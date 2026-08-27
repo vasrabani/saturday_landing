@@ -1,0 +1,2598 @@
+/*
+ * ═══════════════════════════════════════════════════════════════
+ *  SATURDAY RACING — LANDING PAGE  (Mobile-First Rewrite)
+ *  /static/css/landing.css
+ *
+ *  Architecture:
+ *    Base styles target 320px–767px (mobile).
+ *    @media (min-width: 768px)   — tablet / small desktop
+ *    @media (min-width: 1024px)  — full desktop
+ *
+ *  Sections (mirror HTML order exactly):
+ *    1.  Shared landing utilities
+ *    2.  Hero fold + viewport architecture
+ *    3.  Hero background & atmosphere
+ *    4.  Race reveal
+ *    5.  Hero title & subtitle
+ *    6.  Live picks preview
+ *    7.  Hero CTAs
+ *    8.  Countdown card & digits
+ *    9.  Hero stat grid & fav card
+ *    10. Ticker bar
+ *    11. Gamble-aware byline
+ *    12. Game loop section
+ *    13. Deeper game divider
+ *    14. Challenges section
+ *    15. Syndicates section
+ *    16. AI Intelligence section
+ *    17. Fox Teaser / Rivalry section
+ *    18. Saturday Draw section
+ *    19. News section
+ *    20. Results table
+ *    21. Final CTA
+ *    22. Horse name link overrides
+ *    23. Animations (single block)
+ *    24. Tablet breakpoint (768px+)
+ *    25. Desktop breakpoint (1024px+)
+ *
+ *  Token reference: all --c-*, --space-*, --r-*, --font-*,
+ *  --shadow-*, --max-w, --nav-h are defined in base.css :root
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+
+/* ─────────────────────────────────────────────────────────────
+   1. SHARED LANDING UTILITIES
+───────────────────────────────────────────────────────────── */
+
+/* Section header — centred, used across multiple sections */
+.section-header        { text-align: center; margin-bottom: var(--space-7); }
+.section-header .kicker{ margin-bottom: var(--space-3); }
+
+.section-header__title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 7vw, 42px);
+  font-weight: 900;
+  color: var(--c-text-100);
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.section-header__sub {
+  font-family: var(--font-editorial, 'Iowan Old Style', Charter, Georgia, serif);
+  font-size: 17px;
+  color: var(--c-text-55);
+  max-width: 580px;
+  margin: 0 auto;
+  line-height: 1.75;
+}
+
+/* kicker colour variants */
+.kicker--ai   { color: var(--c-cyan);  background: rgba(14,165,233,0.08);  border-color: rgba(14,165,233,0.2); }
+.kicker--draw { color: rgba(192,57,43,0.85); background: rgba(192,57,43,0.08); border-color: rgba(192,57,43,0.2); }
+
+/* Race-type pills */
+.eyebrow-pill        { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; padding: 3px 10px; border-radius: 3px; }
+.eyebrow-pill--jumps { background: var(--c-gold); color: var(--c-midnight); }
+.eyebrow-pill--flat  { background: rgba(212,175,55,0.13); color: var(--c-gold); border: 1px solid var(--c-border-gold); }
+
+/* Split-copy layout shared by Challenges + Syndicates */
+.landing-split { display: flex; flex-direction: column; gap: var(--space-7); }
+
+.landing-split__visual {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  align-items: stretch;
+  min-width: 0;
+}
+
+.landing-split__title {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 7vw, 48px);
+  font-weight: 900;
+  color: var(--c-text-100);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin: var(--space-3) 0 var(--space-4);
+}
+
+.landing-split__sub {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--c-text-55);
+  margin-bottom: var(--space-5);
+}
+
+.landing-split__ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: var(--space-5);
+}
+
+.landing-split__ctas .btn { width: 100%; justify-content: center; }
+
+/* Mechanic list — icon + title + body */
+.landing-mechanic-list  { display: flex; flex-direction: column; gap: var(--space-4); }
+.landing-mechanic       { display: flex; align-items: flex-start; gap: 14px; }
+.landing-mechanic__icon { font-size: 20px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
+.landing-mechanic__title{ font-size: 14px; font-weight: 700; color: var(--c-text-100); margin-bottom: 2px; }
+.landing-mechanic__body { font-size: 15px; line-height: 1.6; color: var(--c-text-55); }
+
+/* btn--lg modifier */
+.btn--lg { font-size: 15px; padding: 15px 28px; }
+
+
+/* ─────────────────────────────────────────────────────────────
+   2. HERO FOLD — VIEWPORT ARCHITECTURE
+   Goal: hero + ticker fill exactly one screen, no scroll needed
+   to see the first CTA.
+
+   Structure in HTML:
+     <div class="landing-hero-fold">        ← fills 100dvh - nav
+       <section class="hero">               ← flex: 1
+         <div class="hero__content">        ← flex column
+           …left + right panels…
+           <div class="hero__flex-spacer">  ← absorbs spare space
+         </div>
+       </section>
+       <div class="ticker-bar--hero-foot">  ← fixed 40px
+     </div>
+───────────────────────────────────────────────────────────── */
+
+/* ─────────────────────────────────────────────────────────────
+   3. HERO — BACKGROUND & ATMOSPHERE
+───────────────────────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  background: var(--c-midnight);
+}
+
+.hero__bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 70% at -5% 60%,   var(--glow-teal)    0%, transparent 65%),
+    radial-gradient(ellipse 70% 65% at 105% 35%,  var(--glow-magenta) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 48% at 72% 58%,   var(--glow-purple)  0%, transparent 55%);
+}
+
+.hero__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent, transparent 79px,
+    rgba(200,169,81,0.028) 79px, rgba(200,169,81,0.028) 80px
+  );
+}
+
+.hero__fence {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 26px;
+  display: flex;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero__fence-post {
+  flex: 1;
+  border-left: 1px solid rgba(212,175,55,0.08);
+}
+
+.hero__fence-post:nth-child(4n) {
+  border-left-color: rgba(200,169,81,0.2);
+  background: linear-gradient(to top, rgba(200,169,81,0.05), transparent);
+}
+
+.hero__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(9,14,28,0.2) 0%, transparent 20%,
+    transparent 68%, rgba(9,14,28,0.8) 90%, var(--c-midnight) 100%
+  );
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   4. RACE REVEAL
+───────────────────────────────────────────────────────────── */
+
+.race-reveal { margin-bottom: var(--space-3); animation: fadeUp 0.4s ease both; }
+
+.race-reveal__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.race-reveal__dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--c-gold);
+  opacity: 0.5;
+  animation: pulseDot 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.race-reveal__week {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  color: var(--c-text-35);
+  text-transform: uppercase;
+}
+
+.race-reveal__stage {
+  position: relative;
+  perspective: 900px;
+  margin-bottom: 6px;
+  overflow: hidden;
+}
+
+.race-reveal__name {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 5vw, 42px);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: transparent;
+  background: linear-gradient(135deg, #e8cc70 0%, #f5e49a 30%, #d4af37 50%, #f5e49a 70%, #c8a020 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-size: 200% 100%;
+  transform-origin: left center;
+  animation: raceNameReveal 1.1s cubic-bezier(0.16,1,0.3,1) 0.15s both, goldShimmer 4s ease-in-out 1.4s infinite;
+  filter: drop-shadow(0 0 18px rgba(212,175,55,0.35));
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.race-reveal__shimmer {
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shimmerSweep 3s ease-in-out 1.2s infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.race-reveal__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px 8px;
+  animation: fadeUp 0.5s 0.6s ease both;
+  opacity: 0;
+  animation-fill-mode: both;
+}
+
+.race-reveal__meta-item {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--c-text-55);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.race-reveal__meta-item--live  { color: var(--c-gold); font-weight: 700; }
+.race-reveal__meta-item--today { color: #ff9a9a; text-transform: uppercase; letter-spacing: 0.12em; animation: pulseDot 1.5s ease-in-out infinite; }
+.race-reveal__meta-sep         { color: var(--c-text-35); font-size: 10px; }
+
+.race-reveal__meta-item--link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 4px 6px;
+  margin: -4px -6px;
+  transition: color 0.18s, background 0.18s;
+  -webkit-tap-highlight-color: transparent;
+}
+.race-reveal__meta-item--link:hover,
+.race-reveal__meta-item--link:focus-visible {
+  color: var(--c-gold-lt);
+  background: rgba(212,175,55,0.1);
+  outline: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.race-reveal__type-pill { flex-shrink: 0; text-transform: uppercase; }
+
+
+/* ─────────────────────────────────────────────────────────────
+   5. HERO TITLE & SUBTITLE
+───────────────────────────────────────────────────────────── */
+
+.hero__title {
+  margin-bottom: var(--space-3);
+  animation: fadeUp 0.5s 0.1s ease both;
+  line-height: 0.95;
+}
+
+.hero__title-small {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(18px, 5vw, 54px);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--c-text-75);
+  line-height: 1.05;
+  margin-bottom: 2px;
+}
+
+.hero__title-main {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(38px, 10vw, 108px);
+  font-weight: 900;
+  color: var(--c-gold);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+}
+
+.hero__subtitle--game {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--c-text-75);
+  margin-bottom: var(--space-3);
+  animation: fadeUp 0.5s 0.18s ease both;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   6. PICKS DUEL — unified split card (dark / gold frame, dual glow)
+   Mobile: stacked. 768px+: single row, vertical gold rail + VS coin.
+───────────────────────────────────────────────────────────── */
+
+.picks-duel {
+  position: relative;
+  isolation: isolate;
+  margin-bottom: var(--space-3);
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(212, 175, 55, 0.42);
+  background: linear-gradient(155deg, #12151c 0%, #0a0b0f 42%, #101218 100%);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.45) inset,
+    0 20px 48px rgba(0, 0, 0, 0.35);
+  animation: fadeUp 0.5s 0.2s ease both;
+}
+
+.picks-duel__ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.picks-duel__ambient-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(48px);
+  opacity: 0.4;
+  transition: opacity 1.1s ease, transform 1.1s ease;
+}
+
+.picks-duel__ambient-glow--fox {
+  width: 58%;
+  height: 85%;
+  left: -18%;
+  top: 8%;
+  background: radial-gradient(ellipse at center, rgba(45, 189, 122, 0.55) 0%, rgba(26, 80, 60, 0.2) 45%, transparent 70%);
+}
+
+.picks-duel__ambient-glow--cubs {
+  width: 68%;
+  height: 100%;
+  right: -18%;
+  top: 0%;
+  background: radial-gradient(ellipse at center, rgba(255, 120, 72, 0.72) 0%, rgba(180, 55, 20, 0.28) 40%, transparent 66%);
+}
+
+.picks-duel--visible .picks-duel__ambient-glow--fox {
+  opacity: 0.45;
+}
+
+.picks-duel--visible .picks-duel__ambient-glow--cubs {
+  opacity: 0.72;
+}
+
+.picks-duel__ambient-flare {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 72%;
+  height: 3px;
+  transform: translate(-50%, -50%) scaleX(0.72);
+  opacity: 0.55;
+  border-radius: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 55, 0.15) 35%,
+    rgba(255, 236, 190, 0.35) 50%,
+    rgba(212, 175, 55, 0.15) 65%,
+    transparent
+  );
+  filter: blur(1.2px);
+  transition: opacity 0.9s ease, transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.picks-duel--visible .picks-duel__ambient-flare {
+  opacity: 0.88;
+  transform: translate(-50%, -50%) scaleX(1);
+}
+
+.picks-duel__grain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.11;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url("%23n")' opacity='0.45'/%3E%3C/svg%3E");
+}
+
+.picks-duel__inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.picks-duel__half {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 18px 16px 20px;
+  color: inherit;
+  min-width: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.picks-duel__half--fox {
+  background: linear-gradient(118deg, rgba(26, 88, 68, 0.28) 0%, transparent 52%);
+}
+
+.picks-duel__half--cubs {
+  align-items: stretch;
+  text-align: right;
+  background: linear-gradient(242deg, rgba(110, 36, 18, 0.26) 0%, transparent 52%);
+}
+
+.picks-duel__half--cubs .picks-duel__meta {
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.picks-duel__half--cubs .picks-duel__streak {
+  left: auto;
+  right: 16px;
+}
+
+.picks-duel__half:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.picks-duel__half:focus-visible {
+  outline: 2px solid rgba(212, 175, 55, 0.75);
+  outline-offset: -6px;
+  z-index: 1;
+}
+
+.picks-duel__streak {
+  position: absolute;
+  top: 16px;
+  width: 76px;
+  height: 2px;
+  border-radius: 2px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.picks-duel__streak--fox {
+  left: 16px;
+  background: linear-gradient(90deg, rgba(94, 220, 160, 0.95), transparent);
+  transform: rotate(-7deg);
+}
+
+.picks-duel__streak--cubs {
+  background: linear-gradient(270deg, rgba(255, 130, 80, 0.95), transparent);
+  transform: rotate(7deg);
+}
+
+.picks-duel__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding-top: 2px;
+}
+
+.picks-duel__who {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(232, 200, 120, 0.92);
+}
+
+.picks-duel__who--cubs {
+  color: rgba(255, 190, 160, 0.95);
+}
+
+.picks-duel__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.picks-duel__dot--live {
+  background: var(--c-emerald-lt);
+  animation: blink 1.4s ease-in-out infinite;
+}
+
+/* Cubs-side live dot uses the ember token instead of green */
+.picks-duel__dot--live.picks-duel__dot--cubs {
+  background: var(--c-cubs-ember);
+}
+
+.picks-duel__dot--open {
+  background: #ff8a5c;
+  box-shadow: 0 0 0 1px rgba(255, 138, 92, 0.35);
+}
+
+.picks-duel__live-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8cf0c0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(12, 40, 28, 0.55);
+  border: 1px solid rgba(45, 189, 122, 0.4);
+}
+
+.picks-duel__live-label--cubs {
+  color: #ffd4c8;
+  background: rgba(48, 16, 8, 0.45);
+  border-color: rgba(255, 140, 100, 0.42);
+}
+
+.picks-duel__horse {
+  display: block;
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: clamp(18px, 4.2vw, 25px);
+  font-weight: 800;
+  color: rgba(252, 248, 240, 0.97);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.picks-duel__half--cubs .picks-duel__horse {
+  text-align: right;
+  color: var(--c-gold-lt, #F5D76E);
+  text-shadow: 0 0 18px rgba(212, 175, 55, 0.30);
+}
+
+.picks-duel__horse--pending {
+  font-size: clamp(16px, 3.6vw, 21px);
+  font-weight: 700;
+  font-style: normal;
+  color: rgba(230, 222, 208, 0.72);
+  white-space: normal;
+}
+
+.picks-duel__half--cubs .picks-duel__horse--pending {
+  color: rgba(255, 210, 190, 0.72);
+}
+
+.picks-duel__horse-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.45);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.picks-duel__horse-link:hover {
+  color: #f5e49a;
+  border-bottom-color: rgba(245, 228, 154, 0.9);
+}
+
+.picks-duel__horse-link--cubs {
+  border-bottom-color: rgba(212, 175, 55, 0.50);
+}
+
+.picks-duel__horse-link--cubs:hover {
+  color: #fff8dc;
+  border-bottom-color: rgba(245, 215, 110, 0.90);
+}
+
+.picks-duel__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.picks-duel__chip {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 11px;
+  border-radius: 999px;
+  letter-spacing: 0.06em;
+}
+
+.picks-duel__chip--fox {
+  color: #ecd78a;
+  background: rgba(8, 10, 14, 0.65);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+}
+
+.picks-duel__chip--cubs {
+  color: #ffc8a8;
+  background: rgba(14, 8, 6, 0.6);
+  border: 1px solid rgba(255, 130, 88, 0.45);
+}
+
+.picks-duel__sub {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(212, 175, 55, 0.88);
+}
+
+.picks-duel__half--cubs .picks-duel__sub {
+  color: var(--c-gold, #D4AF37);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+/* VS rail — mobile: horizontal lines */
+.picks-duel__divider {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 14px 6px;
+  flex-shrink: 0;
+}
+
+.picks-duel__divider-line {
+  flex: 1;
+  height: 1px;
+  min-width: 8px;
+}
+
+.picks-duel__divider-line--before {
+  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.55));
+}
+
+.picks-duel__divider-line--after {
+  height: 2px;
+  background: linear-gradient(270deg, transparent, rgba(212, 175, 55, 0.85));
+}
+
+.picks-duel__vs-badge {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid rgba(212, 175, 55, 0.90);
+  background:
+    radial-gradient(circle at 32% 22%, rgba(255, 248, 220, 0.28) 0%, transparent 42%),
+    radial-gradient(circle at 50% 100%, rgba(0, 0, 0, 0.55) 0%, transparent 58%),
+    linear-gradient(165deg, #1c1a16 0%, #0c0c0f 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 0 1px rgba(212, 175, 55, 0.18),
+    0 0 22px rgba(212, 175, 55, 0.55),
+    0 0 48px rgba(212, 175, 55, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -3px 10px rgba(0, 0, 0, 0.55);
+  transform: scale(1);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.55s ease;
+}
+
+.picks-duel--visible .picks-duel__vs-badge {
+  animation:
+    picksDuelVsPop 0.58s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both,
+    picksDuelVsGlow 2.8s ease-in-out 0.7s infinite;
+}
+
+@keyframes picksDuelVsGlow {
+  0%, 100% {
+    box-shadow:
+      0 0 0 1px rgba(212, 175, 55, 0.18),
+      0 0 22px rgba(212, 175, 55, 0.55),
+      0 0 48px rgba(212, 175, 55, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      inset 0 -3px 10px rgba(0, 0, 0, 0.55);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px rgba(212, 175, 55, 0.28),
+      0 0 32px rgba(212, 175, 55, 0.80),
+      0 0 72px rgba(212, 175, 55, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 -3px 10px rgba(0, 0, 0, 0.55);
+  }
+}
+
+.picks-duel__vs-text {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 900;
+  font-style: italic;
+  color: #f5d76e;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-shadow:
+    0 0 14px rgba(212, 175, 55, 0.70),
+    0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+@keyframes picksDuelVsPop {
+  from {
+    transform: scale(0.86);
+    opacity: 0.75;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   7. HERO CTAs
+───────────────────────────────────────────────────────────── */
+
+.hero__ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeUp 0.5s 0.32s ease both;
+}
+
+.hero__ctas .btn {
+  width: 100%;
+  justify-content: center;
+  white-space: normal;
+  text-align: center;
+  font-size: 14px;
+  padding: 14px 20px;
+  line-height: 1.3;
+  min-height: 48px;
+}
+
+.hero__flex-spacer { flex: 1 1 auto; min-height: 8px; }
+
+
+/* ─────────────────────────────────────────────────────────────
+   8. COUNTDOWN CARD & DIGITS
+───────────────────────────────────────────────────────────── */
+
+
+/* ─────────────────────────────────────────────────────────────
+   9. HERO STAT GRID & FAV CARD
+   (hidden on mobile — revealed at 768px+)
+───────────────────────────────────────────────────────────── */
+
+.hero__stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+}
+
+.hero__stat-box {
+  background: var(--c-navy-raised);
+  border: 1px solid var(--c-border-md);
+  border-radius: var(--r-sm);
+  padding: 14px 12px;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.2s;
+}
+
+.hero__stat-box:hover { border-color: var(--c-border-gold); }
+
+.hero__stat-box--link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 44px;
+}
+.hero__stat-box--link:hover { background: rgba(212,175,55,0.08); border-color: var(--c-gold); transform: translateY(-1px); }
+.hero__stat-box--link:hover .stat-num { color: var(--c-gold-lt); }
+
+.stat-num {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--c-text-100);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  color: var(--c-text-55);
+  font-weight: 500;
+}
+
+.fav-card {
+  background: rgba(192,57,43,0.10);
+  border: 1px solid rgba(192,57,43,0.26);
+  border-left: 3px solid var(--c-red);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  box-shadow: var(--shadow-card);
+}
+
+.fav-card__label { font-size: 9px; font-weight: 700; letter-spacing: 0.16em; color: rgba(255,100,100,0.6); text-transform: uppercase; }
+.fav-card__horse { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--c-text-100); }
+.fav-card__odds  { font-family: var(--font-display); font-size: 22px; font-weight: 900; color: var(--c-gold); line-height: 1; }
+.fav-card__note  { font-size: 10px; color: var(--c-text-35); }
+
+.fav-card__horse-link {
+  color: var(--c-text-100);
+  font-family: var(--font-display);
+  font-size: inherit;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  transition: color 0.18s, border-color 0.18s;
+}
+.fav-card__horse-link:hover { color: var(--c-gold); border-bottom-color: var(--c-gold); }
+
+
+/* ─────────────────────────────────────────────────────────────
+   10. TICKER BAR
+───────────────────────────────────────────────────────────── */
+
+.ticker-bar {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  background: rgba(8,8,12,0.96);
+  overflow: hidden;
+  gap: 0;
+}
+
+.ticker-bar__badge {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 16px;
+  height: 100%;
+  background: rgba(212,175,55,0.1);
+  border-right: 1px solid rgba(212,175,55,0.16);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--c-gold);
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ticker-bar__track {
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.ticker-bar__inner {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  white-space: nowrap;
+  animation: tickerScroll 38s linear infinite;
+  will-change: transform;
+}
+
+.ticker-bar__item {
+  font-size: 11px;
+  color: var(--c-text-55);
+  padding: 0 var(--space-5);
+  white-space: nowrap;
+}
+
+.ticker-bar__item strong { color: var(--c-text-100); font-weight: 600; }
+.ticker-bar__item--urgent { color: rgba(255,160,160,0.85); }
+.ticker-bar__sep { color: var(--c-border-gold); font-size: 8px; flex-shrink: 0; }
+
+@keyframes tickerScroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   11. GAMBLE-AWARE BYLINE
+───────────────────────────────────────────────────────────── */
+
+.hero__gamble-aware {
+  display: none; /* shown selectively via JS or breakpoint */
+  align-items: center;
+  gap: 5px;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(236,238,245,0.28);
+  letter-spacing: 0.04em;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.hero__gamble-aware:hover { color: rgba(212,175,55,0.65); }
+.hero__gamble-aware__shield { font-size: 10px; opacity: 0.6; flex-shrink: 0; }
+.hero__gamble-aware__link { color: rgba(212,175,55,0.45); transition: color 0.2s; }
+.hero__gamble-aware:hover .hero__gamble-aware__link { color: rgba(212,175,55,0.85); }
+
+/* Mobile version appears at bottom of left column */
+.hero__gamble-aware--mobile { display: flex; margin-top: var(--space-3); }
+
+
+/* ─────────────────────────────────────────────────────────────
+   12. HOW IT WORKS — three-tier game explainer + scoring table
+───────────────────────────────────────────────────────────── */
+
+/* Local palette so we don't fight global text colours. The section is
+   dark; the three tier cards inside are paper-cream (clean rulebook
+   feel on a dark stage). */
+.gh-section {
+  --gh-bg:        #14161F;          /* Saturday navy */
+  --gh-bg-deep:   #0E1018;
+  --gh-rule:      rgba(255, 255, 255, 0.10);
+  --gh-ink:       #ECEEF5;
+  --gh-ink-70:    rgba(236, 238, 245, 0.78);
+  --gh-ink-40:    rgba(236, 238, 245, 0.48);
+  --gh-card:      #FAFAF7;          /* paper-cream tier cards */
+  --gh-card-warm: #F7F5EE;
+  --gh-card-ink:  #11151F;
+  --gh-card-ink-70: #41474F;
+  --gh-card-ink-40: #9CA3AF;
+  --gh-card-rule: #E7E5DD;
+  --gh-gold:      #D4AF37;
+  --gh-gold-dk:   #9C7B12;
+  --gh-gold-wash: #FAF1D7;
+  --gh-emerald:    #1A7D4A;
+  --gh-emerald-lt: #2DBD7A;
+  --gh-emerald-soft: rgba(26, 125, 74, 0.10);
+
+  background: linear-gradient(180deg, var(--gh-bg) 0%, var(--gh-bg-deep) 100%);
+  border-top:    1px solid var(--gh-rule);
+  border-bottom: 1px solid var(--gh-rule);
+  color: var(--gh-ink);
+}
+
+/* ── Header ──────────────────────────────────────────────── */
+.gh-header { text-align: center; margin-bottom: var(--space-6); }
+.gh-kicker {
+  display: inline-block;
+  color: var(--gh-gold);
+  letter-spacing: 0.18em;
+  margin-bottom: var(--space-3);
+}
+.gh-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4.4vw, 44px);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  margin: 0 0 var(--space-3);
+  color: var(--gh-ink);
+  line-height: 1.05;
+}
+.gh-sub {
+  font-size: 15px;
+  color: var(--gh-ink-70);
+  max-width: 540px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+.gh-sub strong { color: var(--gh-ink); }
+
+/* ── Tier cards (paper on dark) ──────────────────────────── */
+.gh-tiers {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-7);
+}
+@media (min-width: 768px) {
+  .gh-tiers { grid-template-columns: repeat(3, 1fr); gap: var(--space-4); }
+}
+
+/* Premium tier cards — layered surface, oversized numerical watermark,
+   sculpted top accent for Tier 2/3, scoreboard-style multiplier chip.
+   The treatment evokes printed card stock on a dark page (editorial
+   product card vibe) without straying into novelty. */
+.gh-tier {
+  position: relative;
+  background:
+    linear-gradient(180deg, #FFFFFF 0%, var(--gh-card) 38%, var(--gh-card-warm) 100%);
+  border: 1px solid var(--gh-card-rule);
+  border-radius: 14px;
+  padding: 28px 26px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--gh-card-ink);
+  /* Layered shadow set: hairline inset frame + top-edge highlight +
+     subtle drop + deep ambient. Gives the card real-paper depth. */
+  box-shadow:
+    inset 0 0 0 1px rgba(17, 21, 31, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 1px 2px rgba(0, 0, 0, 0.05),
+    0 18px 38px -22px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+/* Oversized faded tier number watermark — sits behind the content
+   like a magazine page-number flourish. Tier 1 uses ink, 2 gold,
+   3 emerald. Decorative only, so aria-hidden via ::before. */
+.gh-tier::before {
+  content: '1';
+  position: absolute;
+  top: -22px;
+  right: 14px;
+  font-family: var(--font-display);
+  font-size: 180px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: rgba(17, 21, 31, 0.045);
+  pointer-events: none;
+  user-select: none;
+}
+.gh-tier--bonus::before    { content: '2'; color: rgba(212, 175, 55, 0.16); }
+.gh-tier--featured::before { content: '3'; color: rgba(26, 125, 74, 0.16); }
+
+/* Sculpted top edge — full-width gold/emerald glow strip on Tier 2/3
+   (replaces the old 3px hard border). Reads as the card's faction
+   "label" without a dominant rule. */
+.gh-tier--bonus {
+  background:
+    linear-gradient(180deg, var(--gh-gold-wash) 0%, var(--gh-card) 22%, var(--gh-card-warm) 100%);
+  border-color: var(--gh-gold);
+}
+.gh-tier--bonus::after,
+.gh-tier--featured::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  pointer-events: none;
+}
+.gh-tier--bonus::after    { background: linear-gradient(90deg, transparent, var(--gh-gold) 50%, transparent); }
+.gh-tier--featured {
+  background:
+    linear-gradient(180deg, var(--gh-emerald-soft) 0%, var(--gh-card) 22%, var(--gh-card-warm) 100%);
+  border-color: var(--gh-emerald);
+}
+.gh-tier--featured::after { background: linear-gradient(90deg, transparent, var(--gh-emerald) 50%, transparent); }
+
+.gh-tier:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 0 0 1px rgba(17, 21, 31, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    0 2px 4px rgba(0, 0, 0, 0.06),
+    0 28px 48px -22px rgba(0, 0, 0, 0.55);
+}
+.gh-tier--bonus:hover    { border-color: var(--gh-gold);    box-shadow: inset 0 0 0 1px rgba(17,21,31,0.03), inset 0 1px 0 rgba(255,255,255,0.85), 0 0 0 1px rgba(212,175,55,0.30), 0 28px 48px -22px rgba(212,175,55,0.30); }
+.gh-tier--featured:hover { border-color: var(--gh-emerald); box-shadow: inset 0 0 0 1px rgba(17,21,31,0.03), inset 0 1px 0 rgba(255,255,255,0.85), 0 0 0 1px rgba(26,125,74,0.30),  0 28px 48px -22px rgba(26,125,74,0.30);  }
+
+/* ── Tier header — number medallion + kicker on a thin ink rule ── */
+.gh-tier__head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--gh-card-rule);
+}
+.gh-tier__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #FFFFFF, var(--gh-card-warm));
+  border: 1px solid var(--gh-card-rule);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 1px 2px rgba(0,0,0,0.06);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gh-card-ink-70);
+  letter-spacing: -0.01em;
+}
+.gh-tier__num--gold {
+  background: linear-gradient(180deg, #FFF6D5, var(--gh-gold-wash));
+  border-color: var(--gh-gold);
+  color: var(--gh-gold-dk);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 2px 6px -2px rgba(212,175,55,0.45);
+}
+.gh-tier__num--emerald {
+  background: linear-gradient(180deg, #D9F5E5, var(--gh-emerald-soft));
+  border-color: var(--gh-emerald);
+  color: var(--gh-emerald);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 2px 6px -2px rgba(26,125,74,0.45);
+}
+.gh-tier__kicker {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gh-card-ink-40);
+}
+.gh-tier__kicker--gold    { color: var(--gh-gold-dk); }
+.gh-tier__kicker--emerald { color: var(--gh-emerald); }
+
+/* ── Body type — display headline that reads as magazine subhead ── */
+.gh-tier__name {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 700;
+  color: var(--gh-card-ink);
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+/* Cadence — small inset "stat strip" instead of a plain paragraph. */
+.gh-tier__cadence {
+  position: relative;
+  margin: 0;
+  padding: 8px 12px;
+  background: rgba(17, 21, 31, 0.025);
+  border-left: 2px solid var(--gh-card-rule);
+  border-radius: 0 4px 4px 0;
+  font-size: 12.5px;
+  color: var(--gh-card-ink-70);
+  letter-spacing: 0.01em;
+}
+.gh-tier--bonus    .gh-tier__cadence { border-left-color: var(--gh-gold);    background: rgba(212, 175, 55, 0.06); }
+.gh-tier--featured .gh-tier__cadence { border-left-color: var(--gh-emerald); background: rgba(26, 125, 74, 0.05); }
+.gh-tier__cadence strong { color: var(--gh-card-ink); font-weight: 700; }
+
+.gh-tier__text {
+  position: relative;
+  margin: 0;
+  font-size: 14px;
+  color: var(--gh-card-ink-70);
+  line-height: 1.6;
+  flex: 1;
+}
+
+/* ── Multiplier badge as a scoreboard chip ─────────────────
+   Bigger numeral, sub label below. Fills the "stake on the bar"
+   slot at the bottom of the card. Hover shifts elevation slightly. */
+.gh-tier__mul {
+  position: relative;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: auto;
+  align-self: flex-start;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-feature-settings: 'tnum';
+  letter-spacing: 0.02em;
+  border: 1px solid currentColor;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  font-size: 11.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+.gh-tier__mul::before {
+  /* Inject a sculpted highlight strip along the top of the chip
+     so it feels like printed type, not a flat tag. */
+  content: '';
+  position: absolute;
+  top: 1px; left: 1px; right: 1px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 9px 9px 0 0;
+  pointer-events: none;
+}
+.gh-tier__mul--base {
+  background: linear-gradient(180deg, #FFFFFF, var(--gh-card-warm));
+  color: var(--gh-card-ink-70);
+  border-color: var(--gh-card-rule);
+}
+.gh-tier__mul--gold {
+  background: linear-gradient(180deg, #FFF6D5, var(--gh-gold-wash));
+  color: var(--gh-gold-dk);
+  border-color: var(--gh-gold);
+}
+.gh-tier__mul--emerald {
+  background: linear-gradient(180deg, #D9F5E5, var(--gh-emerald-soft));
+  color: var(--gh-emerald);
+  border-color: var(--gh-emerald);
+}
+
+/* ── Scoring table ───────────────────────────────────────── */
+.gh-scoring {
+  margin-top: var(--space-7);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--gh-rule);
+  border-radius: var(--r-lg);
+  padding: var(--space-5) var(--space-4);
+}
+.gh-scoring__head {
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+.gh-scoring__title {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gh-ink);
+  letter-spacing: -0.005em;
+}
+.gh-scoring__sub {
+  margin: 0;
+  font-size: 13px;
+  color: var(--gh-ink-70);
+}
+
+.gh-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-feature-settings: 'tnum';
+}
+.gh-table__th {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gh-ink-40);
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--gh-rule);
+  text-align: right;
+}
+.gh-table__th--result { text-align: left; }
+.gh-table__th--gold     { color: var(--gh-gold); }
+.gh-table__th--emerald  { color: var(--gh-emerald-lt); }
+
+.gh-table__row-th {
+  font-weight: 600;
+  color: var(--gh-ink);
+  padding: 12px 12px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--gh-rule);
+  text-align: left;
+}
+.gh-table__td {
+  padding: 12px 12px;
+  font-size: 16px;
+  font-weight: 800;
+  text-align: right;
+  border-bottom: 1px solid var(--gh-rule);
+  color: var(--gh-ink-70);
+}
+.gh-table__td--gold    { color: var(--gh-gold); }
+.gh-table__td--emerald { color: var(--gh-emerald-lt); }
+
+.gh-table tbody tr:last-child .gh-table__td,
+.gh-table tbody tr:last-child .gh-table__row-th { border-bottom: 0; }
+
+@media (max-width: 540px) {
+  /* On tiny screens, swap to a stacked view via a horizontal scroll
+     wrapper so the four columns don't squash beyond reading. */
+  .gh-scoring { overflow-x: auto; }
+  .gh-table { min-width: 460px; }
+  .gh-table__th { font-size: 9.5px; padding: 8px 8px; }
+  .gh-table__td { font-size: 14px; padding: 10px 8px; }
+  .gh-table__row-th { font-size: 12.5px; padding: 10px 8px; }
+}
+
+/* ── CTAs ────────────────────────────────────────────────── */
+.gh-cta {
+  margin-top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+.gh-cta .btn { width: 100%; justify-content: center; }
+.gh-cta__or {
+  font-size: 13px;
+  color: var(--gh-ink-40);
+  font-style: italic;
+  text-align: center;
+}
+@media (min-width: 768px) {
+  .gh-cta { flex-direction: row; justify-content: center; align-items: center; }
+  .gh-cta .btn { width: auto; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   12b. LEGACY GAME-LOOP / TRACK-TIMELINE — markup removed
+   Selectors below are kept as harmless no-ops so any stale cached
+   HTML (during a deploy window) doesn't render unstyled fragments.
+   Safe to delete after rollout has settled.
+───────────────────────────────────────────────────────────── */
+
+.game-loop-section {
+  background: linear-gradient(180deg, var(--c-midnight) 0%, #0e1018 100%);
+  border-top:    1px solid rgba(212,175,55,0.08);
+  border-bottom: 1px solid rgba(212,175,55,0.08);
+}
+
+/* ── Racing Track Timeline ─────────────────────────────────
+   Markup: .track-timeline > .track-timeline__rail (+ __fill)
+                           > .track-timeline__runner (dot)
+                           > ol.track-timeline__steps
+                               > li.track-step
+                                   > .track-step__marker > .__num
+                                   > .track-step__card
+                                       > svg.track-step__icon
+                                       > .track-step__meta
+                                       > h3.track-step__title
+                                       > p.track-step__text
+   The rail fills as the section scrolls into view (JS module
+   initTrackTimeline in landing-anim.js). Markers activate when
+   the fill passes their midpoint. Mobile pivots to a vertical
+   rail on the left. */
+
+.track-timeline {
+  position: relative;
+  padding: var(--space-6) 0 var(--space-5);
+  margin-bottom: var(--space-7);
+}
+
+.track-timeline__rail {
+  position: absolute;
+  top: 28px;             /* aligns with the centre of a 56px marker */
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  background: rgba(212, 175, 55, 0.12);
+  z-index: 0;
+  overflow: visible;
+}
+.track-timeline__fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--c-gold), var(--c-gold-lt));
+  box-shadow: 0 0 14px rgba(212, 175, 55, 0.5);
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 0.08s linear;
+}
+
+/* The "pace runner" — a glowing gold dot that slides along the rail
+   as the fill progresses. Subtle nod to a horse on the track. */
+.track-timeline__runner {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--c-gold-lt);
+  box-shadow:
+    0 0 10px rgba(212, 175, 55, 0.9),
+    0 0 24px rgba(212, 175, 55, 0.45);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-out, left 0.08s linear;
+  z-index: 2;
+}
+.track-timeline__runner.is-active { opacity: 1; }
+
+.track-timeline__steps {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.track-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.track-step__marker {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--c-midnight);
+  border: 2px solid rgba(212, 175, 55, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  z-index: 1;
+  transition: border-color 0.35s ease,
+              box-shadow  0.35s ease,
+              background  0.35s ease;
+}
+.track-step__marker::before {
+  /* Pulse ring shown only on the active marker. */
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  pointer-events: none;
+}
+.track-step.is-active .track-step__marker {
+  border-color: var(--c-gold);
+  box-shadow: 0 0 28px rgba(212, 175, 55, 0.35);
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.20), rgba(212, 175, 55, 0.04));
+}
+.track-step.is-active .track-step__marker::before {
+  border-color: rgba(212, 175, 55, 0.35);
+  animation: track-pulse 2.2s ease-out infinite;
+}
+@keyframes track-pulse {
+  0%   { transform: scale(1);    opacity: 0.85; }
+  100% { transform: scale(1.65); opacity: 0;    }
+}
+
+.track-step__num {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 900;
+  color: var(--c-gold);
+  line-height: 1;
+  font-style: italic;
+}
+
+.track-step__card {
+  width: 100%;
+  padding: 22px 18px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(212, 175, 55, 0.14);
+  border-radius: var(--r-md);
+  transition: transform   0.35s cubic-bezier(0.2, 0.9, 0.25, 1),
+              border-color 0.3s ease,
+              box-shadow   0.3s ease,
+              background   0.3s ease;
+}
+.track-step__card:hover,
+.track-step.is-active .track-step__card {
+  border-color: rgba(212, 175, 55, 0.34);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow:
+    0 14px 36px rgba(212, 175, 55, 0.10),
+    0 1px 2px rgba(0, 0, 0, 0.35);
+  transform: translateY(-4px);
+}
+
+.track-step__icon {
+  width: 34px;
+  height: 34px;
+  color: var(--c-gold);
+  margin: 0 auto 14px;
+  display: block;
+}
+
+.track-step__meta {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--c-gold);
+  background: rgba(212, 175, 55, 0.10);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  margin-bottom: 12px;
+}
+
+.track-step__title {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--c-text-100);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.track-step__text {
+  font-size: 15px;
+  color: var(--c-text-55);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Mobile — vertical rail on the left ──────────────────── */
+@media (max-width: 767px) {
+  .track-timeline { padding-left: 8px; }
+  .track-timeline__rail {
+    top: 0;
+    bottom: 0;
+    left: 27px;           /* marker centre: 8px padding + 28px radius = 36 - 9 nudge */
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+  .track-timeline__fill {
+    transform-origin: top center;
+    transform: scaleY(0);
+    background: linear-gradient(180deg, var(--c-gold), var(--c-gold-lt));
+  }
+  .track-timeline__runner { display: none; }
+
+  .track-timeline__steps {
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+  .track-step {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    gap: var(--space-4);
+  }
+  .track-step__marker {
+    flex-shrink: 0;
+    margin-bottom: 0;
+  }
+  .track-step__card { flex: 1; }
+  .track-step__icon { margin: 0 0 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track-step.is-active .track-step__marker::before { animation: none; }
+  .track-step__card { transition: none; }
+  .track-timeline__fill { transform: scaleX(1); }
+  .track-step { /* all markers look active in reduced-motion */ }
+}
+
+/* ── CTA row (shared) ─────────────────────────────────────── */
+.game-loop__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.game-loop__cta .btn { width: 100%; justify-content: center; }
+.game-loop__or { font-size: 13px; color: var(--c-text-35); font-style: italic; text-align: center; }
+
+
+/* ─────────────────────────────────────────────────────────────
+   13. DEEPER GAME DIVIDER
+───────────────────────────────────────────────────────────── */
+
+.deeper-game-divider {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 var(--space-5);
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+.deeper-game-divider::before,
+.deeper-game-divider::after {
+  content: '';
+  flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(212,175,55,0.2), transparent);
+}
+
+.deeper-game-divider__text {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--c-text-35);
+  white-space: nowrap;
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   14. CHALLENGES SECTION
+───────────────────────────────────────────────────────────── */
+
+.landing-challenges-section {
+  background:
+    radial-gradient(ellipse 80% 60% at 100% 50%, rgba(192,57,43,0.09), transparent 55%),
+    radial-gradient(ellipse 55% 55% at 0% 40%,  rgba(212,175,55,0.06), transparent 50%),
+    var(--c-midnight);
+}
+
+/* Duel card */
+.landing-duel-card {
+  background: var(--c-navy-card);
+  border: 1px solid rgba(192,57,43,0.22);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  margin-bottom: var(--space-3);
+}
+
+.landing-duel-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(192,57,43,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.landing-duel-card__status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px; font-weight: 800;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: #e05c4c;
+}
+
+.landing-duel-card__dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #e05c4c;
+  flex-shrink: 0;
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+.landing-duel-card__race  { font-size: 11px; color: var(--c-text-35); }
+
+.landing-duel-card__vs-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 16px;
+  gap: 10px;
+}
+
+.landing-duel-card__side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.landing-duel-card__av {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-size: 13px; font-weight: 900; color: white;
+}
+
+.landing-duel-card__cub  { font-size: 12px; font-weight: 700; color: var(--c-text-100); }
+
+.landing-duel-card__pick {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--r-sm); padding: 8px 10px; width: 100%;
+}
+
+.landing-duel-card__silk {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 900; color: white;
+}
+
+.landing-duel-card__horse { font-size: 12px; font-weight: 700; color: var(--c-text-100); }
+.landing-duel-card__odds  { font-size: 11px; color: var(--c-gold); font-weight: 700; }
+
+.landing-duel-card__vs-badge {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 2px solid rgba(212,175,55,0.3);
+  background: rgba(212,175,55,0.06);
+  font-family: var(--font-display); font-size: 11px; font-weight: 900; color: var(--c-gold);
+}
+
+.landing-duel-card__footer {
+  padding: 10px 16px; text-align: center;
+  font-size: 11px; color: var(--c-text-35); font-style: italic;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Leaderboard tease */
+.landing-leaderboard-tease {
+  background: var(--c-navy-card);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+.landing-leaderboard-tease__header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.landing-leaderboard-tease__title { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; color: var(--c-text-75); }
+.landing-leaderboard-tease__link  { font-size: 11px; color: var(--c-gold); font-weight: 700; }
+
+.landing-lb-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.landing-lb-row:last-child     { border-bottom: none; }
+.landing-lb-row--gold          { background: rgba(212,175,55,0.04); }
+.landing-lb-row__rank          { font-family: var(--font-display); font-size: 13px; font-weight: 900; color: var(--c-text-35); width: 16px; text-align: center; flex-shrink: 0; }
+.landing-lb-row--gold .landing-lb-row__rank { color: var(--c-gold); }
+.landing-lb-row__av            { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 10px; font-weight: 900; color: white; }
+.landing-lb-row__name          { flex: 1; font-size: 13px; font-weight: 700; color: var(--c-text-100); min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.landing-lb-row__record        { font-size: 11px; color: var(--c-text-35); white-space: nowrap; }
+.landing-lb-row__rate          { font-size: 12px; font-weight: 700; color: var(--c-gold); white-space: nowrap; margin-left: 4px; }
+.landing-lb-empty              { padding: 16px; font-size: 13px; color: var(--c-text-35); text-align: center; }
+
+
+/* ─────────────────────────────────────────────────────────────
+   15. SYNDICATES SECTION
+───────────────────────────────────────────────────────────── */
+
+.landing-syndicates-section {
+  background:
+    radial-gradient(ellipse 70% 60% at 0% 55%,  rgba(26,58,107,0.16), transparent 55%),
+    radial-gradient(ellipse 50% 55% at 95% 35%, rgba(212,175,55,0.06), transparent 50%),
+    var(--c-navy);
+}
+
+/* Race board card */
+.landing-board-card {
+  background: var(--c-navy-card);
+  border: 1px solid rgba(212,175,55,0.18);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  margin-bottom: var(--space-3);
+}
+
+/* Syndicates column: flex gap handles spacing; avoid double gap under board */
+.landing-split__visual .landing-board-card {
+  margin-bottom: 0;
+}
+
+.landing-board-card__header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 14px 16px;
+  background: rgba(212,175,55,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.landing-board-card__syndicate { font-family: var(--font-display); font-size: 15px; font-weight: 900; color: var(--c-text-100); }
+.landing-board-card__race      { font-size: 11px; color: var(--c-text-35); margin-top: 2px; }
+.landing-board-card__count     { font-size: 11px; color: var(--c-gold); font-weight: 700; flex-shrink: 0; }
+
+.landing-board-card__cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 56px;
+  padding: 7px 16px 5px;
+  font-size: 9px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: var(--c-text-35);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.landing-board-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 56px;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  gap: 8px;
+}
+.landing-board-row:last-child  { border-bottom: none; }
+.landing-board-row--owner      { background: rgba(212,175,55,0.03); }
+.landing-board-row--empty      { opacity: 0.55; }
+
+.landing-board-row__identity   { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.landing-board-av              { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: var(--font-display); font-size: 9px; font-weight: 900; color: white; }
+.landing-board-row__name       { font-size: 12px; font-weight: 700; color: var(--c-text-100); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.landing-board-row__badge      { font-size: 8px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--c-gold); background: rgba(212,175,55,0.1); border-radius: 3px; padding: 2px 4px; margin-left: 4px; }
+.landing-board-row__horse      { font-size: 12px; color: var(--c-text-75); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.landing-board-row__horse--empty { color: var(--c-text-35); font-style: italic; }
+.landing-board-row__odds       { font-size: 12px; font-weight: 700; color: var(--c-gold); text-align: right; }
+.landing-board-card__footer    { padding: 10px 16px; text-align: center; font-size: 11px; color: var(--c-text-35); font-style: italic; border-top: 1px solid rgba(255,255,255,0.05); }
+
+/* Syndicates tease */
+.landing-syn-tease             { background: var(--c-navy-card); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--r-md); overflow: hidden; }
+.landing-syn-tease__header     { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.landing-syn-tease__title      { font-size: 12px; font-weight: 800; letter-spacing: 0.08em; color: var(--c-text-75); }
+.landing-syn-tease__link       { font-size: 11px; color: var(--c-gold); font-weight: 700; }
+.landing-syn-row               { display: flex; align-items: center; justify-content: space-between; padding: 11px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); text-decoration: none; transition: background 0.15s; }
+.landing-syn-row:last-child    { border-bottom: none; }
+.landing-syn-row:hover         { background: rgba(255,255,255,0.03); }
+.landing-syn-row__name         { font-size: 13px; font-weight: 700; color: var(--c-text-100); }
+.landing-syn-row__count        { font-size: 11px; color: var(--c-text-35); }
+
+
+/* ─────────────────────────────────────────────────────────────
+   16. AI INTELLIGENCE SECTION
+───────────────────────────────────────────────────────────── */
+
+.ai-section {
+  background:
+    radial-gradient(ellipse 70% 58% at 10% 50%,  rgba(14,90,170,0.12),  transparent 54%),
+    radial-gradient(ellipse 55% 52% at 90% 38%,  rgba(212,175,55,0.06), transparent 50%),
+    var(--c-navy);
+}
+
+.ai-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+}
+
+.ai-card {
+  transition: all 0.2s;
+  box-shadow: var(--shadow-card);
+  background: var(--c-navy-card);
+}
+
+.ai-card--link {
+  position: relative;
+  cursor: pointer;
+}
+.ai-card__content {
+  position: relative;
+  z-index: 2;
+}
+.ai-card__content a {
+  position: relative;
+  z-index: 3;
+}
+.ai-card__cover-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+}
+.ai-card__cover-link:focus {
+  outline: 2px solid var(--c-gold);
+  outline-offset: 3px;
+  z-index: 4;
+}
+.ai-card--link:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+.ai-card--claude.ai-card--link:hover  { border-color: rgba(204,138,90,0.5);  box-shadow: 0 12px 40px rgba(204,138,90,0.10); }
+.ai-card--chatgpt.ai-card--link:hover { border-color: rgba(16,163,127,0.5);  box-shadow: 0 12px 40px rgba(16,163,127,0.08); }
+.ai-card--gemini.ai-card--link:hover  { border-color: rgba(66,133,244,0.5);  box-shadow: 0 12px 40px rgba(66,133,244,0.08); }
+
+.ai-card__header { display: flex; align-items: center; gap: 11px; margin-bottom: 14px; padding-bottom: 13px; border-bottom: 1px solid var(--c-border); }
+.ai-name  { font-size: 14px; font-weight: 600; color: var(--c-text-100); margin-bottom: 2px; }
+.ai-role  { font-size: 12px; color: var(--c-text-55); }
+.ai-pick  { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+.ai-pick__label { font-size: 9px; font-weight: 700; letter-spacing: 0.16em; color: var(--c-text-35); text-transform: uppercase; }
+.ai-pick__horse { font-family: var(--font-display); font-size: 17px; font-weight: 700; }
+.ai-pick__horse--claude  { color: #e8a870; }
+.ai-pick__horse--chatgpt { color: #3ecfa0; }
+.ai-pick__horse--gemini  { color: #7baff8; }
+.ai-reasoning { font-size: 15px; line-height: 1.72; color: var(--c-text-55); margin-bottom: 13px; }
+.ai-badge { font-size: 10px; padding: 3px 9px; border-radius: var(--r-pill); border: 1px solid; }
+.ai-badge--claude  { color: #e8a870; border-color: rgba(204,138,90,0.22); background: rgba(204,138,90,0.07); }
+.ai-badge--chatgpt { color: #3ecfa0; border-color: rgba(16,163,127,0.22); background: rgba(16,163,127,0.07); }
+.ai-badge--gemini  { color: #7baff8; border-color: rgba(66,133,244,0.22); background: rgba(66,133,244,0.07); }
+
+.ai-consensus {
+  background: rgba(212,175,55,0.05);
+  border: 1px solid var(--c-border-gold);
+  border-radius: var(--r-md);
+  padding: var(--space-5) var(--space-5);
+  text-align: center;
+}
+
+.ai-consensus__title { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; color: var(--c-gold); text-transform: uppercase; margin-bottom: var(--space-4); display: block; }
+.ai-consensus__row   { display: flex; align-items: center; justify-content: center; gap: var(--space-5); margin-bottom: var(--space-4); flex-wrap: wrap; }
+.ai-consensus__num   { font-family: var(--font-display); font-size: 30px; font-weight: 900; color: var(--c-text-35); line-height: 1; margin-bottom: 3px; display: block; }
+.ai-consensus__item--majority .ai-consensus__num { color: var(--c-gold); }
+.ai-consensus__horse { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--c-text-100); margin-bottom: 3px; display: block; }
+.ai-consensus__label { font-size: 11px; color: var(--c-text-35); display: block; }
+.ai-consensus__vs    { font-size: 14px; color: var(--c-text-35); font-style: italic; }
+.ai-consensus__row--stacked {
+  justify-content: center;
+}
+.ai-consensus__row--stacked .ai-consensus__item {
+  max-width: 28rem;
+}
+.ai-consensus__split-msg,
+.ai-consensus__empty {
+  margin: 0 0 var(--space-4);
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--c-text-55);
+}
+.ai-consensus__cta   { font-size: 13px; color: var(--c-gold); font-weight: 500; border-bottom: 1px solid rgba(200,169,81,0.25); padding-bottom: 1px; transition: border-color 0.2s; }
+.ai-consensus__cta:hover { border-color: var(--c-gold); }
+
+
+/* ─────────────────────────────────────────────────────────────
+   17. FOX TEASER / RIVALRY SECTION
+───────────────────────────────────────────────────────────── */
+
+.fox-teaser-section {
+  background:
+    radial-gradient(ellipse 60% 58% at 0% 55%,   rgba(212,175,55,0.07), transparent 48%),
+    radial-gradient(ellipse 50% 52% at 100% 45%, rgba(224,90,42,0.05),  transparent 48%),
+    var(--c-navy);
+}
+
+.fox-teaser-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+
+.fox-teaser__title {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 8vw, 56px);
+  font-weight: 900;
+  color: var(--c-text-100);
+  line-height: 1;
+  margin-bottom: 14px;
+  margin-top: var(--space-3);
+}
+
+.fox-teaser__vs   { font-style: italic; color: var(--c-text-35); font-size: 0.65em; }
+.fox-teaser__text { font-size: 15px; line-height: 1.82; color: var(--c-text-75); margin-bottom: 13px; }
+
+/* Rivalry scoreboard */
+.rivalry-live {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(212,175,55,0.12);
+  border-radius: var(--r-md);
+  padding: var(--space-4) var(--space-4);
+  margin: var(--space-5) 0;
+}
+
+.rivalry-live__score    { display: flex; align-items: center; gap: var(--space-4); margin-bottom: 14px; }
+.rivalry-live__side     { flex: 1; text-align: center; }
+.rivalry-live__num      { display: block; font-family: var(--font-display); font-size: 34px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+.rivalry-live__side--fox .rivalry-live__num { color: var(--c-gold); }
+.rivalry-live__side--cub .rivalry-live__num { color: var(--c-orange); }
+.rivalry-live__label    { font-size: 11px; color: var(--c-text-35); font-weight: 600; letter-spacing: 0.06em; }
+.rivalry-live__divider  { font-size: 20px; color: var(--c-text-35); font-weight: 300; flex-shrink: 0; }
+.rivalry-live__bar      { margin-bottom: 10px; }
+.rivalry-live__caption  { font-size: 12px; color: var(--c-text-35); font-style: italic; text-align: center; margin: 0; }
+
+/* H2H bar */
+.h2h-bar        { height: 6px; border-radius: 3px; display: flex; overflow: hidden; margin-bottom: 5px; }
+.h2h-bar__fox   { background: linear-gradient(90deg, var(--c-gold), var(--c-gold-lt)); }
+.h2h-bar__draw  { background: rgba(255,255,255,0.14); }
+.h2h-bar__cub   { background: linear-gradient(90deg, var(--c-orange), #f08050); }
+.h2h-bar__labels      { display: flex; justify-content: space-between; font-size: 11px; }
+.h2h-bar__label--fox  { color: var(--c-gold); font-weight: 600; }
+.h2h-bar__label--draw { color: var(--c-text-35); }
+.h2h-bar__label--cub  { color: var(--c-orange); font-weight: 600; }
+
+/* Mini picks */
+.mini-picks    { display: flex; flex-direction: column; gap: 9px; margin: var(--space-4) 0; }
+.mini-pick     { background: var(--c-navy-card); box-shadow: var(--shadow-card); border: 1px solid var(--c-border); border-radius: var(--r-sm); padding: 13px 16px; border-left: 3px solid var(--c-gold); }
+.mini-pick--cub { border-left-color: var(--c-orange); }
+.mini-pick__who  { font-size: 10px; font-weight: 600; color: var(--c-text-35); margin-bottom: 3px; }
+.mini-pick__sel  { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--c-text-100); margin-bottom: 2px; }
+.mini-pick__sel--empty { font-family: var(--font-body); font-size: 14px; font-style: italic; color: var(--c-text-35); }
+.mini-pick__odds { font-size: 12px; font-weight: 600; color: var(--c-gold); margin-bottom: 9px; }
+.mini-pick--cub .mini-pick__odds { color: var(--c-orange); }
+
+/* Portrait duo */
+.portrait-duo { display: flex; justify-content: center; gap: var(--space-5); margin-bottom: var(--space-5); flex-wrap: wrap; }
+.portrait-duo__item { text-align: center; }
+.portrait-duo__item svg,
+.portrait-duo__item .portrait-duo__portrait {
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 18px rgba(200,169,81,0.24));
+  transition: transform 0.3s, filter 0.3s;
+  display: block;
+  margin: 0 auto;
+  object-fit: cover;
+  object-position: 50% 42%;
+}
+.portrait-duo__item--cub svg { filter: drop-shadow(0 0 18px rgba(224,90,42,0.24)); }
+.portrait-duo__item svg:hover,
+.portrait-duo__item .portrait-duo__portrait:hover { transform: scale(1.05) translateY(-4px); filter: drop-shadow(0 0 32px rgba(200,169,81,0.5)); }
+.portrait-duo__item--cub svg:hover { filter: drop-shadow(0 0 32px rgba(224,90,42,0.5)); }
+.portrait-duo__label       { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--c-gold); margin-top: 10px; margin-bottom: 3px; }
+.portrait-duo__label--cub  { color: var(--c-orange); }
+.portrait-duo__record      { font-size: 11px; color: var(--c-text-35); }
+
+
+/* ─────────────────────────────────────────────────────────────
+   18. SATURDAY DRAW SECTION
+───────────────────────────────────────────────────────────── */
+
+.draw-section {
+  position: relative;
+  background: #040509;
+  padding: var(--space-9) 0;
+  overflow: hidden;
+}
+
+.draw-section__bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 100%, rgba(192,57,43,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 0%,   rgba(212,175,55,0.04) 0%, transparent 55%);
+}
+
+.draw-section__grid {
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(212,175,55,0.018) 79px, rgba(212,175,55,0.018) 80px),
+    repeating-linear-gradient(0deg,  transparent, transparent 79px, rgba(212,175,55,0.012) 79px, rgba(212,175,55,0.012) 80px);
+}
+
+.draw-header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto var(--space-7);
+  position: relative; z-index: 1;
+}
+
+.draw-title {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 9vw, 72px);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--c-text-100);
+  margin: var(--space-3) 0 var(--space-4);
+  letter-spacing: -0.01em;
+}
+
+.draw-title em { font-style: italic; color: var(--c-gold); filter: drop-shadow(0 0 18px rgba(212,175,55,0.35)); }
+
+.draw-intro { font-size: 15px; line-height: 1.8; color: var(--c-text-55); margin: 0; }
+.draw-intro em { color: var(--c-text-100); font-style: italic; font-weight: 600; }
+
+.draw-machine-wrap {
+  position: relative; z-index: 1;
+  display: flex; justify-content: center;
+  margin-bottom: var(--space-8);
+}
+
+.draw-machine__outer-glow {
+  position: absolute; inset: -80px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(192,57,43,0.1), rgba(212,175,55,0.06), transparent 65%);
+  filter: blur(50px); pointer-events: none;
+  animation: outerGlowPulse 4s ease-in-out infinite;
+}
+
+.draw-machine {
+  position: relative; width: 100%; max-width: 520px;
+  background: linear-gradient(175deg, #0e1018, #09090f);
+  border: 1px solid rgba(212,175,55,0.18); border-radius: 12px; overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.03) inset, 0 32px 80px rgba(0,0,0,0.8);
+  z-index: 1;
+}
+
+.draw-corner { position: absolute; width: 20px; height: 20px; z-index: 10; }
+.draw-corner--tl { top: 10px; left: 10px;   border-top: 2px solid var(--c-gold); border-left: 2px solid var(--c-gold);   opacity: 0.5; }
+.draw-corner--tr { top: 10px; right: 10px;  border-top: 2px solid var(--c-gold); border-right: 2px solid var(--c-gold);  opacity: 0.5; }
+.draw-corner--bl { bottom: 10px; left: 10px;  border-bottom: 2px solid var(--c-gold); border-left: 2px solid var(--c-gold);  opacity: 0.5; }
+.draw-corner--br { bottom: 10px; right: 10px; border-bottom: 2px solid var(--c-gold); border-right: 2px solid var(--c-gold); opacity: 0.5; }
+
+.draw-machine__top {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.02);
+}
+
+.draw-machine__top-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--c-gold); opacity: 0.35; flex-shrink: 0; }
+
+.draw-machine__top-label {
+  font-size: 9px; font-weight: 800; letter-spacing: 0.28em;
+  color: var(--c-text-35); text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.draw-machine__window {
+  position: relative; background: #030305;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  height: 160px;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+
+.draw-machine__scanlines {
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.014) 2px, rgba(255,255,255,0.014) 3px);
+  pointer-events: none; z-index: 2;
+}
+
+.draw-machine__glow-inner { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(212,175,55,0.03), transparent); pointer-events: none; z-index: 1; transition: background 0.8s; }
+.draw-machine__glow-inner.active { background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(192,57,43,0.1), rgba(212,175,55,0.05), transparent); }
+
+.draw-machine__content { position: relative; z-index: 3; text-align: center; padding: 0 28px; width: 100%; }
+.draw-machine__pre-label { display: block; font-size: 9px; font-weight: 700; letter-spacing: 0.28em; color: var(--c-text-35); text-transform: uppercase; margin-bottom: 14px; transition: opacity 0.4s; }
+
+.draw-machine__horse {
+  display: block; font-family: var(--font-display);
+  font-size: clamp(22px, 5vw, 30px);
+  font-weight: 900; color: var(--c-gold); line-height: 1.15; min-height: 36px;
+  letter-spacing: 0.02em; filter: drop-shadow(0 0 16px rgba(212,175,55,0.4));
+}
+
+.draw-machine__horse.spinning { color: rgba(212,175,55,0.3); filter: none; animation: flickerSpin 0.07s steps(1) infinite; }
+.draw-machine__horse.reveal   { animation: horseRevealCinematic 0.9s cubic-bezier(0.16,1,0.3,1) both; }
+
+.draw-machine__odds { display: block; font-size: 12px; font-weight: 600; color: var(--c-text-35); margin-top: 10px; min-height: 18px; letter-spacing: 0.08em; transition: color 0.5s; }
+.draw-machine__odds.live { color: rgba(212,175,55,0.7); }
+
+.draw-machine__action { padding: 20px 28px 24px; }
+
+.draw-machine__btn {
+  width: 100%; background: var(--c-red); border: none; border-radius: 6px;
+  padding: 18px 24px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  transition: background 0.15s, transform 0.12s, box-shadow 0.2s, opacity 0.3s;
+  box-shadow: 0 4px 24px rgba(192,57,43,0.4);
+  min-height: 48px;
+}
+.draw-machine__btn:hover    { background: var(--c-red-lt); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(192,57,43,0.6); }
+.draw-machine__btn:active   { transform: translateY(1px); }
+.draw-machine__btn.drawing  { opacity: 0.45; cursor: not-allowed; transform: none !important; box-shadow: none; }
+.draw-machine__btn-text     { font-size: 12px; font-weight: 900; letter-spacing: 0.28em; color: white; text-transform: uppercase; }
+.draw-machine__btn-sub      { font-size: 10px; color: rgba(255,255,255,0.45); letter-spacing: 0.1em; font-style: italic; }
+
+/* Pillars */
+.draw-pillars {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 8px; overflow: hidden;
+  margin-bottom: var(--space-6);
+}
+
+.draw-pillar {
+  background: rgba(255,255,255,0.02);
+  padding: var(--space-5) var(--space-5);
+  transition: background 0.2s;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.draw-pillar:first-child { border-top: none; }
+.draw-pillar:hover { background: rgba(212,175,55,0.04); }
+.draw-pillar__num   { display: block; font-size: 10px; font-weight: 900; color: rgba(212,175,55,0.28); letter-spacing: 0.15em; margin-bottom: 10px; }
+.draw-pillar__title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--c-text-100); margin: 0 0 8px; }
+.draw-pillar__text  { font-size: 15px; line-height: 1.75; color: var(--c-text-55); margin: 0; }
+
+.draw-footer-cta   { position: relative; z-index: 1; text-align: center; }
+.draw-full-btn     { background: transparent; border: 1px solid rgba(212,175,55,0.28); color: var(--c-text-55); font-size: 14px; font-weight: 600; padding: 13px 28px; border-radius: var(--r-pill); display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; letter-spacing: 0.02em; width: 100%; justify-content: center; min-height: 48px; }
+.draw-full-btn:hover { background: rgba(212,175,55,0.07); border-color: rgba(212,175,55,0.5); color: var(--c-gold); }
+
+
+/* ─────────────────────────────────────────────────────────────
+   19. NEWS SECTION
+───────────────────────────────────────────────────────────── */
+
+.news-section {
+  background:
+    radial-gradient(ellipse 60% 58% at 90% 28%, rgba(100,15,50,0.14), transparent 50%),
+    var(--c-navy);
+}
+
+.news-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: var(--space-5);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.news-live-badge { display: flex; align-items: center; gap: 7px; font-size: 11px; color: var(--c-text-35); }
+.news-grid       { display: flex; flex-direction: column; gap: 12px; }
+
+.news-card { border-left: 3px solid var(--c-border); background: var(--c-navy-card); box-shadow: var(--shadow-card); border-radius: var(--r-md); padding: var(--space-4); }
+.news-card:hover { transform: translateY(-2px); }
+.news-card--urgent { border-left-color: var(--c-red); background: rgba(192,57,43,0.07); }
+.news-card__top   { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
+
+.news-type { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; padding: 3px 8px; border-radius: var(--r-pill); text-transform: uppercase; }
+.news-type--non-runner { background: rgba(200,0,30,0.16);   color: rgba(255,130,130,0.9); }
+.news-type--going      { background: rgba(14,165,233,0.11);  color: rgba(115,175,255,0.9); }
+.news-type--market     { background: rgba(212,175,55,0.12);  color: var(--c-gold); }
+.news-type--jockey     { background: rgba(16,163,127,0.11);  color: #3ecfa0; }
+.news-type--trainer    { background: rgba(139,92,246,0.11);  color: #c4b5fd; }
+
+.news-time     { font-size: 12px; color: var(--c-text-55); }
+.news-headline { font-size: 15px; font-weight: 600; color: var(--c-text-100); line-height: 1.45; margin-bottom: 8px; }
+.news-detail   { font-size: 15px; color: var(--c-text-55); line-height: 1.7; }
+
+
+/* ─────────────────────────────────────────────────────────────
+   20. RESULTS TABLE
+───────────────────────────────────────────────────────────── */
+
+.results-section {
+  background:
+    radial-gradient(ellipse 55% 52% at 0% 40%, rgba(10,48,88,0.2), transparent 50%),
+    var(--c-navy);
+}
+
+.results-table {
+  max-width: 760px; margin: 0 auto;
+  border: 1px solid var(--c-border-md); border-radius: var(--r-md);
+  overflow: hidden; box-shadow: var(--shadow-raised); background: var(--c-navy-card);
+}
+
+.results-table__header,
+.results-table__row {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 36px 36px;
+  gap: 10px; padding: 12px 16px; align-items: center;
+}
+
+.results-table__header {
+  background: rgba(212,175,55,0.08);
+  border-bottom: 1px solid var(--c-border-gold);
+  font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--c-text-35);
+}
+
+.results-table__row {
+  border-bottom: 1px solid var(--c-border);
+  transition: background 0.15s; background: var(--c-navy-card);
+}
+.results-table__row:last-child { border-bottom: none; }
+.results-table__row:hover      { background: var(--c-navy-raised); }
+
+.res-race   { font-size: 13px; color: var(--c-text-75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.res-winner { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--c-text-100); }
+.res-odds   { font-size: 12px; color: var(--c-gold); font-weight: 600; }
+.res-result { font-size: 16px; font-weight: 900; text-align: center; }
+.res-result--correct { color: var(--c-emerald-lt); }
+.res-result--wrong   { color: rgba(255,100,100,0.8); }
+
+
+/* ─────────────────────────────────────────────────────────────
+   21. FINAL CTA
+───────────────────────────────────────────────────────────── */
+
+.final-cta-section {
+  background:
+    radial-gradient(ellipse 70% 75% at 50% 0%,   rgba(212,175,55,0.10), transparent 54%),
+    radial-gradient(ellipse 45% 48% at 80% 80%,  rgba(100,18,55,0.10),  transparent 50%),
+    var(--c-midnight);
+}
+
+.final-cta { text-align: center; }
+
+.final-cta__race-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--c-gold);
+  margin-bottom: 14px; opacity: 0.7;
+}
+
+.final-cta__title {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 7vw, 56px);
+  font-weight: 900; color: var(--c-text-100);
+  line-height: 1.15; margin-bottom: 13px;
+}
+.final-cta__title em { font-style: italic; color: var(--c-gold); }
+
+.final-cta__sub  { font-size: 16px; color: var(--c-text-35); margin-bottom: var(--space-7); }
+.final-cta__btns { display: flex; flex-direction: column; align-items: stretch; gap: 12px; margin-bottom: var(--space-5); }
+.final-cta__btns .btn { width: 100%; justify-content: center; min-height: 48px; }
+.final-cta__disclaimer { font-size: 11px; color: var(--c-text-35); opacity: 0.5; }
+
+
+/* ─────────────────────────────────────────────────────────────
+   22. HORSE NAME LINK OVERRIDES (landing-specific contexts)
+───────────────────────────────────────────────────────────── */
+
+.hero__live-pick .horse-link,
+.mini-pick__sel  .horse-link { color: inherit; font-weight: inherit; }
+
+.ai-pick__horse .horse-link,
+.ai-consensus__horse .horse-link {
+  color: inherit; font-weight: inherit;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+.ai-pick__horse .horse-link:hover,
+.ai-consensus__horse .horse-link:hover { color: var(--c-gold); border-bottom-color: var(--c-gold); }
+
+.res-winner .horse-link { color: var(--c-text-100); font-weight: 600; }
+
+
+/* ─────────────────────────────────────────────────────────────
+   23. ANIMATIONS — single consolidated block
+───────────────────────────────────────────────────────────── */
+
+@keyframes fadeUp    { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulseDot  { 0%,100% { opacity: 1; } 50% { opacity: 0.15; } }
+@keyframes pulseNode { 0%,100% { box-shadow: 0 0 0 0   rgba(212,175,55,0.55); } 50% { box-shadow: 0 0 0 7px rgba(212,175,55,0); } }
+
+@keyframes raceNameReveal {
+  0%   { opacity: 0; transform: rotateX(40deg) rotateY(-8deg) translateY(20px) scale(0.92); filter: drop-shadow(0 0 0px rgba(212,175,55,0)) blur(4px); }
+  60%  { filter: drop-shadow(0 0 32px rgba(212,175,55,0.6)) blur(0px); }
+  100% { opacity: 1; transform: rotateX(0deg) rotateY(0deg) translateY(0px) scale(1); filter: drop-shadow(0 0 20px rgba(212,175,55,0.35)); }
+}
+
+@keyframes goldShimmer  { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+@keyframes shimmerSweep { 0% { background-position: -100% 0; opacity: 0; } 10% { opacity: 1; } 50% { background-position: 200% 0; opacity: 0.8; } 60%,100% { background-position: 300% 0; opacity: 0; } }
+
+@keyframes trophyPulse {
+  0%,100% { filter: drop-shadow(0 0 14px rgba(212,175,55,0.55)) drop-shadow(0 0 4px rgba(212,175,55,0.3)); }
+  50%     { filter: drop-shadow(0 0 26px rgba(212,175,55,0.85)) drop-shadow(0 0 8px rgba(212,175,55,0.5)); }
+}
+
+@keyframes outerGlowPulse { 0%,100% { opacity: 0.5; transform: scale(1); }    50% { opacity: 1; transform: scale(1.06); } }
+@keyframes flickerSpin    { 0% { opacity: 1; transform: scaleY(1); color: rgba(212,175,55,0.35); } 48% { opacity: 0.5; transform: scaleY(0.96); } 52% { opacity: 0.5; transform: scaleY(0.96); } 100% { opacity: 1; transform: scaleY(1); } }
+
+@keyframes horseRevealCinematic {
+  0%   { opacity: 0; transform: translateY(14px) scale(0.88); filter: blur(10px) drop-shadow(0 0 0 rgba(212,175,55,0)); color: white; }
+  30%  { filter: blur(3px) drop-shadow(0 0 50px rgba(212,175,55,1)); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0) drop-shadow(0 0 22px rgba(212,175,55,0.6)); color: var(--c-gold); }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   24. TABLET BREAKPOINT — 768px+
+   Two-column layouts unlock. Buttons stop being full-width.
+   Hero becomes a grid.
+═══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 768px) {
+
+  /* Hero fold: restore grid layout */
+
+  /* Countdown (hero__right) appears LEFT, title (hero__left) appears RIGHT — matching original */
+
+  /* Space hero panel from live ticker */
+
+  /* gap set in hero__right rule above */
+
+
+
+
+
+
+
+
+
+  /* Restore stat grid + fav card */
+
+  /* Hide mobile racecard cta, show racecard cta in left */
+
+  /* Spacer visible again */
+  /* Ticker stays in flow (not fixed) on tablet+ */
+  /* Gamble aware */
+
+  /* Countdown digits larger */
+  .cd-num { font-size: 36px; min-width: 46px; }
+  .countdown-trophy-svg { width: 72px; height: 78px; }
+
+  /* Hero title */
+  .hero__title-main  { font-size: clamp(54px, 8vw, 108px); }
+  .hero__title-small { font-size: clamp(30px, 4vw, 54px); }
+
+  /* Hero subtitle */
+  .hero__subtitle--game { font-size: 16px; }
+
+  /* Hero CTAs: back to inline row */
+  .hero__ctas { flex-direction: row; flex-wrap: wrap; }
+  .hero__ctas .btn { width: auto; }
+
+  /* Picks duel: unified row + vertical gold rail */
+  .picks-duel__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr);
+    align-items: stretch;
+    min-height: 186px;
+  }
+
+  .picks-duel__half {
+    padding: 22px 20px 24px;
+  }
+
+  .picks-duel__streak--fox {
+    left: 20px;
+  }
+
+  .picks-duel__half--cubs .picks-duel__streak {
+    right: 20px;
+  }
+
+  .picks-duel__divider {
+    flex-direction: column;
+    width: 56px;
+    padding: 18px 0;
+    gap: 0;
+    align-self: stretch;
+    justify-content: center;
+  }
+
+  .picks-duel__divider-line {
+    flex: 1;
+    width: 1px;
+    min-height: 16px;
+    height: auto;
+  }
+
+  .picks-duel__divider-line--before {
+    background: linear-gradient(to top, rgba(212, 175, 55, 0.75), transparent);
+  }
+
+  .picks-duel__divider-line--after {
+    width: 2px;
+    background: linear-gradient(to bottom, rgba(212, 175, 55, 0.90), transparent);
+  }
+
+  .picks-duel__vs-badge {
+    width: 70px;
+    height: 70px;
+    margin: 6px 0;
+  }
+
+  .picks-duel__vs-text {
+    font-size: 20px;
+  }
+
+  .picks-duel__horse {
+    font-size: clamp(17px, 2.4vw, 26px);
+  }
+
+  .picks-duel__horse--pending {
+    font-size: clamp(16px, 2.1vw, 22px);
+  }
+
+  /* Section header fonts */
+  .section-header__title { font-size: clamp(28px, 4.5vw, 42px); }
+
+  /* Split layout: two columns */
+  .landing-split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); align-items: start; }
+  .landing-split--rev .landing-split__visual { order: -1; }
+  .landing-split__ctas { flex-direction: row; flex-wrap: wrap; }
+  .landing-split__ctas .btn { width: auto; }
+
+  /* Track timeline: horizontal row of 4 steps, markers aligned on the rail */
+  .track-timeline__steps {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+  }
+  .game-loop__cta { flex-direction: row; align-items: center; justify-content: center; }
+  .game-loop__cta .btn { width: auto; }
+
+  /* AI grid: 2 columns */
+  .ai-grid { display: grid; grid-template-columns: 1fr 1fr; flex-direction: unset; }
+
+  /* News grid: 2 columns */
+  .news-grid { display: grid; grid-template-columns: 1fr 1fr; flex-direction: unset; }
+
+  /* Results table: wider columns */
+  .results-table__header,
+  .results-table__row { grid-template-columns: 2fr 1.5fr 1fr 52px 52px; gap: 14px; padding: 12px 20px; }
+
+  /* Final CTA: row buttons */
+  .final-cta__btns { flex-direction: row; align-items: center; justify-content: center; }
+  .final-cta__btns .btn { width: auto; }
+
+  /* Draw pillars: 3 columns */
+  .draw-pillars { flex-direction: row; }
+  .draw-pillar { border-top: none; border-left: 1px solid rgba(255,255,255,0.05); }
+  .draw-pillar:first-child { border-left: none; }
+
+  /* Draw full btn: auto width */
+  .draw-full-btn { width: auto; }
+
+  /* Fox teaser: two columns */
+  .fox-teaser-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); align-items: center; }
+
+  /* Portrait duo: larger portraits */
+  .portrait-duo__item svg,
+  .portrait-duo__item .portrait-duo__portrait { width: 155px; height: 155px; }
+
+  /* Deeper game divider padding */
+  .deeper-game-divider { padding: 0 var(--space-7); }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   25. DESKTOP BREAKPOINT — 1024px+
+   Three-column AI grid. Section headers larger. Tighter spacing.
+═══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 1024px) {
+
+  /* AI grid: 3 columns */
+  .ai-grid { grid-template-columns: repeat(3, 1fr); }
+
+  /* News grid: 3 columns */
+  .news-grid { grid-template-columns: repeat(3, 1fr); }
+
+  /* Features grid if present: 3 columns */
+  .features-grid { grid-template-columns: repeat(3, 1fr); }
+
+  /* Coverage grid: 3 columns */
+  .cov-grid { grid-template-columns: repeat(3, 1fr); }
+
+  /* Hero content: wider left column on big screens */
+
+
+  /* Section headers bigger */
+  .section-header__title { font-size: 42px; }
+
+  /* Fox teaser: reduce gap */
+  .fox-teaser-grid { gap: 60px; }
+
+  /* Draw pillars get more breathing room */
+  .draw-pillar { padding: 28px 24px; }
+}

@@ -1,0 +1,1764 @@
+/* Compare Us — Cinematic "Tale of the Tape" experience.
+   PR-A ships the layout skeleton + dark arena base. PR-B/C layer
+   in the GSAP animations + Fight Club picker.
+
+   Structure:
+     .cus-cine                 — page root (dark arena)
+     .cus-scene                — one per act (8 total)
+     .cus-scene__inner         — 1100px centred content column
+     .cus-corner               — ring-walk fighter card
+     .cus-tape                 — weigh-in comparison table
+     .cus-rounds / .cus-round  — round-by-round strip
+     .cus-meters / .cus-meter  — wins-per-day gauge (round 2)
+     .cus-verdict              — projected champion card
+     .cus-fightclub            — scene 7 gamification block
+     .cus-outro                — scene 8 CTA row
+*/
+
+/* ── Base surface — dark arena ─────────────────────────────── */
+
+.page-cus-cinematic {
+  background: #050508;
+  color: #f5efe3;
+}
+.cus-cine {
+  --arena-bg-0:   #050508;
+  --arena-bg-1:   #12121a;
+  --arena-ink:    #f5efe3;
+  --arena-ink-70: rgba(245, 239, 227, 0.72);
+  --arena-ink-50: rgba(245, 239, 227, 0.50);
+  --arena-gold:   #b8860b;
+  --arena-red:    #dc2626;
+  --arena-blue:   #2563eb;
+  --arena-hair:   rgba(245, 239, 227, 0.10);
+
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--arena-ink);
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(184, 134, 11, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 90%, rgba(37,  99, 235, 0.08) 0%, transparent 55%),
+    linear-gradient(180deg, var(--arena-bg-0) 0%, var(--arena-bg-1) 100%);
+}
+
+/* ── Scene container ──────────────────────────────────────── */
+
+.cus-scene {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 64px 24px;
+  position: relative;
+  border-bottom: 1px solid var(--arena-hair);
+}
+.cus-scene:last-child { border-bottom: 0; }
+.cus-scene__inner {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.cus-scene__eyebrow {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--arena-gold);
+}
+.cus-scene__title {
+  margin: 0 0 24px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.05;
+  color: var(--arena-ink);
+}
+.cus-scene__prompt {
+  margin-top: 40px;
+  font-size: 13px;
+  color: var(--arena-ink-50);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* ── Empty-state (no snapshot yet) ─────────────────────────── */
+
+.cus-cine__empty {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+}
+.cus-cine__empty-card {
+  max-width: 520px;
+  padding: 40px;
+  background: rgba(245, 239, 227, 0.04);
+  border: 1px solid var(--arena-hair);
+  border-radius: 12px;
+  text-align: center;
+}
+.cus-cine__empty-eyebrow {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--arena-gold);
+}
+.cus-cine__empty-title {
+  margin: 0 0 12px;
+  font-family: Georgia, serif;
+  font-size: 26px;
+  color: var(--arena-ink);
+}
+.cus-cine__empty-copy {
+  margin: 0 0 20px;
+  color: var(--arena-ink-70);
+}
+.cus-cine__empty-back {
+  color: var(--arena-gold);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+/* ── Scene 1 · Ring walk — the face-off ────────────────────── */
+
+.cus-scene__inner--wide {
+  max-width: 1400px;
+}
+.cus-scene__eyebrow--centred {
+  text-align: center;
+}
+.cus-scene--ring-walk {
+  min-height: 100vh;
+  padding: 40px 24px;
+}
+.cus-scene__prompt--scroll {
+  margin-top: 24px;
+}
+
+/* Face-off grid — left fighter · centre stack · right fighter.
+   Portraits are the drama; the middle is data. */
+.cus-faceoff {
+  display: grid;
+  grid-template-columns: 1fr minmax(300px, 480px) 1fr;
+  align-items: center;
+  gap: 24px;
+  margin: 32px 0 40px;
+  position: relative;
+}
+
+/* Fighter blocks flank the centre. Off-canvas start positions are set
+   inline by GSAP; the CSS end state is centred + at rest. */
+.cus-faceoff__fighter {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.cus-faceoff__portrait-wrap {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 0;
+  isolation: isolate;
+}
+.cus-faceoff__portrait-wrap::before {
+  /* Subtle spotlight halo behind the portrait — colour flexes with the
+     fighter's corner accent. */
+  content: '';
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center,
+                var(--corner-glow, transparent) 0%,
+                transparent 68%);
+  z-index: 0;
+  filter: blur(24px);
+}
+.cus-faceoff__portrait {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 4px var(--corner-accent, var(--arena-gold)),
+              0 12px 40px rgba(0, 0, 0, 0.55);
+}
+.cus-faceoff__fighter--left {
+  --corner-accent: var(--left-accent, var(--arena-red));
+  --corner-glow:   color-mix(in srgb, var(--left-accent, #dc2626) 45%, transparent);
+}
+.cus-faceoff__fighter--right {
+  --corner-accent: var(--right-accent, var(--arena-blue));
+  --corner-glow:   color-mix(in srgb, var(--right-accent, #2563eb) 45%, transparent);
+}
+
+.cus-faceoff__caption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+.cus-faceoff__corner {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--corner-accent);
+}
+.cus-faceoff__name {
+  font-family: Georgia, serif;
+  font-size: clamp(20px, 2.6vw, 30px);
+  line-height: 1.1;
+  color: var(--arena-ink);
+  font-weight: 700;
+}
+.cus-faceoff__nickname {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--arena-ink-70);
+  max-width: 260px;
+}
+.cus-faceoff__side-wins {
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+  color: var(--arena-ink-70);
+  margin-top: 4px;
+}
+
+/* Centre stack — title, VS badge, mini-tape. */
+.cus-faceoff__centre {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+  padding: 0 4px;
+}
+.cus-faceoff__title {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: clamp(22px, 2.6vw, 32px);
+  line-height: 1.1;
+  color: var(--arena-ink);
+  letter-spacing: 0.01em;
+}
+.cus-faceoff__vs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center,
+                #1a1a24 0%, #0b0b0f 90%);
+  border: 2px solid var(--arena-gold);
+  box-shadow: 0 0 40px -8px rgba(184, 134, 11, 0.55),
+              inset 0 0 20px rgba(184, 134, 11, 0.20);
+}
+.cus-faceoff__vs-text {
+  font-family: Georgia, serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--arena-gold);
+  letter-spacing: 0.06em;
+}
+.cus-faceoff__stats {
+  margin: 0;
+  padding: 16px 20px;
+  background: rgba(245, 239, 227, 0.03);
+  border: 1px solid var(--arena-hair);
+  border-radius: 8px;
+  min-width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cus-faceoff__stat {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.cus-faceoff__stat-label {
+  grid-column: 1 / -1;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--arena-ink-50);
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: -4px;
+}
+.cus-faceoff__stat-values {
+  grid-column: 1 / -1;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--arena-ink-70);
+}
+.cus-faceoff__stat-left  { text-align: right; }
+.cus-faceoff__stat-right { text-align: left;  }
+.cus-faceoff__stat-sep {
+  color: var(--arena-ink-50);
+  font-weight: 700;
+}
+.cus-faceoff__stat-left--winner {
+  color: var(--left-accent, var(--arena-red));
+  font-weight: 700;
+}
+.cus-faceoff__stat-right--winner {
+  color: var(--right-accent, var(--arena-blue));
+  font-weight: 700;
+}
+
+/* Undercard — smaller cards under the main event. */
+.cus-undercard {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--arena-hair);
+  text-align: center;
+}
+.cus-undercard__eyebrow {
+  margin: 0 0 16px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--arena-gold);
+}
+.cus-undercard__row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+}
+.cus-undercard__fighter {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 140px;
+}
+.cus-undercard__portrait {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 2px var(--fighter-accent, var(--arena-gold)),
+              0 6px 16px rgba(0, 0, 0, 0.4);
+}
+.cus-undercard__fighter figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cus-undercard__name {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  color: var(--arena-ink);
+}
+.cus-undercard__wins {
+  font-size: 11px;
+  color: var(--arena-ink-50);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Mobile: stack the face-off vertically, shrink portraits. */
+@media (max-width: 900px) {
+  .cus-faceoff {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .cus-faceoff__fighter--right { order: 3; }
+  .cus-faceoff__centre         { order: 2; }
+  .cus-faceoff__portrait,
+  .cus-faceoff__portrait-wrap { width: 200px; height: 200px; }
+  .cus-faceoff__vs { width: 68px; height: 68px; }
+  .cus-faceoff__vs-text { font-size: 22px; }
+}
+
+/* ── Scene 2 · Tale of the tape ────────────────────────────── */
+
+.cus-tape {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-variant-numeric: tabular-nums;
+}
+.cus-tape__stat {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--arena-ink-50);
+  border-bottom: 1px solid var(--arena-hair);
+}
+.cus-tape__fighter {
+  text-align: center;
+  padding: 12px 16px;
+  font-family: Georgia, serif;
+  font-size: 16px;
+  color: var(--fighter-accent, var(--arena-ink));
+  border-bottom: 1px solid var(--arena-hair);
+}
+.cus-tape__label {
+  text-align: left;
+  padding: 14px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--arena-ink-70);
+  border-bottom: 1px solid var(--arena-hair);
+}
+.cus-tape__value {
+  text-align: center;
+  padding: 14px 16px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--arena-ink);
+  border-bottom: 1px solid var(--arena-hair);
+  position: relative;
+}
+.cus-tape__value--winner {
+  color: var(--arena-gold);
+}
+.cus-tape__ahead {
+  display: block;
+  margin-top: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--arena-gold);
+}
+
+/* ── Scene 3 · Round 1 (season so far) ─────────────────────── */
+
+/* Deck below the title — sets up the round-by-round framing. */
+.cus-scene__deck {
+  margin: 0 0 32px;
+  font-size: 15px;
+  color: var(--arena-ink-70);
+  max-width: 640px;
+  line-height: 1.55;
+}
+
+.cus-rounds--stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+/* ── The round panel — a "round of the fight" ──────────────── */
+.cus-round-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  padding: 24px 24px 20px;
+  background: linear-gradient(180deg,
+                rgba(245, 239, 227, 0.04) 0%,
+                rgba(245, 239, 227, 0.02) 100%);
+  border: 1px solid var(--arena-hair);
+  border-left: 3px solid var(--winner-accent, var(--arena-gold));
+  border-radius: 10px;
+  position: relative;
+}
+
+.cus-round-panel__head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    "index month"
+    "caption caption";
+  align-items: baseline;
+  gap: 4px 16px;
+}
+.cus-round-panel__index {
+  grid-area: index;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--winner-accent, var(--arena-gold));
+}
+.cus-round-panel__month {
+  grid-area: month;
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 24px;
+  line-height: 1.1;
+  color: var(--arena-ink);
+  font-weight: 700;
+}
+.cus-round-panel__caption {
+  grid-area: caption;
+  margin: 4px 0 0;
+  font-size: 15px;
+  color: var(--arena-ink);
+  font-style: italic;
+  line-height: 1.45;
+}
+
+/* ── Horizontal bar rows (one per fighter) ─────────────────── */
+.cus-round-panel__bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cus-hbar {
+  display: grid;
+  grid-template-columns: 130px 1fr 40px;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+}
+.cus-hbar__name {
+  color: var(--arena-ink-70);
+  font-weight: 600;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cus-hbar--winner .cus-hbar__name {
+  color: var(--arena-ink);
+}
+.cus-hbar__track {
+  position: relative;
+  height: 22px;
+  background: rgba(245, 239, 227, 0.05);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.cus-hbar__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;                       /* JS grows this to the scaled % */
+  background: var(--fighter-accent, var(--arena-ink-50));
+  border-radius: 4px;
+  opacity: 0.75;
+}
+.cus-hbar--winner .cus-hbar__fill {
+  opacity: 1;
+  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.15),
+              0 0 12px var(--fighter-accent, var(--arena-gold));
+}
+.cus-hbar__value {
+  color: var(--arena-ink);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  font-size: 15px;
+}
+.cus-hbar--winner .cus-hbar__value {
+  color: var(--fighter-accent);
+  font-size: 18px;
+}
+
+/* ── Round footer — winner chip, notable race, ticker ──────── */
+.cus-round-panel__foot {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--arena-hair);
+}
+
+.cus-round-panel__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px 6px 8px;
+  background: color-mix(in srgb, var(--winner-accent, #b8860b) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--winner-accent, #b8860b) 45%, transparent);
+  border-radius: 999px;
+  align-self: flex-start;
+  justify-self: flex-start;
+}
+.cus-round-panel__chip-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--winner-accent, var(--arena-gold));
+}
+.cus-round-panel__chip-name {
+  font-family: Georgia, serif;
+  font-size: 14px;
+  color: var(--arena-ink);
+  font-weight: 700;
+}
+.cus-round-panel__chip-gap {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--winner-accent, var(--arena-gold));
+  font-variant-numeric: tabular-nums;
+  background: color-mix(in srgb, var(--winner-accent, #b8860b) 25%, transparent);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.cus-round-panel__notable {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px;
+  background: rgba(245, 239, 227, 0.03);
+  border-radius: 8px;
+  border-left: 3px solid var(--winner-accent, var(--arena-gold));
+  font-size: 12.5px;
+  line-height: 1.4;
+  grid-column: span 1;
+}
+.cus-round-panel__notable-eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--arena-ink-50);
+}
+.cus-round-panel__notable-body {
+  color: var(--arena-ink-70);
+}
+.cus-round-panel__notable-body strong {
+  color: var(--arena-ink);
+  font-weight: 700;
+}
+
+/* Ticker — running-season totals under the round. */
+.cus-round-panel__ticker {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 14px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--arena-hair);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.cus-round-panel__ticker-label {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--arena-ink-50);
+  font-weight: 700;
+  margin-right: 6px;
+}
+.cus-round-panel__ticker-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--arena-ink-70);
+}
+.cus-round-panel__ticker-row--leader {
+  color: var(--arena-ink);
+  font-weight: 700;
+}
+.cus-round-panel__ticker-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fighter-accent, var(--arena-ink-50));
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+.cus-round-panel__ticker-name {
+  font-weight: inherit;
+}
+.cus-round-panel__ticker-wins {
+  font-weight: 700;
+  color: var(--arena-ink);
+}
+
+/* Mobile: bars shrink, footer stacks. */
+@media (max-width: 720px) {
+  .cus-round-panel__foot { grid-template-columns: 1fr; }
+  .cus-hbar { grid-template-columns: 92px 1fr 40px; font-size: 12px; }
+  .cus-hbar__name { font-size: 12px; }
+  .cus-round-panel__month { font-size: 20px; }
+}
+
+/* ── Scene 4 · Round 2 (rate) ──────────────────────────────── */
+
+.cus-meters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+.cus-meter {
+  padding: 20px 20px 22px;
+  background: linear-gradient(180deg,
+                rgba(245, 239, 227, 0.04) 0%,
+                rgba(245, 239, 227, 0.015) 100%);
+  border: 1px solid var(--arena-hair);
+  border-top: 3px solid var(--fighter-accent, var(--arena-gold));
+  border-radius: 10px;
+  text-align: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.cus-meter--leader {
+  box-shadow: 0 0 24px -6px color-mix(in srgb,
+                var(--fighter-accent, #b8860b) 55%, transparent);
+}
+
+.cus-meter__head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.cus-meter__name {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  color: var(--arena-ink);
+  line-height: 1.2;
+}
+.cus-meter__leader-pill {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #050508;
+  background: var(--fighter-accent, var(--arena-gold));
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+/* Gauge arc — SVG half-circle, track light, fill in the fighter's accent. */
+.cus-meter__gauge {
+  display: block;
+  width: 120px;
+  height: 66px;
+  margin: 4px auto -6px;
+}
+.cus-meter__gauge-track {
+  stroke: rgba(245, 239, 227, 0.10);
+  stroke-width: 6;
+}
+.cus-meter__gauge-fill {
+  stroke: var(--fighter-accent, var(--arena-gold));
+  stroke-width: 6;
+  /* pathLength=100 lets JS animate stroke-dashoffset from 100 → 100-pct. */
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  filter: drop-shadow(0 0 4px color-mix(in srgb,
+                       var(--fighter-accent, #b8860b) 45%, transparent));
+}
+
+.cus-meter__value {
+  font-size: 42px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--fighter-accent, var(--arena-ink));
+  line-height: 1;
+  margin-top: 4px;
+}
+.cus-meter__unit {
+  font-size: 11px;
+  color: var(--arena-ink-50);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+/* Momentum chip — up = teal (accelerating), down = crimson (cooling),
+   flat = muted grey. Colour cues + label (never colour alone). */
+.cus-meter__momentum {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  background: rgba(245, 239, 227, 0.06);
+  color: var(--arena-ink-70);
+  border: 1px solid var(--arena-hair);
+}
+.cus-meter--up .cus-meter__momentum {
+  background: rgba(20, 184, 166, 0.15);
+  color: #14b8a6;
+  border-color: rgba(20, 184, 166, 0.35);
+}
+.cus-meter--down .cus-meter__momentum {
+  background: rgba(220, 38, 38, 0.12);
+  color: #f26b6b;
+  border-color: rgba(220, 38, 38, 0.30);
+}
+.cus-meter__momentum-icon {
+  font-size: 11px;
+  line-height: 1;
+}
+
+.cus-meter__gap {
+  font-size: 11px;
+  color: var(--arena-ink-50);
+  margin-top: 2px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Editorial caption below the meter row. */
+.cus-meters__caption {
+  margin: 32px auto 0;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--arena-ink);
+  font-style: italic;
+  text-align: center;
+  max-width: 720px;
+  padding: 0 8px;
+  position: relative;
+}
+.cus-meters__caption::before,
+.cus-meters__caption::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent,
+                var(--arena-gold), transparent);
+  margin: 12px auto;
+  opacity: 0.5;
+}
+
+/* Chase clock — only shown when a challenger is meaningfully faster. */
+.cus-meters__chase {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 12px 18px;
+  max-width: 560px;
+  margin: 20px auto 0;
+  padding: 14px 20px;
+  background: rgba(184, 134, 11, 0.10);
+  border: 1px solid rgba(184, 134, 11, 0.35);
+  border-radius: 10px;
+}
+.cus-meters__chase-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--arena-gold);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.cus-meters__chase-body {
+  font-size: 14px;
+  color: var(--arena-ink);
+  line-height: 1.4;
+}
+.cus-meters__chase-body strong {
+  color: var(--arena-gold);
+  font-weight: 700;
+}
+@media (max-width: 640px) {
+  .cus-meters__chase { grid-template-columns: 1fr; text-align: center; }
+}
+
+/* ── Scene 5 · Forecast — the centrepiece ─────────────────── */
+
+.cus-scene--forecast {
+  min-height: 100vh;
+  padding: 80px 24px;
+  position: relative;
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(184, 134, 11, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 90%, rgba(37, 99, 235, 0.05) 0%, transparent 60%);
+}
+.cus-forecast__head {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 40px;
+}
+.cus-forecast__title {
+  margin: 8px 0 12px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(44px, 6vw, 84px);
+  line-height: 1.0;
+  color: var(--arena-ink);
+  letter-spacing: -0.01em;
+  text-shadow: 0 0 40px rgba(184, 134, 11, 0.10);
+}
+.cus-forecast__deck {
+  margin: 12px 0 0;
+  font-size: clamp(15px, 1.4vw, 17px);
+  color: var(--arena-ink-70);
+  line-height: 1.6;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* The stage — chart + verdict overlay side-by-side on wide viewports,
+   stacked on narrow. */
+.cus-forecast__stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  max-width: 1240px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Chart wrap gets a dramatic outer frame + gold rim + shadow well. */
+.cus-forecast__chart-wrap {
+  position: relative;
+  padding: 24px 20px 12px;
+  background:
+    linear-gradient(180deg,
+      rgba(245, 239, 227, 0.05) 0%,
+      rgba(245, 239, 227, 0.015) 100%);
+  border: 1px solid rgba(184, 134, 11, 0.30);
+  border-radius: 14px;
+  box-shadow:
+    0 0 60px -12px rgba(184, 134, 11, 0.35),
+    0 30px 80px -20px rgba(0, 0, 0, 0.6);
+}
+.cus-forecast__chart-wrap::before {
+  /* Corner sparkle — a subtle gold highlight in the top-left of
+     the frame, evoking a spotlight on the stage. */
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 30%; height: 30%;
+  background: radial-gradient(ellipse at top left,
+                rgba(184, 134, 11, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  border-top-left-radius: 14px;
+}
+
+/* Chart theme override — inherit dark-hosted vars but give it more
+   room to breathe. */
+.cus-scene--forecast .cus-chart {
+  --cus-chart-bg:      transparent;
+  --cus-chart-ink:     var(--arena-ink);
+  --cus-chart-ink-70:  var(--arena-ink-70);
+  --cus-chart-muted:   var(--arena-ink-50);
+  --cus-chart-grid:    rgba(245, 239, 227, 0.09);
+  --cus-chart-base:    rgba(245, 239, 227, 0.28);
+  --cus-chart-today:   var(--arena-ink-70);
+  --cus-chart-today-pill:     var(--arena-gold);
+  --cus-chart-today-pill-ink: #050508;
+  --cus-chart-border:  transparent;
+  margin: 0;
+}
+.cus-scene--forecast .cus-chart__svg {
+  max-width: none;
+  border: 0;
+  padding: 0;
+}
+/* Beef up axis + end-label typography inside this scene only. */
+.cus-scene--forecast .cus-chart__ytick,
+.cus-scene--forecast .cus-chart__xtick {
+  font-size: 13px;
+  fill: var(--arena-ink-70);
+  font-weight: 600;
+}
+.cus-scene--forecast .cus-chart__yaxis-title {
+  font-size: 12px;
+  fill: var(--arena-gold);
+  letter-spacing: 0.20em;
+}
+.cus-scene--forecast .cus-chart__end-label {
+  font-size: 17px;
+  font-weight: 700;
+}
+.cus-scene--forecast .cus-chart__today-label {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+}
+/* Actual + forecast strokes get a hair thicker for stage presence. */
+.cus-scene--forecast .cus-chart__actual  { stroke-width: 3.25; }
+.cus-scene--forecast .cus-chart__forecast { stroke-width: 2.75; }
+/* Legend inside the forecast frame — slightly larger. */
+.cus-scene--forecast .cus-chart__legend {
+  margin-top: 20px;
+  padding: 12px 16px 0;
+  border-top: 1px solid rgba(245, 239, 227, 0.08);
+}
+.cus-scene--forecast .cus-chart__legend-name { font-size: 15px; }
+
+/* Milestone pins — absolute-positioned over the chart at (x, y) as
+   percentages of the SVG's viewBox. Rendered as a small dot with a
+   hover-revealed card. */
+.cus-forecast__milestones {
+  position: absolute;
+  inset: 24px 20px 12px;  /* matches chart-wrap padding */
+  pointer-events: none;
+}
+.cus-forecast__milestone {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  pointer-events: auto;
+  z-index: 3;
+}
+.cus-forecast__milestone-dot {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--milestone-accent, var(--arena-gold));
+  box-shadow:
+    0 0 0 3px rgba(5, 5, 8, 0.9),
+    0 0 12px var(--milestone-accent, var(--arena-gold));
+  margin: 0 auto 6px;
+  animation: cus-milestone-pulse 2s ease-in-out infinite;
+}
+@keyframes cus-milestone-pulse {
+  0%, 100% { transform: scale(1);   opacity: 1; }
+  50%      { transform: scale(1.3); opacity: 0.75; }
+}
+.cus-forecast__milestone-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 12px;
+  min-width: 180px;
+  max-width: 240px;
+  background: rgba(11, 11, 15, 0.94);
+  border: 1px solid var(--milestone-accent, var(--arena-gold));
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--arena-ink);
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 160ms ease, transform 160ms ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.cus-forecast__milestone:hover .cus-forecast__milestone-body,
+.cus-forecast__milestone:focus-within .cus-forecast__milestone-body {
+  opacity: 1;
+  transform: translateY(0);
+}
+.cus-forecast__milestone-eyebrow {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--milestone-accent, var(--arena-gold));
+}
+.cus-forecast__milestone-race {
+  font-family: Georgia, serif;
+  font-weight: 700;
+  color: var(--arena-ink);
+  font-size: 12.5px;
+}
+.cus-forecast__milestone-meta {
+  color: var(--arena-ink-70);
+  font-size: 10.5px;
+}
+
+/* Verdict overlay — lands under the chart as the reveal finishes. */
+.cus-forecast__verdict {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 24px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg,
+                color-mix(in srgb, var(--verdict-accent, #b8860b) 12%, transparent) 0%,
+                rgba(0, 0, 0, 0.15) 100%);
+  border: 1px solid var(--verdict-accent, var(--arena-gold));
+  border-radius: 12px;
+  max-width: 720px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+.cus-forecast__verdict::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at top left,
+                color-mix(in srgb, var(--verdict-accent, #b8860b) 30%, transparent) 0%,
+                transparent 60%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+.cus-forecast__verdict > * { position: relative; z-index: 1; }
+.cus-forecast__verdict-eyebrow {
+  grid-column: 1 / -1;
+  font-family: Georgia, serif;
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--verdict-accent, var(--arena-gold));
+  line-height: 1;
+}
+.cus-forecast__verdict--overlap .cus-forecast__verdict-eyebrow {
+  color: #f0c14b;
+}
+.cus-forecast__verdict-body {
+  grid-column: 1 / -1;
+  font-size: 15px;
+  color: var(--arena-ink-70);
+  line-height: 1.5;
+  margin-top: 4px;
+}
+.cus-forecast__verdict-stats {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 32px;
+  margin: 12px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid rgba(245, 239, 227, 0.10);
+}
+.cus-forecast__verdict-stats > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cus-forecast__verdict-stats dt {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--arena-ink-50);
+}
+.cus-forecast__verdict-stats dd {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 700;
+  color: var(--arena-ink);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+@media (max-width: 720px) {
+  .cus-scene--forecast { padding: 60px 16px; }
+  .cus-forecast__title { font-size: clamp(34px, 8vw, 48px); }
+  .cus-forecast__chart-wrap { padding: 16px 12px 8px; }
+  .cus-forecast__verdict { padding: 16px 18px; }
+  .cus-forecast__verdict-stats { gap: 12px 20px; }
+  /* Milestone tooltips get pushed lower on mobile where hover is
+     a tap — always-shown compact version. */
+  .cus-forecast__milestone-body { display: none; }
+}
+
+/* ── Scene 6 · Decision — championship celebration ────────── */
+
+.cus-scene--decision {
+  min-height: 100vh;
+  padding: 80px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(184, 134, 11, 0.16) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(184, 134, 11, 0.06) 0%, transparent 55%);
+}
+.cus-scene--decision-overlap {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(240, 193, 75, 0.14) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 100%, rgba(37, 99, 235, 0.06) 0%, transparent 55%);
+}
+
+.cus-champ {
+  position: relative;
+  max-width: 780px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Announcer eyebrow — appears first, sets the mood. */
+.cus-champ__announcer {
+  margin: 0;
+  font-size: clamp(11px, 1.2vw, 14px);
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--arena-gold);
+  text-shadow: 0 0 20px rgba(184, 134, 11, 0.5);
+}
+
+/* Stage — portrait + belt + confetti burst all live here. */
+.cus-champ__stage {
+  position: relative;
+  width: 100%;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+.cus-champ__spotlight {
+  position: absolute;
+  top: -60px; left: 50%;
+  transform: translateX(-50%);
+  width: 620px;
+  height: 620px;
+  background: radial-gradient(circle at center,
+                rgba(184, 134, 11, 0.22) 0%,
+                rgba(184, 134, 11, 0.06) 30%,
+                transparent 60%);
+  pointer-events: none;
+  opacity: 0;   /* GSAP fades in */
+  filter: blur(20px);
+}
+
+/* Belt / crown mark — sits above the portrait, colour = champion accent. */
+.cus-champ__belt {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 78px;
+  color: var(--champ-accent, var(--arena-gold));
+  filter: drop-shadow(0 0 12px color-mix(in srgb,
+                       var(--champ-accent, #b8860b) 55%, transparent));
+  opacity: 0;
+}
+.cus-champ__belt-line {
+  stroke-dasharray: 380;
+  stroke-dashoffset: 380;
+}
+.cus-champ__belt-gem {
+  fill: var(--champ-accent, var(--arena-gold));
+  opacity: 0;
+}
+
+/* Portrait wrap — a ring, a shadow well, and a subtle rotate-in. */
+.cus-champ__portrait-wrap {
+  position: relative;
+  width: clamp(200px, 24vw, 280px);
+  height: clamp(200px, 24vw, 280px);
+  border-radius: 50%;
+  padding: 0;
+  isolation: isolate;
+  margin-top: 60px;
+}
+.cus-champ__portrait-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,
+                var(--champ-accent, #b8860b) 0deg,
+                transparent 30deg,
+                var(--champ-accent, #b8860b) 90deg,
+                transparent 130deg,
+                var(--champ-accent, #b8860b) 180deg,
+                transparent 220deg,
+                var(--champ-accent, #b8860b) 270deg,
+                transparent 310deg,
+                var(--champ-accent, #b8860b) 360deg);
+  filter: blur(28px);
+  opacity: 0.35;
+  animation: cus-champ-halo 12s linear infinite;
+  z-index: 0;
+}
+@keyframes cus-champ-halo {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.cus-champ__portrait {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 5px var(--champ-accent, var(--arena-gold)),
+              0 20px 60px rgba(0, 0, 0, 0.65);
+}
+
+/* Confetti — 24 dots emanating from behind the portrait. GSAP
+   picks starting angles + colours per element and animates outward. */
+.cus-champ__confetti {
+  position: absolute;
+  inset: 0;
+  display: block;
+  pointer-events: none;
+}
+.cus-champ__confetto {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--arena-gold);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+}
+
+/* Champion name — the payoff line, oversized Georgia. */
+.cus-champ__name {
+  margin: 8px 0 4px;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(48px, 7vw, 96px);
+  line-height: 1;
+  color: var(--arena-ink);
+  letter-spacing: -0.01em;
+  text-shadow:
+    0 0 40px rgba(184, 134, 11, 0.30),
+    0 0 80px rgba(184, 134, 11, 0.15);
+}
+
+/* Margin big-number block — gold, dominant, the number that matters. */
+.cus-champ__margin {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 8px 0 4px;
+  padding: 12px 28px;
+  background: color-mix(in srgb, var(--champ-accent, #b8860b) 18%, transparent);
+  border: 1px solid var(--champ-accent, var(--arena-gold));
+  border-radius: 999px;
+  box-shadow: 0 0 40px -8px var(--champ-accent, var(--arena-gold));
+}
+.cus-champ__margin-number {
+  font-family: Georgia, serif;
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 700;
+  color: var(--champ-accent, var(--arena-gold));
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.cus-champ__margin-unit {
+  font-size: clamp(12px, 1vw, 14px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--arena-ink-70);
+  font-weight: 700;
+}
+.cus-scene--decision-overlap .cus-champ__margin {
+  background: color-mix(in srgb, #f0c14b 18%, transparent);
+  border-color: #f0c14b;
+  box-shadow: 0 0 40px -8px #f0c14b;
+}
+.cus-scene--decision-overlap .cus-champ__margin-number { color: #f0c14b; }
+
+.cus-champ__subhead {
+  margin: 8px auto 0;
+  font-size: clamp(15px, 1.4vw, 18px);
+  color: var(--arena-ink);
+  line-height: 1.55;
+  max-width: 620px;
+}
+.cus-champ__closing {
+  margin: 0;
+  font-size: 13px;
+  color: var(--arena-ink-50);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* Stat trophy row — 3 chunky stats. */
+.cus-champ__stats {
+  margin: 20px 0 0;
+  padding: 20px 28px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px 48px;
+  background: rgba(245, 239, 227, 0.03);
+  border: 1px solid var(--arena-hair);
+  border-radius: 12px;
+}
+.cus-champ__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  min-width: 120px;
+}
+.cus-champ__stat dt {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--arena-ink-50);
+}
+.cus-champ__stat dd {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: clamp(24px, 2.6vw, 34px);
+  font-weight: 700;
+  color: var(--arena-ink);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* Runner-up strip — smaller card underneath the celebration,
+   acknowledges the challenger without stealing the moment. */
+.cus-champ__runner-up {
+  margin: 32px auto 0;
+  padding: 16px 22px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px 18px;
+  max-width: 520px;
+  background: rgba(245, 239, 227, 0.02);
+  border: 1px solid var(--runner-accent, var(--arena-hair));
+  border-radius: 10px;
+  text-align: left;
+}
+.cus-champ__runner-up-eyebrow {
+  grid-column: 1 / -1;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--runner-accent, var(--arena-ink-50));
+  text-align: center;
+  margin-bottom: 4px;
+}
+.cus-champ__runner-up-portrait {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 2px var(--runner-accent, var(--arena-blue));
+}
+.cus-champ__runner-up-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.cus-champ__runner-up-name {
+  font-family: Georgia, serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--arena-ink);
+}
+.cus-champ__runner-up-meta {
+  font-size: 12px;
+  color: var(--arena-ink-70);
+  font-variant-numeric: tabular-nums;
+}
+.cus-champ__runner-up-gap {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  color: var(--runner-accent, var(--arena-blue));
+}
+
+/* Mobile: tighter spacing, smaller belt + portrait, stats stack. */
+@media (max-width: 720px) {
+  .cus-scene--decision { padding: 60px 16px; }
+  .cus-champ { gap: 16px; }
+  .cus-champ__stage { min-height: 300px; }
+  .cus-champ__belt { width: 200px; height: 60px; top: 10px; }
+  .cus-champ__portrait-wrap { margin-top: 40px; }
+  .cus-champ__stats { padding: 16px; gap: 16px 28px; }
+  .cus-champ__runner-up { padding: 14px 16px; gap: 6px 14px; }
+}
+
+/* ── Scene 7 · Fight Club ─────────────────────────────────── */
+
+.cus-fightclub {
+  padding: 24px;
+  background: rgba(245, 239, 227, 0.03);
+  border: 1px solid var(--arena-hair);
+  border-radius: 10px;
+}
+.cus-fightclub__messages {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cus-fightclub__message {
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  background: rgba(184, 134, 11, 0.10);
+  border-left: 3px solid var(--arena-gold);
+  color: var(--arena-ink);
+}
+.cus-fightclub__message--error {
+  background: rgba(220, 38, 38, 0.10);
+  border-left-color: var(--arena-red);
+}
+.cus-fightclub__message--success {
+  background: rgba(13, 148, 136, 0.12);
+  border-left-color: #0d9488;
+}
+.cus-fightclub__prompt {
+  margin: 0 0 16px;
+  font-size: 15px;
+  color: var(--arena-ink-70);
+  line-height: 1.5;
+}
+.cus-fightclub__prompt a {
+  color: var(--arena-gold);
+  font-weight: 700;
+}
+.cus-fightclub__saved {
+  padding: 20px;
+  background: rgba(184, 134, 11, 0.08);
+  border: 1px solid rgba(184, 134, 11, 0.30);
+  border-radius: 8px;
+}
+.cus-fightclub__saved--correct {
+  background: rgba(13, 148, 136, 0.10);
+  border-color: rgba(13, 148, 136, 0.40);
+}
+.cus-fightclub__saved--wrong {
+  background: rgba(220, 38, 38, 0.08);
+  border-color: rgba(220, 38, 38, 0.30);
+}
+.cus-fightclub__saved--void {
+  background: rgba(245, 239, 227, 0.03);
+  border-color: var(--arena-hair);
+}
+.cus-fightclub__saved-line {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: var(--arena-ink);
+}
+.cus-fightclub__saved-line strong { color: var(--arena-gold); }
+.cus-fightclub__saved--correct .cus-fightclub__saved-line strong { color: #14b8a6; }
+.cus-fightclub__saved--wrong   .cus-fightclub__saved-line strong { color: #ef4444; }
+.cus-fightclub__status {
+  margin: 0;
+  font-size: 13px;
+  color: var(--arena-ink-70);
+  letter-spacing: 0.02em;
+}
+.cus-fightclub__update {
+  margin-top: 16px;
+  border-top: 1px solid var(--arena-hair);
+  padding-top: 16px;
+}
+.cus-fightclub__update summary {
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--arena-ink-70);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.cus-fightclub__leaderboard-link {
+  display: inline-block;
+  margin-top: 16px;
+  color: var(--arena-gold);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+.cus-fightclub__leaderboard-link:hover { text-decoration: underline; }
+
+/* ── Picker form ──────────────────────────────────────────── */
+
+.cus-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.cus-picker__fighters {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+.cus-picker__legend {
+  padding: 0;
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--arena-ink-50);
+}
+.cus-picker__option {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+.cus-picker__option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.cus-picker__option-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 10px;
+  background: rgba(245, 239, 227, 0.03);
+  border: 2px solid var(--arena-hair);
+  border-radius: 8px;
+  transition: border-color 120ms ease, transform 120ms ease,
+              background 120ms ease;
+}
+.cus-picker__option:hover .cus-picker__option-body {
+  border-color: var(--fighter-accent, var(--arena-gold));
+  transform: translateY(-2px);
+}
+.cus-picker__option input:checked + .cus-picker__option-body {
+  border-color: var(--fighter-accent, var(--arena-gold));
+  background: rgba(184, 134, 11, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+.cus-picker__option input:focus-visible + .cus-picker__option-body {
+  outline: 2px solid var(--fighter-accent, var(--arena-gold));
+  outline-offset: 2px;
+}
+.cus-picker__portrait {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 2px var(--fighter-accent, var(--arena-gold));
+}
+.cus-picker__name {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  color: var(--arena-ink);
+  text-align: center;
+}
+.cus-picker__stat {
+  font-size: 11px;
+  color: var(--arena-ink-50);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.cus-picker__gap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cus-picker__gap label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cus-picker__gap-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--arena-ink);
+  letter-spacing: 0.02em;
+}
+.cus-picker__gap-hint {
+  font-size: 11px;
+  color: var(--arena-ink-50);
+}
+.cus-picker__gap input {
+  padding: 10px 14px;
+  background: rgba(245, 239, 227, 0.04);
+  border: 1px solid var(--arena-hair);
+  border-radius: 6px;
+  color: var(--arena-ink);
+  font-size: 15px;
+  font-family: inherit;
+  max-width: 120px;
+}
+.cus-picker__gap input:focus {
+  border-color: var(--arena-gold);
+  outline: none;
+}
+.cus-picker__submit {
+  align-self: flex-start;
+  padding: 12px 24px;
+  background: var(--arena-gold);
+  color: #050508;
+  border: 0;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease;
+}
+.cus-picker__submit:hover {
+  background: #d4a032;
+  transform: translateY(-1px);
+}
+.cus-picker__submit:focus-visible {
+  outline: 2px solid var(--arena-ink);
+  outline-offset: 2px;
+}
+
+/* ── Scene 6 · Belt raise embellishment ───────────────────── */
+
+.cus-verdict__belt {
+  position: absolute;
+  top: -30px;
+  right: -20px;
+  width: 120px;
+  height: 40px;
+  transform: rotate(-12deg);
+  pointer-events: none;
+  opacity: 0;   /* GSAP fades in on scroll */
+}
+.cus-verdict {
+  position: relative;
+}
+
+/* ── Scene 8 · Outro ──────────────────────────────────────── */
+
+.cus-outro {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+}
+.cus-outro__link {
+  padding: 14px 22px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: transform 140ms ease, background 140ms ease;
+}
+.cus-outro__link--primary {
+  background: var(--arena-gold);
+  color: #050508;
+}
+.cus-outro__link--secondary {
+  color: var(--arena-ink);
+  border: 1px solid var(--arena-hair);
+}
+.cus-outro__link:hover { transform: translateY(-2px); }
+.cus-outro__link--primary:hover { background: #d4a032; }
+
+/* ── Reduced-motion honour ─────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .cus-scene { min-height: auto; padding: 40px 24px; }
+  .cus-outro__link:hover { transform: none; }
+}

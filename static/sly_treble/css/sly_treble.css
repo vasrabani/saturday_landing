@@ -1,0 +1,659 @@
+/* ═════════════════════════════════════════════════════════════
+   Sly Man's Treble — long-odds each-way daily punt.
+
+   Brand register: camel/copper palette, slab feel, "trade floor"
+   energy. Distinct from Mr Fox (gold + opinion) and LLaMa (sage
+   + long-form letters). Sly Man is the daily watchlist character;
+   his treble surface is the daily lottery ticket with edge.
+
+   Palette:
+     paper        #FBF7EF
+     paper-warm   #FFFCF3
+     ink          #1A1A1A
+     ink-70       rgba(26, 26, 26, 0.70)
+     amber        #C9892F   (sly-copper primary)
+     amber-ink    #8B5E1A   (sly-dark)
+     amber-soft   #FDF5E6   (warm wash)
+     ember        #B91C1C   (loss accent)
+     emerald      #166534   (win accent)
+   ════════════════════════════════════════════════════════════ */
+
+.page-sly-treble {
+  background: #FBF7EF;
+  color: #1A1A1A;
+  font-family: "Iowan Old Style", "Charter", Georgia, serif;
+  line-height: 1.6;
+}
+
+.slt { display: block; }
+.slt__body { padding: 36px 0 96px; }
+.slt__inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 36px);
+}
+
+/* ── Hero — camel/copper register ──────────────────────────── */
+.slt-hero {
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(201, 137, 47, 0.22), transparent 60%),
+    linear-gradient(180deg, #2a1f12 0%, #1a130a 100%);
+  color: #fff;
+  padding: 52px 0 60px;
+  position: relative;
+  overflow: hidden;
+}
+.slt-hero__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 48px);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  align-items: center;
+}
+@media (min-width: 900px) {
+  .slt-hero__inner { grid-template-columns: 1.4fr 1fr; }
+}
+.slt-hero__copy { max-width: 56ch; }
+.slt-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.30em;
+  text-transform: uppercase;
+  color: #f5c47e;
+  margin-bottom: 16px;
+}
+.slt-hero__mark { font-size: 18px; }
+.slt-hero__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(30px, 4.0vw, 50px);
+  line-height: 1.06;
+  letter-spacing: -0.022em;
+  font-weight: 800;
+  margin: 0 0 14px;
+  color: #fff;
+}
+.slt-hero__date {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-size: clamp(15px, 1.4vw, 18px);
+  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 18px;
+}
+.slt-hero__date-day {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 800;
+  color: #f5c47e;
+}
+.slt-hero__lede {
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.82);
+  margin: 0 0 20px;
+}
+.slt-hero__lede strong {
+  color: #f5c47e;
+  font-style: normal;
+  font-weight: 700;
+}
+.slt-hero__archive-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #f5c47e;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(245, 196, 126, 0.4);
+  padding-bottom: 3px;
+  transition: gap 0.18s ease, color 0.18s ease;
+}
+.slt-hero__archive-link:hover {
+  gap: 12px;
+  color: #fff;
+  text-decoration: none;
+}
+.slt-hero__portrait {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+.slt-hero__portrait img {
+  width: clamp(180px, 28vw, 280px);
+  height: auto;
+  filter: drop-shadow(0 16px 32px rgba(0, 0, 0, 0.55));
+}
+.slt-hero--archive .slt-hero__inner { grid-template-columns: 1fr; text-align: left; }
+.slt-hero--archive { padding: 44px 0 48px; }
+
+/* ── The Treble card ───────────────────────────────────────── */
+.slt-card {
+  background: #FFFCF3;
+  border: 1px solid rgba(201, 137, 47, 0.40);
+  border-radius: 6px;
+  padding: 28px clamp(20px, 3vw, 36px) 24px;
+  margin-bottom: 36px;
+  position: relative;
+}
+.slt-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #C9892F, transparent);
+  border-radius: 6px 6px 0 0;
+}
+.slt-card--emerald::before { background: linear-gradient(90deg, transparent, #166534, transparent); }
+.slt-card--slate::before   { background: linear-gradient(90deg, transparent, #94a3b8, transparent); }
+
+.slt-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.slt-card__eyebrow {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(26, 26, 26, 0.55);
+}
+.slt-card__conviction {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  padding: 5px 11px;
+  border-radius: 4px;
+}
+.slt-card__conviction--amber {
+  background: rgba(201, 137, 47, 0.14);
+  color: #8B5E1A;
+  border: 1px solid rgba(201, 137, 47, 0.40);
+}
+.slt-card__conviction--emerald {
+  background: rgba(45, 189, 122, 0.14);
+  color: #166534;
+  border: 1px solid rgba(45, 189, 122, 0.42);
+}
+.slt-card__conviction--slate {
+  background: rgba(71, 85, 105, 0.10);
+  color: #475569;
+  border: 1px solid rgba(71, 85, 105, 0.30);
+}
+
+.slt-card__legs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid rgba(26, 26, 26, 0.10);
+}
+.slt-card__leg {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(26, 26, 26, 0.08);
+}
+.slt-card__leg:last-child { border-bottom: none; }
+.slt-card__leg-rank {
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  color: rgba(139, 94, 26, 0.85);
+  text-transform: uppercase;
+}
+.slt-card__leg-id { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.slt-card__leg-horse {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(18px, 1.8vw, 22px);
+  font-weight: 800;
+  letter-spacing: -0.014em;
+  line-height: 1.15;
+  margin: 0;
+  color: #1A1A1A;
+}
+.slt-card__leg-where {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 12px;
+  color: rgba(26, 26, 26, 0.55);
+}
+.slt-card__leg-odds {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  color: #8B5E1A;
+}
+.slt-card__leg-odds small {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: rgba(139, 94, 26, 0.65);
+  margin-left: 4px;
+}
+
+/* ── Per-leg outcome chip (post-settlement) ────────────────
+   Sits to the right of the odds when a leg has resolved.
+   Pre-settle pages have no chip — the leg row stays clean.
+   The chip extends the leg row's grid to a 4-column layout
+   only when present. */
+.slt-card__leg-chip {
+  grid-column: 4;
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  padding: 4px 9px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.slt-card__leg-chip--won {
+  background: rgba(45, 189, 122, 0.16);
+  color: #166534;
+  border: 1px solid rgba(45, 189, 122, 0.40);
+}
+.slt-card__leg-chip--placed {
+  background: rgba(201, 137, 47, 0.16);
+  color: #8B5E1A;
+  border: 1px solid rgba(201, 137, 47, 0.42);
+}
+.slt-card__leg-chip--lost {
+  background: rgba(192, 57, 43, 0.10);
+  color: #B91C1C;
+  border: 1px solid rgba(192, 57, 43, 0.32);
+}
+.slt-card__leg-chip--void {
+  background: rgba(26, 26, 26, 0.06);
+  color: rgba(26, 26, 26, 0.55);
+  border: 1px solid rgba(26, 26, 26, 0.18);
+}
+/* Finishing-position suffix inside the chip — e.g. "✗ LOST · 5th".
+   Tabular numerals so single-digit and double-digit positions
+   line up across the three legs when stacked. */
+.slt-card__leg-finish {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  opacity: 0.92;
+}
+.slt-card__leg--outcome-won,
+.slt-card__leg--outcome-placed,
+.slt-card__leg--outcome-lost,
+.slt-card__leg--outcome-void {
+  grid-template-columns: 60px 1fr auto auto;
+}
+/* Re-declare leg grid so the chip column lands cleanly. */
+.slt-card__leg {
+  grid-template-columns: 60px 1fr auto;
+}
+.slt-card__leg--outcome-won,
+.slt-card__leg--outcome-placed,
+.slt-card__leg--outcome-lost,
+.slt-card__leg--outcome-void {
+  column-gap: 12px;
+}
+@media (max-width: 599px) {
+  .slt-card__leg {
+    grid-template-columns: 36px 1fr auto;
+  }
+  .slt-card__leg--outcome-won,
+  .slt-card__leg--outcome-placed,
+  .slt-card__leg--outcome-lost,
+  .slt-card__leg--outcome-void {
+    grid-template-columns: 36px 1fr auto;
+  }
+  .slt-card__leg-chip {
+    grid-column: 1 / -1;
+    justify-self: end;
+    margin-top: -4px;
+  }
+}
+
+.slt-card__combined {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 14px;
+  margin: 20px -clamp(20px, 3vw, 36px) -24px;
+  padding: 18px clamp(20px, 3vw, 36px);
+  border-top: 3px double #1A1A1A;
+  background: linear-gradient(180deg, #fdf5e6 0%, #FFFCF3 100%);
+}
+.slt-card__combined-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: center;
+}
+.slt-card__combined-num {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: #8B5E1A;
+  line-height: 1;
+}
+.slt-card__combined-label {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(26, 26, 26, 0.55);
+}
+
+/* ── Narrative ─────────────────────────────────────────────── */
+.slt-narrative {
+  background: #FFFCF3;
+  border: 1px solid rgba(26, 26, 26, 0.10);
+  border-radius: 4px;
+  padding: 28px clamp(20px, 3vw, 40px);
+  margin-bottom: 36px;
+}
+.slt-narrative__headline {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1.22;
+  font-weight: 800;
+  margin: 0 0 16px;
+  color: #1A1A1A;
+}
+.slt-narrative__body {
+  font-family: "Iowan Old Style", "Charter", Georgia, serif;
+  font-size: 17px;
+  line-height: 1.65;
+  color: rgba(26, 26, 26, 0.85);
+}
+.slt-narrative__body p { margin: 0 0 14px; }
+.slt-narrative__body p:last-child { margin-bottom: 0; }
+
+/* ── Empty states ──────────────────────────────────────────── */
+.slt-pending,
+.slt-no-qualifier {
+  background: #FFFCF3;
+  border: 1px dashed rgba(201, 137, 47, 0.45);
+  border-radius: 4px;
+  padding: 48px clamp(20px, 3vw, 40px);
+  text-align: center;
+}
+.slt-pending__mark,
+.slt-no-qualifier__mark {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 14px;
+}
+.slt-pending__title,
+.slt-no-qualifier__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(22px, 2.4vw, 28px);
+  font-weight: 800;
+  margin: 0 0 10px;
+}
+.slt-pending__lede,
+.slt-no-qualifier__lede {
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(26, 26, 26, 0.62);
+  max-width: 48ch;
+  margin: 0 auto 18px;
+}
+.slt-pending__cta,
+.slt-no-qualifier__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #8B5E1A;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(201, 137, 47, 0.45);
+  padding-bottom: 3px;
+}
+
+/* ── Archive list ──────────────────────────────────────────── */
+.slt-archive__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid rgba(26, 26, 26, 0.10);
+}
+.slt-archive__item { border-bottom: 1px solid rgba(26, 26, 26, 0.08); }
+.slt-archive__link {
+  display: grid;
+  grid-template-columns: 80px 1fr 80px 90px;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 4px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s ease;
+}
+.slt-archive__link:hover {
+  background: rgba(201, 137, 47, 0.06);
+  text-decoration: none;
+}
+@media (max-width: 699px) {
+  .slt-archive__link {
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+  }
+  .slt-archive__chip { display: none; }
+}
+.slt-archive__date {
+  display: flex;
+  flex-direction: column;
+  font-family: "Playfair Display", Georgia, serif;
+}
+.slt-archive__date strong { font-size: 18px; font-weight: 800; line-height: 1; }
+.slt-archive__date span { font-style: italic; font-size: 12px; color: rgba(26, 26, 26, 0.55); }
+.slt-archive__legs { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.slt-archive__leg {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: -0.008em;
+  line-height: 1.3;
+  color: #1A1A1A;
+}
+.slt-archive__leg--none { font-style: italic; font-weight: 400; color: rgba(26, 26, 26, 0.55); }
+.slt-archive__chip {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-align: center;
+  padding: 4px 9px;
+  border-radius: 4px;
+}
+.slt-archive__chip--won        { background: rgba(45, 189, 122, 0.16); color: #166534; }
+.slt-archive__chip--place_only { background: rgba(201, 137, 47, 0.16); color: #8B5E1A; }
+.slt-archive__chip--lost       { background: rgba(192, 57, 43, 0.10);  color: #B91C1C; }
+.slt-archive__chip--void,
+.slt-archive__chip--no_qualifier { background: rgba(26, 26, 26, 0.06); color: rgba(26, 26, 26, 0.55); }
+.slt-archive__chip--live       { background: rgba(201, 137, 47, 0.14); color: #8B5E1A; }
+.slt-archive__pnl {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 900;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: rgba(26, 26, 26, 0.55);
+}
+.slt-archive__pnl.is-positive { color: #166534; }
+.slt-archive__pnl.is-negative { color: #B91C1C; }
+
+/* Pager + empty ──────────────────────────────────────────── */
+.slt-archive__pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 28px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid rgba(26, 26, 26, 0.10);
+}
+.slt-archive__pager-btn {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #8B5E1A;
+  text-decoration: none;
+  padding: 6px 12px;
+  border: 1px solid rgba(201, 137, 47, 0.45);
+  border-radius: 4px;
+}
+.slt-archive__pager-btn:hover {
+  background: rgba(201, 137, 47, 0.10);
+  text-decoration: none;
+}
+.slt-archive__pager-indicator {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 12px;
+  color: rgba(26, 26, 26, 0.55);
+}
+.slt-empty {
+  padding: 64px 20px;
+  text-align: center;
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  color: rgba(26, 26, 26, 0.55);
+}
+
+/* ── The Treble Book — Honest Record summary ───────────────
+   Running stats published on every page. Long stretches of red,
+   occasional huge green — the brand IS the honesty. Newspaper
+   stat-block treatment matching bet_of_day's ledger but in the
+   sly-camel palette. */
+.slt-ledger {
+  margin: 48px 0 0;
+  padding: 24px clamp(20px, 3vw, 36px) 28px;
+  background: #FFFCF3;
+  border-top:    3px double #1A1A1A;
+  border-bottom: 3px double #1A1A1A;
+}
+.slt-ledger__head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.slt-ledger__mark {
+  font-size: 18px;
+  line-height: 1;
+}
+.slt-ledger__title {
+  margin: 0;
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #1A1A1A;
+  white-space: nowrap;
+}
+.slt-ledger__grid {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px clamp(12px, 2vw, 28px);
+  text-align: center;
+}
+@media (max-width: 599px) {
+  .slt-ledger__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.slt-ledger__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 6px;
+  border-left: 1px solid rgba(26, 26, 26, 0.10);
+}
+.slt-ledger__cell:first-child { border-left: none; }
+@media (max-width: 599px) {
+  .slt-ledger__cell:nth-child(odd) { border-left: none; }
+}
+.slt-ledger__num {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: clamp(22px, 2.6vw, 30px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: #1A1A1A;
+}
+.slt-ledger__num.is-positive { color: #166534; }
+.slt-ledger__num.is-negative { color: #B91C1C; }
+.slt-ledger__num-sub {
+  font-size: 0.6em;
+  font-weight: 700;
+  color: rgba(26, 26, 26, 0.45);
+  margin-left: 2px;
+}
+.slt-ledger__label {
+  font-family: "DM Sans", system-ui, sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(26, 26, 26, 0.55);
+}
+.slt-ledger__meta {
+  margin-top: 6px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(26, 26, 26, 0.16);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-size: 14px;
+  color: rgba(26, 26, 26, 0.65);
+  text-align: center;
+}
+.slt-ledger__streak strong { font-style: normal; font-weight: 800; }
+.slt-ledger__streak--won        strong { color: #166534; }
+.slt-ledger__streak--place_only strong { color: #8B5E1A; }
+.slt-ledger__streak--lost       strong { color: #B91C1C; }
+.slt-ledger__voids {
+  font-size: 12px;
+  color: rgba(26, 26, 26, 0.45);
+}
+.slt-ledger__empty {
+  text-align: center;
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  color: rgba(26, 26, 26, 0.55);
+  margin: 0;
+}

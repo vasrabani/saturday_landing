@@ -1,0 +1,476 @@
+/*
+ * Jockeys Taking Aim — magazine-style cards layout.
+ *
+ * Two-tier visual hierarchy:
+ *   • Hero card (the top jockey) gets a full-width spread with a
+ *     prominent stat-tile row + their FULL book as a styled table
+ *     with per-ride result chips.
+ *   • Grid cards (jockeys 2-5) are a 2-column responsive grid with
+ *     a compact stat-pill row + a compact book.
+ *
+ * Result chips inside each book row come from the existing
+ * result_chip_filter; the "Today's tally" summary line at the bottom
+ * of each card aggregates the chip states via the new jta_tally
+ * filter. Both update LIVE off the Runner.finish_position field —
+ * editorial doesn't have to refresh the article when results land.
+ */
+
+:root {
+  --jta-bg-card:    #faf6ec;
+  --jta-bg-deep:    #1a1612;
+  --jta-text:       #1a1612;
+  --jta-text-dim:   rgba(26, 22, 18, 0.62);
+  --jta-text-faint: rgba(26, 22, 18, 0.40);
+  --jta-line:       rgba(26, 22, 18, 0.10);
+  --jta-gold:       #c39e2a;
+  --jta-gold-lt:    #f5e49a;
+  --jta-red:        #c0392b;
+  --jta-green:      #2f7d3a;
+  --jta-purple:     #6b4baf;
+  --jta-cyan:       #1f7a8c;
+  --jta-amber:      #d18b27;
+  --jta-navy:       #1f3a8a;
+  --jta-slate:      #475569;
+}
+
+.jta {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  margin: 28px 0;
+}
+
+/* ── Card shell ───────────────────────────────────────────────── */
+.jta-card {
+  position: relative;
+  background: var(--jta-bg-card);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow:
+    0 1px 0 var(--jta-line),
+    0 4px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--jta-line);
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.jta-card:hover {
+  box-shadow:
+    0 1px 0 var(--jta-line),
+    0 8px 28px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+/* Ribbon — same colour set as Horses to Watch for cross-article
+   visual consistency. Each signal kind maps to a tint via the
+   generator's SIGNAL_TINTS dict. */
+.jta-card__ribbon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.jta-card__ribbon-tag    { opacity: 0.85; }
+.jta-card__ribbon-signal { font-size: 12px; }
+
+.jta-card__ribbon--gold   { background: linear-gradient(95deg, #c39e2a 0%, #f5e49a 100%); color: #2a1f08; }
+.jta-card__ribbon--red    { background: linear-gradient(95deg, #c0392b 0%, #e74c3c 100%); }
+.jta-card__ribbon--green  { background: linear-gradient(95deg, #2f7d3a 0%, #5cb85c 100%); }
+.jta-card__ribbon--purple { background: linear-gradient(95deg, #6b4baf 0%, #9b6bd8 100%); }
+.jta-card__ribbon--cyan   { background: linear-gradient(95deg, #1f7a8c 0%, #4ecdc4 100%); }
+.jta-card__ribbon--amber  { background: linear-gradient(95deg, #d18b27 0%, #f4b942 100%); }
+.jta-card__ribbon--navy   { background: linear-gradient(95deg, #1f3a8a 0%, #4361ee 100%); }
+.jta-card__ribbon--slate  { background: linear-gradient(95deg, #475569 0%, #64748b 100%); }
+
+/* ── Card head ───────────────────────────────────────────────── */
+.jta-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px 24px 14px;
+  flex-wrap: wrap;
+}
+
+.jta-card__rank {
+  display: inline-block;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--jta-gold);
+  margin-right: 12px;
+  vertical-align: middle;
+}
+
+.jta-card__name {
+  display: inline-block;
+  vertical-align: middle;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(28px, 4.5vw, 44px);
+  font-weight: 900;
+  line-height: 1.05;
+  color: var(--jta-text);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.jta-card__name a { color: inherit; text-decoration: none; }
+.jta-card__name a:hover { color: var(--jta-gold); }
+.jta-card__name--sm { font-size: 22px; }
+
+/* Stat tiles — three side-by-side numbers on the hero card. */
+.jta-card__stats {
+  display: flex;
+  gap: 10px;
+}
+.jta-stat {
+  background: var(--jta-bg-deep);
+  color: var(--jta-gold-lt);
+  border-radius: 6px;
+  padding: 10px 14px;
+  text-align: center;
+  min-width: 96px;
+}
+.jta-stat__num {
+  display: block;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--jta-gold-lt);
+}
+.jta-stat__label {
+  display: block;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  color: rgba(245, 228, 154, 0.55);
+}
+.jta-stat--accent .jta-stat__num { color: #ff6b35; }
+.jta-stat--accent .jta-stat__label { color: rgba(255, 107, 53, 0.7); }
+
+/* Compact stat pills for the grid cards. */
+.jta-card__stats--sm {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.jta-stat-pill {
+  display: inline-block;
+  background: rgba(26, 22, 18, 0.08);
+  border: 1px solid var(--jta-line);
+  color: var(--jta-text);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.jta-stat-pill--accent {
+  background: rgba(255, 107, 53, 0.12);
+  border-color: rgba(255, 107, 53, 0.35);
+  color: #c0392b;
+}
+
+/* Narrative + chips */
+.jta-card__narrative {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--jta-text);
+  margin: 0 24px 16px;
+  border-left: 3px solid var(--jta-gold);
+  padding: 4px 0 4px 14px;
+}
+.jta-card__narrative--sm { font-size: 15px; margin: 0 18px 12px; padding-left: 12px; border-left-width: 2px; }
+
+.jta-card__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0 24px 18px;
+}
+.jta-card__chips--sm { margin: 0 18px 12px; }
+
+.jta-card__chip {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(26, 22, 18, 0.06);
+  border: 1px solid var(--jta-line);
+  color: var(--jta-text);
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.jta-card__chips--sm .jta-card__chip { font-size: 11px; }
+
+/* ── Today's Book ────────────────────────────────────────────── */
+.jta-book {
+  border-top: 1px solid var(--jta-line);
+  background: rgba(26, 22, 18, 0.03);
+  margin: 0;
+  padding: 0;
+}
+.jta-book__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.jta-book__title { color: var(--jta-text-dim); }
+.jta-book__count {
+  background: var(--jta-bg-deep);
+  color: var(--jta-gold-lt);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+}
+
+.jta-book__list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 8px;
+}
+
+.jta-book__row {
+  display: grid;
+  grid-template-columns: 50px 26px 1fr auto auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 24px;
+  border-top: 1px dashed var(--jta-line);
+  font-size: 13px;
+}
+.jta-book__row:first-child { border-top: 0; }
+
+.jta-book__row--fox {
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.10), transparent 80%);
+}
+
+.jta-book__time {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--jta-gold);
+  line-height: 1;
+}
+
+.jta-book__silk .silk-jersey {
+  width: 24px;
+  height: auto;
+  display: block;
+}
+
+.jta-book__horse-block {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.jta-book__horse {
+  font-weight: 700;
+  color: var(--jta-text);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.jta-book__horse:hover { color: var(--jta-gold); }
+.jta-book__trainer {
+  font-size: 11px;
+  color: var(--jta-text-dim);
+  margin-top: 1px;
+}
+
+.jta-book__odds {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--jta-text);
+  text-align: right;
+}
+
+.jta-book__fox {
+  font-size: 16px;
+  line-height: 1;
+}
+
+/* Per-ride result chip — compact version of the chip palette in
+   horses_to_watch.css. */
+.jta-book__chip {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border: 1px solid var(--jta-line);
+  background: rgba(26, 22, 18, 0.06);
+  color: var(--jta-text-dim);
+}
+.jta-book__chip--settled { border-style: solid; }
+
+.jta-book__chip--gold {
+  background: linear-gradient(135deg, #f5e49a 0%, #c39e2a 100%);
+  color: #2a1f08;
+  border-color: var(--jta-gold);
+}
+.jta-book__chip--silver {
+  background: linear-gradient(135deg, #f0f0f0 0%, #b8bcc4 100%);
+  color: #2a2f38;
+  border-color: #b8bcc4;
+}
+.jta-book__chip--bronze {
+  background: linear-gradient(135deg, #e8b783 0%, #b8702c 100%);
+  color: #2a1808;
+  border-color: #b8702c;
+}
+.jta-book__chip--neutral { color: var(--jta-text); background: rgba(26, 22, 18, 0.05); }
+.jta-book__chip--grey    { color: var(--jta-text-faint); background: rgba(26, 22, 18, 0.04); }
+.jta-book__chip--red     { color: var(--jta-red); background: rgba(192, 57, 43, 0.10); border-color: rgba(192, 57, 43, 0.35); }
+.jta-book__chip--pending {
+  color: var(--jta-amber);
+  background: rgba(212, 175, 55, 0.08);
+  border-color: rgba(212, 175, 55, 0.30);
+  border-style: dashed;
+}
+
+/* Compact book rows on the grid cards. */
+.jta-book__list--sm .jta-book__row {
+  grid-template-columns: 38px 1fr auto auto auto;
+  padding: 8px 18px;
+  font-size: 12px;
+}
+.jta-book__list--sm .jta-book__silk { display: none; }
+.jta-book__row--sm .jta-book__time { font-size: 14px; }
+.jta-book__row--sm .jta-book__odds { font-size: 14px; }
+.jta-book__row--sm .jta-book__trainer { display: none; }
+
+/* ── Tally ───────────────────────────────────────────────────── */
+.jta-tally {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px;
+  border-top: 1px dashed var(--jta-line);
+  background: rgba(26, 22, 18, 0.05);
+}
+.jta-book--sm .jta-tally { padding: 12px 18px; }
+
+.jta-tally__label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--jta-text-dim);
+}
+.jta-tally__bits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.jta-tally__bit {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 3px 9px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  background: rgba(26, 22, 18, 0.06);
+  color: var(--jta-text);
+}
+.jta-tally__bit--won     { background: linear-gradient(135deg, #f5e49a 0%, #c39e2a 100%); color: #2a1f08; }
+.jta-tally__bit--placed  { background: linear-gradient(135deg, #f0f0f0 0%, #b8bcc4 100%); color: #2a2f38; }
+.jta-tally__bit--unplaced{ background: rgba(26, 22, 18, 0.06); color: var(--jta-text); }
+.jta-tally__bit--dnf     { background: rgba(192, 57, 43, 0.12); color: var(--jta-red); }
+.jta-tally__bit--pending {
+  background: rgba(212, 175, 55, 0.08);
+  color: var(--jta-amber);
+  border: 1px dashed rgba(212, 175, 55, 0.4);
+}
+.jta-tally__pending {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--jta-amber);
+  font-style: italic;
+}
+
+/* ── Grid layout (picks 2-5) ─────────────────────────────────── */
+.jta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.jta-card__head--sm {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 16px 18px 12px;
+}
+
+/* ── Verdict ─────────────────────────────────────────────────── */
+.jta-verdict {
+  background: var(--jta-bg-deep);
+  color: var(--jta-gold-lt);
+  border-radius: 8px;
+  padding: 24px 28px;
+}
+.jta-verdict__title {
+  display: inline-block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--jta-gold);
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--jta-gold);
+}
+.jta-verdict__text {
+  margin: 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 19px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* ── Mobile ──────────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .jta-card__head { padding: 16px 18px 12px; }
+  .jta-card__name { font-size: 26px; }
+  .jta-card__narrative { font-size: 16px; margin: 0 18px 14px; }
+  .jta-stat { min-width: 78px; padding: 8px 10px; }
+  .jta-stat__num { font-size: 22px; }
+
+  .jta-book__row {
+    grid-template-columns: 44px 22px 1fr auto auto;
+    padding: 8px 18px;
+    font-size: 12px;
+  }
+  .jta-book__chip { font-size: 9px; padding: 4px 8px; }
+  .jta-book__odds { font-size: 14px; }
+  /* Trainer hides on mobile to keep horse names readable. */
+  .jta-book__trainer { display: none; }
+
+  .jta-grid { grid-template-columns: 1fr; }
+  .jta-verdict__text { font-size: 16px; }
+}

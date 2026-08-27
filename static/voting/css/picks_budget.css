@@ -1,0 +1,310 @@
+/* ═══════════════════════════════════════════════════════
+   Picks budget pill + card
+   Used in three places:
+     · navbar (compact pill on the dark site nav)
+     · racecard header (compact card, paper theme)
+     · /cubs/my-profile/ (full card, dark theme)
+═══════════════════════════════════════════════════════ */
+
+:root {
+  --pb-fresh:  #2c7a4d;     /* emerald — plenty of headroom */
+  --pb-mid:    #3470b8;     /* informational blue */
+  --pb-low:    #c46a1a;     /* amber — last slot */
+  --pb-full:   #9c7b12;     /* gold — locked / cap reached */
+  --pb-special:#d4af37;
+  --pb-special-glow: rgba(212,175,55,0.42);
+}
+
+/* ── NAVBAR PILL ──────────────────────────────────────── */
+.picks-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: var(--c-text-100, #fff);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.12s ease;
+}
+.picks-pill:hover {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.28);
+  transform: translateY(-1px);
+}
+.picks-pill__icon { font-size: 13px; line-height: 1; }
+.picks-pill__count { font-variant-numeric: tabular-nums; }
+.picks-pill__sep { opacity: 0.55; margin: 0 1px; }
+.picks-pill__nudge {
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--pb-special);
+  color: #1a1100;
+  font-size: 10px;
+  margin-left: 2px;
+  animation: pb-pulse 2.4s ease-in-out infinite;
+}
+
+.picks-pill--mid  { border-color: rgba(52,112,184,0.55); }
+.picks-pill--low  { border-color: rgba(196,106,26,0.55); background: rgba(196,106,26,0.12); }
+.picks-pill--full {
+  border-color: rgba(212,175,55,0.65);
+  background: linear-gradient(135deg, rgba(212,175,55,0.20), rgba(156,123,18,0.18));
+  color: #f3e3a4;
+}
+
+@keyframes pb-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--pb-special-glow); transform: scale(1); }
+  50%      { box-shadow: 0 0 0 6px transparent;          transform: scale(1.10); }
+}
+
+/* ── BUDGET CARD ──────────────────────────────────────── */
+.picks-card {
+  position: relative;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-family: var(--font-text, inherit);
+  color: var(--c-text-100, inherit);
+}
+.picks-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px;
+  border-radius: 14px 0 0 14px;
+  background: var(--pb-fresh);
+}
+.picks-card--mid::before  { background: var(--pb-mid); }
+.picks-card--low::before  { background: var(--pb-low); }
+.picks-card--full::before { background: var(--pb-full); }
+
+.picks-card__head {
+  display: flex; align-items: center; gap: 14px;
+}
+.picks-card__icon {
+  font-size: 22px; line-height: 1;
+  width: 38px; height: 38px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 10px;
+}
+.picks-card__title-block { flex: 1; min-width: 0; }
+.picks-card__title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--c-text-55, rgba(255,255,255,0.55));
+  margin-bottom: 4px;
+}
+.picks-card__count {
+  font-family: var(--font-display, inherit);
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  display: flex; align-items: baseline; gap: 6px;
+}
+.picks-card__count strong { color: var(--c-text-100, #fff); }
+.picks-card__sep {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-text-55, rgba(255,255,255,0.55));
+  margin: 0 2px;
+}
+.picks-card__count-lbl {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--c-text-55, rgba(255,255,255,0.55));
+  text-transform: lowercase;
+  margin-left: 4px;
+  align-self: center;
+}
+.picks-card__cta {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-gold, var(--pb-special));
+  text-decoration: none;
+  white-space: nowrap;
+}
+.picks-card__cta:hover { text-decoration: underline; }
+
+/* meter — single-track progress bar */
+.picks-card__meter {
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.07);
+  overflow: hidden;
+}
+.picks-card__meter-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 4px;
+  background: var(--pb-fresh);
+  transition: width 0.32s ease, background 0.22s ease;
+}
+.picks-card--mid  .picks-card__meter-fill { background: var(--pb-mid); }
+.picks-card--low  .picks-card__meter-fill { background: var(--pb-low); }
+.picks-card--full .picks-card__meter-fill { background: var(--pb-full); }
+
+/* nudge — special-race CTA */
+.picks-card__nudge {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, rgba(212,175,55,0.14), rgba(212,175,55,0.06));
+  border: 1px solid rgba(212,175,55,0.40);
+  border-radius: 10px;
+  color: var(--c-text-100, #fff);
+  text-decoration: none;
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+.picks-card__nudge:hover {
+  transform: translateX(2px);
+  box-shadow: 0 4px 14px rgba(212,175,55,0.22);
+  background: linear-gradient(135deg, rgba(212,175,55,0.20), rgba(212,175,55,0.10));
+}
+.picks-card__nudge-icon {
+  font-size: 22px;
+  width: 36px; height: 36px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(212,175,55,0.18);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.picks-card__nudge-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.picks-card__nudge-title {
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--pb-special);
+  letter-spacing: 0.02em;
+}
+.picks-card__nudge-sub {
+  font-size: 12px;
+  color: var(--c-text-75, rgba(255,255,255,0.75));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.picks-card__nudge-arrow {
+  font-size: 18px;
+  color: var(--pb-special);
+  flex-shrink: 0;
+}
+
+/* "Locked in" — featured race already picked */
+.picks-card__locked {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  background: rgba(44,122,77,0.10);
+  border: 1px solid rgba(44,122,77,0.30);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--c-text-100, #fff);
+}
+.picks-card__locked-pts {
+  margin-left: auto;
+  font-family: var(--font-display, inherit);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: var(--pb-special);
+}
+
+.picks-card__hint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--c-text-55, rgba(255,255,255,0.65));
+}
+
+/* ── COMPACT VARIANT (racecard header) ───────────────── */
+.picks-card--compact {
+  padding: 12px 14px;
+  gap: 10px;
+}
+.picks-card--compact .picks-card__icon {
+  width: 30px; height: 30px;
+  font-size: 18px;
+}
+.picks-card--compact .picks-card__count {
+  font-size: 19px;
+}
+.picks-card--compact .picks-card__title {
+  font-size: 10px;
+}
+
+/* ── PAPER-THEME OVERRIDE (light backgrounds) ────────── */
+/* Rendered when the card sits inside a paper-themed page (homepage,
+   racecard list). Targets the parent body class so neither the
+   navbar pill nor the dark-themed cubs profile is affected. */
+.page-meeting-full .picks-card,
+.page-race-engine .picks-card,
+.page-race-detail .picks-card,
+.page-home .picks-card {
+  background: #fff;
+  border-color: rgba(17,21,31,0.10);
+  color: #11151F;
+  box-shadow: 0 1px 3px rgba(17,21,31,0.04);
+}
+.page-meeting-full .picks-card__icon,
+.page-race-engine .picks-card__icon,
+.page-race-detail .picks-card__icon,
+.page-home .picks-card__icon {
+  background: rgba(17,21,31,0.04);
+  border-color: rgba(17,21,31,0.08);
+}
+.page-meeting-full .picks-card__title,
+.page-race-engine .picks-card__title,
+.page-race-detail .picks-card__title,
+.page-home .picks-card__title { color: rgba(17,21,31,0.55); }
+
+.page-meeting-full .picks-card__count strong,
+.page-race-engine .picks-card__count strong,
+.page-race-detail .picks-card__count strong,
+.page-home .picks-card__count strong { color: #11151F; }
+
+.page-meeting-full .picks-card__sep,
+.page-meeting-full .picks-card__count-lbl,
+.page-race-engine .picks-card__sep,
+.page-race-engine .picks-card__count-lbl,
+.page-race-detail .picks-card__sep,
+.page-race-detail .picks-card__count-lbl,
+.page-home .picks-card__sep,
+.page-home .picks-card__count-lbl { color: rgba(17,21,31,0.55); }
+
+.page-meeting-full .picks-card__meter,
+.page-race-engine .picks-card__meter,
+.page-race-detail .picks-card__meter,
+.page-home .picks-card__meter { background: rgba(17,21,31,0.07); }
+
+.page-meeting-full .picks-card__hint,
+.page-race-engine .picks-card__hint,
+.page-race-detail .picks-card__hint,
+.page-home .picks-card__hint { color: rgba(17,21,31,0.60); }
+
+.page-meeting-full .picks-card__nudge,
+.page-race-engine .picks-card__nudge,
+.page-race-detail .picks-card__nudge,
+.page-home .picks-card__nudge { color: #11151F; }
+
+.page-meeting-full .picks-card__nudge-sub,
+.page-race-engine .picks-card__nudge-sub,
+.page-race-detail .picks-card__nudge-sub,
+.page-home .picks-card__nudge-sub { color: rgba(17,21,31,0.70); }
+
+/* Spacing wrapper used on /cubs/my-profile/ */
+.cub-edit-budget { margin-bottom: 24px; }

@@ -1,0 +1,156 @@
+/* ═══════════════════════════════════════════════════════════════
+   Today's market movers — landing-page panel between the hero and
+   the battle section. Two side-by-side cards (steamers + drifters)
+   that stack on mobile.
+
+   Scoped under `.market-movers` so removing the partial leaves no
+   debris. Inherits movement colours from the convention established
+   in racecard_prices.css (green = shortened, red = drifted).
+═══════════════════════════════════════════════════════════════ */
+
+.market-movers {
+  background: linear-gradient(180deg, #0a121e 0%, #0e1827 100%);
+  border-top: 1px solid rgba(212, 175, 55, 0.20);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.92);
+  padding: 36px 0 40px;
+}
+
+.market-movers__inner {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.market-movers__header {
+  margin-bottom: 22px;
+  text-align: left;
+}
+.market-movers__kicker {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.20em;
+  color: #d4af37;
+}
+.market-movers__title {
+  margin: 4px 0 4px;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.005em;
+  color: #fff;
+}
+.market-movers__sub {
+  margin: 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ── Two-card grid ─────────────────────────────────────────────── */
+.market-movers__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+@media (max-width: 760px) {
+  .market-movers__grid { grid-template-columns: 1fr; }
+}
+
+.movers-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 180px;
+}
+.movers-card--steamers { border-color: rgba(26, 125, 74, 0.30); }
+.movers-card--drifters { border-color: rgba(192, 57, 43, 0.30); }
+
+.movers-card__head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.movers-card__glyph {
+  font-size: 14px;
+  line-height: 1;
+}
+.movers-card--steamers .movers-card__glyph { color: #4ade80; }
+.movers-card--drifters .movers-card__glyph { color: #f87171; }
+.movers-card__heading {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #fff;
+}
+.movers-card__hint {
+  margin-left: auto;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  font-style: italic;
+}
+
+/* ── List rows ─────────────────────────────────────────────────── */
+.movers-list {
+  list-style: none;
+  margin: 0; padding: 0;
+}
+.movers-row + .movers-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+.movers-row__link {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 2px 12px;
+  padding: 10px 4px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 8px;
+  transition: background 0.12s ease;
+}
+.movers-row__link:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+.movers-row__horse {
+  grid-column: 1;
+  grid-row: 1;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+}
+.movers-row__meta {
+  grid-column: 1;
+  grid-row: 2;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+}
+.movers-row__prices {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: inline-flex; align-items: center;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.movers-row__was {
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: line-through;
+  font-weight: 600;
+}
+.movers-row__arrow { color: rgba(255, 255, 255, 0.35); font-size: 13px; }
+.movers-row__now {
+  font-weight: 800;
+}
+.movers-row__now--in  { color: #4ade80; }
+.movers-row__now--out { color: #f87171; }
+
+/* ── Empty state ───────────────────────────────────────────────── */
+.movers-empty {
+  margin: 12px 4px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
+  font-style: italic;
+}

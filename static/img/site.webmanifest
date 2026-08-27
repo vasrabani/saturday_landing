@@ -1,0 +1,24 @@
+{
+  "name": "Saturday Racing",
+  "short_name": "Sat Racing",
+  "description": "Expert tips, AI analysis and full racecards for every big Saturday race.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0B0F",
+  "theme_color": "#D4AF37",
+  "icons": [
+    {
+      "src": "/static/img/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/img/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["sports", "news"],
+  "lang": "en-GB"
+}

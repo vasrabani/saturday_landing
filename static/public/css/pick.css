@@ -1,0 +1,1167 @@
+/*
+ * pick.css — Guest Horse Picker
+ * /pick/ — Cinematic five-act decision screen
+ *
+ * Act timing (all CSS animation-delay from .pick-stage--running):
+ *   Act 1 (race)   : delay 0s     fade in
+ *   Act 2 (fox)    : delay 0.7s   slide up + fade
+ *   Act 3 (cubs)   : delay 1.5s   slide up + fade
+ *   Act 4 (AI)     : delay 2.2s   slide up + fade
+ *   Act 5 (decide) : delay 2.9s   pulse in
+ *   Grid           : JS adds pick-body--visible at 3.4s
+ */
+
+
+/* ── KEYFRAMES ──────────────────────────────────────────────── */
+
+@keyframes pickFadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pickFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pickPulseIn {
+  0%   { opacity: 0; transform: scale(0.96); }
+  60%  { opacity: 1; transform: scale(1.01); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pickGlowFox {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.7; }
+}
+
+@keyframes pickArrowBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50%       { transform: translateY(6px); opacity: 1; }
+}
+
+@keyframes commitSlide {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes bodySlideUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.25; }
+}
+
+
+/* ══ CINEMATIC STAGE ════════════════════════════════════════════ */
+
+.pick-stage {
+  position: relative;
+  overflow: hidden;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  background: var(--c-midnight);
+  cursor: pointer; /* click to skip */
+}
+
+/* Once grid is visible, stage collapses to auto height */
+.pick-stage--done {
+  min-height: 0;
+  cursor: default;
+}
+
+/* ── Background atmosphere ── */
+.pick-stage__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.pick-stage__bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+}
+
+.pick-stage__bg-glow--fox {
+  width: 60%;
+  height: 80%;
+  left: -15%;
+  top: 5%;
+  background: radial-gradient(ellipse at center,
+    rgba(212, 175, 55, 0.12) 0%,
+    rgba(100, 80, 20, 0.05) 50%,
+    transparent 70%);
+  animation: pickGlowFox 4s ease-in-out infinite;
+}
+
+.pick-stage__bg-glow--cubs {
+  width: 50%;
+  height: 70%;
+  right: -10%;
+  bottom: 0;
+  background: radial-gradient(ellipse at center,
+    rgba(192, 57, 43, 0.1) 0%,
+    transparent 65%);
+}
+
+.pick-stage__bg-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url("%23n")' opacity='0.45'/%3E%3C/svg%3E");
+}
+
+/* Skip hint */
+.pick-stage::after {
+  content: 'tap anywhere to skip →';
+  position: absolute;
+  bottom: 20px;
+  right: 24px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.15);
+  font-family: var(--font-body);
+  opacity: 0;
+  transition: opacity 0.4s;
+  pointer-events: none;
+}
+
+.pick-stage--running::after { opacity: 1; }
+.pick-stage--done::after    { opacity: 0; }
+
+/* ── Stage inner layout ── */
+.pick-stage__inner {
+  position: relative;
+  z-index: 1;
+  padding: 64px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+}
+
+
+/* ══ ACTS — base state: invisible until sequence starts ═══════ */
+
+.pick-act {
+  opacity: 0;
+  pointer-events: none; /* acts don't intercept the skip click */
+}
+
+/* When stage starts, each act fires via animation-fill-mode: forwards */
+
+.pick-stage--running .pick-act--1 {
+  animation: pickFadeIn 0.6s ease 0s forwards;
+}
+
+.pick-stage--running .pick-act--2 {
+  animation: pickFadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.75s forwards;
+}
+
+.pick-stage--running .pick-act--3 {
+  animation: pickFadeUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) 1.55s forwards;
+}
+
+.pick-stage--running .pick-act--4 {
+  animation: pickFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 2.3s forwards;
+}
+
+.pick-stage--running .pick-act--5 {
+  animation: pickPulseIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 3.0s forwards;
+}
+
+/* When skipped: all acts show instantly */
+.pick-stage--done .pick-act {
+  animation: none;
+  opacity: 1;
+}
+
+
+/* ══ ACT 1 — THE RACE ═══════════════════════════════════════════ */
+
+.pick-act1__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-gold);
+  margin-bottom: 14px;
+  opacity: 0.8;
+}
+
+.pick-act1__dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--c-gold);
+  flex-shrink: 0;
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+.pick-act1__pill {
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: var(--r-pill);
+  padding: 2px 10px;
+  font-size: 10px;
+  color: var(--c-gold);
+}
+
+.pick-act1__title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 6vw, 64px);
+  font-weight: 900;
+  color: var(--c-text-100);
+  letter-spacing: -0.025em;
+  line-height: 1;
+  margin: 0 0 12px;
+}
+
+.pick-act1__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--c-text-55);
+}
+
+.pick-act1__type {
+  background: var(--c-gold);
+  color: var(--c-midnight);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 3px;
+}
+
+.pick-act1__sep { color: var(--c-text-35); }
+
+
+/* ══ ACT 2 — THE FOX ════════════════════════════════════════════ */
+
+.pick-act2__inner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 24px;
+  background: rgba(212, 175, 55, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-left: 3px solid var(--c-gold);
+  border-radius: var(--r-md);
+  max-width: 560px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pick-act2__glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 100% at 0% 50%,
+    rgba(212, 175, 55, 0.08), transparent 60%);
+  pointer-events: none;
+}
+
+.pick-act2__avatar {
+  font-size: 32px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.pick-act2__body {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.pick-act2__label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.6);
+}
+
+.pick-act2__horse {
+  font-family: var(--font-display);
+  font-size: clamp(22px, 3.5vw, 32px);
+  font-weight: 900;
+  color: var(--c-text-100);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+
+.pick-act2__odds {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--c-gold);
+}
+
+
+/* ══ ACT 3 — THE CUBS ═══════════════════════════════════════════ */
+
+.pick-act3__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 680px;
+}
+
+.pick-act3__label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(224, 90, 42, 0.7);
+}
+
+.pick-act3__body {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pick-act3__count {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 900;
+  color: #E05A2A;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.pick-act3__text {
+  font-size: clamp(16px, 2.5vw, 22px);
+  color: var(--c-text-75);
+  line-height: 1.3;
+}
+
+.pick-act3__text--empty {
+  font-size: 16px;
+  color: var(--c-text-35);
+  font-style: italic;
+}
+
+.pick-act3__horse { color: var(--c-text-100); font-weight: 800; }
+
+.pick-act3__tension {
+  display: inline-block;
+  font-size: 13px;
+  padding: 7px 14px;
+  border-radius: var(--r-sm);
+  line-height: 1.5;
+}
+
+.pick-act3__tension--agrees {
+  background: rgba(212, 175, 55, 0.07);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  color: var(--c-gold);
+}
+
+.pick-act3__tension--split {
+  background: rgba(192, 57, 43, 0.07);
+  border: 1px solid rgba(192, 57, 43, 0.2);
+  color: var(--c-red-lt);
+}
+
+
+/* ══ ACT 4 — AI SPLIT ═══════════════════════════════════════════ */
+
+.pick-act4__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pick-act4__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-text-35);
+}
+
+.pick-act4__chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pick-act4__chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--r-md);
+  transition: border-color 0.2s;
+}
+
+.pick-act4__chip--agrees {
+  background: rgba(212, 175, 55, 0.05);
+  border-color: rgba(212, 175, 55, 0.2);
+}
+
+.pick-act4__chip-ai {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--c-text-35);
+  flex-shrink: 0;
+}
+
+.pick-act4__chip-horse {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--c-text-100);
+}
+
+.pick-act4__chip-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pick-act4__chip-dot--agrees { background: var(--c-gold); }
+.pick-act4__chip-dot--splits  { background: rgba(255, 255, 255, 0.2); }
+
+.pick-act4__footnote {
+  font-size: 13px;
+  color: var(--c-text-35);
+  font-style: italic;
+}
+
+
+/* ══ ACT 5 — THE DECISION ═══════════════════════════════════════ */
+
+.pick-act5__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pick-act5__line {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 4vw, 42px);
+  font-weight: 900;
+  color: var(--c-text-100);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.pick-act5__sub {
+  font-size: 15px;
+  color: var(--c-text-55);
+  line-height: 1.6;
+}
+
+.pick-act5__arrow {
+  font-size: 22px;
+  color: var(--c-gold);
+  display: block;
+  margin-top: 8px;
+  animation: pickArrowBounce 1.2s ease-in-out infinite;
+}
+
+
+/* ══ PICK BODY (runner grid + commit) ═══════════════════════════ */
+
+.pick-body {
+  opacity: 0;
+  transform: translateY(32px);
+  pointer-events: none;
+  padding: 40px 0 120px;
+  background: var(--c-midnight);
+  transition: none;
+}
+
+.pick-body--visible {
+  animation: bodySlideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  pointer-events: auto;
+}
+
+.pick-body--instant {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
+
+
+/* ── Progress indicator ── */
+.pick-progress {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.pick-progress__step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.35;
+  transition: opacity 0.3s;
+}
+
+.pick-progress__step--active { opacity: 1; }
+
+.pick-progress__num {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 900;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: var(--c-gold);
+  transition: background 0.3s;
+}
+
+.pick-progress__step--active .pick-progress__num {
+  background: var(--c-gold);
+  color: var(--c-midnight);
+}
+
+.pick-progress__lbl {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text-75);
+}
+
+.pick-progress__line {
+  flex: 0 0 40px;
+  height: 1px;
+  background: rgba(212, 175, 55, 0.2);
+  margin: 0 12px;
+}
+
+
+/* ── Instruction bar ── */
+.pick-instruction {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--c-text-55);
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--r-sm);
+}
+
+.pick-instruction__icon { font-size: 16px; flex-shrink: 0; }
+
+
+/* ── Runner grid ── */
+.pick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+
+/* ══ Runner card — signal-forward pick-focused design ═══════
+   Layout: flex-column so the CTA always sits at the bottom.
+   Signals pop at the top; silk + name + odds-chip form the
+   hero row; meta is subordinate; AI agreement chip is opt-in
+   (only renders when at least one AI backs the horse); CTA
+   is the full-width commit action. Selected state raises the
+   card above siblings, swaps CTA to gold, and stamps a ✓ in
+   the top-right corner. */
+.pick-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--c-navy-card);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-md);
+  padding: 18px 18px 16px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+  /* Reset <button> browser defaults */
+  font: inherit;
+  color: inherit;
+  width: 100%;
+  transition:
+    border-color 0.25s ease,
+    transform 0.25s cubic-bezier(0.2, 0.9, 0.25, 1),
+    box-shadow 0.25s ease,
+    background 0.25s ease;
+}
+
+/* Top-edge rim light — catches "light from above" on hover */
+.pick-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,175,55,0.35), transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.pick-card:hover,
+.pick-card:focus-visible {
+  border-color: rgba(212,175,55,0.32);
+  transform: translateY(-4px);
+  box-shadow:
+    0 16px 36px rgba(0,0,0,0.50),
+    0 0 0 1px rgba(212,175,55,0.08);
+  background: rgba(28,28,40,0.96);
+}
+.pick-card:hover::before,
+.pick-card:focus-visible::before { opacity: 1; }
+
+.pick-card:focus-visible {
+  outline: 2px solid var(--c-gold);
+  outline-offset: 2px;
+}
+
+/* ── Signal strip ──────────────────────────────────────────── */
+.pick-card__signals {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: 22px;
+}
+.pick-card__signal {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  line-height: 1;
+}
+.pick-card__signal--fox {
+  background: linear-gradient(135deg, rgba(224,90,42,0.18), rgba(212,175,55,0.14));
+  color: var(--c-gold-lt);
+  border: 1px solid rgba(224,90,42,0.4);
+}
+.pick-card__signal--pack {
+  background: rgba(224,90,42,0.16);
+  color: #ffb088;
+  border: 1px solid rgba(224,90,42,0.38);
+}
+.pick-card__signal--fav {
+  background: rgba(45,189,122,0.14);
+  color: var(--c-emerald-lt);
+  border: 1px solid rgba(45,189,122,0.34);
+}
+
+/* Pack-% progress bar — sits on its own row under the pills */
+.pick-card__pack-bar {
+  flex: 1 1 100%;
+  height: 3px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.pick-card__pack-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--c-cubs-ember), #ffb088);
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+/* ── Hero row: silk + title + odds chip ────────────────────── */
+.pick-card__hero {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pick-card__silk {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 900;
+  font-size: 18px;
+  color: #fff;
+  /* Metallic sheen — radial highlight on top-left quadrant */
+  background-image: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.22), transparent 55%);
+  background-repeat: no-repeat;
+  box-shadow:
+    inset 0 -3px 8px rgba(0,0,0,0.35),
+    0 4px 12px rgba(0,0,0,0.4);
+  text-shadow: 0 1px 1px rgba(0,0,0,0.45);
+}
+.pick-card__silk > span { position: relative; z-index: 1; }
+
+.pick-card__title {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pick-card__name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--c-text-100);
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pick-card__connections {
+  font-size: 12px;
+  color: var(--c-text-55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Odds chip — gold pill; prominent like a confidence mark */
+.pick-card__odds-chip {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: var(--r-pill);
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 15px;
+  font-style: italic;
+  background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(212,175,55,0.06));
+  color: var(--c-gold-lt);
+  border: 1px solid rgba(212,175,55,0.45);
+  letter-spacing: 0.01em;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+/* ── Meta row ──────────────────────────────────────────────── */
+.pick-card__meta {
+  font-size: 12px;
+  color: var(--c-text-35);
+  letter-spacing: 0.02em;
+}
+
+/* ── AI agreement chip ─────────────────────────────────────── */
+.pick-card__ai-agree {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px;
+  border-radius: var(--r-pill);
+  background: rgba(45,189,122,0.10);
+  border: 1px solid rgba(45,189,122,0.28);
+  color: var(--c-emerald-lt);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  width: fit-content;
+}
+.pick-card__ai-agree-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--c-emerald-lt);
+  box-shadow: 0 0 6px rgba(45,189,122,0.7);
+}
+/* Unanimous (all 3 AIs agree) gets the stronger gold treatment */
+.pick-card__ai-agree--unanimous {
+  background: rgba(212,175,55,0.12);
+  border-color: rgba(212,175,55,0.40);
+  color: var(--c-gold-lt);
+}
+.pick-card__ai-agree--unanimous .pick-card__ai-agree-dot {
+  background: var(--c-gold-lt);
+  box-shadow: 0 0 6px rgba(212,175,55,0.7);
+}
+
+/* ── Primary CTA ──────────────────────────────────────────── */
+.pick-card__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 16px;
+  border: 1px solid rgba(212,175,55,0.3);
+  border-radius: var(--r-sm);
+  background: rgba(212,175,55,0.05);
+  color: var(--c-gold);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  margin-top: auto;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+.pick-card__cta-arrow {
+  transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+.pick-card:hover .pick-card__cta,
+.pick-card:focus-visible .pick-card__cta {
+  background: rgba(212,175,55,0.16);
+  border-color: var(--c-gold);
+  color: var(--c-gold-lt);
+}
+.pick-card:hover .pick-card__cta-arrow,
+.pick-card:focus-visible .pick-card__cta-arrow {
+  transform: translateX(4px);
+}
+
+/* ── Selected state ────────────────────────────────────────── */
+.pick-card--selected {
+  border-color: var(--c-gold);
+  background: linear-gradient(135deg, rgba(212,175,55,0.10), rgba(212,175,55,0.02));
+  box-shadow:
+    0 0 0 2px rgba(212,175,55,0.45),
+    inset 0 0 24px rgba(212,175,55,0.10),
+    0 16px 36px rgba(0,0,0,0.50);
+  transform: translateY(-6px);
+}
+.pick-card--selected::before { opacity: 1; }
+.pick-card--selected .pick-card__name { color: var(--c-gold); }
+.pick-card--selected .pick-card__odds-chip {
+  background: var(--c-gold);
+  color: var(--c-midnight);
+  border-color: var(--c-gold);
+}
+.pick-card--selected .pick-card__cta {
+  background: var(--c-gold);
+  color: var(--c-midnight);
+  border-color: var(--c-gold);
+  font-weight: 900;
+}
+.pick-card--selected .pick-card__cta-arrow { transform: none; }
+
+/* Checkmark badge in the top-right corner of a selected card */
+.pick-card--selected::after {
+  content: '✓';
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--c-gold);
+  color: var(--c-midnight);
+  font-size: 14px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(212,175,55,0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pick-card,
+  .pick-card__pack-fill,
+  .pick-card__cta,
+  .pick-card__cta-arrow,
+  .pick-card__odds-chip { transition: none; }
+  .pick-card:hover,
+  .pick-card:focus-visible,
+  .pick-card--selected { transform: none; }
+}
+
+
+/* ══ COMMITMENT PANEL ═══════════════════════════════════════════ */
+
+.pick-commit {
+  display: none;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: 32px;
+  background: #08090f;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+              0 4px 20px rgba(212, 175, 55, 0.07),
+              inset 0 1px 0 rgba(212, 175, 55, 0.06);
+  animation: commitSlide 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.pick-commit--visible { display: block; }
+
+.pick-commit__inner { padding: 28px; }
+
+/* Locked-in header — the declaration */
+.pick-commit__locked-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: rgba(212, 175, 55, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin: -28px -28px 20px;
+  flex-wrap: wrap;
+}
+
+.pick-commit__locked-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.pick-commit__locked-eyebrow {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.5);
+  margin-bottom: 3px;
+}
+
+.pick-commit__locked-horse {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--c-text-100);
+  line-height: 1;
+}
+
+.pick-commit__locked-right {
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.pick-commit__locked-odds {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--c-gold);
+}
+
+.pick-commit__change {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--c-text-35);
+  font-family: var(--font-body);
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.pick-commit__change:hover { color: var(--c-text-75); }
+
+/* Fox comparison line */
+.pick-commit__fox-line {
+  margin-bottom: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, margin-bottom 0.3s ease;
+}
+
+.pick-commit__fox-line--active {
+  max-height: 60px;
+  margin-bottom: 16px;
+}
+
+.pick-commit__fox-agrees,
+.pick-commit__fox-disagrees {
+  display: block;
+  font-size: 13px;
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  line-height: 1.5;
+}
+
+.pick-commit__fox-agrees {
+  background: rgba(212, 175, 55, 0.07);
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  color: var(--c-gold);
+}
+
+.pick-commit__fox-disagrees {
+  background: rgba(192, 57, 43, 0.07);
+  border: 1px solid rgba(192, 57, 43, 0.2);
+  color: var(--c-red-lt);
+}
+
+/* CTA section */
+.pick-commit__title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--c-text-100);
+  margin: 0 0 6px;
+}
+
+.pick-commit__sub {
+  font-size: 13px;
+  color: var(--c-text-55);
+  margin: 0 0 20px;
+  line-height: 1.65;
+}
+
+.btn--full { width: 100%; justify-content: center; }
+
+.pick-commit__divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+  font-size: 12px;
+  color: var(--c-text-35);
+}
+
+.pick-commit__divider::before,
+.pick-commit__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.pick-commit__reassure {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--c-text-35);
+}
+
+
+/* ══ STICKY BAR — mobile ════════════════════════════════════════ */
+
+.pick-sticky {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(8, 9, 15, 0.97);
+  border-top: 1px solid rgba(212, 175, 55, 0.25);
+  padding: 12px 16px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
+  display: none;
+}
+
+.pick-sticky--visible { transform: translateY(0); }
+
+.pick-sticky__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+.pick-sticky__pick {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.pick-sticky__label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.5);
+}
+
+.pick-sticky__horse {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--c-text-100);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pick-sticky__odds {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-gold);
+}
+
+.pick-sticky__btn { flex-shrink: 0; white-space: nowrap; }
+
+
+/* ══ EMPTY STATE ════════════════════════════════════════════════ */
+
+.pick-empty {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.pick-empty__icon   { font-size: 48px; margin-bottom: 16px; }
+.pick-empty__title  { font-family: var(--font-display); font-size: 28px; font-weight: 900; color: var(--c-text-100); margin: 0 0 10px; }
+.pick-empty__sub    { font-size: 15px; color: var(--c-text-55); max-width: 460px; margin: 0 auto 24px; line-height: 1.7; }
+
+
+/* ══ RESPONSIVE ═════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .pick-stage__inner  { padding: 48px 0; gap: 28px; }
+  .pick-body          { padding-bottom: 100px; }
+  .pick-sticky        { display: block; }
+  .pick-act2__inner   { padding: 16px 18px; }
+  .pick-act4__chips   { flex-direction: column; }
+  .pick-commit__inner { padding: 20px 16px; }
+  .pick-commit__locked-header { padding: 14px 16px; margin: -20px -16px 18px; }
+}
+
+@media (max-width: 480px) {
+  .pick-progress__lbl    { display: none; }
+  .pick-grid             { grid-template-columns: 1fr; }
+  .pick-commit__locked-horse { font-size: 22px; }
+  .pick-commit__title    { font-size: 20px; }
+  .pick-act4__chip       { padding: 8px 12px; }
+}
+
+/* Reduced motion: skip sequence, show everything at once */
+@media (prefers-reduced-motion: reduce) {
+  .pick-stage {
+    min-height: auto;
+    padding: 48px 0;
+    cursor: default;
+  }
+  .pick-stage::after          { display: none; }
+  .pick-act                   { opacity: 1; animation: none !important; }
+  .pick-body                  { opacity: 1; transform: none; pointer-events: auto; animation: none !important; }
+  .pick-act5__arrow           { animation: none; }
+  .pick-act1__dot             { animation: none; }
+  .pick-stage__bg-glow--fox   { animation: none; }
+}

@@ -1,0 +1,1044 @@
+/*
+ * battle-section.css
+ * The Fox vs Cubs rivalry section (paper edition) + AI Lab section
+ * Mobile-first. Pure flexbox — no grid, no auto columns.
+ *
+ * Paper-mode local palette — keeps the dark-hero / paper-band rhythm
+ * the rest of the landing follows (Day Hub, Money Moves, meeting-full).
+ * Scoped to .battle-section so we don't leak into the AI Lab below.
+ * ─────────────────────────────────────────────────────────────
+ */
+.battle-section {
+  /* Paper surface (section header + footer) */
+  --bs-paper:    #FAFAF7;
+  --bs-rule:     #E7E5DD;
+  --bs-rule-md:  #D6D2C5;
+  --bs-ink:      #11151F;
+  --bs-ink-70:   #41474F;
+  --bs-ink-40:   #9CA3AF;
+  /* Dark card surface — Saturday brand atmosphere on the paper stage */
+  --bs-card:        #14161F;       /* deep navy */
+  --bs-card-raised: #1C1F2A;       /* recessed sub-cards (pick band) */
+  --bs-card-edge:   rgba(255, 255, 255, 0.08);
+  --bs-card-ink:    #ECEEF5;
+  --bs-card-ink-70: rgba(236, 238, 245, 0.78);
+  --bs-card-ink-40: rgba(236, 238, 245, 0.48);
+  /* Faction accents — gold for Fox, emerald for Cubs (both legible on navy) */
+  --bs-gold:         #9C7B12;      /* legible on cream */
+  --bs-gold-lt:      #D4AF37;      /* legible on navy */
+  --bs-gold-wash:    #FAF1D7;
+  --bs-gold-glow:    rgba(212, 175, 55, 0.18);
+  --bs-emerald:      #1A7D4A;
+  --bs-emerald-lt:   #2DBD7A;      /* legible on navy */
+  --bs-emerald-soft: rgba(26, 125, 74, 0.10);
+  --bs-emerald-glow: rgba(45, 189, 122, 0.20);
+}
+
+/* ── SECTION SHELL ──────────────────────────────────────────── */
+
+.battle-section {
+  background: var(--bs-paper);
+  color: var(--bs-ink);
+  border-top:    1px solid var(--bs-rule);
+  border-bottom: 1px solid var(--bs-rule);
+  overflow: hidden;
+  position: relative;          /* anchors the CRT static layers below */
+}
+
+/* ══ RETRO CRT BACKDROP ════════════════════════════════════════
+ *
+ * The "no signal" TV-static effect that lives BEHIND the rivalry
+ * cards. Three stacked layers, all absolutely positioned and
+ * pointer-events:none so they never block clicks on the cards:
+ *
+ *   .battle-static__bg         deep CRT-style wash + edge fade
+ *   .battle-static__canvas     animated snow (TvStatic JS module)
+ *   .battle-static__overlay    fine scanlines + bezel vignette
+ *
+ * The `<canvas>` is sized via CSS only — the JS module reads
+ * getBoundingClientRect() to size its back-buffer. We deliberately
+ * cap the section height to keep the snow rendered to a sensible
+ * pixel budget on tall mobile viewports.
+ *
+ * Container is `.battle-section` (no extra modifier required); the
+ * static layers self-hide if their `data-` toggle is missing on the
+ * canvas. This keeps the retro effect opt-in per page.
+ */
+.battle-static {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+/* Soft dark wash + radial vignette behind the snow — gives the CRT
+   its "glass tube" depth on top of the paper section. The wash is
+   semi-transparent so the paper-cream still bleeds in at the edges. */
+.battle-static__bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 80% at 50% 50%,
+      rgba(8, 10, 18, 0.78) 0%,
+      rgba(8, 10, 18, 0.62) 55%,
+      rgba(8, 10, 18, 0.18) 85%,
+      transparent 100%);
+}
+.battle-static__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* Slight blur softens the chunky pixels into believable CRT noise. */
+  filter: blur(0.4px) contrast(1.05);
+  mix-blend-mode: screen;     /* snow only ADDS light on the dark wash */
+}
+/* Scanlines + bezel vignette overlay. Combined into one element via
+   two layered backgrounds so we only pay for one composited layer. */
+.battle-static__overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    /* Horizontal scanlines — 2px on, 2px off. */
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.18) 0px,
+      rgba(0, 0, 0, 0.18) 1px,
+      transparent 1px,
+      transparent 3px),
+    /* Corner vignette — sells the curved-glass tube. */
+    radial-gradient(ellipse 90% 90% at 50% 50%,
+      transparent 55%,
+      rgba(0, 0, 0, 0.45) 100%);
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+}
+/* A slow, almost-imperceptible vertical drift on the scanlines —
+   the classic CRT roll. Six seconds, looped, GPU-cheap because we're
+   only animating background-position-y. */
+@keyframes battle-static-roll {
+  0%   { background-position: 0 0, center; }
+  100% { background-position: 0 3px, center; }
+}
+.battle-static__overlay {
+  animation: battle-static-roll 0.7s steps(2) infinite;
+}
+
+/* When the user prefers reduced motion the JS already paints a single
+   static frame; we also disable the scanline drift here. */
+@media (prefers-reduced-motion: reduce) {
+  .battle-static__overlay { animation: none; }
+}
+
+/* All content above the static — the container + cards — sits on top. */
+.battle-section > .container { position: relative; z-index: 1; }
+
+/* The header text needs to read on top of the dark CRT wash now — flip
+   it to the brand-light palette only over the dark center, while
+   leaving the very top/bottom of the section in paper-cream rhythm. */
+/* "Broadcast lower-third" panel — dark wash + soft blur behind the
+   header content so the title + sub read cleanly over the CRT static.
+   max-width: max-content lets the panel shrink-wrap the longest line
+   (the subtitle), which keeps the visual frame tight even on wide
+   viewports without us hand-coding a px width. */
+.battle-section .battle-header {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 18px clamp(22px, 4vw, 36px) 22px;
+  background: rgba(8, 10, 18, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.40);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.battle-section .battle-header__title,
+.battle-section .battle-header__sub {
+  position: relative;
+  z-index: 2;
+}
+.battle-section .battle-header__title {
+  color: #fff;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.55);
+}
+.battle-section .battle-header__sub {
+  color: var(--bs-card-ink-70);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
+}
+.battle-section .kicker {
+  color: var(--bs-gold-lt);
+  background: rgba(212, 175, 55, 0.10);
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+/* Footer link — dark pill so the gold copy lifts off the static. */
+.battle-section .battle-footer {
+  position: relative;
+  z-index: 2;
+  border-top-color: rgba(255, 255, 255, 0.10);
+}
+.battle-section .battle-footer__link {
+  display: inline-block;
+  color: var(--bs-gold-lt);
+  background: rgba(8, 10, 18, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 999px;
+  padding: 8px 18px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  transition: color .18s, background .18s, border-color .18s;
+}
+.battle-section .battle-footer__link:hover {
+  color: #fff;
+  background: rgba(8, 10, 18, 0.85);
+  border-color: rgba(212, 175, 55, 0.40);
+}
+
+/* Mobile — let the panel breathe to the section edges so long titles
+   don't overflow on narrow screens. */
+@media (max-width: 480px) {
+  .battle-section .battle-header {
+    width: auto;
+    max-width: none;
+    margin-left: 4px;
+    margin-right: 4px;
+    padding: 14px 18px 16px;
+  }
+}
+
+/* ── HEADER ─────────────────────────────────────────────────── */
+
+.battle-header { text-align: center; margin-bottom: var(--space-6); }
+
+/* Kicker — same .kicker class as elsewhere, but tone the colour
+   down for the paper backdrop. */
+.battle-section .kicker {
+  color: var(--bs-ink-40);
+  letter-spacing: 0.16em;
+}
+
+.battle-header__title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4.4vw, 44px);
+  font-weight: 700;
+  color: var(--bs-ink);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin: var(--space-2) 0 var(--space-2);
+}
+
+.battle-header__sub {
+  font-size: 15px;
+  color: var(--bs-ink-70);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── ARENA — mobile: vertical stack ────────────────────────── */
+
+.battle-arena {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ── BATTLE CARD ────────────────────────────────────────────── */
+
+.battle-card {
+  display: block;
+  position: relative;
+  text-decoration: none;
+  color: var(--bs-card-ink);
+  background: var(--bs-card);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--bs-card-edge);
+  overflow: hidden;
+  transition: border-color 0.22s, transform 0.22s, box-shadow 0.22s;
+  /* Deeper drop shadow so the dark card lifts off the cream paper */
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 10px 28px -16px rgba(20, 22, 31, 0.45);
+  /* On mobile (flex column): fill the full width */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/*
+ * Card primary navigation: full-area link under content (z-index stack).
+ * The card cannot be a single <a> because horse picks use nested <a> links
+ * (horse_name_link) — invalid HTML makes the parser close the outer anchor early.
+ */
+.battle-card__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  text-decoration: none;
+}
+
+.battle-card__backdrop:focus-visible {
+  outline: 2px solid var(--c-gold);
+  outline-offset: -2px;
+}
+
+.battle-card--cubs .battle-card__backdrop:focus-visible {
+  outline-color: var(--bs-emerald);
+}
+
+.battle-card:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 18px 36px -14px rgba(20, 22, 31, 0.55);
+}
+.battle-card--fox:hover {
+  border-color: var(--bs-gold-lt);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 18px 36px -14px rgba(20, 22, 31, 0.55),
+    0 0 0 1px var(--bs-gold-glow) inset;
+}
+.battle-card--cubs:hover {
+  border-color: var(--bs-emerald-lt);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.08),
+    0 18px 36px -14px rgba(20, 22, 31, 0.55),
+    0 0 0 1px var(--bs-emerald-glow) inset;
+}
+
+.battle-card__inner {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  /* Clicks reach .battle-card__backdrop except on nested links (horse picks). */
+  pointer-events: none;
+}
+
+.battle-card__inner a {
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+/* Hover glow — retired on the paper edition; box-shadow on .battle-card
+   provides the only lift. Keep the rule shell for any legacy markup. */
+.battle-card__glow { display: none; }
+
+/* ── PORTRAIT ───────────────────────────────────────────────── */
+
+.battle-card__portrait {
+  width: 100%;
+  max-width: 240px;
+  margin: 0 auto;
+  /* Ensure SVG inside always fills this div */
+  display: block;
+  line-height: 0;
+}
+
+/* Fox portrait: inline SVG (legacy) or <img> from mr_fox_portrait include */
+.battle-card__portrait > svg,
+.battle-card__portrait > img,
+.battle-card__portrait .mr-fox-portrait,
+.battle-card__portrait .cubs-portrait {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1024 / 1536;
+  display: block;
+}
+
+/*
+ * Fox portrait band — single centred portrait on a warm cream backdrop.
+ * The old triptych (gold flank | portrait | binary-rain AI flank) is gone;
+ * the template no longer renders the flanks. We hide any stray markup
+ * defensively so cached old HTML doesn't bleed cyber-rain through paper.
+ */
+.battle-card--fox .battle-card__portrait--fox.battle-card__fox-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  box-sizing: border-box;
+  height: clamp(220px, 36vw, 320px);
+  overflow: hidden;
+  border-radius: var(--r-md);
+  /* Gold halo anchored at the top so it sits behind the Fox's head
+     and cap, not the lower body — same treatment as the Cubs card. */
+  background:
+    radial-gradient(ellipse 75% 55% at 50% 15%, var(--bs-gold-glow) 0%, transparent 70%),
+    #0E1018;
+  border: 1px solid var(--bs-card-edge);
+  pointer-events: none;
+}
+
+/* Fox image fills the landscape band — cover-crop matches the Cubs
+   treatment. The source asset is currently 600x900 (2:3 portrait); the
+   25% vertical anchor keeps the fox face in frame while trimming the
+   wordmark + cyborg half that don't belong on the paper edition.
+   Replace the asset with a 3:2 landscape (recommended 1600x1066) and
+   this rule stays as-is. */
+.battle-card__fox-center {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background-color: transparent;
+  background-image: var(--fox-battle-art, none);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center 25%;
+  transition: background-image 0.3s ease;
+}
+
+/* Defensive: if older cached markup includes flanks/scans/embers/binary,
+   hide them rather than render dark navy panels on the paper card. */
+.battle-card__fox-flank,
+.battle-card__fox-flank--gold,
+.battle-card__fox-flank--ai,
+.battle-card__fox-flank__ember,
+.battle-card__fox-flank__scan,
+.battle-card__fox-binary {
+  display: none !important;
+}
+
+/*
+ * Cubs portrait band — matches Fox band: warm-cream backdrop, same
+ * dimensions, soft border. The earlier neon-orange backdrop is gone.
+ */
+.battle-card--cubs .battle-card__portrait--cubs {
+  display: block;
+  padding: 0;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  box-sizing: border-box;
+  height: clamp(220px, 36vw, 320px);
+  overflow: hidden;
+  border-radius: var(--r-md);
+  /* Halo anchored at the top so the lighted ring sits behind the
+     heads, not the chins. */
+  background:
+    radial-gradient(ellipse 75% 55% at 50% 15%, var(--bs-emerald-glow) 0%, transparent 70%),
+    #0E1018;
+  border: 1px solid var(--bs-card-edge);
+  pointer-events: none;
+}
+
+/* Wrapper element fills the band — picture is inline by default. */
+.battle-card--cubs .battle-card__portrait--cubs picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+/* Match every img path: legacy direct-child <img.cubs-portrait> AND
+   the new <picture> wrapper structure introduced when the partial
+   switched to srcset. !important on object-position too — the inline
+   <img style="aspect-ratio:720/1080"> would otherwise pin a height
+   that defeats the cover crop on some renderers. */
+.battle-card--cubs .battle-card__portrait--cubs > .cubs-portrait,
+.battle-card--cubs .battle-card__portrait--cubs > img.cubs-portrait,
+.battle-card--cubs .battle-card__portrait--cubs picture > img,
+.battle-card--cubs .battle-card__portrait--cubs picture > img.cubs-portrait {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  object-fit: cover !important;
+  /* New Pack portrait runs edge-to-edge top-to-bottom — content
+     fills 100% width x 97% height of the canvas. center center
+     shows the middle slice (heads + jacket tops with CUBS letters)
+     and crops a thin sliver off the very top + bottom. */
+  object-position: center center !important;
+  aspect-ratio: unset !important;
+  display: block;
+}
+
+/* ── IDENTITY ───────────────────────────────────────────────── */
+
+.battle-card__identity { text-align: center; }
+
+.battle-card__faction {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: var(--r-pill);
+  margin-bottom: var(--space-2);
+}
+
+.battle-card__faction--fox {
+  background: var(--bs-gold-glow);
+  color: var(--bs-gold-lt);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+}
+.battle-card__faction--cubs {
+  background: var(--bs-emerald-glow);
+  color: var(--bs-emerald-lt);
+  border: 1px solid rgba(45, 189, 122, 0.45);
+}
+
+.battle-card__name {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3.4vw, 32px);
+  font-weight: 700;
+  color: var(--bs-card-ink);
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  margin: 0 0 var(--space-2);
+}
+
+.battle-card__descriptor {
+  font-size: 12px;
+  color: var(--bs-card-ink-40);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* ── PICK ───────────────────────────────────────────────────── */
+
+.battle-card__pick {
+  background: var(--bs-card-raised);
+  border: 1px solid var(--bs-card-edge);
+  border-radius: var(--r-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+}
+/* A faint faction-tinted top border so the pick band reads as Fox's or
+   Cubs' pick at a glance without screaming colour. */
+.battle-card--fox  .battle-card__pick { border-top-color: rgba(212, 175, 55, 0.35); }
+.battle-card--cubs .battle-card__pick { border-top-color: rgba(45, 189, 122, 0.35); }
+
+.battle-card__pick-label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bs-card-ink-40);
+}
+
+.battle-card__pick-horse {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 3vw, 22px);
+  font-weight: 700;
+  color: var(--bs-card-ink);
+  line-height: 1.2;
+}
+
+.battle-card__pick-horse--pending {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--bs-card-ink-40);
+  font-style: italic;
+}
+
+.battle-card__pick-odds {
+  font-size: 12px;
+  color: var(--bs-card-ink-70);
+  font-feature-settings: 'tnum';
+}
+
+/* Horse links in battle cards — subtle by default, faction colour on hover. */
+.battle-horse-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  transition: color 0.2s, border-color 0.2s;
+}
+.battle-card--fox  .battle-horse-link:hover { color: var(--bs-gold-lt);    border-bottom-color: var(--bs-gold-lt); }
+.battle-card--cubs .battle-horse-link:hover { color: var(--bs-emerald-lt); border-bottom-color: var(--bs-emerald-lt); }
+
+/* ── RECORD ─────────────────────────────────────────────────── */
+
+.battle-card__record {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  justify-content: center;
+}
+
+.battle-card__record-num {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.battle-card--fox  .battle-card__record-num { color: var(--bs-gold-lt); }
+.battle-card--cubs .battle-card__record-num { color: var(--bs-emerald-lt); }
+
+.battle-card__record-label { font-size: 12px; color: var(--bs-card-ink-40); }
+
+/* ── CTA ────────────────────────────────────────────────────── */
+
+.battle-card__cta {
+  text-align: center;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--bs-card-edge);
+}
+
+.battle-card__cta-text { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; transition: color 0.2s; }
+.battle-card--fox  .battle-card__cta-text { color: var(--bs-gold-lt); }
+.battle-card--cubs .battle-card__cta-text { color: var(--bs-emerald-lt); }
+.battle-card:hover .battle-card__cta-text { filter: brightness(1.15); }
+
+/* ── VS DIVIDER — mobile: horizontal strip ──────────────────── */
+
+.battle-vs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-2) 0;
+}
+
+/* The connector lines (horizontal on mobile, vertical on desktop) —
+   subtle gold gradients so the VS badge feels like it's strung along
+   a faction rule rather than floating on its own. */
+.battle-vs__line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--bs-gold-lt) 50%, transparent);
+  opacity: 0.55;
+}
+.battle-vs__line--top,
+.battle-vs__line--bottom { height: 1px; }
+
+/* VS badge — premium-feel medallion, not a tiny circle. */
+.battle-vs__badge {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--bs-gold-lt);
+  background:
+    radial-gradient(circle at 50% 35%, var(--bs-gold-wash) 0%, #FFFFFF 80%),
+    var(--bs-paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow:
+    0 1px 2px rgba(156, 123, 18, 0.08),
+    0 6px 16px -8px rgba(156, 123, 18, 0.20);
+}
+
+.battle-vs__text {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--bs-gold);
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+/* Score + bar below VS on mobile — hidden, shown at 768px */
+.battle-vs__score,
+.battle-vs__bar,
+.battle-vs__bar-labels,
+.battle-vs__caption { display: none; }
+
+/* ── FOOTER ─────────────────────────────────────────────────── */
+
+.battle-footer {
+  text-align: center;
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--bs-rule);
+}
+
+.battle-footer__link {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--bs-ink-70);
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+  text-decoration: none;
+}
+.battle-footer__link:hover { color: var(--bs-gold); }
+
+/* Mr Fox raster portrait (optional nameplate under image) */
+.mr-fox-portrait-caption {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--bs-gold);
+  margin: 10px 0 0;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   TABLET 768px+ — side-by-side layout
+   Flexbox row: [fox card] [vs column] [cubs card]
+   Each card: calc(50% - 80px)  VS column: 160px fixed
+═══════════════════════════════════════════════════════ */
+
+@media (min-width: 768px) {
+
+  .battle-header { margin-bottom: var(--space-5); }
+
+  .battle-arena {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+    /* Collapse anonymous whitespace flex items (stray text nodes between tags) */
+    font-size: 0;
+    line-height: 0;
+  }
+
+  .battle-arena > * {
+    font-size: inherit;  /* restore from body 15px, not browser 'medium' */
+    line-height: inherit;
+  }
+
+  /*
+   * Equal-width cards: flex-basis 0 + grow, min-width 0 — do NOT set width: 0;
+   * that shrinks percentage-based SVGs to zero height on some engines.
+   */
+  .battle-card {
+    flex: 1 1 0%;
+    width: auto; /* override mobile width:100% so three columns share one row */
+    min-width: 0;
+    align-self: stretch;
+  }
+
+  /* VS column — a designed scoreboard panel on warm paper, framed by
+     a subtle gold-tinted border. Sits between the two dark cards as
+     the "editorial commentary" panel: who's winning, by how much. */
+  .battle-vs {
+    flex: 0 0 200px;
+    width: 200px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: var(--space-5) var(--space-4);
+    gap: var(--space-4);
+    background:
+      linear-gradient(180deg, #FFFFFF 0%, var(--bs-paper) 100%);
+    border: 1px solid var(--bs-rule-md);
+    border-radius: var(--r-lg);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+    align-self: stretch;
+  }
+
+  /* Top kicker before VS badge — signposts the panel's role. */
+  .battle-vs::before {
+    content: 'SEASON SCORE';
+    text-align: center;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: var(--bs-ink-40);
+  }
+
+  /* Lines act as gold rules above + below the VS badge. */
+  .battle-vs__line--top,
+  .battle-vs__line--bottom {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--bs-gold-lt) 50%, transparent);
+    opacity: 0.55;
+    flex: 0 0 auto;
+  }
+  .battle-vs__line--top    { display: none; }   /* the ::before kicker takes that slot */
+  .battle-vs__badge        { align-self: center; }
+
+  /* Score block — stacked Fox / dash / Cubs. Big tabular numerics,
+     faction-coloured, light kicker labels under each. */
+  .battle-vs__score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    border-radius: 0;
+  }
+  .battle-vs__score-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .battle-vs__score-num {
+    font-family: var(--font-display);
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .battle-vs__score-side--fox .battle-vs__score-num { color: var(--bs-gold); }
+  .battle-vs__score-side--cub .battle-vs__score-num { color: var(--bs-emerald); }
+  .battle-vs__score-label {
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bs-ink-40);
+  }
+  .battle-vs__score-dash {
+    color: var(--bs-rule-md);
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 0.8;
+  }
+
+  /* Bar — thicker, clearer faction split. */
+  .battle-vs__bar,
+  .battle-vs__bar-labels { display: flex; width: 100%; }
+  .battle-vs__bar {
+    height: 8px;
+    border-radius: var(--r-pill);
+    overflow: hidden;
+    background: var(--bs-rule);
+    border: 1px solid var(--bs-rule-md);
+    box-sizing: border-box;
+  }
+  .battle-vs__bar-fox  { background: var(--bs-gold-lt); height: 100%; }
+  .battle-vs__bar-draw { background: var(--bs-rule-md); height: 100%; }
+  .battle-vs__bar-cub  { background: var(--bs-emerald); height: 100%; }
+
+  .battle-vs__bar-labels { justify-content: space-between; margin-top: -2px; }
+  .battle-vs__bar-label--fox {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--bs-gold);
+    font-variant-numeric: tabular-nums;
+  }
+  .battle-vs__bar-label--cub {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--bs-emerald);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Caption — italic display serif so it reads as editorial pull-quote. */
+  .battle-vs__caption {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 12.5px;
+    color: var(--bs-ink-70);
+    text-align: center;
+    line-height: 1.5;
+    font-style: italic;
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--bs-rule);
+    margin: 0;
+  }
+
+  /* Desktop row: tighter card chrome so the section does not dominate the viewport. */
+  .battle-card__inner {
+    padding: var(--space-4);
+    gap: var(--space-3);
+  }
+
+  .battle-card__pick {
+    padding: var(--space-3);
+  }
+
+  .battle-card__pick-horse {
+    font-size: clamp(14px, 2.2vw, 18px);
+  }
+
+  .battle-card__record-num {
+    font-size: clamp(26px, 4vw, 32px);
+  }
+
+  .battle-card__name {
+    font-size: clamp(22px, 3vw, 30px);
+  }
+
+  /* Fox hero + Cubs portrait: same band height on row layout */
+  .battle-card--cubs .battle-card__portrait--cubs {
+    height: clamp(240px, 34vh, 380px);
+  }
+
+  .battle-card--fox .battle-card__portrait--fox {
+    max-width: none;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    height: clamp(240px, 34vh, 380px);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   DESKTOP 1024px+
+═══════════════════════════════════════════════════════ */
+
+@media (min-width: 1024px) {
+
+  .battle-vs { flex: 0 0 220px; width: 220px; padding: var(--space-5) var(--space-4); }
+
+  .battle-card--cubs .battle-card__portrait--cubs {
+    height: clamp(260px, 32vh, 400px);
+  }
+
+  .battle-card--fox .battle-card__portrait--fox {
+    max-width: none;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    height: clamp(260px, 32vh, 400px);
+  }
+
+  .battle-card__name { font-size: clamp(24px, 2.6vw, 34px); }
+
+  .battle-vs__line--top,
+  .battle-vs__line--bottom { height: 56px; }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   AI LAB SECTION
+   /simulation/how-it-works/ — process + methodology
+───────────────────────────────────────────────────────────── */
+
+.ai-lab-section {
+  background:
+    radial-gradient(ellipse 65% 55% at 5% 50%,  rgba(14,90,170,0.10), transparent 52%),
+    radial-gradient(ellipse 50% 50% at 95% 45%, rgba(212,175,55,0.06), transparent 48%),
+    var(--c-midnight);
+  border-top: 1px solid rgba(14,165,233,0.08);
+}
+
+.ai-lab-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+
+.ai-lab__title {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 6vw, 48px);
+  font-weight: 900;
+  color: var(--c-text-100);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  margin: var(--space-3) 0 var(--space-4);
+}
+
+.ai-lab__text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--c-text-55);
+  margin-bottom: var(--space-5);
+}
+
+.ai-lab__text em {
+  color: var(--c-text-100);
+  font-style: italic;
+}
+
+.ai-lab__mechanics {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.ai-lab__mechanic       { display: flex; align-items: flex-start; gap: 14px; }
+.ai-lab__mechanic-icon  { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.ai-lab__mechanic-title { font-size: 14px; font-weight: 700; color: var(--c-text-100); margin-bottom: 2px; }
+.ai-lab__mechanic-body  { font-size: 13px; line-height: 1.6; color: var(--c-text-55); }
+
+.ai-lab__cta { width: 100%; justify-content: center; min-height: 48px; }
+
+/* Terminal mockup */
+.ai-lab__visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-lab__terminal {
+  width: 100%;
+  max-width: 480px;
+  background: #030305;
+  border: 1px solid rgba(14,165,233,0.2);
+  border-radius: var(--r-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-raised), 0 0 40px rgba(14,165,233,0.06);
+}
+
+.ai-lab__terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.ai-lab__terminal-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ai-lab__terminal-dot--red   { background: #ff5f57; }
+.ai-lab__terminal-dot--amber { background: #febc2e; }
+.ai-lab__terminal-dot--green { background: #28c840; }
+
+.ai-lab__terminal-title {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--c-text-35);
+  text-transform: uppercase;
+  margin-left: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-lab__terminal-body {
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ai-lab__terminal-line {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  color: var(--c-text-55);
+  line-height: 1.5;
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.ai-lab__terminal-line--dim   { color: var(--c-text-35); }
+.ai-lab__terminal-line--blink { color: var(--c-cyan); animation: mf-seam 1.2s ease-in-out infinite; }
+
+.ai-lab__terminal-val              { color: var(--c-text-100); font-weight: 600; text-align: right; }
+.ai-lab__terminal-val--gold        { color: var(--c-gold); }
+.ai-lab__terminal-val--green       { color: var(--c-emerald-lt); }
+
+@media (min-width: 768px) {
+  .ai-lab-inner   { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); align-items: center; }
+  .ai-lab__cta    { width: auto; }
+}

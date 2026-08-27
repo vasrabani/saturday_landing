@@ -1,0 +1,351 @@
+/* Verify landing — PR6 polish.
+ *
+ * The landing is the /verify/ entry point. Two paths a reader
+ * comes in on:
+ *   1. "Show me everything you've sealed"     → the Ledger
+ *   2. "Verify this ONE pick I was told about" → the pick-ID lookup
+ *
+ * The hero surfaces both as first-class CTAs; the body backs it up
+ * with a live "sealed today" snapshot, a 5-row preview of the
+ * latest picks, and the how-it-works explainer.
+ *
+ * Layered on top of proof.css — namespace `.pfl__` so nothing
+ * collides with the existing .pf__ base styles.
+ */
+
+/* ── Hero — dual CTA ─────────────────────────────────────────── */
+
+.pfl__hero {
+  padding: 44px 0 32px;
+  border-bottom: 1px solid #e3ddd0;
+  margin-bottom: 32px;
+}
+
+.pfl__eyebrow {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: #8b5a2b;
+  margin: 0 0 12px;
+}
+
+.pfl__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 700;
+  line-height: 1.1;
+  color: #17171a;
+  margin: 0 0 14px;
+  letter-spacing: -0.01em;
+}
+
+.pfl__lede {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1.55;
+  color: #3a3a42;
+  margin: 0 0 22px;
+  max-width: 62ch;
+}
+
+.pfl__hero-cta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.pfl__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, color 0.15s,
+              transform 0.1s;
+}
+
+.pfl__cta:active { transform: translateY(1px); }
+
+.pfl__cta--primary {
+  background: #8b5a2b;
+  color: #fbf8f0;
+  border: 1px solid #8b5a2b;
+}
+
+.pfl__cta--primary:hover,
+.pfl__cta--primary:focus-visible {
+  background: #6f4520;
+  border-color: #6f4520;
+  outline: none;
+}
+
+.pfl__cta--ghost {
+  background: transparent;
+  color: #17171a;
+  border: 1px solid #d8d3c8;
+}
+
+.pfl__cta--ghost:hover,
+.pfl__cta--ghost:focus-visible {
+  background: #fbf8f0;
+  border-color: #8b5a2b;
+  color: #8b5a2b;
+  outline: none;
+}
+
+.pfl__cta svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+.pfl__cta-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  margin-left: 4px;
+  background: rgba(251, 248, 240, 0.22);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Chrome around the two CTA groups. Primary + ghost together
+   read as "the two things the reader can do here". */
+
+.pfl__hero-quiet {
+  margin: 14px 0 0;
+  color: #6a6a70;
+  font-size: 12px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.pfl__hero-quiet a {
+  color: #8b5a2b;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+/* ── Live "sealed today" strip ───────────────────────────────── */
+
+.pfl__today {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+  padding: 0;
+  margin: 0 0 34px;
+  background: #fbf8f0;
+  border: 1px solid #d8d3c8;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.pfl__today-stat {
+  padding: 14px 18px;
+  border-right: 1px solid #e3ddd0;
+}
+
+.pfl__today-stat:last-child { border-right: none; }
+
+.pfl__today-value {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: #17171a;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.pfl__today-value--muted { color: #a3a3ac; }
+
+.pfl__today-label {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6a6a70;
+}
+
+.pfl__today-note {
+  display: block;
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: #a3a3ac;
+}
+
+@media (max-width: 640px) {
+  .pfl__today { grid-template-columns: 1fr 1fr; }
+  .pfl__today-stat { border-right: none; border-bottom: 1px solid #e3ddd0; }
+  .pfl__today-stat:nth-child(2n) { border-right: none; }
+  .pfl__today-stat:last-child { border-bottom: none; grid-column: 1 / -1; }
+}
+
+/* ── Latest sealed picks preview ─────────────────────────────── */
+
+.pfl__latest {
+  margin: 0 0 34px;
+}
+
+.pfl__section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e3ddd0;
+}
+
+.pfl__section-head h2 {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #17171a;
+  margin: 0;
+}
+
+.pfl__section-head a {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #8b5a2b;
+  text-decoration: none;
+}
+
+.pfl__section-head a:hover { text-decoration: underline; }
+
+.pfl__latest-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #f0ebe0;
+}
+
+.pfl__latest-row {
+  display: grid;
+  grid-template-columns: 60px 1fr auto auto;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 4px;
+  border-bottom: 1px solid #f0ebe0;
+  transition: background 0.12s;
+}
+
+.pfl__latest-row:hover { background: #fbf8f0; }
+
+.pfl__latest-time {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #17171a;
+  letter-spacing: 0.01em;
+}
+
+.pfl__latest-body {
+  min-width: 0;
+}
+
+.pfl__latest-horse {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #17171a;
+  margin: 0 0 2px;
+  line-height: 1.15;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pfl__latest-meta {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 11px;
+  color: #6a6a70;
+  letter-spacing: 0.01em;
+}
+
+.pfl__latest-meta strong {
+  color: #8b5a2b;
+  font-weight: 700;
+}
+
+.pfl__latest-result {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+}
+
+.pfl__latest-result--gold    { background: #f7ecd0; color: #8b5a2b; }
+.pfl__latest-result--silver  { background: #ececec; color: #4a4a4a; }
+.pfl__latest-result--bronze  { background: #f2e2d2; color: #7d4b25; }
+.pfl__latest-result--out     { background: #f3f3f0; color: #85858e; }
+.pfl__latest-result--pending { background: #eaeaea; color: #6a6a70; }
+.pfl__latest-result--live    { background: #fce8e0; color: #b03a20; }
+
+.pfl__latest-verify {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: #fff;
+  border: 1px solid #d8d3c8;
+  border-radius: 3px;
+  color: #17171a;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.pfl__latest-verify:hover,
+.pfl__latest-verify:focus-visible {
+  background: #fbf8f0;
+  border-color: #8b5a2b;
+  color: #8b5a2b;
+  outline: none;
+}
+
+.pfl__latest-empty {
+  padding: 22px 4px;
+  color: #6a6a70;
+  font-family: Georgia, serif;
+  font-style: italic;
+  text-align: center;
+}
+
+@media (max-width: 560px) {
+  .pfl__latest-row {
+    grid-template-columns: 50px 1fr auto;
+    row-gap: 6px;
+  }
+  .pfl__latest-verify {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: center;
+  }
+  .pfl__latest-result {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: start;
+  }
+}

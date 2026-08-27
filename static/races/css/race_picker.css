@@ -1,0 +1,519 @@
+/* ─────────────────────────────────────────────────────────────
+   RACE PICKER — inline mini-pickers + bottom-sheet <dialog> for
+   full discovery. All classes prefixed .rp-* for isolation; no
+   global token bleed.
+
+   The picker now lives in `.race-toolbar` (a sticky utility band
+   between the hero and the chamber verdict), NOT in the hero
+   eyebrow. See _race_toolbar.html.
+───────────────────────────────────────────────────────────── */
+
+/* ── Race toolbar wrapper ──────────────────────────────────────
+   Sticky band sitting below the navbar. Distinct visual register
+   from the hero (flat, utilitarian) so it reads as a TOOL surface,
+   not an editorial element. */
+.race-toolbar {
+  position: sticky;
+  top: var(--nav-h, 60px);
+  z-index: 50;
+  background: rgba(8, 10, 16, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.16);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+}
+.race-toolbar__inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Race Explorer entry — now lives inside the RTC action pair as
+   .rtc-btn--explorer (see rtc_toolbar.css). The old gold-outline
+   pill that hung off margin-left:auto in this band is retired. */
+
+/* .rp stacks its rows vertically (inline picker + Up next ribbon).
+   Was display:contents; switched to flex-column so the ribbon can't
+   get squeezed onto the same row by the parent toolbar's flex. */
+.rp {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1 1 100%;
+  min-width: 0;
+}
+
+/* The legacy inline picker (.rp-inline, .rp-next-pill*, .rp-chip*,
+   .rp-pop*, .rp-switch*, .rp-date-tail) has been replaced by the
+   RTC three-tier composition (see rtc_toolbar.css). Bottom-sheet
+   dialog below is unchanged — it is the same surface both the
+   new action pair and picker chip open via #rpOpenBtn /
+   #rpPickerBtn. */
+
+
+/* ── Bottom-sheet dialog ───────────────────────────────────── */
+.rp-sheet {
+  width: min(96vw, 920px);
+  max-height: 88vh;
+  margin: auto;
+  padding: 0;
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  border-radius: 16px;
+  background: #0a0e1c;
+  color: rgba(255,255,255,0.85);
+  box-shadow: 0 30px 90px rgba(0,0,0,0.7);
+  overflow: hidden;
+}
+.rp-sheet::backdrop {
+  background: rgba(2, 4, 10, 0.78);
+  backdrop-filter: blur(4px);
+}
+
+.rp-sheet__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: sticky;
+  top: 0;
+  background: linear-gradient(180deg, #0a0e1c, rgba(10,14,28,0.92));
+  z-index: 5;
+}
+.rp-sheet__title-block { display: flex; flex-direction: column; gap: 2px; }
+.rp-sheet__eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-gold);
+  opacity: 0.75;
+}
+.rp-sheet__title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.1;
+}
+.rp-sheet__close {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: transparent;
+  border-radius: 50%;
+  color: rgba(255,255,255,0.62);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
+}
+.rp-sheet__close:hover {
+  background: rgba(255,255,255,0.06);
+  color: #ffffff;
+  border-color: rgba(255,255,255,0.30);
+}
+
+.rp-sheet__body {
+  padding: 18px 24px 24px;
+  overflow-y: auto;
+  max-height: calc(88vh - 76px);
+}
+
+/* ── Quick-jump (featured race) ────────────────────────────── */
+.rp-quick {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(212,175,55,0.10), rgba(212,175,55,0.02));
+  color: inherit;
+  text-decoration: none;
+  margin-bottom: 18px;
+  transition: border-color 0.18s, transform 0.18s;
+}
+.rp-quick:hover {
+  border-color: var(--c-gold);
+  transform: translateY(-1px);
+}
+.rp-quick__star {
+  font-size: 28px;
+  color: var(--c-gold);
+  line-height: 1;
+}
+.rp-quick__body { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.rp-quick__label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-gold);
+}
+.rp-quick__name {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.1;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.rp-quick__meta { font-size: 12px; color: rgba(255,255,255,0.55); }
+.rp-quick__arrow { color: var(--c-gold); font-size: 18px; }
+
+/* ── Date strip ────────────────────────────────────────────── */
+.rp-dates {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 4px;
+}
+.rp-date-chip {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 18px;
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 10px;
+  background: rgba(255,255,255,0.025);
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  text-align: center;
+  min-width: 100px;
+  transition: border-color 0.18s, background 0.18s;
+}
+.rp-date-chip:hover {
+  border-color: rgba(212,175,55,0.40);
+  background: rgba(212,175,55,0.06);
+}
+.rp-date-chip.is-current {
+  border-color: var(--c-gold);
+  background: rgba(212,175,55,0.12);
+}
+.rp-date-chip__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-gold);
+}
+.rp-date-chip__date {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  color: #ffffff;
+}
+.rp-date-chip__count { font-size: 11px; color: rgba(255,255,255,0.50); }
+
+/* ── Meeting timetable grid ────────────────────────────────── */
+.rp-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rp-meeting {
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 16px 18px;
+  background: rgba(255,255,255,0.015);
+  transition: border-color 0.18s;
+}
+.rp-meeting.is-current {
+  border-color: rgba(212,175,55,0.30);
+  background: rgba(212,175,55,0.04);
+}
+
+.rp-meeting__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.rp-meeting__name {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.rp-meeting__sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  font-variant-numeric: tabular-nums;
+}
+
+.rp-races {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 6px;
+}
+
+.rp-race {
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.015);
+  text-decoration: none;
+  color: rgba(255,255,255,0.85);
+  transition: border-color 0.16s, background 0.16s, transform 0.14s;
+}
+.rp-race:hover {
+  border-color: rgba(212,175,55,0.40);
+  background: rgba(212,175,55,0.06);
+  transform: translateX(2px);
+}
+.rp-race--viewing {
+  border-color: var(--c-gold);
+  background: rgba(212,175,55,0.10);
+  box-shadow: 0 0 0 1px rgba(212,175,55,0.30);
+}
+.rp-race--next {
+  border-color: rgba(45,189,122,0.45);
+  background: rgba(45,189,122,0.06);
+}
+.rp-race--result { opacity: 0.85; }
+
+.rp-race__time {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--c-gold);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+.rp-race__name {
+  font-size: 12.5px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: rgba(255,255,255,0.78);
+}
+.rp-race__chips {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.rp-race__badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: rgba(45,189,122,0.16);
+  color: #79e0ad;
+  border: 1px solid rgba(45,189,122,0.40);
+}
+.rp-race__badge--viewing {
+  background: rgba(212,175,55,0.14);
+  color: var(--c-gold);
+  border-color: rgba(212,175,55,0.40);
+}
+/* Spoiler-aware reveal chip — sits on resulted-race tiles inside the
+ * picker sheet. Default state shows "👁 Reveal" (winner hidden); on
+ * click it flips to "🏆 <winner name>". Persisted via
+ * sr_revealed_races localStorage so reveals stay across sessions and
+ * surfaces (sheet + popover + meeting-full + meetings-browse). */
+.rp-race__result {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(45, 189, 122, 0.10);
+  border: 1px solid rgba(45, 189, 122, 0.35);
+  cursor: pointer;
+  user-select: none;
+  font-size: 10px;
+  font-weight: 600;
+  color: #2DBD7A;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.rp-race__result:hover,
+.rp-race__result:focus-visible {
+  background: rgba(45, 189, 122, 0.18);
+  border-color: rgba(45, 189, 122, 0.55);
+  outline: none;
+}
+.rp-race__result:focus-visible {
+  box-shadow: 0 0 0 2px rgba(45, 189, 122, 0.35);
+}
+/* Face swap via aria-pressed — hidden by default, revealed when set. */
+.rp-race__result-face--hidden,
+.rp-race__result-face--revealed {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.rp-race__result-face--revealed { display: none; }
+.rp-race__result[aria-pressed="true"] .rp-race__result-face--hidden { display: none; }
+.rp-race__result[aria-pressed="true"] .rp-race__result-face--revealed { display: inline-flex; }
+.rp-race__result[aria-pressed="true"] {
+  background: rgba(45, 189, 122, 0.18);
+  border-color: rgba(45, 189, 122, 0.55);
+}
+
+/* Same treatment for the inline minute popover. The chip sits inside
+ * a tighter row (rp-pop__item) so we trim the padding a touch. */
+.rp-pop__result {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(45, 189, 122, 0.10);
+  border: 1px solid rgba(45, 189, 122, 0.35);
+  color: #2DBD7A;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s, border-color .15s;
+}
+.rp-pop__result:hover { background: rgba(45, 189, 122, 0.18); border-color: rgba(45, 189, 122, 0.55); }
+.rp-pop__result-face--hidden,
+.rp-pop__result-face--revealed { display: inline-flex; align-items: center; gap: 4px; }
+.rp-pop__result-face--revealed { display: none; }
+.rp-pop__result[aria-pressed="true"] .rp-pop__result-face--hidden { display: none; }
+.rp-pop__result[aria-pressed="true"] .rp-pop__result-face--revealed { display: inline-flex; }
+.rp-pop__result[aria-pressed="true"] {
+  background: rgba(45, 189, 122, 0.18);
+  border-color: rgba(45, 189, 122, 0.55);
+}
+
+/* Star — used in chips / pop-items / quick-jump */
+.rp-star {
+  display: inline-block;
+  color: var(--c-gold);
+  filter: drop-shadow(0 0 4px rgba(212,175,55,0.4));
+}
+
+/* ── Hover preview tooltip (desktop) ───────────────────────── */
+@media (hover: hover) and (pointer: fine) {
+  .rp-race[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 8px);
+    transform: translateX(-50%);
+    padding: 8px 12px;
+    background: #06081a;
+    border: 1px solid rgba(212,175,55,0.30);
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.92);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s 0.4s;
+    z-index: 10;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.55);
+  }
+  .rp-race[data-tooltip]:hover::after { opacity: 1; }
+}
+
+/* ── Recent races (P4) ─────────────────────────────────────── */
+.rp-recent {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.rp-recent__title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.50);
+  margin: 0 0 10px;
+}
+.rp-recent__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.rp-recent__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 99px;
+  background: rgba(255,255,255,0.02);
+  color: rgba(255,255,255,0.78);
+  text-decoration: none;
+  font-size: 12px;
+  transition: border-color 0.16s;
+}
+.rp-recent__chip:hover { border-color: rgba(212,175,55,0.40); color: #ffffff; }
+.rp-recent__chip-time {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--c-gold);
+}
+
+/* ── Mobile ──────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  /* Toolbar — tighter padding on mobile. The inner already uses
+     gn-container which collapses its side padding on narrow screens. */
+  .race-toolbar__inner { min-height: 48px; padding-top: 6px; padding-bottom: 6px; }
+
+  /* iOS Safari counts the URL bar inside 100vh, so a bottom-anchored
+     dialog at 92vh ends up pushing its head above the visible
+     viewport. Use the dynamic viewport unit (dvh) with a vh fallback
+     so the close button can never be clipped behind the chrome. */
+  .rp-sheet {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 88vh;
+    max-height: 88dvh;
+    margin: auto auto 0;
+    border-radius: 16px 16px 0 0;
+    border-bottom: none;
+  }
+  /* Honour the device safe-area (iOS notch / status bar) so the
+     close button always sits below it. */
+  .rp-sheet__head {
+    padding-top: max(14px, env(safe-area-inset-top));
+    padding-bottom: 14px;
+  }
+  .rp-sheet__body {
+    padding: 16px;
+    /* Body scrolls inside the dialog; clamp to the new mobile cap. */
+    max-height: calc(88dvh - 80px);
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+  .rp-races { grid-template-columns: 1fr; }
+
+  /* Hide the desktop hover-preview tooltip on touch — long-press
+     would be confusing and tap already navigates. */
+  .rp-race[data-tooltip]::after { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rp-race { animation: none; transition: none; }
+}
+
+/* Legacy .rp-switch--primary / .rp-upnext / .rp-inline / .rp-chip /
+   .rp-next-pill / .rp-date-tail rules removed — their markup no
+   longer renders. The new mobile-hero composition lives in
+   rtc_toolbar.css as .rtc-anchor + .rtc-actions + .rtc-picker. */

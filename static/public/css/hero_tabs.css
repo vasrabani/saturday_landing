@@ -1,0 +1,99 @@
+/* Hero tabs — switcher above the hero for Saturday / Today. Scoped under .hero-tabs. */
+
+.hero-tabs {
+  display: flex;
+  gap: 0;
+  background: #06070d;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.20);
+  padding: 0;
+}
+
+.hero-tab {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: transparent;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+.hero-tab[aria-current="page"] { cursor: default; }
+.hero-tab:hover {
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.85);
+}
+.hero-tab:focus-visible {
+  outline: 2px solid var(--c-gold, #D4AF37);
+  outline-offset: -2px;
+}
+
+.hero-tab.is-active {
+  color: #fff;
+}
+.hero-tab--week.is-active { border-bottom-color: var(--c-gold, #D4AF37); }
+.hero-tab--day.is-active  { border-bottom-color: #4ade80; }
+
+.hero-tab__star {
+  color: var(--c-gold, #D4AF37);
+  font-size: 16px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.hero-tab__pulse {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.70);
+  animation: hero-tab-pulse 1.6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes hero-tab-pulse {
+  0%, 100% { opacity: 1;    transform: scale(1);    }
+  50%      { opacity: 0.55; transform: scale(1.30); }
+}
+
+.hero-tab__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.hero-tab__kicker {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.50);
+}
+.hero-tab.is-active .hero-tab__kicker {
+  color: rgba(255, 255, 255, 0.78);
+}
+.hero-tab--week.is-active .hero-tab__kicker { color: var(--c-gold, #D4AF37); }
+.hero-tab--day.is-active .hero-tab__kicker  { color: #4ade80; }
+
+.hero-tab__name {
+  font-size: 13px;
+  font-weight: 700;
+  color: inherit;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hero-tab__name--pending {
+  font-style: italic;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+@media (max-width: 640px) {
+  .hero-tab { padding: 10px 12px; gap: 8px; }
+  .hero-tab__name { font-size: 12px; }
+  .hero-tab__kicker { font-size: 9px; letter-spacing: 0.12em; }
+}

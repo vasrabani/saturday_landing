@@ -1,0 +1,125 @@
+/* Cub hello strip — personalised welcome band, logged-in only. */
+
+.cub-hello {
+  background: linear-gradient(180deg, #08101c 0%, #0a121e 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.92);
+  padding: 10px 0;
+  font-size: 13px;
+}
+
+.cub-hello__inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.cub-hello__greeting {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.78);
+  letter-spacing: 0.01em;
+}
+.cub-hello__greeting strong {
+  color: #fff;
+  font-weight: 800;
+}
+.cub-hello__wave {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.cub-hello__tiles {
+  list-style: none;
+  margin: 0; padding: 0;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-left: auto;
+}
+
+.cub-hello__tile {
+  display: inline-flex;
+}
+.cub-hello__tile-link,
+.cub-hello__tile > .cub-hello__tile-body,
+.cub-hello__tile > .cub-hello__tile-icon {
+  /* Tiles can be <a> or plain spans — visual treatment matches either. */
+}
+
+.cub-hello__tile,
+.cub-hello__tile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.14s, border-color 0.14s, transform 0.12s;
+}
+.cub-hello__tile-link:hover {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(212, 175, 55, 0.45);
+  transform: translateY(-1px);
+}
+
+.cub-hello__tile-icon {
+  font-size: 14px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.cub-hello__tile-body {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.cub-hello__tile-num {
+  font-weight: 800;
+  color: #fff;
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+}
+.cub-hello__tile-of {
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 600;
+  font-size: 12px;
+}
+.cub-hello__tile-label {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+/* Variant accents — picks neutral, winner gold, nudge green. */
+.cub-hello__tile--winner {
+  background: rgba(212, 175, 55, 0.12);
+  border-color: rgba(212, 175, 55, 0.45);
+}
+.cub-hello__tile--nudge .cub-hello__tile-link {
+  background: rgba(45, 189, 122, 0.14);
+  border-color: rgba(45, 189, 122, 0.45);
+}
+.cub-hello__tile--nudge .cub-hello__tile-num { color: #4ade80; }
+
+/* Mobile — stack the greeting + scrollable tile row. */
+@media (max-width: 640px) {
+  .cub-hello__inner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .cub-hello__tiles {
+    margin-left: 0;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 2px;
+    scrollbar-width: thin;
+  }
+  .cub-hello__tile { flex-shrink: 0; }
+}

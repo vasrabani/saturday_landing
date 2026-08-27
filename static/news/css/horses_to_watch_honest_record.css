@@ -1,0 +1,449 @@
+/* ============================================================
+   Horses to Watch — Honest Record
+   Public track-record page. Medal palette, clean tabular
+   layout, mobile-scrollable table.
+   ============================================================ */
+
+:root {
+  --hr-navy:      #0b1e39;
+  --hr-cream:     #faf6ec;
+  --hr-cream-2:   #f4eedb;
+  --hr-ink:       #1a2233;
+  --hr-ink-70:    #4a5568;
+  --hr-ink-40:    #8c96a5;
+  --hr-gold:      #d4af37;
+  --hr-gold-dim:  #a68929;
+  --hr-emerald:   #1a7d4a;
+  --hr-claret:    #a03040;
+  /* Medal tints — soft, not garish */
+  --hr-gold-bg:   rgba(212, 175, 55, 0.14);
+  --hr-silver-bg: rgba(140, 150, 165, 0.16);
+  --hr-bronze-bg: rgba(160, 90, 40, 0.14);
+  --hr-gold-border:   rgba(212, 175, 55, 0.55);
+  --hr-silver-border: rgba(140, 150, 165, 0.55);
+  --hr-bronze-border: rgba(160, 90, 40, 0.55);
+}
+
+/* Content island: the site wraps this in a dark theme, so we render
+   the whole Honest Record as a light editorial card. Keeps our
+   navy-on-cream palette legible without fighting the site chrome. */
+.honest-record {
+  max-width: 1160px;
+  margin: 30px auto 60px;
+  padding: 42px 44px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  color: var(--hr-ink);
+}
+@media (max-width: 700px) {
+  .honest-record { padding: 28px 20px; margin: 12px; }
+}
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.honest-record__hero {
+  padding-bottom: 28px;
+  border-bottom: 1px solid rgba(11, 30, 57, 0.12);
+  margin-bottom: 32px;
+}
+.honest-record__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--hr-gold-dim);
+  font-weight: 800;
+  margin: 0 0 10px;
+}
+.honest-record__title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 900;
+  color: var(--hr-navy);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin: 0 0 14px;
+}
+.honest-record__deck {
+  font-size: 15px;
+  color: var(--hr-ink-70);
+  max-width: 720px;
+  line-height: 1.55;
+  margin: 0 0 22px;
+}
+.honest-record__medal {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.honest-record__medal--gold   { background: var(--hr-gold-bg);   color: var(--hr-gold-dim); }
+.honest-record__medal--silver { background: var(--hr-silver-bg); color: var(--hr-ink-70); }
+.honest-record__medal--bronze { background: var(--hr-bronze-bg); color: #7a4a20; }
+
+/* ── Totals strip ─────────────────────────────────────────── */
+.honest-record__totals {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 22px;
+}
+@media (max-width: 640px) {
+  .honest-record__totals { grid-template-columns: repeat(2, 1fr); }
+}
+.honest-record__stat {
+  background: var(--hr-cream);
+  border: 1px solid rgba(11, 30, 57, 0.08);
+  border-radius: 6px;
+  padding: 14px 18px;
+}
+.honest-record__stat-val {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--hr-navy);
+  line-height: 1;
+}
+.honest-record__stat-lbl {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hr-ink-40);
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+/* ── The table ────────────────────────────────────────────── */
+.honest-record__table-wrap {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(11, 30, 57, 0.06);
+  margin: 12px 0 24px;
+}
+.honest-record__table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  font-size: 13px;
+}
+.honest-record__table thead th {
+  background: var(--hr-navy);
+  color: var(--hr-cream);
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.honest-record__table tbody th,
+.honest-record__table tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(11, 30, 57, 0.06);
+  vertical-align: top;
+}
+.honest-record__table tbody tr:last-child th,
+.honest-record__table tbody tr:last-child td {
+  border-bottom: none;
+}
+.honest-record__col-date { width: 160px; }
+
+/* Date cell */
+.honest-record__date {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 800;
+  color: var(--hr-navy);
+  font-size: 14px;
+  vertical-align: top;
+  /* Was inline nowrap; now a flex column so the 'Read why?' pill
+     drops onto its own line under the date + win tag instead of
+     wrapping mid-arrow. Aligns pill to the left edge of the cell. */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.honest-record__date-line {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  white-space: nowrap;
+}
+.honest-record__day-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  margin-left: 6px;
+  letter-spacing: 0.06em;
+}
+.honest-record__day-tag--win {
+  background: var(--hr-emerald);
+  color: white;
+}
+
+/* Read why? deep-link — sits on its own line under the date,
+   jumps to the HTW article for that day. Ghost/outlined style
+   feels more editorial than the solid ink pill; hover fills to
+   ink for the affordance signal. Chevron split into its own
+   span so hover slides it a couple of px without wrapping. */
+.honest-record__why {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px 5px;
+  background: transparent;
+  color: var(--hr-navy);
+  border: 1px solid rgba(28, 41, 66, 0.28);
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  width: fit-content;
+  transition: background 0.15s ease,
+              color 0.15s ease,
+              border-color 0.15s ease,
+              transform 0.15s ease;
+}
+.honest-record__why:hover,
+.honest-record__why:focus-visible {
+  background: var(--hr-navy);
+  color: #fff;
+  border-color: var(--hr-navy);
+  transform: translateY(-1px);
+}
+
+/* Pick cell */
+.honest-record__cell {
+  position: relative;
+  min-width: 140px;
+}
+/* Gold cell — the star of the show. Deeper cream-gold background,
+   solid gold left rail, subtle top-line highlight, and a soft outer
+   glow so a run of wins immediately catches the eye in a long table. */
+.honest-record__cell--gold {
+  background: linear-gradient(180deg,
+    rgba(212, 175, 55, 0.28) 0%,
+    rgba(212, 175, 55, 0.18) 100%);
+  border-left: 5px solid var(--hr-gold);
+  box-shadow: inset 0 1px 0 rgba(212, 175, 55, 0.5);
+  position: relative;
+}
+.honest-record__cell--silver { background: var(--hr-silver-bg); border-left: 3px solid var(--hr-silver-border); }
+.honest-record__cell--bronze { background: var(--hr-bronze-bg); border-left: 3px solid var(--hr-bronze-border); }
+.honest-record__cell--pending { color: var(--hr-ink-40); }
+
+/* WON pill — the most prominent element on the page. Bold, uppercase,
+   sits above the horse name so scanning the table reads winners first. */
+.honest-record__won-flag {
+  display: inline-block;
+  margin-bottom: 6px;
+  padding: 4px 10px 3px;
+  background: linear-gradient(180deg, #d4af37 0%, #b8901f 100%);
+  color: white;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  box-shadow: 0 1px 3px rgba(160, 120, 20, 0.35);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+}
+/* Placed flag — same shape as WON but more understated so gold still
+   dominates. Silver + bronze get their palette tint. */
+.honest-record__placed-flag {
+  display: inline-block;
+  margin-bottom: 6px;
+  padding: 3px 8px 2px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.honest-record__placed-flag--silver {
+  background: rgba(140, 150, 165, 0.28);
+  color: #4a5566;
+}
+.honest-record__placed-flag--bronze {
+  background: rgba(160, 90, 40, 0.22);
+  color: #7a4a20;
+}
+/* 4TH — each-way convention in bigger handicaps pays 4 places, so
+   the papers honest record surfaces a distinct 4th-place chip.
+   Muted amber ribbon — visually adjacent to bronze but clearly
+   separate; keeps the medal metaphor without inventing a fake metal. */
+.honest-record__placed-flag--4th {
+  background: rgba(200, 165, 90, 0.18);
+  color: #7a5a10;
+}
+.honest-record__horse {
+  display: inline-block;
+  color: var(--hr-navy);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(11, 30, 57, 0.28);
+}
+.honest-record__horse:hover { border-bottom-style: solid; color: var(--hr-emerald); }
+/* Winner's horse name — bump the type weight so the winning row is
+   scannable even without the WON pill (accessibility). */
+.honest-record__cell--gold .honest-record__horse {
+  font-weight: 800;
+  border-bottom-color: rgba(160, 120, 20, 0.5);
+}
+.honest-record__race {
+  display: block;
+  font-size: 11px;
+  color: var(--hr-ink-40);
+  margin-top: 3px;
+  line-height: 1.5;
+}
+/* Advised price — the number the tipster put next to the horse.
+   Slightly more prominent than the race label so a reader can eyeball
+   value at a glance. Uses a subtle box so it reads as a "price tag". */
+.honest-record__price {
+  display: inline-block;
+  padding: 0 5px;
+  border-radius: 3px;
+  background: rgba(11, 30, 57, 0.06);
+  color: var(--hr-ink-70);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.honest-record__cell--gold .honest-record__price {
+  background: rgba(212, 175, 55, 0.28);
+  color: #7a5a10;
+}
+/* SP badge — only shown for winners. Reader intuition: "you'd have
+   backed at X, it started at Y". */
+.honest-record__sp {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: 3px;
+  background: var(--hr-emerald);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+.honest-record__pending {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hr-gold-dim);
+  font-weight: 700;
+  margin-top: 3px;
+}
+/* Position chip — reader-facing rule: "every settled pick shows a
+   result chip". Top-3 get gold/silver/bronze medals above the horse
+   name; 4th+ gets a neutral slate chip here (proportionally similar
+   to the placed-flag so 4TH/9TH/12TH visually reads as a sibling of
+   2ND/3RD, not a stray number). Sits inline after the race label.
+   Renders as "9TH" via the `ordinal_upper` filter, not a bare number. */
+.honest-record__pos {
+  display: inline-block;
+  margin-top: 3px;
+  padding: 3px 8px 2px;
+  background: rgba(60, 70, 90, 0.10);
+  color: #4a5566;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+/* Settled-but-unknown-position — the runner didn't have a
+   finish_position on file (DNF, void, or API omission). Same chip
+   shape as .pos, tinted claret so a reader can distinguish
+   "finished outside the frame" (grey) from "no position on
+   record" (claret). */
+.honest-record__pos--unplaced {
+  background: rgba(160, 48, 64, 0.09);
+  color: var(--hr-claret);
+  letter-spacing: 0.14em;
+  font-weight: 800;
+}
+
+/* ── Pager ────────────────────────────────────────────────── */
+.honest-record__pager {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 40px;
+  flex-wrap: wrap;
+}
+.honest-record__pager-btn {
+  display: inline-block;
+  padding: 8px 18px;
+  background: var(--hr-navy);
+  color: var(--hr-cream);
+  text-decoration: none;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  transition: transform 0.15s ease;
+}
+.honest-record__pager-btn:hover { transform: translateY(-1px); }
+.honest-record__pager-btn--disabled {
+  background: rgba(11, 30, 57, 0.08);
+  color: var(--hr-ink-40);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.honest-record__pager-status {
+  font-size: 12px;
+  color: var(--hr-ink-70);
+  letter-spacing: 0.02em;
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.honest-record__empty {
+  padding: 48px 24px;
+  text-align: center;
+  background: var(--hr-cream);
+  border: 1px dashed rgba(11, 30, 57, 0.18);
+  border-radius: 8px;
+  color: var(--hr-ink-70);
+}
+.honest-record__empty h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  color: var(--hr-navy);
+  margin: 0 0 12px;
+}
+.honest-record__empty p {
+  max-width: 520px;
+  margin: 0 auto 10px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.honest-record__foot {
+  padding-top: 24px;
+  border-top: 1px solid rgba(11, 30, 57, 0.12);
+  font-size: 12px;
+  color: var(--hr-ink-40);
+  text-align: center;
+}
+.honest-record__foot a { color: var(--hr-emerald); font-weight: 700; }

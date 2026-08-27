@@ -1,0 +1,162 @@
+/* ═══════════════════════════════════════════════════════
+   PICK SIX vs THE FOX — duel emblem component
+   ──────────────────────────────────────────────────────
+   Self-contained green wax-stamp badge that pitches the
+   "pick six horses and beat Mr Fox" challenge. Designed
+   to drop into any dark hero (meeting /full/, landing,
+   featured-race pages, etc.) via:
+
+       {% include "races/components/_pick6_emblem.html"
+                  with href="..."
+                       size="default" %}
+
+   Size variants:
+       .pick6                    default — full duel framing
+                                  with CHALLENGE ribbon + tagline
+       .pick6--compact           tighter — smaller "6", no
+                                  ribbon, no tagline. Used when
+                                  the emblem sits beside another
+                                  marquee headline (landing hero).
+═══════════════════════════════════════════════════════ */
+.pick6 {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 22px 14px 18px;
+  background: linear-gradient(135deg, #34D27B 0%, #2DBD7A 35%, #1A7D4A 100%);
+  color: #FFF;
+  border: 2px solid rgba(255,255,255,0.22);
+  border-radius: 16px;
+  box-shadow:
+    0 10px 26px rgba(26,125,74,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    inset 0 -2px 4px rgba(0,30,12,0.25);
+  transform: rotate(-2deg);
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+.pick6:hover {
+  transform: rotate(-2deg) translateY(-2px) scale(1.02);
+  box-shadow:
+    0 14px 32px rgba(26,125,74,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    inset 0 -2px 4px rgba(0,30,12,0.25);
+}
+
+/* CHALLENGE ribbon — gold stamp floating above the badge.
+   Sits with its bottom edge clear of the badge top so the
+   "PICK SIX" title never sits beneath it. */
+.pick6__stamp {
+  position: absolute;
+  top: -18px;
+  right: 12px;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  color: #1A2233;
+  background: linear-gradient(135deg, #F5D04A 0%, #D4AF37 100%);
+  border: 1px solid rgba(0,0,0,0.18);
+  border-radius: 4px;
+  padding: 3px 8px;
+  box-shadow: 0 3px 8px rgba(80,55,0,0.35);
+  transform: rotate(4deg);
+}
+
+.pick6__num {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 48px;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: 0 2px 4px rgba(0,40,15,0.45);
+}
+
+.pick6__body {
+  display: flex; flex-direction: column;
+  align-items: flex-start; gap: 3px;
+}
+.pick6__lbl {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 13px; font-weight: 800; letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: #FFF;
+  line-height: 1;
+}
+.pick6__vs {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0 1px;
+}
+.pick6__vs-word {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-size: 14px;
+  font-weight: 700;
+  color: #F5D04A;
+  text-shadow: 0 1px 2px rgba(0,40,15,0.45);
+}
+.pick6__fox-glyph {
+  font-size: 16px;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,40,15,0.4));
+}
+.pick6__vs-foe {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #FFF;
+}
+.pick6__sub {
+  font-family: 'Iowan Old Style', 'Charter', Georgia, serif;
+  font-style: italic;
+  font-size: 12px;
+  color: rgba(255,255,255,0.90);
+  line-height: 1.25;
+  max-width: 200px;
+}
+
+/* ── COMPACT VARIANT ─────────────────────────────────────
+   For placements beside another marquee headline (landing
+   hero) where the full duel framing would compete. The
+   "vs 🦊 The Fox" line still does the storytelling. */
+.pick6--compact {
+  padding: 10px 16px 10px 14px;
+  gap: 12px;
+  border-radius: 14px;
+}
+.pick6--compact .pick6__num { font-size: 34px; }
+.pick6--compact .pick6__lbl { font-size: 11px; letter-spacing: 0.16em; }
+.pick6--compact .pick6__vs-word { font-size: 13px; }
+.pick6--compact .pick6__fox-glyph { font-size: 14px; }
+.pick6--compact .pick6__vs-foe { font-size: 12px; }
+/* Compact keeps the CHALLENGE ribbon — it's the contest cue that
+   sells the duel framing — but drops the body tagline since the
+   surrounding marquee headline carries the storytelling. */
+.pick6--compact .pick6__stamp {
+  top: -16px;
+  font-size: 8.5px;
+  letter-spacing: 0.18em;
+  padding: 2px 7px;
+}
+.pick6--compact .pick6__sub { display: none; }
+
+@media (max-width: 720px) {
+  .pick6 {
+    transform: rotate(-1deg);
+    padding: 12px 16px;
+    gap: 12px;
+  }
+  .pick6:hover {
+    transform: rotate(-1deg) translateY(-2px) scale(1.02);
+  }
+  .pick6__num { font-size: 36px; }
+  .pick6__lbl { font-size: 12px; }
+  .pick6__sub { font-size: 11px; max-width: 160px; }
+  .pick6__stamp { top: -15px; font-size: 8px; padding: 2px 7px; }
+
+  .pick6--compact { padding: 8px 12px; gap: 10px; }
+  .pick6--compact .pick6__num { font-size: 28px; }
+}

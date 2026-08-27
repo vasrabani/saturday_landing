@@ -1,0 +1,443 @@
+/*
+ * challenges-section.css
+ * Landing page challenges section — self-contained partial styles.
+ * Partial: public/templates/public/components/challenges_section.html
+ * Mobile-first. Single column → two columns at 768px+.
+ * All classes namespaced to chal-* to avoid conflicts.
+ */
+
+/* ── SECTION SHELL ─────────────────────────────────────── */
+
+.chal-section {
+  background: var(--c-navy);
+  border-top: 1px solid var(--c-border);
+}
+
+/* ── TWO-COLUMN LAYOUT ─────────────────────────────────── */
+
+.chal-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+
+@media (min-width: 768px) {
+  .chal-layout {
+    flex-direction: row;
+    align-items: start;
+    gap: var(--space-8, 64px);
+  }
+
+  .chal-copy   { flex: 1 1 0%; min-width: 0; }
+  .chal-visual { flex: 1 1 0%; min-width: 0; display: flex; flex-direction: column; gap: var(--space-4); }
+}
+
+/* ── COPY COLUMN ───────────────────────────────────────── */
+
+.chal-copy__title {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 5vw, 44px);
+  font-weight: 900;
+  color: var(--c-text-100);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: var(--space-3) 0 var(--space-4);
+}
+
+.chal-copy__sub {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--c-text-55);
+  margin-bottom: var(--space-5);
+  max-width: 480px;
+}
+
+/* ── MECHANICS LIST ────────────────────────────────────── */
+
+.chal-mechanics {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.chal-mechanic {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.chal-mechanic__icon {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.chal-mechanic__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--c-text-100);
+  margin-bottom: 3px;
+}
+
+.chal-mechanic__body {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--c-text-55);
+}
+
+/* ── CTAs ──────────────────────────────────────────────── */
+
+.chal-ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (min-width: 480px) {
+  .chal-ctas { flex-direction: row; flex-wrap: wrap; }
+}
+
+/* ── DUEL CARD ─────────────────────────────────────────── */
+
+.chal-duel-card {
+  background: var(--c-navy-card);
+  border: 1px solid var(--c-border-md);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+/* Header bar */
+.chal-duel-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(212,175,55,0.05);
+  border-bottom: 1px solid rgba(212,175,55,0.14);
+}
+
+.chal-duel-card__status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-gold);
+}
+
+.chal-duel-card__dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--c-emerald-lt);
+  flex-shrink: 0;
+  animation: blink 1.4s ease-in-out infinite;
+}
+
+.chal-duel-card__race {
+  font-size: 11px;
+  color: var(--c-text-35);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+/* Arena: two fighters + VS */
+.chal-duel-card__arena {
+  display: flex;
+  align-items: stretch;
+  padding: var(--space-4) var(--space-5);
+  gap: 0;
+}
+
+/* Fighter panel */
+.chal-duel-card__fighter {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3);
+  text-align: center;
+}
+
+.chal-duel-card__fighter--right {
+  /* mirror of left — no extra styles needed */
+}
+
+/* Avatar circle */
+.chal-duel-card__av {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 900;
+  color: #fff;
+  flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,0.1);
+}
+
+.chal-duel-card__av-placeholder {
+  font-size: 20px;
+  color: var(--c-text-35);
+}
+
+.chal-duel-card__cub-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-text-100);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+/* Pick row: silk + horse name */
+.chal-duel-card__pick-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--c-navy-raised);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+  padding: 7px 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.chal-duel-card__silk {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 900;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.chal-duel-card__pick-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-align: left;
+}
+
+.chal-duel-card__pick-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--c-text-35);
+}
+
+.chal-duel-card__pick-horse {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-text-100);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.chal-duel-card__pick-horse--tbc {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--c-text-35);
+  font-weight: 400;
+}
+
+/* Win/loss/draw record chips */
+.chal-duel-card__record {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.chal-duel-card__record-num {
+  font-weight: 700;
+  color: var(--c-text-55);
+}
+
+.chal-duel-card__record-num--wins { color: var(--c-emerald-lt); }
+.chal-duel-card__record-sep { color: var(--c-text-35); }
+
+/* VS column */
+.chal-duel-card__vs {
+  flex: 0 0 48px;
+  width: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: var(--space-3) 0;
+}
+
+.chal-duel-card__vs-line {
+  flex: 1;
+  width: 1px;
+  background: linear-gradient(to bottom,
+    rgba(212,175,55,0.0),
+    rgba(212,175,55,0.3) 30%,
+    rgba(224,90,42,0.3) 70%,
+    rgba(224,90,42,0.0));
+}
+
+.chal-duel-card__vs-badge {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--c-navy-raised);
+  border: 1.5px solid rgba(212,175,55,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 14px rgba(212,175,55,0.15);
+}
+
+.chal-duel-card__vs-text {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--c-gold);
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+/* Footer */
+.chal-duel-card__footer {
+  padding: 10px 16px;
+  border-top: 1px solid var(--c-border);
+  font-size: 11px;
+  color: var(--c-text-35);
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+/* ── SEASON STANDINGS ──────────────────────────────────── */
+
+.chal-standings {
+  background: var(--c-navy-card);
+  border: 1px solid var(--c-border-md);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+
+.chal-standings__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.chal-standings__title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-text-75);
+}
+
+.chal-standings__link {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--c-gold);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.chal-standings__link:hover { opacity: 0.75; }
+
+/* Row — each cub is a link */
+.chal-standings__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--c-border);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s;
+}
+
+.chal-standings__row:last-child { border-bottom: none; }
+.chal-standings__row:hover { background: rgba(255,255,255,0.03); }
+.chal-standings__row--gold { background: rgba(212,175,55,0.04); }
+
+.chal-standings__rank {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--c-text-35);
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.chal-standings__row--gold .chal-standings__rank { color: var(--c-gold); }
+
+.chal-standings__av {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 900;
+  color: #fff;
+}
+
+.chal-standings__name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-text-100);
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chal-standings__record {
+  font-size: 11px;
+  color: var(--c-text-35);
+  white-space: nowrap;
+}
+
+.chal-standings__rate {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--c-text-55);
+  white-space: nowrap;
+  min-width: 36px;
+  text-align: right;
+}
+
+.chal-standings__rate--gold { color: var(--c-gold); }
+
+.chal-standings__empty {
+  padding: 20px 16px;
+  font-size: 13px;
+  color: var(--c-text-35);
+  text-align: center;
+  line-height: 1.6;
+}

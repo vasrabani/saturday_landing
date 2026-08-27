@@ -1,0 +1,530 @@
+/* Money Moves — standout market-movers band. Scoped under .money-moves. */
+
+.money-moves {
+  position: relative;
+  background: #06070d;
+  color: #fff;
+  font-family: inherit;
+  overflow: hidden;
+  padding: 28px 24px 32px;
+  border-top: 1px solid rgba(74, 222, 128, 0.18);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.18);
+}
+
+/* Soft aurora glow behind the hero — gives the section gravity without a heavy background. */
+.money-moves__aurora {
+  position: absolute;
+  inset: -40% -10% auto -10%;
+  height: 70%;
+  background:
+    radial-gradient(50% 60% at 20% 30%, rgba(74, 222, 128, 0.18) 0%, transparent 70%),
+    radial-gradient(40% 50% at 80% 30%, rgba(212, 175, 55, 0.16) 0%, transparent 70%);
+  filter: blur(28px);
+  opacity: 0.85;
+  pointer-events: none;
+  animation: mm-aurora 14s ease-in-out infinite alternate;
+}
+@keyframes mm-aurora {
+  0%   { transform: translate3d(-2%, 0, 0) scale(1);    opacity: 0.85; }
+  100% { transform: translate3d( 3%, 1%, 0) scale(1.06); opacity: 1.00; }
+}
+
+.money-moves__inner {
+  position: relative;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* ── Header strip ──────────────────────────────────────────── */
+.money-moves__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.money-moves__head-titles { min-width: 0; }
+.money-moves__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #4ade80;
+  margin-bottom: 6px;
+}
+.money-moves__pulse {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.85);
+  animation: mm-pulse 1.6s ease-in-out infinite;
+}
+@keyframes mm-pulse {
+  0%, 100% { opacity: 1;    transform: scale(1);    }
+  50%      { opacity: 0.45; transform: scale(1.35); }
+}
+.money-moves__title {
+  margin: 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(24px, 2.6vw, 32px);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.005em;
+}
+.money-moves__updated {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  font-feature-settings: 'tnum';
+}
+
+/* ── Hero + stats grid ─────────────────────────────────────── */
+.money-moves__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+/* The hero card — single biggest steamer. */
+.mm-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 24px 20px;
+  background:
+    linear-gradient(180deg, rgba(74, 222, 128, 0.10) 0%, rgba(74, 222, 128, 0.02) 70%, rgba(255, 255, 255, 0.015) 100%);
+  border: 1px solid rgba(74, 222, 128, 0.34);
+  border-radius: 14px;
+  text-decoration: none;
+  color: #fff;
+  overflow: hidden;
+  transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
+}
+.mm-hero::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: radial-gradient(60% 80% at 0% 0%, rgba(74, 222, 128, 0.22) 0%, transparent 60%);
+  pointer-events: none;
+  opacity: 0.85;
+}
+.mm-hero:hover {
+  transform: translateY(-2px);
+  border-color: #4ade80;
+  box-shadow: 0 12px 32px -16px rgba(74, 222, 128, 0.45);
+}
+.mm-hero__head { display: flex; align-items: center; }
+.mm-hero__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #4ade80;
+}
+.mm-hero__flame { font-size: 13px; }
+.mm-hero__horse {
+  margin: 4px 0 2px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(28px, 3.6vw, 42px);
+  font-weight: 700;
+  line-height: 1.05;
+  color: #fff;
+  text-wrap: balance;
+}
+.mm-hero__where {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.65);
+  text-transform: uppercase;
+}
+
+.mm-hero__prices {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 6px 0 2px;
+  font-feature-settings: 'tnum';
+}
+.mm-hero__price {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  line-height: 1;
+}
+.mm-hero__price--was {
+  font-size: clamp(28px, 3.2vw, 36px);
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 255, 255, 0.30);
+}
+.mm-hero__arrow {
+  font-size: 24px;
+  color: #4ade80;
+  animation: mm-arrow 1.4s ease-in-out infinite;
+}
+@keyframes mm-arrow {
+  0%, 100% { transform: translateX(0);    opacity: 1;   }
+  50%      { transform: translateX(4px);  opacity: 0.7; }
+}
+.mm-hero__price--now {
+  font-size: clamp(42px, 5.2vw, 64px);
+  color: #4ade80;
+  text-shadow: 0 0 24px rgba(74, 222, 128, 0.45);
+}
+
+.mm-hero__pct {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #4ade80;
+  text-transform: uppercase;
+  font-feature-settings: 'tnum';
+}
+.mm-hero__cta {
+  align-self: flex-start;
+  margin-top: 8px;
+  padding: 9px 18px;
+  border-radius: 8px;
+  background: #4ade80;
+  color: #06070d;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  transition: filter 0.15s;
+}
+.mm-hero:hover .mm-hero__cta { filter: brightness(1.08); }
+
+/* Right-hand stat tiles + narrative. */
+.mm-side {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0%, rgba(255, 255, 255, 0.005) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+}
+.mm-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(86px, 1fr));
+  gap: 10px;
+}
+.mm-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 14px 14px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+}
+.mm-stat__num {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  font-feature-settings: 'tnum';
+}
+.mm-stat__lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+.mm-stat--steamers .mm-stat__num { color: #4ade80; }
+.mm-stat--drifters .mm-stat__num { color: #fca5a5; }
+.mm-stat--biggest  .mm-stat__num { color: var(--c-gold, #D4AF37); }
+
+.mm-narrative {
+  margin: 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.85);
+  text-wrap: balance;
+}
+
+/* ── Tables — top steamers + top drifters ─────────────────── */
+.money-moves__tables {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.mm-table {
+  padding: 16px 18px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+.mm-table--steamers { border-color: rgba(74, 222, 128, 0.22); }
+.mm-table--drifters { border-color: rgba(252, 165, 165, 0.22); }
+
+.mm-table__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.mm-table__glyph { font-size: 14px; line-height: 1; }
+.mm-table--steamers .mm-table__glyph { color: #4ade80; }
+.mm-table--drifters .mm-table__glyph { color: #fca5a5; }
+.mm-table__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+.mm-table__hint {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.50);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mm-table__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.mm-row {}
+.mm-row__link {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.85);
+  transition: background 0.14s, border-color 0.14s, transform 0.14s;
+}
+.mm-row__link:hover {
+  background: rgba(212, 175, 55, 0.06);
+  border-color: rgba(212, 175, 55, 0.30);
+  transform: translateX(2px);
+}
+.mm-row__horse {
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mm-row__where {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.50);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.mm-row__horse + .mm-row__where { grid-column: 1; }
+
+.mm-row__prices {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-feature-settings: 'tnum';
+}
+.mm-row__was {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.40);
+  text-decoration: line-through;
+  text-decoration-color: rgba(255, 255, 255, 0.25);
+}
+.mm-row__arrow { font-size: 10px; color: rgba(255, 255, 255, 0.50); }
+.mm-row__now { font-size: 14px; font-weight: 800; }
+.mm-row__now--in  { color: #4ade80; }
+.mm-row__now--out { color: #fca5a5; }
+
+.mm-row__pct {
+  padding: 3px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  font-feature-settings: 'tnum';
+}
+.mm-row__pct--in  { background: rgba(74, 222, 128, 0.16); color: #4ade80; }
+.mm-row__pct--out { background: rgba(252, 165, 165, 0.16); color: #fca5a5; }
+
+.mm-empty {
+  margin: 0;
+  padding: 12px 4px;
+  color: rgba(255, 255, 255, 0.45);
+  font-style: italic;
+  font-size: 13px;
+}
+
+/* ── Underdog watch ───────────────────────────────────────── */
+.mm-underdog {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(212, 175, 55, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+.mm-underdog__glyph { font-size: 18px; }
+.mm-underdog__label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-gold, #D4AF37);
+}
+.mm-underdog__link {
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  font-feature-settings: 'tnum';
+}
+.mm-underdog__link strong { color: #fff; }
+.mm-underdog__link:hover { color: var(--c-gold, #D4AF37); }
+
+/* ── Section CTA → /steamers/ ─────────────────────────────
+ * Sits at the bottom of the Money Moves band, points at the
+ * dedicated transparency page. Composition mirrors the rest of the
+ * band: dark surface, soft gold/green accent, single primary action.
+ */
+.mm-cta {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px 24px;
+  padding: 18px 22px;
+  background:
+    radial-gradient(ellipse 60% 100% at 0% 50%, rgba(74, 222, 128, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 100% at 100% 50%, rgba(212, 175, 55, 0.10) 0%, transparent 60%),
+    rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(74, 222, 128, 0.22);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.mm-cta::before {
+  /* Hairline gold accent — picks up the underdog chip's palette. */
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #4ade80 0%, var(--c-gold, #D4AF37) 100%);
+}
+.mm-cta__copy {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+.mm-cta__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-gold, #D4AF37);
+  margin-bottom: 6px;
+}
+.mm-cta__sub {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.78);
+}
+.mm-cta__sub strong {
+  color: #fff;
+  font-weight: 700;
+}
+.mm-cta__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+  color: #06070d;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.20);
+  box-shadow: 0 6px 18px rgba(74, 222, 128, 0.25),
+              inset 0 1px 0 rgba(255, 255, 255, 0.30);
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: transform .15s, box-shadow .18s, background .18s;
+}
+.mm-cta__btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(74, 222, 128, 0.35),
+              inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  background: linear-gradient(135deg, #5be88c 0%, #2ad067 100%);
+  color: #06070d;
+}
+.mm-cta__btn:active { transform: translateY(0); }
+.mm-cta__btn:focus-visible {
+  outline: 2px solid var(--c-gold, #D4AF37);
+  outline-offset: 3px;
+}
+.mm-cta__btn-arrow {
+  font-size: 16px;
+  font-weight: 900;
+  transition: transform .18s;
+}
+.mm-cta__btn:hover .mm-cta__btn-arrow { transform: translateX(3px); }
+
+@media (max-width: 640px) {
+  .mm-cta {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px 16px 18px;
+    gap: 14px;
+  }
+  .mm-cta__btn {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+/* ── Responsive ───────────────────────────────────────────── */
+@media (max-width: 880px) {
+  .money-moves__grid    { grid-template-columns: 1fr; }
+  .money-moves__tables  { grid-template-columns: 1fr; }
+  .mm-hero__price--now  { font-size: clamp(36px, 9vw, 56px); }
+}
+@media (max-width: 480px) {
+  .money-moves { padding: 22px 16px 26px; }
+  .mm-hero     { padding: 18px 18px 16px; }
+  .mm-side     { padding: 18px 18px 16px; }
+  .mm-row__link { grid-template-columns: minmax(0, 1fr) auto; }
+  .mm-row__pct  { display: none; }
+}

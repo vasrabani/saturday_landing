@@ -1,0 +1,209 @@
+/* ═══════════════════════════════════════════════════════════════
+   Today's Racing strip — landing page, above the hero fold.
+
+   Two variants share one <aside>:
+     .today-strip__mobile   — single tappable row, hidden on tablet+
+     .today-strip__desktop  — full 3-col layout, hidden on mobile
+
+   The breakpoint at 700px keeps the desktop strip from collapsing
+   awkwardly between 700 and 880px (current layout still fits at
+   that width because the meta column wraps naturally).
+
+   Self-contained — nothing here targets the hero or any other
+   landing section. Removing the include in landing.html leaves no
+   CSS debris.
+═══════════════════════════════════════════════════════════════ */
+
+.today-strip {
+  /* Same dark family as the hero so the page reads as one piece.
+     Sits above the hero — the gold rule is on the BOTTOM so it
+     forms the visual seam INTO the hero; the top edge gets the
+     subtle border that separates it from the navbar. */
+  background: linear-gradient(180deg, #0a121e 0%, #0e1827 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.35);
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* ── Mobile variant: single-row tap target ─────────────────────── */
+.today-strip__mobile {
+  display: none;   /* enabled at the bottom of this file for ≤700px */
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  text-decoration: none;
+  color: inherit;
+  min-height: 48px;
+}
+.today-strip__mobile:active,
+.today-strip__mobile:focus {
+  background: rgba(255, 255, 255, 0.04);
+  outline: none;
+}
+.today-strip__mobile-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.today-strip__mobile-body {
+  display: flex; flex-direction: column;
+  min-width: 0;   /* allow inner ellipsis */
+  flex: 1;
+}
+.today-strip__mobile-kicker {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #d4af37;
+  line-height: 1.2;
+}
+.today-strip__mobile-line {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.today-strip__mobile-arrow {
+  font-size: 18px;
+  color: rgba(212, 175, 55, 0.85);
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+/* ── Desktop variant: full 3-column strip ──────────────────────── */
+.today-strip__desktop {
+  padding: 18px 0;
+}
+.today-strip__inner {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 22px;
+  align-items: center;
+}
+
+.today-strip__date-col { display: flex; align-items: center; }
+.today-strip__date-pill {
+  display: inline-flex; flex-direction: column;
+  padding: 6px 14px;
+  border-radius: 12px;
+  background: rgba(212, 175, 55, 0.10);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  min-width: 92px;
+  text-align: center;
+}
+.today-strip__date-kicker {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: #d4af37;
+}
+.today-strip__date-value {
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+
+.today-strip__feature-col {
+  display: flex; flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.today-strip__feature-kicker {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #d4af37;
+  text-transform: uppercase;
+}
+.today-strip__feature-line {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.today-strip__feature-line strong {
+  color: #fff;
+  font-weight: 700;
+  margin-right: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.today-strip__meta-col {
+  display: flex; flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  text-align: right;
+  white-space: nowrap;
+}
+.today-strip__meta-counts {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.02em;
+}
+.today-strip__meta-counts strong {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.today-strip__meta-next {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.78);
+}
+.today-strip__meta-next strong {
+  color: #fff;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.today-strip__dot {
+  display: inline-block;
+  margin: 0 6px;
+  color: rgba(212, 175, 55, 0.50);
+}
+
+.today-strip__cta {
+  display: inline-flex; align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease, border 0.15s ease;
+}
+.today-strip__cta--primary {
+  align-self: flex-start;
+  background: #d4af37;
+  color: #11151f;
+  border: 1px solid #d4af37;
+}
+.today-strip__cta--primary:hover {
+  background: #e2c25e;
+  color: #11151f;
+}
+.today-strip__cta--secondary {
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+.today-strip__cta--secondary:hover {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(212, 175, 55, 0.35);
+}
+
+/* ── Breakpoint switch ─────────────────────────────────────────── */
+/* Anything 700px and below shows the mobile one-liner and hides
+   the desktop strip. The previous 880px multi-row stack of the
+   desktop variant is gone — the dedicated mobile markup replaces it
+   so the hero stays above the fold on phones. */
+@media (max-width: 700px) {
+  .today-strip__desktop { display: none; }
+  .today-strip__mobile  { display: flex; }
+}

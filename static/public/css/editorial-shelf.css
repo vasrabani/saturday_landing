@@ -1,0 +1,175 @@
+/* ═══════════════════════════════════════════════════════════════
+   EDITORIAL SHELF — landing page
+
+   Three persona-coded cards sitting below the hero, offering
+   soft entry points for visitors not ready to vote. Dark-on-
+   dark variant of the wire-shelf-card pattern (which lives in
+   news.css for the Fox's Wire masthead).
+
+   Persona accents driven by a single CSS custom property
+   (--shelf-accent) so adding a fourth persona is one new
+   .land-shelf-card--<name> rule + matching colour values.
+   No structural CSS changes needed.
+
+   Card data shape is fixed by news/services/editorial_shelf.py
+   — see the docstring there for the contract.
+═══════════════════════════════════════════════════════════════ */
+
+.land-shelf {
+  background: linear-gradient(180deg, #14141a 0%, #0b0e15 100%);
+  padding: 24px 0 32px;
+  border-top: 1px solid rgba(212, 175, 55, 0.05);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.05);
+}
+
+.land-shelf__inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 32px);
+}
+
+/* ── Kicker — the "Not voting? Start here." prompt ── */
+.land-shelf__kicker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #d4af37;
+  margin: 0 0 14px;
+}
+.land-shelf__kicker-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d4af37;
+  flex-shrink: 0;
+  animation: land-shelf-blink 1.6s ease-in-out infinite;
+}
+@keyframes land-shelf-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .land-shelf__kicker-dot { animation: none; }
+}
+
+/* ── Cards grid — three on desktop, stacks on narrow ── */
+.land-shelf__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 720px) {
+  .land-shelf__cards {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+/* ── Base card ─────────────────────────────────────────────────
+   Visual styling driven by --shelf-accent. Defaults to gold
+   (Mr Fox); persona modifiers below override per card. */
+.land-shelf-card {
+  --shelf-accent: #B8932F;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px 12px 12px;
+  background: rgba(212, 175, 55, 0.05);
+  border: 1px solid rgba(212, 175, 55, 0.18);
+  border-radius: 12px;
+  text-decoration: none;
+  color: #f5ead5;
+  font-family: "DM Sans", "Inter", sans-serif;
+  transition: transform 180ms ease,
+              background 180ms ease,
+              border-color 180ms ease;
+}
+.land-shelf-card:hover,
+.land-shelf-card:focus-visible {
+  transform: translateY(-2px);
+  background: rgba(212, 175, 55, 0.10);
+  border-color: var(--shelf-accent);
+  outline: none;
+  color: #f5ead5;
+  text-decoration: none;
+}
+
+.land-shelf-card__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--shelf-accent);
+  background: #1f1d18;
+  flex: 0 0 auto;
+  object-fit: cover;
+  display: block;
+}
+
+.land-shelf-card__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.land-shelf-card__eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--shelf-accent);
+}
+.land-shelf-card__headline {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #f5ead5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.land-shelf-card__meta {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(245, 234, 213, 0.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.land-shelf-card__arrow {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--shelf-accent);
+  flex: 0 0 auto;
+  transition: transform 180ms ease;
+}
+.land-shelf-card:hover .land-shelf-card__arrow,
+.land-shelf-card:focus-visible .land-shelf-card__arrow {
+  transform: translateX(4px);
+}
+
+/* ── Persona accents ──────────────────────────────────────────
+   Override --shelf-accent + card background/border. Adding a
+   fourth persona is one block here — no markup changes. */
+.land-shelf-card--fox {
+  --shelf-accent: #d4af37;
+  background: rgba(212, 175, 55, 0.05);
+  border-color: rgba(212, 175, 55, 0.18);
+}
+.land-shelf-card--sly {
+  --shelf-accent: #c9892f;
+  background: rgba(139, 94, 26, 0.08);
+  border-color: rgba(139, 94, 26, 0.28);
+}
+.land-shelf-card--llama {
+  --shelf-accent: #87a07f;
+  background: rgba(90, 120, 96, 0.08);
+  border-color: rgba(90, 120, 96, 0.28);
+}

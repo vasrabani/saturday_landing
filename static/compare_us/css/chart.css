@@ -1,0 +1,255 @@
+/* Compare Us chart — head-to-head line chart, editorial polish.
+
+   SVG is rendered at whatever CSS width the container gives it, but
+   viewBox is 900×380 — so a 12px source glyph renders at ≈8.5px on
+   the article column (640-ish). Every text size in here is picked
+   so it lands ≥11px at the actual rendered scale.
+
+   The palette follows the dataviz reference — text NEVER carries
+   the series colour; identity comes from the swatch beside it.
+   Consuming pages set --cus-chart-* to swap into the dark variant. */
+
+.cus-chart {
+  margin: 24px 0;
+  /* Editorial sans stack — matches the rest of the site's UI type
+     (DM Sans is loaded by base). Falls back to system stack. */
+  font-family: "DM Sans", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+
+  /* Light-mode tokens (dataviz palette.md § chart chrome & ink) */
+  --cus-chart-bg:      #fefdf8;
+  --cus-chart-ink:     #0b0b0b;
+  --cus-chart-ink-70:  #43423f;   /* secondary text — a hair darker for legibility */
+  --cus-chart-muted:   #7a7873;   /* axis / labels */
+  --cus-chart-grid:    #e6e4dc;   /* hairline gridline */
+  --cus-chart-base:    #b8b6ab;   /* baseline / axis */
+  --cus-chart-today:   #52514e;   /* today divider — secondary ink */
+  --cus-chart-today-pill: #0b0b0b;
+  --cus-chart-today-pill-ink: #ffffff;
+  --cus-chart-border:  rgba(11, 11, 11, 0.09);
+  --cus-chart-shadow:  0 1px 2px rgba(11, 11, 11, 0.04),
+                       0 8px 24px -8px rgba(11, 11, 11, 0.08);
+}
+
+.cus-chart__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 960px;
+  margin: 0 auto;
+  background: var(--cus-chart-bg);
+  border: 1px solid var(--cus-chart-border);
+  border-radius: 14px;
+  padding: 8px 10px 4px;
+  box-shadow: var(--cus-chart-shadow);
+}
+
+/* ── Grid + axes ─────────────────────────────────────────── */
+.cus-chart__gridline {
+  stroke: var(--cus-chart-grid);
+  stroke-width: 1;
+  /* Solid, hairline — matches dataviz mark specs (never dashed). */
+}
+.cus-chart__gridline--baseline {
+  stroke: var(--cus-chart-base);
+  stroke-width: 1.25;
+}
+.cus-chart__ytick,
+.cus-chart__xtick {
+  font-size: 15px;
+  fill: var(--cus-chart-ink-70);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.cus-chart__xtick {
+  /* Month labels want a shade of authority — slightly heavier and
+     lifted from the axis so they feel like anchors, not tickmarks. */
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 12.5px;
+}
+.cus-chart__yaxis-title {
+  font-size: 12px;
+  fill: var(--cus-chart-muted);
+  letter-spacing: 0.16em;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* ── "Today" divider + chip ─────────────────────────────── */
+.cus-chart__today-line {
+  stroke: var(--cus-chart-today);
+  stroke-width: 1;
+  stroke-dasharray: 4 4;
+  opacity: 0.55;
+}
+.cus-chart__today-pill {
+  fill: var(--cus-chart-today-pill);
+}
+.cus-chart__today-label {
+  font-size: 11px;
+  fill: var(--cus-chart-today-pill-ink);
+  letter-spacing: 0.16em;
+  font-weight: 700;
+}
+
+/* ── Series marks ────────────────────────────────────────── */
+/* Line + marker specs come from the SVG attrs on the shape itself
+   (stroke-width, r, stroke). CSS covers grouping affordances. */
+.cus-chart__series { transition: opacity 120ms ease; }
+
+/* Hover: dim every non-hovered series so the reader can isolate a
+   single entrant. Modern browsers support :has() — legacy graceful
+   degrade to no hover state. */
+.cus-chart__svg:hover .cus-chart__series:not(:hover) {
+  opacity: 0.28;
+}
+
+/* ── End-of-line direct labels ───────────────────────────── */
+/* These are the hero numbers on the right edge — this is where the
+   reader's eye lands. Bigger, bolder, wider halo so they read against
+   both the surface and any gridline they cross. */
+.cus-chart__end-label {
+  font-size: 17px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: -0.01em;
+  paint-order: stroke;
+  stroke: var(--cus-chart-bg);
+  stroke-width: 4;
+  stroke-linejoin: round;
+}
+
+/* ── Legend ─────────────────────────────────────────────── */
+.cus-chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-top: 20px;
+  padding: 0 8px;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1.35;
+}
+.cus-chart__legend-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  min-width: 220px;
+  max-width: 300px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.cus-chart__legend-item--leader {
+  background: rgba(184, 134, 11, 0.06);
+  border-color: rgba(184, 134, 11, 0.18);
+}
+.cus-chart__legend-item--leader .cus-chart__legend-name::after {
+  content: "LEADER";
+  display: inline-block;
+  margin-left: 10px;
+  padding: 2px 7px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: #fff;
+  background: #b8860b;
+  border-radius: 4px;
+  vertical-align: 2px;
+}
+.cus-chart__legend-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  margin-top: 4px;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(11, 11, 11, 0.08);
+}
+.cus-chart__legend-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.cus-chart__legend-name {
+  font-weight: 700;
+  color: var(--cus-chart-ink);
+  line-height: 1.15;
+  font-size: 15px;
+  letter-spacing: -0.005em;
+}
+.cus-chart__legend-numbers {
+  font-size: 13px;
+  color: var(--cus-chart-ink-70);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.4;
+}
+.cus-chart__legend-todate {
+  font-weight: 700;
+  color: var(--cus-chart-ink);
+}
+.cus-chart__legend-proj {
+  font-weight: 500;
+  color: var(--cus-chart-ink-70);
+}
+.cus-chart__legend-sep {
+  color: var(--cus-chart-muted);
+  margin: 0 6px;
+}
+.cus-chart__legend-band {
+  display: block;
+  font-size: 11.5px;
+  color: var(--cus-chart-muted);
+  font-variant-numeric: tabular-nums;
+  margin-top: 3px;
+  letter-spacing: 0.02em;
+}
+
+/* ── Dark-hosted variant ─────────────────────────────────── */
+/* Consuming pages set .cus-chart--on-dark on an ancestor. Same
+   structure — only the tokens swap. Dark values come from
+   dataviz palette.md § chart chrome & ink. */
+.cus-chart--on-dark {
+  --cus-chart-bg:      rgba(255, 249, 232, 0.03);
+  --cus-chart-ink:     #f0e8d5;
+  --cus-chart-ink-70:  #c3c2b7;
+  --cus-chart-muted:   #898781;
+  --cus-chart-grid:    #2c2c2a;
+  --cus-chart-base:    #3a3a37;
+  --cus-chart-today:   #c3c2b7;
+  --cus-chart-today-pill: #f0e8d5;
+  --cus-chart-today-pill-ink: #0b0b0b;
+  --cus-chart-border:  rgba(240, 232, 213, 0.10);
+  --cus-chart-shadow:  none;
+}
+.cus-chart--on-dark .cus-chart__legend-item--leader {
+  background: rgba(212, 175, 55, 0.10);
+  border-color: rgba(212, 175, 55, 0.24);
+}
+
+/* ── Mobile ─────────────────────────────────────────────── */
+/* Below ~640px the chart is roughly full-viewport-width, so the
+   viewBox → CSS-px ratio is close to 1:1 and the source sizes
+   land closer to their nominal values. Nudge up so a phone reader
+   isn't leaning in. */
+@media (max-width: 640px) {
+  .cus-chart__ytick { font-size: 14px; }
+  .cus-chart__xtick { font-size: 12px; }
+  .cus-chart__end-label { font-size: 18px; stroke-width: 5; }
+  .cus-chart__today-label { font-size: 11.5px; }
+  .cus-chart__yaxis-title { font-size: 11.5px; }
+  .cus-chart__legend-item {
+    min-width: 100%;
+    max-width: 100%;
+    padding: 12px 14px;
+  }
+  .cus-chart__legend-name { font-size: 15.5px; }
+  .cus-chart__legend-numbers { font-size: 13.5px; }
+}

@@ -1,0 +1,458 @@
+/*
+ * ═══════════════════════════════════════════════════════════════
+ *  SATURDAY RACING — BASE STYLESHEET  (Visual Refresh v2)
+ *  /static/css/base.css
+ *
+ *  This revision makes the depth *visible*, not just token-level.
+ *  Key structural changes:
+ *    - Body bg: #0B0B0F (near black — true floor)
+ *    - Section bg: #111118 (first step up, clearly different)
+ *    - Cards: #1C1C28 with real shadows + visible borders
+ *    - Gold refined: #D4AF37 (cooler, richer)
+ *    - Emerald introduced: win / live / positive only
+ *    - Body text warmer, higher contrast
+ *    - Line-height 1.75 for better readability
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* ── DESIGN TOKENS ─────────────────────────────────────────── */
+:root {
+
+  /* ── Gold (refined) ──────────────────────────────────────── */
+  --c-gold:          #D4AF37;
+  --c-gold-lt:       #F5D76E;
+  --c-gold-dk:       #9E7F1A;
+  --c-gold-subtle:   rgba(212,175,55,0.10);
+  --c-border-gold:   rgba(212,175,55,0.28);
+
+  /* ── Layered darks — each step is clearly visible ─────────
+     Background:  #0B0B0F  ← deepest floor
+     Sections:    #111118  ← first elevation  (+8 luminance)
+     Cards:       #1C1C28  ← raised surface   (+14 luminance)
+     Hover cards: #222234  ← interactive lift (+6 luminance)
+  ─────────────────────────────────────────────────────────── */
+  --c-midnight:      #0B0B0F;
+  --c-navy:          #111118;
+  --c-navy-mid:      #161622;
+  --c-navy-card:     #1C1C28;
+  --c-navy-raised:   #222234;
+
+  /* ── Emerald — win / live / profit signals only ──────────── */
+  --c-emerald:       #1A5C40;
+  --c-emerald-lt:    #2DBD7A;
+  --c-emerald-glow:  rgba(26,92,64,0.25);
+
+  /* ── Status ──────────────────────────────────────────────── */
+  --c-red:           #C0392B;
+  --c-red-lt:        #E05C4C;
+  --c-orange:        #D4622A;
+  --c-cyan:          #0EA5E9;
+
+  /* ── Cubs ember — the "warm" side of the Fox/Cubs rivalry.
+     Used as the default Cubs accent in many components (battle
+     cards, picks duel, pack pulse). Anchoring it here so the
+     brand can be updated in one place. */
+  --c-cubs-ember:    #E05A2A;
+
+  /* ── Text — warmer, higher hierarchy gap ──────────────────
+     Contrast floors (on --c-midnight #0B0B0F):
+       -100: ~15.1:1   — AAA large + body
+       -75:  ~10.1:1   — AAA body
+       -60:  ~ 5.8:1   — AA body (was -55 @ 0.55 ≈ 5.0:1)
+       -45:  ~ 4.6:1   — AA body floor (was -35 @ 0.32 ≈ 3.5:1)
+     The old -55/-35 tokens are aliased to the new floors so existing
+     rules get the contrast bump without a rename sweep.
+  ────────────────────────────────────────────────────────── */
+  --c-text-100:      #ECEEF5;
+  --c-text-75:       rgba(236,238,245,0.80);
+  --c-text-55:       rgba(236,238,245,0.72);
+  --c-text-35:       rgba(236,238,245,0.45);
+
+  /* ── Borders ─────────────────────────────────────────────── */
+  --c-border:        rgba(255,255,255,0.09);
+  --c-border-md:     rgba(255,255,255,0.15);
+
+  /* ── Shadows — real depth, not just colour ──────────────── */
+  --shadow-card:     0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(0,0,0,0.3);
+  --shadow-raised:   0 4px 6px rgba(0,0,0,0.5), 0 12px 40px rgba(0,0,0,0.4);
+  --shadow-gold:     0 4px 24px rgba(212,175,55,0.28), 0 1px 4px rgba(212,175,55,0.15);
+  --shadow-emerald:  0 4px 20px rgba(45,189,122,0.22);
+
+  /* ── Atmospheric glows (richer, more cinematic) ─────────── */
+  --glow-teal:       rgba(10,55,120,0.55);
+  --glow-magenta:    rgba(110,15,55,0.50);
+  --glow-purple:     rgba(60,8,85,0.32);
+  --glow-gold:       rgba(212,175,55,0.12);
+
+  /* ── Spacing ─────────────────────────────────────────────── */
+  --space-1:  4px;  --space-2:  8px;  --space-3:  12px;
+  --space-4:  16px; --space-5:  24px; --space-6:  32px;
+  --space-7:  48px; --space-8:  64px; --space-9:  80px;
+  --space-10: 96px;
+
+  /* ── Border radius ───────────────────────────────────────── */
+  --r-sm: 6px; --r-md: 12px; --r-lg: 18px; --r-pill: 100px;
+
+  /* ── Typography ──────────────────────────────────────────── */
+  --font-display:   'Playfair Display', Georgia, serif;
+  /* Editorial body font — used for long-form prose, ledes, sub-
+     headlines on landing/article surfaces. Reads as magazine
+     rather than SaaS. Iowan Old Style ships with macOS; Charter
+     ships with iOS/Windows fall-backs; Georgia is the universal
+     web-safe fallback. */
+  --font-editorial: 'Iowan Old Style', 'Charter', 'Source Serif Pro', Georgia, serif;
+  --font-body:      'DM Sans', system-ui, sans-serif;
+
+  /* ── Layout ──────────────────────────────────────────────── */
+  --max-w:  1280px;
+  --nav-h:  60px;
+
+  /* Tell the UA our palette is dark so form controls, scrollbars
+     and UA-styled elements match (avoids a white flash on load). */
+  color-scheme: dark;
+}
+
+/* ── RESET ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* Prevent horizontal slide on mobile. On iOS Safari the document
+   scroll viewport is <html>, not <body>, so overflow rules need to
+   live here too. `clip` is preferred over `hidden` because it
+   doesn't create a new scroll context (so position: sticky on
+   .scroll-progress / .sim-docs-subnav keeps working). */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;   /* fallback */
+  overflow-x: clip;     /* modern, no scroll-context side-effects */
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--c-midnight);
+  color: var(--c-text-75);
+  overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100vw;
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+button { cursor: pointer; font-family: inherit; }
+ul, ol { list-style: none; }
+
+/* Main content padding — compensates for the fixed site nav.
+   Notification banner (when present) bumps it further; body class
+   .has-notif-banner is set server-side in base.html. */
+.site-main { padding-top: var(--nav-h, 60px); }
+body.has-notif-banner .site-main { padding-top: calc(var(--nav-h, 60px) + 44px); }
+@media (max-width: 640px) {
+  body.has-notif-banner .site-main { padding-top: calc(var(--nav-h, 60px) + 40px); }
+}
+
+/* Visually hidden but available to assistive tech (live regions etc.) */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Visually hidden until focused — jumps past the nav for keyboard users */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 8px;
+  transform: translateY(-120%);
+  padding: 10px 16px;
+  background: var(--c-gold);
+  color: var(--c-midnight);
+  font-weight: 700;
+  border-radius: var(--r-sm);
+  z-index: 10000;
+  transition: transform 0.15s ease-out;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(8px);
+  outline: 2px solid var(--c-text-100);
+  outline-offset: 2px;
+}
+#main-content:focus { outline: none; }
+
+/* ── LAYOUT ─────────────────────────────────────────────────── */
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--space-7); }
+/* Premium section rhythm — 96px desktop / 64px mobile. Magazine
+   pages run on more air than product pages; tight padding makes
+   even high-quality content read 'shovelled in'. */
+.section   { padding: var(--space-10) 0; }
+
+/* ── TYPOGRAPHY ──────────────────────────────────────────────── */
+.display-xl {
+  font-family: var(--font-display);
+  font-size: clamp(54px, 8vw, 108px);
+  font-weight: 900; line-height: 0.92; letter-spacing: -0.02em;
+  color: var(--c-text-100);
+}
+.display-lg {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 900; line-height: 1; color: var(--c-text-100);
+}
+.display-md {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3.5vw, 44px);
+  font-weight: 700; line-height: 1.1; color: var(--c-text-100);
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--c-gold);
+  background: var(--c-gold-subtle); border: 1px solid var(--c-border-gold);
+  padding: 5px 16px; border-radius: var(--r-pill);
+}
+/* Branded SVG mark inside the kicker — sized just below the cap
+   height of the surrounding letters; colour inherits via
+   currentColor so kicker theme tints (gold / cyan / draw red)
+   flow through to the mark. Replaces the emoji prefix that used
+   to live in the same slot. */
+.kicker__mark {
+  display: inline-block;
+  vertical-align: -2px;
+  flex-shrink: 0;
+  opacity: 0.88;
+}
+
+/* ── BUTTONS ─────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-body); font-weight: 600; font-size: 14px;
+  padding: 13px 24px; border-radius: var(--r-sm);
+  border: none; transition: all 0.22s; cursor: pointer; white-space: nowrap;
+}
+
+.btn-primary { background: var(--c-gold); color: var(--c-midnight); }
+.btn-primary:hover {
+  background: var(--c-gold-lt); transform: translateY(-2px);
+  box-shadow: var(--shadow-gold);
+}
+
+.btn-ghost {
+  background: rgba(255,255,255,0.07); color: var(--c-text-100);
+  border: 1px solid var(--c-border);
+}
+.btn-ghost:hover {
+  background: rgba(255,255,255,0.11); border-color: var(--c-border-md);
+  transform: translateY(-1px);
+}
+
+.btn-outline-gold {
+  background: transparent; color: var(--c-gold);
+  border: 1px solid var(--c-border-gold);
+}
+.btn-outline-gold:hover { background: var(--c-gold-subtle); border-color: var(--c-gold); }
+
+/* ── CARD ────────────────────────────────────────────────────── */
+/*
+ * Cards use solid colour (#1C1C28) against section bg (#111118).
+ * The 20-point luminance difference is clearly visible.
+ * Shadow adds physical depth — cards feel like raised surfaces.
+ */
+.card {
+  background: var(--c-navy-card);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-card);
+  transition: background 0.2s, transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+  background: var(--c-navy-raised);
+  border-color: var(--c-border-md);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-raised);
+}
+
+/* ── ODDS CHIP ───────────────────────────────────────────────── */
+.odds-chip {
+  font-family: var(--font-display); font-size: 15px; font-weight: 700;
+  background: rgba(255,255,255,0.08); color: var(--c-text-100);
+  border: 1px solid var(--c-border); padding: 5px 12px; border-radius: var(--r-sm);
+}
+.odds-chip--fav { background: var(--c-gold); color: var(--c-midnight); border-color: var(--c-gold); }
+
+/* ── FAV TAG ─────────────────────────────────────────────────── */
+.fav-tag {
+  background: var(--c-gold); color: var(--c-midnight);
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1em; padding: 2px 7px; border-radius: 3px;
+}
+
+/* ── TOOL CHIPS ──────────────────────────────────────────────── */
+.tool-chip { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: var(--r-pill); }
+.tool-chip--claude     { background: rgba(204,138,90,0.18); color: #e8a870; border: 1px solid rgba(204,138,90,0.28); }
+.tool-chip--chatgpt    { background: rgba(16,163,127,0.14); color: #3ecfa0; border: 1px solid rgba(16,163,127,0.28); }
+.tool-chip--gemini     { background: rgba(66,133,244,0.14); color: #7baff8; border: 1px solid rgba(66,133,244,0.28); }
+.tool-chip--experience { background: var(--c-gold-subtle);  color: var(--c-gold); border: 1px solid var(--c-border-gold); }
+.tool-chip--instinct   { background: rgba(212,98,42,0.14);  color: #f0804a; border: 1px solid rgba(212,98,42,0.28); }
+
+/* ── RESULT BADGES ───────────────────────────────────────────── */
+.result-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; padding: 3px 9px; border-radius: 4px; }
+.result-badge--won     { background: var(--c-emerald-glow);  color: var(--c-emerald-lt);  border: 1px solid rgba(45,189,122,0.22); }
+.result-badge--lost    { background: rgba(192,57,43,0.18);   color: var(--c-red-lt);       border: 1px solid rgba(192,57,43,0.22); }
+.result-badge--pending { background: var(--c-gold-subtle);   color: var(--c-gold);         border: 1px solid var(--c-border-gold); }
+
+/* ── CONFIDENCE BAR ──────────────────────────────────────────── */
+.conf-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
+.conf-bar__fill { height:100%; background: linear-gradient(90deg, var(--c-gold), var(--c-gold-lt)); border-radius:2px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
+.conf-bar__fill--cub { background: linear-gradient(90deg, var(--c-orange), #f08050); }
+
+/* ── SECTION HEADER ──────────────────────────────────────────── */
+.section-header { text-align: center; margin-bottom: var(--space-8); }
+.section-header .kicker { margin-bottom: 14px; }
+.section-header__title {
+  font-family: var(--font-display); font-size: clamp(26px,4vw,42px);
+  font-weight: 900; color: var(--c-text-100); line-height: 1.1; margin-bottom: 12px;
+}
+.section-header__sub {
+  font-size: 15px; color: var(--c-text-55);
+  max-width: 520px; margin: 0 auto; line-height: 1.75;
+}
+
+/* ── VERDICT CARD ────────────────────────────────────────────── */
+.verdict-card {
+  background: rgba(212,175,55,0.06);
+  border: 1px solid var(--c-border-gold);
+  border-left: 3px solid var(--c-gold);
+  border-radius: var(--r-sm); padding: var(--space-4) var(--space-5);
+}
+.verdict-card__label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.2em;
+  color: var(--c-gold); text-transform: uppercase; display: block; margin-bottom: 7px;
+}
+.verdict-card p { font-size: 14px; line-height: 1.75; color: var(--c-text-55); }
+
+/* ── WIN CARD (emerald) ──────────────────────────────────────── */
+.win-card {
+  background: var(--c-emerald-glow);
+  border: 1px solid rgba(45,189,122,0.25);
+  border-left: 3px solid var(--c-emerald-lt);
+  border-radius: var(--r-sm); padding: var(--space-4) var(--space-5);
+}
+
+/* ── TICKER DOT (green = live) ───────────────────────────────── */
+.ticker-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--c-emerald-lt);
+  animation: blink 1.4s ease-in-out infinite; flex-shrink: 0;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.15;} }
+
+/* ── ANIMATIONS ──────────────────────────────────────────────── */
+@keyframes fadeUp   { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+@keyframes fadeIn   { from{opacity:0;} to{opacity:1;} }
+@keyframes pulseDot { 0%,100%{opacity:1;} 50%{opacity:0.45;} }
+@keyframes pulseNode {
+  0%,100%{ box-shadow:0 0 0 0   rgba(212,175,55,0.55); }
+  50%    { box-shadow:0 0 0 7px rgba(212,175,55,0); }
+}
+.animate-fade-up { animation: fadeUp 0.5s ease both; }
+
+
+/* ── Horse profile link — global ────────────────────────────── */
+/* Used anywhere a horse name appears: GN cards, racecard,       */
+/* Mr Fox picks. Inherits parent colour, underline on hover.     */
+.horse-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.18s, border-color 0.18s;
+}
+.horse-link:hover {
+  color: var(--c-gold);
+  border-bottom-color: rgba(212,175,55,0.45);
+}
+/* ── RESPONSIVE ──────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .container { padding: 0 var(--space-5); }
+  .section   { padding: var(--space-8) 0; }
+}
+
+/* ── MOBILE READABILITY OVERRIDE ───────────────────────────────
+   On screens ≤ 640px:
+   - Body text floor raised to 15px
+   - Detail/secondary text raised from 12→14px, 13→15px
+   - Opacity raised: text-35 → ~50%, text-55 → ~72%
+   - Line height loosened for easier scanning
+   These are floor values — larger text is untouched.
+──────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+
+  body {
+    font-size: 15px;
+    line-height: 1.78;
+  }
+
+  /* Raise opacity floors so dim text is readable */
+  :root {
+    --c-text-55: rgba(236,238,245,0.65);   /* was 0.55 */
+    --c-text-35: rgba(236,238,245,0.50);   /* was 0.32 — most impactful change */
+  }
+
+  /* Card body text — never below 14px on mobile */
+  .news-detail,
+  .feature-text,
+  .cov-text,
+  .ai-reasoning,
+  .decl-detail,
+  .tip-card__analysis,
+  .gn-pick__analysis,
+  .verdict-card p,
+  .fox-teaser__text {
+    font-size: 14px !important;
+    line-height: 1.75 !important;
+  }
+
+  /* Secondary/meta text — never below 13px on mobile */
+  .news-headline,
+  .vote-card__name,
+  .tip-card__race,
+  .res-race,
+  .res-winner {
+    font-size: 15px !important;
+  }
+
+  /* Metadata labels — raise from 10-11px to 12px */
+  .news-time,
+  .decl-date,
+  .tip-card__date,
+  .vote-card__meta,
+  .vote-card__connections,
+  .ai-role,
+  .scoreboard__total,
+  .profile-since {
+    font-size: 12px !important;
+    opacity: 1 !important;
+  }
+
+  /* Section subtitles */
+  .section-header__sub { font-size: 15px !important; }
+  .section-header__title { font-size: clamp(22px, 7vw, 34px) !important; }
+
+  /* Verdict card */
+  .verdict-card p { font-size: 14px !important; line-height: 1.75 !important; }
+
+  /* Kicker labels — keep compact but legible */
+  .kicker { font-size: 10px !important; }
+
+  /* News type pills */
+  .news-type { font-size: 10px !important; padding: 4px 10px !important; }
+}

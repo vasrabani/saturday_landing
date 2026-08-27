@@ -1,0 +1,559 @@
+/*
+ * experiences/pick-hero/css/pick-hero.css
+ * Hero stage for /pick/ — GSAP cinematic sequence.
+ * Works alongside pick.css (runner grid + commit panel).
+ * All classes prefixed hero-* to avoid collisions.
+ */
+
+/* ── STAGE ──────────────────────────────────────────────────── */
+
+.pick-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  /* Subtract nav height so stage fills exactly one screen without overflow */
+  min-height: calc(100svh - var(--nav-h, 60px));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--c-midnight, #0B0B0F);
+  cursor: pointer;
+}
+
+.pick-stage--done {
+  min-height: 0;
+  cursor: default;
+}
+
+/* ── PARTICLE CANVAS ─────────────────────────────────────────── */
+
+#heroParticleCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── AMBIENT GLOW ────────────────────────────────────────────── */
+
+.hero-bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-bg-glow--gold {
+  width: 55%;
+  height: 75%;
+  left: -10%;
+  top: 5%;
+  background: radial-gradient(ellipse at center,
+    rgba(212,175,55,0.10) 0%, transparent 65%);
+  animation: heroGlowPulse 6s ease-in-out infinite;
+}
+
+.hero-bg-glow--red {
+  width: 40%;
+  height: 65%;
+  right: -8%;
+  bottom: 0;
+  background: radial-gradient(ellipse at center,
+    rgba(192,57,43,0.09) 0%, transparent 65%);
+  animation: heroGlowPulse 7s ease-in-out infinite 1.5s;
+}
+
+@keyframes heroGlowPulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.06); }
+}
+
+/* ── GOLD CURTAIN LINE ───────────────────────────────────────── */
+
+#heroCurtain {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(212,175,55,0.5) 25%,
+    rgba(245,228,154,0.9) 50%,
+    rgba(212,175,55,0.5) 75%,
+    transparent 100%
+  );
+  transform: scaleX(0);
+  transform-origin: left center;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ── STAGE INNER LAYOUT ─────────────────────────────────────── */
+
+.hero-stage-inner {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 860px;       /* Tighter max-width keeps text readable and centred */
+  padding: 0 32px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ── RACE IDENTITY ───────────────────────────────────────────── */
+
+.hero-identity {
+  margin-bottom: 40px;
+  opacity: 0;             /* JS sets to 1 before GSAP runs */
+  width: 100%;
+}
+
+.hero-identity__eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-gold, #D4AF37);
+  opacity: 0;             /* GSAP animates from 0 */
+  margin-bottom: 16px;
+}
+
+.hero-identity__eyebrow-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--c-gold, #D4AF37);
+  flex-shrink: 0;
+  animation: heroDotBlink 2s ease-in-out infinite;
+}
+
+.hero-identity__eyebrow-sep {
+  opacity: 0.35;
+}
+
+@keyframes heroDotBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.15; }
+}
+
+.hero-identity__title {
+  font-family: var(--font-display, 'Playfair Display', Georgia, serif);
+  font-size: clamp(26px, 4.5vw, 52px);
+  font-weight: 900;
+  color: var(--c-text-100, #ECEEF5);
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  margin: 0 0 12px;
+  /* Flex layout for per-word GSAP stagger */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  column-gap: 0.22em;     /* em-based gap scales with font size */
+  row-gap: 0.08em;        /* small vertical gap between wrapped lines */
+}
+
+.hero-identity__meta {
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: 12px;
+  color: var(--c-text-35, rgba(236,238,245,0.32));
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  opacity: 0;             /* GSAP animates from 0 */
+}
+
+/* ── COMMENTARY BLOCK ────────────────────────────────────────── */
+
+.hero-commentary {
+  position: relative;
+  width: 100%;
+  /* Tall enough for line 4 at max font size (80px * 1 line + breathing) */
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.hero-commentary__line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  column-gap: 0.2em;
+  row-gap: 0.05em;
+  pointer-events: none;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+
+/* Line 1 — quiet, italic, sets mood */
+.hero-commentary__line--1 {
+  font-family: var(--font-display, 'Playfair Display', Georgia, serif);
+  font-size: clamp(18px, 2.8vw, 26px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--c-text-55, rgba(236,238,245,0.55));
+  letter-spacing: 0.01em;
+}
+
+/* Line 2 — warmer, draws them in */
+.hero-commentary__line--2 {
+  font-family: var(--font-display, 'Playfair Display', Georgia, serif);
+  font-size: clamp(20px, 3.2vw, 32px);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--c-text-75, rgba(236,238,245,0.80));
+}
+
+/* Line 3 — challenge, gold, bold */
+.hero-commentary__line--3 {
+  font-family: var(--font-display, 'Playfair Display', Georgia, serif);
+  font-size: clamp(20px, 3.2vw, 32px);
+  font-weight: 900;
+  font-style: normal;
+  color: var(--c-gold, #D4AF37);
+  letter-spacing: -0.01em;
+}
+
+/* Line 4 — the peak: large, italic, white */
+.hero-commentary__line--4 {
+  font-family: var(--font-display, 'Playfair Display', Georgia, serif);
+  font-size: clamp(44px, 7.5vw, 88px);
+  font-weight: 900;
+  font-style: italic;
+  color: var(--c-text-100, #ECEEF5);
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+}
+
+/* Fox word — orange glow on line 3 */
+.hero-commentary__line--3 .hero-word--fox {
+  color: var(--c-cubs-ember);
+  text-shadow: 0 0 20px rgba(224,90,42,0.35);
+}
+
+/* ── HERO WORD SPANS (GSAP targets) ─────────────────────────── */
+
+.hero-word {
+  display: inline-block;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* ── ARROW ───────────────────────────────────────────────────── */
+
+#heroArrow {
+  font-size: 28px;
+  color: var(--c-gold, #D4AF37);
+  opacity: 0;
+  will-change: transform, opacity;
+  margin-top: 12px;
+  position: relative;
+  z-index: 3;
+  line-height: 1;
+}
+
+#heroArrow::before,
+#heroArrow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(212,175,55,0.30);
+  animation: heroArrowRipple 2.2s ease-out infinite;
+}
+
+#heroArrow::after {
+  animation-delay: 1.1s;
+}
+
+@keyframes heroArrowRipple {
+  0%   { width: 16px; height: 16px; opacity: 0.5; }
+  100% { width: 72px; height: 72px; opacity: 0; }
+}
+
+/* ── FINALE CARD ─────────────────────────────────────────────── */
+
+#heroFinaleCard {
+  opacity: 0;
+  will-change: transform, opacity;
+  max-width: 360px;
+  width: 100%;
+  background: var(--c-navy-card, #1C1C28);
+  border: 1px solid rgba(212,175,55,0.30);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  z-index: 3;
+  margin-top: 20px;
+}
+
+#heroFinaleCard:hover {
+  border-color: rgba(212,175,55,0.60);
+}
+
+.hero-finale-card__header {
+  padding: 10px 16px 9px;
+  background: rgba(212,175,55,0.05);
+  border-bottom: 1px solid rgba(212,175,55,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hero-finale-card__label {
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: rgba(212,175,55,0.55);
+}
+
+.hero-finale-card__featured {
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--c-gold, #D4AF37);
+  letter-spacing: 0.08em;
+}
+
+.hero-finale-card__body {
+  padding: 14px 16px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hero-finale-card__silk {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: 15px;
+  font-weight: 900;
+  color: #fff;
+  flex-shrink: 0;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.hero-finale-card__info {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.hero-finale-card__horse {
+  font-family: var(--font-display, 'Playfair Display', Georgia, serif);
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--c-text-100, #ECEEF5);
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.hero-finale-card__connections {
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: 11px;
+  color: var(--c-text-35, rgba(236,238,245,0.32));
+  display: block;
+  margin-top: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hero-finale-card__odds {
+  font-family: var(--font-display, 'Playfair Display', Georgia, serif);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--c-gold, #D4AF37);
+  flex-shrink: 0;
+  letter-spacing: -0.01em;
+}
+
+/* ── FINALE CTA ──────────────────────────────────────────────── */
+
+#heroFinaleCta {
+  opacity: 0;
+  display: inline-block;
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--c-gold, #D4AF37);
+  margin-top: 12px;
+  will-change: transform, opacity;
+  position: relative;
+  z-index: 3;
+}
+
+#heroFinaleCta::after {
+  content: ' →';
+}
+
+/* ── SKIP BUTTON ─────────────────────────────────────────────
+   Sits in the top-right of the cinematic so users can jump
+   straight to the racecard. Unobtrusive by default — fades in
+   ~0.3s after the cinematic starts and pulses gently after a
+   few seconds so it's easy to find without dominating the
+   hero. Fades out when the cinematic is skipped or completes. */
+
+.hero-skip-btn {
+  position: absolute;
+  /* Anchored to the bottom-centre of the cinematic area so it's
+     easy to spot without overlapping the title or commentary. */
+  left: 50%;
+  bottom: 8%;
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  background: rgba(11, 11, 15, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--c-gold, #D4AF37);
+  font-family: var(--font-body, 'DM Sans', sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  transform: translate(-50%, 6px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s cubic-bezier(0.2, 0.9, 0.25, 1),
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.hero-skip-btn__arrow {
+  display: inline-block;
+  transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+.hero-skip-btn:hover,
+.hero-skip-btn:focus-visible {
+  background: rgba(212, 175, 55, 0.14);
+  border-color: var(--c-gold, #D4AF37);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.18);
+  outline: none;
+}
+.hero-skip-btn:hover .hero-skip-btn__arrow,
+.hero-skip-btn:focus-visible .hero-skip-btn__arrow {
+  transform: translateX(4px);
+}
+.hero-skip-btn:focus-visible {
+  outline: 2px solid var(--c-gold-lt, #F5D76E);
+  outline-offset: 2px;
+}
+
+/* Revealed by JS (.is-visible) after the cinematic begins.
+   Keeps the translateX(-50%) for horizontal centring. */
+.hero-skip-btn.is-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Gentle attention pulse after a couple of seconds, so the
+   button advertises itself without being pushy. */
+.hero-skip-btn.is-advertising {
+  animation: heroSkipPulse 2.6s ease-in-out infinite;
+}
+@keyframes heroSkipPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.0); }
+  50%      { box-shadow: 0 0 0 6px rgba(212, 175, 55, 0.14); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-skip-btn { transition: opacity 0.1s linear; transform: translate(-50%, 0); }
+  .hero-skip-btn.is-advertising { animation: none; }
+}
+
+@media (max-width: 600px) {
+  .hero-skip-btn {
+    bottom: 6%;
+    padding: 10px 18px;
+    font-size: 12px;
+    letter-spacing: 0.10em;
+  }
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .hero-stage-inner {
+    padding: 0 20px;
+  }
+  .hero-identity {
+    margin-bottom: 28px;
+  }
+  .hero-identity__title {
+    font-size: clamp(24px, 6vw, 40px);
+  }
+  .hero-commentary {
+    min-height: 180px;
+  }
+  .hero-commentary__line--4 {
+    font-size: clamp(40px, 11vw, 66px);
+  }
+  #heroArrow {
+    font-size: 24px;
+    margin-top: 8px;
+  }
+  #heroFinaleCard {
+    max-width: 100%;
+    margin-top: 16px;
+  }
+  .hero-finale-card__horse {
+    font-size: 15px;
+  }
+  .hero-finale-card__odds {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 400px) {
+  .hero-identity__title {
+    font-size: clamp(22px, 7vw, 34px);
+  }
+  .hero-commentary__line--4 {
+    font-size: clamp(36px, 12vw, 56px);
+  }
+}

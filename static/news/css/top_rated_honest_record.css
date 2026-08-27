@@ -1,0 +1,230 @@
+/* ─────────────────────────────────────────────────────────────────
+   Top Rated Honest Record — DELTA on top of horses_to_watch_honest_
+   record.css. Loads AFTER the HTW sheet, so it inherits every
+   .honest-record__* variable (--hr-gold-bg / --hr-ink-70 / etc.) and
+   only overrides what's genuinely different:
+
+     · A lane-tab row (six pills, grouped visually so SR/OR/TS read as
+       one Ratings cluster)
+     · An "auto" table layout — HTW is fixed-5-column because it
+       always ships 5 picks; Top Rated lanes ship 3-5, so cells flow
+     · A per-pick card treatment inside the single Selections column
+       (the horizontal strip of picks)
+
+   Everything else — medals, day-tag, pager, hero, empty state — is
+   pure HTW reuse.
+   ─────────────────────────────────────────────────────────────── */
+
+/* Lane pills — six tabs, grouped by underline colour so Ratings
+   (SR/OR/TS) reads as one cluster. */
+.tr-lanes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 6px;
+  padding: 14px 0 18px;
+  border-bottom: 1px solid rgba(11, 30, 57, 0.10);
+  margin-bottom: 22px;
+}
+.tr-lanes__pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+               Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--hr-ink-70);
+  background: var(--hr-cream);
+  border: 1px solid rgba(11, 30, 57, 0.10);
+  transition: background-color .15s ease, color .15s ease,
+              border-color .15s ease;
+}
+.tr-lanes__pill:hover,
+.tr-lanes__pill:focus-visible {
+  background: #fff;
+  color: var(--hr-ink);
+  border-color: var(--hr-ink-40);
+}
+.tr-lanes__pill.is-active {
+  background: var(--hr-ink);
+  color: var(--hr-cream);
+  border-color: var(--hr-ink);
+}
+
+/* Group hint: a 2px underline colour so the three ratings pills read
+   as siblings, distinct from signals / consensus / movers. Purely
+   visual — the a11y remains the pill's aria-current label. */
+.tr-lanes__pill--signals      { box-shadow: inset 0 -3px 0 rgba(212, 175, 55, 0.30); }
+.tr-lanes__pill--signals-lead { box-shadow: inset 0 -3px 0 rgba(198, 90, 46, 0.55); }
+.tr-lanes__pill--ratings      { box-shadow: inset 0 -3px 0 rgba(88, 130, 89, 0.35); }
+.tr-lanes__pill--consensus    { box-shadow: inset 0 -3px 0 rgba(120, 90, 160, 0.35); }
+.tr-lanes__pill--movers       { box-shadow: inset 0 -3px 0 rgba(198, 90, 46, 0.35); }
+.tr-lanes__pill.is-active     { box-shadow: none; }
+
+/* Lead Signals pill — orange active state to reinforce the same
+   colour language as the LEAD SIGNAL row badge + hit-rate tile. */
+.tr-lanes__pill--signals-lead.is-active {
+  background: #c65a2e;
+  color: #fff;
+  border-color: #c65a2e;
+}
+
+/* Table override: auto layout so a 3-pick lane doesn't stretch three
+   cells across an HTW-sized 5-column grid. */
+.honest-record__table--auto {
+  table-layout: auto;
+}
+.honest-record__table--auto thead th:not(.honest-record__col-date) {
+  text-align: left;
+}
+
+/* One cell per row, then a horizontal strip of pick cards inside.
+   Flex-wrap so mobile stacks vertically. */
+.tr-picks-cell {
+  padding: 10px 8px !important;   /* HTW's default is tight; give strip room */
+  vertical-align: top;
+}
+.tr-picks-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Individual pick card — mirrors HTW's .honest-record__cell shape
+   but sits inline in the strip rather than in its own <td>. Base
+   background/border come from HTW variables so the visual language
+   stays identical. */
+.tr-pick {
+  flex: 1 1 220px;
+  min-width: 200px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid rgba(11, 30, 57, 0.10);
+  border-radius: 4px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+               Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--hr-ink);
+}
+.tr-pick--gold {
+  background: var(--hr-gold-bg);
+  border-left: 3px solid var(--hr-gold-border);
+}
+.tr-pick--silver {
+  background: var(--hr-silver-bg);
+  border-left: 3px solid var(--hr-silver-border);
+}
+.tr-pick--bronze {
+  background: var(--hr-bronze-bg);
+  border-left: 3px solid var(--hr-bronze-border);
+}
+.tr-pick--pending {
+  color: var(--hr-ink-40);
+}
+
+/* Lead Signal — the day's highest-conviction signals-lane pick. The
+   orange flag badge alone carries identification so medal treatment
+   (gold/silver/bronze background + border) stays untouched when a
+   lead ALSO won or placed. Non-medal lead rows get a subtle warm
+   tint to still stand out, applied only when no medal class fires. */
+.tr-pick--lead:not(.tr-pick--gold):not(.tr-pick--silver):not(.tr-pick--bronze) {
+  background: #fdf3e6;
+  border-left: 3px solid #c65a2e;
+}
+.tr-pick__lead-flag {
+  display: inline-block;
+  padding: 3px 8px;
+  margin-right: 6px;
+  background: #c65a2e;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+               Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+/* Big-number tile — highlights the Lead Signal hit-rate alongside the
+   overall totals. Same shape as the sibling tiles, orange accent to
+   match the row badge. */
+.honest-record__stat--lead {
+  position: relative;
+}
+.honest-record__stat--lead .honest-record__stat-val {
+  color: #c65a2e;
+}
+.honest-record__stat-flag {
+  display: inline-block;
+  padding: 2px 7px;
+  margin-right: 4px;
+  background: #c65a2e;
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  vertical-align: 1px;
+}
+
+/* Inside a pick, the medal/won flag + horse + race line + position
+   should stack, matching the HTW cell layout. Every element from
+   there (.honest-record__horse / __race / __price / __sp / __pending
+   / __pos) is reused as-is. */
+.tr-pick .honest-record__horse {
+  display: block;
+  font-weight: 700;
+  color: var(--hr-ink);
+  text-decoration: none;
+  margin-top: 4px;
+}
+.tr-pick .honest-record__horse:hover {
+  text-decoration: underline;
+}
+.tr-pick .honest-record__race {
+  display: block;
+  color: var(--hr-ink-70);
+  font-size: 12px;
+  margin-top: 2px;
+}
+.tr-pick .honest-record__price {
+  color: var(--hr-ink);
+  font-weight: 600;
+}
+.tr-pick .honest-record__sp {
+  color: var(--hr-ink-70);
+  font-variant-numeric: tabular-nums;
+}
+.tr-pick .honest-record__pending,
+.tr-pick .honest-record__pos {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--hr-ink-40);
+}
+.tr-pick .honest-record__pos--unplaced {
+  color: var(--hr-ink-40);
+}
+
+@media (max-width: 720px) {
+  .tr-pick {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  .tr-lanes__pill {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+}
