@@ -1042,3 +1042,576 @@
   .ai-lab-inner   { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-8); align-items: center; }
   .ai-lab__cta    { width: auto; }
 }
+
+/* ══ The Rivalry — dark arena (.battle-section--rivalry) ══ */
+.battle-section--rivalry {
+  --rv-teal: #2ee6c5;
+  --rv-pack: #e07c4b;
+  --rv-gold: #d4af37;
+  /* Live CRT snow (tv_static.js) */
+  background: #080a0e;
+  color: #fff;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-block: clamp(48px, 7vw, 88px);
+}
+.battle-section--rivalry .battle-static__bg {
+  background:
+    radial-gradient(
+      ellipse 70% 80% at 50% 50%,
+      rgba(8, 10, 18, 0.55) 0%,
+      rgba(8, 10, 18, 0.35) 55%,
+      rgba(8, 10, 18, 0.12) 85%,
+      transparent 100%
+    );
+}
+.battle-section--rivalry .battle-static__canvas,
+.battle-section--rivalry .battle-static__overlay {
+  display: block;
+}
+
+.battle-section--rivalry .battle-header {
+  text-align: left;
+  /* Wider than shrink-wrap (~460px sub + pad); still well under arena */
+  width: min(100%, 640px);
+  max-width: 100%;
+  background: rgba(10, 12, 16, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 22px clamp(24px, 4vw, 40px) 24px;
+  margin-bottom: clamp(28px, 4vw, 44px);
+}
+.battle-section--rivalry .kicker {
+  display: inline-block;
+  color: var(--rv-gold);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  letter-spacing: 0.2em;
+  font-size: 11px;
+  font-weight: 800;
+}
+.battle-section--rivalry .battle-header__title {
+  color: #fff;
+  text-shadow: none;
+  margin-top: 10px;
+}
+.battle-section--rivalry .battle-header__title em {
+  font-style: italic;
+  color: var(--rv-gold);
+  font-weight: 700;
+}
+.battle-section--rivalry .battle-header__sub {
+  color: rgba(236, 238, 245, 0.7);
+  text-shadow: none;
+  max-width: 560px;
+}
+
+.battle-section--rivalry .container {
+  max-width: var(--max-w, 1280px);
+}
+.battle-section--rivalry .battle-arena {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: clamp(12px, 2vw, 24px);
+  align-items: stretch;
+  width: 100%;
+  /* Undo legacy tablet `font-size: 0` whitespace hack on .battle-arena */
+  font-size: 15px;
+  line-height: 1.5;
+}
+.battle-section--rivalry .battle-arena > * {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.battle-section--rivalry .battle-card {
+  min-height: clamp(580px, 70vw, 720px);
+  border-radius: 22px;
+  overflow: hidden;
+  background: #0a0c10;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+.battle-section--rivalry .battle-card--fox {
+  border: 1px solid rgba(46, 230, 197, 0.35);
+  background:
+    linear-gradient(180deg, transparent 28%, rgba(4, 8, 10, 0.55) 52%, rgba(4, 8, 10, 0.94) 72%, #04080a 100%),
+    url('../img/rivalry-fox-card-bg.png') center 20% / cover no-repeat,
+    #071014;
+}
+.battle-section--rivalry .battle-card--cubs {
+  border: 1px solid rgba(224, 124, 75, 0.38);
+  background:
+    linear-gradient(180deg, transparent 28%, rgba(8, 4, 4, 0.55) 52%, rgba(8, 4, 4, 0.94) 72%, #0a0504 100%),
+    url('../img/rivalry-pack-card-bg.png') center 18% / cover no-repeat,
+    #120806;
+}
+
+.battle-section--rivalry .battle-card__inner {
+  position: relative;
+  height: 100%;
+  min-height: inherit;
+  padding: 0 0 20px;
+  gap: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+/* Bottom → text black fade so Mr Fox / The Pack stay readable over portraits */
+.battle-section--rivalry .battle-card__inner::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 62%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.48) 28%,
+    rgba(0, 0, 0, 0.82) 58%,
+    rgba(0, 0, 0, 0.95) 100%
+  );
+}
+
+/* Portrait fills the card; copy sits over the lower gradient (layout) */
+.battle-section--rivalry .battle-card__portrait {
+  position: absolute;
+  inset: 0 0 0 0;
+  z-index: 0;
+  width: auto;
+  height: auto;
+  max-width: none;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent !important;
+  pointer-events: none;
+  overflow: hidden;
+}
+.battle-section--rivalry .battle-card--fox .battle-card__portrait--fox.battle-card__fox-hero,
+.battle-section--rivalry .battle-card--cubs .battle-card__portrait--cubs {
+  position: absolute !important;
+  inset: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  display: block !important;
+  align-items: stretch;
+  justify-content: stretch;
+}
+.battle-section--rivalry .battle-card__fox-center {
+  width: 100%;
+  height: 78%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 1%;
+  box-sizing: border-box;
+  background: transparent !important;
+  background-image: none !important;
+}
+.battle-section--rivalry .battle-card__fox-img {
+  display: block;
+  width: auto;
+  max-width: min(100%, 560px);
+  height: 100%;
+  object-fit: contain;
+  object-position: center top;
+  pointer-events: none;
+}
+.battle-section--rivalry .cubs-portrait-wrap {
+  width: 100%;
+  height: 76%;
+  display: block;
+  padding: 0;
+  box-sizing: border-box;
+}
+.battle-section--rivalry .cubs-portrait-wrap picture,
+.battle-section--rivalry .cubs-portrait,
+.battle-section--rivalry .battle-card--cubs .battle-card__portrait--cubs picture > img,
+.battle-section--rivalry .battle-card--cubs .battle-card__portrait--cubs picture > img.cubs-portrait {
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: auto !important;
+  object-fit: cover !important;
+  object-position: center 8% !important;
+  display: block;
+}
+.battle-section--rivalry .cubs-portrait-caption { display: none; }
+
+.battle-section--rivalry .battle-card__identity,
+.battle-section--rivalry .battle-card__pick,
+.battle-section--rivalry .battle-card__foot {
+  position: relative;
+  z-index: 3;
+  margin-left: 20px;
+  margin-right: 20px;
+  text-align: left;
+  align-self: stretch;
+  width: auto;
+  max-width: none;
+}
+.battle-section--rivalry .battle-card__identity {
+  margin-bottom: 14px;
+}
+.battle-section--rivalry .battle-card__faction { display: none; }
+.battle-section--rivalry .battle-card__name {
+  margin: 0;
+  font-family: var(--font-display), 'Playfair Display', Georgia, serif;
+  font-size: clamp(36px, 4.2vw, 52px);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--rv-teal);
+  letter-spacing: -0.02em;
+}
+.battle-section--rivalry .battle-card--cubs .battle-card__name {
+  color: var(--rv-pack);
+}
+.battle-section--rivalry .battle-card__name-accent,
+.battle-section--rivalry .battle-card__name-accent--pack {
+  color: inherit;
+}
+.battle-section--rivalry .battle-card__descriptor {
+  margin: 8px 0 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rv-teal);
+  opacity: 0.92;
+}
+.battle-section--rivalry .battle-card--cubs .battle-card__descriptor {
+  color: var(--rv-pack);
+}
+
+.battle-section--rivalry .battle-card__pick {
+  padding: 14px 16px 16px;
+  border-radius: 16px;
+  background: rgba(6, 8, 12, 0.78);
+  border: 1px solid rgba(46, 230, 197, 0.45);
+  margin-bottom: 14px;
+}
+.battle-section--rivalry .battle-card--cubs .battle-card__pick {
+  border-color: rgba(224, 124, 75, 0.5);
+}
+
+/* layout: Vector 5 above label (y=0 → text y=8), ~90px wide, no calendar icon */
+.battle-section--rivalry .battle-card__pick-label {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--rv-teal);
+  text-align: left;
+}
+.battle-section--rivalry .battle-card--cubs .battle-card__pick-label {
+  color: var(--rv-pack);
+}
+.battle-section--rivalry .battle-card__pick-rule {
+  display: block;
+  width: 90px;
+  height: 1.5px;
+  border-radius: 0;
+  background: currentColor;
+  flex-shrink: 0;
+  opacity: 0.95;
+}
+.battle-section--rivalry .battle-card__pick-kicker {
+  display: block;
+  text-transform: uppercase;
+}
+.battle-card__pick-ico { display: none !important; }
+
+.battle-section--rivalry .battle-card__pick-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.battle-section--rivalry .battle-card__pick-horse {
+  font-family: var(--font-display), 'Playfair Display', Georgia, serif;
+  font-size: clamp(22px, 2.2vw, 28px);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+}
+.battle-section--rivalry .battle-card__pick-odds {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(46, 230, 197, 0.92);
+  color: #041014;
+  font-size: 12px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.battle-section--rivalry .battle-card__pick-odds--cta {
+  --liquid: var(--rv-pack, #e07c4b);
+  --ink: #1a0c08;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: transparent;
+  color: var(--rv-pack, #e07c4b);
+  border: 1px solid rgba(224, 124, 75, 0.7);
+  transition: color 0.4s, border-color 0.4s;
+}
+.battle-section--rivalry .battle-card__pick-odds--cta::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -25%;
+  width: 150%;
+  height: 200%;
+  background: var(--liquid);
+  border-radius: 45% 55% 0 0 / 25% 25% 0 0;
+  transform: translateY(100%);
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+  pointer-events: none;
+}
+.battle-section--rivalry .battle-card__pick-odds--cta:hover::before,
+.battle-section--rivalry .battle-card__pick-odds--cta:focus-visible::before {
+  transform: translateY(5%);
+  animation: sat-btn-liquid-wave 2.5s ease-in-out infinite 0.65s;
+}
+.battle-section--rivalry .battle-card__pick-odds--cta:hover,
+.battle-section--rivalry .battle-card__pick-odds--cta:focus-visible {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--rv-pack, #e07c4b);
+}
+
+.battle-section--rivalry .battle-card__record { display: none; }
+
+/* layout foot: season left · CTA right */
+.battle-section--rivalry .battle-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+.battle-section--rivalry .battle-card__season {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.58);
+}
+.battle-section--rivalry .battle-card__season-rule {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  border-radius: 0;
+  background: var(--rv-teal);
+  flex-shrink: 0;
+  opacity: 0.9;
+}
+.battle-section--rivalry .battle-card--cubs .battle-card__season-rule {
+  background: var(--rv-pack);
+}
+.battle-card__season-ico { display: none !important; }
+
+.battle-section--rivalry .battle-card__cta {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-top: 0;
+  align-self: auto;
+  text-align: right;
+  flex: 0 0 auto;
+}
+.battle-section--rivalry .battle-card__cta-text {
+  display: inline-flex;
+  align-items: center;
+  padding: 11px 18px;
+  border-radius: 999px;
+  border: 0;
+  color: #041014 !important;
+  font-size: 13px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #2ee6c5 0%, #14b8a0 100%);
+  box-shadow: 0 8px 20px rgba(46, 230, 197, 0.28);
+}
+.battle-section--rivalry .battle-card--cubs .battle-card__cta-text {
+  border: 0;
+  color: #1a0c08 !important;
+  background: linear-gradient(90deg, #e87c4b 0%, #c45a2e 100%);
+  box-shadow: 0 8px 20px rgba(224, 124, 75, 0.28);
+}
+
+.battle-section--rivalry .battle-card:hover {
+  transform: translateY(-4px);
+}
+.battle-section--rivalry .battle-card--fox:hover {
+  border-color: rgba(46, 230, 197, 0.7);
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.5), 0 0 40px rgba(46, 230, 197, 0.14);
+}
+.battle-section--rivalry .battle-card--cubs:hover {
+  border-color: rgba(224, 124, 75, 0.7);
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.5), 0 0 40px rgba(224, 124, 75, 0.14);
+}
+
+.battle-section--rivalry .battle-vs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: auto;
+  min-width: 0;
+  flex: 0 0 auto;
+  padding: 0;
+  gap: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.battle-section--rivalry .battle-vs::before {
+  content: none !important;
+  display: none !important;
+}
+.battle-section--rivalry .battle-vs__line,
+.battle-section--rivalry .battle-vs__score,
+.battle-section--rivalry .battle-vs__bar,
+.battle-section--rivalry .battle-vs__bar-labels,
+.battle-section--rivalry .battle-vs__caption {
+  display: none !important;
+}
+.battle-section--rivalry .battle-vs__badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(8, 10, 14, 0.92);
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+.battle-section--rivalry .battle-vs__text {
+  font-family: var(--font-display), 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--rv-gold);
+  letter-spacing: 0.04em;
+}
+
+.battle-section--rivalry .battle-footer {
+  margin-top: 28px;
+  border-top: 0;
+  text-align: center;
+}
+.battle-section--rivalry .battle-footer__link {
+  color: var(--rv-gold);
+  background: rgba(8, 10, 14, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 860px) {
+  .battle-section--rivalry {
+    overflow: visible;
+  }
+  .battle-section--rivalry .battle-arena {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .battle-section--rivalry .battle-vs {
+    order: 0;
+    margin: -8px 0;
+  }
+  .battle-section--rivalry .battle-card {
+    min-height: clamp(520px, 140vw, 640px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .battle-section--rivalry .battle-card__inner {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: inherit;
+    justify-content: flex-end;
+    padding-bottom: 16px;
+  }
+  .battle-section--rivalry .battle-card__portrait,
+  .battle-section--rivalry .battle-card--fox .battle-card__portrait--fox.battle-card__fox-hero,
+  .battle-section--rivalry .battle-card--cubs .battle-card__portrait--cubs {
+    position: absolute !important;
+    inset: 0 !important;
+    width: auto;
+    height: auto;
+    max-width: none;
+    flex: none;
+    margin: 0;
+  }
+  .battle-section--rivalry .battle-card__fox-center {
+    height: 68%;
+  }
+  .battle-section--rivalry .cubs-portrait-wrap {
+    height: 66%;
+  }
+  .battle-section--rivalry .battle-card__fox-img {
+    max-width: min(98%, 420px);
+    object-position: center top;
+  }
+  .battle-section--rivalry .cubs-portrait {
+    object-fit: cover !important;
+    object-position: center 12% !important;
+  }
+  .battle-section--rivalry .battle-card__identity,
+  .battle-section--rivalry .battle-card__pick,
+  .battle-section--rivalry .battle-card__foot {
+    margin-left: 16px;
+    margin-right: 16px;
+    text-align: left;
+    align-self: stretch;
+    max-width: none;
+  }
+  .battle-section--rivalry .battle-card__identity {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  .battle-section--rivalry .battle-card__name {
+    font-size: 32px;
+  }
+  .battle-section--rivalry .battle-card__foot {
+    flex-wrap: wrap;
+  }
+  .battle-section--rivalry .battle-card__cta {
+    margin: 0;
+    align-self: auto;
+  }
+  .battle-section--rivalry .battle-vs__badge {
+    width: 56px;
+    height: 56px;
+  }
+  .battle-section--rivalry .battle-header {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0 4px 8px;
+  }
+}

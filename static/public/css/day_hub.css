@@ -1,26 +1,156 @@
 /* Day Hub — Today tab on the landing hero. Scoped under .day-hub. */
 
 .day-hub {
-  background: #06070d;
+  position: relative;
   color: #fff;
   font-family: inherit;
+  border-bottom: 1px solid rgba(242, 236, 223, 0.1);
+  /* Full-band atmosphere — not only on the cream-card strip (avoids seam/sliver) */
+  background-color: #030b16;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(3, 11, 22, 0.78) 0%,
+      rgba(3, 11, 22, 0.55) 42%,
+      rgba(3, 11, 22, 0.82) 100%
+    ),
+    url("../img/day-hub-bg.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
 }
 
-/* ── BAND 1 · Day header strip ───────────────────────────────── */
-.day-hub__header {
-  background: linear-gradient(180deg, rgba(74, 222, 128, 0.06) 0%, rgba(6, 7, 13, 0) 100%);
-  border-bottom: 1px solid rgba(74, 222, 128, 0.18);
+/* ── BAND 0 · Intro headline (layout “Today’s Racing”) ───────── */
+.day-hub__intro {
+  padding: 40px 0 8px;
 }
-.day-hub__header-inner {
-  max-width: 1240px;
+.day-hub__intro-inner {
+  max-width: var(--max-w);
   margin: 0 auto;
-  padding: 18px 24px 16px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px 24px;
-  align-items: flex-end;
-  justify-content: space-between;
+  padding: 0 var(--page-gutter);
+  box-sizing: border-box;
 }
+.day-hub__intro-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #c9a227;
+  margin-bottom: 14px;
+}
+.day-hub__intro-rule {
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.85;
+}
+.day-hub__intro-title {
+  margin: 0 0 12px;
+  max-width: 22em;
+  font-family: var(--font-display, "Playfair Display", Georgia, serif);
+  font-size: clamp(32px, 4.2vw, 48px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.day-hub__intro-accent {
+  display: block;
+  color: #e8c558;
+}
+.day-hub__intro-sub {
+  margin: 0;
+  max-width: 42em;
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ── BAND 1 · Status capsule + meeting chips ─────────────────── */
+.day-hub__header {
+  background: transparent;
+  border-bottom: 0;
+  padding: 20px 0 8px;
+}
+.day-hub__header-inner,
+.day-hub__status {
+  width: calc(100% - 2 * var(--page-gutter));
+  max-width: calc(var(--max-w) - 2 * var(--page-gutter));
+  margin: 0 auto;
+  padding: 10px 14px 10px 16px;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px 16px;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(8, 18, 24, 0.72);
+  border: 1px solid rgba(74, 222, 128, 0.45);
+  border-radius: 999px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  box-sizing: border-box;
+}
+.day-hub__status::-webkit-scrollbar {
+  display: none;
+}
+.day-hub__status-meta {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px 10px;
+  min-width: 0;
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  white-space: nowrap;
+}
+.day-hub__status-cal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(74, 222, 128, 0.12);
+  color: #4ade80;
+  flex-shrink: 0;
+}
+.day-hub__status-today {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+}
+.day-hub__status-today em {
+  font-style: normal;
+  color: #4ade80;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-right: 4px;
+}
+.day-hub__status-sep {
+  color: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+}
+.day-hub__status-counts {
+  white-space: nowrap;
+}
+.day-hub__status-counts em {
+  font-style: normal;
+  color: #4ade80;
+  font-weight: 700;
+}
+
 .day-hub__title-block { min-width: 0; }
 .day-hub__kicker {
   display: inline-block;
@@ -46,17 +176,18 @@
 
 .day-hub__meetings {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
   align-items: center;
+  flex-shrink: 0;
 }
 .day-hub__chip {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 14px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(212, 175, 55, 0.20);
+  padding: 7px 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
   color: rgba(255, 255, 255, 0.92);
   font-size: 13px;
@@ -73,9 +204,14 @@
 .day-hub__chip-count {
   font-size: 11px;
   font-weight: 700;
-  padding: 2px 7px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
   border-radius: 999px;
-  background: rgba(212, 175, 55, 0.18);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 175, 55, 0.22);
   color: var(--c-gold, #D4AF37);
 }
 .day-hub__chip--finished {
@@ -89,11 +225,13 @@
 
 /* ── BAND 2 · Dual hero cards ────────────────────────────────── */
 .day-hub__hero {
-  padding: 24px 24px 8px;
+  padding: 20px 0 28px;
 }
 .day-hub__hero-inner {
-  max-width: 1240px;
+  max-width: var(--max-w);
   margin: 0 auto;
+  padding: 0 var(--page-gutter);
+  box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
@@ -105,18 +243,94 @@
   flex-direction: column;
   gap: 12px;
   padding: 22px 22px 20px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025) 0%, rgba(255, 255, 255, 0.01) 100%);
+  background-color: #030b16;
+  background-image:
+    linear-gradient(180deg, rgba(3, 11, 22, 0.72) 0%, rgba(3, 11, 22, 0.92) 100%);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   border: 1px solid rgba(255, 255, 255, 0.10);
-  border-radius: 14px;
+  border-radius: 16px;
   overflow: hidden;
+  isolation: isolate;
+}
+.day-card > * {
+  position: relative;
+  z-index: 1;
 }
 .day-card--featured {
-  border-color: rgba(212, 175, 55, 0.35);
-  background: linear-gradient(180deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.015) 100%);
+  border-color: rgba(212, 175, 55, 0.45);
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.08);
+  /* Photo lives on ::before so it always edge-fills under tip/CTAs */
+  background-image: none;
+  background-color: #030b16;
+  /* Hero-style 3D tilt (JS sets rotateX/Y on pointermove) */
+  transform: perspective(760px) rotateX(0deg) rotateY(0deg);
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.25, 1);
+  will-change: transform;
+}
+.day-card--featured.is-tilting,
+.day-card--next-off.is-tilting {
+  transition: transform 0.08s linear;
+}
+@media (prefers-reduced-motion: reduce) {
+  .day-card--featured,
+  .day-card--next-off {
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+}
+.day-card--featured::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-color: #030b16;
+  background-image:
+    linear-gradient(
+      105deg,
+      rgba(3, 11, 22, 0.82) 0%,
+      rgba(3, 11, 22, 0.42) 48%,
+      rgba(3, 11, 22, 0.28) 100%
+    ),
+    url("../img/race-of-the-day-bg-bleed.png");
+  background-size: cover;
+  background-position: right center;
+  background-repeat: no-repeat;
 }
 .day-card--next-off {
-  border-color: rgba(74, 222, 128, 0.32);
-  background: linear-gradient(180deg, rgba(74, 222, 128, 0.07) 0%, rgba(74, 222, 128, 0.012) 100%);
+  border-color: rgba(74, 222, 128, 0.38);
+  box-shadow: 0 0 0 1px rgba(74, 222, 128, 0.06);
+  background-image: none;
+  background-color: #030b16;
+  transform: perspective(760px) rotateX(0deg) rotateY(0deg);
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.25, 1);
+  will-change: transform;
+}
+.day-card--next-off::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background-color: #030b16;
+  background-image:
+    linear-gradient(
+      105deg,
+      rgba(3, 11, 22, 0.82) 0%,
+      rgba(3, 11, 22, 0.42) 48%,
+      rgba(3, 11, 22, 0.28) 100%
+    ),
+    url("../img/next-off-bg.png");
+  background-size: cover;
+  background-position: right center;
+  background-repeat: no-repeat;
 }
 
 .day-card__header {
@@ -136,7 +350,13 @@
   color: var(--c-gold, #D4AF37);
 }
 .day-card__kicker--live { color: #4ade80; }
-.day-card__star { color: var(--c-gold, #D4AF37); font-size: 14px; }
+.day-card__star {
+  color: var(--c-gold, #D4AF37);
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+}
+.day-card__star svg { display: block; }
 .day-card__pulse {
   width: 9px; height: 9px;
   border-radius: 50%;
@@ -154,7 +374,7 @@
   letter-spacing: 0.10em;
   text-transform: uppercase;
   padding: 3px 10px 3px 6px;
-  border-radius: 4px;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.80);
   display: inline-flex;
@@ -173,7 +393,7 @@
 
 .day-card__time-row {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 10px;
 }
 .day-card__time {
@@ -182,6 +402,7 @@
   letter-spacing: -0.01em;
   color: #fff;
   font-feature-settings: 'tnum';
+  line-height: 1;
 }
 .day-card__course {
   font-size: 14px;
@@ -189,14 +410,16 @@
   color: rgba(255, 255, 255, 0.65);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  line-height: 1;
 }
 .day-card__name {
   margin: 0;
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(20px, 2.2vw, 26px);
+  font-size: clamp(17px, 1.55vw, 22px);
   font-weight: 700;
   color: #fff;
-  line-height: 1.2;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
 }
 
 .day-card__facts {
@@ -207,9 +430,10 @@
   gap: 8px 14px;
 }
 .day-card__facts > div {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
   padding: 8px 12px;
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -217,30 +441,31 @@
   min-width: 78px;
 }
 
-/* Stat-tile icon — small circular chip with a muted gold outline,
- * sits before the label/value stack. Gives the numbers something
- * to sit against so a scanner's eye lands on Runners/Prize before
- * reading the digit. */
+/* Upper: icon + label · Lower: value (no icon-column indent) */
+.day-card__fact-top {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
 .day-card__fact-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1px solid rgba(212, 175, 55, 0.32);
-  background: rgba(212, 175, 55, 0.08);
-  color: var(--c-gold, #D4AF37);
+  color: #d8b14a;
   flex-shrink: 0;
+  line-height: 0;
 }
-.day-card__fact-icon svg { width: 16px; height: 16px; }
+.day-card__fact-icon svg { width: 16px; height: 16px; display: block; }
+.day-card--next-off .day-card__fact-icon {
+  color: #d8b14a;
+}
+.day-card--featured .day-card__facts > div {
+  border-color: rgba(212, 175, 55, 0.28);
+}
+.day-card--next-off .day-card__facts > div {
+  border-color: rgba(74, 222, 128, 0.35);
+}
 
-.day-card__fact-body {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
 .day-card__facts dt {
   font-size: 9px;
   font-weight: 700;
@@ -251,6 +476,7 @@
 }
 .day-card__facts dd {
   margin: 0;
+  padding: 0;
   font-size: 14px;
   font-weight: 700;
   color: #fff;
@@ -300,8 +526,8 @@
 /* Fox portrait — circular chip on the left of the tip callout,
  * face-framed so his tweed collar doesn't crop over the face. */
 .day-card__tip-portrait {
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   overflow: hidden;
   background: #fff;
@@ -338,9 +564,11 @@
 
 .day-card__tip-fox {
   color: var(--c-gold, #D4AF37);
-  font-size: 11px;
-  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
 }
+.day-card__tip-fox svg { display: block; }
 
 .day-card__tip-horse {
   font-family: "Playfair Display", Georgia, serif;
@@ -352,6 +580,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.day-card__tip-note {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.62);
 }
 
 .day-card__tip-odds {
@@ -380,7 +616,7 @@
 .day-card__cta {
   align-self: flex-start;
   padding: 9px 16px;
-  border-radius: 8px;
+  border-radius: 999px;
   background: var(--c-gold, #D4AF37);
   color: #06070d;
   font-size: 13px;
@@ -397,102 +633,492 @@
  * currentColor works for both filled (dark on gold) and ghost
  * (light on transparent). */
 .day-card__cta-icon {
-  width: 16px;
-  height: 16px;
+  width: 11px;
+  height: 15px;
   flex-shrink: 0;
 }
 
 /* Standalone .day-card__cta not inside an .actions wrapper keeps
  * its own top margin so we don't have to touch every other card. */
 .day-card > .day-card__cta { margin-top: 8px; }
-.day-card--next-off .day-card__cta { background: #4ade80; }
-.day-card__cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
-.day-card__cta--ghost {
-  background: transparent;
-  color: rgba(255, 255, 255, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.20);
+.day-card--next-off .day-card__cta:not(.day-card__cta--ghost) {
+  background: #4ade80;
+  color: #06070d;
 }
-.day-card__cta--ghost:hover { background: rgba(255, 255, 255, 0.05); }
+.day-card__cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
+/* Ghost CTAs: outline idle → theme liquid fill on hover */
+.day-card__cta--ghost {
+  --liquid: var(--c-gold, #d4af37);
+  --ink: #06070d;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  transition: color 0.4s, border-color 0.4s;
+}
+.day-card--featured .day-card__cta--ghost {
+  border-color: rgba(212, 175, 55, 0.55);
+  color: rgba(255, 255, 255, 0.92);
+}
+.day-card--next-off .day-card__cta--ghost {
+  --liquid: #4ade80;
+  border-color: rgba(74, 222, 128, 0.55);
+  color: rgba(255, 255, 255, 0.92);
+}
+.day-card__cta--ghost::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -25%;
+  width: 150%;
+  height: 200%;
+  background: var(--liquid);
+  border-radius: 45% 55% 0 0 / 25% 25% 0 0;
+  transform: translateY(100%);
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+  pointer-events: none;
+}
+.day-card__cta--ghost:hover::before,
+.day-card__cta--ghost:focus-visible::before,
+.day-card--next-off .day-card__cta--ghost:hover::before,
+.day-card--featured .day-card__cta--ghost:hover::before {
+  transform: translateY(5%);
+  animation: sat-btn-liquid-wave 2.5s ease-in-out infinite 0.65s;
+}
+.day-card__cta--ghost:hover,
+.day-card--next-off .day-card__cta--ghost:hover,
+.day-card--featured .day-card__cta--ghost:hover {
+  background: transparent;
+  color: var(--ink);
+  filter: none;
+  transform: none;
+}
+.day-card--next-off .day-card__cta--ghost:hover {
+  border-color: #4ade80;
+}
+.day-card--featured .day-card__cta--ghost:hover {
+  border-color: var(--c-gold, #d4af37);
+}
+.day-card__cta--ghost:hover .day-card__cta-icon,
+.day-card__cta--ghost:focus-visible .day-card__cta-icon {
+  filter: brightness(0);
+}
 .day-card__empty {
   margin: 0;
   color: rgba(255, 255, 255, 0.65);
   font-style: italic;
 }
 
-/* Inline countdown for Next Off card. */
+/* Inline countdown for Next Off card — layout: 00 : 01 : 35 (no hrs/min/sec labels). */
 .day-hub-countdown {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  background: rgba(0, 0, 0, 0.35);
-  border-radius: 8px;
+  gap: 10px;
+  padding: 12px 18px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  border-radius: 10px;
   font-feature-settings: 'tnum';
   margin-top: 4px;
   align-self: flex-start;
 }
-.day-hub-cd__unit { display: inline-flex; flex-direction: column; align-items: center; min-width: 32px; }
-.day-hub-cd__num  { font-size: 18px; font-weight: 800; color: #4ade80; line-height: 1; }
-.day-hub-cd__lbl  { font-size: 8px;  font-weight: 700; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(255, 255, 255, 0.50); margin-top: 2px; }
-.day-hub-cd__sep  { font-size: 16px; font-weight: 700; color: rgba(74, 222, 128, 0.55); }
+.day-hub-cd__num {
+  font-size: 22px;
+  font-weight: 800;
+  color: #7dffa8;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  min-width: 1.6ch;
+  text-align: center;
+}
+.day-hub-cd__lbl { display: none; }
+.day-hub-cd__unit { display: contents; }
+.day-hub-cd__sep {
+  font-size: 20px;
+  font-weight: 700;
+  color: #7dffa8;
+  opacity: 0.85;
+  line-height: 1;
+}
 
-/* ── BAND 3 · Race grid ─────────────────────────────────────── */
-.day-hub__grid-section { padding: 18px 24px 24px; }
-.day-hub__grid-inner   { max-width: 1240px; margin: 0 auto; }
+/* ── BAND 3 · Race grid — white “Today’s Card” panel (layout) ── */
+.day-hub__grid-section {
+  padding: 48px 0 56px;
+  /* Inherit continuous .day-hub photo — do not restart bg here */
+  background: transparent;
+}
+
+.day-hub__card {
+  /* Match landing hero content rail (fox/picks), not wider than header */
+  width: calc(100% - 2 * var(--page-gutter));
+  max-width: calc(var(--max-w) - 2 * var(--page-gutter));
+  margin: 0 auto;
+  background: #f7f4ec;
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  border-radius: 28px;
+  padding: 28px 28px 32px;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+  box-sizing: border-box;
+}
+
+/* Same element as .day-hub__card — keep rail width */
+.day-hub__grid-inner.day-hub__card {
+  width: calc(100% - 2 * var(--page-gutter));
+  max-width: calc(var(--max-w) - 2 * var(--page-gutter));
+  margin: 0 auto;
+}
 
 .day-hub__grid-head {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
-  align-items: center;
+  gap: 16px;
+  align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 22px;
 }
+
+.day-hub__grid-titles {
+  min-width: 0;
+}
+
+.day-hub__grid-kicker {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #c9a227;
+  margin-bottom: 6px;
+}
+
 .day-hub__grid-title {
   margin: 0;
-  font-size: 18px;
+  font-family: var(--font-display, "Playfair Display", Georgia, serif);
+  font-size: clamp(28px, 3.5vw, 40px);
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.92);
-  letter-spacing: 0.02em;
+  color: #14161f;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
-.day-hub__filters { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.day-hub__filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .day-hub__filter {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 13px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 9px 16px;
+  background: #ebe6da;
+  border: 1px solid transparent;
   border-radius: 999px;
-  color: rgba(255, 255, 255, 0.70);
+  color: #3a3f4b;
   font-family: inherit;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
 }
-.day-hub__filter:hover { background: rgba(255, 255, 255, 0.07); color: #fff; }
-.day-hub__filter.is-active {
-  background: rgba(212, 175, 55, 0.18);
-  border-color: var(--c-gold, #D4AF37);
-  color: #fff;
-}
-.day-hub__filter-n {
-  font-size: 10px;
-  padding: 1px 6px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.10);
-  color: rgba(255, 255, 255, 0.85);
-}
-.day-hub__filter.is-active .day-hub__filter-n { background: rgba(212, 175, 55, 0.30); color: #fff; }
 
-/* Picker-tile overrides for the day hub. We adopt the racecards
-   picker's .rp-meeting / .rp-race look directly and only extend it
-   with the extra states (live, fox, featured) the picker doesn't ship. */
-.day-hub__rp-grid { margin-top: 4px; }
-.day-hub__rp-meeting.is-finished { opacity: 0.72; }
-.day-hub__rp-meeting.is-hidden    { display: none; }
+.day-hub__filter:hover {
+  background: #e2dccf;
+  color: #14161f;
+}
+
+.day-hub__filter.is-active {
+  background: #14161f;
+  border-color: #d4af37;
+  color: #e8c558;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.35), 0 0 18px rgba(212, 175, 55, 0.25);
+}
+
+.day-hub__filter-n {
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgba(20, 22, 31, 0.08);
+  color: inherit;
+}
+
+.day-hub__filter.is-active .day-hub__filter-n {
+  background: rgba(212, 175, 55, 0.2);
+  color: #f5d76e;
+}
+
+/* Two-column body: courses | races */
+.day-hub__card-body {
+  display: grid;
+  grid-template-columns: minmax(200px, 260px) 1px minmax(0, 1fr);
+  gap: 0 22px;
+  align-items: start;
+  min-height: 280px;
+}
+
+.day-hub__courses {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 4px;
+}
+
+.day-hub__card-body::before {
+  content: "";
+  grid-column: 2;
+  grid-row: 1;
+  width: 1px;
+  align-self: stretch;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(212, 175, 55, 0.55) 12%,
+    rgba(212, 175, 55, 0.55) 88%,
+    transparent 100%
+  );
+  justify-self: center;
+}
+
+.day-hub__races-pane {
+  grid-column: 3;
+  min-width: 0;
+}
+
+.day-hub__course {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #14161f;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.day-hub__course-ico {
+  display: none;
+  width: 40px;
+  height: 27px;
+  object-fit: contain;
+  object-position: left center;
+  flex-shrink: 0;
+}
+
+.day-hub__course-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: inherit;
+}
+
+.day-hub__course-meta {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(20, 22, 31, 0.45);
+  white-space: nowrap;
+}
+
+.day-hub__course:hover {
+  background: rgba(20, 22, 31, 0.05);
+}
+
+.day-hub__course.is-active {
+  grid-template-columns: 40px 1fr auto;
+  background: #14161f;
+  color: #f5ead5;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.35);
+}
+
+.day-hub__course.is-active .day-hub__course-ico {
+  display: block;
+}
+
+.day-hub__course.is-active .day-hub__course-meta {
+  color: #d4af37;
+}
+
+/* Meeting panels inside white card */
+.day-hub__rp-grid {
+  margin-top: 0;
+}
+
+.day-hub__rp-meeting {
+  display: none;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+}
+
+.day-hub__rp-meeting.is-active {
+  display: block;
+}
+
+.day-hub__rp-meeting.is-hidden {
+  display: none !important;
+}
+
+.day-hub__rp-meeting .rp-meeting__head {
+  display: none;
+}
+
+.day-hub__rp-meeting .rp-races {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.day-hub__rp-race {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px 14px;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px solid rgba(20, 22, 31, 0.1);
+  border-radius: 12px;
+  color: #14161f;
+  text-decoration: none;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+}
+
+.day-hub__rp-race::before {
+  display: none;
+}
+
+.day-hub__rp-race:hover,
+.day-hub__rp-race:focus-visible {
+  border-color: rgba(212, 175, 55, 0.55);
+  background: #fffdf6;
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.2);
+}
+
+.day-hub__rp-race.rp-race--next,
+.day-hub__rp-race.rp-race--featured,
+.day-hub__rp-meeting.is-active .day-hub__rp-race:first-child {
+  background: #f7efd4;
+  border-color: rgba(212, 175, 55, 0.55);
+}
+
+.day-hub__rp-race .rp-race__time {
+  font-size: 15px;
+  font-weight: 800;
+  color: #14161f;
+  font-variant-numeric: tabular-nums;
+}
+
+.day-hub__rp-race .rp-race__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1c2030;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.35;
+}
+
+.day-hub__rp-race .rp-race__chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.day-hub__rp-race .rp-race__badge--next {
+  background: #1f8f5f;
+  color: #fff;
+  border: 0;
+}
+
+.day-hub__rp-race .rp-star {
+  color: #d4af37;
+}
+
+/* FOX → affordance (layout) */
+.day-hub__rp-race::after {
+  content: "FOX →";
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #c9a227;
+  white-space: nowrap;
+}
+
+.day-hub__empty-filter {
+  color: rgba(20, 22, 31, 0.55);
+  margin: 16px 0 0;
+}
+
+@media (max-width: 900px) {
+  .day-hub__card {
+    padding: 20px 16px 24px;
+    border-radius: 20px;
+  }
+
+  .day-hub__card-body {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .day-hub__card-body::before {
+    display: none;
+  }
+
+  .day-hub__courses {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .day-hub__course,
+  .day-hub__course.is-active {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: auto;
+    max-width: 100%;
+    grid-template-columns: unset;
+    overflow: hidden;
+  }
+
+  .day-hub__course-ico,
+  .day-hub__course.is-active .day-hub__course-ico {
+    display: none !important;
+  }
+
+  .day-hub__races-pane {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 720px) {
+  .day-hub__grid-section {
+    padding: 28px 0 36px;
+  }
+
+  .day-hub__rp-race {
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+    gap: 8px 10px;
+  }
+
+  .day-hub__rp-race .rp-race__chips {
+    grid-column: 2 / -1;
+  }
+}
 
 /* Meeting-name link — routes to /races/meeting/<slug>/<date>/full/.
    Subtle by default (inherits the .rp-meeting__name display-serif),
@@ -563,12 +1189,17 @@
 }
 
 /* ── BAND 4 · Movers ──────────────────────────────────────── */
-.day-hub__movers { padding: 0 24px 16px; }
-.day-hub__movers-inner { max-width: 1240px; margin: 0 auto; }
+.day-hub__movers { padding: 0 0 16px; }
+.day-hub__movers-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--page-gutter);
+  box-sizing: border-box;
+}
 
 /* ── Whole-day empty state ────────────────────────────────── */
 .day-hub__empty {
-  padding: 60px 24px 80px;
+  padding: 60px 0 80px;
   text-align: center;
 }
 .day-hub__empty-inner { max-width: 480px; margin: 0 auto; }
@@ -583,6 +1214,14 @@
 
 /* ── Responsive ──────────────────────────────────────────── */
 @media (max-width: 880px) {
+  .day-hub__intro { padding: 28px 0 4px; }
+  .day-hub__intro-title { max-width: none; }
+  .day-hub__header { padding: 16px 0 4px; }
+  .day-hub__header-inner,
+  .day-hub__status {
+    border-radius: 18px;
+    align-items: center;
+  }
   .day-hub__hero-inner { grid-template-columns: 1fr; }
   .day-row__link {
     grid-template-columns: 56px 1fr 100px;
@@ -599,11 +1238,56 @@
   .day-row__runners  { grid-area: runners; text-align: right; }
   .day-row__status   { grid-area: status; }
 }
+@media (max-width: 720px) {
+  .day-card              { padding: 14px 14px 12px; border-radius: 18px; }
+
+  .day-card__time {
+    font-size: 24px;
+  }
+  .day-card__time-row {
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .day-card__name {
+    margin-top: 2px;
+    font-size: 15px;
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .day-card__facts {
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .day-card__facts > div {
+    padding: 6px 10px;
+    border-radius: 12px;
+    min-width: 0;
+    flex: 1 1 40%;
+  }
+  .day-card__actions {
+    gap: 8px;
+  }
+  .day-card__cta {
+    border-radius: 999px;
+    padding: 11px 14px;
+    font-size: 13px;
+  }
+  .day-card__tip {
+    border-radius: 14px;
+    padding: 10px 12px;
+  }
+}
+
 @media (max-width: 480px) {
-  .day-hub__header-inner { padding: 14px 16px 12px; }
-  .day-hub__hero         { padding: 14px 16px 4px; }
-  .day-card              { padding: 16px 16px 14px; }
-  .day-hub__grid-section { padding: 12px 16px 16px; }
+  .day-hub__intro { padding: 24px 0 0; }
+  .day-hub__header { padding: 12px 0 0; }
+  .day-hub__header-inner,
+  .day-hub__status { padding: 12px 14px; border-radius: 16px; }
+  .day-hub__hero         { padding: 14px 0 20px; }
+  .day-hub__grid-section { padding: 24px 0 32px; }
 }
 
 /* ── Mobile-only accordion for the meetings list ─────────────
@@ -670,7 +1354,7 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   VARIANT A — Elevated cards UX revamp.
+   VARIANT A — Elevated cards UX restyle.
 
    Solves the dark-on-dark legibility crisis: tile borders were 6%
    white opacity (invisible), meeting backgrounds 1.5% opacity
@@ -806,6 +1490,7 @@
   font-size: 11px;
   padding: 3px 9px;
   letter-spacing: 0.08em;
+  border-radius: 999px;
 }
 
 /* Resulted tiles — fade the content but keep the band subtle. */
@@ -882,3 +1567,283 @@
   .day-hub__rp-race .rp-race__time { font-size: 18px; }
   .day-hub__rp-race .rp-race__name { font-size: 14px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   WHITE CARD OVERRIDES — win over VARIANT A / accordion dark rules
+   when the layout “Today’s Card” panel (.day-hub__card) is present.
+═══════════════════════════════════════════════════════════════ */
+.day-hub__card .day-hub__rp-meeting {
+  display: none;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+  transform: none;
+}
+.day-hub__card .day-hub__rp-meeting:hover {
+  border-color: transparent;
+  background: transparent;
+}
+.day-hub__card .day-hub__rp-meeting.has-next {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+.day-hub__card .day-hub__rp-meeting.is-active {
+  display: block;
+}
+.day-hub__card .day-hub__rp-meeting.is-hidden {
+  display: none !important;
+}
+.day-hub__card .day-hub__rp-meeting .rp-meeting__head {
+  display: none;
+}
+.day-hub__card .day-hub__rp-meeting .rp-races {
+  display: flex !important;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 0;
+  grid-template-columns: unset;
+}
+.day-hub__card .day-hub__rp-race {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px 14px;
+  position: relative;
+  padding: 14px 16px;
+  background: #fff;
+  border: 1px solid rgba(20, 22, 31, 0.1);
+  border-radius: 12px;
+  color: #14161f;
+  overflow: visible;
+  transform: none;
+  box-shadow: none;
+}
+.day-hub__card .day-hub__rp-race::before {
+  display: none;
+  content: none;
+}
+.day-hub__card .day-hub__rp-race::after {
+  content: "FOX →";
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #c9a227;
+  white-space: nowrap;
+}
+.day-hub__card .day-hub__rp-race:hover,
+.day-hub__card .day-hub__rp-race:focus-visible {
+  border-color: rgba(212, 175, 55, 0.55);
+  background: #fffdf6;
+  transform: none;
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.2);
+}
+.day-hub__card .day-hub__rp-race.rp-race--next,
+.day-hub__card .day-hub__rp-race.rp-race--featured,
+.day-hub__card .day-hub__rp-meeting.is-active .day-hub__rp-race:first-child {
+  background: #f7efd4;
+  border-color: rgba(212, 175, 55, 0.55);
+}
+.day-hub__card .day-hub__rp-race .rp-race__time {
+  font-size: 15px;
+  font-weight: 800;
+  color: #14161f;
+}
+.day-hub__card .day-hub__rp-race .rp-race__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1c2030;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.35;
+  display: block;
+  -webkit-line-clamp: unset;
+  -webkit-box-orient: unset;
+}
+.day-hub__card .day-hub__empty-filter {
+  color: rgba(20, 22, 31, 0.55);
+}
+
+@media (max-width: 720px) {
+  .day-hub__card .day-hub__grid-head {
+    position: static;
+    margin: 0 0 14px;
+    padding: 0;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 0;
+    gap: 10px;
+  }
+
+  .day-hub__card {
+    padding: 12px 10px 14px;
+    border-radius: 18px;
+  }
+
+  .day-hub__grid-section {
+    padding: 20px 0 28px;
+  }
+
+  .day-hub__grid-title {
+    font-size: 24px;
+  }
+
+  .day-hub__grid-kicker {
+    font-size: 10px;
+  }
+
+  .day-hub__filter {
+    min-height: 36px;
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  .day-hub__filters {
+    gap: 6px;
+  }
+
+  .day-hub__card .day-hub__rp-meeting {
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .day-hub__card .day-hub__rp-race {
+    display: block;
+    overflow: hidden; /* contain float */
+    min-height: 0;
+    padding: 10px 12px;
+    font-size: 0; /* collapse whitespace text nodes between spans */
+  }
+
+  .day-hub__card .day-hub__rp-race .rp-race__time {
+    float: left;
+    width: 48px;
+    margin: 0 8px -10px 0; /* negative bottom so line 2 wraps under time */
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .day-hub__card .day-hub__rp-race .rp-race__name {
+    /* Flows around floated time — line 2 uses space under time.
+       Do NOT set overflow:hidden (BFC kills wrap-around).
+       JS clampDayHubRaceTitles() enforces 2 lines + ellipsis. */
+    display: block;
+    overflow: visible;
+    white-space: normal;
+    font-size: 13px;
+    line-height: 1.35;
+    margin: 0;
+  }
+
+  .day-hub__card .day-hub__rp-race .rp-race__chips {
+    clear: both;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: auto;
+    max-width: calc(100% - 72px);
+    margin-top: 6px;
+    margin-right: 0;
+    font-size: 11px;
+    vertical-align: middle;
+  }
+
+  .day-hub__card .day-hub__rp-race::after {
+    content: "FOX →";
+    display: inline-flex;
+    align-items: center;
+    clear: none;
+    margin-top: 6px;
+    margin-left: 10px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #c9a227;
+    vertical-align: middle;
+  }
+
+  .day-hub__card .day-hub__meeting-toggle {
+    display: none;
+  }
+
+  .day-hub__card-body {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .day-hub__card-body::before {
+    display: none;
+  }
+
+  .day-hub__courses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-right: 0;
+  }
+
+  .day-hub__course,
+  .day-hub__course.is-active {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    width: auto;
+    max-width: calc(50% - 3px);
+    grid-template-columns: unset;
+    padding: 6px 9px;
+    border-radius: 999px;
+    background: #ebe6da;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .day-hub__course.is-active {
+    background: #14161f;
+    color: #e8c558;
+  }
+
+  .day-hub__course-ico,
+  .day-hub__course.is-active .day-hub__course-ico {
+    display: none !important;
+  }
+
+  .day-hub__course-name {
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .day-hub__course-meta {
+    font-size: 9px;
+    font-weight: 700;
+    white-space: nowrap;
+    flex: 0 0 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .day-hub__races-pane {
+    grid-column: 1;
+    min-width: 0;
+  }
+
+  .day-hub__filter {
+    border-radius: 999px;
+  }
+
+  .day-hub__card .day-hub__rp-race {
+    border-radius: 14px;
+  }
+}
+

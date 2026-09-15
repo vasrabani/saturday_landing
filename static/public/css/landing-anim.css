@@ -16,28 +16,36 @@
   inset: -15%;
   z-index: 0;
   pointer-events: none;
-  background:
-    conic-gradient(
-      from 0deg at 50% 45%,
-      rgba(212, 175, 55, 0.00) 0deg,
-      rgba(212, 175, 55, 0.28) 40deg,
-      rgba(192, 57, 43, 0.18) 140deg,
-      rgba(14, 165, 233, 0.12) 220deg,
-      rgba(212, 175, 55, 0.22) 300deg,
-      rgba(212, 175, 55, 0.00) 360deg
-    );
+  background: conic-gradient(
+    from 0deg at 50% 45%,
+    rgba(212, 175, 55, 0) 0deg,
+    rgba(212, 175, 55, 0.28) 40deg,
+    rgba(192, 57, 43, 0.18) 140deg,
+    rgba(14, 165, 233, 0.12) 220deg,
+    rgba(212, 175, 55, 0.22) 300deg,
+    rgba(212, 175, 55, 0) 360deg
+  );
   filter: blur(80px) saturate(1.1);
   opacity: 0.55;
   animation: aurora-drift 24s linear infinite;
   will-change: transform;
 }
 @keyframes aurora-drift {
-  0%   { transform: rotate(0deg)   scale(1.05); }
-  50%  { transform: rotate(180deg) scale(1.15); }
-  100% { transform: rotate(360deg) scale(1.05); }
+  0% {
+    transform: rotate(0deg) scale(1.05);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.15);
+  }
+  100% {
+    transform: rotate(360deg) scale(1.05);
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-fold__aurora { animation: none; opacity: 0.35; }
+  .hero-fold__aurora {
+    animation: none;
+    opacity: 0.35;
+  }
 }
 
 /* Ensure hero stacking makes sense: aurora below content. The
@@ -50,7 +58,10 @@
   overflow: hidden;
   max-width: 100%;
 }
-.hero-fold__section { position: relative; z-index: 1; }
+.hero-fold__section {
+  position: relative;
+  z-index: 1;
+}
 
 /* ══════════════════════════════════════════════════════════════
    2) SPLIT-TEXT HERO HEADLINE
@@ -74,12 +85,22 @@
   opacity: 1;
   animation: none;
 }
-.hf-title__word + .hf-title__word { margin-left: 0.28em; }
+.hf-title__word + .hf-title__word {
+  margin-left: 0.28em;
+}
 
 @keyframes hf-word-rise {
-  0%   { transform: translateY(110%); opacity: 0; }
-  60%  { opacity: 1; }
-  100% { transform: translateY(0);    opacity: 1; }
+  0% {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* "the Fox?" — solid gold with a one-off shine pass.
@@ -88,16 +109,16 @@
 .hf-title__main .hf-title__word {
   background-image: linear-gradient(
     100deg,
-    var(--c-gold)    0%,
-    var(--c-gold)    40%,
+    var(--c-gold) 0%,
+    var(--c-gold) 40%,
     var(--c-gold-lt) 50%,
-    var(--c-gold)    60%,
-    var(--c-gold)    100%
+    var(--c-gold) 60%,
+    var(--c-gold) 100%
   );
   background-size: 250% 100%;
   background-position: 30% 0;
   -webkit-background-clip: text;
-          background-clip: text;
+  background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
   /* PR2 restraint pass — was: hf-word-rise + hf-shine animations.
@@ -107,13 +128,19 @@
   animation: none;
 }
 @keyframes hf-shine {
-  0%   { background-position: 100% 0; }
-  100% { background-position: -50% 0; }
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -50% 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hf-title__word {
-    transform: none; opacity: 1; animation: none;
+    transform: none;
+    opacity: 1;
+    animation: none;
     background: none;
     color: var(--c-text-100);
     -webkit-text-fill-color: currentColor;
@@ -136,8 +163,8 @@
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    rgba(212, 175, 55, 0.10),
-    rgba(212, 175, 55, 0.00)
+    rgba(212, 175, 55, 0.1),
+    rgba(212, 175, 55, 0)
   );
 }
 .scroll-progress__bar {
@@ -160,13 +187,19 @@
     transition: none;
   }
   @keyframes scroll-progress-fill {
-    from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .scroll-progress { display: none; }
+  .scroll-progress {
+    display: none;
+  }
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -189,16 +222,18 @@
 .btn-primary,
 .draw-machine__btn,
 [data-magnetic] {
-  transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.25, 1),
-              background 0.2s ease,
-              box-shadow 0.25s ease;
+  transition:
+    transform 0.25s cubic-bezier(0.2, 0.9, 0.25, 1),
+    background 0.2s ease,
+    box-shadow 0.25s ease;
   will-change: transform;
 }
 .btn-primary:hover,
 .draw-machine__btn:hover {
-  transition: transform 0.08s linear,
-              background 0.2s ease,
-              box-shadow 0.25s ease;
+  transition:
+    transform 0.08s linear,
+    background 0.2s ease,
+    box-shadow 0.25s ease;
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -215,7 +250,7 @@
    ══════════════════════════════════════════════════════════════ */
 [data-count-up] {
   font-variant-numeric: tabular-nums;
-  font-feature-settings: 'tnum';
+  font-feature-settings: "tnum";
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -234,8 +269,9 @@
 .picks-duel {
   transform: perspective(1400px) rotateX(0) rotateY(0);
   transform-style: preserve-3d;
-  transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.25, 1),
-              box-shadow 0.45s ease;
+  transition:
+    transform 0.45s cubic-bezier(0.2, 0.9, 0.25, 1),
+    box-shadow 0.45s ease;
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.45) inset,
     inset 0 1px 0 rgba(255, 235, 180, 0.12),
@@ -246,7 +282,9 @@
   will-change: transform;
 }
 .picks-duel.is-tilting {
-  transition: transform 0.08s linear, box-shadow 0.3s ease;
+  transition:
+    transform 0.08s linear,
+    box-shadow 0.3s ease;
 }
 
 /* Inner bevel — recessed well for the content */
@@ -264,17 +302,18 @@
     0 0 0 1px rgba(212, 175, 55, 0.22),
     0 0 26px rgba(212, 175, 55, 0.6),
     0 0 56px rgba(212, 175, 55, 0.28),
-    0 14px 28px rgba(0, 0, 0, 0.55),        /* new: cast shadow under */
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 14px 28px rgba(0, 0, 0, 0.55),
+    /* new: cast shadow under */ inset 0 1px 0 rgba(255, 255, 255, 0.22),
     inset 0 -3px 10px rgba(0, 0, 0, 0.55);
 }
 .picks-duel--visible .picks-duel__vs-badge {
   animation:
-    picksDuelVsPop  0.58s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both,
+    picksDuelVsPop 0.58s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both,
     picksDuelVsGlowZ 2.8s ease-in-out 0.7s infinite;
 }
 @keyframes picksDuelVsGlowZ {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateZ(28px) scale(1);
     box-shadow:
       0 0 0 1px rgba(212, 175, 55, 0.22),
@@ -305,7 +344,7 @@
 .picks-duel__half--cubs .picks-duel__horse {
   text-shadow:
     0 1px 0 rgba(0, 0, 0, 0.55),
-    0 0 18px rgba(212, 175, 55, 0.30),
+    0 0 18px rgba(212, 175, 55, 0.3),
     0 2px 6px rgba(0, 0, 0, 0.35);
 }
 
@@ -314,24 +353,40 @@
    linear gradient, so the card reads as lit from two sides. */
 .picks-duel__half--fox {
   background:
-    radial-gradient(circle at 18% 60%, rgba(45, 189, 122, 0.20), transparent 58%),
+    radial-gradient(
+      circle at 18% 60%,
+      rgba(45, 189, 122, 0.2),
+      transparent 58%
+    ),
     linear-gradient(118deg, rgba(26, 88, 68, 0.28) 0%, transparent 52%);
 }
 .picks-duel__half--cubs {
   background:
-    radial-gradient(circle at 82% 60%, rgba(255, 120, 72, 0.26), transparent 58%),
+    radial-gradient(
+      circle at 82% 60%,
+      rgba(255, 120, 72, 0.26),
+      transparent 58%
+    ),
     linear-gradient(242deg, rgba(110, 36, 18, 0.26) 0%, transparent 52%);
 }
 
 /* Turn on the spotlight when the half is hovered */
 .picks-duel__half--fox:hover {
   background:
-    radial-gradient(circle at 18% 60%, rgba(55, 210, 140, 0.30), transparent 62%),
-    linear-gradient(118deg, rgba(34, 110, 84, 0.40) 0%, transparent 52%);
+    radial-gradient(
+      circle at 18% 60%,
+      rgba(55, 210, 140, 0.3),
+      transparent 62%
+    ),
+    linear-gradient(118deg, rgba(34, 110, 84, 0.4) 0%, transparent 52%);
 }
 .picks-duel__half--cubs:hover {
   background:
-    radial-gradient(circle at 82% 60%, rgba(255, 150, 90, 0.42), transparent 62%),
+    radial-gradient(
+      circle at 82% 60%,
+      rgba(255, 150, 90, 0.42),
+      transparent 62%
+    ),
     linear-gradient(242deg, rgba(130, 45, 22, 0.42) 0%, transparent 52%);
 }
 
@@ -344,7 +399,9 @@
   align-items: center;
   gap: 4px;
   animation: cubsVoteBreathe 2.4s ease-in-out infinite;
-  transition: color 0.25s ease, letter-spacing 0.25s ease;
+  transition:
+    color 0.25s ease,
+    letter-spacing 0.25s ease;
 }
 .picks-duel__half--cubs .picks-duel__arrow {
   display: inline-block;
@@ -352,8 +409,13 @@
 }
 
 @keyframes cubsVoteBreathe {
-  0%, 100% { opacity: 0.80; }
-  50%      { opacity: 1; }
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .picks-duel__half--cubs:hover .picks-duel__sub--cta {
@@ -366,8 +428,13 @@
   animation: cubsArrowNudge 1s ease-in-out infinite;
 }
 @keyframes cubsArrowNudge {
-  0%, 100% { transform: translateX(0); }
-  50%      { transform: translateX(5px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(5px);
+  }
 }
 
 /* Styled vote count — number in gold italic Playfair,
@@ -383,11 +450,21 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .picks-duel { transform: none !important; transition: none; }
-  .picks-duel__vs-badge { animation: none !important; transform: translateZ(0); }
+  .picks-duel {
+    transform: none !important;
+    transition: none;
+  }
+  .picks-duel__vs-badge {
+    animation: none !important;
+    transform: translateZ(0);
+  }
   .picks-duel__half--cubs .picks-duel__sub--cta,
-  .picks-duel__half--cubs .picks-duel__arrow { animation: none !important; }
-  .picks-duel__readwhy { transition: none; }
+  .picks-duel__half--cubs .picks-duel__arrow {
+    animation: none !important;
+  }
+  .picks-duel__readwhy {
+    transition: none;
+  }
 }
 
 /* "Read why" pill — secondary editorial CTA on the Fox half.
@@ -417,29 +494,53 @@
   align-self: flex-end;
   margin-left: auto;
   padding: 4px 12px 4px 10px;
-  font-family: 'DM Sans', system-ui, sans-serif;
+  font-family: "DM Sans", system-ui, sans-serif;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.10em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--c-gold-lt, #F5D76E);
-  background: rgba(212, 175, 55, 0.08);
-  border: 1px solid rgba(212, 175, 55, 0.40);
+  color: var(--c-gold-lt, #f5d76e);
+  background: transparent;
+  border: 1px solid rgba(212, 175, 55, 0.4);
   border-radius: 999px;
   white-space: nowrap;
+  --liquid: var(--c-gold, #d4af37);
+  --ink: #06070d;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease,
-    color 0.18s ease;
+    color 0.4s,
+    border-color 0.4s,
+    transform 0.18s ease;
+}
+.picks-duel__readwhy::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -25%;
+  width: 150%;
+  height: 200%;
+  background: var(--liquid);
+  border-radius: 45% 55% 0 0 / 25% 25% 0 0;
+  transform: translateY(100%);
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+  pointer-events: none;
+}
+.picks-duel__readwhy:hover::before,
+.picks-duel__readwhy:focus-visible::before {
+  transform: translateY(5%);
+  animation: sat-btn-liquid-wave 2.5s ease-in-out infinite 0.65s;
 }
 .picks-duel__readwhy:hover,
 .picks-duel__readwhy:focus-visible {
-  background: rgba(212, 175, 55, 0.18);
-  border-color: rgba(212, 175, 55, 0.75);
-  color: #F8E58A;
+  background: transparent;
+  border-color: var(--c-gold, #d4af37);
+  color: var(--ink);
   transform: translateY(-1px);
+  filter: none;
   outline: none;
 }
 .picks-duel__readwhy-icon {
@@ -482,32 +583,56 @@
   align-items: center;
   gap: 7px;
   margin-top: 10px;
-  align-self: flex-end;
-  margin-left: auto;
+  align-self: flex-start;
+  margin-left: 0;
   padding: 4px 12px 4px 10px;
-  font-family: 'DM Sans', system-ui, sans-serif;
+  font-family: "DM Sans", system-ui, sans-serif;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.10em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #F0B07A;
-  background: rgba(204, 138, 90, 0.10);
-  border: 1px solid rgba(204, 138, 90, 0.45);
+  color: #f0b07a;
+  background: transparent;
+  border: 1px solid rgba(224, 124, 75, 0.55);
   border-radius: 999px;
   white-space: nowrap;
+  --liquid: #e07c4b;
+  --ink: #1a0c08;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease,
-    color 0.18s ease;
+    color 0.4s,
+    border-color 0.4s,
+    transform 0.18s ease;
+}
+.picks-duel__racecard::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -25%;
+  width: 150%;
+  height: 200%;
+  background: var(--liquid);
+  border-radius: 45% 55% 0 0 / 25% 25% 0 0;
+  transform: translateY(100%);
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: -1;
+  pointer-events: none;
+}
+.picks-duel__racecard:hover::before,
+.picks-duel__racecard:focus-visible::before {
+  transform: translateY(5%);
+  animation: sat-btn-liquid-wave 2.5s ease-in-out infinite 0.65s;
 }
 .picks-duel__racecard:hover,
 .picks-duel__racecard:focus-visible {
-  background: rgba(204, 138, 90, 0.22);
-  border-color: rgba(204, 138, 90, 0.78);
-  color: #FBC9A0;
+  background: transparent;
+  border-color: #e07c4b;
+  color: var(--ink);
   transform: translateY(-1px);
+  filter: none;
   outline: none;
 }
 .picks-duel__racecard-icon {
@@ -537,6 +662,31 @@
   }
 }
 
+/* Kill combined gold frame around Fox+Cubs (landing.css loads after hero-fold) */
+.picks-duel.picks-duel--split {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+  isolation: auto;
+}
+.picks-duel.picks-duel--split .picks-duel__inner {
+  box-shadow: none !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+/* Keep full article borders — do NOT half-radius / kill middle edges */
+.picks-duel.picks-duel--split .picks-duel__card--fox {
+  border: 1px solid rgba(240, 206, 107, 0.33) !important;
+  border-radius: 18px !important;
+}
+.picks-duel.picks-duel--split .picks-duel__card--cubs {
+  border: 1px solid rgba(216, 177, 74, 0.35) !important;
+  border-radius: 20px !important;
+}
+
 /* ══════════════════════════════════════════════════════════════
    8) VIEW TRANSITIONS (MPA — Chrome 126+, Safari 18)
    ══════════════════════════════════════════════════════════════
@@ -552,5 +702,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),
-  ::view-transition-new(root) { animation-duration: 0ms; }
+  ::view-transition-new(root) {
+    animation-duration: 0ms;
+  }
 }

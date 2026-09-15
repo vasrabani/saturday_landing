@@ -17,86 +17,135 @@
 
 .land-shelf {
   background: linear-gradient(180deg, #14141a 0%, #0b0e15 100%);
-  padding: 24px 0 32px;
+  padding: 40px 0 60px;
   border-top: 1px solid rgba(212, 175, 55, 0.05);
   border-bottom: 1px solid rgba(212, 175, 55, 0.05);
 }
 
 .land-shelf__inner {
-  max-width: 1120px;
+  max-width: var(--max-w);
   margin: 0 auto;
-  padding: 0 clamp(16px, 4vw, 32px);
+  padding: 0 var(--page-gutter);
+  box-sizing: border-box;
 }
 
-/* ── Kicker — the "Not voting? Start here." prompt ── */
+/* ── Kicker — title on line 1, subtitle on line 2 ── */
 .land-shelf__kicker {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  font-size: 10px;
+  gap: 6px;
+  font-size: 16px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   font-weight: 800;
   color: #d4af37;
-  margin: 0 0 14px;
+  margin: 0 0 28px;
+  text-align: center;
+}
+.land-shelf__kicker-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.land-shelf__kicker-sub {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #f5ead5;
+  margin: 0;
+  letter-spacing: 0.06em;
+  text-transform: none;
 }
 .land-shelf__kicker-dot {
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #d4af37;
   flex-shrink: 0;
   animation: land-shelf-blink 1.6s ease-in-out infinite;
 }
 @keyframes land-shelf-blink {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.35; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
-  .land-shelf__kicker-dot { animation: none; }
+  .land-shelf__kicker-dot {
+    animation: none;
+  }
 }
 
-/* ── Cards grid — three on desktop, stacks on narrow ── */
+/* ── Cards — horizontal scroll row ── */
 .land-shelf__cards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  /* Room for hover translateY so top border is not clipped */
+  padding: 12px 0;
+  margin-top: -2px;
+  margin-bottom: 20px;
+  scrollbar-width: none; /* Firefox — hide scrollbar, keep scroll */
+  /* Left stays on content rail; right bleeds to viewport edge */
+  box-sizing: border-box;
+  width: calc(100% + (100vw - 100%) / 2);
+  max-width: none;
 }
-@media (max-width: 720px) {
-  .land-shelf__cards {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
+.land-shelf__cards::-webkit-scrollbar {
+  display: none; /* Chrome/Safari — hide scrollbar */
+  height: 0;
+  width: 0;
 }
 
 /* ── Base card ─────────────────────────────────────────────────
    Visual styling driven by --shelf-accent. Defaults to gold
    (Mr Fox); persona modifiers below override per card. */
 .land-shelf-card {
-  --shelf-accent: #B8932F;
+  --shelf-accent: #b8932f;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   gap: 12px;
-  padding: 12px 14px 12px 12px;
+  flex: 0 0 min(320px, 82vw);
+  max-width: 360px;
+  scroll-snap-align: start;
+  padding: 18px 16px 16px 14px;
   background: rgba(212, 175, 55, 0.05);
   border: 1px solid rgba(212, 175, 55, 0.18);
   border-radius: 12px;
   text-decoration: none;
   color: #f5ead5;
   font-family: "DM Sans", "Inter", sans-serif;
-  transition: transform 180ms ease,
-              background 180ms ease,
-              border-color 180ms ease;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
 }
 .land-shelf-card:hover,
 .land-shelf-card:focus-visible {
   transform: translateY(-2px);
-  background: rgba(212, 175, 55, 0.10);
+  background: rgba(212, 175, 55, 0.1);
   border-color: var(--shelf-accent);
   outline: none;
   color: #f5ead5;
   text-decoration: none;
+}
+
+.land-shelf-card__main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
 }
 
 .land-shelf-card__avatar {
@@ -144,7 +193,14 @@
 }
 
 .land-shelf-card__arrow {
-  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--shelf-accent);
+  font-size: 14px;
   font-weight: 700;
   color: var(--shelf-accent);
   flex: 0 0 auto;
@@ -152,7 +208,110 @@
 }
 .land-shelf-card:hover .land-shelf-card__arrow,
 .land-shelf-card:focus-visible .land-shelf-card__arrow {
-  transform: translateX(4px);
+  transform: translateX(3px);
+}
+
+/* Card bottom row — icon + caption (layout) */
+.land-shelf-card__foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding-top: 2px;
+}
+.land-shelf-card__foot-icon {
+  flex: 0 0 auto;
+  display: block;
+}
+.land-shelf-card__foot-text {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(245, 234, 213, 0.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Footer CTA — "See all stories & angles" ── */
+.land-shelf__footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 4px;
+  width: 100%;
+}
+.land-shelf__footer-rule {
+  flex: 1 1 0;
+  min-width: 48px;
+  max-width: none;
+  height: 1px;
+  position: relative;
+  border: 0;
+}
+/* Left rule: fade in from left → solid near the button/dot */
+.land-shelf__footer-rule:first-child {
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(216, 177, 74, 0.15) 35%,
+    rgba(216, 177, 74, 0.75) 100%
+  );
+}
+/* Right rule: solid near button → fade out to right */
+.land-shelf__footer-rule:last-child {
+  background: linear-gradient(
+    to left,
+    transparent 0%,
+    rgba(216, 177, 74, 0.15) 35%,
+    rgba(216, 177, 74, 0.75) 100%
+  );
+}
+.land-shelf__footer-rule::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(216, 177, 74, 0.9);
+  transform: translateY(-50%);
+}
+.land-shelf__footer-rule:first-child::after {
+  right: 0;
+}
+.land-shelf__footer-rule:last-child::after {
+  left: 0;
+}
+
+.land-shelf-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  background: rgba(8, 10, 14, 0.55);
+  color: #d4af37;
+  text-decoration: none;
+  font-family: "DM Sans", "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+.land-shelf-all:hover,
+.land-shelf-all:focus-visible {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: #d4af37;
+  color: #f5d76e;
+  outline: none;
+  text-decoration: none;
 }
 
 /* ── Persona accents ──────────────────────────────────────────
@@ -172,4 +331,24 @@
   --shelf-accent: #87a07f;
   background: rgba(90, 120, 96, 0.08);
   border-color: rgba(90, 120, 96, 0.28);
+}
+
+/* ── Mobile: layout vertical stack ───────────────────────────── */
+@media (max-width: 700px) {
+  .land-shelf__cards {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow-x: visible;
+    overflow-y: visible;
+    scroll-snap-type: none;
+    gap: 12px;
+  }
+  .land-shelf-card {
+    flex: 0 0 auto;
+    max-width: none;
+    width: 100%;
+  }
+  .land-shelf-card__headline {
+    white-space: normal;
+  }
 }
