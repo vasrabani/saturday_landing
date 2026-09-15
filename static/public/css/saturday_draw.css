@@ -1,0 +1,488 @@
+/* Saturday Draw — section styles (.draw-section--machine) */
+
+.draw-section--machine {
+  --draw-gold: #d8b14a;
+  --draw-gold-soft: #f0ce6b;
+  --draw-ink: #f5f2ea;
+  --draw-muted: rgba(245, 242, 234, 0.62);
+  --draw-faint: rgba(245, 242, 234, 0.38);
+  --draw-red: #e23a32;
+  --draw-red-lt: #f04a40;
+  position: relative;
+  isolation: isolate;
+  background-color: #05080f;
+  /* layout: dark base + image ~58% opacity feel */
+  background-image:
+    linear-gradient(180deg, rgba(5, 8, 15, 0.28) 0%, rgba(5, 8, 15, 0.45) 45%, rgba(5, 8, 15, 0.72) 100%),
+    url("../img/saturday-draw/draw-bg.jpg");
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  padding: clamp(56px, 7vw, 96px) 0 clamp(64px, 8vw, 104px);
+  overflow: hidden;
+  border-top: 0;
+  color: var(--draw-ink);
+}
+
+.draw-section--machine .container {
+  max-width: var(--max-w, 1280px);
+  position: relative;
+  z-index: 1;
+}
+
+.draw-section--machine .draw-section__bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 45% at 50% 0%, rgba(216, 177, 74, 0.05), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(192, 57, 43, 0.06), transparent 55%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.draw-section--machine .draw-section__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      115deg,
+      transparent,
+      transparent 70px,
+      rgba(216, 177, 74, 0.02) 70px,
+      rgba(216, 177, 74, 0.02) 71px
+    );
+  opacity: 0.55;
+}
+
+.draw-section--machine .draw-header {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 36px;
+}
+
+.draw-section--machine .draw-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(216, 177, 74, 0.45);
+  background: rgba(8, 12, 20, 0.65);
+  font-family: ui-monospace, "IBM Plex Mono", Menlo, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--draw-gold);
+}
+
+.draw-section--machine .draw-kicker img {
+  display: block;
+  width: 24px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.draw-section--machine .draw-title {
+  margin: 0 0 14px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(30px, 4.5vw, 48px);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+
+.draw-section--machine .draw-title__accent,
+.draw-section--machine .draw-title em {
+  font-style: normal;
+  color: var(--draw-gold);
+  filter: none;
+}
+
+.draw-section--machine .draw-intro {
+  margin: 0 auto;
+  max-width: 640px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(240, 206, 107, 0.72);
+}
+
+.draw-section--machine .draw-intro em {
+  color: rgba(245, 242, 234, 0.92);
+  font-style: italic;
+  font-weight: 600;
+}
+
+.draw-section--machine .draw-machine-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto 40px;
+  max-width: 860px;
+}
+
+.draw-section--machine .draw-machine__outer-glow {
+  display: none;
+}
+
+.draw-section--machine .draw-machine {
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  background: rgba(8, 12, 20, 0.72);
+  border: 1px solid rgba(216, 177, 74, 0.35);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.45);
+}
+
+.draw-section--machine .draw-corner {
+  display: block;
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.draw-section--machine .draw-corner--tl {
+  top: 14px;
+  left: 14px;
+  border-top: 2px solid var(--draw-gold);
+  border-left: 2px solid var(--draw-gold);
+}
+
+.draw-section--machine .draw-corner--tr {
+  top: 14px;
+  right: 14px;
+  border-top: 2px solid var(--draw-gold);
+  border-right: 2px solid var(--draw-gold);
+}
+
+.draw-section--machine .draw-corner--bl {
+  bottom: 14px;
+  left: 14px;
+  border-bottom: 2px solid var(--draw-gold);
+  border-left: 2px solid var(--draw-gold);
+}
+
+.draw-section--machine .draw-corner--br {
+  bottom: 14px;
+  right: 14px;
+  border-bottom: 2px solid var(--draw-gold);
+  border-right: 2px solid var(--draw-gold);
+}
+
+.draw-section--machine .draw-machine__tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 22px 20px 8px;
+}
+
+.draw-section--machine .draw-machine__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: ui-monospace, "IBM Plex Mono", Menlo, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(240, 206, 107, 0.45);
+  cursor: default;
+}
+
+.draw-section--machine .draw-machine__tab.is-active {
+  color: var(--draw-gold-soft);
+}
+
+.draw-section--machine .draw-machine__tab-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--draw-gold);
+  box-shadow: 0 0 10px rgba(216, 177, 74, 0.55);
+  display: inline-block;
+}
+
+.draw-section--machine .draw-machine__tab:not(.is-active) .draw-machine__tab-dot {
+  display: inline-block;
+  opacity: 0.55;
+  box-shadow: none;
+}
+
+.draw-section--machine .draw-machine__window {
+  position: relative;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 24px 12px;
+  background: transparent;
+  border: 0;
+}
+
+.draw-section--machine .draw-machine__glow-inner {
+  position: absolute;
+  inset: 10% 18%;
+  background: radial-gradient(ellipse at center, rgba(216, 177, 74, 0.06), transparent 70%);
+  pointer-events: none;
+  transition: background 0.8s;
+}
+
+.draw-section--machine .draw-machine__glow-inner.active {
+  background: radial-gradient(ellipse at center, rgba(192, 57, 43, 0.12), rgba(216, 177, 74, 0.06), transparent 70%);
+}
+
+.draw-section--machine .draw-machine__content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  width: 100%;
+}
+
+.draw-section--machine .draw-machine__pre-label {
+  display: block;
+  margin: 0 0 10px;
+  font-family: ui-monospace, "IBM Plex Mono", Menlo, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(240, 206, 107, 0.78);
+}
+
+.draw-section--machine .draw-machine__pre-label::after {
+  content: "";
+  display: block;
+  width: 42px;
+  height: 1px;
+  margin: 14px auto 0;
+  background: rgba(216, 177, 74, 0.45);
+}
+
+.draw-section--machine .draw-machine__horse {
+  display: block;
+  min-height: 0;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 500;
+  color: var(--draw-gold);
+  filter: none;
+  letter-spacing: 0.01em;
+}
+
+.draw-section--machine .draw-machine__odds {
+  display: block;
+  margin-top: 8px;
+  min-height: 0;
+  font-size: 13px;
+  color: var(--draw-faint);
+}
+
+.draw-section--machine .draw-machine__action {
+  padding: 12px 28px 28px;
+}
+
+.draw-section--machine .draw-machine__btn {
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 16px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: var(--draw-red);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(192, 57, 43, 0.35);
+  transition: background 0.15s, transform 0.12s, box-shadow 0.2s, opacity 0.3s;
+}
+
+.draw-section--machine .draw-machine__btn:hover:not(:disabled) {
+  background: var(--draw-red-lt);
+  transform: translateY(-1px);
+}
+
+.draw-section--machine .draw-machine__btn:disabled,
+.draw-section--machine .draw-machine__btn.drawing {
+  opacity: 0.85;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.draw-section--machine .draw-machine__btn-text {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.draw-section--machine .draw-machine__btn-sub {
+  display: block;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.06em;
+  font-style: italic;
+}
+
+.draw-section--machine .draw-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0 0 28px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.draw-section--machine .draw-pillar {
+  position: relative;
+  overflow: hidden;
+  padding: 22px 22px 24px;
+  border-radius: 14px;
+  background: rgba(8, 12, 20, 0.55);
+  border: 1px solid rgba(245, 242, 234, 0.12);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.draw-section--machine .draw-pillar:hover {
+  background: rgba(216, 177, 74, 0.05);
+  border-color: rgba(216, 177, 74, 0.28);
+}
+
+.draw-section--machine .draw-pillar__watermark {
+  position: absolute;
+  top: -6px;
+  right: 8px;
+  z-index: 0;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(72px, 8vw, 96px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  /* Soft fill + quieter stroke (dimmer than before) */
+  color: rgba(160, 170, 190, 0.08);
+  -webkit-text-stroke: 1px rgba(200, 215, 235, 0.16);
+  text-stroke: 1px rgba(200, 215, 235, 0.16);
+  opacity: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.draw-section--machine .draw-pillar__num {
+  position: relative;
+  z-index: 1;
+  display: block;
+  margin-bottom: 12px;
+  font-family: ui-monospace, "IBM Plex Mono", Menlo, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--draw-gold);
+}
+
+.draw-section--machine .draw-pillar__title {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 10px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--draw-gold-soft);
+}
+
+.draw-section--machine .draw-pillar__text {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--draw-muted);
+}
+
+.draw-section--machine .draw-footer-cta {
+  text-align: left;
+}
+
+.draw-section--machine .draw-full-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: var(--draw-red);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 10px 28px rgba(192, 57, 43, 0.35);
+  transition: background 0.15s, transform 0.12s, box-shadow 0.2s;
+}
+
+.draw-section--machine .draw-full-btn:hover {
+  color: #fff;
+  background: var(--draw-red-lt);
+  border-color: transparent;
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(192, 57, 43, 0.45);
+}
+
+.draw-section--machine .draw-full-btn img {
+  display: block;
+  opacity: 1;
+  filter: brightness(0) invert(1);
+}
+
+@media (max-width: 900px) {
+  .draw-section--machine .draw-pillars {
+    grid-template-columns: 1fr;
+  }
+
+  .draw-section--machine .draw-machine__tabs {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  .draw-section--machine .draw-machine__tabs {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .draw-section--machine .draw-machine__action {
+    padding: 12px 16px 20px;
+  }
+
+  .draw-section--machine .draw-full-btn {
+    width: 100%;
+    min-height: 42px;
+    padding: 10px 16px;
+    gap: 8px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .draw-section--machine .draw-full-btn img {
+    width: 16px;
+    height: 8px;
+  }
+}

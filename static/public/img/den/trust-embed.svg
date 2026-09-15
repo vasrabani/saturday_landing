@@ -1,0 +1,15 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="67" height="66" viewBox="0 0 67 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame 465">
+<g id="fi:zap">
+<path id="Vector" d="M34.0683 18L22.4774 36H32.9092L31.7501 48L43.341 30H32.9092L34.0683 18Z" stroke="url(#paint0_linear_0_68)" stroke-width="2.835" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<path id="Ellipse 25" d="M33.5 1.5C51.1945 1.5 65.5 15.6242 65.5 33C65.5 50.3758 51.1945 64.5 33.5 64.5C15.8055 64.5 1.5 50.3758 1.5 33C1.5 15.6242 15.8055 1.5 33.5 1.5Z" stroke="#55CC75" stroke-width="3"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_68" x1="32.9092" y1="18" x2="32.9092" y2="48" gradientUnits="userSpaceOnUse">
+<stop stop-color="#67B864"/>
+<stop offset="0.5" stop-color="#55CC75"/>
+<stop offset="1" stop-color="#FAF7F0" stop-opacity="0.66"/>
+</linearGradient>
+</defs>
+</svg>

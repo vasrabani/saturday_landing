@@ -27,55 +27,133 @@
   line-height: 1.4;
 }
 
-/* ── Mobile variant: single-row tap target ─────────────────────── */
+/* ── Mobile variant: layout Race of the Day card ≤700px ─────────── */
 .today-strip__mobile {
-  display: none;   /* enabled at the bottom of this file for ≤700px */
-  align-items: center;
+  display: none; /* enabled at ≤700px */
+  flex-direction: column;
+  align-items: stretch;
   gap: 12px;
-  padding: 10px 16px;
+  /* Vertical only — .container supplies --page-gutter sides */
+  padding-top: 14px;
+  padding-bottom: 10px;
   text-decoration: none;
   color: inherit;
-  min-height: 48px;
 }
-.today-strip__mobile:active,
-.today-strip__mobile:focus {
-  background: rgba(255, 255, 255, 0.04);
+
+.today-strip__m-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px 16px;
+  align-items: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 16px;
+  border: 1px solid rgba(212, 175, 55, 0.38);
+  background: rgba(8, 12, 20, 0.55);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+}
+.today-strip__m-card:active,
+.today-strip__m-card:focus-visible {
   outline: none;
+  border-color: rgba(212, 175, 55, 0.65);
+  background: rgba(212, 175, 55, 0.06);
 }
-.today-strip__mobile-icon {
-  font-size: 20px;
-  flex-shrink: 0;
-  line-height: 1;
+
+.today-strip__m-date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 64px;
 }
-.today-strip__mobile-body {
-  display: flex; flex-direction: column;
-  min-width: 0;   /* allow inner ellipsis */
-  flex: 1;
+.today-strip__m-kicker {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: rgba(245, 242, 234, 0.88);
+  line-height: 1.2;
 }
-.today-strip__mobile-kicker {
+.today-strip__m-day {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 0.92;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.today-strip__m-race {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.today-strip__m-label {
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.16em;
   color: #d4af37;
-  line-height: 1.2;
 }
-.today-strip__mobile-line {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.92);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.today-strip__m-when {
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(245, 242, 234, 0.92);
 }
-.today-strip__mobile-arrow {
-  font-size: 18px;
-  color: rgba(212, 175, 55, 0.85);
-  flex-shrink: 0;
+.today-strip__m-when strong {
+  color: #d4af37;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.today-strip__m-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: rgba(245, 242, 234, 0.92);
+}
+
+.today-strip__m-next {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 0 2px 4px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(245, 242, 234, 0.78);
+}
+.today-strip__m-zap {
+  flex: 0 0 14px;
+  margin-top: 2px;
+  filter: brightness(0) saturate(100%) invert(72%) sepia(54%) saturate(450%)
+    hue-rotate(64deg) brightness(1.05);
+}
+.today-strip__m-next a {
+  color: rgba(245, 242, 234, 0.92);
+  text-decoration: none;
+}
+.today-strip__m-next a:hover {
+  color: #d4af37;
+}
+.today-strip__m-next strong {
+  color: #fff;
   font-weight: 700;
+}
+
+/* Legacy one-liner hooks (unused with new markup) */
+.today-strip__mobile-icon,
+.today-strip__mobile-body,
+.today-strip__mobile-kicker,
+.today-strip__mobile-line,
+.today-strip__mobile-arrow {
+  display: none;
 }
 
 /* ── Desktop variant: full 3-column strip ──────────────────────── */
 .today-strip__desktop {
-  padding: 18px 0;
+  /* Only vertical rhythm — keep .container horizontal --page-gutter */
+  padding-top: 18px;
+  padding-bottom: 18px;
 }
 .today-strip__inner {
   display: grid;
@@ -134,10 +212,19 @@
 }
 
 .today-strip__meta-col {
-  display: flex; flex-direction: column;
-  align-items: flex-end;
-  gap: 4px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px 14px;
   text-align: right;
+}
+.today-strip__meta-counts-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
   white-space: nowrap;
 }
 .today-strip__meta-counts {
@@ -204,6 +291,14 @@
    desktop variant is gone — the dedicated mobile markup replaces it
    so the hero stays above the fold on phones. */
 @media (max-width: 700px) {
-  .today-strip__desktop { display: none; }
-  .today-strip__mobile  { display: flex; }
+  .today-strip {
+    background: #05070c;
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+  }
+  .today-strip__desktop {
+    display: none;
+  }
+  .today-strip__mobile {
+    display: flex;
+  }
 }

@@ -106,10 +106,18 @@
   /* ── Layout ──────────────────────────────────────────────── */
   --max-w:  1280px;
   --nav-h:  60px;
+  /* Shared content rail — header, hero, and landing bands share this gutter */
+  --page-gutter: var(--space-5); /* 24px */
 
   /* Tell the UA our palette is dark so form controls, scrollbars
      and UA-styled elements match (avoids a white flash on load). */
   color-scheme: dark;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --page-gutter: var(--space-7); /* 48px — matches hero fold */
+  }
 }
 
 /* ── RESET ─────────────────────────────────────────────────── */
@@ -187,7 +195,7 @@ body.has-notif-banner .site-main { padding-top: calc(var(--nav-h, 60px) + 44px);
 #main-content:focus { outline: none; }
 
 /* ── LAYOUT ─────────────────────────────────────────────────── */
-.container { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--space-7); }
+.container { max-width: var(--max-w); margin: 0 auto; padding: 0 var(--page-gutter); }
 /* Premium section rhythm — 96px desktop / 64px mobile. Magazine
    pages run on more air than product pages; tight padding makes
    even high-quality content read 'shovelled in'. */
@@ -260,6 +268,17 @@ body.has-notif-banner .site-main { padding-top: calc(var(--nav-h, 60px) + 44px);
   border: 1px solid var(--c-border-gold);
 }
 .btn-outline-gold:hover { background: var(--c-gold-subtle); border-color: var(--c-gold); }
+
+/* Shared liquid-rise keyframes for outline→fill CTA hovers */
+@keyframes sat-btn-liquid-wave {
+  0%,
+  100% {
+    border-radius: 45% 55% 0 0 / 25% 25% 0 0;
+  }
+  50% {
+    border-radius: 55% 45% 0 0 / 20% 30% 0 0;
+  }
+}
 
 /* ── CARD ────────────────────────────────────────────────────── */
 /*
@@ -382,7 +401,7 @@ body.has-notif-banner .site-main { padding-top: calc(var(--nav-h, 60px) + 44px);
 }
 /* ── RESPONSIVE ──────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .container { padding: 0 var(--space-5); }
+  .container { padding: 0 var(--page-gutter); }
   .section   { padding: var(--space-8) 0; }
 }
 
@@ -455,4 +474,11 @@ body.has-notif-banner .site-main { padding-top: calc(var(--nav-h, 60px) + 44px);
 
   /* News type pills */
   .news-type { font-size: 10px !important; padding: 4px 10px !important; }
+}
+
+/* Em-dash CTA suffixes — hide on mobile ("Label — extra" → "Label") */
+@media (max-width: 767px) {
+  .cta-dash-tail {
+    display: none;
+  }
 }
