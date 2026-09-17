@@ -92,7 +92,7 @@
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.16em;
-  color: #d4af37;
+  color: var(--c-gold);
 }
 .today-strip__m-when {
   font-size: 15px;
@@ -100,7 +100,7 @@
   color: rgba(245, 242, 234, 0.92);
 }
 .today-strip__m-when strong {
-  color: #d4af37;
+  color: var(--c-gold);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
@@ -133,7 +133,7 @@
   text-decoration: none;
 }
 .today-strip__m-next a:hover {
-  color: #d4af37;
+  color: var(--c-gold);
 }
 .today-strip__m-next strong {
   color: #fff;
@@ -176,7 +176,7 @@
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.18em;
-  color: #d4af37;
+  color: var(--c-gold);
 }
 .today-strip__date-value {
   font-size: 17px;
@@ -194,7 +194,7 @@
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.14em;
-  color: #d4af37;
+  color: var(--c-gold);
   text-transform: uppercase;
 }
 .today-strip__feature-line {
@@ -267,9 +267,9 @@
 }
 .today-strip__cta--primary {
   align-self: flex-start;
-  background: #d4af37;
+  background: var(--c-gold);
   color: #11151f;
-  border: 1px solid #d4af37;
+  border: 1px solid var(--c-gold);
 }
 .today-strip__cta--primary:hover {
   background: #e2c25e;

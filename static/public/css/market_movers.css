@@ -31,7 +31,7 @@
   font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.20em;
-  color: #d4af37;
+  color: var(--c-gold);
 }
 .market-movers__title {
   margin: 4px 0 4px;

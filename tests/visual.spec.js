@@ -70,7 +70,6 @@ test('nav bar', async ({ page }) => {
 });
 
 test('nav menu open', async ({ page }) => {
-  test.skip(!showsDrawerNav(page) && !showsDesktopNav(page), 'no nav menu at this width (known issue, PR 4)');
   if (showsDrawerNav(page)) {
     await page.locator('#navHamburger').click();
     await page.locator('#mobileDrawer .mob-drawer__accordion-trigger').first().click();

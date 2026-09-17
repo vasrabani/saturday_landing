@@ -6,10 +6,9 @@ export const VIEWPORTS = [
   { name: 'desktop-1440', width: 1440, height: 900, touch: false },
 ];
 
-// Where the nav changes shape (chrome.css). The hamburger drawer shows up
-// to 900px and the desktop links from 1025px; between them neither shows,
-// which is a live-site bug tracked in features.spec.js.
-export const DRAWER_NAV_MAX_WIDTH = 900;
+// Where the nav changes shape (chrome.css): the drawer covers everything
+// below the desktop links, which start at 1025px.
+export const DRAWER_NAV_MAX_WIDTH = 1024;
 export const DESKTOP_NAV_MIN_WIDTH = 1025;
 
 export const showsDrawerNav = (page) => page.viewportSize().width <= DRAWER_NAV_MAX_WIDTH;

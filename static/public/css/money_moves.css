@@ -250,7 +250,7 @@
 }
 .mm-stat--steamers .mm-stat__num { color: #4ade80; }
 .mm-stat--drifters .mm-stat__num { color: #fca5a5; }
-.mm-stat--biggest  .mm-stat__num { color: var(--c-gold, #D4AF37); }
+.mm-stat--biggest  .mm-stat__num { color: var(--c-gold, var(--c-gold)); }
 
 .mm-narrative {
   margin: 0;
@@ -400,7 +400,7 @@
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold, var(--c-gold));
 }
 .mm-underdog__link {
   color: rgba(255, 255, 255, 0.88);
@@ -410,7 +410,7 @@
   font-feature-settings: 'tnum';
 }
 .mm-underdog__link strong { color: #fff; }
-.mm-underdog__link:hover { color: var(--c-gold, #D4AF37); }
+.mm-underdog__link:hover { color: var(--c-gold, var(--c-gold)); }
 
 /* ── Section CTA → /steamers/ ─────────────────────────────
  * Sits at the bottom of the Money Moves band, points at the
@@ -439,7 +439,7 @@
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 3px;
-  background: linear-gradient(180deg, #4ade80 0%, var(--c-gold, #D4AF37) 100%);
+  background: linear-gradient(180deg, #4ade80 0%, var(--c-gold, var(--c-gold)) 100%);
 }
 .mm-cta__copy {
   flex: 1 1 320px;
@@ -453,7 +453,7 @@
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold, var(--c-gold));
   margin-bottom: 6px;
 }
 .mm-cta__sub {
@@ -494,7 +494,7 @@
 }
 .mm-cta__btn:active { transform: translateY(0); }
 .mm-cta__btn:focus-visible {
-  outline: 2px solid var(--c-gold, #D4AF37);
+  outline: 2px solid var(--c-gold, var(--c-gold));
   outline-offset: 3px;
 }
 .mm-cta__btn-arrow {

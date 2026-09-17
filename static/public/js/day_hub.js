@@ -288,8 +288,12 @@
         balanceHeroTitleWidths();
       });
     });
+    // Both of these measure text, so they have to run again once the web
+    // fonts are in: measured against the fallback font, the clamp cuts
+    // titles at the wrong point and the result differs from load to load.
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(function () {
+        clampDayHubRaceTitles();
         balanceHeroTitleWidths();
       }).catch(function () {});
     }

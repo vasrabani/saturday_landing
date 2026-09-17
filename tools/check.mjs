@@ -201,9 +201,12 @@ const RULES = {
           match[1],
         ]),
       );
+      // base.css documents the palette in hex on purpose, so comments are
+      // stripped before looking for colours that should use a variable.
+      const withoutComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, ' ');
       return countBy(
         ownedOfType('.css').flatMap((file) =>
-          [...read(file).matchAll(/(--[\w-]+\s*:\s*)?(#[0-9a-f]{6}|#[0-9a-f]{3})\b/gi)]
+          [...withoutComments(read(file)).matchAll(/(--[\w-]+\s*:\s*)?(#[0-9a-f]{6}|#[0-9a-f]{3})\b/gi)]
             .filter((match) => !match[1] && tokens.has(match[2].toLowerCase()))
             .map((match) => `${file} -> ${match[2].toLowerCase()} (use ${tokens.get(match[2].toLowerCase())})`),
         ),

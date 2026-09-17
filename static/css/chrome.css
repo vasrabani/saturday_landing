@@ -151,14 +151,14 @@
   background: transparent;
 }
 .site-nav__link.active {
-  color: var(--c-gold, #d4af37);
+  color: var(--c-gold, var(--c-gold));
   background: transparent;
   font-weight: 700;
   box-shadow: none;
 }
 .site-nav__link.active .site-nav__link-ico,
 .site-nav__link.active .site-nav__caret {
-  color: var(--c-gold, #d4af37);
+  color: var(--c-gold, var(--c-gold));
   stroke: currentColor;
 }
 .site-nav__link.active .site-nav__link-portrait {
@@ -1363,11 +1363,16 @@ body.drawer-open {
   }
 }
 
-/* Show hamburger below 900px */
-@media (max-width: 900px) {
+/* The hamburger covers every width where the desktop links are hidden.
+   Those hide at 1024px, so anything narrower needs the drawer: between
+   901px and 1024px the page used to offer no navigation at all. */
+@media (max-width: 1024px) {
   .site-nav__hamburger {
     display: flex;
   }
+}
+
+@media (max-width: 900px) {
 
   /* Hide action pills on small screens — they're in the drawer */
   .site-nav__pill {
@@ -1513,7 +1518,7 @@ body.drawer-open {
 
 /* ── Join Free button — outline idle; gold liquid fill on hover ── */
 .site-nav__join-btn {
-  --liquid: var(--c-gold, #d4af37);
+  --liquid: var(--c-gold, var(--c-gold));
   --ink: #06070d;
   position: relative;
   overflow: hidden;
@@ -2143,7 +2148,7 @@ body.drawer-open {
 .notif-banner__dismiss:focus-visible,
 .mob-drawer__cta-btn:focus-visible,
 .mob-drawer__cta-ghost:focus-visible {
-  outline: 2px solid var(--c-gold, #d4af37);
+  outline: 2px solid var(--c-gold, var(--c-gold));
   outline-offset: 2px;
   border-radius: var(--r-sm, 6px);
 }
@@ -2187,7 +2192,7 @@ body.drawer-open {
   color: var(--c-gold);
 }
 .site-nav__dropdown-item--gold:hover .site-nav__di-name {
-  color: var(--c-gold-lt, #f5d76e);
+  color: var(--c-gold-lt, var(--c-gold-lt));
 }
 .site-nav__dropdown-item--gold .site-nav__di-icon {
   filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.25));
@@ -2207,7 +2212,7 @@ body.drawer-open {
   left: 0;
   right: 0;
   z-index: 90;
-  background: linear-gradient(180deg, #f5e49a 0%, #d4af37 70%, #c8a020 100%);
+  background: linear-gradient(180deg, #f5e49a 0%, var(--c-gold) 70%, #c8a020 100%);
   color: #18120a;
   border-bottom: 1px solid rgba(0, 0, 0, 0.18);
   box-shadow: 0 4px 18px -6px rgba(0, 0, 0, 0.32);

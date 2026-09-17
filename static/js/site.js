@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // If screen resizes above mobile breakpoint, close drawer cleanly
-    const mq = window.matchMedia('(min-width: 901px)');
+    const mq = window.matchMedia('(min-width: 1025px)');
     const onResize = e => { if (e.matches && drawer.classList.contains('open')) closeDrawer(); };
     if (mq.addEventListener) mq.addEventListener('change', onResize);
     else mq.addListener(onResize); // Safari < 14 fallback

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { HIDDEN_SECTIONS, SECTIONS, knownIssue, openLanding } from './support/landing.js';
-import { DESKTOP_NAV_MIN_WIDTH, DRAWER_NAV_MAX_WIDTH, showsDesktopNav, showsDrawerNav } from './support/viewports.js';
+import { showsDesktopNav, showsDrawerNav } from './support/viewports.js';
 
 const DRAW_FIELD = [
   { name: 'Trawlerman', odds: '5/2' },
@@ -60,9 +60,6 @@ test.describe('sections', () => {
 
 test.describe('navigation', () => {
   test('a way to navigate is visible at every width', async ({ page }) => {
-    if (!showsDrawerNav(page) && !showsDesktopNav(page)) {
-      knownIssue('PR 4', `no nav between ${DRAWER_NAV_MAX_WIDTH + 1} and ${DESKTOP_NAV_MIN_WIDTH - 1}px (also on the live site)`);
-    }
     await openLanding(page);
     const hamburger = page.locator('#navHamburger');
     const desktopLinks = page.locator('.site-nav__links');

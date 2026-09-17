@@ -495,7 +495,7 @@
 .al-cta:hover::before,
 .al-cta:focus-visible::before {
   transform: translateY(5%);
-  animation: al-cta-liquid-wave 2.5s ease-in-out infinite 0.65s;
+  animation: sat-btn-liquid-wave 2.5s ease-in-out infinite 0.65s;
 }
 
 .al-cta:hover,
@@ -516,16 +516,6 @@
 .al-cta:hover img,
 .al-cta:focus-visible img {
   filter: brightness(0);
-}
-
-@keyframes al-cta-liquid-wave {
-  0%,
-  100% {
-    border-radius: 45% 55% 0 0 / 25% 25% 0 0;
-  }
-  50% {
-    border-radius: 55% 45% 0 0 / 20% 30% 0 0;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -40,7 +40,7 @@
   letter-spacing: 0.22em;
   text-transform: uppercase;
   font-weight: 800;
-  color: #d4af37;
+  color: var(--c-gold);
   margin: 0 0 28px;
   text-align: center;
 }
@@ -63,7 +63,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #d4af37;
+  background: var(--c-gold);
   flex-shrink: 0;
   animation: land-shelf-blink 1.6s ease-in-out infinite;
 }
@@ -293,7 +293,7 @@
   border-radius: 999px;
   border: 1px solid rgba(212, 175, 55, 0.45);
   background: rgba(8, 10, 14, 0.55);
-  color: #d4af37;
+  color: var(--c-gold);
   text-decoration: none;
   font-family: "DM Sans", "Inter", sans-serif;
   font-size: 13px;
@@ -308,8 +308,8 @@
 .land-shelf-all:hover,
 .land-shelf-all:focus-visible {
   background: rgba(212, 175, 55, 0.1);
-  border-color: #d4af37;
-  color: #f5d76e;
+  border-color: var(--c-gold);
+  color: var(--c-gold-lt);
   outline: none;
   text-decoration: none;
 }
