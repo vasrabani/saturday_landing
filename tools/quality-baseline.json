@@ -1,24 +1,14 @@
 {
   "check": {
-    "css-url-missing": {
-      "static/public/css/hero-fold.css -> ../img/courses/ascot.jpg": 1,
-      "static/public/css/hero-fold.css -> ../img/courses/newbury.jpg": 1
-    },
+    "css-url-missing": {},
     "html-ref-missing": {
       "static/img/apple-touch-icon.png": 1,
       "static/img/favicon-16.png": 1,
       "static/img/favicon-32.png": 1
     },
-    "debug-endpoint": {
-      "static/public/js/day_hub.js -> http://127.0.0.1:7631/ingest/51a1334d-a1f0-4bae-a705-e8f774178324": 1
-    },
-    "debug-marker": {
-      "static/public/js/day_hub.js -> #region agent log": 1,
-      "static/public/js/day_hub.js -> X-Debug-Session-Id": 1
-    },
-    "third-party-script": {
-      "www.clarity.ms": 1
-    },
+    "debug-endpoint": {},
+    "debug-marker": {},
+    "third-party-script": {},
     "hidden-section": {
       "final-cta Race day Who called it": 1,
       "syndicates": 1,
@@ -36,31 +26,13 @@
       "static/public/img/mr_fox_host.png": 1,
       "static/public/img/next-off-bg.png": 1,
       "static/public/img/picks-cubs-card-bg-bleed.png": 1,
-      "static/public/img/picks-cubs-card-bg.png": 1,
       "static/public/img/picks-fox-card-bg-bleed.png": 1,
-      "static/public/img/picks-fox-card-bg.png": 1,
       "static/public/img/race-of-the-day-bg-bleed.png": 1,
-      "static/public/img/race-of-the-day-bg.png": 1,
       "static/public/img/rivalry-fox-card-bg.png": 1,
       "static/public/img/rivalry-pack-card-bg.png": 1,
-      "static/public/img/rivalry-section-bg.png": 1,
       "static/public/img/the_pack.png": 1
     },
-    "unused-image": {
-      "static/public/img/ai-chamber/vs-ellipse.svg": 1,
-      "static/public/img/footer/footer-bg.jpg": 1,
-      "static/public/img/icons/class-clock.svg": 1,
-      "static/public/img/icons/fox-flag.svg": 1,
-      "static/public/img/icons/nav-active-underline.svg": 1,
-      "static/public/img/icons/prize.svg": 1,
-      "static/public/img/icons/quick-play.svg": 1,
-      "static/public/img/icons/star.svg": 1,
-      "static/public/img/icons/this-saturday.svg": 1,
-      "static/public/img/picks-cubs-card-bg.png": 1,
-      "static/public/img/picks-fox-card-bg.png": 1,
-      "static/public/img/race-of-the-day-bg.png": 1,
-      "static/public/img/rivalry-section-bg.png": 1
-    },
+    "unused-image": {},
     "svg-export-junk": {
       "static/public/img/ai-chamber/icon-arrow.svg": 1,
       "static/public/img/ai-chamber/icon-claude.svg": 1,
@@ -68,7 +40,6 @@
       "static/public/img/ai-chamber/icon-lab-arrow.svg": 1,
       "static/public/img/ai-chamber/icon-lenses.svg": 1,
       "static/public/img/ai-chamber/icon-sim.svg": 1,
-      "static/public/img/ai-chamber/vs-ellipse.svg": 1,
       "static/public/img/den/icon-activity.svg": 1,
       "static/public/img/den/icon-arrow-down.svg": 1,
       "static/public/img/den/icon-check.svg": 1,

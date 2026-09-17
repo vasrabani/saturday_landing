@@ -158,15 +158,11 @@
    matches. See public/static/public/img/courses/README.md for
    the file-naming + image-spec convention.
 
-   Example (uncomment after dropping ascot.jpg into the courses
-   folder + running collectstatic):
-
-     .hero-fold[data-course="ascot"] .hero-fold__bg {
-       --course-photo: url("../img/courses/ascot.jpg");
-     }
-     .hero-fold[data-course="newbury"] .hero-fold__bg {
-       --course-photo: url("../img/courses/newbury.jpg");
-     }
+   The worked example to copy is step 2 of that README. Keep examples
+   containing url() there, not in a .css file: the production static
+   build resolves url() with a regex over the raw file and does not skip
+   comments, so a commented example pointing at a file that was never
+   shipped breaks collectstatic outright.
    ───────────────────────────────────────────────────────── */
 
 /* Landing hero — cinematic race photo behind the fold */

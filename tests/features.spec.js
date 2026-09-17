@@ -27,14 +27,12 @@ test.describe('page health', () => {
   });
 
   test('calls no localhost or debug endpoints', async ({ page }) => {
-    knownIssue('PR 1', 'day_hub.js POSTs layout data to 127.0.0.1:7631');
     const { offsite } = await openLanding(page);
     await page.waitForLoadState('networkidle');
     expect(offsite.filter((url) => LOCAL_DEBUG_URL.test(url))).toEqual([]);
   });
 
   test('loads no third-party analytics in the sandbox', async ({ page }) => {
-    knownIssue('PR 1', 'the snapshot still loads Microsoft Clarity');
     const { offsite } = await openLanding(page);
     await page.waitForLoadState('networkidle');
     expect(offsite.filter((url) => url.includes('clarity.ms'))).toEqual([]);

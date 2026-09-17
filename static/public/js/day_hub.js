@@ -303,11 +303,9 @@
   function balanceHeroTitleWidths() {
     var lead = document.querySelector('.hf-title__lead');
     var fox = document.querySelector('.hf-title__fox');
-    if (!lead || !fox) return null;
+    if (!lead || !fox) return;
     lead.style.letterSpacing = '';
-    if (window.innerWidth > 719) {
-      return { skipped: true, vw: window.innerWidth };
-    }
+    if (window.innerWidth > 719) return;
     var leadW0 = lead.getBoundingClientRect().width;
     var foxW = fox.getBoundingClientRect().width;
     var text = (lead.textContent || '').replace(/\s+/g, ' ').trim();
@@ -315,17 +313,6 @@
     if (foxW > leadW0 + 0.5) {
       lead.style.letterSpacing = ((foxW - leadW0) / gaps) + 'px';
     }
-    var leadW1 = lead.getBoundingClientRect().width;
-    return {
-      skipped: false,
-      vw: window.innerWidth,
-      foxFont: window.getComputedStyle(fox).fontSize,
-      leadW0: Math.round(leadW0),
-      leadW: Math.round(leadW1),
-      foxW: Math.round(foxW),
-      delta: Math.abs(Math.round(leadW1) - Math.round(foxW)),
-      equal: Math.abs(leadW1 - foxW) <= 3
-    };
   }
 
   function boot() {
@@ -348,45 +335,6 @@
         balanceHeroTitleWidths();
       }).catch(function () {});
     }
-    // #region agent log
-    (function () {
-      var cameo = document.querySelector('.den-section__grid .den-cameo');
-      var side = document.querySelector('.den-section__grid .den-side');
-      var ask = document.querySelector('.den-side__lbl--ask');
-      var cmds = document.querySelector('.den-cmds');
-      var prompts = document.querySelector('.den-prompts');
-      if (!cameo || !side) return;
-      var cR = cameo.getBoundingClientRect();
-      var sR = side.getBoundingClientRect();
-      var cmdsR = cmds ? cmds.getBoundingClientRect() : null;
-      var askR = ask ? ask.getBoundingClientRect() : null;
-      var promptsR = prompts ? prompts.getBoundingClientRect() : null;
-      var gapAboveAsk = cmdsR && askR ? Math.round(askR.top - cmdsR.bottom) : null;
-      var gapBelowAsk = askR && promptsR ? Math.round(promptsR.top - askR.bottom) : null;
-      fetch('http://127.0.0.1:7631/ingest/51a1334d-a1f0-4bae-a705-e8f774178324', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '1bf3af' },
-        body: JSON.stringify({
-          sessionId: '1bf3af',
-          runId: 'den-equal-height-v1',
-          hypothesisId: 'H-den-equal-h',
-          location: 'day_hub.js:boot',
-          message: 'DEN columns equal height; Try asking gaps tighter',
-          timestamp: Date.now(),
-          data: {
-            vw: window.innerWidth,
-            cameoH: Math.round(cR.height),
-            sideH: Math.round(sR.height),
-            heightDelta: Math.round(cR.height - sR.height),
-            equalHeight: Math.abs(cR.height - sR.height) <= 4,
-            gapAboveAsk: gapAboveAsk,
-            gapBelowAsk: gapBelowAsk,
-            askGapsTight: gapAboveAsk != null && gapAboveAsk <= 20 && gapBelowAsk != null && gapBelowAsk <= 14
-          }
-        })
-      }).catch(function () {});
-    })();
-    // #endregion
   }
 
   if (document.readyState === 'loading') {
