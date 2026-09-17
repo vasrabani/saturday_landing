@@ -14,7 +14,7 @@
       rgba(3, 11, 22, 0.55) 42%,
       rgba(3, 11, 22, 0.82) 100%
     ),
-    url("../img/day-hub-bg.png");
+    url("../img/day-hub-bg.webp");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
@@ -297,7 +297,7 @@
       rgba(3, 11, 22, 0.42) 48%,
       rgba(3, 11, 22, 0.28) 100%
     ),
-    url("../img/race-of-the-day-bg-bleed.png");
+    url("../img/race-of-the-day-bg-bleed.webp");
   background-size: cover;
   background-position: right center;
   background-repeat: no-repeat;
@@ -327,7 +327,7 @@
       rgba(3, 11, 22, 0.42) 48%,
       rgba(3, 11, 22, 0.28) 100%
     ),
-    url("../img/next-off-bg.png");
+    url("../img/next-off-bg.webp");
   background-size: cover;
   background-position: right center;
   background-repeat: no-repeat;

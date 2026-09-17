@@ -176,7 +176,7 @@
   width: auto;
   height: 14px;
   transform: none;
-  background: url("../public/img/nav-active-underline.png") center / 100% 100%
+  background: url("../public/img/nav-active-underline.webp") center / 100% 100%
     no-repeat;
   pointer-events: none;
   opacity: 1;
@@ -2360,7 +2360,7 @@ body.has-demo-banner.has-notif-banner .site-main {
       rgba(5, 7, 12, 0.28) 72%,
       rgba(5, 7, 12, 0.45) 100%
     ),
-    url("../public/img/footer/footer-bg.png");
+    url("../public/img/footer/footer-bg.webp");
   background-size: cover, cover;
   background-position:
     center,

@@ -15,7 +15,7 @@
   isolation: isolate;
   background:
     linear-gradient(rgba(0, 0, 0, 0.61), rgba(0, 0, 0, 0.61)),
-    url("../img/ai-chamber/chamber-bg.png") center / cover no-repeat,
+    url("../img/ai-chamber/chamber-bg.webp") center / cover no-repeat,
     #05070c;
   color: var(--ac-ink);
   padding: clamp(48px, 7vw, 88px) 0 var(--ac-gap);
@@ -387,7 +387,7 @@
   position: relative;
   background:
     linear-gradient(rgba(0, 0, 0, 0.61), rgba(0, 0, 0, 0.72)),
-    url("../img/ai-chamber/chamber-bg.png") center bottom / cover no-repeat,
+    url("../img/ai-chamber/chamber-bg.webp") center bottom / cover no-repeat,
     #05070c;
   border-top: 0;
   /* Top pad 0 — chamber bottom --ac-gap is the shared vertical rhythm */

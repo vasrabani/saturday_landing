@@ -14,24 +14,7 @@
       "syndicates": 1,
       "track-record / results-section": 1
     },
-    "image-over-budget": {
-      "static/public/img/ai-chamber/chamber-bg.png": 1,
-      "static/public/img/day-hub-bg.png": 1,
-      "static/public/img/den/fox-avatar.png": 1,
-      "static/public/img/den/shield-fox.png": 1,
-      "static/public/img/footer/footer-bg.png": 1,
-      "static/public/img/fox-card-bg.png": 1,
-      "static/public/img/hero-fold-bg.png": 1,
-      "static/public/img/mi-steam-bg.png": 1,
-      "static/public/img/mr_fox_host.png": 1,
-      "static/public/img/next-off-bg.png": 1,
-      "static/public/img/picks-cubs-card-bg-bleed.png": 1,
-      "static/public/img/picks-fox-card-bg-bleed.png": 1,
-      "static/public/img/race-of-the-day-bg-bleed.png": 1,
-      "static/public/img/rivalry-fox-card-bg.png": 1,
-      "static/public/img/rivalry-pack-card-bg.png": 1,
-      "static/public/img/the_pack.png": 1
-    },
+    "image-over-budget": {},
     "unused-image": {},
     "svg-export-junk": {
       "static/public/img/ai-chamber/icon-arrow.svg": 1,

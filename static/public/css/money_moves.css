@@ -612,7 +612,7 @@
   border: 1px solid rgba(46, 230, 197, 0.38);
   background:
     linear-gradient(115deg, rgba(6, 14, 18, 0.92) 0%, rgba(6, 14, 18, 0.72) 42%, rgba(6, 14, 18, 0.35) 100%),
-    url('../img/mi-steam-bg.png') right center / cover no-repeat,
+    url('../img/mi-steam-bg.webp') right center / cover no-repeat,
     #0a1216;
   box-shadow:
     0 0 0 1px rgba(46, 230, 197, 0.08) inset,
@@ -947,7 +947,7 @@
   .money-moves--intel .mi-steam {
     background:
       linear-gradient(90deg, rgba(5, 7, 12, 0.55) 0%, transparent 58%),
-      url("../img/mi-steam-bg.png") center / cover no-repeat,
+      url("../img/mi-steam-bg.webp") center / cover no-repeat,
       #05070c;
   }
   .mi-head {

@@ -167,7 +167,7 @@
 
 /* Landing hero — cinematic race photo behind the fold */
 .hero-fold .hero-fold__bg {
-  --course-photo: url("../img/hero-fold-bg.png");
+  --course-photo: url("../img/hero-fold-bg.webp");
   background-position:
     center,
     center,
@@ -1703,7 +1703,7 @@
   min-height: 0;
   overflow: hidden;
   background-color: #071018;
-  background-image: url("../img/fox-card-bg.png");
+  background-image: url("../img/fox-card-bg.webp");
   background-size: cover;
   background-position: center 35%;
 }
@@ -2107,7 +2107,7 @@
   border-radius: 18px;
   min-height: 224px;
   background-color: #0a0c12;
-  background-image: url("../img/picks-fox-card-bg-bleed.png");
+  background-image: url("../img/picks-fox-card-bg-bleed.webp");
   background-repeat: no-repeat;
   background-position: center 35%;
   background-size: cover;
@@ -2133,7 +2133,7 @@
   min-height: 224px;
   padding: 15px 23px 14px 28px;
   background-color: #0a0c12;
-  background-image: url("../img/picks-cubs-card-bg-bleed.png");
+  background-image: url("../img/picks-cubs-card-bg-bleed.webp");
   background-repeat: no-repeat;
   background-position: right 40%;
   background-size: cover;
