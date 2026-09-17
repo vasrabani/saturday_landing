@@ -51,7 +51,7 @@ test.describe('sections', () => {
 
   for (const section of HIDDEN_SECTIONS) {
     test(`renders ${section.name}`, async ({ page }) => {
-      knownIssue('PR 8', `${section.name} is commented out as TEMP HIDDEN`);
+      knownIssue('PR 7', `${section.name} is commented out as TEMP HIDDEN`);
       await openLanding(page);
       await expect(page.locator(section.selector).first()).toBeVisible();
     });
@@ -61,7 +61,7 @@ test.describe('sections', () => {
 test.describe('navigation', () => {
   test('a way to navigate is visible at every width', async ({ page }) => {
     if (!showsDrawerNav(page) && !showsDesktopNav(page)) {
-      knownIssue('PR 5', `no nav between ${DRAWER_NAV_MAX_WIDTH + 1} and ${DESKTOP_NAV_MIN_WIDTH - 1}px (also on the live site)`);
+      knownIssue('PR 4', `no nav between ${DRAWER_NAV_MAX_WIDTH + 1} and ${DESKTOP_NAV_MIN_WIDTH - 1}px (also on the live site)`);
     }
     await openLanding(page);
     const hamburger = page.locator('#navHamburger');
@@ -174,7 +174,6 @@ test.describe('day hub', () => {
   });
 
   test('the Fox picks filter shows only races the Fox has picked', async ({ page }) => {
-    knownIssue('PR 4', 'day_hub.js matches every race for the "fox" filter');
     await openLanding(page);
     const hub = page.locator('#day-hub');
     await hub.locator('[data-day-filter="fox"]').click();
@@ -223,7 +222,6 @@ test.describe('tabs', () => {
   test('AI Chamber shows each model when its tab is chosen', async ({ page }) => {
     await openLanding(page);
     const chamber = page.locator('.ai-section--chamber');
-    const panel = chamber.locator('#ac-panel');
     const tabs = chamber.locator('[data-ac-tab]');
     await expect(tabs).toHaveCount(3);
 
@@ -232,17 +230,24 @@ test.describe('tabs', () => {
       const model = await tab.getAttribute('data-ac-tab');
       await tab.click();
       await expect(tab).toHaveAttribute('aria-selected', 'true');
+
+      const panel = chamber.locator(`#${await tab.getAttribute('aria-controls')}`);
+      await expect(panel).toBeVisible();
       await expect(panel).toHaveAttribute('aria-labelledby', await tab.getAttribute('id'));
       await expect(panel.locator('[data-ac-model]')).toHaveText(new RegExp(model, 'i'));
     }
   });
 
-  test("AI Chamber shows the chosen model's icon", async ({ page }) => {
-    knownIssue('PR 4', 'the Claude icon stays on the ChatGPT and Gemini tabs');
+  test('AI Chamber shows one model panel at a time', async ({ page }) => {
     await openLanding(page);
     const chamber = page.locator('.ai-section--chamber');
+    const panels = chamber.locator('[role="tabpanel"]');
+    await expect(panels).toHaveCount(3);
+
     await chamber.locator('[data-ac-tab="gemini"]').click();
-    await expect(chamber.locator('#ac-panel img').first()).toHaveAttribute('src', /gemini/i);
+    await expect(chamber.locator('#ac-panel-gemini')).toBeVisible();
+    await expect(chamber.locator('#ac-panel-claude')).toBeHidden();
+    await expect(chamber.locator('#ac-panel-chatgpt')).toBeHidden();
   });
 
   for (const [name, selector] of [
@@ -250,7 +255,6 @@ test.describe('tabs', () => {
     ['market intelligence', '.mi-board'],
   ]) {
     test(`${name} tabs move with the arrow keys`, async ({ page }) => {
-      knownIssue('PR 4', 'tabs have no arrow-key support');
       await openLanding(page);
       const tabs = page.locator(`${selector} [role="tab"]`);
       await tabs.first().focus();

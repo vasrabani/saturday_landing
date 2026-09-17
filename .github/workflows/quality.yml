@@ -40,7 +40,7 @@ jobs:
           retention-days: 14
 
   visual:
-    # Advisory until PR 3 and PR 4 land: a few sections with blurred,
+    # Advisory: a few sections with blurred,
     # blended art layers do not rasterise identically twice, so a red run
     # here is a prompt to look at the diff images, not a blocked merge.
     name: Visual comparison with the design reference (advisory)

@@ -161,6 +161,12 @@
   font-weight: 700;
 }
 
+/* One model shows at a time: `hidden` has to win over the panel's own
+   display value, which it does not by default. */
+.ac-panel[hidden] {
+  display: none;
+}
+
 .ac-panel {
   display: flex;
   flex-direction: column;

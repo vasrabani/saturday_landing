@@ -31,7 +31,7 @@ test('has no new WCAG 2.1 AA violations', async ({ page }, testInfo) => {
 });
 
 test('headings never skip a level', async ({ page }) => {
-  knownIssue('PR 6', 'the hero jumps from h1 to h3');
+  knownIssue('PR 5', 'the hero jumps from h1 to h3');
   await openLanding(page);
   const levels = await page
     .locator('main :is(h1, h2, h3, h4, h5, h6)')

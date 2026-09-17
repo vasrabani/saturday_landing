@@ -5081,7 +5081,7 @@
                 role="tab"
                 id="ac-tab-claude"
                 aria-selected="true"
-                aria-controls="ac-panel"
+                aria-controls="ac-panel-claude"
                 data-ac-tab="claude"
               >
                 <span class="ac-tab__top">
@@ -5099,7 +5099,7 @@
                 role="tab"
                 id="ac-tab-chatgpt"
                 aria-selected="false"
-                aria-controls="ac-panel"
+                aria-controls="ac-panel-chatgpt"
                 data-ac-tab="chatgpt"
               >
                 <span class="ac-tab__top">
@@ -5117,7 +5117,7 @@
                 role="tab"
                 id="ac-tab-gemini"
                 aria-selected="false"
-                aria-controls="ac-panel"
+                aria-controls="ac-panel-gemini"
                 data-ac-tab="gemini"
               >
                 <span class="ac-tab__top">
@@ -5133,7 +5133,7 @@
 
             <article
               class="ac-panel"
-              id="ac-panel"
+              id="ac-panel-claude"
               role="tabpanel"
               aria-labelledby="ac-tab-claude"
               data-reveal
@@ -5142,7 +5142,7 @@
               <div class="ac-panel__meta">
                 <span class="ac-panel__badge">
                   <img
-                    src="static/public/img/ai-chamber/icon-claude.svg"
+                    src="static/public/img/ai-chamber/icon-model.svg"
                     alt=""
                     width="12"
                     height="12"
@@ -5162,14 +5162,141 @@
                 </div>
               </div>
               <p class="ac-panel__body" data-ac-body>
-                Trawlerman owns one of the strongest chamber scores in this
-                field. With no SR/RPR/TS data on the winner, the Balanced lens
-                leaned on market confidence and pace fit instead. The profile
-                stays composed even after race-day variance.
+                Trawlerman owns one of the strongest chamber scores in this field. With no SR/RPR/TS data on the winner, the Balanced lens leaned on market confidence and pace fit instead. The profile stays composed even after race-day variance.
               </p>
               <div class="ac-tags" data-ac-tags>
                 <span>Speed figures</span>
                 <span>Trainer patterns</span>
+              </div>
+              <div class="ac-split">
+                <div class="ac-split__card ac-split__card--agree">
+                  <p class="ac-split__lbl">2/3 CONSENSUS</p>
+                  <p class="ac-split__horse">Trawlerman</p>
+                  <p class="ac-split__note">Claude &amp; ChatGPT agree</p>
+                </div>
+                <span class="ac-split__vs" aria-hidden="true">vs</span>
+                <div class="ac-split__card ac-split__card--break">
+                  <p class="ac-split__lbl">1/3 BREAKS RANKS</p>
+                  <p class="ac-split__horse">Illinois</p>
+                  <p class="ac-split__note">Gemini differs</p>
+                </div>
+              </div>
+              <a
+                class="ac-cta"
+                href="https://www.saturday-racing.com/ai/tools/"
+              >
+                Enter the AI Chamber<span class="cta-dash-tail"> — full analysis</span>
+                <img
+                  src="static/public/img/ai-chamber/icon-arrow.svg"
+                  alt=""
+                  width="14"
+                  height="14"
+                />
+              </a>
+            </article>
+
+            <article
+              class="ac-panel"
+              id="ac-panel-chatgpt"
+              role="tabpanel"
+              aria-labelledby="ac-tab-chatgpt"
+              data-reveal
+              data-reveal-delay="1"
+              hidden
+            >
+              <div class="ac-panel__meta">
+                <span class="ac-panel__badge">
+                  <img
+                    src="static/public/img/ai-chamber/icon-model.svg"
+                    alt=""
+                    width="12"
+                    height="12"
+                  />
+                  <span data-ac-model>CHATGPT</span>
+                </span>
+                <span class="ac-panel__lens" data-ac-lens>Market lens</span>
+              </div>
+              <h3 class="ac-panel__horse" data-ac-horse>Trawlerman</h3>
+              <div class="ac-conf">
+                <div class="ac-conf__row">
+                  <span>CONFIDENCE</span>
+                  <span class="ac-conf__val" data-ac-conf>54/100</span>
+                </div>
+                <div class="ac-conf__bar" aria-hidden="true">
+                  <span data-ac-bar style="width: 54%"></span>
+                </div>
+              </div>
+              <p class="ac-panel__body" data-ac-body>
+                ChatGPT reads the same steam as Claude but with less conviction. Market shortening supports Trawlerman, though the model flags price compression as a risk if the field reshapes late.
+              </p>
+              <div class="ac-tags" data-ac-tags>
+                <span>Market moves</span>
+                <span>Odds analysis</span>
+              </div>
+              <div class="ac-split">
+                <div class="ac-split__card ac-split__card--agree">
+                  <p class="ac-split__lbl">2/3 CONSENSUS</p>
+                  <p class="ac-split__horse">Trawlerman</p>
+                  <p class="ac-split__note">Claude &amp; ChatGPT agree</p>
+                </div>
+                <span class="ac-split__vs" aria-hidden="true">vs</span>
+                <div class="ac-split__card ac-split__card--break">
+                  <p class="ac-split__lbl">1/3 BREAKS RANKS</p>
+                  <p class="ac-split__horse">Illinois</p>
+                  <p class="ac-split__note">Gemini differs</p>
+                </div>
+              </div>
+              <a
+                class="ac-cta"
+                href="https://www.saturday-racing.com/ai/tools/"
+              >
+                Enter the AI Chamber<span class="cta-dash-tail"> — full analysis</span>
+                <img
+                  src="static/public/img/ai-chamber/icon-arrow.svg"
+                  alt=""
+                  width="14"
+                  height="14"
+                />
+              </a>
+            </article>
+
+            <article
+              class="ac-panel"
+              id="ac-panel-gemini"
+              role="tabpanel"
+              aria-labelledby="ac-tab-gemini"
+              data-reveal
+              data-reveal-delay="1"
+              hidden
+            >
+              <div class="ac-panel__meta">
+                <span class="ac-panel__badge">
+                  <img
+                    src="static/public/img/ai-chamber/icon-model.svg"
+                    alt=""
+                    width="12"
+                    height="12"
+                  />
+                  <span data-ac-model>GEMINI</span>
+                </span>
+                <span class="ac-panel__lens" data-ac-lens>Course lens</span>
+              </div>
+              <h3 class="ac-panel__horse" data-ac-horse>Illinois</h3>
+              <div class="ac-conf">
+                <div class="ac-conf__row">
+                  <span>CONFIDENCE</span>
+                  <span class="ac-conf__val" data-ac-conf>52/100</span>
+                </div>
+                <div class="ac-conf__bar" aria-hidden="true">
+                  <span data-ac-bar style="width: 52%"></span>
+                </div>
+              </div>
+              <p class="ac-panel__body" data-ac-body>
+                Gemini breaks ranks on course and distance history. Illinois profiles better for this trip and going than the chamber majority, so the model holds a contrarian line despite lower absolute confidence.
+              </p>
+              <div class="ac-tags" data-ac-tags>
+                <span>Course database</span>
+                <span>Going correlations</span>
               </div>
               <div class="ac-split">
                 <div class="ac-split__card ac-split__card--agree">

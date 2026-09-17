@@ -18,10 +18,10 @@
     "unused-image": {},
     "svg-export-junk": {
       "static/public/img/ai-chamber/icon-arrow.svg": 1,
-      "static/public/img/ai-chamber/icon-claude.svg": 1,
       "static/public/img/ai-chamber/icon-confidence.svg": 1,
       "static/public/img/ai-chamber/icon-lab-arrow.svg": 1,
       "static/public/img/ai-chamber/icon-lenses.svg": 1,
+      "static/public/img/ai-chamber/icon-model.svg": 1,
       "static/public/img/ai-chamber/icon-sim.svg": 1,
       "static/public/img/den/icon-activity.svg": 1,
       "static/public/img/den/icon-arrow-down.svg": 1,

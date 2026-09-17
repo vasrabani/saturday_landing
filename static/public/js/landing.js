@@ -112,66 +112,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 
-/* ── Hero countdown card — subtle 3D tilt (desktop, fine pointer) ── */
-(function () {
-  const card = document.querySelector('.hf-countdown');
-  if (!card) return;
-  if (window.matchMedia('(pointer: coarse)').matches) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const onMove = (e) => {
-    const r = card.getBoundingClientRect();
-    const cx = r.left + r.width / 2;
-    const cy = r.top + r.height / 2;
-    const mx = (e.clientX - cx) / (r.width / 2);
-    const my = (e.clientY - cy) / (r.height / 2);
-    const clamp = (v) => Math.max(-1, Math.min(1, v));
-    const rx = (-clamp(my) * 3.5).toFixed(2);
-    const ry = (clamp(mx) * 4.5).toFixed(2);
-    card.style.transform = `perspective(760px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-  };
-
-  const reset = () => {
-    card.style.transform = '';
-  };
-
-  card.addEventListener('pointermove', onMove);
-  card.addEventListener('pointerleave', reset);
-})();
-
-/* ── Day hub cards — same 3D tilt as hero countdown ── */
-(function () {
-  if (window.matchMedia('(pointer: coarse)').matches) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  const cards = document.querySelectorAll(
-    '.day-hub .day-card--featured, .day-hub .day-card--next-off'
+/* ── 3D tilt on the hero countdown and the day hub cards ──
+   SaturdayTilt (site.js) owns the maths and the touch / reduced-motion
+   guards. Deferred scripts have run by DOMContentLoaded, so it is
+   defined by the time this fires. ── */
+document.addEventListener('DOMContentLoaded', () => {
+  window.SaturdayTilt(
+    document.querySelectorAll(
+      '.hf-countdown, .day-hub .day-card--featured, .day-hub .day-card--next-off'
+    )
   );
-  if (!cards.length) return;
-
-  cards.forEach((card) => {
-    const onMove = (e) => {
-      const r = card.getBoundingClientRect();
-      const cx = r.left + r.width / 2;
-      const cy = r.top + r.height / 2;
-      const mx = (e.clientX - cx) / (r.width / 2);
-      const my = (e.clientY - cy) / (r.height / 2);
-      const clamp = (v) => Math.max(-1, Math.min(1, v));
-      const rx = (-clamp(my) * 3.5).toFixed(2);
-      const ry = (clamp(mx) * 4.5).toFixed(2);
-      card.style.transform = `perspective(760px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-      card.classList.add('is-tilting');
-    };
-
-    const reset = () => {
-      card.style.transform = '';
-      card.classList.remove('is-tilting');
-    };
-
-    card.addEventListener('pointermove', onMove, { passive: true });
-    card.addEventListener('pointerleave', reset, { passive: true });
-  });
-})();
+});
 
 
 /* ─────────────────────────────────────────────────────────────

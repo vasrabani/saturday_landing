@@ -5,8 +5,8 @@
  * few - battle, market intelligence, DEN - still differ run to run on the
  * same code. Their full-bleed art layers combine large blurs with
  * `mix-blend-mode`, and this page's images decode late, so the rasteriser
- * does not produce identical pixels twice. PR 3 (images) and PR 4 (the
- * title-clamp race) remove most of that; this becomes a CI gate after them.
+ * does not produce identical pixels twice. PR 2 (images) and PR 3 (the
+ * title-clamp race) removed most of that; this becomes a CI gate after them.
  *
  * Use it to review a diff before and after a change, not as a pass/fail.
  */
@@ -70,7 +70,7 @@ test('nav bar', async ({ page }) => {
 });
 
 test('nav menu open', async ({ page }) => {
-  test.skip(!showsDrawerNav(page) && !showsDesktopNav(page), 'no nav menu at this width (known issue, PR 5)');
+  test.skip(!showsDrawerNav(page) && !showsDesktopNav(page), 'no nav menu at this width (known issue, PR 4)');
   if (showsDrawerNav(page)) {
     await page.locator('#navHamburger').click();
     await page.locator('#mobileDrawer .mob-drawer__accordion-trigger').first().click();

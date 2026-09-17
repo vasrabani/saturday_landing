@@ -97,7 +97,7 @@ npx playwright install chromium
 
 `npm run verify` runs all of them in order. The first two must pass; the third is for review.
 
-**Why the visual check is advisory.** Most sections compare cleanly, but a few (battle, market intelligence, DEN) differ between runs of identical code: their full-bleed art layers combine large blurs with `mix-blend-mode`, and the page's 34 MB of images decode late, so the same frame is never painted twice. Use it to look at what a change did (`test-results/` holds before, after and diff images), not as pass/fail. It becomes a blocking gate once PR 3 (image weight) and PR 4 (the race-title clamp race) remove that noise.
+**Why the visual check is advisory.** Most sections compare cleanly, but a few (battle, market intelligence, DEN) differ between runs of identical code: their full-bleed art layers combine large blurs with `mix-blend-mode`, so the same frame is never painted twice. Use it to look at what a change did (`test-results/` holds before, after and diff images), not as pass/fail. It becomes a blocking gate once the noise is gone: PR 2 cut the image weight and PR 3 fixed the race-title clamp, so this is due a re-check.
 
 **Known issues are tracked, not ignored.**
 
