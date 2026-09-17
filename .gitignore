@@ -16,7 +16,6 @@ __pycache__/
 
 # Node (contractor might reach for a build step)
 node_modules/
-package-lock.json
 yarn.lock
 dist/
 build/
@@ -25,3 +24,9 @@ build/
 *.log
 .env
 .env.local
+
+# Quality tooling output (npm run baseline / npm test)
+.baseline/
+tests/visual/__baseline__/
+test-results/
+playwright-report/

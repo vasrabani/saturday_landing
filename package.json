@@ -1,0 +1,20 @@
+{
+  "name": "saturday-landing",
+  "private": true,
+  "description": "Quality tooling for the Saturday Racing landing sandbox. Dev-only; nothing here ships to production.",
+  "scripts": {
+    "serve": "node tools/serve.mjs",
+    "check": "node tools/check.mjs",
+    "test": "playwright test --project=features-*",
+    "baseline": "node tools/baseline.mjs",
+    "test:visual": "playwright test --project=visual-*",
+    "verify": "npm run check && npm test && npm run baseline && npm run test:visual"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "@playwright/test": "1.56.1"
+  }
+}
