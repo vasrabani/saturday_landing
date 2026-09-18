@@ -1,0 +1,1543 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Landing page states · Saturday Racing</title>
+<link rel="stylesheet" href="static/fonts/saturday-fonts.css" />
+
+    <!-- ── Stylesheets ───────────────────────────────────────── -->
+    <link rel="stylesheet" href="static/css/base.css" />
+    <link rel="stylesheet" href="static/css/chrome.css" />
+    <link rel="stylesheet" href="static/voting/css/picks_budget.css" />
+
+    <link rel="stylesheet" href="static/public/css/hero-fold.css" />
+    <link rel="stylesheet" href="static/races/css/pick6_emblem.css" />
+    <link rel="stylesheet" href="static/public/css/landing.css" />
+    <link rel="stylesheet" href="static/public/css/battle-section.css" />
+    <link rel="stylesheet" href="static/public/css/landing_den_section.css" />
+    <link rel="stylesheet" href="static/public/css/challenges-section.css" />
+    <link rel="stylesheet" href="static/public/css/saturday_draw.css" />
+    <link rel="stylesheet" href="static/public/css/cubs-portrait.css" />
+    <link rel="stylesheet" href="static/public/css/landing-anim.css" />
+    <link rel="stylesheet" href="static/public/css/market_movers.css" />
+    <link rel="stylesheet" href="static/public/css/cub_hello.css" />
+    <link rel="stylesheet" href="static/public/css/today-strip.css" />
+    <link rel="stylesheet" href="static/public/css/editorial-shelf.css" />
+    <link rel="stylesheet" href="static/public/css/hero_tabs.css" />
+    <link rel="stylesheet" href="static/races/css/race_picker.css" />
+    <link rel="stylesheet" href="static/public/css/day_hub.css" />
+    <link rel="stylesheet" href="static/public/css/money_moves.css" />
+    <link rel="stylesheet" href="static/public/css/ai_chamber.css" />
+    <link rel="stylesheet" href="static/public/css/how_it_works.css" />
+  
+    <style>
+      /* Page furniture only — the sections below use the real stylesheets. */
+      .states-doc { max-width: 1280px; margin: 0 auto; padding: 48px 24px 96px; font-family: var(--font-body, system-ui); color: var(--c-text-100, #eceef5); }
+      .states-doc h1 { font-family: var(--font-display, Georgia, serif); font-size: 32px; margin-bottom: 8px; }
+      .states-doc__intro { color: var(--c-text-55, #9aa0b5); max-width: 70ch; line-height: 1.6; }
+      .states-case { margin-top: 56px; border-top: 1px solid rgba(255,255,255,0.12); padding-top: 20px; }
+      .states-case__name { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+      .states-case__when { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--c-gold, #d4af37); margin: 0 0 16px; }
+      .states-case__needs { color: var(--c-text-55, #9aa0b5); line-height: 1.6; max-width: 70ch; margin: 0; }
+      .states-case--gap { border-left: 3px solid var(--c-gold, #d4af37); padding-left: 16px; }
+      .states-case__tag { display: inline-block; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #0b0b0f; background: var(--c-gold, #d4af37); padding: 2px 8px; border-radius: 4px; margin-bottom: 8px; }
+      .states-frame { border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; overflow: hidden; margin-top: 16px; }
+    </style>
+  </head>
+  <body class="page-landing">
+    <div class="states-doc">
+      <h1>Landing page states</h1>
+      <p class="states-doc__intro">
+        Every state the Django template can render, so they can be looked at
+        rather than imagined. Generated from <code>index.html</code> by
+        <code>node tools/build-states.mjs</code>, so it cannot drift from the
+        real markup. Styles are the real ones; no page JavaScript runs here,
+        so countdowns and tabs are static.
+      </p>
+
+      <h2>States that exist</h2>
+      <section class="states-case">
+        <p class="states-case__name">Day hub · racing finished</p>
+        <p class="states-case__when">_day_hub.html sets .is-finished on a meeting whose last race has run</p>
+        <div class="states-frame">
+<section class="day-hub" id="day-hub" aria-label="Today's racing">
+        <div class="day-hub__intro">
+          <div class="day-hub__intro-inner">
+            <span class="day-hub__intro-kicker">
+              <span class="day-hub__intro-rule" aria-hidden="true"></span>
+              TODAY&rsquo;S RACING
+            </span>
+            <h2 class="day-hub__intro-title">
+              Four meetings. Twenty-six races.
+              <span class="day-hub__intro-accent">One that matters most.</span>
+            </h2>
+            <p class="day-hub__intro-sub">
+              Start with the marquee race, then work the rest of the card. Every
+              race carries a Fox pick.
+            </p>
+          </div>
+        </div>
+
+        <header class="day-hub__header">
+          <div class="day-hub__header-inner day-hub__status">
+            <div class="day-hub__status-meta">
+              <span class="day-hub__status-cal" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+                  <rect
+                    x="3"
+                    y="5"
+                    width="18"
+                    height="16"
+                    rx="2"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                  />
+                  <path
+                    d="M3 10h18M8 3v4M16 3v4"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </span>
+              <span class="day-hub__status-today"
+                ><em>TODAY</em> Tue 25 Aug</span
+              >
+              <span class="day-hub__status-sep" aria-hidden="true">·</span>
+              <span class="day-hub__status-counts"
+                >4 meetings · 26 races ·
+                <em>Fox has picked 26</em></span
+              >
+            </div>
+            <nav class="day-hub__meetings" aria-label="Today's meetings">
+              <a href="#dayhub-meeting-musselburgh" class="day-hub__chip">
+                <span class="day-hub__chip-course">Musselburgh</span>
+                <span class="day-hub__chip-count">6</span>
+              </a>
+              <a href="#dayhub-meeting-lingfield-aw" class="day-hub__chip">
+                <span class="day-hub__chip-course">Lingfield (AW)</span>
+                <span class="day-hub__chip-count">6</span>
+              </a>
+              <a href="#dayhub-meeting-bellewstown" class="day-hub__chip">
+                <span class="day-hub__chip-course">Bellewstown</span>
+                <span class="day-hub__chip-count">8</span>
+              </a>
+              <a href="#dayhub-meeting-stratford" class="day-hub__chip">
+                <span class="day-hub__chip-course">Stratford</span>
+                <span class="day-hub__chip-count">6</span>
+              </a>
+            </nav>
+          </div>
+        </header>
+
+        <section class="day-hub__hero" aria-label="Featured and next-off">
+          <div class="day-hub__hero-inner">
+            <article
+              class="day-card day-card--featured"
+              aria-label="Race of the Day"
+            >
+              <header class="day-card__header">
+                <span class="day-card__kicker">
+                  <span class="day-card__star" aria-hidden="true">
+                    <svg width="14" height="13" viewBox="0 0 20 18" fill="none">
+                      <path
+                        d="M8.76726 0.491324C9.08152 -0.163781 10.0143 -0.163783 10.3285 0.491323L12.5164 5.0523C12.6453 5.32084 12.9031 5.50432 13.199 5.53805L18.327 6.12268C19.0708 6.20747 19.3637 7.13246 18.8042 7.62991L15.0599 10.9594C14.8286 11.1651 14.7247 11.4786 14.7873 11.7817L15.7882 16.6252C15.937 17.3452 15.1774 17.9113 14.53 17.5628L9.95823 15.1022C9.70205 14.9643 9.39374 14.9643 9.13756 15.1022L4.56581 17.5628C3.91843 17.9113 3.1588 17.3452 3.30758 16.6252L4.30849 11.7817C4.37113 11.4786 4.26721 11.1651 4.03593 10.9594L0.291539 7.62991C-0.2679 7.13246 0.0249857 6.20747 0.768788 6.12268L5.89678 5.53805C6.19271 5.50432 6.45052 5.32084 6.57934 5.0523L8.76726 0.491324Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </span>
+                  RACE OF THE DAY
+                </span>
+              </header>
+
+              <div class="day-card__time-row">
+                <span class="day-card__time">15:45</span>
+                <span class="day-card__course">Musselburgh</span>
+              </div>
+              <h3 class="day-card__name">
+                Portobello Cup Handicap Stakes (GBBPlus Race)
+              </h3>
+              <dl class="day-card__facts">
+                <div>
+                  <dt class="day-card__fact-top">
+                  <span class="day-card__fact-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                      <path
+                        d="M11.5444 15.1515V13.7085C11.5444 12.1146 10.2523 10.8225 8.65837 10.8225H4.32936C2.73547 10.8225 1.44336 12.1146 1.44336 13.7085V15.1515"
+                        stroke="currentColor"
+                        stroke-width="0.865801"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M11.5444 2.25098C12.8189 2.5808 13.7089 3.72891 13.7089 5.04318C13.7089 6.35746 12.8189 7.50557 11.5444 7.83539"
+                        stroke="currentColor"
+                        stroke-width="0.865801"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M15.873 15.166V13.7205C15.872 12.4031 14.9819 11.2529 13.7085 10.9236"
+                        stroke="currentColor"
+                        stroke-width="0.865801"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M3.60742 5.05055C3.60742 3.45666 4.89953 2.16455 6.49343 2.16455C8.08732 2.16455 9.37943 3.45666 9.37943 5.05055C9.37943 6.64445 8.08732 7.93656 6.49343 7.93656C4.89953 7.93656 3.60742 6.64445 3.60742 5.05055Z"
+                        stroke="currentColor"
+                        stroke-width="0.865801"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  Runners
+                </dt>
+                <dd>11</dd>
+                </div>
+                <div>
+                  <dt class="day-card__fact-top">
+                  <span class="day-card__fact-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                      <path
+                        d="M7.2148 10.5771V11.7506C7.20925 12.2535 6.94247 12.7172 6.51061 12.9746C5.5965 13.6519 5.05528 14.7207 5.05029 15.8585"
+                        stroke="currentColor"
+                        stroke-width="1.443"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M10.1011 10.5771V11.7506C10.1066 12.2535 10.3734 12.7172 10.8053 12.9746C11.7194 13.6519 12.2606 14.7207 12.2656 15.8585"
+                        stroke="currentColor"
+                        stroke-width="1.443"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M12.9868 6.49349H14.0691C15.0653 6.49349 15.8728 5.68592 15.8728 4.68974C15.8728 3.69355 15.0653 2.88599 14.0691 2.88599H12.9868"
+                        stroke="currentColor"
+                        stroke-width="1.443"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M2.88574 15.873H14.4298"
+                        stroke="currentColor"
+                        stroke-width="1.443"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M4.3291 6.49362C4.3291 8.88446 6.26726 10.8226 8.65811 10.8226C11.049 10.8226 12.9871 8.88446 12.9871 6.49362V2.16462C12.9871 1.76614 12.6641 1.44312 12.2656 1.44312H5.0506C4.65213 1.44312 4.3291 1.76614 4.3291 2.16462V6.49362Z"
+                        stroke="currentColor"
+                        stroke-width="1.443"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M4.32936 6.49349H3.24711C2.25093 6.49349 1.44336 5.68592 1.44336 4.68974C1.44336 3.69355 2.25093 2.88599 3.24711 2.88599H4.32936"
+                        stroke="currentColor"
+                        stroke-width="1.443"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  Prize
+                </dt>
+                <dd>£10,468</dd>
+                </div>
+                <div class="day-card__facts-fox">
+                  <dt class="day-card__fact-top">
+                  <span class="day-card__fact-icon" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path
+                        d="M2.66992 14.6601V2.66308C2.66992 2.45329 2.76875 2.25575 2.93667 2.12988C3.62927 1.61072 4.47167 1.33008 5.33742 1.33008C7.33805 1.33008 8.6718 2.66308 10.2276 2.66308C11.1168 2.66308 11.7986 2.48534 12.2729 2.12988C12.475 1.97841 12.7454 1.95404 12.9713 2.06694C13.1972 2.17984 13.3399 2.41063 13.3399 2.66308V9.32808C13.3399 9.53786 13.2411 9.73541 13.0732 9.86128C12.3806 10.3804 11.5382 10.6611 10.6724 10.6611C8.6718 10.6611 7.33805 9.32808 5.33742 9.32808C4.35319 9.3281 3.4035 9.69068 2.66992 10.3465"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  Fox&rsquo;s pick
+                </dt>
+                <dd>Dark Cloud Rising</dd>
+                </div>
+                <div>
+                  <dt class="day-card__fact-top">
+                  <span class="day-card__fact-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                      <path
+                        d="M1.44287 8.65812C1.44287 4.67338 4.67314 1.44312 8.65788 1.44312C12.6426 1.44312 15.8729 4.67338 15.8729 8.65812C15.8729 12.6429 12.6426 15.8731 8.65788 15.8731C4.67314 15.8731 1.44287 12.6429 1.44287 8.65812Z"
+                        stroke="currentColor"
+                        stroke-width="0.865801"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M8.65771 4.3291V8.65811L11.5437 10.1011"
+                        stroke="currentColor"
+                        stroke-width="0.865801"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  Class
+                </dt>
+                <dd>Handicap</dd>
+                </div>
+              </dl>
+
+              <a
+                href="https://www.saturday-racing.com/races/feature/"
+                class="day-card__tip"
+              >
+                <span class="day-card__tip-portrait">
+                  <img
+                    src="static/public/img/mr_fox_host-sm.webp"
+                    alt=""
+                    width="48"
+                    height="48"
+                  />
+                </span>
+                <span class="day-card__tip-body">
+                  <span class="day-card__tip-kicker">
+                    <span class="day-card__tip-fox" aria-hidden="true">
+                      <svg width="12" height="11" viewBox="0 0 20 18" fill="none">
+                        <path
+                          d="M8.76726 0.491324C9.08152 -0.163781 10.0143 -0.163783 10.3285 0.491323L12.5164 5.0523C12.6453 5.32084 12.9031 5.50432 13.199 5.53805L18.327 6.12268C19.0708 6.20747 19.3637 7.13246 18.8042 7.62991L15.0599 10.9594C14.8286 11.1651 14.7247 11.4786 14.7873 11.7817L15.7882 16.6252C15.937 17.3452 15.1774 17.9113 14.53 17.5628L9.95823 15.1022C9.70205 14.9643 9.39374 14.9643 9.13756 15.1022L4.56581 17.5628C3.91843 17.9113 3.1588 17.3452 3.30758 16.6252L4.30849 11.7817C4.37113 11.4786 4.26721 11.1651 4.03593 10.9594L0.291539 7.62991C-0.2679 7.13246 0.0249857 6.20747 0.768788 6.12268L5.89678 5.53805C6.19271 5.50432 6.45052 5.32084 6.57934 5.0523L8.76726 0.491324Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </span>
+                    FOX&rsquo;S PICK
+                  </span>
+                  <span class="day-card__tip-horse">Dark Cloud Rising</span>
+                  <span class="day-card__tip-note"
+                    >High-class stayer with strong form at this trip.</span
+                  >
+                </span>
+              </a>
+
+              <div class="day-card__actions">
+                <a
+                  href="https://www.saturday-racing.com/races/feature/"
+                  class="day-card__cta"
+                  >Pick your horse <span aria-hidden="true">→</span></a
+                >
+                <a
+                  href="https://www.saturday-racing.com/races/feature/"
+                  class="day-card__cta day-card__cta--ghost"
+                  >Read why <span aria-hidden="true">→</span></a
+                >
+              </div>
+            </article>
+
+            <article class="day-card day-card--next-off" aria-label="Next off">
+              <header class="day-card__header">
+                <span class="day-card__kicker day-card__kicker--live">
+                  <span class="day-card__pulse" aria-hidden="true"></span>
+                  NEXT OFF
+                </span>
+              </header>
+
+              <div class="day-card__time-row">
+                <span class="day-card__time">14:15</span>
+                <span class="day-card__course">Musselburgh</span>
+              </div>
+              <h3 class="day-card__name">
+                EBF Restricted Maiden Stakes (For Horses In Bands C And D) (EBF
+                Restricted Race Qualifier) (GBB Race)
+              </h3>
+              <div
+                class="day-hub-countdown"
+                data-race-iso="2026-08-25T14:15:00"
+              >
+                <span class="day-hub-cd__num hf-cd-hours">--</span>
+                <span class="day-hub-cd__sep" aria-hidden="true">:</span>
+                <span class="day-hub-cd__num hf-cd-mins">--</span>
+                <span class="day-hub-cd__sep" aria-hidden="true">:</span>
+                <span class="day-hub-cd__num hf-cd-secs">--</span>
+                <span class="hf-cd-days" hidden>--</span>
+              </div>
+              <dl class="day-card__facts">
+                <div>
+                  <dt class="day-card__fact-top">
+                  <span class="day-card__fact-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                      <path
+                        d="M11.5444 15.1515V13.7085C11.5444 12.1146 10.2523 10.8225 8.65837 10.8225H4.32936C2.73547 10.8225 1.44336 12.1146 1.44336 13.7085V15.1515"
+                        stroke="currentColor"
+                        stroke-width="0.865801"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M11.5444 2.25098C12.8189 2.5808 13.7089 3.72891 13.7089 5.04318C13.7089 6.35746 12.8189 7.50557 11.5444 7.83539"
+                        stroke="currentColor"
+                        stroke-width="0.865801"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M15.873 15.166V13.7205C15.872 12.4031 14.9819 11.2529 13.7085 10.9236"
+                        stroke="currentColor"
+                        stroke-width="0.865801"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                      <path
+                        d="M3.60742 5.05055C3.60742 3.45666 4.89953 2.16455 6.49343 2.16455C8.08732 2.16455 9.37943 3.45666 9.37943 5.05055C9.37943 6.64445 8.08732 7.93656 6.49343 7.93656C4.89953 7.93656 3.60742 6.64445 3.60742 5.05055Z"
+                        stroke="currentColor"
+                        stroke-width="0.865801"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  Runners
+                </dt>
+                <dd>10</dd>
+                </div>
+                <div>
+                  <dt class="day-card__fact-top">
+                  <span class="day-card__fact-icon" aria-hidden="true">
+                    <svg width="16" height="14" viewBox="0 0 20 18" fill="none">
+                      <path
+                        d="M8.76726 0.491324C9.08152 -0.163781 10.0143 -0.163783 10.3285 0.491323L12.5164 5.0523C12.6453 5.32084 12.9031 5.50432 13.199 5.53805L18.327 6.12268C19.0708 6.20747 19.3637 7.13246 18.8042 7.62991L15.0599 10.9594C14.8286 11.1651 14.7247 11.4786 14.7873 11.7817L15.7882 16.6252C15.937 17.3452 15.1774 17.9113 14.53 17.5628L9.95823 15.1022C9.70205 14.9643 9.39374 14.9643 9.13756 15.1022L4.56581 17.5628C3.91843 17.9113 3.1588 17.3452 3.30758 16.6252L4.30849 11.7817C4.37113 11.4786 4.26721 11.1651 4.03593 10.9594L0.291539 7.62991C-0.2679 7.13246 0.0249857 6.20747 0.768788 6.12268L5.89678 5.53805C6.19271 5.50432 6.45052 5.32084 6.57934 5.0523L8.76726 0.491324Z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </span>
+                  Favourite
+                </dt>
+                <dd>
+                      <a
+                        href="https://www.saturday-racing.com/horses/vegasmile/"
+                        class="horse-link"
+                        >Vegasmile</a
+                      >
+                      <span class="day-card__odds">10/11</span>
+                    </dd>
+                </div>
+              </dl>
+              <div class="day-card__actions">
+                <a
+                  href="https://www.saturday-racing.com/races/4435/"
+                  class="day-card__cta"
+                >
+                  Quick pick
+                  <svg
+                    class="day-card__cta-icon"
+                    width="13"
+                    height="18"
+                    viewBox="0 0 13 18"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M6.88276 0.75L0.75 10.2738H6.26948L5.65621 16.623L11.789 7.09921H6.26948L6.88276 0.75Z"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </a>
+                <a
+                  href="https://www.saturday-racing.com/races/4435/"
+                  class="day-card__cta day-card__cta--ghost"
+                  >Open racecard <span aria-hidden="true">→</span></a
+                >
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="day-hub__grid-section" aria-label="All today's races">
+          <div class="day-hub__grid-inner day-hub__card">
+            <div class="day-hub__grid-head">
+              <div class="day-hub__grid-titles">
+                <span class="day-hub__grid-kicker">TODAY&rsquo;S CARD</span>
+                <h3 class="day-hub__grid-title">Today&rsquo;s racing &mdash; finished</h3>
+              </div>
+              <div
+                class="day-hub__filters"
+                role="tablist"
+                aria-label="Filter races"
+              >
+                <button
+                  type="button"
+                  class="day-hub__filter is-active"
+                  data-day-filter="all"
+                  role="tab"
+                  aria-selected="true"
+                >
+                  All <span class="day-hub__filter-n">26</span>
+                </button>
+                <button
+                  type="button"
+                  class="day-hub__filter"
+                  data-day-filter="fox"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Fox picks <span class="day-hub__filter-n">26</span>
+                </button>
+                <button
+                  type="button"
+                  class="day-hub__filter"
+                  data-day-filter="pattern"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Pattern
+                </button>
+                <button
+                  type="button"
+                  class="day-hub__filter"
+                  data-day-filter="handicap"
+                  role="tab"
+                  aria-selected="false"
+                >
+                  Handicaps
+                </button>
+              </div>
+            </div>
+
+            <div class="day-hub__card-body">
+              <nav class="day-hub__courses" aria-label="Today's meetings">
+                <button
+                  type="button"
+                  class="day-hub__course is-active"
+                  data-day-course="musselburgh"
+                  aria-pressed="true"
+                >
+                  <img
+                    class="day-hub__course-ico"
+                    src="static/public/img/course-horse.webp"
+                    alt=""
+                    width="40"
+                    height="27"
+                    aria-hidden="true"
+                  />
+                  <span class="day-hub__course-name">Musselburgh</span>
+                  <span class="day-hub__course-meta">GB · 6</span>
+                </button>
+                <button
+                  type="button"
+                  class="day-hub__course"
+                  data-day-course="lingfield-aw"
+                  aria-pressed="false"
+                >
+                  <img
+                    class="day-hub__course-ico"
+                    src="static/public/img/course-horse.webp"
+                    alt=""
+                    width="40"
+                    height="27"
+                    aria-hidden="true"
+                  />
+                  <span class="day-hub__course-name">Lingfield (AW)</span>
+                  <span class="day-hub__course-meta">GB · 6</span>
+                </button>
+                <button
+                  type="button"
+                  class="day-hub__course"
+                  data-day-course="bellewstown"
+                  aria-pressed="false"
+                >
+                  <img
+                    class="day-hub__course-ico"
+                    src="static/public/img/course-horse.webp"
+                    alt=""
+                    width="40"
+                    height="27"
+                    aria-hidden="true"
+                  />
+                  <span class="day-hub__course-name">Bellewstown</span>
+                  <span class="day-hub__course-meta">IRE · 8</span>
+                </button>
+                <button
+                  type="button"
+                  class="day-hub__course"
+                  data-day-course="stratford"
+                  aria-pressed="false"
+                >
+                  <img
+                    class="day-hub__course-ico"
+                    src="static/public/img/course-horse.webp"
+                    alt=""
+                    width="40"
+                    height="27"
+                    aria-hidden="true"
+                  />
+                  <span class="day-hub__course-name">Stratford</span>
+                  <span class="day-hub__course-meta">GB · 6</span>
+                </button>
+              </nav>
+
+              <div class="day-hub__races-pane">
+            <div class="rp-grid day-hub__rp-grid" data-day-races>
+              <section
+                class="rp-meeting day-hub__rp-meeting is-finished is-active"
+                id="dayhub-meeting-musselburgh"
+                data-meeting-slug="musselburgh"
+                data-day-hub-meeting
+              >
+                <header class="rp-meeting__head">
+                  <h3 class="rp-meeting__name">
+                    <a
+                      class="day-hub__meeting-link"
+                      href="https://www.saturday-racing.com/races/meeting/musselburgh/2026-08-25/full/"
+                      title="View full racecard for Musselburgh"
+                    >
+                      Musselburgh
+                      <span
+                        class="day-hub__meeting-link-arrow"
+                        aria-hidden="true"
+                        >→</span
+                      >
+                    </a>
+                  </h3>
+                  <span class="rp-meeting__sub">14:15–16:45 · 6 races</span>
+
+                  <button
+                    type="button"
+                    class="day-hub__meeting-toggle"
+                    data-day-hub-toggle
+                    aria-expanded="false"
+                    aria-controls="dayhub-races-musselburgh"
+                    aria-label="Show Musselburgh races"
+                  >
+                    <span
+                      class="day-hub__meeting-toggle-chev"
+                      aria-hidden="true"
+                      >▾</span
+                    >
+                  </button>
+                </header>
+                <div class="rp-races" id="dayhub-races-musselburgh">
+                  <a
+                    class="rp-race rp-race--next day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4435/"
+                    id="dayhub-race-4435"
+                    data-flags="all"
+                    data-race-id="4435"
+                  >
+                    <span class="rp-race__time">14:15</span>
+                    <span class="rp-race__name"
+                      >EBF Restricted Maiden Stakes (For Horses In Bands C And D) (EBF Restricted Race Qualifier) (GBB Race)</span
+                    >
+                    <span class="rp-race__chips">
+                      <span class="rp-race__badge rp-race__badge--next"
+                        >Next</span
+                      >
+                    </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4436/"
+                    id="dayhub-race-4436"
+                    data-flags="all handicap"
+                    data-race-id="4436"
+                  >
+                    <span class="rp-race__time">14:45</span>
+                    <span class="rp-race__name"
+                      >National Racehorse Week Nursery Handicap Stakes</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4437/"
+                    id="dayhub-race-4437"
+                    data-flags="all handicap"
+                    data-race-id="4437"
+                  >
+                    <span class="rp-race__time">15:15</span>
+                    <span class="rp-race__name"
+                      >Thomson Bethune Handicap Stakes</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--featured day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4438/"
+                    id="dayhub-race-4438"
+                    data-flags="all handicap"
+                    data-race-id="4438"
+                  >
+                    <span class="rp-race__time">15:45</span>
+                    <span class="rp-race__name"
+                      >Portobello Cup Handicap Stakes (GBBPlus Race)</span
+                    >
+                    <span class="rp-race__chips">
+                      <span class="rp-star" aria-label="Race of the day"
+                        >★</span
+                      >
+                    </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4439/"
+                    id="dayhub-race-4439"
+                    data-flags="all handicap"
+                    data-race-id="4439"
+                  >
+                    <span class="rp-race__time">16:15</span>
+                    <span class="rp-race__name"
+                      >AAB Group And Bibby Financial Services Handicap Stakes</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4440/"
+                    id="dayhub-race-4440"
+                    data-flags="all handicap"
+                    data-race-id="4440"
+                  >
+                    <span class="rp-race__time">16:45</span>
+                    <span class="rp-race__name"
+                      >Mediterranean Shipping Company Handicap Stakes</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+                </div>
+              </section>
+
+              <section
+                class="rp-meeting day-hub__rp-meeting is-finished"
+                id="dayhub-meeting-lingfield-aw"
+                data-meeting-slug="lingfield-aw"
+                data-day-hub-meeting
+              >
+                <header class="rp-meeting__head">
+                  <h3 class="rp-meeting__name">
+                    <a
+                      class="day-hub__meeting-link"
+                      href="https://www.saturday-racing.com/races/meeting/lingfield-aw/2026-08-25/full/"
+                      title="View full racecard for Lingfield (AW)"
+                    >
+                      Lingfield (AW)
+                      <span
+                        class="day-hub__meeting-link-arrow"
+                        aria-hidden="true"
+                        >→</span
+                      >
+                    </a>
+                  </h3>
+                  <span class="rp-meeting__sub">14:30–17:02 · 6 races</span>
+
+                  <button
+                    type="button"
+                    class="day-hub__meeting-toggle"
+                    data-day-hub-toggle
+                    aria-expanded="false"
+                    aria-controls="dayhub-races-lingfield-aw"
+                    aria-label="Show Lingfield (AW) races"
+                  >
+                    <span
+                      class="day-hub__meeting-toggle-chev"
+                      aria-hidden="true"
+                      >▾</span
+                    >
+                  </button>
+                </header>
+                <div class="rp-races" id="dayhub-races-lingfield-aw">
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4429/"
+                    id="dayhub-race-4429"
+                    data-flags="all handicap"
+                    data-race-id="4429"
+                  >
+                    <span class="rp-race__time">14:30</span>
+                    <span class="rp-race__name"
+                      >Smarter Gambling Starts At gambling.com Apprentice Handicap Stakes</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4430/"
+                    id="dayhub-race-4430"
+                    data-flags="all"
+                    data-race-id="4430"
+                  >
+                    <span class="rp-race__time">15:00</span>
+                    <span class="rp-race__name"
+                      >Advice You Can Trust At gambling.com Fillies&#x27; Novice Stakes (GBB Race)</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4431/"
+                    id="dayhub-race-4431"
+                    data-flags="all"
+                    data-race-id="4431"
+                  >
+                    <span class="rp-race__time">15:30</span>
+                    <span class="rp-race__name"
+                      >Sky Sports Racing Sky 415 Classified Stakes</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4432/"
+                    id="dayhub-race-4432"
+                    data-flags="all handicap"
+                    data-race-id="4432"
+                  >
+                    <span class="rp-race__time">16:00</span>
+                    <span class="rp-race__name"
+                      >Follow @AtTheRaces On X Handicap Stakes</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4433/"
+                    id="dayhub-race-4433"
+                    data-flags="all"
+                    data-race-id="4433"
+                  >
+                    <span class="rp-race__time">16:30</span>
+                    <span class="rp-race__name"
+                      >Celebrate National Racehorse Week Restricted Novice Stakes (For Horses In Bands C And D) (GBB Race)</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4434/"
+                    id="dayhub-race-4434"
+                    data-flags="all handicap"
+                    data-race-id="4434"
+                  >
+                    <span class="rp-race__time">17:02</span>
+                    <span class="rp-race__name"
+                      >Free Tips On attheraces.com Handicap Stakes</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+                </div>
+              </section>
+
+              <section
+                class="rp-meeting day-hub__rp-meeting is-finished"
+                id="dayhub-meeting-bellewstown"
+                data-meeting-slug="bellewstown"
+                data-day-hub-meeting
+              >
+                <header class="rp-meeting__head">
+                  <h3 class="rp-meeting__name">
+                    <a
+                      class="day-hub__meeting-link"
+                      href="https://www.saturday-racing.com/races/meeting/bellewstown/2026-08-25/full/"
+                      title="View full racecard for Bellewstown"
+                    >
+                      Bellewstown
+                      <span
+                        class="day-hub__meeting-link-arrow"
+                        aria-hidden="true"
+                        >→</span
+                      >
+                    </a>
+                  </h3>
+                  <span class="rp-meeting__sub">16:20–20:02 · 8 races</span>
+
+                  <button
+                    type="button"
+                    class="day-hub__meeting-toggle"
+                    data-day-hub-toggle
+                    aria-expanded="false"
+                    aria-controls="dayhub-races-bellewstown"
+                    aria-label="Show Bellewstown races"
+                  >
+                    <span
+                      class="day-hub__meeting-toggle-chev"
+                      aria-hidden="true"
+                      >▾</span
+                    >
+                  </button>
+                </header>
+                <div class="rp-races" id="dayhub-races-bellewstown">
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4447/"
+                    id="dayhub-race-4447"
+                    data-flags="all"
+                    data-race-id="4447"
+                  >
+                    <span class="rp-race__time">16:20</span>
+                    <span class="rp-race__name"
+                      >Irish Stallion Farms EBF Median Auction Maiden</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4448/"
+                    id="dayhub-race-4448"
+                    data-flags="all handicap"
+                    data-race-id="4448"
+                  >
+                    <span class="rp-race__time">16:55</span>
+                    <span class="rp-race__name"
+                      >Ploughman Bar &amp; Grill Handicap (Div I)</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4449/"
+                    id="dayhub-race-4449"
+                    data-flags="all handicap"
+                    data-race-id="4449"
+                  >
+                    <span class="rp-race__time">17:30</span>
+                    <span class="rp-race__name"
+                      >Ploughman Bar &amp; Grill Handicap (Div II)</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4450/"
+                    id="dayhub-race-4450"
+                    data-flags="all handicap"
+                    data-race-id="4450"
+                  >
+                    <span class="rp-race__time">18:02</span>
+                    <span class="rp-race__name"
+                      >Gleeson&#x27;s Bar, Drogheda, Home Of Racing Handicap</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4451/"
+                    id="dayhub-race-4451"
+                    data-flags="all"
+                    data-race-id="4451"
+                  >
+                    <span class="rp-race__time">18:32</span>
+                    <span class="rp-race__name"
+                      >Irish EBF Auction Series Maiden</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4452/"
+                    id="dayhub-race-4452"
+                    data-flags="all handicap"
+                    data-race-id="4452"
+                  >
+                    <span class="rp-race__time">19:02</span>
+                    <span class="rp-race__name"
+                      >Gibney&#x27;s Of Gormanstown Handicap</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4453/"
+                    id="dayhub-race-4453"
+                    data-flags="all"
+                    data-race-id="4453"
+                  >
+                    <span class="rp-race__time">19:32</span>
+                    <span class="rp-race__name"
+                      >Dolly&#x27;s Bar &amp; Pantry Fillies Maiden</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4454/"
+                    id="dayhub-race-4454"
+                    data-flags="all handicap"
+                    data-race-id="4454"
+                  >
+                    <span class="rp-race__time">20:02</span>
+                    <span class="rp-race__name"
+                      >Gibney&#x27;s Of Malahide (Q.R.) Handicap</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+                </div>
+              </section>
+
+              <section
+                class="rp-meeting day-hub__rp-meeting is-finished"
+                id="dayhub-meeting-stratford"
+                data-meeting-slug="stratford"
+                data-day-hub-meeting
+              >
+                <header class="rp-meeting__head">
+                  <h3 class="rp-meeting__name">
+                    <a
+                      class="day-hub__meeting-link"
+                      href="https://www.saturday-racing.com/races/meeting/stratford/2026-08-25/full/"
+                      title="View full racecard for Stratford"
+                    >
+                      Stratford
+                      <span
+                        class="day-hub__meeting-link-arrow"
+                        aria-hidden="true"
+                        >→</span
+                      >
+                    </a>
+                  </h3>
+                  <span class="rp-meeting__sub">17:10–19:45 · 6 races</span>
+
+                  <button
+                    type="button"
+                    class="day-hub__meeting-toggle"
+                    data-day-hub-toggle
+                    aria-expanded="false"
+                    aria-controls="dayhub-races-stratford"
+                    aria-label="Show Stratford races"
+                  >
+                    <span
+                      class="day-hub__meeting-toggle-chev"
+                      aria-hidden="true"
+                      >▾</span
+                    >
+                  </button>
+                </header>
+                <div class="rp-races" id="dayhub-races-stratford">
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4441/"
+                    id="dayhub-race-4441"
+                    data-flags="all"
+                    data-race-id="4441"
+                  >
+                    <span class="rp-race__time">17:10</span>
+                    <span class="rp-race__name"
+                      >Celebrate National Racehorse Week 2026 Mares&#x27; Maiden Hurdle Race (GBB Race)</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4442/"
+                    id="dayhub-race-4442"
+                    data-flags="all handicap"
+                    data-race-id="4442"
+                  >
+                    <span class="rp-race__time">17:40</span>
+                    <span class="rp-race__name"
+                      >Stratford Novices&#x27; Limited Handicap Hurdle Race</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4443/"
+                    id="dayhub-race-4443"
+                    data-flags="all handicap"
+                    data-race-id="4443"
+                  >
+                    <span class="rp-race__time">18:15</span>
+                    <span class="rp-race__name"
+                      >George &amp; Dragon Handicap Steeple Chase (GBB Race)</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4444/"
+                    id="dayhub-race-4444"
+                    data-flags="all handicap"
+                    data-race-id="4444"
+                  >
+                    <span class="rp-race__time">18:45</span>
+                    <span class="rp-race__name"
+                      >Allsopps Love Stratford Handicap Hurdle Race</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4445/"
+                    id="dayhub-race-4445"
+                    data-flags="all handicap"
+                    data-race-id="4445"
+                  >
+                    <span class="rp-race__time">19:15</span>
+                    <span class="rp-race__name"
+                      >Thank You To Our Hardworking Groundstaff Handicap Steeple Chase</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+
+                  <a
+                    class="rp-race rp-race--upcoming day-hub__rp-race"
+                    href="https://www.saturday-racing.com/races/4446/"
+                    id="dayhub-race-4446"
+                    data-flags="all"
+                    data-race-id="4446"
+                  >
+                    <span class="rp-race__time">19:45</span>
+                    <span class="rp-race__name"
+                      >Hollow Bottom National Hunt Flat Race (Category 1 Elimination) (Conditional &amp; Amateur Jockeys) (GBB Race)</span
+                    >
+                    <span class="rp-race__chips"> </span>
+                  </a>
+                </div>
+              </section>
+            </div>
+            <p class="day-hub__empty-filter" data-day-empty hidden>
+              No races match this filter.
+            </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Battle · no pick yet</p>
+        <p class="states-case__when">landing.html: {% if big_race.fox_pick %} … {% else %} Pick pending</p>
+        <div class="states-frame">
+<section
+        class="section battle-section battle-section--rivalry"
+        id="the-battle"
+        aria-label="Fox vs Cubs"
+      >
+        <div class="battle-static" aria-hidden="true">
+          <div class="battle-static__bg"></div>
+          <canvas
+            class="battle-static__canvas"
+            data-tv-static
+            data-tv-static-cell="2"
+            data-tv-static-fps="24"
+            data-tv-static-opacity="0.5"
+            data-tv-static-tint="cool"
+            data-tv-static-scroll-pause
+          ></canvas>
+          <div class="battle-static__overlay"></div>
+        </div>
+
+        <div class="container">
+          <div class="battle-header" data-reveal data-reveal-delay="0">
+            <span class="kicker">THE RIVALRY</span>
+            <h2 class="battle-header__title">
+              Choose <em>your side.</em>
+            </h2>
+            <p class="battle-header__sub">
+              Every Saturday one race decides it. Fox or Cubs — who calls it
+              right?
+            </p>
+          </div>
+
+          <div
+            class="battle-arena"
+            role="group"
+            aria-label="Choose Fox or Cubs"
+          >
+            <div
+              class="battle-card battle-card--fox"
+              data-reveal
+              data-reveal-delay="1"
+            >
+              <a
+                href="https://www.saturday-racing.com/tipsters/mr-fox/"
+                class="battle-card__backdrop"
+                aria-label="View Mr Fox"
+              ></a>
+              <div class="battle-card__inner">
+                <div
+                  class="battle-card__portrait battle-card__portrait--fox battle-card__fox-hero"
+                >
+                  <div
+                    class="battle-card__fox-center"
+                    data-fox-art="static/public/img/mr_fox_host.webp"
+                    role="img"
+                    aria-label="Mr Fox — Saturday Racing AI tipster"
+                  >
+                    <img
+                      class="battle-card__fox-img"
+                      src="static/public/img/mr_fox_host.webp"
+                      alt=""
+                      width="720"
+                      height="1080"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                </div>
+                <div class="battle-card__identity">
+                  <h3 class="battle-card__name">
+                    Mr <span class="battle-card__name-accent">Fox</span>
+                  </h3>
+                  <p class="battle-card__descriptor">
+                    AI · DATA · MACHINE PRECISION
+                  </p>
+                </div>
+                <div class="battle-card__pick">
+                  <div class="battle-card__pick-label">
+                    <span class="battle-card__pick-rule" aria-hidden="true"></span>
+                    <span class="battle-card__pick-kicker">THIS SATURDAY</span>
+                  </div>
+                  <div class="battle-card__pick-row">
+                    <span class="battle-card__pick-horse battle-card__pick-horse--pending">Pick pending</span>
+                    
+                  </div>
+                </div>
+                <div class="battle-card__foot">
+                  <div class="battle-card__season">
+                    <span class="battle-card__season-rule" aria-hidden="true"></span>
+                    <span>&mdash; wins this season</span>
+                  </div>
+                  <div class="battle-card__cta">
+                    <span class="battle-card__cta-text">View the Fox →</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="battle-vs"
+              aria-hidden="true"
+              data-reveal
+              data-reveal-delay="2"
+            >
+              <div class="battle-vs__badge">
+                <span class="battle-vs__text">VS</span>
+              </div>
+            </div>
+
+            <div
+              class="battle-card battle-card--cubs"
+              data-reveal
+              data-reveal-delay="3"
+            >
+              <a
+                href="https://www.saturday-racing.com/cubs/"
+                class="battle-card__backdrop"
+                aria-label="Join the Cubs"
+              ></a>
+              <div class="battle-card__inner">
+                <div class="battle-card__portrait battle-card__portrait--cubs">
+                  <div class="cubs-portrait-wrap">
+                    <picture>
+                      <source
+                        type="image/webp"
+                        srcset="
+                          static/public/img/the_pack-sm.webp 340w,
+                          static/public/img/the_pack.webp    720w
+                        "
+                        sizes="(max-width: 720px) 340px, 720px"
+                      />
+                      <source
+                        type="image/png"
+                        srcset="
+                          static/public/img/the_pack-sm.webp 340w,
+                          static/public/img/the_pack.webp    720w
+                        "
+                        sizes="(max-width: 720px) 340px, 720px"
+                      />
+                      <img
+                        src="static/public/img/the_pack.webp"
+                        alt="The Pack — Saturday Racing community"
+                        width="720"
+                        height="1080"
+                        class="cubs-portrait"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </picture>
+                  </div>
+                </div>
+                <div class="battle-card__identity">
+                  <h3 class="battle-card__name">
+                    The <span class="battle-card__name-accent battle-card__name-accent--pack">Pack</span>
+                  </h3>
+                  <p class="battle-card__descriptor">
+                    HUMAN · INSTINCT · COLLECTIVE WISDOM
+                  </p>
+                </div>
+                <div class="battle-card__pick">
+                  <div class="battle-card__pick-label">
+                    <span class="battle-card__pick-rule" aria-hidden="true"></span>
+                    <span class="battle-card__pick-kicker">THIS SATURDAY</span>
+                  </div>
+                  <div class="battle-card__pick-row">
+                    <span class="battle-card__pick-horse">Voting open</span>
+                    <span class="battle-card__pick-odds battle-card__pick-odds--cta">Cast your vote</span>
+                  </div>
+                </div>
+                <div class="battle-card__foot">
+                  <div class="battle-card__season">
+                    <span class="battle-card__season-rule" aria-hidden="true"></span>
+                    <span>&mdash; wins this season</span>
+                  </div>
+                  <div class="battle-card__cta">
+                    <span class="battle-card__cta-text">Join the Cubs →</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="battle-footer" data-reveal data-reveal-delay="4">
+            <a
+              href="https://www.saturday-racing.com/tipsters/mr-fox/"
+              class="battle-footer__link"
+              >Full rivalry record<span class="cta-dash-tail"> — every race, every result</span> →</a
+            >
+          </div>
+        </div>
+      </section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Market intelligence · drifters</p>
+        <p class="states-case__when">the Drifters tab: .mi-board[data-mi-mode='drifters']</p>
+        <div class="states-frame">
+<section class="money-moves money-moves--intel" id="market-movers" aria-label="Market intelligence">
+        <div class="money-moves__inner">
+          <header class="mi-head">
+            <div class="mi-head__kicker">
+              <span class="mi-head__rule" aria-hidden="true"></span>
+              <span>MARKET INTELLIGENCE</span>
+            </div>
+            <h2 class="mi-head__title">Follow the money before the off.</h2>
+            <p class="mi-head__sub">
+              Where the market has moved hardest today across every UK and Irish
+              meeting.
+            </p>
+          </header>
+
+          <div class="mi-grid">
+            <article class="mi-steam">
+              <div class="mi-steam__kicker">
+                <img class="mi-steam__zap-img" src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
+                <span>STEAM OF THE DAY</span>
+              </div>
+              <h3 class="mi-steam__horse">Toco Madera</h3>
+              <p class="mi-steam__meta">15:45 · Musselburgh · William Hill</p>
+              <div class="mi-steam__prices" aria-label="Price moved from 33/1 to 14/1">
+                <span class="mi-steam__was">33/1</span>
+                <span class="mi-steam__chevs" aria-hidden="true">&gt;&gt;&gt;</span>
+                <span class="mi-steam__now">14/1</span>
+              </div>
+              <div class="mi-steam__bar" aria-hidden="true"><span style="width:72%"></span></div>
+              <p class="mi-steam__pct"><span>-56%</span> · 5 hours, 14 minutes ago</p>
+              <a class="mi-steam__cta" href="https://www.saturday-racing.com/races/feature/">
+                <img src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
+                View the race
+                <span aria-hidden="true">→</span>
+              </a>
+            </article>
+
+            <aside class="mi-board" data-mi-mode="drifters" aria-label="Top steamers">
+              <div class="mi-board__toolbar">
+                <div class="mi-board__tabs" role="tablist" aria-label="Market list">
+                  <button type="button" class="mi-tab" role="tab" aria-selected="false" aria-controls="mi-list" data-mi-tab="steamers">
+                    <img class="mi-tab__icon" src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
+                    Steamers
+                  </button>
+                  <button type="button" class="mi-tab is-active" role="tab" aria-selected="true" aria-controls="mi-list" data-mi-tab="drifters">
+                    <img class="mi-tab__icon" src="static/public/img/icons/drifters.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
+                    Drifters
+                  </button>
+                </div>
+                <span class="mi-board__top">TOP 5</span>
+              </div>
+              <div id="mi-list" role="tabpanel" aria-label="Market movers">
+              <ol class="mi-list mi-list--steamers">
+                <li class="mi-row">
+                  <a class="mi-row__link" href="https://www.saturday-racing.com/races/feature/">
+                    <span class="mi-row__rank">1</span>
+                    <span class="mi-row__body">
+                      <span class="mi-row__horse">Toco Madera</span>
+                      <span class="mi-row__meta">15:45 Musselburgh · William Hill</span>
+                    </span>
+                    <span class="mi-row__odds"><span>33/1</span><span aria-hidden="true">→</span><strong>14/1</strong></span>
+                    <span class="mi-row__pct">-56%</span>
+                  </a>
+                </li>
+                <li class="mi-row">
+                  <a class="mi-row__link" href="https://www.saturday-racing.com/races/feature/">
+                    <span class="mi-row__rank">2</span>
+                    <span class="mi-row__body">
+                      <span class="mi-row__horse">Twisting Physics</span>
+                      <span class="mi-row__meta">14:30 Lingfield (AW) · William Hill</span>
+                    </span>
+                    <span class="mi-row__odds"><span>16/1</span><span aria-hidden="true">→</span><strong>7/1</strong></span>
+                    <span class="mi-row__pct">-53%</span>
+                  </a>
+                </li>
+                <li class="mi-row">
+                  <a class="mi-row__link" href="https://www.saturday-racing.com/races/feature/">
+                    <span class="mi-row__rank">3</span>
+                    <span class="mi-row__body">
+                      <span class="mi-row__horse">Nanino Niyati</span>
+                      <span class="mi-row__meta">16:15 Musselburgh · William Hill</span>
+                    </span>
+                    <span class="mi-row__odds"><span>8/1</span><span aria-hidden="true">→</span><strong>9/2</strong></span>
+                    <span class="mi-row__pct">-39%</span>
+                  </a>
+                </li>
+                <li class="mi-row">
+                  <a class="mi-row__link" href="https://www.saturday-racing.com/races/feature/">
+                    <span class="mi-row__rank">4</span>
+                    <span class="mi-row__body">
+                      <span class="mi-row__horse">Woohoo</span>
+                      <span class="mi-row__meta">17:10 Bellewstown · Betfred</span>
+                    </span>
+                    <span class="mi-row__odds"><span>33/1</span><span aria-hidden="true">→</span><strong>20/1</strong></span>
+                    <span class="mi-row__pct">-38%</span>
+                  </a>
+                </li>
+                <li class="mi-row">
+                  <a class="mi-row__link" href="https://www.saturday-racing.com/races/feature/">
+                    <span class="mi-row__rank">5</span>
+                    <span class="mi-row__body">
+                      <span class="mi-row__horse">Macarone</span>
+                      <span class="mi-row__meta">18:20 Stratford · William Hill</span>
+                    </span>
+                    <span class="mi-row__odds"><span>18/1</span><span aria-hidden="true">→</span><strong>11/1</strong></span>
+                    <span class="mi-row__pct">-37%</span>
+                  </a>
+                </li>
+              </ol>
+              <ol class="mi-list mi-list--drifters">
+                <li class="mi-row">
+                  <a class="mi-row__link" href="https://www.saturday-racing.com/races/feature/">
+                    <span class="mi-row__rank">1</span>
+                    <span class="mi-row__body">
+                      <span class="mi-row__horse">Pennywhistle</span>
+                      <span class="mi-row__meta">14:15 Musselburgh · Betfred</span>
+                    </span>
+                    <span class="mi-row__odds"><span>5/2</span><span aria-hidden="true">&rarr;</span><strong>11/2</strong></span>
+                    <span class="mi-row__pct">+120%</span>
+                  </a>
+                </li>
+                <li class="mi-row">
+                  <a class="mi-row__link" href="https://www.saturday-racing.com/races/feature/">
+                    <span class="mi-row__rank">2</span>
+                    <span class="mi-row__body">
+                      <span class="mi-row__horse">Harbour Master</span>
+                      <span class="mi-row__meta">15:00 Lingfield (AW) · William Hill</span>
+                    </span>
+                    <span class="mi-row__odds"><span>7/2</span><span aria-hidden="true">&rarr;</span><strong>7/1</strong></span>
+                    <span class="mi-row__pct">+100%</span>
+                  </a>
+                </li>
+                <li class="mi-row">
+                  <a class="mi-row__link" href="https://www.saturday-racing.com/races/feature/">
+                    <span class="mi-row__rank">3</span>
+                    <span class="mi-row__body">
+                      <span class="mi-row__horse">Copper Lantern</span>
+                      <span class="mi-row__meta">16:45 Musselburgh · Betfred</span>
+                    </span>
+                    <span class="mi-row__odds"><span>4/1</span><span aria-hidden="true">&rarr;</span><strong>15/2</strong></span>
+                    <span class="mi-row__pct">+88%</span>
+                  </a>
+                </li>
+                <li class="mi-row">
+                  <a class="mi-row__link" href="https://www.saturday-racing.com/races/feature/">
+                    <span class="mi-row__rank">4</span>
+                    <span class="mi-row__body">
+                      <span class="mi-row__horse">Shelbourne Star</span>
+                      <span class="mi-row__meta">17:40 Bellewstown · William Hill</span>
+                    </span>
+                    <span class="mi-row__odds"><span>9/2</span><span aria-hidden="true">&rarr;</span><strong>8/1</strong></span>
+                    <span class="mi-row__pct">+78%</span>
+                  </a>
+                </li>
+                <li class="mi-row">
+                  <a class="mi-row__link" href="https://www.saturday-racing.com/races/feature/">
+                    <span class="mi-row__rank">5</span>
+                    <span class="mi-row__body">
+                      <span class="mi-row__horse">Wingfoot</span>
+                      <span class="mi-row__meta">18:50 Stratford · Betfred</span>
+                    </span>
+                    <span class="mi-row__odds"><span>6/1</span><span aria-hidden="true">&rarr;</span><strong>10/1</strong></span>
+                    <span class="mi-row__pct">+67%</span>
+                  </a>
+                </li>
+              </ol>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+        </div>
+      </section>
+
+      <h2 style="margin-top:72px">States with no design yet</h2>
+      <p class="states-doc__intro">
+        Each of these is a branch the live template can take. Until they are
+        designed, the page has nothing to render when the data looks like
+        this.
+      </p>
+      <section class="states-case states-case--gap">
+        <span class="states-case__tag">Needs design</span>
+        <p class="states-case__name">Hero · result declared</p>
+        <p class="states-case__when">hero_fold.html, hero.result — roughly 80 lines of the live template</p>
+        <p class="states-case__needs">The hero after the race has run: winner, placed horses, and the spoiler reveal (landing.js initHeroResultSpoiler still looks for [data-hero-result]). The redesign has no resulted hero, so on a Saturday evening the page has nothing to show.</p>
+      </section>
+      <section class="states-case states-case--gap">
+        <span class="states-case__tag">Needs design</span>
+        <p class="states-case__name">AI Chamber · four of five outcomes</p>
+        <p class="states-case__when">landing.html: ai_consensus.pattern is majority | unanimous | single | split | empty</p>
+        <p class="states-case__needs">Only majority is designed. Unanimous (all three agree), single (one model has a pick), split (three different picks) and empty (fewer than two picks, which is what the snapshot day actually was) all need a layout for the .ac-split block.</p>
+      </section>
+      <section class="states-case states-case--gap">
+        <span class="states-case__tag">Needs design</span>
+        <p class="states-case__name">Challenges · with challengers</p>
+        <p class="states-case__when">challenges_section.html: {% if top_challengers %}</p>
+        <p class="states-case__needs">Only the empty state is designed. The filled state lists challengers with avatar, silk colour and a W/L/D record, plus the standings rows.</p>
+      </section>
+      <section class="states-case states-case--gap">
+        <span class="states-case__tag">Needs design</span>
+        <p class="states-case__name">Market intelligence · no data</p>
+        <p class="states-case__when">_money_moves.html hides the whole section when has_data is false</p>
+        <p class="states-case__needs">Early in the morning there are no market moves. The old section removed itself; the redesign has no empty state, so it would render an empty board.</p>
+      </section>
+      <section class="states-case states-case--gap">
+        <span class="states-case__tag">Needs design</span>
+        <p class="states-case__name">Nav and footer · signed in</p>
+        <p class="states-case__when">base.html and partials/footer.html: {% if user.is_authenticated %}</p>
+        <p class="states-case__needs">My profile and Sign out in place of Sign in and Join free, and the hero pick link pointing at the pick rather than the join page (data-picks-half-href).</p>
+      </section>
+    </div>
+  </body>
+</html>
