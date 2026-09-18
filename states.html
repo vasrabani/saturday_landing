@@ -1326,6 +1326,357 @@
         </div>
       </section>
       <section class="states-case">
+        <p class="states-case__name">Hero · the race has been run</p>
+        <p class="states-case__when">hero_fold.html: {% if hero.result %} — the state every Saturday evening</p>
+        <div class="states-frame">
+<!-- Hero · the race has been run (hero_fold.html: {% if hero.result %})
+     Every Saturday evening the hero is in this state, and the redesign had
+     no markup for it. The styles were still in hero-fold.css, and
+     landing.js still wires the spoiler, so this is the structure they
+     expect: tone class on the column (hf-tone-hit / -miss / -void),
+     [data-hero-result] for the script, and the winner behind a reveal so
+     the page does not spoil the result for someone who has not watched.
+
+     Placement: this replaces the hero's title column content when
+     hero.result is set; the countdown column becomes the result panel. -->
+<div class="hero-fold__col hero-fold__col--title hero-fold__col--resulted hf-tone-hit">
+  <div class="hf-race-reveal">
+    <span class="hf-race-reveal__eyebrow hf-race-reveal__eyebrow--resulted">
+      <span class="hf-race-reveal__dot hf-race-reveal__dot--resulted" aria-hidden="true"></span>
+      <span>RESULT &middot; 15:45 MUSSELBURGH</span>
+    </span>
+  </div>
+
+  <h1 class="hf-title hf-title--oneline">
+    <span class="hf-title__lead">The Fox</span>
+    <span class="hf-title__fox">called it.</span>
+  </h1>
+
+  <div class="hf-result" data-hero-result>
+    <div class="hf-result__headline">
+      Portobello Cup Handicap Stakes (GBBPlus Race)
+    </div>
+
+    <div class="hf-result__panel">
+      <div class="hf-result__row hf-result__row--winner">
+        <div class="hf-result__label">Winner</div>
+        <div class="hf-result__winner">
+          <button
+            type="button"
+            class="hf-result__spoiler"
+            data-spoiler
+            data-action="reveal-result"
+            data-race-id="4434"
+            aria-pressed="false"
+            aria-label="Tap to reveal the winner"
+          >
+            <span class="hf-result__spoiler-cover">Tap to reveal winner</span>
+            <span class="hf-result__spoiler-payload">
+              <span class="hf-result__horse">Dark Cloud Rising</span>
+              <span class="hf-result__sp">SP 7/2</span>
+            </span>
+          </button>
+          <div class="hf-result__connections">P J McDonald &middot; K Dalgleish</div>
+        </div>
+      </div>
+
+      <div class="hf-result__verdict">
+        <div class="hf-result__verdict-item hf-result__verdict-item--fox is-correct">
+          <span class="hf-result__verdict-tag">Fox</span>
+          <span class="hf-result__verdict-pick">Dark Cloud Rising</span>
+          <span class="hf-result__verdict-icon" aria-hidden="true">&check;</span>
+        </div>
+        <div class="hf-result__verdict-item hf-result__verdict-item--cubs is-wrong">
+          <span class="hf-result__verdict-tag">Cubs</span>
+          <span class="hf-result__verdict-pick">Vegasmile</span>
+          <span class="hf-result__verdict-icon" aria-hidden="true">&times;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">AI Chamber · unanimous</p>
+        <p class="states-case__when">ai_consensus.pattern == 'unanimous' — all three models agree</p>
+        <div class="states-frame">
+<section class="section ai-section ai-section--chamber"><div class="container"><div class="ac-layout"><article
+              class="ac-panel"
+              id="ac-panel-claude"
+              role="tabpanel"
+              aria-labelledby="ac-tab-claude"
+              data-reveal
+              data-reveal-delay="1"
+            >
+              <div class="ac-panel__meta">
+                <span class="ac-panel__badge">
+                  <img
+                    src="static/public/img/ai-chamber/icon-model.svg"
+                    alt=""
+                    width="12"
+                    height="12"
+                  />
+                  <span data-ac-model>CLAUDE</span>
+                </span>
+                <span class="ac-panel__lens" data-ac-lens>Balanced lens</span>
+              </div>
+              <h3 class="ac-panel__horse" data-ac-horse>Trawlerman</h3>
+              <div class="ac-conf">
+                <div class="ac-conf__row">
+                  <span>CONFIDENCE</span>
+                  <span class="ac-conf__val" data-ac-conf>91/100</span>
+                </div>
+                <div class="ac-conf__bar" aria-hidden="true">
+                  <span data-ac-bar style="width: 91%"></span>
+                </div>
+              </div>
+              <p class="ac-panel__body" data-ac-body>
+                Trawlerman owns one of the strongest chamber scores in this field. With no SR/RPR/TS data on the winner, the Balanced lens leaned on market confidence and pace fit instead. The profile stays composed even after race-day variance.
+              </p>
+              <div class="ac-tags" data-ac-tags>
+                <span>Speed figures</span>
+                <span>Trainer patterns</span>
+              </div>
+              <!-- AI Chamber · consensus: unanimous (ai_consensus.pattern == 'unanimous')
+     All three models landed on the same horse, so there is no dissent to
+     show: one card, the agree treatment, across the full width. -->
+<div class="ac-split ac-split--solo">
+  <div class="ac-split__card ac-split__card--agree">
+    <p class="ac-split__lbl">3/3 UNANIMOUS</p>
+    <p class="ac-split__horse">Trawlerman</p>
+    <p class="ac-split__note">Claude, ChatGPT &amp; Gemini agree</p>
+  </div>
+</div>
+              <a
+                class="ac-cta"
+                href="https://www.saturday-racing.com/ai/tools/"
+              >
+                Enter the AI Chamber<span class="cta-dash-tail"> — full analysis</span>
+                <img
+                  src="static/public/img/ai-chamber/icon-arrow.svg"
+                  alt=""
+                  width="14"
+                  height="14"
+                />
+              </a>
+            </article></div></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">AI Chamber · one model has a pick</p>
+        <p class="states-case__when">ai_consensus.pattern == 'single'</p>
+        <div class="states-frame">
+<section class="section ai-section ai-section--chamber"><div class="container"><div class="ac-layout"><article
+              class="ac-panel"
+              id="ac-panel-claude"
+              role="tabpanel"
+              aria-labelledby="ac-tab-claude"
+              data-reveal
+              data-reveal-delay="1"
+            >
+              <div class="ac-panel__meta">
+                <span class="ac-panel__badge">
+                  <img
+                    src="static/public/img/ai-chamber/icon-model.svg"
+                    alt=""
+                    width="12"
+                    height="12"
+                  />
+                  <span data-ac-model>CLAUDE</span>
+                </span>
+                <span class="ac-panel__lens" data-ac-lens>Balanced lens</span>
+              </div>
+              <h3 class="ac-panel__horse" data-ac-horse>Trawlerman</h3>
+              <div class="ac-conf">
+                <div class="ac-conf__row">
+                  <span>CONFIDENCE</span>
+                  <span class="ac-conf__val" data-ac-conf>91/100</span>
+                </div>
+                <div class="ac-conf__bar" aria-hidden="true">
+                  <span data-ac-bar style="width: 91%"></span>
+                </div>
+              </div>
+              <p class="ac-panel__body" data-ac-body>
+                Trawlerman owns one of the strongest chamber scores in this field. With no SR/RPR/TS data on the winner, the Balanced lens leaned on market confidence and pace fit instead. The profile stays composed even after race-day variance.
+              </p>
+              <div class="ac-tags" data-ac-tags>
+                <span>Speed figures</span>
+                <span>Trainer patterns</span>
+              </div>
+              <!-- AI Chamber · consensus: single (ai_consensus.pattern == 'single')
+     Only one model has a pick at all — the others have not run or have no
+     runner data. One card, and a note saying so, rather than a consensus
+     the page cannot claim. -->
+<div class="ac-split ac-split--solo">
+  <div class="ac-split__card ac-split__card--agree">
+    <p class="ac-split__lbl">1/3 HAS A PICK</p>
+    <p class="ac-split__horse">Trawlerman</p>
+    <p class="ac-split__note">Claude only &mdash; the others have not run yet</p>
+  </div>
+</div>
+              <a
+                class="ac-cta"
+                href="https://www.saturday-racing.com/ai/tools/"
+              >
+                Enter the AI Chamber<span class="cta-dash-tail"> — full analysis</span>
+                <img
+                  src="static/public/img/ai-chamber/icon-arrow.svg"
+                  alt=""
+                  width="14"
+                  height="14"
+                />
+              </a>
+            </article></div></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">AI Chamber · three-way split</p>
+        <p class="states-case__when">ai_consensus.pattern == 'split' — three models, three horses</p>
+        <div class="states-frame">
+<section class="section ai-section ai-section--chamber"><div class="container"><div class="ac-layout"><article
+              class="ac-panel"
+              id="ac-panel-claude"
+              role="tabpanel"
+              aria-labelledby="ac-tab-claude"
+              data-reveal
+              data-reveal-delay="1"
+            >
+              <div class="ac-panel__meta">
+                <span class="ac-panel__badge">
+                  <img
+                    src="static/public/img/ai-chamber/icon-model.svg"
+                    alt=""
+                    width="12"
+                    height="12"
+                  />
+                  <span data-ac-model>CLAUDE</span>
+                </span>
+                <span class="ac-panel__lens" data-ac-lens>Balanced lens</span>
+              </div>
+              <h3 class="ac-panel__horse" data-ac-horse>Trawlerman</h3>
+              <div class="ac-conf">
+                <div class="ac-conf__row">
+                  <span>CONFIDENCE</span>
+                  <span class="ac-conf__val" data-ac-conf>91/100</span>
+                </div>
+                <div class="ac-conf__bar" aria-hidden="true">
+                  <span data-ac-bar style="width: 91%"></span>
+                </div>
+              </div>
+              <p class="ac-panel__body" data-ac-body>
+                Trawlerman owns one of the strongest chamber scores in this field. With no SR/RPR/TS data on the winner, the Balanced lens leaned on market confidence and pace fit instead. The profile stays composed even after race-day variance.
+              </p>
+              <div class="ac-tags" data-ac-tags>
+                <span>Speed figures</span>
+                <span>Trainer patterns</span>
+              </div>
+              <!-- AI Chamber · consensus: split (ai_consensus.pattern == 'split')
+     Three models, three different horses. Every card takes the dissent
+     treatment, because none of them agrees with another. -->
+<div class="ac-split ac-split--three">
+  <div class="ac-split__card ac-split__card--break">
+    <p class="ac-split__lbl">CLAUDE</p>
+    <p class="ac-split__horse">Trawlerman</p>
+    <p class="ac-split__note">Balanced lens</p>
+  </div>
+  <div class="ac-split__card ac-split__card--break">
+    <p class="ac-split__lbl">CHATGPT</p>
+    <p class="ac-split__horse">Vegasmile</p>
+    <p class="ac-split__note">Market lens</p>
+  </div>
+  <div class="ac-split__card ac-split__card--break">
+    <p class="ac-split__lbl">GEMINI</p>
+    <p class="ac-split__horse">Illinois</p>
+    <p class="ac-split__note">Course lens</p>
+  </div>
+</div>
+              <a
+                class="ac-cta"
+                href="https://www.saturday-racing.com/ai/tools/"
+              >
+                Enter the AI Chamber<span class="cta-dash-tail"> — full analysis</span>
+                <img
+                  src="static/public/img/ai-chamber/icon-arrow.svg"
+                  alt=""
+                  width="14"
+                  height="14"
+                />
+              </a>
+            </article></div></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">AI Chamber · waiting (no consensus yet)</p>
+        <p class="states-case__when">the {% else %} branch — fewer than two picks, as on the captured day</p>
+        <div class="states-frame">
+<section class="section ai-section ai-section--chamber"><div class="container"><div class="ac-layout"><article
+              class="ac-panel"
+              id="ac-panel-claude"
+              role="tabpanel"
+              aria-labelledby="ac-tab-claude"
+              data-reveal
+              data-reveal-delay="1"
+            >
+              <div class="ac-panel__meta">
+                <span class="ac-panel__badge">
+                  <img
+                    src="static/public/img/ai-chamber/icon-model.svg"
+                    alt=""
+                    width="12"
+                    height="12"
+                  />
+                  <span data-ac-model>CLAUDE</span>
+                </span>
+                <span class="ac-panel__lens" data-ac-lens>Balanced lens</span>
+              </div>
+              <h3 class="ac-panel__horse" data-ac-horse>Trawlerman</h3>
+              <div class="ac-conf">
+                <div class="ac-conf__row">
+                  <span>CONFIDENCE</span>
+                  <span class="ac-conf__val" data-ac-conf>91/100</span>
+                </div>
+                <div class="ac-conf__bar" aria-hidden="true">
+                  <span data-ac-bar style="width: 91%"></span>
+                </div>
+              </div>
+              <p class="ac-panel__body" data-ac-body>
+                Trawlerman owns one of the strongest chamber scores in this field. With no SR/RPR/TS data on the winner, the Balanced lens leaned on market confidence and pace fit instead. The profile stays composed even after race-day variance.
+              </p>
+              <div class="ac-tags" data-ac-tags>
+                <span>Speed figures</span>
+                <span>Trainer patterns</span>
+              </div>
+              <!-- AI Chamber · consensus: empty (the {% else %} branch)
+     Fewer than two models have a pick, so there is no consensus to draw.
+     This is the state the captured snapshot day was actually in, and the
+     most common one before a card is analysed. -->
+<div class="ac-split ac-split--empty">
+  <div class="ac-split__card ac-split__card--waiting">
+    <p class="ac-split__lbl">CHAMBER WAITING</p>
+    <p class="ac-split__note">
+      At least two AI picks are needed to show a consensus snapshot. The
+      engines run once the card is declared.
+    </p>
+  </div>
+</div>
+              <a
+                class="ac-cta"
+                href="https://www.saturday-racing.com/ai/tools/"
+              >
+                Enter the AI Chamber<span class="cta-dash-tail"> — full analysis</span>
+                <img
+                  src="static/public/img/ai-chamber/icon-arrow.svg"
+                  alt=""
+                  width="14"
+                  height="14"
+                />
+              </a>
+            </article></div></div></section>
+        </div>
+      </section>
+      <section class="states-case">
         <p class="states-case__name">Market intelligence · drifters</p>
         <p class="states-case__when">the Drifters tab: .mi-board[data-mi-mode='drifters']</p>
         <div class="states-frame">
@@ -1508,18 +1859,6 @@
         designed, the page has nothing to render when the data looks like
         this.
       </p>
-      <section class="states-case states-case--gap">
-        <span class="states-case__tag">Needs design</span>
-        <p class="states-case__name">Hero · result declared</p>
-        <p class="states-case__when">hero_fold.html, hero.result — roughly 80 lines of the live template</p>
-        <p class="states-case__needs">The hero after the race has run: winner, placed horses, and the spoiler reveal (landing.js initHeroResultSpoiler still looks for [data-hero-result]). The redesign has no resulted hero, so on a Saturday evening the page has nothing to show.</p>
-      </section>
-      <section class="states-case states-case--gap">
-        <span class="states-case__tag">Needs design</span>
-        <p class="states-case__name">AI Chamber · four of five outcomes</p>
-        <p class="states-case__when">landing.html: ai_consensus.pattern is majority | unanimous | single | split | empty</p>
-        <p class="states-case__needs">Only majority is designed. Unanimous (all three agree), single (one model has a pick), split (three different picks) and empty (fewer than two picks, which is what the snapshot day actually was) all need a layout for the .ac-split block.</p>
-      </section>
       <section class="states-case states-case--gap">
         <span class="states-case__tag">Needs design</span>
         <p class="states-case__name">Challenges · with challengers</p>

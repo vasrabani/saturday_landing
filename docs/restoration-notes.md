@@ -19,6 +19,15 @@ out. They work and they are accessible, but next to the new sections they
 look like what they are — older. They want a visual pass in the redesign's
 language. That is design work, not integration work.
 
+## Designed since: the resulted hero and the chamber's other outcomes
+
+`partials/hero-resulted.html` and `partials/ai-consensus-*.html` fill the
+two biggest gaps, in the redesign's own language, using CSS that was
+already in the repo. See them in `states.html`. The Django port should
+copy the partials into the matching template branches:
+`hero_fold.html` for the result, and the five-way `ai_consensus.pattern`
+block in `landing.html` for the chamber.
+
 ## Not restored: these need a design decision
 
 Each of these was on the live page and is not in the redesign. In every

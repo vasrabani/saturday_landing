@@ -33,13 +33,13 @@ Repositories:
 | Section here | Template there | Context | Notes |
 | --- | --- | --- | --- |
 | Today strip | `components/_today_strip.html` | `today_summary`, `daily_featured` | 9 branches. The hero tab toggle (`_hero_tabs.html`) was dropped by the redesign — decide before porting |
-| Hero | `components/hero_fold.html` | `hero_day`, `hero_week`, `hero_source` | 44 branches, the most in the page. The resulted state and the race strip are missing from the redesign |
+| Hero | `components/hero_fold.html` | `hero_day`, `hero_week`, `hero_source` | 44 branches, the most in the page. The resulted state is now designed (`partials/hero-resulted.html`); the race strip is still missing |
 | Editorial shelf | `components/_editorial_shelf.html` | `editorial_shelf` (`news/services/editorial_shelf.py`) | The service builds 4 cards; the design shows 6 |
 | Day hub | `components/_day_hub.html` | `day_hub` (`landing.py`) | 33 branches. Keep `.is-finished`, and `data-flags` on each race tile — the filters read them. GB/IRE labels have no field |
 | Market intelligence | `components/_money_moves.html` | `money_moves` | 16 branches. Drifters now needs its own list, not the steamers recoloured. The section hides itself when `has_data` is false |
 | Battle | `landing.html` (inline, ~100 lines) | `big_race`, `fox_wins`, `cub_wins`, `cub_tip`, `rivalry_caption` | Keep `data-count-up` on the win counts and the `Pick pending` branch |
 | DEN | `components/_landing_den_section.html` | fixed demo content | Closest to unchanged |
-| AI Chamber | `landing.html` (inline) | `ai_consensus`, `ai_analysis` | One panel per model, `role="tabpanel"`, one visible. Per-model confidence scores have no field yet |
+| AI Chamber | `landing.html` (inline) | `ai_consensus`, `ai_analysis` | One panel per model, `role="tabpanel"`, one visible. All five `ai_consensus.pattern` branches now have markup in `partials/ai-consensus-*.html`. Per-model confidence scores still have no field |
 | AI Lab | `landing.html` (inline) | `big_race`, `ai_analysis` | The terminal was dropped; its data (race name, runner count, top signal) is shown nowhere else |
 | How it works | `landing.html` (inline) | `daily_pick_limit` | The copy now says six picks a day; keep it tied to the variable |
 | Challenges | `components/challenges_section.html` | `top_challengers`, `big_race` | 7 branches; only the empty state is designed |

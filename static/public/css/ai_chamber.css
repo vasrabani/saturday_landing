@@ -609,3 +609,48 @@
     justify-content: center;
   }
 }
+
+/* ── Consensus layouts other than "majority" ──────────────────────────
+   The chamber can land in five states and the redesign drew one of them.
+   These reuse the same cards: only the grid changes, so a unanimous call
+   reads as one confident card and a three-way split reads as three.
+   Django picks the layout via ai_consensus.pattern. */
+
+/* Unanimous, and the single-pick case: one card, full width. */
+.ac-split--solo {
+  grid-template-columns: 1fr;
+}
+.ac-split--solo .ac-split__card--agree {
+  margin-right: 0;
+}
+
+/* Three models, three horses: every card dissents. */
+.ac-split--three {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.ac-split--three .ac-split__card--break {
+  margin-left: 0;
+}
+
+/* Nothing to compare yet. Quieter than the dissent card: this is a
+   waiting state, not a disagreement. */
+.ac-split--empty {
+  grid-template-columns: 1fr;
+}
+.ac-split__card--waiting {
+  background: rgba(242, 236, 223, 0.04);
+  border: 1px dashed rgba(242, 236, 223, 0.2);
+}
+.ac-split__card--waiting .ac-split__lbl {
+  color: rgba(242, 236, 223, 0.55);
+}
+.ac-split__card--waiting .ac-split__note {
+  max-width: 46ch;
+}
+
+@media (max-width: 767px) {
+  .ac-split--three {
+    grid-template-columns: 1fr;
+  }
+}

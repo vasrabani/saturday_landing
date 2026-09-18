@@ -6,6 +6,7 @@
 // States the redesign has no markup for are listed as gaps, with what the
 // template branch needs, rather than invented here.
 import { readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 const CR = String.fromCharCode(13);
 const LF = String.fromCharCode(10);
@@ -46,6 +47,24 @@ const dayHub = extract('<section class="day-hub"', 'section');
 const battle = extract('<section\n        class="section battle-section battle-section--rivalry"', 'section');
 const market = extract('<section class="money-moves money-moves--intel"', 'section');
 
+// States with no markup in index.html live in partials/, so the Django
+// port has real HTML to copy rather than a screenshot to work from.
+const partial = (name) => readFileSync(join('partials', `${name}.html`), 'utf8').split(CR + LF).join(LF);
+
+// The chamber's consensus block sits inside a model panel, so each variant
+// is shown in that panel with the majority block swapped out.
+const chamberPanel = extract(`<article${LF}              class="ac-panel"`, 'article');
+const splitStart = chamberPanel.indexOf('<div class="ac-split">');
+// Past the dissent card's own closing tag, then past the block's.
+const splitEnd = chamberPanel.indexOf('</div>', chamberPanel.indexOf('</div>', chamberPanel.indexOf('ac-split__card--break')) + 1) + '</div>'.length;
+// The panel is wrapped back in its section: ai_chamber.css defines the
+// section's colours as custom properties on .ai-section--chamber, so a
+// panel shown outside it loses its gold.
+const chamberWith = (variant) =>
+  '<section class="section ai-section ai-section--chamber"><div class="container"><div class="ac-layout">'
+  + chamberPanel.slice(0, splitStart) + partial(variant).trim() + chamberPanel.slice(splitEnd)
+  + '</div></div></section>';
+
 // ── States that exist in the markup ───────────────────────────────────
 const STATES = [
   {
@@ -66,6 +85,31 @@ const STATES = [
       .replace(/<strong data-count-up>\d+<\/strong> wins this season/g, '&mdash; wins this season'),
   },
   {
+    name: 'Hero · the race has been run',
+    when: 'hero_fold.html: {% if hero.result %} — the state every Saturday evening',
+    markup: partial('hero-resulted'),
+  },
+  {
+    name: 'AI Chamber · unanimous',
+    when: "ai_consensus.pattern == 'unanimous' — all three models agree",
+    markup: chamberWith('ai-consensus-unanimous'),
+  },
+  {
+    name: 'AI Chamber · one model has a pick',
+    when: "ai_consensus.pattern == 'single'",
+    markup: chamberWith('ai-consensus-single'),
+  },
+  {
+    name: 'AI Chamber · three-way split',
+    when: "ai_consensus.pattern == 'split' — three models, three horses",
+    markup: chamberWith('ai-consensus-split'),
+  },
+  {
+    name: 'AI Chamber · waiting (no consensus yet)',
+    when: 'the {% else %} branch — fewer than two picks, as on the captured day',
+    markup: chamberWith('ai-consensus-empty'),
+  },
+  {
     name: 'Market intelligence · drifters',
     when: "the Drifters tab: .mi-board[data-mi-mode='drifters']",
     markup: market
@@ -79,16 +123,6 @@ const STATES = [
 
 // ── States the design does not cover yet ──────────────────────────────
 const GAPS = [
-  {
-    name: 'Hero · result declared',
-    when: 'hero_fold.html, hero.result — roughly 80 lines of the live template',
-    needs: 'The hero after the race has run: winner, placed horses, and the spoiler reveal (landing.js initHeroResultSpoiler still looks for [data-hero-result]). The redesign has no resulted hero, so on a Saturday evening the page has nothing to show.',
-  },
-  {
-    name: 'AI Chamber · four of five outcomes',
-    when: "landing.html: ai_consensus.pattern is majority | unanimous | single | split | empty",
-    needs: 'Only majority is designed. Unanimous (all three agree), single (one model has a pick), split (three different picks) and empty (fewer than two picks, which is what the snapshot day actually was) all need a layout for the .ac-split block.',
-  },
   {
     name: 'Challenges · with challengers',
     when: 'challenges_section.html: {% if top_challengers %}',
