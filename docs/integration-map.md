@@ -76,9 +76,8 @@ not overwritten by it.
   because the sandbox has no URL resolver. In Django they are `{% url %}`
   tags. `docs/content-notes.md` lists the ones that were wrong.
 - **`chrome.css` is site-wide.** The nav and footer restyle lands on all
-  141 templates that extend the base, not just this page. It has only been
-  looked at on the landing page so far: check three or four other page
-  types before it ships.
+  141 templates that extend the base, not just this page. See "Checked on
+  other page types" below for what that does to them.
 - **The nav gap fix belongs on production regardless** of this port: between
   901px and 1024px the live site currently shows no navigation at all
   (PR 4).
@@ -89,6 +88,33 @@ not overwritten by it.
   them at all.
 - **Images were resized to twice their painted size** (PR 2). If a section
   is used bigger anywhere else, re-export rather than upscale.
+
+## Checked on other page types
+
+On 2026-09-18, eleven live production page types were loaded at 375, 768,
+1024 and 1440px: once as they are, and once with this `chrome.css` and
+`base.css` swapped in (plus, in a second pass, this footer's markup). The
+page types were the racecard list, a single racecard, results, the news
+index, an article, Fox Trail, Learn (Accumulators), Bet of the Day, The
+Honest Record, sign-in and the LLaMa Letters.
+
+- **Nav: safe everywhere.** Same 60px height on every page, no horizontal
+  scroll, and the 901–1024px gap is fixed on every page type, not just this
+  one: production shows no nav there at all.
+- **Footer: fixed here, would have broken three pages.** The new footer set
+  no font, line height or colour of its own, so it inherited each page's:
+  serif on Bet of the Day and Learn, tighter spacing on the racecards.
+  `.sf--branded` now sets its own type (base.css's body values), and all
+  eleven pages compute identical footer styles.
+- **768px only: the page gutter changes.** `.container` padding at exactly
+  768px (iPad portrait) goes from 24px to 48px, the same as every wider
+  screen already had. Of the pages checked, only the racecard list uses
+  `.container`; its column gets 48px narrower and nothing breaks.
+- **Pre-existing, not from this redesign:** at 768px the single racecard's
+  headline and "Today" label sit flush against the left edge of the screen.
+
+The check ran from a scratch script against the live site; re-run it
+against the Django port's staging pages before release.
 
 ## What to check when a section is ported
 

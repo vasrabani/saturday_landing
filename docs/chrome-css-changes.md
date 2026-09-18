@@ -4,7 +4,7 @@
 -->
 # static/css/chrome.css: what actually changed
 
-Rules: 260 before, 311 after. Reformatting ignored.
+Rules: 260 before, 318 after. Reformatting ignored.
 
 Why this file exists: `chrome.css` was reformatted wholesale in the redesign, so its
 diff is 2,394 lines for roughly 600 lines of real change. Reverting the formatting
@@ -12,16 +12,22 @@ risked changing what renders, so the formatting stays and this list records what
 actually changed. `chrome.css` is site-wide (nav and footer on every page), so this
 is also the checklist for porting the redesign into the Django repo.
 
-## Added (50)
+## Added (56)
 
 - `.site-nav__link.active .site-nav__link-ico, .site-nav__link.active .site-nav__caret`
 - `.site-nav__link.active .site-nav__link-portrait`
 - `.site-nav__link.active::after`
 - `.site-nav__dropdown-trigger.site-nav__link.active::after`
+- `.mob-drawer__section`
+- `.mob-drawer__section:first-child`
 - `.site-nav__join-btn::before`
 - `.site-nav__join-btn:hover::before, .site-nav__join-btn:focus-visible::before`
 - `.site-nav__join-btn:hover, .site-nav__join-btn:focus-visible`
 - `.site-nav__link.active .site-nav__caret`
+- `.site-nav__dropdown-section`
+- `.site-nav__dropdown-section:first-child`
+- `.site-nav__dropdown-section + .site-nav__dropdown-item`
+- `body.has-demo-banner`
 - `.sf--branded`
 - `.sf--branded .sf__aurora`
 - `.sf--branded .sf__shell`
@@ -65,7 +71,7 @@ is also the checklist for porting the redesign into the Django repo.
 - `@media (max-width: 1100px)`
 - `@media (max-width: 700px)`
 
-## Changed (36)
+## Changed (42)
 
 - `.site-nav__inner`
 - `.site-nav__wordmark-main`
@@ -88,6 +94,8 @@ is also the checklist for porting the redesign into the Django repo.
 - `.ticker-bar`
 - `@keyframes ticker-scroll`
 - `.mob-drawer__link--gold`
+- `@media (max-width: 1024px)`
+- `@media (max-width: 900px)`
 - `.site-nav__badge--gold`
 - `.site-nav__join-btn`
 - `.site-nav__login-btn`
@@ -102,7 +110,11 @@ is also the checklist for porting the redesign into the Django repo.
 - `.site-nav__dropdown-item--gold:hover`
 - `.notif-banner__inner`
 - `.site-nav__link:focus-visible, .site-nav__pill:focus-visible, .site-nav__auth-link:focus-visible, .site-nav__auth-btn:fo…`
-- `@media (max-width: 900px)`
+- `.site-nav__dropdown-item--gold:hover .site-nav__di-name`
+- `.demo-banner`
+- `body.has-demo-banner .site-main`
+- `body.has-demo-banner.has-notif-banner .site-main`
+- `@media (max-width: 720px)`
 
 ## Removed (1)
 

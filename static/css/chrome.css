@@ -2423,6 +2423,20 @@ body.has-demo-banner.has-notif-banner .site-main {
     right center;
   background-repeat: no-repeat;
   border-top: 1px solid rgba(216, 177, 74, 0.14);
+  /* The footer is shared chrome, so it sets its own type instead of
+     inheriting the page's. Left to inherit, it turned serif on Bet of the
+     Day (Iowan Old Style) and Learn (IBM Plex Serif), and tightened on the
+     racecards (line-height 1.5). These are base.css's body values, restated
+     so no page stylesheet can reach them. */
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.75;
+  letter-spacing: normal;
+  text-align: start;
+  text-transform: none;
+  color: var(--c-text-75);
 }
 
 .sf--branded .sf__aurora {
