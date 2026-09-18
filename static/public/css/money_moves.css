@@ -964,3 +964,11 @@
   .mi-row__odds { display: none; }
   .mi-steam { padding: 22px 20px 20px; }
 }
+
+/* The board holds both lists and shows the one its tab selects. Before
+   this, the Drifters tab only recoloured the steamers, so the same
+   shortening horses were presented as drifting. */
+.mi-board[data-mi-mode='drifters'] .mi-list--steamers,
+.mi-board:not([data-mi-mode='drifters']) .mi-list--drifters {
+  display: none;
+}

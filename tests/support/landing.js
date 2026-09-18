@@ -21,8 +21,9 @@ export const SECTIONS = [
   { name: 'footer', selector: 'footer.sf' },
 ];
 
-// Live-site sections the redesign commented out ("TEMP HIDDEN").
-export const HIDDEN_SECTIONS = [
+// Sections the redesign commented out and PR 7 restored. Kept as their
+// own list so it stays obvious that they went missing once.
+export const RESTORED_SECTIONS = [
   { name: 'syndicates', selector: '#syndicates' },
   { name: 'track-record', selector: '.results-section' },
   { name: 'final-cta', selector: '.final-cta-section' },
