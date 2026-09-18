@@ -654,3 +654,77 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ── AI Lab · the simulation terminal ─────────────────────────────────
+   The live page showed the race, the runner count and the top signal
+   here. The redesign dropped the panel, so that data appeared nowhere.
+   Rebuilt on the Lab's own tokens and card treatment: same radius and
+   border as .al-layout, the section's gold for the values. */
+.ai-lab-section--live .al-terminal {
+  grid-column: 1 / -1;
+  margin-top: clamp(20px, 3vw, 28px);
+  border-radius: 16px;
+  border: 1px solid rgba(242, 236, 223, 0.12);
+  background: rgba(5, 7, 12, 0.72);
+  overflow: hidden;
+}
+
+.ai-lab-section--live .al-terminal__bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(242, 236, 223, 0.1);
+  background: rgba(242, 236, 223, 0.03);
+}
+
+.ai-lab-section--live .al-terminal__dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex: 0 0 9px;
+}
+.ai-lab-section--live .al-terminal__dot--red { background: var(--c-red-lt); }
+.ai-lab-section--live .al-terminal__dot--amber { background: var(--al-gold); }
+.ai-lab-section--live .al-terminal__dot--green { background: #6fbf8c; }
+
+.ai-lab-section--live .al-terminal__title {
+  margin-left: 6px;
+  font-family: ui-monospace, "IBM Plex Mono", Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(242, 236, 223, 0.55);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ai-lab-section--live .al-terminal__body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ai-lab-section--live .al-terminal__line {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: ui-monospace, "IBM Plex Mono", Menlo, monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--al-ink);
+}
+
+.ai-lab-section--live .al-terminal__line--dim {
+  color: rgba(242, 236, 223, 0.42);
+}
+
+.ai-lab-section--live .al-terminal__val {
+  color: rgba(242, 236, 223, 0.78);
+}
+
+.ai-lab-section--live .al-terminal__val--gold {
+  color: var(--al-gold);
+}

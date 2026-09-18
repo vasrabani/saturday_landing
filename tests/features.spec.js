@@ -118,6 +118,41 @@ test.describe('navigation', () => {
   });
 });
 
+// These four were on the live page, dropped by the redesign, and rebuilt
+// in PR 9. Tested so they cannot go missing quietly a second time.
+test.describe('features the redesign had dropped', () => {
+  test('the hero carries the race detail', async ({ page }) => {
+    await openLanding(page);
+    const facts = page.locator('.hf-facts__item');
+    await expect(facts).toHaveCount(6);
+    await expect(page.locator('.hf-facts')).toContainText('Runners');
+    await expect(page.locator('.hf-facts')).toContainText('Prize fund');
+  });
+
+  test('the hero routes into The Pin and Pick 6', async ({ page }) => {
+    await openLanding(page);
+    await expect(page.locator('.hf-facts__item--link a')).toHaveAttribute('href', /pinsticker/);
+    await expect(page.locator('.hf-facts__item--pick6 a')).toHaveAttribute('href', /pick6/);
+  });
+
+  test('the hero offers both races', async ({ page }) => {
+    await openLanding(page);
+    const options = page.locator('.hf-switch__opt');
+    await expect(options).toHaveCount(2);
+    await expect(options.first()).toHaveAttribute('aria-current', 'true');
+    await expect(options.nth(1)).toHaveAttribute('href', /hero=bet_of_day/);
+  });
+
+  test('the AI Lab shows what the simulation found', async ({ page }) => {
+    await openLanding(page);
+    const terminal = page.locator('.al-terminal');
+    await terminal.scrollIntoViewIfNeeded();
+    await expect(terminal).toBeVisible();
+    await expect(terminal).toContainText('RUNNERS LOADED');
+    await expect(terminal).toContainText('TOP SIGNAL');
+  });
+});
+
 test.describe('countdowns', () => {
   for (const [name, selector] of [
     ['hero', '.hf-countdown[data-race-iso]'],

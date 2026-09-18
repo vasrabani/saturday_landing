@@ -2465,3 +2465,126 @@
     width: 100%;
   }
 }
+
+/* ── Hero · which race is showing ─────────────────────────────────────
+   The live page could switch the hero between the big race and Bet of
+   the Day; the redesign showed one with no way to the other. Same
+   segmented-control language as the section tab strips. */
+.hf-switch {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 3px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(242, 236, 223, 0.16);
+  background: rgba(10, 12, 18, 0.55);
+}
+
+.hf-switch__opt {
+  padding: 7px 16px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(242, 236, 223, 0.6);
+  text-decoration: none;
+  transition: color 0.15s, background 0.15s;
+}
+
+.hf-switch__opt:hover,
+.hf-switch__opt:focus-visible {
+  color: var(--c-gold-lt);
+}
+
+.hf-switch__opt.is-active {
+  background: var(--c-gold);
+  color: var(--c-midnight);
+}
+
+/* ── Hero · race detail, The Pin and Pick 6 ───────────────────────────
+   Declarations, prize, favourite and each-way terms used to sit in a
+   band under the hero, along with the routes into The Pin and Pick 6.
+   Rebuilt as chips in the day hub's fact language so the hero keeps its
+   own weight: values first, labels beneath. */
+.hf-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+
+/* Compact enough that all six sit on one line beneath the CTAs: the
+   hero is sized to the viewport, so a second row is clipped. */
+.hf-facts__item {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 6px 10px;
+  border-radius: 9px;
+  border: 1px solid rgba(242, 236, 223, 0.1);
+  background: rgba(242, 236, 223, 0.04);
+}
+
+.hf-facts__num {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.hf-facts__lbl {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+/* The two that go somewhere read as routes, not readouts. */
+.hf-facts__item--link,
+.hf-facts__item--pick6 {
+  border-color: rgba(212, 175, 55, 0.3);
+  background: rgba(212, 175, 55, 0.07);
+}
+
+.hf-facts__item--pick6 .hf-facts__num {
+  color: var(--c-gold-lt);
+}
+
+.hf-facts__link {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: none;
+}
+
+.hf-facts__item--link:hover,
+.hf-facts__item--pick6:hover,
+.hf-facts__item--link:focus-within,
+.hf-facts__item--pick6:focus-within {
+  border-color: var(--c-gold);
+  background: rgba(212, 175, 55, 0.12);
+}
+
+/* Below desktop the chips would wrap to three rows and push the hero well
+   past the fold, so they become one swipeable row instead. The row scrolls
+   inside itself; the page does not. */
+@media (max-width: 1024px) {
+  .hf-facts {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .hf-facts::-webkit-scrollbar {
+    display: none;
+  }
+  .hf-facts__item {
+    flex: 0 0 auto;
+  }
+}
