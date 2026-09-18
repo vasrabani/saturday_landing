@@ -696,8 +696,8 @@
   min-height: 48px;
   padding: 10px 22px;
   border-radius: 999px;
-  border: 1px solid var(--c-gold, var(--c-gold));
-  background: var(--c-gold, var(--c-gold));
+  border: 1px solid var(--c-gold);
+  background: var(--c-gold);
   color: #06070d;
   font-size: 15px;
   font-weight: 800;

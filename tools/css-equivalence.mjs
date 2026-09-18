@@ -44,15 +44,28 @@ const snapshot = async (page, port, width) => {
   // race titles that way), so let it run before measuring.
   await page.waitForTimeout(SETTLE_MS);
   const rows = await page.evaluate((properties) => {
-    const out = [];
-    document.querySelectorAll('body *').forEach((el, index) => {
+    // Key each element by its position in the tree rather than a running
+    // index, so adding or removing an element only reports that element
+    // instead of shifting everything after it.
+    const pathOf = (el) => {
+      const steps = [];
+      for (let node = el; node && node.tagName !== 'BODY'; node = node.parentElement) {
+        const siblings = [...node.parentElement.children].filter((sibling) => sibling.tagName === node.tagName);
+        steps.unshift(`${node.tagName.toLowerCase()}:${siblings.indexOf(node) + 1}`);
+      }
+      return steps.join('/');
+    };
+    const out = {};
+    document.querySelectorAll('body *').forEach((el) => {
       const style = getComputedStyle(el);
-      out.push(`${index}|${el.tagName}.${el.className}|${properties.map((p) => style.getPropertyValue(p)).join('|')}`);
+      out[pathOf(el)] = `${el.tagName}.${el.className}|${properties.map((p) => style.getPropertyValue(p)).join('|')}`;
     });
     return out;
   }, PROPERTIES);
   // Computed url() values are absolute, so each copy reports its own port.
-  return rows.map((row) => row.split(`http://localhost:${port}/`).join('/'));
+  return Object.fromEntries(
+    Object.entries(rows).map(([path, row]) => [path, row.split(`http://localhost:${port}/`).join('/')]),
+  );
 };
 
 spawnSync('git', ['worktree', 'remove', '--force', WORKTREE], { cwd: ROOT, stdio: 'ignore' });
@@ -68,21 +81,31 @@ try {
   for (const width of WIDTHS) {
     const after = await snapshot(page, 4290, width);
     const before = await snapshot(page, 4291, width);
-    const differences = after.filter((row, index) => row !== before[index]);
-    if (differences.length || before.length !== after.length) {
+    const paths = new Set([...Object.keys(before), ...Object.keys(after)]);
+    const added = [...paths].filter((path) => !before[path]);
+    const removed = [...paths].filter((path) => !after[path]);
+    const changedPaths = [...paths].filter((path) => before[path] && after[path] && before[path] !== after[path]);
+
+    if (added.length || removed.length || changedPaths.length) {
       identical = false;
-      console.log(`${width}px: ${differences.length} of ${after.length} elements differ`);
-      differences.slice(0, 8).forEach((row) => {
-        const index = after.indexOf(row);
-        const beforeParts = before[index].split('|');
-        const afterParts = row.split('|');
+      const counts = [
+        `${changedPaths.length} changed`,
+        added.length ? `${added.length} added` : null,
+        removed.length ? `${removed.length} removed` : null,
+      ].filter(Boolean);
+      console.log(`${width}px: ${counts.join(', ')} of ${Object.keys(after).length} elements`);
+      changedPaths.slice(0, 10).forEach((path) => {
+        const beforeParts = before[path].split('|');
+        const afterParts = after[path].split('|');
         const changed = afterParts
-          .map((value, i) => (value === beforeParts[i] ? null : `${PROPERTIES[i - 2] ?? 'field ' + i}: ${beforeParts[i]} -> ${value}`))
+          .map((value, i) => (value === beforeParts[i] ? null : `${PROPERTIES[i - 1] ?? 'element'}: ${beforeParts[i]} -> ${value}`))
           .filter(Boolean);
-        console.log(`   ${afterParts[1]}  ${changed.join('; ').slice(0, 220)}`);
+        console.log(`   ${afterParts[0]}  ${changed.join('; ').slice(0, 200)}`);
       });
+      added.slice(0, 5).forEach((path) => console.log(`   added: ${after[path].split('|')[0]}`));
+      removed.slice(0, 5).forEach((path) => console.log(`   removed: ${before[path].split('|')[0]}`));
     } else {
-      console.log(`${width}px: identical (${after.length} elements)`);
+      console.log(`${width}px: identical (${Object.keys(after).length} elements)`);
     }
   }
 } finally {

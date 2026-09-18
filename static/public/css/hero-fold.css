@@ -1015,7 +1015,7 @@
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: var(--c-gold, var(--c-gold));
+  color: var(--c-gold);
   background: rgba(212, 175, 55, 0.06);
   border: 1px solid rgba(212, 175, 55, 0.22);
   border-radius: 999px;
@@ -1027,11 +1027,11 @@
 }
 .hf-demo-link:hover {
   background: rgba(212, 175, 55, 0.14);
-  border-color: var(--c-gold, var(--c-gold));
+  border-color: var(--c-gold);
   color: var(--c-gold-lt);
 }
 .hf-demo-link:focus-visible {
-  outline: 2px solid var(--c-gold, var(--c-gold));
+  outline: 2px solid var(--c-gold);
   outline-offset: 3px;
 }
 .hf-demo-link__icon {
@@ -1041,7 +1041,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--c-gold, var(--c-gold));
+  background: var(--c-gold);
   color: #14161f;
   font-size: 9px;
   line-height: 1;
@@ -1058,8 +1058,8 @@
 
 /* ── TOUR BUTTON — outline idle; gold liquid rise on hover ── */
 .hf-ctas__tour {
-  --liquid: var(--c-gold, var(--c-gold));
-  --border-col: var(--c-gold, var(--c-gold));
+  --liquid: var(--c-gold);
+  --border-col: var(--c-gold);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -1102,7 +1102,7 @@
 .hf-ctas__tour:hover,
 .hf-ctas__tour:focus-visible {
   background: transparent;
-  border-color: var(--c-gold, var(--c-gold));
+  border-color: var(--c-gold);
   color: #06070d;
   transform: none;
   box-shadow: none;
@@ -1901,7 +1901,7 @@
   max-width: 55%;
 }
 .hf-countdown__news-arrow {
-  color: var(--c-gold, var(--c-gold));
+  color: var(--c-gold);
   flex-shrink: 0;
 }
 
@@ -1979,7 +1979,7 @@
   gap: 5px;
 }
 .hf-meta-ico {
-  color: var(--c-gold, var(--c-gold));
+  color: var(--c-gold);
 }
 
 .hf-title--oneline {

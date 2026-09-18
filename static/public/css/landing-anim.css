@@ -500,12 +500,12 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
-  color: var(--c-gold-lt, var(--c-gold-lt));
+  color: var(--c-gold-lt);
   background: transparent;
   border: 1px solid rgba(212, 175, 55, 0.4);
   border-radius: 999px;
   white-space: nowrap;
-  --liquid: var(--c-gold, var(--c-gold));
+  --liquid: var(--c-gold);
   --ink: #06070d;
   position: relative;
   overflow: hidden;
@@ -537,7 +537,7 @@
 .picks-duel__readwhy:hover,
 .picks-duel__readwhy:focus-visible {
   background: transparent;
-  border-color: var(--c-gold, var(--c-gold));
+  border-color: var(--c-gold);
   color: var(--ink);
   transform: translateY(-1px);
   filter: none;

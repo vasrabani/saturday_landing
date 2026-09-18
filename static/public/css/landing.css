@@ -616,7 +616,7 @@
 
 .picks-duel__half--cubs .picks-duel__horse {
   text-align: right;
-  color: var(--c-gold-lt, var(--c-gold-lt));
+  color: var(--c-gold-lt);
   text-shadow: 0 0 18px rgba(212, 175, 55, 0.30);
 }
 
@@ -689,7 +689,7 @@
 }
 
 .picks-duel__half--cubs .picks-duel__sub {
-  color: var(--c-gold, var(--c-gold));
+  color: var(--c-gold);
   font-weight: 700;
   letter-spacing: 0.06em;
 }

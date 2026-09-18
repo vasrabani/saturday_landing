@@ -124,24 +124,16 @@
   },
   "axe": {
     "mobile-375": [
-      "color-contrast",
-      "definition-list",
-      "dlitem"
+      "color-contrast"
     ],
     "tablet-768": [
-      "color-contrast",
-      "definition-list",
-      "dlitem"
+      "color-contrast"
     ],
     "laptop-1024": [
-      "color-contrast",
-      "definition-list",
-      "dlitem"
+      "color-contrast"
     ],
     "desktop-1440": [
-      "color-contrast",
-      "definition-list",
-      "dlitem"
+      "color-contrast"
     ]
   }
 }

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { knownIssue, openLanding } from './support/landing.js';
+import { openLanding } from './support/landing.js';
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 const BASELINE_FILE = join(__dirname, '..', 'tools', 'quality-baseline.json');
@@ -31,7 +31,6 @@ test('has no new WCAG 2.1 AA violations', async ({ page }, testInfo) => {
 });
 
 test('headings never skip a level', async ({ page }) => {
-  knownIssue('PR 5', 'the hero jumps from h1 to h3');
   await openLanding(page);
   const levels = await page
     .locator('main :is(h1, h2, h3, h4, h5, h6)')

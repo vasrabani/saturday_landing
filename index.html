@@ -2900,7 +2900,7 @@
                       </span>
                       <span class="picks-duel__live-label">LIVE</span>
                     </div>
-                    <h3 class="picks-duel__horse-name">Dark Cloud Rising</h3>
+                    <h2 class="picks-duel__horse-name">Dark Cloud Rising</h2>
                     <div class="picks-duel__card-actions">
                       <span class="picks-duel__odds">7/2</span>
                       <a
@@ -2960,7 +2960,7 @@
                         >OPEN</span
                       >
                     </div>
-                    <h3 class="picks-duel__horse-name">Voting Open</h3>
+                    <h2 class="picks-duel__horse-name">Voting Open</h2>
                     <div class="picks-duel__card-actions">
                       <span class="picks-duel__chip picks-duel__chip--cubs">
                         <svg
@@ -3579,7 +3579,7 @@
               </h3>
               <dl class="day-card__facts">
                 <div>
-                  <div class="day-card__fact-top">
+                  <dt class="day-card__fact-top">
                   <span class="day-card__fact-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                       <path
@@ -3612,12 +3612,12 @@
                       />
                     </svg>
                   </span>
-                  <dt>Runners</dt>
-                </div>
+                  Runners
+                </dt>
                 <dd>11</dd>
                 </div>
                 <div>
-                  <div class="day-card__fact-top">
+                  <dt class="day-card__fact-top">
                   <span class="day-card__fact-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                       <path
@@ -3664,12 +3664,12 @@
                       />
                     </svg>
                   </span>
-                  <dt>Prize</dt>
-                </div>
+                  Prize
+                </dt>
                 <dd>£10,468</dd>
                 </div>
                 <div class="day-card__facts-fox">
-                  <div class="day-card__fact-top">
+                  <dt class="day-card__fact-top">
                   <span class="day-card__fact-icon" aria-hidden="true">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                       <path
@@ -3681,12 +3681,12 @@
                       />
                     </svg>
                   </span>
-                  <dt>Fox&rsquo;s pick</dt>
-                </div>
+                  Fox&rsquo;s pick
+                </dt>
                 <dd>Dark Cloud Rising</dd>
                 </div>
                 <div>
-                  <div class="day-card__fact-top">
+                  <dt class="day-card__fact-top">
                   <span class="day-card__fact-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                       <path
@@ -3705,8 +3705,8 @@
                       />
                     </svg>
                   </span>
-                  <dt>Class</dt>
-                </div>
+                  Class
+                </dt>
                 <dd>Handicap</dd>
                 </div>
               </dl>
@@ -3785,7 +3785,7 @@
               </div>
               <dl class="day-card__facts">
                 <div>
-                  <div class="day-card__fact-top">
+                  <dt class="day-card__fact-top">
                   <span class="day-card__fact-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                       <path
@@ -3818,12 +3818,12 @@
                       />
                     </svg>
                   </span>
-                  <dt>Runners</dt>
-                </div>
+                  Runners
+                </dt>
                 <dd>10</dd>
                 </div>
                 <div>
-                  <div class="day-card__fact-top">
+                  <dt class="day-card__fact-top">
                   <span class="day-card__fact-icon" aria-hidden="true">
                     <svg width="16" height="14" viewBox="0 0 20 18" fill="none">
                       <path
@@ -3832,8 +3832,8 @@
                       />
                     </svg>
                   </span>
-                  <dt>Favourite</dt>
-                </div>
+                  Favourite
+                </dt>
                 <dd>
                       <a
                         href="https://www.saturday-racing.com/horses/vegasmile/"
@@ -4586,17 +4586,18 @@
             <aside class="mi-board" aria-label="Top steamers">
               <div class="mi-board__toolbar">
                 <div class="mi-board__tabs" role="tablist" aria-label="Market list">
-                  <button type="button" class="mi-tab is-active" role="tab" aria-selected="true" data-mi-tab="steamers">
+                  <button type="button" class="mi-tab is-active" role="tab" aria-selected="true" aria-controls="mi-list" data-mi-tab="steamers">
                     <img class="mi-tab__icon" src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
                     Steamers
                   </button>
-                  <button type="button" class="mi-tab" role="tab" aria-selected="false" data-mi-tab="drifters">
+                  <button type="button" class="mi-tab" role="tab" aria-selected="false" aria-controls="mi-list" data-mi-tab="drifters">
                     <img class="mi-tab__icon" src="static/public/img/icons/drifters.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
                     Drifters
                   </button>
                 </div>
                 <span class="mi-board__top">TOP 5</span>
               </div>
+              <div id="mi-list" role="tabpanel" aria-label="Market movers">
               <ol class="mi-list">
                 <li class="mi-row">
                   <a class="mi-row__link" href="https://www.saturday-racing.com/races/feature/">
@@ -4654,6 +4655,7 @@
                   </a>
                 </li>
               </ol>
+              </div>
             </aside>
           </div>
         </div>
@@ -5498,11 +5500,14 @@
 
           <div class="gh-scoring" data-reveal data-reveal-delay="2">
             <table class="gh-table">
+              <caption class="sr-only">
+                How points are scored, by result and race type
+              </caption>
               <thead>
                 <tr>
-                  <th>RESULT</th>
-                  <th>STANDARD</th>
-                  <th>
+                  <th scope="col">RESULT</th>
+                  <th scope="col">STANDARD</th>
+                  <th scope="col">
                     RACE OF THE DAY
                     <img
                       class="gh-table__th-icon"
@@ -5513,7 +5518,7 @@
                       decoding="async"
                     />
                   </th>
-                  <th>
+                  <th scope="col">
                     SATURDAY FEATURED
                     <img
                       class="gh-table__th-icon"
@@ -5905,12 +5910,11 @@
               <span class="draw-corner draw-corner--tr" aria-hidden="true"></span>
               <span class="draw-corner draw-corner--bl" aria-hidden="true"></span>
               <span class="draw-corner draw-corner--br" aria-hidden="true"></span>
-              <div class="draw-machine__tabs" role="tablist">
+              <div class="draw-machine__tabs">
                 <button
                   type="button"
                   class="draw-machine__tab is-active"
-                  role="tab"
-                  aria-selected="true"
+                                    aria-current="true"
                 >
                   <span class="draw-machine__tab-dot" aria-hidden="true"></span>
                   SATURDAY DRAW
@@ -5918,8 +5922,6 @@
                 <button
                   type="button"
                   class="draw-machine__tab"
-                  role="tab"
-                  aria-selected="false"
                   disabled
                 >
                   THE BIG RACE
