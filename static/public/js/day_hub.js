@@ -39,17 +39,25 @@
       // Pass 1 — show/hide individual race tiles.
       tiles.forEach(function (tile) {
         var flags = (tile.getAttribute('data-flags') || '').split(/\s+/);
-        // Snapshot: "fox" shows all races (layout count mirrors All).
-        var match = (name === 'all' || name === 'fox') || flags.indexOf(name) !== -1;
+        var match = name === 'all' || flags.indexOf(name) !== -1;
         tile.hidden = !match;
         if (match) shownTotal += 1;
       });
       // Pass 2 — hide meetings that ended up with zero visible tiles.
-      // Keep course-switcher .is-active meeting visible when it has races.
+      var withRaces = [];
       meetings.forEach(function (m) {
         var visible = m.querySelectorAll('[data-flags]:not([hidden])').length;
         m.classList.toggle('is-hidden', visible === 0);
+        if (visible) withRaces.push(m);
       });
+      // The course sidebar shows one meeting at a time, so a filter that
+      // empties the selected course would leave the panel blank with its
+      // course button still lit. Move to the first course that has races;
+      // if none do, the empty message covers it.
+      var selected = hub.querySelector('[data-day-hub-meeting].is-active');
+      if (withRaces.length && selected && selected.classList.contains('is-hidden')) {
+        selectMeeting(withRaces[0].getAttribute('data-meeting-slug'));
+      }
       if (empty) empty.hidden = shownTotal !== 0;
       filters.forEach(function (b) {
         var on = b.getAttribute('data-day-filter') === name;
@@ -65,6 +73,10 @@
     });
   }
 
+  // Set by initCourseSwitcher so the filters can move the sidebar's
+  // selection when a filter empties the course being shown.
+  var selectMeeting = function () {};
+
   // White-card course sidebar: show one meeting's races at a time.
   function initCourseSwitcher() {
     var hub = document.querySelector('.day-hub');
@@ -72,6 +84,8 @@
     var courses = hub.querySelectorAll('[data-day-course]');
     var meetings = hub.querySelectorAll('[data-day-hub-meeting]');
     if (!courses.length || !meetings.length) return;
+
+    selectMeeting = selectCourse;
 
     function selectCourse(slug) {
       courses.forEach(function (btn) {
@@ -185,106 +199,42 @@
   function initMarketIntelTabs() {
     var board = document.querySelector('.mi-board');
     if (!board) return;
-    var tabs = board.querySelectorAll('[data-mi-tab]');
-    tabs.forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        var mode = tab.getAttribute('data-mi-tab') || 'steamers';
-        board.setAttribute('data-mi-mode', mode);
-        tabs.forEach(function (t) {
-          var on = t === tab;
-          t.classList.toggle('is-active', on);
-          t.setAttribute('aria-selected', on ? 'true' : 'false');
-        });
-      });
+    window.SaturdayTabs(board.querySelectorAll('[data-mi-tab]'), function (tab) {
+      board.setAttribute('data-mi-mode', tab.getAttribute('data-mi-tab') || 'steamers');
     });
   }
 
+  // Each model has its own panel in the markup, so switching a tab shows
+  // one and hides the others. The picks and confidence scores used to live
+  // in a constant here, which meant the page could never show real data.
   function initAiChamberTabs() {
     var root = document.querySelector('.ai-section--chamber');
     if (!root) return;
     var tabs = root.querySelectorAll('[data-ac-tab]');
-    var panel = root.querySelector('#ac-panel');
-    if (!tabs.length || !panel) return;
+    if (!tabs.length) return;
 
-    var DATA = {
-      claude: {
-        model: 'CLAUDE',
-        lens: 'Balanced lens',
-        horse: 'Trawlerman',
-        conf: '91/100',
-        bar: 91,
-        body:
-          'Trawlerman owns one of the strongest chamber scores in this field. With no SR/RPR/TS data on the winner, the Balanced lens leaned on market confidence and pace fit instead. The profile stays composed even after race-day variance.',
-        tags: ['Speed figures', 'Trainer patterns']
-      },
-      chatgpt: {
-        model: 'CHATGPT',
-        lens: 'Market lens',
-        horse: 'Trawlerman',
-        conf: '54/100',
-        bar: 54,
-        body:
-          'ChatGPT reads the same steam as Claude but with less conviction. Market shortening supports Trawlerman, though the model flags price compression as a risk if the field reshapes late.',
-        tags: ['Market moves', 'Odds analysis']
-      },
-      gemini: {
-        model: 'GEMINI',
-        lens: 'Course lens',
-        horse: 'Illinois',
-        conf: '52/100',
-        bar: 52,
-        body:
-          'Gemini breaks ranks on course and distance history. Illinois profiles better for this trip and going than the chamber majority, so the model holds a contrarian line despite lower absolute confidence.',
-        tags: ['Course database', 'Going correlations']
-      }
-    };
-
-    function apply(key) {
-      var d = DATA[key] || DATA.claude;
-      var modelEl = panel.querySelector('[data-ac-model]');
-      var lensEl = panel.querySelector('[data-ac-lens]');
-      var horseEl = panel.querySelector('[data-ac-horse]');
-      var confEl = panel.querySelector('[data-ac-conf]');
-      var barEl = panel.querySelector('[data-ac-bar]');
-      var bodyEl = panel.querySelector('[data-ac-body]');
-      var tagsEl = panel.querySelector('[data-ac-tags]');
-      if (modelEl) modelEl.textContent = d.model;
-      if (lensEl) lensEl.textContent = d.lens;
-      if (horseEl) horseEl.textContent = d.horse;
-      if (confEl) confEl.textContent = d.conf;
-      if (barEl) barEl.style.width = d.bar + '%';
-      if (bodyEl) bodyEl.textContent = d.body;
-      if (tagsEl) {
-        tagsEl.innerHTML = d.tags
-          .map(function (t) {
-            return '<span>' + t + '</span>';
-          })
-          .join('');
-      }
-    }
-
-    tabs.forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        var key = tab.getAttribute('data-ac-tab') || 'claude';
-        tabs.forEach(function (t) {
-          var on = t === tab;
-          t.classList.toggle('is-active', on);
-          t.setAttribute('aria-selected', on ? 'true' : 'false');
-        });
-        panel.setAttribute('aria-labelledby', tab.id || '');
-        apply(key);
+    window.SaturdayTabs(tabs, function (tab) {
+      var panelId = tab.getAttribute('aria-controls');
+      Array.prototype.forEach.call(root.querySelectorAll('[role="tabpanel"]'), function (panel) {
+        panel.hidden = panel.id !== panelId;
       });
     });
   }
 
+  // Race titles are clipped to two lines on narrow screens. Above the
+  // breakpoint they are restored, so rotating a phone or widening a window
+  // no longer leaves them truncated.
+  var CLAMP_MAX_WIDTH = 767;
+
   function clampDayHubRaceTitles() {
-    if (window.innerWidth > 720) return;
     var names = document.querySelectorAll('.day-hub__card .day-hub__rp-race .rp-race__name');
+    var clamping = window.innerWidth <= CLAMP_MAX_WIDTH;
     Array.prototype.forEach.call(names, function (el) {
       var full = el.getAttribute('data-full-title') || (el.textContent || '').trim();
       if (!full) return;
       el.setAttribute('data-full-title', full);
       el.textContent = full;
+      if (!clamping) return;
       var lh = parseFloat(window.getComputedStyle(el).lineHeight) || 17;
       var maxH = lh * 2 + 1;
       if (el.offsetHeight <= maxH) return;
@@ -303,11 +253,9 @@
   function balanceHeroTitleWidths() {
     var lead = document.querySelector('.hf-title__lead');
     var fox = document.querySelector('.hf-title__fox');
-    if (!lead || !fox) return null;
+    if (!lead || !fox) return;
     lead.style.letterSpacing = '';
-    if (window.innerWidth > 719) {
-      return { skipped: true, vw: window.innerWidth };
-    }
+    if (window.innerWidth > 719) return;
     var leadW0 = lead.getBoundingClientRect().width;
     var foxW = fox.getBoundingClientRect().width;
     var text = (lead.textContent || '').replace(/\s+/g, ' ').trim();
@@ -315,17 +263,6 @@
     if (foxW > leadW0 + 0.5) {
       lead.style.letterSpacing = ((foxW - leadW0) / gaps) + 'px';
     }
-    var leadW1 = lead.getBoundingClientRect().width;
-    return {
-      skipped: false,
-      vw: window.innerWidth,
-      foxFont: window.getComputedStyle(fox).fontSize,
-      leadW0: Math.round(leadW0),
-      leadW: Math.round(leadW1),
-      foxW: Math.round(foxW),
-      delta: Math.abs(Math.round(leadW1) - Math.round(foxW)),
-      equal: Math.abs(leadW1 - foxW) <= 3
-    };
   }
 
   function boot() {
@@ -339,54 +276,27 @@
     initAiChamberTabs();
     clampDayHubRaceTitles();
     balanceHeroTitleWidths();
+    // Both of these measure and rewrite text, which forces layout. Run
+    // them once per frame rather than once per resize event.
+    var pending = false;
     window.addEventListener('resize', function () {
-      clampDayHubRaceTitles();
-      balanceHeroTitleWidths();
+      if (pending) return;
+      pending = true;
+      window.requestAnimationFrame(function () {
+        pending = false;
+        clampDayHubRaceTitles();
+        balanceHeroTitleWidths();
+      });
     });
+    // Both of these measure text, so they have to run again once the web
+    // fonts are in: measured against the fallback font, the clamp cuts
+    // titles at the wrong point and the result differs from load to load.
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(function () {
+        clampDayHubRaceTitles();
         balanceHeroTitleWidths();
       }).catch(function () {});
     }
-    // #region agent log
-    (function () {
-      var cameo = document.querySelector('.den-section__grid .den-cameo');
-      var side = document.querySelector('.den-section__grid .den-side');
-      var ask = document.querySelector('.den-side__lbl--ask');
-      var cmds = document.querySelector('.den-cmds');
-      var prompts = document.querySelector('.den-prompts');
-      if (!cameo || !side) return;
-      var cR = cameo.getBoundingClientRect();
-      var sR = side.getBoundingClientRect();
-      var cmdsR = cmds ? cmds.getBoundingClientRect() : null;
-      var askR = ask ? ask.getBoundingClientRect() : null;
-      var promptsR = prompts ? prompts.getBoundingClientRect() : null;
-      var gapAboveAsk = cmdsR && askR ? Math.round(askR.top - cmdsR.bottom) : null;
-      var gapBelowAsk = askR && promptsR ? Math.round(promptsR.top - askR.bottom) : null;
-      fetch('http://127.0.0.1:7631/ingest/51a1334d-a1f0-4bae-a705-e8f774178324', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '1bf3af' },
-        body: JSON.stringify({
-          sessionId: '1bf3af',
-          runId: 'den-equal-height-v1',
-          hypothesisId: 'H-den-equal-h',
-          location: 'day_hub.js:boot',
-          message: 'DEN columns equal height; Try asking gaps tighter',
-          timestamp: Date.now(),
-          data: {
-            vw: window.innerWidth,
-            cameoH: Math.round(cR.height),
-            sideH: Math.round(sR.height),
-            heightDelta: Math.round(cR.height - sR.height),
-            equalHeight: Math.abs(cR.height - sR.height) <= 4,
-            gapAboveAsk: gapAboveAsk,
-            gapBelowAsk: gapBelowAsk,
-            askGapsTight: gapAboveAsk != null && gapAboveAsk <= 20 && gapBelowAsk != null && gapBelowAsk <= 14
-          }
-        })
-      }).catch(function () {});
-    })();
-    // #endregion
   }
 
   if (document.readyState === 'loading') {

@@ -5,20 +5,9 @@
        not staff, not DEBUG) lives in public.context_processors.analytics —
        empty IDs short-circuit the conditional so no tag is emitted. -->
 
-    <script type="text/javascript">
-      (function (c, l, a, r, i, t, y) {
-        c[a] =
-          c[a] ||
-          function () {
-            (c[a].q = c[a].q || []).push(arguments);
-          };
-        t = l.createElement(r);
-        t.async = 1;
-        t.src = "https://www.clarity.ms/tag/" + i;
-        y = l.getElementsByTagName(r)[0];
-        y.parentNode.insertBefore(t, y);
-      })(window, document, "clarity", "script", "x0e7sm3rbk");
-    </script>
+    <!-- Analytics (Microsoft Clarity) is deliberately not in this
+         sandbox: previews would be reported to the live site's account.
+         Production loads it from the Django base template. -->
 
     <!-- ── Character set & viewport ──────────────────────────── -->
     <meta charset="UTF-8" />
@@ -2720,13 +2709,13 @@
                       <source
                         type="image/png"
                         srcset="
-                          static/public/img/mr_fox_host-sm.png 340w,
-                          static/public/img/mr_fox_host.png    720w
+                          static/public/img/mr_fox_host-sm.webp 340w,
+                          static/public/img/mr_fox_host.webp    720w
                         "
                         sizes="(max-width: 900px) 170px, 260px"
                       />
                       <img
-                        src="static/public/img/mr_fox_host.png"
+                        src="static/public/img/mr_fox_host.webp"
                         alt=""
                         width="720"
                         height="1080"
@@ -2881,7 +2870,7 @@
                     THE FOX?
                     <img
                       class="hf-title__fox-underline"
-                      src="static/public/img/fox-title-underline.png"
+                      src="static/public/img/fox-title-underline.webp"
                       alt=""
                       width="278"
                       height="20"
@@ -2911,7 +2900,7 @@
                       </span>
                       <span class="picks-duel__live-label">LIVE</span>
                     </div>
-                    <h3 class="picks-duel__horse-name">Dark Cloud Rising</h3>
+                    <h2 class="picks-duel__horse-name">Dark Cloud Rising</h2>
                     <div class="picks-duel__card-actions">
                       <span class="picks-duel__odds">7/2</span>
                       <a
@@ -2971,7 +2960,7 @@
                         >OPEN</span
                       >
                     </div>
-                    <h3 class="picks-duel__horse-name">Voting Open</h3>
+                    <h2 class="picks-duel__horse-name">Voting Open</h2>
                     <div class="picks-duel__card-actions">
                       <span class="picks-duel__chip picks-duel__chip--cubs">
                         <svg
@@ -3590,7 +3579,7 @@
               </h3>
               <dl class="day-card__facts">
                 <div>
-                  <div class="day-card__fact-top">
+                  <dt class="day-card__fact-top">
                   <span class="day-card__fact-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                       <path
@@ -3623,12 +3612,12 @@
                       />
                     </svg>
                   </span>
-                  <dt>Runners</dt>
-                </div>
+                  Runners
+                </dt>
                 <dd>11</dd>
                 </div>
                 <div>
-                  <div class="day-card__fact-top">
+                  <dt class="day-card__fact-top">
                   <span class="day-card__fact-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                       <path
@@ -3675,12 +3664,12 @@
                       />
                     </svg>
                   </span>
-                  <dt>Prize</dt>
-                </div>
+                  Prize
+                </dt>
                 <dd>£10,468</dd>
                 </div>
                 <div class="day-card__facts-fox">
-                  <div class="day-card__fact-top">
+                  <dt class="day-card__fact-top">
                   <span class="day-card__fact-icon" aria-hidden="true">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                       <path
@@ -3692,12 +3681,12 @@
                       />
                     </svg>
                   </span>
-                  <dt>Fox&rsquo;s pick</dt>
-                </div>
+                  Fox&rsquo;s pick
+                </dt>
                 <dd>Dark Cloud Rising</dd>
                 </div>
                 <div>
-                  <div class="day-card__fact-top">
+                  <dt class="day-card__fact-top">
                   <span class="day-card__fact-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                       <path
@@ -3716,8 +3705,8 @@
                       />
                     </svg>
                   </span>
-                  <dt>Class</dt>
-                </div>
+                  Class
+                </dt>
                 <dd>Handicap</dd>
                 </div>
               </dl>
@@ -3796,7 +3785,7 @@
               </div>
               <dl class="day-card__facts">
                 <div>
-                  <div class="day-card__fact-top">
+                  <dt class="day-card__fact-top">
                   <span class="day-card__fact-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                       <path
@@ -3829,12 +3818,12 @@
                       />
                     </svg>
                   </span>
-                  <dt>Runners</dt>
-                </div>
+                  Runners
+                </dt>
                 <dd>10</dd>
                 </div>
                 <div>
-                  <div class="day-card__fact-top">
+                  <dt class="day-card__fact-top">
                   <span class="day-card__fact-icon" aria-hidden="true">
                     <svg width="16" height="14" viewBox="0 0 20 18" fill="none">
                       <path
@@ -3843,8 +3832,8 @@
                       />
                     </svg>
                   </span>
-                  <dt>Favourite</dt>
-                </div>
+                  Favourite
+                </dt>
                 <dd>
                       <a
                         href="https://www.saturday-racing.com/horses/vegasmile/"
@@ -3949,7 +3938,7 @@
                 >
                   <img
                     class="day-hub__course-ico"
-                    src="static/public/img/course-horse.png"
+                    src="static/public/img/course-horse.webp"
                     alt=""
                     width="40"
                     height="27"
@@ -3966,7 +3955,7 @@
                 >
                   <img
                     class="day-hub__course-ico"
-                    src="static/public/img/course-horse.png"
+                    src="static/public/img/course-horse.webp"
                     alt=""
                     width="40"
                     height="27"
@@ -3983,7 +3972,7 @@
                 >
                   <img
                     class="day-hub__course-ico"
-                    src="static/public/img/course-horse.png"
+                    src="static/public/img/course-horse.webp"
                     alt=""
                     width="40"
                     height="27"
@@ -4000,7 +3989,7 @@
                 >
                   <img
                     class="day-hub__course-ico"
-                    src="static/public/img/course-horse.png"
+                    src="static/public/img/course-horse.webp"
                     alt=""
                     width="40"
                     height="27"
@@ -4597,17 +4586,18 @@
             <aside class="mi-board" aria-label="Top steamers">
               <div class="mi-board__toolbar">
                 <div class="mi-board__tabs" role="tablist" aria-label="Market list">
-                  <button type="button" class="mi-tab is-active" role="tab" aria-selected="true" data-mi-tab="steamers">
+                  <button type="button" class="mi-tab is-active" role="tab" aria-selected="true" aria-controls="mi-list" data-mi-tab="steamers">
                     <img class="mi-tab__icon" src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
                     Steamers
                   </button>
-                  <button type="button" class="mi-tab" role="tab" aria-selected="false" data-mi-tab="drifters">
+                  <button type="button" class="mi-tab" role="tab" aria-selected="false" aria-controls="mi-list" data-mi-tab="drifters">
                     <img class="mi-tab__icon" src="static/public/img/icons/drifters.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
                     Drifters
                   </button>
                 </div>
                 <span class="mi-board__top">TOP 5</span>
               </div>
+              <div id="mi-list" role="tabpanel" aria-label="Market movers">
               <ol class="mi-list">
                 <li class="mi-row">
                   <a class="mi-row__link" href="https://www.saturday-racing.com/races/feature/">
@@ -4665,6 +4655,7 @@
                   </a>
                 </li>
               </ol>
+              </div>
             </aside>
           </div>
         </div>
@@ -4803,13 +4794,13 @@
                       <source
                         type="image/png"
                         srcset="
-                          static/public/img/the_pack-sm.png 340w,
-                          static/public/img/the_pack.png    720w
+                          static/public/img/the_pack-sm.webp 340w,
+                          static/public/img/the_pack.webp    720w
                         "
                         sizes="(max-width: 720px) 340px, 720px"
                       />
                       <img
-                        src="static/public/img/the_pack.png"
+                        src="static/public/img/the_pack.webp"
                         alt="The Pack — Saturday Racing community"
                         width="720"
                         height="1080"
@@ -4909,7 +4900,7 @@
               <div class="den-cameo__chat">
                 <div class="den-chat__user">
                   <div class="den-chat__fox" aria-hidden="true">
-                    <img src="static/public/img/den/fox-avatar.png" alt="" width="57" height="60" />
+                    <img src="static/public/img/den/fox-avatar.webp" alt="" width="57" height="60" />
                   </div>
                   <div class="den-chat__bubble den-chat__bubble--user">
                     <p>Why did the fox pick Trawlerman in the 15:35 Goodwood?</p>
@@ -5025,7 +5016,7 @@
             <div class="den-strip__brand">
               <div class="den-strip__emblem" aria-hidden="true">
                 <img class="den-strip__shield-outline" src="static/public/img/den/shield-outline.svg" alt="" width="86" height="86" />
-                <img class="den-strip__shield-fox" src="static/public/img/den/shield-fox.png" alt="" width="48" height="42" />
+                <img class="den-strip__shield-fox" src="static/public/img/den/shield-fox.webp" alt="" width="48" height="42" />
               </div>
               <div class="den-strip__copy">
                 <p class="den-strip__tag">
@@ -5092,7 +5083,7 @@
                 role="tab"
                 id="ac-tab-claude"
                 aria-selected="true"
-                aria-controls="ac-panel"
+                aria-controls="ac-panel-claude"
                 data-ac-tab="claude"
               >
                 <span class="ac-tab__top">
@@ -5110,7 +5101,7 @@
                 role="tab"
                 id="ac-tab-chatgpt"
                 aria-selected="false"
-                aria-controls="ac-panel"
+                aria-controls="ac-panel-chatgpt"
                 data-ac-tab="chatgpt"
               >
                 <span class="ac-tab__top">
@@ -5128,7 +5119,7 @@
                 role="tab"
                 id="ac-tab-gemini"
                 aria-selected="false"
-                aria-controls="ac-panel"
+                aria-controls="ac-panel-gemini"
                 data-ac-tab="gemini"
               >
                 <span class="ac-tab__top">
@@ -5144,7 +5135,7 @@
 
             <article
               class="ac-panel"
-              id="ac-panel"
+              id="ac-panel-claude"
               role="tabpanel"
               aria-labelledby="ac-tab-claude"
               data-reveal
@@ -5153,7 +5144,7 @@
               <div class="ac-panel__meta">
                 <span class="ac-panel__badge">
                   <img
-                    src="static/public/img/ai-chamber/icon-claude.svg"
+                    src="static/public/img/ai-chamber/icon-model.svg"
                     alt=""
                     width="12"
                     height="12"
@@ -5173,14 +5164,141 @@
                 </div>
               </div>
               <p class="ac-panel__body" data-ac-body>
-                Trawlerman owns one of the strongest chamber scores in this
-                field. With no SR/RPR/TS data on the winner, the Balanced lens
-                leaned on market confidence and pace fit instead. The profile
-                stays composed even after race-day variance.
+                Trawlerman owns one of the strongest chamber scores in this field. With no SR/RPR/TS data on the winner, the Balanced lens leaned on market confidence and pace fit instead. The profile stays composed even after race-day variance.
               </p>
               <div class="ac-tags" data-ac-tags>
                 <span>Speed figures</span>
                 <span>Trainer patterns</span>
+              </div>
+              <div class="ac-split">
+                <div class="ac-split__card ac-split__card--agree">
+                  <p class="ac-split__lbl">2/3 CONSENSUS</p>
+                  <p class="ac-split__horse">Trawlerman</p>
+                  <p class="ac-split__note">Claude &amp; ChatGPT agree</p>
+                </div>
+                <span class="ac-split__vs" aria-hidden="true">vs</span>
+                <div class="ac-split__card ac-split__card--break">
+                  <p class="ac-split__lbl">1/3 BREAKS RANKS</p>
+                  <p class="ac-split__horse">Illinois</p>
+                  <p class="ac-split__note">Gemini differs</p>
+                </div>
+              </div>
+              <a
+                class="ac-cta"
+                href="https://www.saturday-racing.com/ai/tools/"
+              >
+                Enter the AI Chamber<span class="cta-dash-tail"> — full analysis</span>
+                <img
+                  src="static/public/img/ai-chamber/icon-arrow.svg"
+                  alt=""
+                  width="14"
+                  height="14"
+                />
+              </a>
+            </article>
+
+            <article
+              class="ac-panel"
+              id="ac-panel-chatgpt"
+              role="tabpanel"
+              aria-labelledby="ac-tab-chatgpt"
+              data-reveal
+              data-reveal-delay="1"
+              hidden
+            >
+              <div class="ac-panel__meta">
+                <span class="ac-panel__badge">
+                  <img
+                    src="static/public/img/ai-chamber/icon-model.svg"
+                    alt=""
+                    width="12"
+                    height="12"
+                  />
+                  <span data-ac-model>CHATGPT</span>
+                </span>
+                <span class="ac-panel__lens" data-ac-lens>Market lens</span>
+              </div>
+              <h3 class="ac-panel__horse" data-ac-horse>Trawlerman</h3>
+              <div class="ac-conf">
+                <div class="ac-conf__row">
+                  <span>CONFIDENCE</span>
+                  <span class="ac-conf__val" data-ac-conf>54/100</span>
+                </div>
+                <div class="ac-conf__bar" aria-hidden="true">
+                  <span data-ac-bar style="width: 54%"></span>
+                </div>
+              </div>
+              <p class="ac-panel__body" data-ac-body>
+                ChatGPT reads the same steam as Claude but with less conviction. Market shortening supports Trawlerman, though the model flags price compression as a risk if the field reshapes late.
+              </p>
+              <div class="ac-tags" data-ac-tags>
+                <span>Market moves</span>
+                <span>Odds analysis</span>
+              </div>
+              <div class="ac-split">
+                <div class="ac-split__card ac-split__card--agree">
+                  <p class="ac-split__lbl">2/3 CONSENSUS</p>
+                  <p class="ac-split__horse">Trawlerman</p>
+                  <p class="ac-split__note">Claude &amp; ChatGPT agree</p>
+                </div>
+                <span class="ac-split__vs" aria-hidden="true">vs</span>
+                <div class="ac-split__card ac-split__card--break">
+                  <p class="ac-split__lbl">1/3 BREAKS RANKS</p>
+                  <p class="ac-split__horse">Illinois</p>
+                  <p class="ac-split__note">Gemini differs</p>
+                </div>
+              </div>
+              <a
+                class="ac-cta"
+                href="https://www.saturday-racing.com/ai/tools/"
+              >
+                Enter the AI Chamber<span class="cta-dash-tail"> — full analysis</span>
+                <img
+                  src="static/public/img/ai-chamber/icon-arrow.svg"
+                  alt=""
+                  width="14"
+                  height="14"
+                />
+              </a>
+            </article>
+
+            <article
+              class="ac-panel"
+              id="ac-panel-gemini"
+              role="tabpanel"
+              aria-labelledby="ac-tab-gemini"
+              data-reveal
+              data-reveal-delay="1"
+              hidden
+            >
+              <div class="ac-panel__meta">
+                <span class="ac-panel__badge">
+                  <img
+                    src="static/public/img/ai-chamber/icon-model.svg"
+                    alt=""
+                    width="12"
+                    height="12"
+                  />
+                  <span data-ac-model>GEMINI</span>
+                </span>
+                <span class="ac-panel__lens" data-ac-lens>Course lens</span>
+              </div>
+              <h3 class="ac-panel__horse" data-ac-horse>Illinois</h3>
+              <div class="ac-conf">
+                <div class="ac-conf__row">
+                  <span>CONFIDENCE</span>
+                  <span class="ac-conf__val" data-ac-conf>52/100</span>
+                </div>
+                <div class="ac-conf__bar" aria-hidden="true">
+                  <span data-ac-bar style="width: 52%"></span>
+                </div>
+              </div>
+              <p class="ac-panel__body" data-ac-body>
+                Gemini breaks ranks on course and distance history. Illinois profiles better for this trip and going than the chamber majority, so the model holds a contrarian line despite lower absolute confidence.
+              </p>
+              <div class="ac-tags" data-ac-tags>
+                <span>Course database</span>
+                <span>Going correlations</span>
               </div>
               <div class="ac-split">
                 <div class="ac-split__card ac-split__card--agree">
@@ -5360,7 +5478,7 @@
                 <span class="gh-tier__num gh-tier__num--emerald" aria-hidden="true">3</span>
                 <span class="gh-tier__icon">
                   <img
-                    src="static/public/img/how-it-works/icon-trophy-card.png"
+                    src="static/public/img/how-it-works/icon-trophy-card.webp"
                     alt=""
                     width="18"
                     height="18"
@@ -5382,11 +5500,14 @@
 
           <div class="gh-scoring" data-reveal data-reveal-delay="2">
             <table class="gh-table">
+              <caption class="sr-only">
+                How points are scored, by result and race type
+              </caption>
               <thead>
                 <tr>
-                  <th>RESULT</th>
-                  <th>STANDARD</th>
-                  <th>
+                  <th scope="col">RESULT</th>
+                  <th scope="col">STANDARD</th>
+                  <th scope="col">
                     RACE OF THE DAY
                     <img
                       class="gh-table__th-icon"
@@ -5397,11 +5518,11 @@
                       decoding="async"
                     />
                   </th>
-                  <th>
+                  <th scope="col">
                     SATURDAY FEATURED
                     <img
                       class="gh-table__th-icon"
-                      src="static/public/img/how-it-works/icon-trophy-card.png"
+                      src="static/public/img/how-it-works/icon-trophy-card.webp"
                       alt=""
                       width="13"
                       height="13"
@@ -5425,7 +5546,7 @@
                         />
                         <img
                           class="gh-table__result-glyph"
-                          src="static/public/img/how-it-works/icon-trophy-card.png"
+                          src="static/public/img/how-it-works/icon-trophy-card.webp"
                           alt=""
                           width="14"
                           height="14"
@@ -5789,12 +5910,11 @@
               <span class="draw-corner draw-corner--tr" aria-hidden="true"></span>
               <span class="draw-corner draw-corner--bl" aria-hidden="true"></span>
               <span class="draw-corner draw-corner--br" aria-hidden="true"></span>
-              <div class="draw-machine__tabs" role="tablist">
+              <div class="draw-machine__tabs">
                 <button
                   type="button"
                   class="draw-machine__tab is-active"
-                  role="tab"
-                  aria-selected="true"
+                                    aria-current="true"
                 >
                   <span class="draw-machine__tab-dot" aria-hidden="true"></span>
                   SATURDAY DRAW
@@ -5802,8 +5922,6 @@
                 <button
                   type="button"
                   class="draw-machine__tab"
-                  role="tab"
-                  aria-selected="false"
                   disabled
                 >
                   THE BIG RACE

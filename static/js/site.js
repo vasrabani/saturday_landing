@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // If screen resizes above mobile breakpoint, close drawer cleanly
-    const mq = window.matchMedia('(min-width: 901px)');
+    const mq = window.matchMedia('(min-width: 1025px)');
     const onResize = e => { if (e.matches && drawer.classList.contains('open')) closeDrawer(); };
     if (mq.addEventListener) mq.addEventListener('change', onResize);
     else mq.addListener(onResize); // Safari < 14 fallback
@@ -429,3 +429,93 @@ document.querySelectorAll('.mob-drawer__accordion').forEach(initDrawerAccordion)
     sessionStorage.setItem(KEY, '1');
   });
 })();
+
+
+/* ════════════════════════════════════════════════════════════
+   SHARED UI HELPERS
+   Used by the landing page's tab strips and card tilts. Kept here
+   with SaturdayCountdown so each surface wires behaviour rather
+   than re-implementing it. Deferred landing scripts run after this
+   file, so the helpers are always defined by the time they boot.
+   ════════════════════════════════════════════════════════════ */
+
+/**
+ * Wire a tab strip: click and full keyboard support (arrow keys, Home,
+ * End) with a roving tabindex, per the WAI-ARIA tabs pattern. Only the
+ * selected tab is in the tab order; arrows move between tabs.
+ *
+ * onSelect(tab, index) does whatever the strip actually changes.
+ */
+window.SaturdayTabs = function (tabs, onSelect) {
+  tabs = Array.prototype.slice.call(tabs || []);
+  if (!tabs.length) return;
+
+  function select(tab, moveFocus) {
+    tabs.forEach(function (other) {
+      var on = other === tab;
+      other.classList.toggle('is-active', on);
+      other.setAttribute('aria-selected', on ? 'true' : 'false');
+      other.tabIndex = on ? 0 : -1;
+    });
+    if (moveFocus) tab.focus();
+    if (onSelect) onSelect(tab, tabs.indexOf(tab));
+  }
+
+  var KEY_STEPS = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
+
+  tabs.forEach(function (tab, index) {
+    tab.tabIndex = tab.getAttribute('aria-selected') === 'true' ? 0 : -1;
+    tab.addEventListener('click', function () {
+      select(tab, false);
+    });
+    tab.addEventListener('keydown', function (event) {
+      var step = KEY_STEPS[event.key];
+      var target =
+        step !== undefined ? tabs[(index + step + tabs.length) % tabs.length]
+        : event.key === 'Home' ? tabs[0]
+        : event.key === 'End' ? tabs[tabs.length - 1]
+        : null;
+      if (!target) return;
+      event.preventDefault();
+      select(target, true);
+    });
+  });
+
+  return { select: select };
+};
+
+/**
+ * Mouse-parallax tilt for a card. Skipped on touch screens and when the
+ * visitor prefers reduced motion, so behaviour matches everywhere it is
+ * used instead of each caller remembering the guards.
+ */
+window.SaturdayTilt = function (elements, options) {
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var settings = options || {};
+  var maxTiltX = settings.maxTiltX || 3.5;
+  var maxTiltY = settings.maxTiltY || 4.5;
+  var perspective = settings.perspective || 760;
+  var clamp = function (value) {
+    return Math.max(-1, Math.min(1, value));
+  };
+
+  Array.prototype.forEach.call(elements || [], function (card) {
+    card.addEventListener('pointermove', function (event) {
+      var box = card.getBoundingClientRect();
+      var fromCentreX = (event.clientX - (box.left + box.width / 2)) / (box.width / 2);
+      var fromCentreY = (event.clientY - (box.top + box.height / 2)) / (box.height / 2);
+      var rotateX = (-clamp(fromCentreY) * maxTiltX).toFixed(2);
+      var rotateY = (clamp(fromCentreX) * maxTiltY).toFixed(2);
+      card.style.transform =
+        'perspective(' + perspective + 'px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg)';
+      card.classList.add('is-tilting');
+    }, { passive: true });
+
+    card.addEventListener('pointerleave', function () {
+      card.style.transform = '';
+      card.classList.remove('is-tilting');
+    }, { passive: true });
+  });
+};

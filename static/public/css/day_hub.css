@@ -14,7 +14,7 @@
       rgba(3, 11, 22, 0.55) 42%,
       rgba(3, 11, 22, 0.82) 100%
     ),
-    url("../img/day-hub-bg.png");
+    url("../img/day-hub-bg.webp");
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
@@ -212,7 +212,7 @@
   align-items: center;
   justify-content: center;
   background: rgba(212, 175, 55, 0.22);
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold);
 }
 .day-hub__chip--finished {
   opacity: 0.55;
@@ -297,7 +297,7 @@
       rgba(3, 11, 22, 0.42) 48%,
       rgba(3, 11, 22, 0.28) 100%
     ),
-    url("../img/race-of-the-day-bg-bleed.png");
+    url("../img/race-of-the-day-bg-bleed.webp");
   background-size: cover;
   background-position: right center;
   background-repeat: no-repeat;
@@ -327,7 +327,7 @@
       rgba(3, 11, 22, 0.42) 48%,
       rgba(3, 11, 22, 0.28) 100%
     ),
-    url("../img/next-off-bg.png");
+    url("../img/next-off-bg.webp");
   background-size: cover;
   background-position: right center;
   background-repeat: no-repeat;
@@ -347,11 +347,11 @@
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold);
 }
 .day-card__kicker--live { color: #4ade80; }
 .day-card__star {
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold);
   display: inline-flex;
   align-items: center;
   line-height: 0;
@@ -387,7 +387,7 @@
   height: 13px;
   flex-shrink: 0;
 }
-.day-card__badge--pinned   { background: rgba(212, 175, 55, 0.18); color: var(--c-gold, #D4AF37); }
+.day-card__badge--pinned   { background: rgba(212, 175, 55, 0.18); color: var(--c-gold); }
 .day-card__badge--fallback { background: rgba(255, 255, 255, 0.06); color: rgba(255, 255, 255, 0.55); font-style: italic; }
 .day-card__badge--live     { background: rgba(239, 68, 68, 0.22);  color: #fca5a5; }
 
@@ -441,7 +441,10 @@
   min-width: 78px;
 }
 
-/* Upper: icon + label · Lower: value (no icon-column indent) */
+/* Upper: icon + label · Lower: value (no icon-column indent).
+   .day-card__fact-body is the production template's name for this row;
+   kept so the stylesheet works before and after the Django port. */
+.day-card__fact-body,
 .day-card__fact-top {
   display: inline-flex;
   align-items: center;
@@ -466,6 +469,7 @@
   border-color: rgba(74, 222, 128, 0.35);
 }
 
+.day-card__facts .day-card__fact-body,
 .day-card__facts dt {
   font-size: 9px;
   font-weight: 700;
@@ -481,14 +485,14 @@
   font-weight: 700;
   color: #fff;
 }
-.day-card__facts-fox dt { color: var(--c-gold, #D4AF37); }
+.day-card__facts-fox dt { color: var(--c-gold); }
 .day-card__odds {
   display: inline-block;
   margin-left: 4px;
   padding: 1px 6px;
   border-radius: 4px;
   background: rgba(212, 175, 55, 0.16);
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold);
   font-size: 12px;
   font-feature-settings: 'tnum';
 }
@@ -559,11 +563,11 @@
   font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold);
 }
 
 .day-card__tip-fox {
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold);
   display: inline-flex;
   align-items: center;
   line-height: 0;
@@ -594,7 +598,7 @@
   flex-shrink: 0;
   padding: 6px 12px;
   background: #06070d;
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold);
   border-radius: 6px;
   font-family: "Playfair Display", Georgia, serif;
   font-weight: 800;
@@ -617,7 +621,7 @@
   align-self: flex-start;
   padding: 9px 16px;
   border-radius: 999px;
-  background: var(--c-gold, #D4AF37);
+  background: var(--c-gold);
   color: #06070d;
   font-size: 13px;
   font-weight: 800;
@@ -648,7 +652,7 @@
 .day-card__cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
 /* Ghost CTAs: outline idle → theme liquid fill on hover */
 .day-card__cta--ghost {
-  --liquid: var(--c-gold, #d4af37);
+  --liquid: var(--c-gold);
   --ink: #06070d;
   position: relative;
   overflow: hidden;
@@ -700,7 +704,7 @@
   border-color: #4ade80;
 }
 .day-card--featured .day-card__cta--ghost:hover {
-  border-color: var(--c-gold, #d4af37);
+  border-color: var(--c-gold);
 }
 .day-card__cta--ghost:hover .day-card__cta-icon,
 .day-card__cta--ghost:focus-visible .day-card__cta-icon {
@@ -836,7 +840,7 @@
 
 .day-hub__filter.is-active {
   background: #14161f;
-  border-color: #d4af37;
+  border-color: var(--c-gold);
   color: #e8c558;
   box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.35), 0 0 18px rgba(212, 175, 55, 0.25);
 }
@@ -851,7 +855,7 @@
 
 .day-hub__filter.is-active .day-hub__filter-n {
   background: rgba(212, 175, 55, 0.2);
-  color: #f5d76e;
+  color: var(--c-gold-lt);
 }
 
 /* Two-column body: courses | races */
@@ -926,7 +930,7 @@
 .day-hub__course-meta {
   font-size: 12px;
   font-weight: 600;
-  color: rgba(20, 22, 31, 0.45);
+  color: rgba(20, 22, 31, 0.62);
   white-space: nowrap;
 }
 
@@ -946,7 +950,7 @@
 }
 
 .day-hub__course.is-active .day-hub__course-meta {
-  color: #d4af37;
+  color: var(--c-gold);
 }
 
 /* Meeting panels inside white card */
@@ -1038,13 +1042,13 @@
 }
 
 .day-hub__rp-race .rp-race__badge--next {
-  background: #1f8f5f;
+  background: #17794f;
   color: #fff;
   border: 0;
 }
 
 .day-hub__rp-race .rp-star {
-  color: #d4af37;
+  color: var(--c-gold);
 }
 
 /* FOX → affordance (layout) */
@@ -1131,17 +1135,17 @@
   gap: 8px;
   transition: color 0.15s;
 }
-.day-hub__meeting-link:hover { color: var(--c-gold, #D4AF37); }
+.day-hub__meeting-link:hover { color: var(--c-gold); }
 .day-hub__meeting-link:focus-visible {
-  color: var(--c-gold, #D4AF37);
-  outline: 2px solid var(--c-gold, #D4AF37);
+  color: var(--c-gold);
+  outline: 2px solid var(--c-gold);
   outline-offset: 3px;
   border-radius: 3px;
 }
 .day-hub__meeting-link-arrow {
   font-size: 0.7em;
   font-weight: 500;
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold);
   opacity: 0.45;
   transform: translateX(0);
   transition: opacity 0.15s, transform 0.15s;
@@ -1174,7 +1178,7 @@
 }
 .rp-race__badge--fox {
   background: rgba(212, 175, 55, 0.18);
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold);
   border: 1px solid rgba(212, 175, 55, 0.35);
   font-size: 12px;
   padding: 1px 6px;
@@ -1208,7 +1212,7 @@
   margin: 0 0 8px;
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 28px;
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold);
 }
 .day-hub__empty-text { margin: 0; color: rgba(255, 255, 255, 0.65); }
 
@@ -1306,14 +1310,14 @@
   height: 36px;
   padding: 0;
   cursor: pointer;
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold);
   font: inherit;
   transition: background 0.15s, border-color 0.15s;
 }
 .day-hub__meeting-toggle:hover,
 .day-hub__meeting-toggle:focus-visible {
   background: rgba(212, 175, 55, 0.10);
-  border-color: var(--c-gold, #D4AF37);
+  border-color: var(--c-gold);
   outline: none;
 }
 .day-hub__meeting-toggle-chev {
@@ -1438,7 +1442,7 @@
   transition: background 0.18s ease, box-shadow 0.18s ease;
 }
 .day-hub__rp-race.rp-race--next::before {
-  background: linear-gradient(180deg, #f5e49a 0%, #d4af37 100%);
+  background: linear-gradient(180deg, #f5e49a 0%, var(--c-gold) 100%);
   box-shadow: 0 0 14px rgba(212, 175, 55, 0.55);
 }
 .day-hub__rp-race.rp-race--live::before {
@@ -1454,14 +1458,14 @@
 .day-hub__rp-race[data-flags*="fox"]::before {
   background:
     repeating-linear-gradient(180deg,
-      #d4af37 0,
-      #d4af37 5px,
+      var(--c-gold) 0,
+      var(--c-gold) 5px,
       rgba(212, 175, 55, 0.10) 5px,
       rgba(212, 175, 55, 0.10) 10px);
 }
 .day-hub__rp-race.rp-race--next[data-flags*="fox"]::before,
 .day-hub__rp-race.rp-race--live[data-flags*="fox"]::before {
-  background: linear-gradient(180deg, #f5e49a 0%, #d4af37 100%);
+  background: linear-gradient(180deg, #f5e49a 0%, var(--c-gold) 100%);
   box-shadow: 0 0 14px rgba(212, 175, 55, 0.55);
 }
 
@@ -1507,8 +1511,8 @@
               color 0.15s ease, transform 0.12s ease;
 }
 .day-hub__filter.is-active {
-  background: var(--c-gold, #d4af37);
-  border-color: var(--c-gold, #d4af37);
+  background: var(--c-gold);
+  border-color: var(--c-gold);
   color: #18120a;     /* dark text on solid gold — high contrast */
   font-weight: 800;
 }
@@ -1847,3 +1851,8 @@
   }
 }
 
+/* A meeting whose racing is over reads as done rather than upcoming.
+   Production's day hub template still sets this class. */
+.day-hub__rp-meeting.is-finished {
+  opacity: 0.72;
+}

@@ -78,6 +78,38 @@ Keep commits scoped ("Navbar mobile drawer refresh", "Footer newsletter block re
 
 ---
 
+## Quality checks
+
+Every PR must pass three checks. GitHub runs them automatically on each PR (`.github/workflows/quality.yml`); run them locally before you push.
+
+One-time setup (Node 20 recommended, see `.nvmrc`):
+
+```bash
+npm ci
+npx playwright install chromium
+```
+
+| Command | What it proves |
+| --- | --- |
+| `npm run check` | No debug code or localhost calls, every CSS `url()` resolves, images within 300 KB, no unused images, no new `!important`s, hardcoded token colours, off-scale breakpoints or unloaded fonts. |
+| `npm test` | Every feature works at 375, 768, 1024 and 1440px: nav dropdowns and mobile drawer, countdowns, day hub filters and course switcher, tabs, Saturday Draw, tilt and reduced motion, no horizontal scroll, no new accessibility violations. |
+| `npm run baseline` then `npm run test:visual` | **Advisory.** Screenshots each section at all four widths and compares them with the design reference commit (`tools/visual-baseline-ref`). |
+
+`npm run verify` runs all of them in order. The first two must pass; the third is for review.
+
+**Refactoring CSS?** `node tools/css-equivalence.mjs <ref>` compares the computed styles of every element against another commit, at all four widths. Use it when a change is meant to alter nothing that renders — swapping a colour for the variable holding the same value, merging duplicate keyframes — because it checks what the browser resolved rather than pixels, so rendering noise cannot hide a real change.
+
+**Why the visual check is advisory.** Most sections compare cleanly, but a few (battle, market intelligence, DEN) differ between runs of identical code: their full-bleed art layers combine large blurs with `mix-blend-mode`, so the same frame is never painted twice. Use it to look at what a change did (`test-results/` holds before, after and diff images), not as pass/fail. It becomes a blocking gate once the noise is gone: PR 2 cut the image weight and PR 3 fixed the race-title clamp, so this is due a re-check.
+
+**Known issues are tracked, not ignored.**
+
+- `tools/quality-baseline.json` lists the problems that existed when the checks were introduced. A new problem fails the run, and so does a listed problem that has been fixed, until you run `npm run check -- --update` and commit the shorter list.
+- Feature tests for known defects are marked `knownIssue('PR n', …)`. They must fail today; when the fix lands, Playwright reports them as unexpectedly passing, so the marker comes out in the PR that fixes it.
+
+**Intentional visual changes** fail `test:visual` by design. Say so in the PR description, attach the diff images from `test-results/`, and once the PR is approved move `tools/visual-baseline-ref` to the merged commit.
+
+---
+
 ## Troubleshooting
 
 **Fonts look wrong** — you're on `file://`. Kill the tab, run `python -m http.server 8080`, reopen at `http://localhost:8080/`.

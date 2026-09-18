@@ -30,18 +30,18 @@
   color: rgba(255, 255, 255, 0.85);
 }
 .hero-tab:focus-visible {
-  outline: 2px solid var(--c-gold, #D4AF37);
+  outline: 2px solid var(--c-gold);
   outline-offset: -2px;
 }
 
 .hero-tab.is-active {
   color: #fff;
 }
-.hero-tab--week.is-active { border-bottom-color: var(--c-gold, #D4AF37); }
+.hero-tab--week.is-active { border-bottom-color: var(--c-gold); }
 .hero-tab--day.is-active  { border-bottom-color: #4ade80; }
 
 .hero-tab__star {
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold);
   font-size: 16px;
   line-height: 1;
   flex-shrink: 0;
@@ -75,7 +75,7 @@
 .hero-tab.is-active .hero-tab__kicker {
   color: rgba(255, 255, 255, 0.78);
 }
-.hero-tab--week.is-active .hero-tab__kicker { color: var(--c-gold, #D4AF37); }
+.hero-tab--week.is-active .hero-tab__kicker { color: var(--c-gold); }
 .hero-tab--day.is-active .hero-tab__kicker  { color: #4ade80; }
 
 .hero-tab__name {

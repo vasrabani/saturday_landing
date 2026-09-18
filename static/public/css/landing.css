@@ -261,7 +261,7 @@
   letter-spacing: 0.04em;
   line-height: 1;
   color: transparent;
-  background: linear-gradient(135deg, #e8cc70 0%, #f5e49a 30%, #d4af37 50%, #f5e49a 70%, #c8a020 100%);
+  background: linear-gradient(135deg, #e8cc70 0%, #f5e49a 30%, var(--c-gold) 50%, #f5e49a 70%, #c8a020 100%);
   background-clip: text;
   -webkit-background-clip: text;
   background-size: 200% 100%;
@@ -616,7 +616,7 @@
 
 .picks-duel__half--cubs .picks-duel__horse {
   text-align: right;
-  color: var(--c-gold-lt, #F5D76E);
+  color: var(--c-gold-lt);
   text-shadow: 0 0 18px rgba(212, 175, 55, 0.30);
 }
 
@@ -689,7 +689,7 @@
 }
 
 .picks-duel__half--cubs .picks-duel__sub {
-  color: var(--c-gold, #D4AF37);
+  color: var(--c-gold);
   font-weight: 700;
   letter-spacing: 0.06em;
 }
@@ -772,7 +772,7 @@
   font-size: 19px;
   font-weight: 900;
   font-style: italic;
-  color: #f5d76e;
+  color: var(--c-gold-lt);
   letter-spacing: 0.12em;
   line-height: 1;
   text-shadow:
@@ -1701,13 +1701,13 @@
   gap: 6px;
   font-size: 11px; font-weight: 800;
   letter-spacing: 0.1em; text-transform: uppercase;
-  color: #e05c4c;
+  color: var(--c-red-lt);
 }
 
 .landing-duel-card__dot {
   width: 6px; height: 6px;
   border-radius: 50%;
-  background: #e05c4c;
+  background: var(--c-red-lt);
   flex-shrink: 0;
   animation: pulseDot 2s ease-in-out infinite;
 }
@@ -2595,4 +2595,11 @@
 
   /* Draw pillars get more breathing room */
   .draw-pillar { padding: 28px 24px; }
+}
+
+/* Em-dash CTA suffixes — hide on mobile ("Label — extra" → "Label") */
+@media (max-width: 767px) {
+  .cta-dash-tail {
+    display: none;
+  }
 }

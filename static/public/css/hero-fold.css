@@ -158,20 +158,16 @@
    matches. See public/static/public/img/courses/README.md for
    the file-naming + image-spec convention.
 
-   Example (uncomment after dropping ascot.jpg into the courses
-   folder + running collectstatic):
-
-     .hero-fold[data-course="ascot"] .hero-fold__bg {
-       --course-photo: url("../img/courses/ascot.jpg");
-     }
-     .hero-fold[data-course="newbury"] .hero-fold__bg {
-       --course-photo: url("../img/courses/newbury.jpg");
-     }
+   The worked example to copy is step 2 of that README. Keep examples
+   containing url() there, not in a .css file: the production static
+   build resolves url() with a regex over the raw file and does not skip
+   comments, so a commented example pointing at a file that was never
+   shipped breaks collectstatic outright.
    ───────────────────────────────────────────────────────── */
 
 /* Landing hero — cinematic race photo behind the fold */
 .hero-fold .hero-fold__bg {
-  --course-photo: url("../img/hero-fold-bg.png");
+  --course-photo: url("../img/hero-fold-bg.webp");
   background-position:
     center,
     center,
@@ -545,7 +541,7 @@
   }
 
   .hf-countdown--race-day .hf-cd-num {
-    background: linear-gradient(185deg, #ffffff 0%, #ffe9a8 40%, #d4af37 100%);
+    background: linear-gradient(185deg, #ffffff 0%, #ffe9a8 40%, var(--c-gold) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -738,7 +734,7 @@
 .hf-pin-emblem:hover,
 .hf-pin-emblem:focus-visible {
   transform: translateY(-1px);
-  border-color: #d4af37;
+  border-color: var(--c-gold);
   box-shadow: 0 10px 24px -12px rgba(212, 175, 55, 0.45);
   outline: none;
 }
@@ -771,7 +767,7 @@
   font-weight: 800;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #d4af37;
+  color: var(--c-gold);
 }
 .hf-pin-emblem__title {
   font-family: "Playfair Display", Georgia, serif;
@@ -786,7 +782,7 @@
 .hf-pin-emblem__arrow {
   font-size: 18px;
   font-weight: 800;
-  color: #d4af37;
+  color: var(--c-gold);
   line-height: 1;
   transition: transform 0.22s ease;
 }
@@ -1019,7 +1015,7 @@
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.02em;
-  color: var(--c-gold, #d4af37);
+  color: var(--c-gold);
   background: rgba(212, 175, 55, 0.06);
   border: 1px solid rgba(212, 175, 55, 0.22);
   border-radius: 999px;
@@ -1031,11 +1027,11 @@
 }
 .hf-demo-link:hover {
   background: rgba(212, 175, 55, 0.14);
-  border-color: var(--c-gold, #d4af37);
-  color: #f5d76e;
+  border-color: var(--c-gold);
+  color: var(--c-gold-lt);
 }
 .hf-demo-link:focus-visible {
-  outline: 2px solid var(--c-gold, #d4af37);
+  outline: 2px solid var(--c-gold);
   outline-offset: 3px;
 }
 .hf-demo-link__icon {
@@ -1045,7 +1041,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--c-gold, #d4af37);
+  background: var(--c-gold);
   color: #14161f;
   font-size: 9px;
   line-height: 1;
@@ -1062,8 +1058,8 @@
 
 /* ── TOUR BUTTON — outline idle; gold liquid rise on hover ── */
 .hf-ctas__tour {
-  --liquid: var(--c-gold, #d4af37);
-  --border-col: var(--c-gold, #d4af37);
+  --liquid: var(--c-gold);
+  --border-col: var(--c-gold);
   position: relative;
   overflow: hidden;
   isolation: isolate;
@@ -1101,12 +1097,12 @@
 .hf-ctas__tour:hover::before,
 .hf-ctas__tour:focus-visible::before {
   transform: translateY(5%);
-  animation: hf-tour-liquid-wave 2.5s ease-in-out infinite 0.65s;
+  animation: sat-btn-liquid-wave 2.5s ease-in-out infinite 0.65s;
 }
 .hf-ctas__tour:hover,
 .hf-ctas__tour:focus-visible {
   background: transparent;
-  border-color: var(--c-gold, #d4af37);
+  border-color: var(--c-gold);
   color: #06070d;
   transform: none;
   box-shadow: none;
@@ -1116,15 +1112,6 @@
   line-height: 1;
   flex-shrink: 0;
   color: inherit;
-}
-@keyframes hf-tour-liquid-wave {
-  0%,
-  100% {
-    border-radius: 45% 55% 0 0 / 25% 25% 0 0;
-  }
-  50% {
-    border-radius: 55% 45% 0 0 / 20% 30% 0 0;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .hf-ctas__tour::before {
@@ -1194,7 +1181,7 @@
   font-size: 22px;
   font-weight: 700;
   line-height: 1.05;
-  color: #f5d76e;
+  color: var(--c-gold-lt);
   letter-spacing: -0.01em;
 }
 .hf-cover-flag__lbl {
@@ -1221,14 +1208,14 @@
   text-decoration: none;
 }
 .hf-cover-flag__fav-link:hover {
-  color: #f5d76e;
+  color: var(--c-gold-lt);
 }
 .hf-cover-flag__fav-meta {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.55);
 }
 .hf-cover-flag__fav-meta strong {
-  color: #f5d76e;
+  color: var(--c-gold-lt);
   font-weight: 700;
   margin-right: 4px;
 }
@@ -1284,7 +1271,7 @@
 .hf-cover-flag__pin-arrow {
   font-size: 14px;
   font-weight: 700;
-  color: #f5d76e;
+  color: var(--c-gold-lt);
   transition: transform 0.18s ease;
 }
 .hf-cover-flag__cell--pin:hover .hf-cover-flag__pin-arrow {
@@ -1356,12 +1343,12 @@
    + rust system so the hero's brand identity is preserved.
 ═══════════════════════════════════════════════════════════════ */
 .hero-fold__col--resulted .hf-race-reveal__eyebrow--resulted {
-  color: #d4af37;
+  color: var(--c-gold);
   letter-spacing: 0.22em;
   text-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
 }
 .hf-race-reveal__dot--resulted {
-  background: #d4af37;
+  background: var(--c-gold);
   box-shadow: 0 0 12px rgba(212, 175, 55, 0.55);
 }
 .hero-fold__col--resulted.hf-tone-miss .hf-race-reveal__eyebrow--resulted {
@@ -1397,7 +1384,7 @@
   margin: 0;
 }
 .hf-tone-win .hf-result__headline {
-  background: linear-gradient(135deg, #f5e49a 0%, #d4af37 55%, #f5d76e 100%);
+  background: linear-gradient(135deg, #f5e49a 0%, var(--c-gold) 55%, var(--c-gold-lt) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1470,7 +1457,7 @@
   font-size: 0.68rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: #d4af37;
+  color: var(--c-gold);
   font-weight: 600;
 }
 .hf-tone-miss .hf-result__label {
@@ -1523,7 +1510,7 @@
   font-size: 0.85rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #d4af37;
+  color: var(--c-gold);
   opacity: 1;
   transition: opacity 0.25s;
 }
@@ -1552,7 +1539,7 @@
   font-family: "Inter", system-ui, sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #d4af37;
+  color: var(--c-gold);
   letter-spacing: 0.04em;
 }
 .hf-result__connections {
@@ -1599,7 +1586,7 @@
   color: rgba(248, 244, 234, 0.6);
 }
 .hf-result__verdict-item--fox .hf-result__verdict-tag {
-  color: #d4af37;
+  color: var(--c-gold);
 }
 .hf-result__verdict-item--cubs .hf-result__verdict-tag {
   color: #8fb9d4;
@@ -1655,7 +1642,7 @@
   line-height: 1.5;
 }
 .hf-result__footnote a {
-  color: #d4af37;
+  color: var(--c-gold);
   text-decoration: none;
   border-bottom: 1px solid rgba(212, 175, 55, 0.35);
   transition:
@@ -1707,7 +1694,7 @@
   min-height: 0;
   overflow: hidden;
   background-color: #071018;
-  background-image: url("../img/fox-card-bg.png");
+  background-image: url("../img/fox-card-bg.webp");
   background-size: cover;
   background-position: center 35%;
 }
@@ -1914,7 +1901,7 @@
   max-width: 55%;
 }
 .hf-countdown__news-arrow {
-  color: var(--c-gold, #d4af37);
+  color: var(--c-gold);
   flex-shrink: 0;
 }
 
@@ -1992,7 +1979,7 @@
   gap: 5px;
 }
 .hf-meta-ico {
-  color: var(--c-gold, #d4af37);
+  color: var(--c-gold);
 }
 
 .hf-title--oneline {
@@ -2111,7 +2098,7 @@
   border-radius: 18px;
   min-height: 224px;
   background-color: #0a0c12;
-  background-image: url("../img/picks-fox-card-bg-bleed.png");
+  background-image: url("../img/picks-fox-card-bg-bleed.webp");
   background-repeat: no-repeat;
   background-position: center 35%;
   background-size: cover;
@@ -2137,7 +2124,7 @@
   min-height: 224px;
   padding: 15px 23px 14px 28px;
   background-color: #0a0c12;
-  background-image: url("../img/picks-cubs-card-bg-bleed.png");
+  background-image: url("../img/picks-cubs-card-bg-bleed.webp");
   background-repeat: no-repeat;
   background-position: right 40%;
   background-size: cover;

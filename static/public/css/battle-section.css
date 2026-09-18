@@ -1141,14 +1141,14 @@
   border: 1px solid rgba(46, 230, 197, 0.35);
   background:
     linear-gradient(180deg, transparent 28%, rgba(4, 8, 10, 0.55) 52%, rgba(4, 8, 10, 0.94) 72%, #04080a 100%),
-    url('../img/rivalry-fox-card-bg.png') center 20% / cover no-repeat,
+    url('../img/rivalry-fox-card-bg.webp') center 20% / cover no-repeat,
     #071014;
 }
 .battle-section--rivalry .battle-card--cubs {
   border: 1px solid rgba(224, 124, 75, 0.38);
   background:
     linear-gradient(180deg, transparent 28%, rgba(8, 4, 4, 0.55) 52%, rgba(8, 4, 4, 0.94) 72%, #0a0504 100%),
-    url('../img/rivalry-pack-card-bg.png') center 18% / cover no-repeat,
+    url('../img/rivalry-pack-card-bg.webp') center 18% / cover no-repeat,
     #120806;
 }
 

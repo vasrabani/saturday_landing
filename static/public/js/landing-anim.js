@@ -405,30 +405,14 @@
   // (set in CSS) makes the badge visibly lift off the plane when
   // the card tilts — that's the "3D pop" the user asked for.
   function initPicksDuelTilt() {
-    const card = document.querySelector('.picks-duel');
-    if (!card) return;
-    if (prefersReducedMotion() || isCoarsePointer()) return;
-
     // Gentler than the battle cards — this is the hero focal,
-    // too much tilt reads as gimmick.
-    const MAX_X = 3;
-    const MAX_Y = 4;
-
-    card.addEventListener('pointermove', (e) => {
-      const r = card.getBoundingClientRect();
-      const mx = (e.clientX - r.left) / r.width;
-      const my = (e.clientY - r.top) / r.height;
-      const rx = ((0.5 - my) * 2 * MAX_X).toFixed(2);
-      const ry = ((mx - 0.5) * 2 * MAX_Y).toFixed(2);
-      card.style.transform =
-        `perspective(1400px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-      card.classList.add('is-tilting');
-    }, { passive: true });
-
-    card.addEventListener('pointerleave', () => {
-      card.style.transform = '';
-      card.classList.remove('is-tilting');
-    }, { passive: true });
+    // too much tilt reads as gimmick. SaturdayTilt (site.js) owns the
+    // maths and the touch / reduced-motion guards.
+    window.SaturdayTilt(document.querySelectorAll('.picks-duel'), {
+      maxTiltX: 3,
+      maxTiltY: 4,
+      perspective: 1400,
+    });
   }
 
   // ══════════════════════════════════════════════════════════════

@@ -1,0 +1,139 @@
+{
+  "check": {
+    "css-url-missing": {},
+    "html-ref-missing": {
+      "static/img/apple-touch-icon.png": 1,
+      "static/img/favicon-16.png": 1,
+      "static/img/favicon-32.png": 1
+    },
+    "debug-endpoint": {},
+    "debug-marker": {},
+    "third-party-script": {},
+    "hidden-section": {
+      "final-cta Race day Who called it": 1,
+      "syndicates": 1,
+      "track-record / results-section": 1
+    },
+    "image-over-budget": {},
+    "unused-image": {},
+    "svg-export-junk": {
+      "static/public/img/ai-chamber/icon-arrow.svg": 1,
+      "static/public/img/ai-chamber/icon-confidence.svg": 1,
+      "static/public/img/ai-chamber/icon-lab-arrow.svg": 1,
+      "static/public/img/ai-chamber/icon-lenses.svg": 1,
+      "static/public/img/ai-chamber/icon-model.svg": 1,
+      "static/public/img/ai-chamber/icon-sim.svg": 1,
+      "static/public/img/den/icon-activity.svg": 1,
+      "static/public/img/den/icon-arrow-down.svg": 1,
+      "static/public/img/den/icon-check.svg": 1,
+      "static/public/img/den/icon-glasses.svg": 1,
+      "static/public/img/den/icon-shield.svg": 1,
+      "static/public/img/den/icon-star.svg": 1,
+      "static/public/img/den/icon-trophy.svg": 1,
+      "static/public/img/den/shield-outline.svg": 1,
+      "static/public/img/den/trust-cub.svg": 1,
+      "static/public/img/den/trust-embed.svg": 1,
+      "static/public/img/den/trust-live.svg": 1,
+      "static/public/img/how-it-works/arrow-callout.svg": 1,
+      "static/public/img/how-it-works/icon-arrow.svg": 1,
+      "static/public/img/how-it-works/icon-certificate.svg": 1,
+      "static/public/img/how-it-works/icon-cta-circle.svg": 1,
+      "static/public/img/how-it-works/icon-link.svg": 1,
+      "static/public/img/how-it-works/icon-place.svg": 1,
+      "static/public/img/how-it-works/icon-row-circle.svg": 1,
+      "static/public/img/how-it-works/icon-star.svg": 1,
+      "static/public/img/how-it-works/icon-zap.svg": 1
+    },
+    "important-count": {
+      "static/css/base.css": 13,
+      "static/css/chrome.css": 19,
+      "static/public/css/battle-section.css": 36,
+      "static/public/css/day_hub.css": 5,
+      "static/public/css/hero-fold.css": 8,
+      "static/public/css/how_it_works.css": 2,
+      "static/public/css/landing_den_section.css": 1,
+      "static/public/css/landing-anim.css": 16,
+      "static/public/css/landing.css": 4,
+      "static/public/css/pick.css": 2
+    },
+    "token-colour-hardcoded": {
+      "static/public/experiences/pick-hero/css/pick-hero.css -> #0b0b0f (use --c-midnight)": 1,
+      "static/public/experiences/pick-hero/css/pick-hero.css -> #1c1c28 (use --c-navy-card)": 1,
+      "static/public/experiences/pick-hero/css/pick-hero.css -> #d4af37 (use --c-gold)": 9,
+      "static/public/experiences/pick-hero/css/pick-hero.css -> #eceef5 (use --c-text-100)": 3,
+      "static/public/experiences/pick-hero/css/pick-hero.css -> #f5d76e (use --c-gold-lt)": 1
+    },
+    "off-scale-breakpoint": {
+      "static/css/base.css -> max-width:640px": 2,
+      "static/css/chrome.css -> max-width:1100px": 1,
+      "static/css/chrome.css -> max-width:400px": 1,
+      "static/css/chrome.css -> max-width:420px": 2,
+      "static/css/chrome.css -> max-width:600px": 2,
+      "static/css/chrome.css -> max-width:640px": 1,
+      "static/css/chrome.css -> max-width:700px": 1,
+      "static/css/chrome.css -> max-width:720px": 2,
+      "static/css/chrome.css -> max-width:900px": 5,
+      "static/css/chrome.css -> min-width:1025px": 1,
+      "static/public/css/ai_chamber.css -> max-width:560px": 1,
+      "static/public/css/ai_chamber.css -> max-width:900px": 2,
+      "static/public/css/battle-section.css -> max-width:480px": 1,
+      "static/public/css/battle-section.css -> max-width:860px": 1,
+      "static/public/css/challenges-section.css -> max-width:560px": 1,
+      "static/public/css/challenges-section.css -> max-width:900px": 1,
+      "static/public/css/challenges-section.css -> min-width:480px": 1,
+      "static/public/css/cub_hello.css -> max-width:640px": 1,
+      "static/public/css/day_hub.css -> max-width:480px": 1,
+      "static/public/css/day_hub.css -> max-width:720px": 5,
+      "static/public/css/day_hub.css -> max-width:880px": 1,
+      "static/public/css/day_hub.css -> max-width:900px": 1,
+      "static/public/css/editorial-shelf.css -> max-width:700px": 1,
+      "static/public/css/hero_tabs.css -> max-width:640px": 1,
+      "static/public/css/hero-fold.css -> max-width:640px": 1,
+      "static/public/css/hero-fold.css -> max-width:719px": 1,
+      "static/public/css/hero-fold.css -> max-width:720px": 2,
+      "static/public/css/hero-fold.css -> max-width:900px": 1,
+      "static/public/css/hero-fold.css -> min-width:600px": 1,
+      "static/public/css/hero-fold.css -> min-width:720px": 1,
+      "static/public/css/how_it_works.css -> max-width:560px": 1,
+      "static/public/css/how_it_works.css -> max-width:700px": 1,
+      "static/public/css/how_it_works.css -> max-width:900px": 2,
+      "static/public/css/landing_den_section.css -> max-width:1100px": 1,
+      "static/public/css/landing_den_section.css -> max-width:480px": 1,
+      "static/public/css/landing_den_section.css -> max-width:560px": 1,
+      "static/public/css/landing_den_section.css -> max-width:900px": 3,
+      "static/public/css/landing_den_section.css -> min-width:901px": 1,
+      "static/public/css/landing-anim.css -> max-width:540px": 2,
+      "static/public/css/landing.css -> max-width:540px": 1,
+      "static/public/css/market_movers.css -> max-width:760px": 1,
+      "static/public/css/money_moves.css -> max-width:480px": 1,
+      "static/public/css/money_moves.css -> max-width:560px": 1,
+      "static/public/css/money_moves.css -> max-width:640px": 1,
+      "static/public/css/money_moves.css -> max-width:700px": 1,
+      "static/public/css/money_moves.css -> max-width:880px": 1,
+      "static/public/css/money_moves.css -> max-width:920px": 1,
+      "static/public/css/pick.css -> max-width:480px": 1,
+      "static/public/css/saturday_draw.css -> max-width:560px": 1,
+      "static/public/css/saturday_draw.css -> max-width:900px": 1,
+      "static/public/css/today-strip.css -> max-width:700px": 1,
+      "static/public/experiences/pick-hero/css/pick-hero.css -> max-width:400px": 1,
+      "static/public/experiences/pick-hero/css/pick-hero.css -> max-width:600px": 1
+    },
+    "font-not-loaded": {
+      "static/public/css/hero-fold.css -> Inter": 6
+    }
+  },
+  "axe": {
+    "mobile-375": [
+      "color-contrast"
+    ],
+    "tablet-768": [
+      "color-contrast"
+    ],
+    "laptop-1024": [
+      "color-contrast"
+    ],
+    "desktop-1440": [
+      "color-contrast"
+    ]
+  }
+}
