@@ -1039,3 +1039,70 @@
     font-size: 18px;
   }
 }
+
+/* ── Standings, once challenges have settled ──────────────────────────
+   The section only ever showed "first challenges settle this Saturday",
+   so the moment a Cub had a record there was nowhere to put it. Rows use
+   the same avatar and gold as the duel above them. */
+.chal-section--duel .chal-live__table {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.chal-section--duel .chal-live__row {
+  display: grid;
+  grid-template-columns: 18px 26px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 7px 10px;
+  border-radius: 10px;
+  background: rgba(242, 236, 223, 0.04);
+  border: 1px solid rgba(242, 236, 223, 0.08);
+  font-size: 13px;
+}
+
+.chal-section--duel .chal-live__row--leader {
+  background: rgba(216, 177, 74, 0.08);
+  border-color: rgba(216, 177, 74, 0.28);
+}
+
+.chal-section--duel .chal-live__rank {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--chal-faint);
+  text-align: center;
+}
+
+.chal-section--duel .chal-live__row--leader .chal-live__rank {
+  color: var(--chal-gold);
+}
+
+/* The duel avatar at row scale. */
+.chal-section--duel .chal-live__av--sm {
+  width: 26px;
+  height: 26px;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+.chal-section--duel .chal-live__name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chal-section--duel .chal-live__record {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 11px;
+  color: var(--chal-faint);
+  white-space: nowrap;
+}
+
+.chal-section--duel .chal-live__record strong {
+  color: var(--chal-gold);
+}

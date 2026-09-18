@@ -24,9 +24,8 @@ Repositories:
 3. **Section by section**, in the order below. Each one is: rebuild the
    markup in its partial, keep every `{% if %}` branch the partial already
    has, and check it against `states.html` as well as the page.
-4. **The gaps.** Some branches have no design (see the end of
-   `states.html`). Decide each one before the section that contains it goes
-   live, or the page will render nothing for that state.
+4. **Check every branch.** `states.html` renders all eleven states the
+   template can take, so each one can be compared rather than imagined.
 
 ## Section by section
 
@@ -36,15 +35,15 @@ Repositories:
 | Hero | `components/hero_fold.html` | `hero_day`, `hero_week`, `hero_source` | 44 branches, the most in the page. The resulted state is now designed (`partials/hero-resulted.html`); the race strip is still missing |
 | Editorial shelf | `components/_editorial_shelf.html` | `editorial_shelf` (`news/services/editorial_shelf.py`) | The service builds 4 cards; the design shows 6 |
 | Day hub | `components/_day_hub.html` | `day_hub` (`landing.py`) | 33 branches. Keep `.is-finished`, and `data-flags` on each race tile — the filters read them. GB/IRE labels have no field |
-| Market intelligence | `components/_money_moves.html` | `money_moves` | 16 branches. Drifters now needs its own list, not the steamers recoloured. The section hides itself when `has_data` is false |
+| Market intelligence | `components/_money_moves.html` | `money_moves` | 16 branches. Drifters now needs its own list, not the steamers recoloured. When `has_data` is false, either keep hiding the section as production does or use `partials/market-empty.html` |
 | Battle | `landing.html` (inline, ~100 lines) | `big_race`, `fox_wins`, `cub_wins`, `cub_tip`, `rivalry_caption` | Keep `data-count-up` on the win counts and the `Pick pending` branch |
 | DEN | `components/_landing_den_section.html` | fixed demo content | Closest to unchanged |
 | AI Chamber | `landing.html` (inline) | `ai_consensus`, `ai_analysis` | One panel per model, `role="tabpanel"`, one visible. All five `ai_consensus.pattern` branches now have markup in `partials/ai-consensus-*.html`. Per-model confidence scores still have no field |
 | AI Lab | `landing.html` (inline) | `big_race`, `ai_analysis` | The terminal was dropped; its data (race name, runner count, top signal) is shown nowhere else |
 | How it works | `landing.html` (inline) | `daily_pick_limit` | The copy now says six picks a day; keep it tied to the variable |
-| Challenges | `components/challenges_section.html` | `top_challengers`, `big_race` | 7 branches; only the empty state is designed |
+| Challenges | `components/challenges_section.html` | `top_challengers`, `big_race` | 7 branches. The filled state is now designed (`partials/challenges-filled.html`), standings rows included |
 | Syndicates, Track record, final CTA | `landing.html` (inline) | `top_syndicates_landing`, results context | Restored in PR 7, still in the pre-redesign look |
-| Footer | `templates/partials/footer.html` | `site_contact`, `user.is_authenticated` | Signed-in links are still to do. Use `{% url %}`, not the absolute URLs used here |
+| Footer | `templates/partials/footer.html` | `site_contact`, `user.is_authenticated` | Signed-in nav and footer are in `partials/signed-in-chrome.html`. Use `{% url %}`, not the absolute URLs used here |
 
 ## Things that will bite
 

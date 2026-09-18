@@ -65,6 +65,23 @@ const chamberWith = (variant) =>
   + chamberPanel.slice(0, splitStart) + partial(variant).trim() + chamberPanel.slice(splitEnd)
   + '</div></div></section>';
 
+const challenges = extract('<section class="chal-section chal-section--duel section"', 'section');
+// The filled state replaces everything from the arena to the end of the
+// standings block.
+const challengesFilled = () => {
+  const start = challenges.indexOf('<div class="chal-live__arena">');
+  const end = challenges.indexOf('</div>', challenges.indexOf('chal-live__standings-empty')) + '</div>'.length;
+  const tail = challenges.indexOf('</div>', end) + '</div>'.length;
+  return challenges.slice(0, start) + partial('challenges-filled').trim() + challenges.slice(tail);
+};
+
+// The empty board replaces the whole two-column grid.
+const marketEmpty = () => {
+  const start = market.indexOf('<div class="mi-grid">');
+  const end = market.lastIndexOf('</div>', market.lastIndexOf('</section>'));
+  return market.slice(0, start) + partial('market-empty').trim() + market.slice(end);
+};
+
 // ── States that exist in the markup ───────────────────────────────────
 const STATES = [
   {
@@ -110,6 +127,21 @@ const STATES = [
     markup: chamberWith('ai-consensus-empty'),
   },
   {
+    name: 'Challenges · Cubs are challenging',
+    when: 'challenges_section.html: {% if top_challengers %}',
+    markup: challengesFilled(),
+  },
+  {
+    name: 'Market intelligence · nothing has moved yet',
+    when: '_money_moves.html: has_data is false (production hides the section instead)',
+    markup: marketEmpty(),
+  },
+  {
+    name: 'Nav and footer · signed in',
+    when: 'base.html and partials/footer.html: {% if user.is_authenticated %}',
+    markup: partial('signed-in-chrome'),
+  },
+  {
     name: 'Market intelligence · drifters',
     when: "the Drifters tab: .mi-board[data-mi-mode='drifters']",
     markup: market
@@ -121,24 +153,8 @@ const STATES = [
   },
 ];
 
-// ── States the design does not cover yet ──────────────────────────────
-const GAPS = [
-  {
-    name: 'Challenges · with challengers',
-    when: 'challenges_section.html: {% if top_challengers %}',
-    needs: 'Only the empty state is designed. The filled state lists challengers with avatar, silk colour and a W/L/D record, plus the standings rows.',
-  },
-  {
-    name: 'Market intelligence · no data',
-    when: '_money_moves.html hides the whole section when has_data is false',
-    needs: 'Early in the morning there are no market moves. The old section removed itself; the redesign has no empty state, so it would render an empty board.',
-  },
-  {
-    name: 'Nav and footer · signed in',
-    when: 'base.html and partials/footer.html: {% if user.is_authenticated %}',
-    needs: 'My profile and Sign out in place of Sign in and Join free, and the hero pick link pointing at the pick rather than the join page (data-picks-half-href).',
-  },
-];
+// Every branch the live template can take now has markup.
+const GAPS = [];
 
 const escape = (text) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -183,12 +199,12 @@ ${state.markup}
         </div>
       </section>`).join(LF)}
 
-      <h2 style="margin-top:72px">States with no design yet</h2>
+${GAPS.length === 0 ? '' : `      <h2 style="margin-top:72px">States with no design yet</h2>
       <p class="states-doc__intro">
         Each of these is a branch the live template can take. Until they are
         designed, the page has nothing to render when the data looks like
         this.
-      </p>
+      </p>`}
 ${GAPS.map((gap) => `      <section class="states-case states-case--gap">
         <span class="states-case__tag">Needs design</span>
         <p class="states-case__name">${escape(gap.name)}</p>

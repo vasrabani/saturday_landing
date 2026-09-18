@@ -1677,6 +1677,285 @@
         </div>
       </section>
       <section class="states-case">
+        <p class="states-case__name">Challenges · Cubs are challenging</p>
+        <p class="states-case__when">challenges_section.html: {% if top_challengers %}</p>
+        <div class="states-frame">
+<section class="chal-section chal-section--duel section" id="challenges">
+        <div class="container">
+          <div class="chal-top" data-reveal data-reveal-delay="0">
+            <p class="chal-kicker">⚔ CHALLENGES</p>
+            <div class="chal-ctas">
+              <a
+                href="https://www.saturday-racing.com/cubs/"
+                class="chal-cta chal-cta--primary"
+              >
+                Browse Cubs to challenge
+                <img
+                  src="static/public/img/challenges/icon-arrow.svg"
+                  alt=""
+                  width="14"
+                  height="14"
+                  decoding="async"
+                />
+              </a>
+              <a
+                href="https://www.saturday-racing.com/cubs/challenges/"
+                class="chal-cta chal-cta--ghost"
+                >My Challenges</a
+              >
+            </div>
+          </div>
+
+          <header class="chal-head" data-reveal data-reveal-delay="0">
+            <h2 class="chal-head__title">
+              Back your pick<br />against another
+              <span class="chal-head__accent">Cub.</span>
+            </h2>
+            <p class="chal-head__sub">
+              Your featured-race vote is already your challenge entry. Find a
+              Cub who fancies a different horse, send the challenge, and let
+              race day settle it.
+            </p>
+          </header>
+
+          <div class="chal-body">
+            <ul class="chal-steps" aria-label="How challenges work" data-reveal data-reveal-delay="1">
+              <li class="chal-step">
+                <span class="chal-step__watermark" aria-hidden="true">01</span>
+                <span class="chal-step__icon" aria-hidden="true">
+                  <img
+                    src="static/public/img/challenges/icon-entry.svg"
+                    alt=""
+                    width="16"
+                    height="16"
+                    decoding="async"
+                  />
+                </span>
+                <div class="chal-step__copy">
+                  <div class="chal-step__title">
+                    <span class="chal-step__num">01</span>
+                    One pick, instant entry
+                  </div>
+                  <p class="chal-step__body">
+                    Your featured-race vote becomes your challenge horse
+                    automatically. Nothing extra to do.
+                  </p>
+                </div>
+              </li>
+              <li class="chal-step">
+                <span class="chal-step__watermark" aria-hidden="true">02</span>
+                <span class="chal-step__icon" aria-hidden="true">
+                  <img
+                    src="static/public/img/challenges/icon-clock.svg"
+                    alt=""
+                    width="16"
+                    height="16"
+                    decoding="async"
+                  />
+                </span>
+                <div class="chal-step__copy">
+                  <div class="chal-step__title">
+                    <span class="chal-step__num">02</span>
+                    24 hours to accept
+                  </div>
+                  <p class="chal-step__body">
+                    Find a Cub backing a different horse. They have 24 hours to
+                    accept or it expires.
+                  </p>
+                </div>
+              </li>
+              <li class="chal-step">
+                <span class="chal-step__watermark" aria-hidden="true">03</span>
+                <span class="chal-step__icon" aria-hidden="true">
+                  <img
+                    src="static/public/img/challenges/icon-flag.svg"
+                    alt=""
+                    width="16"
+                    height="16"
+                    decoding="async"
+                  />
+                </span>
+                <div class="chal-step__copy">
+                  <div class="chal-step__title">
+                    <span class="chal-step__num">03</span>
+                    Race day decides
+                  </div>
+                  <p class="chal-step__body">
+                    Results settle automatically. Your win–loss–draw record is
+                    public and permanent.
+                  </p>
+                </div>
+              </li>
+            </ul>
+
+            <aside class="chal-live" data-reveal data-reveal-delay="2">
+              <div class="chal-live__status">
+                <img
+                  src="static/public/img/challenges/icon-live.svg"
+                  alt=""
+                  width="14"
+                  height="14"
+                  decoding="async"
+                />
+                <span>LIVE DUEL</span>
+              </div>
+              <h3 class="chal-live__race">
+                Portobello Cup Handicap Stakes (GBBPlus Race)
+              </h3>
+
+              <!-- Challenges · Cubs are challenging (challenges_section.html:
+     {% if top_challengers %})
+     Only the empty state was designed, so once the first challenge was
+     made the section had nothing to show. Two things change: the arena
+     names the two Cubs and their picks instead of "?" and "TBC", and the
+     standings show rows instead of the "first challenges settle this
+     Saturday" line.
+
+     Avatar and silk colours come from the Cub record (c.colour), so they
+     are inline styles here exactly as the live template writes them. -->
+<div class="chal-live__arena">
+  <div class="chal-live__side">
+    <div class="chal-live__av" style="background: #1a3a6b">RM</div>
+    <span class="chal-live__who">Rosie M</span>
+    <span class="chal-live__pick">Dark Cloud Rising</span>
+  </div>
+  <span class="chal-live__vs" aria-hidden="true">vs</span>
+  <div class="chal-live__side">
+    <div class="chal-live__av" style="background: #8b0040">TC</div>
+    <span class="chal-live__who">Tom C</span>
+    <span class="chal-live__pick">Vegasmile</span>
+  </div>
+</div>
+<p class="chal-live__meta">RACE DAY DECIDES &middot; PICKS LOCKED AT OFF</p>
+
+<div class="chal-live__standings">
+  <div class="chal-live__standings-head">
+    <span class="chal-live__standings-title">
+      <img
+        src="static/public/img/challenges/icon-trophy.svg"
+        alt=""
+        width="14"
+        height="14"
+        decoding="async"
+      />
+      Season standings
+    </span>
+    <a
+      href="https://www.saturday-racing.com/cubs/leaderboard/"
+      class="chal-live__standings-link"
+      >Full table</a
+    >
+  </div>
+
+  <ol class="chal-live__table">
+    <li class="chal-live__row chal-live__row--leader">
+      <span class="chal-live__rank">1</span>
+      <span class="chal-live__av chal-live__av--sm" style="background: #1a6b3c" aria-hidden="true">RM</span>
+      <span class="chal-live__name">Rosie M</span>
+      <span class="chal-live__record"><strong>7</strong>W &middot; 2L &middot; 1D</span>
+    </li>
+    <li class="chal-live__row">
+      <span class="chal-live__rank">2</span>
+      <span class="chal-live__av chal-live__av--sm" style="background: #8b0040" aria-hidden="true">TC</span>
+      <span class="chal-live__name">Tom C</span>
+      <span class="chal-live__record"><strong>6</strong>W &middot; 3L &middot; 1D</span>
+    </li>
+    <li class="chal-live__row">
+      <span class="chal-live__rank">3</span>
+      <span class="chal-live__av chal-live__av--sm" style="background: #1a3a6b" aria-hidden="true">JD</span>
+      <span class="chal-live__name">Jas D</span>
+      <span class="chal-live__record"><strong>5</strong>W &middot; 4L &middot; 0D</span>
+    </li>
+  </ol>
+</div>
+        </div>
+      </section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Market intelligence · nothing has moved yet</p>
+        <p class="states-case__when">_money_moves.html: has_data is false (production hides the section instead)</p>
+        <div class="states-frame">
+<section class="money-moves money-moves--intel" id="market-movers" aria-label="Market intelligence">
+        <div class="money-moves__inner">
+          <header class="mi-head">
+            <div class="mi-head__kicker">
+              <span class="mi-head__rule" aria-hidden="true"></span>
+              <span>MARKET INTELLIGENCE</span>
+            </div>
+            <h2 class="mi-head__title">Follow the money before the off.</h2>
+            <p class="mi-head__sub">
+              Where the market has moved hardest today across every UK and Irish
+              meeting.
+            </p>
+          </header>
+
+          <!-- Market intelligence · nothing has moved yet (_money_moves.html hides
+     the whole section when has_data is false)
+     Early on a card there are no moves to report. Production removes the
+     section; the redesign gives it a headline and a steam panel that would
+     render empty, so this is the third option: keep the section, say why
+     it is quiet, and give the reader somewhere to go.
+
+     If you would rather it disappear as production does, drop this and
+     keep the {% if money_moves.has_data %} guard around the section. -->
+<div class="mi-grid mi-grid--empty">
+  <div class="mi-steam mi-steam--empty">
+    <p class="mi-steam__kicker">MARKET QUIET</p>
+    <p class="mi-steam__horse mi-steam__horse--empty">No moves yet</p>
+    <p class="mi-steam__meta">
+      Prices firm up through the morning. The board fills as the market
+      takes a view.
+    </p>
+    <a class="mi-steam__cta" href="https://www.saturday-racing.com/races/">
+      Browse today&rsquo;s card
+      <span class="cta-dash-tail"> &mdash; all meetings</span>
+    </a>
+  </div>
+</div></div>
+      </section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Nav and footer · signed in</p>
+        <p class="states-case__when">base.html and partials/footer.html: {% if user.is_authenticated %}</p>
+        <div class="states-frame">
+<!-- Nav and footer · signed in (base.html and partials/footer.html:
+     {% if user.is_authenticated %})
+     The redesign drew the signed-out chrome only, so a Cub who is logged
+     in still sees "Join Free" and "Login". Three places change.
+
+     1. The nav actions: profile in place of Join Free, sign out in place
+        of Login. Same classes, so the pill keeps its weight. -->
+<div class="site-nav__actions">
+  <a href="https://www.saturday-racing.com/races/big-race/" class="site-nav__badge">
+    🏆 Saturday Big Race
+  </a>
+  <span class="site-nav__sep" aria-hidden="true"></span>
+  <a href="https://www.saturday-racing.com/members/profile/" class="site-nav__join-btn">
+    <span>✦</span> My profile
+  </a>
+  <a href="https://www.saturday-racing.com/members/logout/" class="site-nav__login-btn">
+    Sign out
+  </a>
+</div>
+
+<!-- 2. The footer's account links, in the Community column. -->
+<ul class="sf__nav-list">
+  <li><a href="https://www.saturday-racing.com/members/profile/">My profile</a></li>
+  <li><a href="https://www.saturday-racing.com/pick/">My picks</a></li>
+  <li><a href="https://www.saturday-racing.com/members/logout/">Sign out</a></li>
+</ul>
+
+<!-- 3. The hero's Fox card points at the pick itself rather than at the
+     join page. In Django that is the data-picks-half-href value:
+
+       data-picks-half-href="{% if user.is_authenticated %}{% url 'pick' %}{% else %}{% url 'cub_register' %}{% endif %}"
+-->
+
+        </div>
+      </section>
+      <section class="states-case">
         <p class="states-case__name">Market intelligence · drifters</p>
         <p class="states-case__when">the Drifters tab: .mi-board[data-mi-mode='drifters']</p>
         <div class="states-frame">
@@ -1853,30 +2132,8 @@
         </div>
       </section>
 
-      <h2 style="margin-top:72px">States with no design yet</h2>
-      <p class="states-doc__intro">
-        Each of these is a branch the live template can take. Until they are
-        designed, the page has nothing to render when the data looks like
-        this.
-      </p>
-      <section class="states-case states-case--gap">
-        <span class="states-case__tag">Needs design</span>
-        <p class="states-case__name">Challenges · with challengers</p>
-        <p class="states-case__when">challenges_section.html: {% if top_challengers %}</p>
-        <p class="states-case__needs">Only the empty state is designed. The filled state lists challengers with avatar, silk colour and a W/L/D record, plus the standings rows.</p>
-      </section>
-      <section class="states-case states-case--gap">
-        <span class="states-case__tag">Needs design</span>
-        <p class="states-case__name">Market intelligence · no data</p>
-        <p class="states-case__when">_money_moves.html hides the whole section when has_data is false</p>
-        <p class="states-case__needs">Early in the morning there are no market moves. The old section removed itself; the redesign has no empty state, so it would render an empty board.</p>
-      </section>
-      <section class="states-case states-case--gap">
-        <span class="states-case__tag">Needs design</span>
-        <p class="states-case__name">Nav and footer · signed in</p>
-        <p class="states-case__when">base.html and partials/footer.html: {% if user.is_authenticated %}</p>
-        <p class="states-case__needs">My profile and Sign out in place of Sign in and Join free, and the hero pick link pointing at the pick rather than the join page (data-picks-half-href).</p>
-      </section>
+
+
     </div>
   </body>
 </html>
