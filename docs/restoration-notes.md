@@ -19,6 +19,25 @@ out. They work and they are accessible, but next to the new sections they
 look like what they are — older. They want a visual pass in the redesign's
 language. That is design work, not integration work.
 
+## Designed since: every state the template can take
+
+`partials/` now holds markup for each branch the redesign had no answer
+for, built in its own language and using CSS that was mostly already in the
+repo. `states.html` renders all of them; the Django port copies each
+partial into the matching template branch.
+
+| Partial | Branch it serves |
+| --- | --- |
+| `hero-resulted.html` | `hero_fold.html`: `{% if hero.result %}` |
+| `ai-consensus-unanimous/single/split/empty.html` | `landing.html`: the five-way `ai_consensus.pattern` block |
+| `challenges-filled.html` | `challenges_section.html`: `{% if top_challengers %}` |
+| `market-empty.html` | `_money_moves.html`: `has_data` false — an alternative to hiding the section, which is what production does |
+| `signed-in-chrome.html` | `base.html` and `partials/footer.html`: `{% if user.is_authenticated %}` |
+
+Two of them needed new CSS, written in the section's existing language: the
+challenges standings rows (there was nowhere to put a record) and the quiet
+market board.
+
 ## Not restored: these need a design decision
 
 Each of these was on the live page and is not in the redesign. In every

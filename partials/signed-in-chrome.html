@@ -1,0 +1,32 @@
+<!-- Nav and footer · signed in (base.html and partials/footer.html:
+     {% if user.is_authenticated %})
+     The redesign drew the signed-out chrome only, so a Cub who is logged
+     in still sees "Join Free" and "Login". Three places change.
+
+     1. The nav actions: profile in place of Join Free, sign out in place
+        of Login. Same classes, so the pill keeps its weight. -->
+<div class="site-nav__actions">
+  <a href="https://www.saturday-racing.com/races/big-race/" class="site-nav__badge">
+    🏆 Saturday Big Race
+  </a>
+  <span class="site-nav__sep" aria-hidden="true"></span>
+  <a href="https://www.saturday-racing.com/members/profile/" class="site-nav__join-btn">
+    <span>✦</span> My profile
+  </a>
+  <a href="https://www.saturday-racing.com/members/logout/" class="site-nav__login-btn">
+    Sign out
+  </a>
+</div>
+
+<!-- 2. The footer's account links, in the Community column. -->
+<ul class="sf__nav-list">
+  <li><a href="https://www.saturday-racing.com/members/profile/">My profile</a></li>
+  <li><a href="https://www.saturday-racing.com/pick/">My picks</a></li>
+  <li><a href="https://www.saturday-racing.com/members/logout/">Sign out</a></li>
+</ul>
+
+<!-- 3. The hero's Fox card points at the pick itself rather than at the
+     join page. In Django that is the data-picks-half-href value:
+
+       data-picks-half-href="{% if user.is_authenticated %}{% url 'pick' %}{% else %}{% url 'cub_register' %}{% endif %}"
+-->

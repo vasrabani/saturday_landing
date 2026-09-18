@@ -78,6 +78,23 @@ Keep commits scoped ("Navbar mobile drawer refresh", "Footer newsletter block re
 
 ---
 
+## States and integration
+
+`states.html` (open it at <http://localhost:8080/states.html>) shows every state the live template can render: the day hub when racing has finished, the battle card before the Fox has picked, the drifters board — and, at the end, the states that have **no design yet**, such as the hero after a result is declared. Rebuild it with `node tools/build-states.mjs` after changing `index.html`; it is generated from the real markup so it cannot drift.
+
+The `docs/` folder carries the decisions and the handover:
+
+| File | What it is |
+| --- | --- |
+| `integration-map.md` | How this becomes Django templates: section by section, with the context each one needs |
+| `content-notes.md` | Which numbers are sample data, and the content decisions still open |
+| `accessibility-notes.md` | What was fixed, the one open contrast decision, and why some axe findings are false positives |
+| `restoration-notes.md` | What the redesign dropped: what came back, and what still needs a designer |
+| `chrome-css-changes.md` | What the redesign actually changed in the site-wide stylesheet, ignoring reformatting |
+| `image-provenance.md` | Every original image, its size, and whether it is AI-generated |
+
+---
+
 ## Quality checks
 
 Every PR must pass three checks. GitHub runs them automatically on each PR (`.github/workflows/quality.yml`); run them locally before you push.

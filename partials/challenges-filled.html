@@ -1,0 +1,65 @@
+<!-- Challenges · Cubs are challenging (challenges_section.html:
+     {% if top_challengers %})
+     Only the empty state was designed, so once the first challenge was
+     made the section had nothing to show. Two things change: the arena
+     names the two Cubs and their picks instead of "?" and "TBC", and the
+     standings show rows instead of the "first challenges settle this
+     Saturday" line.
+
+     Avatar and silk colours come from the Cub record (c.colour), so they
+     are inline styles here exactly as the live template writes them. -->
+<div class="chal-live__arena">
+  <div class="chal-live__side">
+    <div class="chal-live__av" style="background: #1a3a6b">RM</div>
+    <span class="chal-live__who">Rosie M</span>
+    <span class="chal-live__pick">Dark Cloud Rising</span>
+  </div>
+  <span class="chal-live__vs" aria-hidden="true">vs</span>
+  <div class="chal-live__side">
+    <div class="chal-live__av" style="background: #8b0040">TC</div>
+    <span class="chal-live__who">Tom C</span>
+    <span class="chal-live__pick">Vegasmile</span>
+  </div>
+</div>
+<p class="chal-live__meta">RACE DAY DECIDES &middot; PICKS LOCKED AT OFF</p>
+
+<div class="chal-live__standings">
+  <div class="chal-live__standings-head">
+    <span class="chal-live__standings-title">
+      <img
+        src="static/public/img/challenges/icon-trophy.svg"
+        alt=""
+        width="14"
+        height="14"
+        decoding="async"
+      />
+      Season standings
+    </span>
+    <a
+      href="https://www.saturday-racing.com/cubs/leaderboard/"
+      class="chal-live__standings-link"
+      >Full table</a
+    >
+  </div>
+
+  <ol class="chal-live__table">
+    <li class="chal-live__row chal-live__row--leader">
+      <span class="chal-live__rank">1</span>
+      <span class="chal-live__av chal-live__av--sm" style="background: #1a6b3c" aria-hidden="true">RM</span>
+      <span class="chal-live__name">Rosie M</span>
+      <span class="chal-live__record"><strong>7</strong>W &middot; 2L &middot; 1D</span>
+    </li>
+    <li class="chal-live__row">
+      <span class="chal-live__rank">2</span>
+      <span class="chal-live__av chal-live__av--sm" style="background: #8b0040" aria-hidden="true">TC</span>
+      <span class="chal-live__name">Tom C</span>
+      <span class="chal-live__record"><strong>6</strong>W &middot; 3L &middot; 1D</span>
+    </li>
+    <li class="chal-live__row">
+      <span class="chal-live__rank">3</span>
+      <span class="chal-live__av chal-live__av--sm" style="background: #1a3a6b" aria-hidden="true">JD</span>
+      <span class="chal-live__name">Jas D</span>
+      <span class="chal-live__record"><strong>5</strong>W &middot; 4L &middot; 0D</span>
+    </li>
+  </ol>
+</div>

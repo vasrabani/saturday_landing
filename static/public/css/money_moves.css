@@ -972,3 +972,42 @@
 .mi-board:not([data-mi-mode='drifters']) .mi-list--drifters {
   display: none;
 }
+
+/* ── Nothing has moved yet ────────────────────────────────────────────
+   Production hides the whole section when there is no data. If it is kept
+   instead, this is the quiet version: one column, no board, and a way on
+   to the card. */
+.mi-grid--empty {
+  grid-template-columns: 1fr;
+}
+
+.mi-steam--empty {
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.mi-steam__horse--empty {
+  color: rgba(242, 236, 223, 0.5);
+}
+
+.mi-steam__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  min-height: 42px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(242, 236, 223, 0.25);
+  color: #f2ecdf;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.mi-steam__cta:hover,
+.mi-steam__cta:focus-visible {
+  border-color: var(--mi-teal, #4ade80);
+  background: rgba(255, 255, 255, 0.04);
+}
