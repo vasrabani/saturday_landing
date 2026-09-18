@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { HIDDEN_SECTIONS, SECTIONS, knownIssue, openLanding } from './support/landing.js';
+import { RESTORED_SECTIONS, SECTIONS, openLanding } from './support/landing.js';
 import { showsDesktopNav, showsDrawerNav } from './support/viewports.js';
 
 const DRAW_FIELD = [
@@ -49,9 +49,8 @@ test.describe('sections', () => {
     });
   }
 
-  for (const section of HIDDEN_SECTIONS) {
+  for (const section of RESTORED_SECTIONS) {
     test(`renders ${section.name}`, async ({ page }) => {
-      knownIssue('PR 7', `${section.name} is commented out as TEMP HIDDEN`);
       await openLanding(page);
       await expect(page.locator(section.selector).first()).toBeVisible();
     });
@@ -233,6 +232,22 @@ test.describe('tabs', () => {
       await expect(panel).toHaveAttribute('aria-labelledby', await tab.getAttribute('id'));
       await expect(panel.locator('[data-ac-model]')).toHaveText(new RegExp(model, 'i'));
     }
+  });
+
+  test('market intelligence lists different horses for steamers and drifters', async ({ page }) => {
+    await openLanding(page);
+    const board = page.locator('.mi-board');
+    const horsesIn = (list) => board.locator(`${list} .mi-row__horse`).allTextContents();
+
+    await board.locator('[data-mi-tab="steamers"]').click();
+    const steamers = await horsesIn('.mi-list--steamers');
+    await board.locator('[data-mi-tab="drifters"]').click();
+    await expect(board.locator('.mi-list--drifters')).toBeVisible();
+    await expect(board.locator('.mi-list--steamers')).toBeHidden();
+
+    const drifters = await horsesIn('.mi-list--drifters');
+    expect(drifters.length).toBeGreaterThan(0);
+    expect(drifters).not.toEqual(steamers);
   });
 
   test('AI Chamber shows one model panel at a time', async ({ page }) => {
