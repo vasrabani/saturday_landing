@@ -1,0 +1,39 @@
+/* PAPER-1 · The Saturday Edition cream palette.
+ *
+ * The site is dark navy and gold. But for anything a reader SCANS
+ * rather than looks at -- a racecard, a results table -- it switches
+ * to what meetings_browse.html calls "SATURDAY-EDITION CREAM PAPER,
+ * easier to read at a glance". That treatment is the established
+ * answer here, not a departure: races/, public/, news/, learn/,
+ * enclosure/ and 404.html all reference these tokens.
+ *
+ * WHY THIS FILE EXISTS. Every one of those references was reading a
+ * variable nothing declared in its scope. The only declaration in the
+ * project sat inline inside races/templates/races/racecard/
+ * meetings_browse.html, scoped to `body.page-racecard-browse` -- so on
+ * any other page the var() calls fell through to their fallbacks, or
+ * to nothing.
+ *
+ * Declared on :root and loaded by base.html, so a custom property is
+ * available wherever it is referenced. Custom properties paint nothing
+ * on their own, so this changes no page that was not already asking
+ * for these colours.
+ *
+ * --c-red is deliberately NOT here: base.css already declares it, at
+ * the same #C0392B. A second declaration of one name is how two
+ * values drift apart.
+ */
+:root {
+  --c-paper:        #FAFAF7;   /* page ground */
+  --c-card:         #FFFFFF;   /* raised surface */
+  --c-card-warm:    #F7F5EE;   /* secondary surface, table stripes */
+  --c-ink:          #11151F;   /* body text */
+  --c-ink-70:       #41474F;   /* secondary text */
+  --c-ink-40:       #9CA3AF;   /* labels, captions */
+  --c-rule:         #E7E5DD;   /* hairline */
+  --c-rule-strong:  #D6D2C5;   /* section divider */
+  --c-gold-ink:     #9C7B12;   /* gold that passes on white */
+  --c-gold-bright:  #D4AF37;   /* the brand gold, for fills not text */
+  --c-gold-wash:    #FAF1D7;   /* gold tint background */
+  --c-green:        #1A7D4A;   /* a result landed */
+}

@@ -607,6 +607,26 @@
   background: rgba(212, 175, 55, 0.12);
 }
 
+/* Group-header label inside a mobile accordion body — parallels the
+   desktop `.site-nav__dropdown-section` so both surfaces read the
+   same taxonomy. Sits between sub-items, no tap target of its own,
+   the tiny top-border acts as a divider between groups. */
+.mob-drawer__section {
+  padding: 12px 20px 4px 52px;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-text-35);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 4px;
+}
+.mob-drawer__section:first-child {
+  border-top: 0;
+  margin-top: 0;
+}
+
 .mob-drawer__link-icon {
   font-size: 20px;
   flex-shrink: 0;
@@ -1710,6 +1730,31 @@ body.drawer-open {
   font-size: 13px;
 }
 
+/* Section header inside the News dropdown — small caps label that
+   groups a run of dropdown items ("Today's Edge", "Read"). Not a
+   menuitem; purely visual. Kept subtle so the eye still tracks the
+   items themselves as the primary content. */
+.site-nav__dropdown-section {
+  padding: 10px 14px 4px;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-text-35);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 2px;
+}
+.site-nav__dropdown-section:first-child {
+  border-top: 0;
+  margin-top: 0;
+}
+/* Kill the item-to-item border above a section header so the header
+   itself provides the divider. */
+.site-nav__dropdown-section + .site-nav__dropdown-item {
+  border-top: 0;
+}
+
 /* Sub-section label inside a dropdown menu — small caps eyebrow
  * that groups items visually without adding a click target. Used
  * to slot Ante Post books under the Races dropdown. */
@@ -2312,21 +2357,27 @@ body.drawer-open {
   transform: scale(0.92);
 }
 
-/* Push main content down by the banner's height when present.
-   Mirrors the .has-notif-banner pattern but with its own offset
-   in case both happen to render at the same time. */
+/* The banner is fixed, so it covers whatever is beneath it. Publishing
+   its height as --banner-h lets everything pinned to the top of the
+   viewport clear it from one number: .site-main here, and the
+   cinematic's screens and canvases, which are fixed and were being
+   overlaid by it. .notif-banner needs none of this — it is in normal
+   flow and pushes content down by itself. */
+body.has-demo-banner {
+  --banner-h: 48px;
+}
 body.has-demo-banner .site-main {
-  padding-top: calc(var(--nav-h, 60px) + 48px);
+  padding-top: calc(var(--nav-h, 60px) + var(--banner-h));
 }
 body.has-demo-banner.has-notif-banner .site-main {
-  padding-top: calc(var(--nav-h, 60px) + 48px + 44px);
+  padding-top: calc(var(--nav-h, 60px) + var(--banner-h) + 44px);
 }
 @media (max-width: 720px) {
-  body.has-demo-banner .site-main {
-    padding-top: calc(var(--nav-h, 60px) + 56px);
+  body.has-demo-banner {
+    --banner-h: 56px;
   }
   body.has-demo-banner.has-notif-banner .site-main {
-    padding-top: calc(var(--nav-h, 60px) + 56px + 40px);
+    padding-top: calc(var(--nav-h, 60px) + var(--banner-h) + 40px);
   }
   .demo-banner__inner {
     padding: 10px 14px;

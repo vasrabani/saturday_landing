@@ -153,6 +153,24 @@ test.describe('features the redesign had dropped', () => {
   });
 });
 
+// Production added these after the snapshot was taken; they were synced
+// in. If the nav is ever regenerated from an older copy, this fails.
+test.describe('nav matches production', () => {
+  for (const [label, path] of [
+    ['Fox Trail', '/trail/'],
+    ['Dream Ticket', '/sly-mans-acca/'],
+    ['Results', '/results/'],
+    ['Accumulators', '/learn/accumulators/'],
+  ]) {
+    test(`${label} is in the desktop and mobile nav`, async ({ page }) => {
+      await openLanding(page);
+      const links = page.locator(`a[href$="${path}"]`);
+      await expect(links.filter({ has: page.locator('.site-nav__di-name') })).toHaveCount(1);
+      await expect(page.locator(`.mob-drawer a[href$="${path}"]`)).toHaveCount(1);
+    });
+  }
+});
+
 test.describe('countdowns', () => {
   for (const [name, selector] of [
     ['hero', '.hf-countdown[data-race-iso]'],

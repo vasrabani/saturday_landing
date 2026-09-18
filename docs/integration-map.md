@@ -11,6 +11,31 @@ Repositories:
   `public/templates/public/landing.html` plus the partials it includes, and
   its context comes from `public/views/landing.py`.
 
+## In sync with production as of
+
+The nav, `chrome.css`, `base.css` and the page head match production at
+**`6140974c` (2026-09-17)**. The snapshot was taken on 2026-08-27; these
+production changes were brought across since:
+
+| Commit | Change |
+| --- | --- |
+| `a965c5f8` | Fox Trail in News, under new "Today's Edge" and "Read" section headers |
+| `0d5fe25a` | Accumulators under a "Learn" subhead in The Honest Record |
+| `b7b100c2` | Dream Ticket in News |
+| `288460ca` | Results in Races |
+| `6b1f4547` | The demo banner's height published as `--banner-h` |
+| `a8f3728d` | `paper.css` linked between `base.css` and `chrome.css` |
+| `290bac43` | `og:image` default removed — `og-image.png` never existed, and the manifest backend 500s on it |
+
+**Before porting, check for newer ones:**
+
+```bash
+git log 6140974c..main --oneline -- templates/base/base.html static/css/chrome.css static/css/base.css
+```
+
+Anything that lists has to be merged into this version of `chrome.css`,
+not overwritten by it.
+
 ## Order of work
 
 1. **Files first** (no template work): `static/public/css/*`,
@@ -51,7 +76,9 @@ Repositories:
   because the sandbox has no URL resolver. In Django they are `{% url %}`
   tags. `docs/content-notes.md` lists the ones that were wrong.
 - **`chrome.css` is site-wide.** The nav and footer restyle lands on all
-  141 templates that extend the base, not just this page.
+  141 templates that extend the base, not just this page. It has only been
+  looked at on the landing page so far: check three or four other page
+  types before it ships.
 - **The nav gap fix belongs on production regardless** of this port: between
   901px and 1024px the live site currently shows no navigation at all
   (PR 4).

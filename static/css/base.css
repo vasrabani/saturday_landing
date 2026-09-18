@@ -106,6 +106,10 @@
   /* ── Layout ──────────────────────────────────────────────── */
   --max-w:  1280px;
   --nav-h:  60px;
+  /* Height of the fixed demo banner under the nav, 0 when none is
+     showing — chrome.css raises it on body.has-demo-banner. Anything
+     that pins itself to the top of the viewport has to clear both. */
+  --banner-h: 0px;
   /* Shared content rail — header, hero, and landing bands share this gutter */
   --page-gutter: var(--space-5); /* 24px */
 
