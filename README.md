@@ -116,7 +116,7 @@ npx playwright install chromium
 
 **Refactoring CSS?** `node tools/css-equivalence.mjs <ref>` compares the computed styles of every element against another commit, at all four widths. Use it when a change is meant to alter nothing that renders — swapping a colour for the variable holding the same value, merging duplicate keyframes — because it checks what the browser resolved rather than pixels, so rendering noise cannot hide a real change.
 
-**Why the visual check is advisory.** Most sections compare cleanly, but a few (battle, market intelligence, DEN) differ between runs of identical code: their full-bleed art layers combine large blurs with `mix-blend-mode`, so the same frame is never painted twice. Use it to look at what a change did (`test-results/` holds before, after and diff images), not as pass/fail. It becomes a blocking gate once the noise is gone: PR 2 cut the image weight and PR 3 fixed the race-title clamp, so this is due a re-check.
+**Why the visual check is advisory.** It used to fail at random on the battle section and occasionally the phone hero. Neither was the renderer: the spec passed its hide rules to `toHaveScreenshot` as `style`, an option that does not exist, so the random TV-static canvas was compared pixel for pixel (the rules are now injected into the page); and the hero's lead line was sometimes spaced against a fallback font (`day_hub.js` now re-measures whenever a web font loads). Since then it has passed repeated full runs. Use it to look at what a change did (`test-results/` holds before, after and diff images); it can become a blocking gate once it has stayed clean for a while.
 
 **Known issues are tracked, not ignored.**
 
