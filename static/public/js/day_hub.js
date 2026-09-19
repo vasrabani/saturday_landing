@@ -277,9 +277,9 @@
     clampDayHubRaceTitles();
     balanceHeroTitleWidths();
     // Both of these measure and rewrite text, which forces layout. Run
-    // them once per frame rather than once per resize event.
+    // them once per frame rather than once per event.
     var pending = false;
-    window.addEventListener('resize', function () {
+    function remeasure() {
       if (pending) return;
       pending = true;
       window.requestAnimationFrame(function () {
@@ -287,15 +287,19 @@
         clampDayHubRaceTitles();
         balanceHeroTitleWidths();
       });
-    });
+    }
+    window.addEventListener('resize', remeasure);
     // Both of these measure text, so they have to run again once the web
     // fonts are in: measured against the fallback font, the clamp cuts
-    // titles at the wrong point and the result differs from load to load.
+    // titles at the wrong point and the hero's lead line is spaced to the
+    // wrong width. fonts.ready only covers fonts already loading when it is
+    // read, and a face first used further down the page can start later,
+    // so measure again whenever any font finishes loading.
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(function () {
-        clampDayHubRaceTitles();
-        balanceHeroTitleWidths();
-      }).catch(function () {});
+      document.fonts.ready.then(remeasure).catch(function () {});
+    }
+    if (document.fonts && document.fonts.addEventListener) {
+      document.fonts.addEventListener('loadingdone', remeasure);
     }
   }
 

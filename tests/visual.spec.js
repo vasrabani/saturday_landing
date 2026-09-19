@@ -1,12 +1,13 @@
 /*
  * Visual comparison against the design reference commit.
  *
- * ADVISORY, not a gate (see README). Most sections compare cleanly, but a
- * few - battle, market intelligence, DEN - still differ run to run on the
- * same code. Their full-bleed art layers combine large blurs with
- * `mix-blend-mode`, and this page's images decode late, so the rasteriser
- * does not produce identical pixels twice. PR 2 (images) and PR 3 (the
- * title-clamp race) removed most of that; this becomes a CI gate after them.
+ * ADVISORY, not a gate (see README).
+ *
+ * The battle section used to differ run to run on the same code. The
+ * cause was not the rasteriser: the hide rules below were passed to
+ * toHaveScreenshot as `style`, an option it does not have (it takes
+ * `stylePath`, a file), so Playwright ignored them and compared the random
+ * TV-static canvas pixel for pixel. They are now injected into the page.
  *
  * Use it to review a diff before and after a change, not as a pass/fail.
  */
@@ -16,16 +17,24 @@ import { showsDesktopNav, showsDrawerNav } from './support/viewports.js';
 
 const RANDOM_SEED = 20260825;
 
-// Injected while a screenshot is taken. Hiding beats masking here: a
-// section taller than the viewport is captured in strips, and mask
-// rectangles are placed from one scroll position, so they land in the
-// wrong strip. The same CSS is injected for the reference images and the
-// comparison, so what is hidden is simply outside the comparison.
-const hide = (selectors) => `${selectors.join(', ')} { visibility: hidden !important; }`;
+// Injected into the page before its screenshots, with page.addStyleTag:
+// toHaveScreenshot has no `style` option, and silently ignores one. Hiding
+// beats masking here: a section taller than the viewport is captured in
+// strips, and mask rectangles are placed from one scroll position, so they
+// land in the wrong strip. The same CSS is injected for the reference
+// images and the comparison, so what is hidden is simply outside the
+// comparison. Descendants are hidden too, because some of them (the nav's
+// Login link) set their own visibility and would show through.
+const hide = (selectors) =>
+  `${selectors.flatMap((s) => [s, `${s} *`]).join(', ')} { visibility: hidden !important; }`;
+
+// The site scrolls smoothly, so a scripted scrollTo would still be moving
+// when the tile is captured. Sections scroll instantly instead.
+const INSTANT_SCROLL = 'html { scroll-behavior: auto !important; }';
 
 // Nav shots keep the fixed chrome, since the nav is the subject.
 const NAV_STYLE = hide(NON_DETERMINISTIC_ART);
-const SECTION_STYLE = [hide(FIXED_CHROME), NAV_STYLE].join('\n');
+const SECTION_STYLE = [hide(FIXED_CHROME), NAV_STYLE, INSTANT_SCROLL].join('\n');
 
 // Seeded Math.random so randomised effects paint identically every run.
 function seedRandom(seed) {
@@ -77,17 +86,19 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('nav bar', async ({ page }) => {
-  await expect(page.locator('.site-nav')).toHaveScreenshot('nav.png', { style: NAV_STYLE });
+  await page.addStyleTag({ content: NAV_STYLE });
+  await expect(page.locator('.site-nav')).toHaveScreenshot('nav.png');
 });
 
 test('nav menu open', async ({ page }) => {
+  await page.addStyleTag({ content: NAV_STYLE });
   if (showsDrawerNav(page)) {
     await page.locator('#navHamburger').click();
     await page.locator('#mobileDrawer .mob-drawer__accordion-trigger').first().click();
-    await expect(page).toHaveScreenshot('nav-drawer-open.png', { style: NAV_STYLE });
+    await expect(page).toHaveScreenshot('nav-drawer-open.png');
   } else {
     await page.locator('.site-nav__dropdown-trigger').first().click();
-    await expect(page).toHaveScreenshot('nav-dropdown-open.png', { style: NAV_STYLE });
+    await expect(page).toHaveScreenshot('nav-dropdown-open.png');
   }
 });
 
@@ -101,6 +112,7 @@ const PAINT_SETTLE_MS = 250;
 
 for (const section of SECTIONS) {
   test(`section: ${section.name}`, async ({ page }) => {
+    await page.addStyleTag({ content: SECTION_STYLE });
     const height = await page
       .locator(section.selector)
       .first()
@@ -122,7 +134,7 @@ for (const section of SECTIONS) {
       );
       await page.waitForTimeout(PAINT_SETTLE_MS);
       const name = tiles === 1 ? `${section.name}.png` : `${section.name}-${tile + 1}.png`;
-      await expect(page).toHaveScreenshot(name, { style: SECTION_STYLE });
+      await expect(page).toHaveScreenshot(name);
     }
   });
 }
