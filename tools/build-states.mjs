@@ -75,11 +75,16 @@ const challengesFilled = () => {
   return challenges.slice(0, start) + partial('challenges-filled').trim() + challenges.slice(tail);
 };
 
-// The empty board replaces the whole two-column grid.
-const marketEmpty = () => {
-  const start = market.indexOf('<div class="mi-grid">');
-  const end = market.lastIndexOf('</div>', market.lastIndexOf('</section>'));
-  return market.slice(0, start) + partial('market-empty').trim() + market.slice(end);
+// With no moves at all, production hides the whole section. Early in the
+// day one list can still be empty while the other has moves: that list
+// says so, and the tabs switch to the message like any other list.
+const marketNoDrifters = () => {
+  const start = market.indexOf('<ol class="mi-list mi-list--drifters">');
+  const end = market.indexOf('</ol>', start) + '</ol>'.length;
+  return (market.slice(0, start)
+    + '<p class="mi-list mi-list--drifters mi-list__empty">No drifters yet today.</p>'
+    + market.slice(end))
+    .replace('&middot; 14 drifters', '&middot; 0 drifters');
 };
 
 // ── States that exist in the markup ───────────────────────────────────
@@ -132,13 +137,32 @@ const STATES = [
     markup: challengesFilled(),
   },
   {
-    name: 'Market intelligence · nothing has moved yet',
-    when: '_money_moves.html: has_data is false (production hides the section instead)',
-    markup: marketEmpty(),
+    name: 'Market intelligence · no drifters yet',
+    when: "_money_moves.html: {% if money_moves.top_drifters %} … {% else %}, on the Drifters tab (with no moves at all the section is hidden)",
+    markup: marketNoDrifters()
+      .replace('<aside class="mi-board"', '<aside class="mi-board" data-mi-mode="drifters"')
+      .replace('class="mi-tab is-active" role="tab" aria-selected="true"', 'class="mi-tab" role="tab" aria-selected="false"')
+      .replace('class="mi-tab" role="tab" aria-selected="false" aria-controls="mi-list" data-mi-tab="drifters"',
+        'class="mi-tab is-active" role="tab" aria-selected="true" aria-controls="mi-list" data-mi-tab="drifters"'),
   },
   {
-    name: 'Nav and footer · signed in',
-    when: 'base.html and partials/footer.html: {% if user.is_authenticated %}',
+    name: 'Syndicates · none yet',
+    when: '_syndicates.html: {% if top_syndicates_landing %} … {% else %}',
+    markup: partial('syndicates-empty'),
+  },
+  {
+    name: 'Track record · no results yet',
+    when: '_track_record.html: {% if previous_results %} … {% else %}',
+    markup: partial('track-record-empty'),
+  },
+  {
+    name: 'Final call to action · days to go',
+    when: '_final_cta.html: days_to_go > 0 (the page shows race day)',
+    markup: partial('final-cta-days-to-go'),
+  },
+  {
+    name: 'Signed in · nav, footer and the Welcome back strip',
+    when: 'base.html, partials/footer.html and _cub_hello.html: {% if user.is_authenticated %}',
     markup: partial('signed-in-chrome'),
   },
   {

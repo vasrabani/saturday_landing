@@ -25,7 +25,9 @@ const ENTRY_HTML = 'index.html';
 const IMAGE_BUDGET_BYTES = 300 * 1024;
 const RASTER_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif']);
 const IMAGE_EXTENSIONS = new Set([...RASTER_EXTENSIONS, '.svg']);
-const ALLOWED_BREAKPOINTS = new Set([767, 768, 1023, 1024]);
+// 1279/1280 is the nav's own switch: the full link row needs about 1260px,
+// so below 1280 the hamburger stands in for it (production's chrome.css).
+const ALLOWED_BREAKPOINTS = new Set([767, 768, 1023, 1024, 1279, 1280]);
 const ALLOWED_THIRD_PARTY_HOSTS = new Set(['fonts.googleapis.com', 'fonts.gstatic.com', 'www.saturday-racing.com']);
 const GENERIC_FONT_FAMILIES = new Set([
   'serif', 'sans-serif', 'monospace', 'cursive', 'fantasy', 'system-ui', 'ui-serif', 'ui-sans-serif',

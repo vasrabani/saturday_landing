@@ -137,7 +137,11 @@
   font-weight: 500;
   letter-spacing: 0.01em;
   color: rgba(242, 236, 223, 0.72);
-  padding: 7px 12px 10px;
+  /* 8px each side, not the redesign's 12px: at 12px the seven links ran
+     12px past their row and into the Join button on every page. 8px
+     leaves 44px to spare in the 1280px nav. The active underline below
+     is positioned from this padding. */
+  padding: 7px 8px 10px;
   border-radius: 0;
   background: transparent;
   border: 0;
@@ -169,9 +173,9 @@
 .site-nav__link.active::after {
   content: "";
   position: absolute;
-  /* Start after icon (15px) + gap (6px) + left pad (12px) ≈ under "Home" text */
-  left: calc(12px + 15px + 6px);
-  right: 10px;
+  /* Start after icon (15px) + gap (6px) + left pad (8px) ≈ under "Home" text */
+  left: calc(8px + 15px + 6px);
+  right: 6px;
   bottom: -1px;
   width: auto;
   height: 14px;
@@ -184,7 +188,7 @@
 }
 .site-nav__dropdown-trigger.site-nav__link.active::after {
   /* dropdown triggers also have caret — keep underline under label only */
-  right: 22px;
+  right: 18px;
   bottom: -1px;
 }
 
@@ -275,6 +279,31 @@
   white-space: nowrap;
   transition: all 0.2s;
   box-shadow: 0 2px 8px rgba(192, 57, 43, 0.35);
+  /* The badge carries the featured race's name, which is as long as its
+     sponsor wants ("Churchill Tyres Supporting Macmillan Sprint
+     Handicap" is 416px). A fixed budget keeps the tablet bar in fit;
+     the link's title carries the full name. */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 220px;
+  min-width: 0;
+}
+.site-nav__badge-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Below 1280px the bar holds the race badge, the date and the account
+   items beside the hamburger. If they still overflow (a long Cub name,
+   signed-in extras), site.js adds these, and the race context gives way
+   first: it repeats what the page already shows. */
+.site-nav--tight .site-nav__badge {
+  display: none;
+}
+.site-nav--tighter .site-nav__date {
+  display: none;
 }
 .site-nav__badge:hover {
   background: var(--c-red-lt);
@@ -1356,6 +1385,17 @@ body.drawer-open {
   border-color: var(--c-border-gold);
   color: var(--c-gold);
   font-weight: 600;
+  /* A fixed budget, so a long Cub name cannot push the nav out of fit:
+     about twelve characters, then an ellipsis. The link's title carries
+     the full name. */
+  max-width: 150px;
+  min-width: 0;
+}
+.site-nav__pill-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .site-nav__pill--cub:hover {
   background: rgba(200, 169, 81, 0.22);
@@ -1366,42 +1406,73 @@ body.drawer-open {
    7. RESPONSIVE BREAKPOINTS
 ───────────────────────────────────────────────────────────── */
 
-/* Hide desktop links at tablet width */
-@media (max-width: 1024px) {
+/* Links or hamburger: one or the other, never neither.
+   The full link row needs about 1260px, so below 1280px the hamburger
+   stands in for it. This used to switch at two different widths (links
+   hidden at 1024px, hamburger shown at 900px), which left 901-1024px with
+   no navigation at all, and 1025-1259px with Join / Login pushed off the
+   right edge of the screen. */
+@media (max-width: 1279px) {
   .site-nav__links {
     display: none;
   }
-}
-
-/* Hide race badge + date when primary links are visible (they already show it) */
-@media (min-width: 1025px) {
-  .site-nav__badge {
-    display: none;
-  }
-  .site-nav__date {
-    display: none;
-  }
-}
-
-/* The hamburger covers every width where the desktop links are hidden.
-   Those hide at 1024px, so anything narrower needs the drawer: between
-   901px and 1024px the page used to offer no navigation at all. */
-@media (max-width: 1024px) {
   .site-nav__hamburger {
     display: flex;
   }
 }
 
+/* Hide race badge + date when primary links are visible (they already show it).
+   Scoped to .site-nav for weight: the plain .site-nav__date rule in the
+   right-actions block further down sets display:flex and, coming later at
+   equal specificity, used to win - so the date never actually hid. */
+@media (min-width: 1280px) {
+  .site-nav .site-nav__badge {
+    display: none;
+  }
+  .site-nav .site-nav__date {
+    display: none;
+  }
+  /* Signed in, the bar is too full for Sign out as well as the links:
+     it lives in the footer, the menu and on the profile page instead. */
+  .site-nav .site-nav__auth-link {
+    display: none;
+  }
+}
+
+/* The back link ("← Races", "← Cubs", on 22 page types) only shows while
+   the hamburger does. On desktop the full link row takes its place: with
+   it, the row does not fit the 1280px nav. */
+@media (min-width: 1280px) {
+  .site-nav__back {
+    display: none;
+  }
+}
+
+/* Wider than that the row usually fits, but not always: signed-in extras
+   or an unusually long label can still push Join / Login off screen.
+   site.js measures the nav and adds this class when the row does not fit,
+   which gives that page the hamburger layout, back link included. */
+.site-nav--compact .site-nav__links {
+  display: none;
+}
+.site-nav--compact .site-nav__hamburger {
+  display: flex;
+}
+.site-nav--compact .site-nav__back {
+  display: flex;
+}
+
 @media (max-width: 900px) {
 
-  /* Hide action pills on small screens — they're in the drawer */
+  /* Hide action pills on small screens — they're in the drawer.
+     .site-nav for weight, as above. */
   .site-nav__pill {
     display: none;
   }
-  .site-nav__badge {
+  .site-nav .site-nav__badge {
     display: none;
   }
-  .site-nav__date {
+  .site-nav .site-nav__date {
     display: none;
   }
 }

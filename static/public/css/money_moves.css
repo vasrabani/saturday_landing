@@ -1011,3 +1011,97 @@
   border-color: var(--mi-teal, #4ade80);
   background: rgba(255, 255, 255, 0.04);
 }
+
+/* ── Market Intelligence — what production shows and the redesign dropped ──
+   The live status line, the Steamers Board route, the underdog watch and
+   an empty-list line, in the section's own tokens. (The day's narrative
+   sits in .mi-head__sub when there is one.) */
+.money-moves--intel .mi-head__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px auto 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--mi-muted);
+}
+
+.money-moves--intel .mi-head__pulse {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 50%;
+  background: var(--mi-teal);
+  box-shadow: 0 0 0 0 rgba(46, 230, 197, 0.55);
+  animation: mi-pulse 2s ease-out infinite;
+}
+
+@keyframes mi-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(46, 230, 197, 0.55); }
+  70%  { box-shadow: 0 0 0 8px rgba(46, 230, 197, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(46, 230, 197, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .money-moves--intel .mi-head__pulse { animation: none; }
+}
+
+.money-moves--intel .mi-board__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-end;
+  margin-top: 12px;
+  padding: 6px 2px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--mi-gold);
+  text-decoration: none;
+}
+
+.money-moves--intel .mi-board__more:hover,
+.money-moves--intel .mi-board__more:focus-visible {
+  color: var(--mi-ink);
+}
+
+.money-moves--intel .mi-list__empty {
+  margin: 0;
+  padding: 18px 4px;
+  font-size: 13px;
+  color: var(--mi-muted);
+}
+
+.money-moves--intel .mi-underdog {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+  margin: 18px 0 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(46, 230, 197, 0.22);
+  background: rgba(46, 230, 197, 0.05);
+  font-size: 13px;
+  color: var(--mi-muted);
+}
+
+.money-moves--intel .mi-underdog__label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mi-teal);
+}
+
+.money-moves--intel .mi-underdog__link {
+  color: var(--mi-ink);
+  text-decoration: none;
+}
+
+.money-moves--intel .mi-underdog__link:hover,
+.money-moves--intel .mi-underdog__link:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

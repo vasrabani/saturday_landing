@@ -3,25 +3,32 @@
      The redesign drew the signed-out chrome only, so a Cub who is logged
      in still sees "Join Free" and "Login". Three places change.
 
-     1. The nav actions: profile in place of Join Free, sign out in place
-        of Login. Same classes, so the pill keeps its weight. -->
+     1. The nav actions, as production's base.html renders them: the
+        picks pill, the Cub's name (truncated past 150px, full name in the
+        title) and Sign out. Sign out hides at 1280px and wider, where the
+        link row needs the room; it stays in the footer and the menu. -->
 <div class="site-nav__actions">
-  <a href="https://www.saturday-racing.com/races/big-race/" class="site-nav__badge">
-    🏆 Saturday Big Race
+  <a href="https://www.saturday-racing.com/races/big-race/" class="site-nav__badge" title="Portobello Cup Handicap Stakes (GBBPlus Race)">
+    🏆 <span class="site-nav__badge-name">Portobello Cup Handicap Stakes (GBBPlus Race)</span>
   </a>
   <span class="site-nav__sep" aria-hidden="true"></span>
-  <a href="https://www.saturday-racing.com/members/profile/" class="site-nav__join-btn">
-    <span>✦</span> My profile
+  <a href="https://www.saturday-racing.com/my-picks/?period=today" class="picks-pill picks-pill--fresh picks-pill--has-nudge" data-picks-pill title="2 of 6 picks used today — view your scoreboard · 2× points still available on Portobello Cup Handicap Stakes (GBBPlus Race)" aria-label="My picks">
+    <span class="picks-pill__icon" aria-hidden="true">🐾</span>
+    <span class="picks-pill__count" data-picks-count><span data-picks-used>2</span><span class="picks-pill__sep">/</span><span data-picks-max>6</span></span>
+    <span class="picks-pill__nudge" aria-hidden="true">✨</span>
   </a>
-  <a href="https://www.saturday-racing.com/members/logout/" class="site-nav__login-btn">
-    Sign out
+  <a href="https://www.saturday-racing.com/members/profile/" class="site-nav__pill site-nav__pill--cub" title="Rosie M">
+    🐾 <span class="site-nav__pill-name">Rosie M</span>
+  </a>
+  <a href="https://www.saturday-racing.com/members/logout/" class="site-nav__auth-link">
+    <span class="site-nav__auth-icon">↩</span> Sign out
   </a>
 </div>
 
-<!-- 2. The footer's account links, in the Community column. -->
+<!-- 2. The footer's account links, in the Community column, in place of
+     Sign in and Join free. -->
 <ul class="sf__nav-list">
   <li><a href="https://www.saturday-racing.com/members/profile/">My profile</a></li>
-  <li><a href="https://www.saturday-racing.com/pick/">My picks</a></li>
   <li><a href="https://www.saturday-racing.com/members/logout/">Sign out</a></li>
 </ul>
 
@@ -30,3 +37,36 @@
 
        data-picks-half-href="{% if user.is_authenticated %}{% url 'pick' %}{% else %}{% url 'cub_register' %}{% endif %}"
 -->
+
+<!-- 4. The "Welcome back" strip above the today strip, for a signed-in Cub
+     only (components/v2/_cub_hello.html): name, picks used today, a nudge
+     to the featured race when they haven't picked it, and their last
+     winner. Rendered from production's template with sample data. -->
+<aside class="cub-hello" aria-label="Welcome back">
+  <div class="container cub-hello__inner">
+    <p class="cub-hello__greeting">
+      <span class="cub-hello__kicker">WELCOME BACK</span>
+      <strong class="cub-hello__name" title="Rosie M">Rosie M</strong>
+    </p>
+    <ul class="cub-hello__tiles">
+      <li class="cub-hello__tile">
+        <svg class="cub-hello__icon" width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M2.66992 14.6601V2.66308C2.66992 2.45329 2.76875 2.25575 2.93667 2.12988C3.62927 1.61072 4.47167 1.33008 5.33742 1.33008C7.33805 1.33008 8.6718 2.66308 10.2276 2.66308C11.1168 2.66308 11.7986 2.48534 12.2729 2.12988C12.475 1.97841 12.7454 1.95404 12.9713 2.06694C13.1972 2.17984 13.3399 2.41063 13.3399 2.66308V9.32808C13.3399 9.53786 13.2411 9.73541 13.0732 9.86128C12.3806 10.3804 11.5382 10.6611 10.6724 10.6611C8.6718 10.6611 7.33805 9.32808 5.33742 9.32808C4.35319 9.3281 3.4035 9.69068 2.66992 10.3465" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="cub-hello__num">2<span class="cub-hello__of">/6</span></span>
+        <span class="cub-hello__label">picks today</span>
+      </li>
+      <li>
+        <a href="https://www.saturday-racing.com/races/4438/" class="cub-hello__tile cub-hello__tile--nudge">
+          <svg class="cub-hello__icon" width="11" height="15" viewBox="0 0 13 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M6.88276 0.75L0.75 10.2738H6.26948L5.65621 16.623L11.789 7.09921H6.26948L6.88276 0.75Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="cub-hello__num">Pick now</span>
+          <span class="cub-hello__label">Musselburgh 15:45</span>
+          <span class="cub-hello__arrow" aria-hidden="true">&rarr;</span>
+        </a>
+      </li>
+      <li class="cub-hello__tile cub-hello__tile--winner">
+        <svg class="cub-hello__icon" width="15" height="15" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M7.2148 10.5771V11.7506C7.20925 12.2535 6.94247 12.7172 6.51061 12.9746C5.5965 13.6519 5.05528 14.7207 5.05029 15.8585" stroke="currentColor" stroke-width="1.443" stroke-linecap="round" stroke-linejoin="round"/> <path d="M10.1011 10.5771V11.7506C10.1066 12.2535 10.3734 12.7172 10.8053 12.9746C11.7194 13.6519 12.2606 14.7207 12.2656 15.8585" stroke="currentColor" stroke-width="1.443" stroke-linecap="round" stroke-linejoin="round"/> <path d="M12.9868 6.49349H14.0691C15.0653 6.49349 15.8728 5.68592 15.8728 4.68974C15.8728 3.69355 15.0653 2.88599 14.0691 2.88599H12.9868" stroke="currentColor" stroke-width="1.443" stroke-linecap="round" stroke-linejoin="round"/> <path d="M2.88574 15.873H14.4298" stroke="currentColor" stroke-width="1.443" stroke-linecap="round" stroke-linejoin="round"/> <path d="M4.3291 6.49362C4.3291 8.88446 6.26726 10.8226 8.65811 10.8226C11.049 10.8226 12.9871 8.88446 12.9871 6.49362V2.16462C12.9871 1.76614 12.6641 1.44312 12.2656 1.44312H5.0506C4.65213 1.44312 4.3291 1.76614 4.3291 2.16462V6.49362Z" stroke="currentColor" stroke-width="1.443" stroke-linecap="round" stroke-linejoin="round"/> <path d="M4.32936 6.49349H3.24711C2.25093 6.49349 1.44336 5.68592 1.44336 4.68974C1.44336 3.69355 2.25093 2.88599 3.24711 2.88599H4.32936" stroke="currentColor" stroke-width="1.443" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="cub-hello__num">Vegasmile</span>
+        <span class="cub-hello__label">your last winner</span>
+      </li>
+    </ul>
+  </div>
+</aside>

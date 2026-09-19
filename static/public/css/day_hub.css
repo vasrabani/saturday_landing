@@ -1047,6 +1047,15 @@
   border: 0;
 }
 
+/* The race picker's pale-red LIVE badge is drawn for a dark ground;
+   on these light tiles it all but vanished, so LIVE gets the same
+   solid treatment as NEXT. */
+.day-hub__rp-race .rp-race__badge--live {
+  background: #b91c1c;
+  color: #fff;
+  border: 0;
+}
+
 .day-hub__rp-race .rp-star {
   color: var(--c-gold);
 }
@@ -1855,4 +1864,19 @@
    Production's day hub template still sets this class. */
 .day-hub__rp-meeting.is-finished {
   opacity: 0.72;
+}
+
+/* ── Filters and Fox markers, on a real card ──────────────────────────
+   day_hub.js filters by setting the hidden attribute on each tile, but
+   the tile's own display: grid outranks the browser's [hidden] rule, so
+   filtered races stayed on screen. */
+.day-hub .day-hub__rp-race[hidden] {
+  display: none;
+}
+
+/* "FOX →" marks a race Mr Fox has picked. The design put it on every
+   tile - its sample card had a pick in all 26 races - which on a real
+   card claims picks that do not exist. Only tiles flagged fox keep it. */
+.day-hub .day-hub__rp-race:not([data-flags~="fox"])::after {
+  content: none;
 }
