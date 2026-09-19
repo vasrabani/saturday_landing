@@ -1,0 +1,31 @@
+/* ═══════════════════════════════════════════════════════════════
+   Deferred section backgrounds — landing page only.
+
+   Every section below the hero paints a photo or texture as a CSS
+   background (the day hub, market, rivalry cards, chamber, draw,
+   footer...). CSS backgrounds are not lazy: the browser fetches all of
+   them as soon as the stylesheets apply, about 900 KB, and they queue
+   ahead of the hero photo the visitor is actually looking at.
+
+   While a [data-defer-bg] section or the footer is still far below
+   the screen, its backgrounds are switched off, so nothing is fetched.
+   defer-bg.js adds .is-bg-ready once the section comes within reach,
+   and the section's own backgrounds apply as written.
+
+   Only in effect when <html> has .bg-defer, which the page head adds
+   with an inline script. Without JavaScript, nothing here applies and
+   every background loads as normal.
+
+   The rule clears gradients as well as photos. That is invisible: the
+   section is well off screen until it is ready, and the flat
+   background-color underneath still paints.
+═══════════════════════════════════════════════════════════════ */
+
+.bg-defer :is([data-defer-bg], footer.sf):not(.is-bg-ready),
+.bg-defer :is([data-defer-bg], footer.sf):not(.is-bg-ready) *,
+.bg-defer :is([data-defer-bg], footer.sf):not(.is-bg-ready)::before,
+.bg-defer :is([data-defer-bg], footer.sf):not(.is-bg-ready)::after,
+.bg-defer :is([data-defer-bg], footer.sf):not(.is-bg-ready) *::before,
+.bg-defer :is([data-defer-bg], footer.sf):not(.is-bg-ready) *::after {
+  background-image: none !important;
+}

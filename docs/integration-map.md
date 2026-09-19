@@ -16,9 +16,22 @@ Repositories:
 
 ## In sync with production as of
 
-Production **`8abdc1e6` (2026-09-18)**, the switch-over. Everything below
-was brought back into this snapshot from production in one sync, so the
-two now match section for section:
+Production **`c7faffb1` (2026-09-19)**. Two syncs brought production's
+changes back into this snapshot, so the two match section for section.
+
+**Second sync, to `c7faffb1`: image loading (production `b7ad01bd`, PERF-1).**
+The hero photo is preloaded; the nine sections below the hero carry
+`data-defer-bg`, and `static/public/css/defer-bg.css` with
+`static/public/js/defer-bg.js` hold their CSS backgrounds (and the
+footer's) until each comes near the screen; 61 images below the hero load
+lazily; the nav portraits use 72px copies in `static/img/nav/`; and
+`mi-steam-bg.webp` is recompressed. Production's two other changes since
+the first sync are server-only and have nothing to bring across: the
+gunicorn workers load the URLconf at start (`saturday/wsgi.py`), and the
+market movers are no longer ranked on every page, with the landing's
+market section cached for a minute.
+
+**First sync, to `8abdc1e6` (2026-09-18), the switch-over:**
 
 | Area | What production had that this snapshot didn't |
 | --- | --- |
@@ -37,7 +50,7 @@ two now match section for section:
 **Before designing, check for newer production changes:**
 
 ```bash
-git log 8abdc1e6..main --oneline -- public/templates/public/landing_v2.html public/templates/public/components/v2 public/static/public/v2 templates/base/base.html templates/partials/footer.html static/css/chrome.css static/css/base.css static/js/site.js
+git log c7faffb1..main --oneline -- public/templates/public/landing_v2.html public/templates/public/components/v2 public/static/public/v2 templates/base/base.html templates/partials/footer.html static/css/chrome.css static/css/base.css static/js/site.js static/img
 ```
 
 Anything that lists has to come back here first, or a change made here
@@ -98,6 +111,12 @@ The day hub's icons are shared includes in `components/v2/icons/`.
   behind them.
 - **Images were resized to twice their painted size.** If a section is used
   bigger anywhere else, re-export rather than upscale.
+- **Backgrounds below the hero load late on purpose.** A new section that
+  paints a CSS background image needs `data-defer-bg` on its `<section>`,
+  or it will load with the first screen and slow the hero down. The hero
+  itself must not have it. `states.html` shows every background at once
+  (it leaves the switch out), and the visual test turns deferral off so
+  its screenshots show the finished page.
 
 ## Checked on other page types
 

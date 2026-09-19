@@ -49,6 +49,16 @@ function loadImagesEagerly() {
   }).observe(document, { childList: true, subtree: true });
 }
 
+// The same for section backgrounds: defer-bg.js holds them until a section
+// nears the screen, which would leave each capture racing its own images.
+// Switching deferral off at DOMContentLoaded requests them all before the
+// `load` event, so the screenshots show the finished page.
+function loadBackgroundsEagerly() {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.documentElement.classList.remove('bg-defer');
+  });
+}
+
 // Everything painted and still: fonts loaded, and scroll reveals shown
 // (they are keyed to scrolling, which screenshots never do).
 async function settle(page) {
@@ -61,6 +71,7 @@ async function settle(page) {
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(seedRandom, RANDOM_SEED);
   await page.addInitScript(loadImagesEagerly);
+  await page.addInitScript(loadBackgroundsEagerly);
   await openLanding(page, { waitUntil: 'load' });
   await settle(page);
 });
