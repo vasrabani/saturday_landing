@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="static/css/chrome.css" />
     <link rel="stylesheet" href="static/voting/css/picks_budget.css" />
 
+    <link rel="preload" as="image" href="static/public/img/hero-fold-bg.webp" fetchpriority="high" />
+    <link rel="stylesheet" href="static/public/css/defer-bg.css" />
     <link rel="stylesheet" href="static/public/css/hero-fold.css" />
     <link rel="stylesheet" href="static/races/css/pick6_emblem.css" />
     <link rel="stylesheet" href="static/public/css/landing.css" />
@@ -63,7 +65,7 @@
         <p class="states-case__name">Day hub · racing finished</p>
         <p class="states-case__when">_day_hub.html sets .is-finished on a meeting whose last race has run</p>
         <div class="states-frame">
-<section class="day-hub" id="day-hub" aria-label="Today's racing">
+<section data-defer-bg class="day-hub" id="day-hub" aria-label="Today's racing">
         <div class="day-hub__intro">
           <div class="day-hub__intro-inner">
             <span class="day-hub__intro-kicker">
@@ -304,8 +306,7 @@
                     src="static/public/img/mr_fox_host-sm.webp"
                     alt=""
                     width="48"
-                    height="48"
-                  />
+                    height="48" loading="lazy" />
                 </span>
                 <span class="day-card__tip-body">
                   <span class="day-card__tip-kicker">
@@ -524,8 +525,7 @@
                     alt=""
                     width="40"
                     height="27"
-                    aria-hidden="true"
-                  />
+                    aria-hidden="true" loading="lazy" />
                   <span class="day-hub__course-name">Musselburgh</span>
                   <span class="day-hub__course-meta">6 races</span>
                 </button>
@@ -541,8 +541,7 @@
                     alt=""
                     width="40"
                     height="27"
-                    aria-hidden="true"
-                  />
+                    aria-hidden="true" loading="lazy" />
                   <span class="day-hub__course-name">Lingfield (AW)</span>
                   <span class="day-hub__course-meta">6 races</span>
                 </button>
@@ -558,8 +557,7 @@
                     alt=""
                     width="40"
                     height="27"
-                    aria-hidden="true"
-                  />
+                    aria-hidden="true" loading="lazy" />
                   <span class="day-hub__course-name">Bellewstown</span>
                   <span class="day-hub__course-meta">8 races</span>
                 </button>
@@ -575,8 +573,7 @@
                     alt=""
                     width="40"
                     height="27"
-                    aria-hidden="true"
-                  />
+                    aria-hidden="true" loading="lazy" />
                   <span class="day-hub__course-name">Stratford</span>
                   <span class="day-hub__course-meta">6 races</span>
                 </button>
@@ -1134,7 +1131,7 @@
         <p class="states-case__name">Battle · no pick yet</p>
         <p class="states-case__when">landing.html: {% if big_race.fox_pick %} … {% else %} Pick pending</p>
         <div class="states-frame">
-<section
+<section data-defer-bg
         class="section battle-section battle-section--rivalry"
         id="the-battle"
         aria-label="Fox vs Cubs"
@@ -1417,8 +1414,7 @@
                     src="static/public/img/ai-chamber/icon-model.svg"
                     alt=""
                     width="12"
-                    height="12"
-                  />
+                    height="12" loading="lazy" />
                   <span data-ac-model>CLAUDE</span>
                 </span>
                 <span class="ac-panel__lens" data-ac-lens>Balanced lens</span>
@@ -1450,8 +1446,7 @@
                   src="static/public/img/ai-chamber/icon-arrow.svg"
                   alt=""
                   width="14"
-                  height="14"
-                />
+                  height="14" loading="lazy" />
               </a>
             </article></div></div></section>
         </div>
@@ -1474,8 +1469,7 @@
                     src="static/public/img/ai-chamber/icon-model.svg"
                     alt=""
                     width="12"
-                    height="12"
-                  />
+                    height="12" loading="lazy" />
                   <span data-ac-model>CLAUDE</span>
                 </span>
                 <span class="ac-panel__lens" data-ac-lens>Balanced lens</span>
@@ -1508,8 +1502,7 @@
                   src="static/public/img/ai-chamber/icon-arrow.svg"
                   alt=""
                   width="14"
-                  height="14"
-                />
+                  height="14" loading="lazy" />
               </a>
             </article></div></div></section>
         </div>
@@ -1532,8 +1525,7 @@
                     src="static/public/img/ai-chamber/icon-model.svg"
                     alt=""
                     width="12"
-                    height="12"
-                  />
+                    height="12" loading="lazy" />
                   <span data-ac-model>CLAUDE</span>
                 </span>
                 <span class="ac-panel__lens" data-ac-lens>Balanced lens</span>
@@ -1575,8 +1567,7 @@
                   src="static/public/img/ai-chamber/icon-arrow.svg"
                   alt=""
                   width="14"
-                  height="14"
-                />
+                  height="14" loading="lazy" />
               </a>
             </article></div></div></section>
         </div>
@@ -1599,8 +1590,7 @@
                     src="static/public/img/ai-chamber/icon-model.svg"
                     alt=""
                     width="12"
-                    height="12"
-                  />
+                    height="12" loading="lazy" />
                   <span data-ac-model>CLAUDE</span>
                 </span>
                 <span class="ac-panel__lens" data-ac-lens>Balanced lens</span>
@@ -1635,8 +1625,7 @@
                   src="static/public/img/ai-chamber/icon-arrow.svg"
                   alt=""
                   width="14"
-                  height="14"
-                />
+                  height="14" loading="lazy" />
               </a>
             </article></div></div></section>
         </div>
@@ -1645,7 +1634,7 @@
         <p class="states-case__name">Challenges · Cubs are challenging</p>
         <p class="states-case__when">challenges_section.html: {% if top_challengers %}</p>
         <div class="states-frame">
-<section class="chal-section chal-section--duel section" id="challenges">
+<section data-defer-bg class="chal-section chal-section--duel section" id="challenges">
         <div class="container">
           <div class="chal-top" data-reveal data-reveal-delay="0">
             <p class="chal-kicker">⚔ CHALLENGES</p>
@@ -1660,8 +1649,7 @@
                   alt=""
                   width="14"
                   height="14"
-                  decoding="async"
-                />
+                  decoding="async" loading="lazy" />
               </a>
               <a
                 href="https://www.saturday-racing.com/cubs/challenges/"
@@ -1693,8 +1681,7 @@
                     alt=""
                     width="16"
                     height="16"
-                    decoding="async"
-                  />
+                    decoding="async" loading="lazy" />
                 </span>
                 <div class="chal-step__copy">
                   <div class="chal-step__title">
@@ -1715,8 +1702,7 @@
                     alt=""
                     width="16"
                     height="16"
-                    decoding="async"
-                  />
+                    decoding="async" loading="lazy" />
                 </span>
                 <div class="chal-step__copy">
                   <div class="chal-step__title">
@@ -1737,8 +1723,7 @@
                     alt=""
                     width="16"
                     height="16"
-                    decoding="async"
-                  />
+                    decoding="async" loading="lazy" />
                 </span>
                 <div class="chal-step__copy">
                   <div class="chal-step__title">
@@ -1760,8 +1745,7 @@
                   alt=""
                   width="14"
                   height="14"
-                  decoding="async"
-                />
+                  decoding="async" loading="lazy" />
                 <span>LIVE DUEL</span>
               </div>
               <h3 class="chal-live__race">
@@ -1841,7 +1825,7 @@
         <p class="states-case__name">Market intelligence · no drifters yet</p>
         <p class="states-case__when">_money_moves.html: {% if money_moves.top_drifters %} … {% else %}, on the Drifters tab (with no moves at all the section is hidden)</p>
         <div class="states-frame">
-<section class="money-moves money-moves--intel" id="market-movers" aria-label="Market intelligence">
+<section data-defer-bg class="money-moves money-moves--intel" id="market-movers" aria-label="Market intelligence">
         <div class="money-moves__inner">
           <header class="mi-head">
             <div class="mi-head__kicker">
@@ -1862,7 +1846,7 @@
           <div class="mi-grid">
             <article class="mi-steam">
               <div class="mi-steam__kicker">
-                <img class="mi-steam__zap-img" src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
+                <img class="mi-steam__zap-img" src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" loading="lazy" />
                 <span>STEAM OF THE DAY</span>
               </div>
               <h3 class="mi-steam__horse">Toco Madera</h3>
@@ -1875,7 +1859,7 @@
               <div class="mi-steam__bar" aria-hidden="true"><span style="width:72%"></span></div>
               <p class="mi-steam__pct"><span>-56%</span> · 5 hours, 14 minutes ago</p>
               <a class="mi-steam__cta" href="https://www.saturday-racing.com/races/4438/">
-                <img src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
+                <img src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" loading="lazy" />
                 View the race
                 <span aria-hidden="true">→</span>
               </a>
@@ -1885,11 +1869,11 @@
               <div class="mi-board__toolbar">
                 <div class="mi-board__tabs" role="tablist" aria-label="Market list">
                   <button type="button" class="mi-tab" role="tab" aria-selected="false" aria-controls="mi-list" data-mi-tab="steamers">
-                    <img class="mi-tab__icon" src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
+                    <img class="mi-tab__icon" src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" loading="lazy" />
                     Steamers
                   </button>
                   <button type="button" class="mi-tab is-active" role="tab" aria-selected="true" aria-controls="mi-list" data-mi-tab="drifters">
-                    <img class="mi-tab__icon" src="static/public/img/icons/drifters.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
+                    <img class="mi-tab__icon" src="static/public/img/icons/drifters.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" loading="lazy" />
                     Drifters
                   </button>
                 </div>
@@ -2147,7 +2131,7 @@
         <p class="states-case__name">Market intelligence · drifters</p>
         <p class="states-case__when">the Drifters tab: .mi-board[data-mi-mode='drifters']</p>
         <div class="states-frame">
-<section class="money-moves money-moves--intel" id="market-movers" aria-label="Market intelligence">
+<section data-defer-bg class="money-moves money-moves--intel" id="market-movers" aria-label="Market intelligence">
         <div class="money-moves__inner">
           <header class="mi-head">
             <div class="mi-head__kicker">
@@ -2168,7 +2152,7 @@
           <div class="mi-grid">
             <article class="mi-steam">
               <div class="mi-steam__kicker">
-                <img class="mi-steam__zap-img" src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
+                <img class="mi-steam__zap-img" src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" loading="lazy" />
                 <span>STEAM OF THE DAY</span>
               </div>
               <h3 class="mi-steam__horse">Toco Madera</h3>
@@ -2181,7 +2165,7 @@
               <div class="mi-steam__bar" aria-hidden="true"><span style="width:72%"></span></div>
               <p class="mi-steam__pct"><span>-56%</span> · 5 hours, 14 minutes ago</p>
               <a class="mi-steam__cta" href="https://www.saturday-racing.com/races/4438/">
-                <img src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
+                <img src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" loading="lazy" />
                 View the race
                 <span aria-hidden="true">→</span>
               </a>
@@ -2191,11 +2175,11 @@
               <div class="mi-board__toolbar">
                 <div class="mi-board__tabs" role="tablist" aria-label="Market list">
                   <button type="button" class="mi-tab" role="tab" aria-selected="false" aria-controls="mi-list" data-mi-tab="steamers">
-                    <img class="mi-tab__icon" src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
+                    <img class="mi-tab__icon" src="static/public/img/icons/steamers.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" loading="lazy" />
                     Steamers
                   </button>
                   <button type="button" class="mi-tab is-active" role="tab" aria-selected="true" aria-controls="mi-list" data-mi-tab="drifters">
-                    <img class="mi-tab__icon" src="static/public/img/icons/drifters.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" />
+                    <img class="mi-tab__icon" src="static/public/img/icons/drifters.svg" alt="" width="14" height="14" decoding="async" aria-hidden="true" loading="lazy" />
                     Drifters
                   </button>
                 </div>

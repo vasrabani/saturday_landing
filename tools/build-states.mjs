@@ -41,11 +41,15 @@ function extract(openingMatch, tag) {
   throw new Error(`unbalanced ${tag} from ${openingMatch}`);
 }
 
-const head = html.slice(html.indexOf('<link rel="stylesheet"'), html.indexOf('</head>'));
+// The page head, minus the line that switches on deferred backgrounds:
+// defer-bg.js, which marks each section ready, is not loaded here, so
+// with the switch on the states' backgrounds would never appear.
+const head = html.slice(html.indexOf('<link rel="stylesheet"'), html.indexOf('</head>'))
+  .replace(/\s*<script>document\.documentElement\.classList\.add\('bg-defer'\);<\/script>/, '');
 
-const dayHub = extract('<section class="day-hub"', 'section');
-const battle = extract('<section\n        class="section battle-section battle-section--rivalry"', 'section');
-const market = extract('<section class="money-moves money-moves--intel"', 'section');
+const dayHub = extract('<section data-defer-bg class="day-hub"', 'section');
+const battle = extract('<section data-defer-bg\n        class="section battle-section battle-section--rivalry"', 'section');
+const market = extract('<section data-defer-bg class="money-moves money-moves--intel"', 'section');
 
 // States with no markup in index.html live in partials/, so the Django
 // port has real HTML to copy rather than a screenshot to work from.
@@ -65,7 +69,7 @@ const chamberWith = (variant) =>
   + chamberPanel.slice(0, splitStart) + partial(variant).trim() + chamberPanel.slice(splitEnd)
   + '</div></div></section>';
 
-const challenges = extract('<section class="chal-section chal-section--duel section"', 'section');
+const challenges = extract('<section data-defer-bg class="chal-section chal-section--duel section"', 'section');
 // The filled state replaces everything from the arena to the end of the
 // standings block.
 const challengesFilled = () => {
