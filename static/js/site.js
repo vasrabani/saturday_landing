@@ -21,6 +21,52 @@ document.addEventListener('DOMContentLoaded', () => {
     onScroll();
   }
 
+  // ── 1b. NAV FIT ────────────────────────────────────────────
+  // From 1280px chrome.css shows the full link row, which fits on most
+  // pages. Signed-in extras or an unusually long label can still push
+  // Join / Login off the screen, so measure rather than guess:
+  // if the row does not fit, .site-nav--compact swaps it for the
+  // hamburger, exactly as below 1280px.
+  function fitNav() {
+    if (!nav) return;
+    nav.classList.remove('site-nav--compact', 'site-nav--tight', 'site-nav--tighter');
+    const links = nav.querySelector('.site-nav__links');
+    if (!links) return;
+
+    const shown = el => el.getClientRects().length > 0;
+    const right = el => el.getBoundingClientRect().right;
+    const actions = () => Array.from(nav.querySelectorAll('.site-nav__actions > *')).filter(shown);
+    const linksShown = () => getComputedStyle(links).display !== 'none';
+    const offScreen = () => actions().some(el => right(el) > window.innerWidth + 1);
+
+    if (linksShown()) {
+      const tops = Array.from(links.querySelectorAll('.site-nav__link')).filter(shown);
+      const acts = actions();
+      if (!tops.length || !acts.length) return;
+      const lastLink = Math.max(...tops.map(right));
+      const firstAction = Math.min(...acts.map(el => el.getBoundingClientRect().left));
+      if (!offScreen() && lastLink <= firstAction + 1) return;
+      nav.classList.add('site-nav--compact');
+    }
+
+    // Hamburger layout: if the bar still overflows, the race badge gives
+    // way first, then the date - both repeat what the page shows.
+    if (offScreen()) nav.classList.add('site-nav--tight');
+    if (offScreen()) nav.classList.add('site-nav--tighter');
+  }
+
+  if (nav) {
+    fitNav();
+    let fitQueued = false;
+    window.addEventListener('resize', () => {
+      if (fitQueued) return;
+      fitQueued = true;
+      requestAnimationFrame(() => { fitQueued = false; fitNav(); });
+    });
+    // Web fonts change the width of every label.
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitNav);
+  }
+
   // ── 2. MOBILE DRAWER ───────────────────────────────────────
   const hamburger  = document.getElementById('navHamburger');
   const drawer     = document.getElementById('mobileDrawer');
@@ -120,11 +166,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // If screen resizes above mobile breakpoint, close drawer cleanly
-    const mq = window.matchMedia('(min-width: 1025px)');
-    const onResize = e => { if (e.matches && drawer.classList.contains('open')) closeDrawer(); };
-    if (mq.addEventListener) mq.addEventListener('change', onResize);
-    else mq.addListener(onResize); // Safari < 14 fallback
+    // Once the hamburger is gone the full links are back, so close the
+    // drawer. Asking the hamburger rather than repeating a breakpoint here
+    // keeps this in step with chrome.css and with the nav-fit check above;
+    // a hardcoded 901px is what let this close the drawer on an iPad
+    // rotating to 1024px, where the drawer was still the only navigation.
+    // Checked a frame later, so the nav-fit pass (queued first, above) has
+    // already decided whether this page is compact.
+    window.addEventListener('resize', () => {
+      requestAnimationFrame(() => {
+        if (drawer.classList.contains('open') && getComputedStyle(hamburger).display === 'none') closeDrawer();
+      });
+    });
   }
 
   // ── 3. MOBILE ACCORDIONS — handled by the generic

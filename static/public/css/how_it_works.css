@@ -9,7 +9,6 @@
   --gh-gold-mid: #b4903a;
   --gh-pill: rgba(216, 177, 74, 0.2);
   --gh-muted: rgba(10, 16, 27, 0.6);
-  --gh-faint: rgba(10, 16, 27, 0.45);
   background: var(--gh-bg);
   color: var(--gh-ink);
   padding: clamp(48px, 6vw, 80px) 0 clamp(56px, 7vw, 88px);
@@ -200,7 +199,9 @@
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--gh-faint);
+  /* Fixed dark ink: the tier cards stay white even on the phone's dark
+     stage, where the section's own muted tones turn cream. */
+  color: rgba(10, 16, 27, 0.64);
   line-height: 1.4;
 }
 
@@ -514,7 +515,6 @@
     --gh-bg: #05070c;
     --gh-ink: #0a101b;
     --gh-muted: rgba(245, 242, 234, 0.72);
-    --gh-faint: rgba(245, 242, 234, 0.5);
     background: #05070c;
     color: #f5f2ea;
     padding: 36px 0 44px;

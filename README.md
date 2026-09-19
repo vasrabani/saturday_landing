@@ -80,7 +80,7 @@ Keep commits scoped ("Navbar mobile drawer refresh", "Footer newsletter block re
 
 ## States and integration
 
-`states.html` (open it at <http://localhost:8080/states.html>) shows every state the live template can render: the day hub when racing has finished, the battle card before the Fox has picked, the drifters board — and, at the end, the states that have **no design yet**, such as the hero after a result is declared. Rebuild it with `node tools/build-states.mjs` after changing `index.html`; it is generated from the real markup so it cannot drift.
+`states.html` (open it at <http://localhost:8080/states.html>) shows every state the live template can render beyond the page itself: the day hub when racing has finished, the hero after the race, each AI Chamber outcome, the empty Syndicates and Track record, the signed-in nav, footer and Welcome back strip, and more. Rebuild it with `node tools/build-states.mjs` after changing `index.html` or `partials/`; it is generated from the real markup so it cannot drift.
 
 The `docs/` folder carries the decisions and the handover:
 

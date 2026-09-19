@@ -31,6 +31,35 @@ compliance links.
 Removed, because the live site has no such page and its own footer has
 never linked to one: **Terms**, **Cookies**, **Racecourses**.
 
+## Sample data added in the production sync
+
+These are the sample values behind sections that came back from
+production, where the snapshot had nothing to show them with. None has
+a real source.
+
+- **Market intelligence:** "Updated 12 minutes ago · 18 steamers · 14
+  drifters". The narrative and underdog watch are what production's view
+  writes for this page's own steamers.
+- **Day hub:** the Portobello Cup's class ("3").
+- **Syndicates:** The Friday Night Pack (5), Musselburgh Regulars (4), The
+  Early Doors Club (3).
+- **Build-up News:** Chapman's Peak's withdrawal (the non-runner the ticker
+  already reports), the Musselburgh going and a jockey booking.
+- **Track record:** three past results.
+- **Signed in (`states.html`):** Rosie M, 2 of 6 picks used, Vegasmile as
+  her last winner.
+
+## Decided in the production port
+
+- **Shelf cards:** the shelf shows the four cards the service builds; the
+  two sample-only cards are gone.
+- **AI Chamber confidence scores:** dropped, since there is no field behind
+  them.
+- **GB / IRE labels on meetings:** dropped. Course buttons show race counts.
+- **The hero's "Latest News" card:** shows the featured race's first
+  build-up headline, or the Fox's Wire line when there is none.
+- **Market intelligence with no moves:** the section is hidden.
+
 ## Decisions for you
 
 1. **Terms and Cookies.** Most sites this size have both, and the site has
@@ -39,15 +68,3 @@ never linked to one: **Terms**, **Cookies**, **Racecourses**.
    wire it up.
 2. **Racecourses.** The redesign invented this link. If you want the page,
    it needs a source; if not, nothing more to do.
-3. **Two shelf cards have no data behind them.** The editorial shelf
-   service (`news/services/editorial_shelf.py`) builds four cards; the
-   design shows six. The two extra ones — course notes and a market report
-   — are sample content only. Either the service learns to build them, or
-   the shelf shows four and the design flexes to fit.
-4. **Per-model confidence scores in the AI Chamber** (Claude 91, ChatGPT
-   54, Gemini 52) have no field in the app. They look good and they are a
-   real feature to build, but until then they cannot be rendered.
-5. **GB / IRE labels on meetings** in the day hub: meetings carry no
-   country field today.
-6. **A news headline in the hero** ("Latest News" card): there is no
-   headline slot in the hero's data.

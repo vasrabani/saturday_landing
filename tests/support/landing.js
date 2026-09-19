@@ -18,6 +18,7 @@ export const SECTIONS = [
   { name: 'how-it-works', selector: '#how-it-works' },
   { name: 'challenges', selector: '#challenges' },
   { name: 'saturday-draw', selector: '#saturday-draw' },
+  { name: 'news', selector: '#news' },
   { name: 'footer', selector: 'footer.sf' },
 ];
 
@@ -25,8 +26,8 @@ export const SECTIONS = [
 // own list so it stays obvious that they went missing once.
 export const RESTORED_SECTIONS = [
   { name: 'syndicates', selector: '#syndicates' },
-  { name: 'track-record', selector: '.results-section' },
-  { name: 'final-cta', selector: '.final-cta-section' },
+  { name: 'track-record', selector: '#track-record' },
+  { name: 'final-cta', selector: '.lw-final' },
 ];
 
 // Chrome that is position:fixed. Hidden while screenshotting a section so

@@ -1,93 +1,103 @@
 # Integration map
 
-How to get this redesign into the Django site. Written for whoever does the
-port, which is a template job: the CSS, JS and images move across as files,
-and the HTML has to be rebuilt as templates against real context.
+Where each part of this snapshot lives in the Django site, and how a change
+made here gets there. The redesign has been ported: since 2026-09-18 it is
+the live home page. So this repo is now the design workspace for that page,
+and a change made here is ported into the matching template by hand.
 
 Repositories:
 
 - **Here:** `saturday_landing` — the static snapshot.
-- **There:** the Saturday Racing app. The landing page is
-  `public/templates/public/landing.html` plus the partials it includes, and
-  its context comes from `public/views/landing.py`.
+- **There:** the Saturday Racing app. The page is
+  `public/templates/public/landing_v2.html`, which includes one partial per
+  section from `public/templates/public/components/v2/`. Its context comes
+  from `public/views/landing.py`, and its CSS, JS and images live under
+  `public/static/public/v2/`.
 
 ## In sync with production as of
 
-The nav, `chrome.css`, `base.css` and the page head match production at
-**`6140974c` (2026-09-17)**. The snapshot was taken on 2026-08-27; these
-production changes were brought across since:
+Production **`8abdc1e6` (2026-09-18)**, the switch-over. Everything below
+was brought back into this snapshot from production in one sync, so the
+two now match section for section:
 
-| Commit | Change |
+| Area | What production had that this snapshot didn't |
 | --- | --- |
-| `a965c5f8` | Fox Trail in News, under new "Today's Edge" and "Read" section headers |
-| `0d5fe25a` | Accumulators under a "Learn" subhead in The Honest Record |
-| `b7b100c2` | Dream Ticket in News |
-| `288460ca` | Results in Races |
-| `6b1f4547` | The demo banner's height published as `--banner-h` |
-| `a8f3728d` | `paper.css` linked between `base.css` and `chrome.css` |
-| `290bac43` | `og:image` default removed — `og-image.png` never existed, and the manifest backend 500s on it |
+| Nav | The fit rules: the hamburger below 1280px, and `site.js` switching to it whenever the link row doesn't fit. A 220px budget for the race badge, now carrying the featured race's name. 8px link padding. The back link hidden on desktop. The date actually hiding at 1280px and wider |
+| Signed in | Production's nav actions (picks pill, name chip capped at 150px, Sign out hidden at 1280px and wider) and footer links, plus the "Welcome back" strip, all on `states.html` |
+| Editorial shelf | Four cards, as the service builds. The Bet of the Day line is the card's fixed tagline |
+| Day hub | Filtered tiles really hide. "FOX →" only on races the Fox picked (every tile is now flagged `fox`, as "Fox has picked 26" says). Course buttons show race counts, not GB/IRE. The Class fact is a number. The Fox's tip shows odds, not a note. LIVE is solid red |
+| Market intelligence | The narrative line, "Updated · steamers · drifters", the Steamers Board link, underdog watch, and empty lists that say so. With no moves at all the section is hidden |
+| DEN | "Better bets", capitalised |
+| AI Chamber | No confidence scores: there is no field behind them |
+| AI Lab | Launch goes to the simulation; the terminal names the race in full |
+| How it works | Tier 2 says "multiplied by 2", as the setting drives it. The tier cadence line keeps its own dark ink on phones |
+| Saturday Draw | The two "tabs" are labels, not buttons. With no field loaded the button is disabled |
+| Syndicates, News, Track record, final CTA | Rebuilt in the redesign's language (`lower.css`); News is new |
 
-**Before porting, check for newer ones:**
+**Before designing, check for newer production changes:**
 
 ```bash
-git log 6140974c..main --oneline -- templates/base/base.html static/css/chrome.css static/css/base.css
+git log 8abdc1e6..main --oneline -- public/templates/public/landing_v2.html public/templates/public/components/v2 public/static/public/v2 templates/base/base.html templates/partials/footer.html static/css/chrome.css static/css/base.css static/js/site.js
 ```
 
-Anything that lists has to be merged into this version of `chrome.css`,
-not overwritten by it.
-
-## Order of work
-
-1. **Files first** (no template work): `static/public/css/*`,
-   `static/public/js/*`, `static/public/img/*` and `static/js/site.js`.
-   Copy, then `collectstatic`. `tools/check.mjs` already guarantees every
-   `url()` resolves, which is what used to break that step.
-2. **Site chrome** (`static/css/chrome.css`, `base.css`): these style every
-   page, not just the landing page. Read `docs/chrome-css-changes.md` — it
-   lists the 50 rules added, 36 changed and 1 removed, ignoring the
-   reformatting, so the nav and footer changes can be reviewed on their own.
-3. **Section by section**, in the order below. Each one is: rebuild the
-   markup in its partial, keep every `{% if %}` branch the partial already
-   has, and check it against `states.html` as well as the page.
-4. **Check every branch.** `states.html` renders all eleven states the
-   template can take, so each one can be compared rather than imagined.
+Anything that lists has to come back here first, or a change made here
+will be ported on top of an old version of the section.
 
 ## Section by section
 
-| Section here | Template there | Context | Notes |
-| --- | --- | --- | --- |
-| Today strip | `components/_today_strip.html` | `today_summary`, `daily_featured` | 9 branches. The hero tab toggle (`_hero_tabs.html`) was dropped by the redesign — decide before porting |
-| Hero | `components/hero_fold.html` | `hero_day`, `hero_week`, `hero_source` | 44 branches, the most in the page. The resulted state is now designed (`partials/hero-resulted.html`); the race strip is still missing |
-| Editorial shelf | `components/_editorial_shelf.html` | `editorial_shelf` (`news/services/editorial_shelf.py`) | The service builds 4 cards; the design shows 6 |
-| Day hub | `components/_day_hub.html` | `day_hub` (`landing.py`) | 33 branches. Keep `.is-finished`, and `data-flags` on each race tile — the filters read them. GB/IRE labels have no field |
-| Market intelligence | `components/_money_moves.html` | `money_moves` | 16 branches. Drifters now needs its own list, not the steamers recoloured. When `has_data` is false, either keep hiding the section as production does or use `partials/market-empty.html` |
-| Battle | `landing.html` (inline, ~100 lines) | `big_race`, `fox_wins`, `cub_wins`, `cub_tip`, `rivalry_caption` | Keep `data-count-up` on the win counts and the `Pick pending` branch |
-| DEN | `components/_landing_den_section.html` | fixed demo content | Closest to unchanged |
-| AI Chamber | `landing.html` (inline) | `ai_consensus`, `ai_analysis` | One panel per model, `role="tabpanel"`, one visible. All five `ai_consensus.pattern` branches now have markup in `partials/ai-consensus-*.html`. Per-model confidence scores still have no field |
-| AI Lab | `landing.html` (inline) | `big_race`, `ai_analysis` | The terminal was dropped; its data (race name, runner count, top signal) is shown nowhere else |
-| How it works | `landing.html` (inline) | `daily_pick_limit` | The copy now says six picks a day; keep it tied to the variable |
-| Challenges | `components/challenges_section.html` | `top_challengers`, `big_race` | 7 branches. The filled state is now designed (`partials/challenges-filled.html`), standings rows included |
-| Syndicates, Track record, final CTA | `landing.html` (inline) | `top_syndicates_landing`, results context | Restored in PR 7, still in the pre-redesign look |
-| Footer | `templates/partials/footer.html` | `site_contact`, `user.is_authenticated` | Signed-in nav and footer are in `partials/signed-in-chrome.html`. Use `{% url %}`, not the absolute URLs used here |
+| Section here | Template there | Context |
+| --- | --- | --- |
+| Welcome back (signed in; `states.html`) | `components/v2/_cub_hello.html` | `cub_dashboard`, `picks_summary` |
+| Today strip | `components/v2/_today_strip.html` | `today_summary`, `daily_featured` |
+| Hero | `components/v2/hero_fold.html`, `_hero_switch.html` | `hero_day` or `hero_week`, by `hero_source` |
+| Editorial shelf | `components/v2/_editorial_shelf.html` | `editorial_shelf` (`news/services/editorial_shelf.py`) |
+| Day hub | `components/v2/_day_hub.html`, `_day_card_feature.html` | `day_hub` |
+| Market intelligence | `components/v2/_money_moves.html` | `money_moves` |
+| Battle | `components/v2/_battle.html` | `big_race`, `cub_tip`, the season wins |
+| DEN | `components/v2/_den.html` | fixed content |
+| AI Chamber | `components/v2/_ai_chamber.html`, `_ai_tab.html`, `_ai_panel.html`, `_ai_consensus.html` | `ai_analysis`, `ai_consensus` |
+| AI Lab | `components/v2/_ai_lab.html` | `big_race`, `ai_analysis` |
+| How it works | `components/v2/_how_it_works.html` | `scoring`, `SCORING_MATRIX` |
+| Challenges | `components/v2/_challenges.html` | `top_challengers`, `big_race` |
+| Saturday Draw | `components/v2/_draw.html` | `draw_runners`, `big_race` |
+| Syndicates | `components/v2/_syndicates.html` | `top_syndicates_landing` |
+| Build-up News | `components/v2/_news.html` | `breaking_news` |
+| Track record | `components/v2/_track_record.html` | `previous_results` |
+| Final call to action | `components/v2/_final_cta.html` | `big_race`, `days_to_go`, the runner count |
+| Nav and footer | `templates/base/base.html`, `templates/partials/footer.html` | `user`, `featured`, `site_contact` |
+
+The day hub's icons are shared includes in `components/v2/icons/`.
+
+## Porting a change
+
+1. **Files:** a changed stylesheet, script or image goes to the same name
+   under `public/static/public/v2/`, apart from `chrome.css`, `base.css`
+   and `site.js`, which are site-wide and live in `static/`. `npm run check`
+   already guarantees every `url()` resolves, which is what breaks the
+   deploy if it doesn't.
+2. **Markup:** rebuild the change in the section's partial, keeping every
+   `{% if %}` branch it already has. `states.html` shows those branches
+   (fourteen states), so check the change against each one, not just the
+   page.
+3. **Sample data here, real data there.** Anything this snapshot shows that
+   has no field in the view's context is a decision, not a port. List it
+   in `docs/content-notes.md` rather than inventing the field.
 
 ## Things that will bite
 
 - **Absolute URLs.** Every link here points at `https://www.saturday-racing.com/...`
   because the sandbox has no URL resolver. In Django they are `{% url %}`
-  tags. `docs/content-notes.md` lists the ones that were wrong.
-- **`chrome.css` is site-wide.** The nav and footer restyle lands on all
-  141 templates that extend the base, not just this page. See "Checked on
-  other page types" below for what that does to them.
-- **The nav gap fix belongs on production regardless** of this port: between
-  901px and 1024px the live site currently shows no navigation at all
-  (PR 4).
+  tags.
+- **`chrome.css`, `base.css` and `site.js` are site-wide.** A nav or footer
+  change lands on all 141 templates that extend the base, not just this
+  page. See "Checked on other page types" below.
 - **`collectstatic` reads `url()` inside comments.** That is what broke the
-  deploy before (PR 1); `npm run check` now catches it.
+  deploy before; `npm run check` now catches it.
 - **Sample data is sample data.** Every horse, price and count here is
-  invented. `docs/content-notes.md` says which numbers have no field behind
-  them at all.
-- **Images were resized to twice their painted size** (PR 2). If a section
-  is used bigger anywhere else, re-export rather than upscale.
+  invented. `docs/content-notes.md` says which numbers have no field
+  behind them.
+- **Images were resized to twice their painted size.** If a section is used
+  bigger anywhere else, re-export rather than upscale.
 
 ## Checked on other page types
 
@@ -99,8 +109,8 @@ index, an article, Fox Trail, Learn (Accumulators), Bet of the Day, The
 Honest Record, sign-in and the LLaMa Letters.
 
 - **Nav: safe everywhere.** Same 60px height on every page, no horizontal
-  scroll, and the 901–1024px gap is fixed on every page type, not just this
-  one: production shows no nav there at all.
+  scroll. The nav fit rules that came back in this sync were built against
+  those pages, signed in and out.
 - **Footer: fixed here, would have broken three pages.** The new footer set
   no font, line height or colour of its own, so it inherited each page's:
   serif on Bet of the Day and Learn, tighter spacing on the racecards.
@@ -108,18 +118,12 @@ Honest Record, sign-in and the LLaMa Letters.
   eleven pages compute identical footer styles.
 - **768px only: the page gutter changes.** `.container` padding at exactly
   768px (iPad portrait) goes from 24px to 48px, the same as every wider
-  screen already had. Of the pages checked, only the racecard list uses
-  `.container`; its column gets 48px narrower and nothing breaks.
-- **Pre-existing, not from this redesign:** at 768px the single racecard's
-  headline and "Today" label sit flush against the left edge of the screen.
+  screen already had.
 
-The check ran from a scratch script against the live site; re-run it
-against the Django port's staging pages before release.
+## What to check when a change is ported
 
-## What to check when a section is ported
-
-Run the same checks against the Django page that this repo runs against the
-snapshot:
+Run the same checks against the Django page that this repo runs against
+the snapshot:
 
 - Every feature at 375, 768, 1024 and 1440px (`tests/features.spec.js` is
   the list).
