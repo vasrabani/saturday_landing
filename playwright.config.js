@@ -58,7 +58,7 @@ export default defineConfig({
   projects: [
     ...VIEWPORTS.map((viewport) => ({
       name: `features-${viewport.name}`,
-      testMatch: /(features|a11y)\.spec\.js/,
+      testMatch: /(features|a11y|trail)\.spec\.js/,
       use: chromeAt(viewport),
     })),
     ...VIEWPORTS.map((viewport) => ({

@@ -1,0 +1,3330 @@
+/* ═══════════════════════════════════════════════════════════════
+   The Fox Trail — GRID-1
+   ---------------------------------------------------------------
+   One cell per race. Confidence tier (1-4) = how many sources back
+   the pick. Fixed left-to-right chip order teaches the reader the
+   grammar. Mobile-first (2-col at 380px) → desktop (6-col at 1080+).
+   ═══════════════════════════════════════════════════════════════ */
+
+.page-trail {
+  --trail-ground:        #F4EFE4;
+  --trail-cell:          #FBF7ED;
+  --trail-cell-warm:     #F7EDD9;
+  --trail-cell-hot:      #F3E4BE;
+  --trail-ink:           #1A1712;
+  --trail-ink-2:         #4B443A;
+  --trail-ink-3:         #7A7060;
+  --trail-hair:          rgba(26,23,18,0.10);
+  --trail-hair-strong:   rgba(26,23,18,0.22);
+
+  --trail-gold:          #C39A26;
+  --trail-gold-bright:   #E9C447;
+  --trail-gold-glow:     rgba(212,175,55,0.42);
+  --trail-crown:         #7A5A0F;
+  --trail-lost:          #8A8478;
+  --trail-live:          #C24A2C;
+
+  --src-bod:             #C39A26;   /* Sly Man gold */
+  --src-top-rated:       #6B4CBA;   /* system violet */
+  --src-htw:             #0D8577;   /* editorial teal */
+  --src-steamer:         #C55A17;   /* market orange */
+  --src-letters:         #6B7A3B;   /* LLaMa Letters sage */
+  --src-featured:        #B03A2E;   /* Featured Tip crimson */
+  --src-pick-winner:     #4A5A6B;   /* Pick Winner slate — deliberately quieter than the editorial six, signals "fallback" */
+  --featured-ring:       #C39A26;   /* gold ring around the featured cell */
+  --featured-glow:       rgba(195, 154, 38, 0.32);
+
+  /* GRID-3d: badge + tier label + Smoker green */
+  --badge-bg:            #E8823A;   /* orange stamp */
+  --badge-ink:           #FFF9EE;
+  --smoker-green:        #1E7E4B;
+  --smoker-green-bright: #37B26D;
+  --smoker-glow:         rgba(55, 178, 109, 0.35);
+  --chorus-red:          #C24A2C;
+  --nod-warm:            #C39A26;
+  --arrow:               rgba(179, 130, 22, 0.95);
+
+  background: var(--trail-ground);
+  color: var(--trail-ink);
+}
+
+/* ── Layout ────────────────────────────────────────────────── */
+
+.trail {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 12px 60px;
+}
+
+.trail__frame {
+  /* Legend moved to .trail__nav shell column; this wrapper is now
+     just the grid's container. Kept for template-level ownership
+     of the empty-state fallback. */
+}
+
+@media (min-width: 1080px) {
+  .trail:has(.trail__nav) {
+    /* Nav rail rides left of the board on desktop. Breaks out of the
+       old 1240 cap so the extra column doesn't come out of the grid.
+       Empty/premature days render no .trail__nav — :has() falls
+       through and the block-flow layout above still applies. */
+    max-width: 1500px;
+    padding: 0 24px 60px;
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    column-gap: 32px;
+    align-items: start;
+  }
+}
+
+@media (min-width: 1600px) {
+  .trail:has(.trail__nav) { max-width: 1720px; }
+}
+
+/* ── Masthead + counter (sticky on mobile) ─────────────────── */
+
+.trail__masthead {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: linear-gradient(180deg, var(--trail-ground) 0%, var(--trail-ground) 80%, rgba(244,239,228,0.85) 100%);
+  padding: 14px 4px 12px;
+  backdrop-filter: saturate(1.05) blur(2px);
+  border-bottom: 1px solid var(--trail-hair);
+  margin-bottom: 16px;
+}
+
+.trail__masthead-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (min-width: 720px) {
+  .trail__masthead-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+}
+
+.trail__masthead-lockup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.trail__mark {
+  color: var(--trail-ink);
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+}
+
+.trail__mark svg { width: 100%; height: 100%; }
+
+.trail__masthead-title { display: flex; flex-direction: column; gap: 2px; }
+
+.trail__eyebrow {
+  font: 500 10.5px/1 "DM Sans", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--trail-ink-3);
+}
+
+.trail__date {
+  font: 700 20px/1.15 "Playfair Display", Georgia, serif;
+  margin: 0;
+  color: var(--trail-ink);
+  text-wrap: balance;
+}
+
+@media (min-width: 720px) {
+  .trail__date { font-size: 22px; }
+}
+
+/* ── Counter row (live tally) ──────────────────────────────── */
+
+.trail__counter {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--trail-cell);
+  border: 1px solid var(--trail-hair);
+  border-radius: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 720px) {
+  .trail__counter {
+    padding: 10px 16px;
+    gap: 22px;
+    background: transparent;
+    border: 0;
+  }
+}
+
+.trail__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  min-width: 0;
+}
+
+@media (min-width: 720px) {
+  .trail__stat { align-items: flex-start; }
+}
+
+.trail__stat-num {
+  font: 700 20px/1 "Playfair Display", Georgia, serif;
+  color: var(--trail-ink);
+  white-space: nowrap;
+}
+
+.trail__stat-unit {
+  font-size: 12px;
+  color: var(--trail-ink-3);
+  font-weight: 500;
+  margin-left: 1px;
+}
+
+.trail__stat-num--neg { color: var(--trail-lost); }
+
+.trail__stat--gold .trail__stat-num { color: var(--trail-crown); }
+.trail__stat--live .trail__stat-num { color: var(--trail-live); }
+
+.trail__stat-label {
+  font: 500 9.5px/1.1 "DM Sans", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--trail-ink-3);
+  text-align: center;
+}
+
+@media (min-width: 720px) {
+  .trail__stat-label { text-align: left; font-size: 10.5px; }
+  .trail__stat-num   { font-size: 26px; }
+}
+
+/* ── Proposition — one-line pitch above the board (GRID-3a) ─ */
+
+.trail__proposition {
+  max-width: 780px;
+  margin: 18px auto 22px;
+  padding: 0 6px;
+  text-align: center;
+  color: var(--trail-ink-2);
+}
+
+.trail__proposition-line {
+  font: 400 17px/1.4 "Playfair Display", Georgia, serif;
+  color: var(--trail-ink);
+  margin: 0 0 6px;
+  text-wrap: balance;
+}
+
+.trail__proposition-line strong {
+  font-weight: 700;
+  color: var(--trail-crown);
+}
+
+@media (min-width: 720px) {
+  .trail__proposition-line { font-size: 20px; }
+}
+
+.trail__proposition-body {
+  font: 400 13px/1.55 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+  margin: 0 auto 10px;
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+
+.trail__proposition-key {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px 18px;
+  font: 500 12px/1 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+}
+
+.trail__proposition-key li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* GRID-9.2 A: the "Four signals + Two overlays" model line. Chips
+   render inline; the two <strong>s carry the categorical weight. */
+.trail__proposition-model {
+  font: 400 12.5px/1.7 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+  margin: 6px auto 0;
+  max-width: 68ch;
+  text-wrap: pretty;
+}
+.trail__proposition-model strong {
+  color: var(--trail-crown);
+  font-weight: 700;
+}
+.trail__proposition-model .cell__chip {
+  vertical-align: -3px;
+  margin: 0 2px 0 4px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Track record strip (GRID-4)
+   Turns the confidence tiers from a claim into a receipt. Sits
+   between the proposition and the grid — after "why this exists"
+   and before "here's today", so a first-time visitor's next
+   question ("does it work?") is answered before they scroll.
+   ═══════════════════════════════════════════════════════════════ */
+
+.trail__record {
+  max-width: 780px;
+  margin: 6px auto 22px;
+  padding: 12px 14px;
+  background: rgba(122, 90, 15, 0.05);
+  border: 1px solid var(--trail-hair);
+  border-radius: 10px;
+}
+
+/* Today strip sits above the 30-day baseline — subtly warmer
+   background + a gold left-rail so the reader parses it as the
+   live view without needing separate typography. */
+.trail__record--today {
+  margin-bottom: 10px;
+  background: rgba(195, 154, 38, 0.08);
+  border-left: 3px solid var(--src-bod);
+}
+.trail__record--today .record__window { color: var(--trail-crown); font-weight: 700; }
+
+.record__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  font: 500 11px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--trail-ink-3);
+}
+
+.record__eyebrow { font-weight: 700; color: var(--trail-crown); }
+
+.record__tiers {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.record__tier {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--trail-cell);
+  border: 1px solid var(--trail-hair);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.record__tier--nod    { border-top: 3px solid var(--nod-warm); }
+.record__tier--chorus { border-top: 3px solid var(--chorus-red); }
+.record__tier--smoker { border-top: 3px solid var(--smoker-green-bright); }
+
+.record__tier.is-thin { opacity: 0.65; }
+
+.record__tier-name {
+  font: 700 10.5px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--trail-ink-2);
+}
+
+.record__tier-rate {
+  font: 700 26px/1 "Playfair Display", Georgia, serif;
+  color: var(--trail-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.record__tier-rate--thin {
+  color: var(--trail-ink-3);
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.record__tier-unit {
+  font-size: 15px;
+  color: var(--trail-ink-2);
+  margin-left: 1px;
+  font-weight: 500;
+}
+
+.record__tier-detail {
+  font: 500 12px/1.35 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.record__tier-pl {
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(122, 90, 15, 0.08);
+}
+.record__tier-pl.is-up   { color: #1E7E4B; background: rgba(30, 126, 75, 0.10); }
+.record__tier-pl.is-down { color: #A5382B; background: rgba(165, 56, 43, 0.09); }
+
+.record__caveat {
+  margin: 10px 0 0;
+  font: 400 11px/1.4 "DM Sans", sans-serif;
+  color: var(--trail-ink-3);
+  text-align: center;
+}
+
+/* Mobile: 3-across is fine down to ~360px, but shrink internal type. */
+@media (max-width: 520px) {
+  .record__tier          { padding: 8px 8px; gap: 3px; }
+  .record__tier-rate     { font-size: 22px; }
+  .record__tier-name     { font-size: 9.5px; }
+  .record__tier-detail   { font-size: 11px; gap: 5px; }
+  .record__head          { flex-direction: column; align-items: flex-start; gap: 2px; }
+}
+
+
+/* ── Spotlight — Smoker banner + Chorus/Nods strip (GRID-3a) ─
+   Answers "what should I actually look at?" before the full grid. */
+
+.trail__spotlight {
+  max-width: 1240px;
+  margin: 28px auto 0;   /* was 0 auto 28px — now sits BELOW the grid */
+  padding: 0 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* The Smoker banner — a Saturday Racing event */
+.smoker {
+  position: relative;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(233, 196, 71, 0.20), transparent 60%),
+    linear-gradient(140deg, #1D1710 0%, #2C1F13 50%, #1F1810 100%);
+  color: #F5E9C6;
+  border: 2px solid var(--trail-gold-bright);
+  border-radius: 14px;
+  padding: 18px 20px 20px;
+  box-shadow:
+    inset 0 0 0 1px rgba(233, 196, 71, 0.25),
+    0 4px 22px rgba(212, 175, 55, 0.28);
+  overflow: hidden;
+  animation: smokerBanner 5.4s ease-in-out infinite;
+}
+
+@media (min-width: 720px) { .smoker { padding: 26px 32px 28px; } }
+
+.smoker::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 82% 18%, rgba(233, 196, 71, 0.10), transparent 55%);
+  pointer-events: none;
+}
+
+@keyframes smokerBanner {
+  0%, 100% { box-shadow: inset 0 0 0 1px rgba(233,196,71,0.25), 0 4px 22px rgba(212,175,55,0.28); }
+  50%      { box-shadow: inset 0 0 0 1px rgba(233,196,71,0.40), 0 5px 32px rgba(212,175,55,0.42); }
+}
+
+.smoker__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font: 700 11px/1 "DM Sans", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--trail-gold-bright);
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.smoker__flame { font-size: 18px; filter: drop-shadow(0 0 6px rgba(233,196,71,0.5)); }
+.smoker__tag   { color: var(--trail-gold-bright); }
+.smoker__meta  { color: rgba(245,233,198,0.60); font-weight: 500; letter-spacing: 0.10em; }
+
+.smoker__body {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr;
+  align-items: baseline;
+}
+
+@media (min-width: 720px) {
+  .smoker__body { grid-template-columns: 1fr auto auto; gap: 24px; }
+}
+
+.smoker__horse {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.smoker__horse-name {
+  font: 700 26px/1.1 "Playfair Display", Georgia, serif;
+  color: #F5E9C6;
+  text-wrap: balance;
+}
+
+@media (min-width: 720px) { .smoker__horse-name { font-size: 32px; } }
+
+.smoker__odds {
+  font: 700 18px/1 "DM Sans", sans-serif;
+  color: var(--trail-gold-bright);
+  padding: 4px 10px;
+  background: rgba(233,196,71,0.18);
+  border-radius: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.smoker__race {
+  font: 500 13px/1 "DM Sans", sans-serif;
+  color: rgba(245,233,198,0.72);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.smoker__chips { display: inline-flex; gap: 4px; }
+
+.smoker__chips .cell__chip {
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+  border: 1px solid rgba(255,255,255,0.20);
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.35);
+}
+
+/* Chorus / Nods strip */
+
+.spotlight__strip {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 720px) {
+  .spotlight__strip { grid-template-columns: 1fr 1fr; gap: 14px; }
+}
+
+.spotlight__group {
+  background: var(--trail-cell);
+  border: 1px solid var(--trail-hair);
+  border-radius: 10px;
+  padding: 14px 16px 12px;
+}
+
+.spotlight__group--chorus { border-color: rgba(195,154,38,0.32); background: var(--trail-cell-hot); }
+.spotlight__group--nods   { border-color: rgba(195,154,38,0.18); background: var(--trail-cell-warm); }
+
+.spotlight__title {
+  margin: 0 0 10px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  border-bottom: 1px solid var(--trail-hair);
+  padding-bottom: 8px;
+}
+
+.spotlight__title-num {
+  font: 700 22px/1 "Playfair Display", Georgia, serif;
+  color: var(--trail-crown);
+  font-variant-numeric: tabular-nums;
+}
+
+.spotlight__title-name {
+  font: 700 13px/1 "DM Sans", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: var(--trail-ink);
+}
+
+.spotlight__title-sub {
+  font: 500 10.5px/1 "DM Sans", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: var(--trail-ink-3);
+  margin-left: auto;
+}
+
+.spotlight__picks {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.spotlight__pick {
+  display: grid;
+  grid-template-columns: 46px 1fr auto;
+  gap: 8px;
+  align-items: baseline;
+  padding: 5px 0;
+  font: 500 13px/1.3 "DM Sans", sans-serif;
+  color: var(--trail-ink);
+  font-variant-numeric: tabular-nums;
+  border-bottom: 1px dotted var(--trail-hair);
+}
+
+.spotlight__pick:last-child { border-bottom: 0; }
+
+.spotlight__pick-time { font-weight: 700; color: var(--trail-ink); }
+
+.spotlight__pick-course {
+  color: var(--trail-ink-3);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  align-self: center;
+  grid-column: 1;
+  grid-row: 2;
+  margin-top: -4px;
+}
+
+.spotlight__pick-horse {
+  font-weight: 500;
+  color: var(--trail-ink);
+  grid-column: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spotlight__pick-odds {
+  font-weight: 700;
+  color: var(--trail-crown);
+  padding: 2px 6px;
+  background: rgba(122,90,15,0.08);
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.spotlight__picks--compact .spotlight__pick { padding: 3px 0; }
+
+
+/* ── The grid itself ───────────────────────────────────────── */
+
+.trail__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));   /* mobile default */
+  gap: 22px 8px;   /* row-gap slightly bigger to give arrows breathing room */
+}
+
+@media (min-width: 520px) { .trail__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 720px) { .trail__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 26px 10px; } }
+@media (min-width: 960px) { .trail__grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+@media (min-width: 1080px){
+  .trail__grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 30px 14px;
+    /* GRID-5F fix: the serpentine below uses :nth-child(12n+7..12) to
+       reverse row 2 via explicit `grid-column: 6..1`. Without dense
+       auto-flow the grid cursor never backtracks — cell 7 lands at
+       row 2 col 6 but cells 8-12 cascade one-per-row instead of
+       filling row 2 columns 5..1. Dense lets grid backfill. */
+    grid-auto-flow: dense;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Serpentine layout (GRID-3d) — 6-col boardgame snake
+   Odd rows run left → right (default DOM order); even rows are
+   reversed so the trail flows "down and back" like Snakes & Ladders.
+   Only kicks in at the 6-col breakpoint; smaller layouts stay
+   straightforward left-to-right (the numbering still tells the flow).
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 1080px) {
+  /* Every 12n+K for K=7..12 hits cells in even rows across
+     the whole board (row 2 = 7-12, row 4 = 19-24, row 6 = 31-36...). */
+  .trail__grid .cell:nth-child(12n+7)  { grid-column: 6; }
+  .trail__grid .cell:nth-child(12n+8)  { grid-column: 5; }
+  .trail__grid .cell:nth-child(12n+9)  { grid-column: 4; }
+  .trail__grid .cell:nth-child(12n+10) { grid-column: 3; }
+  .trail__grid .cell:nth-child(12n+11) { grid-column: 2; }
+  .trail__grid .cell:nth-child(12n+12) { grid-column: 1; }
+}
+
+/* ── Trail arrows between cells (decorative) ─────────────── */
+/* Horizontal chevrons in the gutter between adjacent cells;
+   direction flips per row so odd rows point → and even rows point ←.
+   End-of-row cells get a down-and-return chevron via a second
+   pseudo-element that hints at the row wrap. */
+
+@media (min-width: 1080px) {
+  .trail__grid .cell::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -16px;                     /* into the column gutter */
+    width: 14px;
+    height: 14px;
+    border: solid var(--arrow);
+    border-width: 0 3px 3px 0;
+    transform: translateY(-50%) rotate(-45deg);   /* points right */
+    filter: drop-shadow(0 1px 1px rgba(120, 84, 12, 0.35));
+    z-index: 2;
+  }
+
+  /* Reverse arrow direction on even-row cells (K=7..12, plus 12n) */
+  .trail__grid .cell:nth-child(12n+7)::after,
+  .trail__grid .cell:nth-child(12n+8)::after,
+  .trail__grid .cell:nth-child(12n+9)::after,
+  .trail__grid .cell:nth-child(12n+10)::after,
+  .trail__grid .cell:nth-child(12n+11)::after,
+  .trail__grid .cell:nth-child(12n+12)::after {
+    right: auto;
+    left: -16px;
+    transform: translateY(-50%) rotate(135deg);   /* points left */
+  }
+
+  /* Suppress the horizontal chevron on every row-end cell — it
+     would otherwise point into an empty outer gutter. */
+  .trail__grid .cell:nth-child(6n)::after { content: none; }
+
+  /* Row-wrap down-arrows.
+     Odd-row end (cells 6, 18, 30 — the 12n+6 family) is on the RIGHT;
+     the next cell begins directly below it at column 6, so the arrow
+     sits at bottom-right and points down. Bumped ~22% vs horizontal
+     chevrons — end-of-row is the critical navigational moment where
+     the reader's eye needs to be pulled downward and back. */
+  .trail__grid .cell:nth-child(12n+6)::before {
+    content: '';
+    position: absolute;
+    bottom: -22px;
+    right: 4px;
+    width: 18px;
+    height: 18px;
+    border: solid var(--arrow);
+    border-width: 0 4px 4px 0;
+    transform: rotate(45deg);
+    filter: drop-shadow(0 2px 2px rgba(120, 84, 12, 0.42));
+    z-index: 2;
+  }
+
+  /* Even-row end (cells 12, 24, 36 — multiples of 12) is on the LEFT;
+     the next cell begins directly below it at column 1, so the arrow
+     sits at bottom-left. */
+  .trail__grid .cell:nth-child(12n+12)::before {
+    content: '';
+    position: absolute;
+    bottom: -22px;
+    left: 4px;
+    width: 18px;
+    height: 18px;
+    border: solid var(--arrow);
+    border-width: 0 4px 4px 0;
+    transform: rotate(45deg);
+    filter: drop-shadow(0 2px 2px rgba(120, 84, 12, 0.42));
+    z-index: 2;
+  }
+}
+
+/* ── Cell foundation ───────────────────────────────────────── */
+
+.cell {
+  position: relative;
+  background: var(--trail-cell);
+  border: 1px solid var(--trail-hair);
+  border-radius: 8px;
+  padding: 14px 10px 8px;   /* extra top-padding — badge sits at top-left */
+  min-height: 148px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 140ms ease, box-shadow 140ms ease;
+  cursor: pointer;   /* GRID-3b: cell opens a drawer with per-source detail */
+}
+
+.cell:focus-visible {
+  outline: 2px solid var(--trail-crown);
+  outline-offset: 2px;
+}
+
+.cell:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(26, 23, 18, 0.08);
+}
+
+@media (min-width: 720px) {
+  .cell { min-height: 164px; padding: 16px 12px 10px; }
+}
+
+/* ── Numbered spot badge (GRID-3d) ───────────────────────── */
+/* Fixed orange stamp at top-left, sits INSIDE the cell chrome so
+   the layout doesn't shift when arrows appear. Reads as a game
+   board spot number rather than an editorial highlight. */
+
+.cell__badge {
+  position: absolute;
+  top: -8px;
+  left: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--badge-bg);
+  color: var(--badge-ink);
+  font: 700 11px/22px "DM Sans", sans-serif;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 1px 4px rgba(26,23,18,0.20);
+  z-index: 2;
+}
+
+@media (min-width: 720px) {
+  .cell__badge { width: 26px; height: 26px; font-size: 12px; line-height: 26px; }
+}
+
+/* ── Tier + crown/star marks ─────────────────────────────── */
+
+.cell__mark {
+  display: inline-flex;
+  margin-left: auto;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.cell__mark--crown  { color: var(--trail-crown); }
+.cell__mark--star   { color: var(--smoker-green-bright); filter: drop-shadow(0 0 4px var(--smoker-glow)); }
+
+/* ── Tier label strip inside the cell (Nod/Chorus/Smoker) ─ */
+
+.cell__tier-label {
+  margin: 8px -10px -8px;   /* bleed to cell edges */
+  padding: 6px 10px;
+  font: 800 12px/1 "DM Sans", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  color: #FBF7ED;
+  border-radius: 0 0 8px 8px;
+}
+
+@media (min-width: 720px) {
+  .cell__tier-label { margin: 8px -12px -10px; padding: 7px 12px; font-size: 13px; }
+}
+
+.cell__tier-label--nod     { background: var(--nod-warm); }
+.cell__tier-label--chorus  { background: var(--chorus-red); }
+.cell__tier-label--smoker  { background: var(--smoker-green); letter-spacing: 0.16em; }
+
+/* Tier name is the proprietary Saturday language — give it the weight;
+   the 2/4 count sits alongside as small print. */
+.cell__tier-name  { font-weight: 800; font-size: 1.05em; }
+.cell__tier-count { opacity: 0.80; font-weight: 500; font-size: 0.78em; }
+
+/* Icon before the tier name (🦊 NOD, 🔥 SMOKER). Injected via ::before
+   so templates stay simple — no per-tier icon markup. */
+.cell__tier-label--nod    .cell__tier-name::before { content: "\1F98A  "; }   /* 🦊 */
+.cell__tier-label--chorus .cell__tier-name::before { content: "\1F3B6  "; }   /* 🎶 */
+.cell__tier-label--smoker .cell__tier-name::before { content: "\1F525  "; }   /* 🔥 */
+
+.cell:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(26,23,18,0.06);
+}
+
+/* ── Cell head (time + course + pips) ──────────────────────── */
+
+.cell__head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.cell__time {
+  font: 700 12.5px/1 "DM Sans", sans-serif;
+  color: var(--trail-ink);
+  letter-spacing: 0.02em;
+}
+
+.cell__course {
+  font: 500 11px/1 "DM Sans", sans-serif;
+  color: var(--trail-ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Confidence pips (1-4 dots top-right) */
+.cell__pips {
+  display: inline-flex;
+  gap: 3px;
+  padding-left: 4px;
+}
+
+.cell__pip {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--trail-hair-strong);
+  transition: background 200ms ease;
+}
+
+.cell__pip.is-lit { background: var(--trail-gold); }
+
+/* ── Cell body (the pick) ──────────────────────────────────── */
+
+.cell__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+}
+
+.cell__pick {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.cell__horse {
+  font: 500 15px/1.15 "DM Sans", sans-serif;
+  color: var(--trail-ink);
+  text-wrap: balance;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+@media (min-width: 720px) {
+  .cell__horse { font-size: 16px; }
+}
+
+.cell__odds {
+  /* Demoted vs pre-9.2 (was 700 11px, more chrome). Odds are commodity;
+   the Saturday-proprietary bit is the tier band below. */
+  font: 500 10px/1 "DM Sans", sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: var(--trail-ink-3);
+  align-self: flex-start;
+  padding: 1px 4px;
+  border-radius: 2px;
+  margin-top: 2px;
+  opacity: 0.85;
+}
+
+/* Split cell (2v2 disagreement) — top half vs bottom half */
+.cell__split-rule {
+  height: 1px;
+  background: var(--trail-hair);
+  margin: 2px 0;
+}
+
+.cell--split .cell__pick--alt .cell__horse { font-size: 13px; color: var(--trail-ink-2); }
+.cell--split .cell__pick--alt .cell__odds  { font-size: 10px; }
+
+/* No-fancy state */
+.cell__body--ghost {
+  align-items: center;
+  justify-content: center;
+}
+
+.cell__ghost-label {
+  font: 500 10.5px/1 "DM Sans", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--trail-ink-3);
+  opacity: 0.55;
+}
+
+/* ── Cell foot (chips + state glyph) ───────────────────────── */
+
+.cell__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.cell__chips {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.cell__chip {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: 700 9.5px/1 "DM Sans", sans-serif;
+  color: #FBF7ED;
+  letter-spacing: 0;
+}
+
+.cell__chip--bod       { background: var(--src-bod); }
+.cell__chip--top_rated { background: var(--src-top-rated); }
+.cell__chip--htw       { background: var(--src-htw); }
+.cell__chip--steamer   { background: var(--src-steamer); }
+.cell__chip--letters   { background: var(--src-letters); }
+.cell__chip--featured  { background: var(--src-featured); }
+.cell__chip--pick_winner {
+  /* PW-2: Pick Winner slate — quieter than the six editorial signals
+     to visually signal "fallback" without disappearing. Two-letter
+     label ("PW") needs slightly tighter tracking. */
+  background: var(--src-pick-winner);
+  letter-spacing: -0.03em;
+}
+
+/* ── Featured cell standout (GRID-F) ─────────────────────────
+   Sly Man's Featured Tip race sits above the grid visually — 3px
+   gold ring, warm drop-shadow, corner ★ FEATURED ribbon. The race
+   is featured whether or not Featured Tip agrees with the cell's
+   consensus horse; the F chip separately shows whether Featured
+   Tip is one of the backing sources. */
+.cell--featured {
+  box-shadow:
+    0 0 0 3px var(--featured-ring),
+    0 6px 18px var(--featured-glow);
+  z-index: 3;
+}
+
+/* ── "You are here" — Fox marker on the current race (GRID-D)
+   The race the reader is travelling toward: any LIVE race, else the
+   next unsettled cell. Server-computed each render; live poller
+   refreshes on every tick so the marker moves through the day.
+   Historic dates: no marker.
+
+   Design: warm russet glow — reads as movement, not alarm. Pill sits
+   at the top-left corner (opposite the ★ FEATURED ribbon) with a
+   fox glyph and short label. Gentle pulse so the eye finds it
+   without being nagged; disabled under prefers-reduced-motion. */
+.cell--now {
+  z-index: 4;   /* above featured, above serpentine arrows */
+  box-shadow:
+    0 0 0 2px var(--src-steamer, #C55A17),
+    0 6px 22px rgba(197, 90, 23, 0.28);
+  animation: cellNowPulse 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cell--now { animation: none; }
+}
+@keyframes cellNowPulse {
+  0%, 100% { box-shadow: 0 0 0 2px var(--src-steamer, #C55A17), 0 6px 22px rgba(197,90,23,0.22); }
+  50%      { box-shadow: 0 0 0 2px var(--src-steamer, #C55A17), 0 8px 28px rgba(197,90,23,0.42); }
+}
+
+.cell__now {
+  position: absolute;
+  top: -10px;
+  left: 26px;               /* clear the numbered spot badge */
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px 3px 6px;
+  background: var(--src-steamer, #C55A17);
+  color: #FBF7ED;
+  font: 700 9.5px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  box-shadow: 0 1px 2px rgba(120, 84, 12, 0.35);
+  z-index: 5;
+  white-space: nowrap;
+}
+.cell__now-glyph { font-size: 12px; line-height: 1; }
+@media (max-width: 720px) {
+  .cell__now-label { display: none; }        /* mobile: fox alone speaks */
+  .cell__now       { padding: 3px 6px; left: 22px; }
+}
+/* GRID-STAR: flagship pill + corner star.
+ * Pill borrows the .cell__now idiom (top edge, right side so it
+ * never collides with YOU ARE HERE on the left) — text label is
+ * the primary read; the corner star gives a redundant glanceable
+ * marker. BoD trumps Top Rated at the template layer. */
+.cell__flag {
+  position: absolute;
+  top: -10px;
+  right: 22px;                 /* clear the corner star */
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px 3px 6px;
+  color: #3A2A05;
+  font: 700 9.5px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  box-shadow: 0 1px 3px rgba(120, 84, 12, 0.35),
+              inset 0 0 0 1px rgba(58, 42, 5, 0.15);
+  z-index: 6;
+  white-space: nowrap;
+}
+.cell__flag--bod {
+  background: linear-gradient(180deg, #F0D68A 0%, #C69A2E 100%);
+}
+.cell__flag--lead {
+  background: linear-gradient(180deg, #F4E9BF 0%, #D4AF37 100%);
+}
+.cell__flag-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  color: #3A2A05;
+}
+.cell__flag-label { line-height: 1; }
+
+@media (max-width: 720px) {
+  /* On mobile the labelled pill is too wide for a small card. Fall
+   * back to the corner star only, and drop the pill. */
+  .cell__flag { display: none; }
+}
+
+.cell__star {
+  position: absolute;
+  top: -8px;
+  right: -6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #FBF7ED 0%, #F1E7C6 40%, #E9D68A 80%);
+  box-shadow: 0 2px 6px rgba(122, 90, 15, 0.35),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+  z-index: 6;
+  color: #C69A2E;
+  pointer-events: auto;
+  cursor: help;
+}
+.cell__star--bod   { color: #C69A2E; }
+.cell__star--lead  { color: #D4AF37; background: radial-gradient(circle at 30% 30%, #FBF7ED 0%, #F4E9BF 45%, #E1C97A 90%); }
+.cell__star svg    { display: block; }
+
+/* Gold halo behind the horse name on flagship cells — same idiom as
+ * Fox's Pick on the Pin. Subtle enough it never fights the tier
+ * label; loud enough that a scanner picks up "premium" without
+ * reading the star. */
+.cell--flagship .cell__pick--primary {
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.14) 0%, rgba(212, 175, 55, 0.04) 100%);
+  border-radius: 6px;
+  padding: 2px 6px;
+  margin: 0 -6px;
+}
+.cell--flagship-bod .cell__horse { color: #3A2A05; }
+
+/* Legend rows — reuse .trail__legend-row skeleton; the star tile
+ * mirrors the on-card badge so a reader learns the two glyphs. */
+.trail__legend-star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #FBF7ED 0%, #F1E7C6 40%, #E9D68A 80%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+  color: #C69A2E;
+  flex: 0 0 auto;
+}
+.trail__legend-star--lead { color: #D4AF37; }
+
+.cell__ribbon {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  background: var(--featured-ring);
+  color: #1F1608;
+  font-family: var(--font-condensed, 'Inter Tight', sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 3px 8px 3px 7px;
+  border-bottom-left-radius: 8px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  line-height: 1;
+  z-index: 4;
+  filter: drop-shadow(0 1px 1px rgba(120, 84, 12, 0.35));
+}
+
+.cell__chip.is-ghost {
+  background: transparent;
+  border: 1px dashed var(--trail-hair-strong);
+  color: transparent;
+}
+
+/* ── PW-4: 7-chip strip mobile compact reflow ────────────────
+   With Pick Winner added as the 7th signal the chip strip grew
+   from 111px (6 × 16 + 5 × 3) to 127px. On narrow phones that's
+   getting close to the cell's content budget, so shrink chips
+   and tighten the gap under 400px. Ratio stays the same so the
+   reader's chip-strip mental model (always 7 slots, canonical
+   order) doesn't shift on the small screen. Explicit
+   flex-wrap:nowrap on the container keeps the strip on one line
+   even if a future cell adds content next to it. */
+@media (max-width: 400px) {
+  .cell__chips {
+    gap: 2px;
+    flex-wrap: nowrap;
+  }
+  .cell__chip {
+    width: 14px;
+    height: 14px;
+    font-size: 8.5px;
+  }
+  /* PW chip carries two letters so shave a hair more when
+     the box shrinks — otherwise "PW" hugs the edges. */
+  .cell__chip--pick_winner {
+    font-size: 7.5px;
+    letter-spacing: -0.05em;
+  }
+}
+
+/* ── State glyphs ──────────────────────────────────────────── */
+
+.cell__state {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.cell__crown {
+  font-size: 16px;
+  color: var(--trail-crown);
+  line-height: 1;
+}
+
+.cell__finish {
+  font: 700 10px/1 "DM Sans", sans-serif;
+  color: var(--trail-crown);
+  padding: 2px 4px;
+  background: rgba(212,175,55,0.20);
+  border-radius: 3px;
+}
+
+.cell__glyph {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.cell__glyph--pending { background: var(--trail-hair-strong); }
+.cell__glyph--live    { background: var(--trail-live); animation: cellLivePulse 1.6s ease-in-out infinite; }
+.cell__glyph--void    { background: transparent; color: var(--trail-ink-3); font: 700 10px/1 "DM Sans", sans-serif; }
+.cell__glyph--lost    {
+  background: rgba(138, 132, 120, 0.14);
+  color: var(--trail-lost);
+  width: auto;
+  height: auto;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid rgba(138, 132, 120, 0.35);
+  font: 700 9px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@keyframes cellLivePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(194,74,44,0.55); }
+  50%      { box-shadow: 0 0 0 6px rgba(194,74,44,0); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Confidence tiers — visual grammar the reader learns without
+   being taught. Each tier lifts the cell surface, thickens the
+   border, and warms the tone. Templates apply .cell--tier-{1..4}.
+   ═══════════════════════════════════════════════════════════════ */
+
+.cell--tier-1 { /* Whisper — one source */
+  /* base look */
+}
+
+.cell--tier-2 { /* Nod — two agree */
+  background: var(--trail-cell-warm);
+  border-color: rgba(195,154,38,0.28);
+}
+
+.cell--tier-3 { /* Chorus — three-way */
+  background: var(--trail-cell-hot);
+  border: 1.5px solid rgba(195,154,38,0.55);
+  box-shadow: inset 0 0 0 1px rgba(195,154,38,0.15);
+}
+
+.cell--tier-3 .cell__horse { font-weight: 700; }
+
+.cell--tier-4 { /* Smoker — all four; GREEN treatment (GRID-3d) */
+  background: linear-gradient(180deg, #E9F5EC 0%, #D5EBDD 100%);
+  border: 2px solid var(--smoker-green-bright);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.55),
+    0 0 0 3px var(--smoker-glow);
+  animation: smokerBreathe 4.6s ease-in-out infinite;
+}
+
+.cell--tier-4 .cell__horse { font-weight: 700; font-size: 16px; color: #0F2C1B; }
+.cell--tier-4 .cell__time  { color: var(--smoker-green); }
+
+@keyframes smokerBreathe {
+  0%, 100% { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55), 0 0 0 3px var(--smoker-glow); }
+  50%      { box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55), 0 0 0 5px rgba(55,178,109,0.50); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   State overlays — layered ON TOP of tier styling
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Gold (won) cells override every tier — the win is the story now */
+.cell--won {
+  background: linear-gradient(180deg, #F5E7B4 0%, #EBD383 100%);
+  border: 2px solid var(--trail-gold-bright);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.6),
+    0 3px 10px var(--trail-gold-glow);
+  animation: none;
+}
+
+.cell--won .cell__horse { font-weight: 700; color: var(--trail-ink); }
+.cell--won .cell__pip.is-lit { background: var(--trail-crown); }
+.cell--won .cell__odds { background: rgba(122,90,15,0.15); color: var(--trail-crown); }
+
+/* ── Placed cells (GRID-3e): silver 2nd, bronze 3rd ────────
+   Not a bet win, but the horse made the podium — the trail tells
+   that story instead of flattening it into LOST. */
+
+.cell--placed { /* base — sub-variants below add the podium tint */
+  background: var(--trail-cell);
+  border-color: var(--trail-hair);
+}
+
+.cell--placed-2 { /* silver — pearlescent grey ground */
+  background: linear-gradient(180deg, #F3F3F0 0%, #E5E7E4 100%);
+  border: 2px solid #B8BDBC;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.6),
+    0 0 0 3px rgba(184, 189, 188, 0.20);
+}
+
+.cell--placed-3 { /* bronze — warm sienna ground */
+  background: linear-gradient(180deg, #F1E2D2 0%, #E2CDB2 100%);
+  border: 2px solid #B98A56;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.55),
+    0 0 0 3px rgba(185, 138, 86, 0.20);
+}
+
+.cell--placed .cell__horse { font-weight: 700; color: var(--trail-ink); }
+
+.cell__glyph--placed {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 4px;
+  font: 700 11px/1 "DM Sans", sans-serif;
+  color: #FBF7ED;
+  background: var(--trail-ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.cell--placed-2 .cell__glyph--placed { background: #7E8483; }
+.cell--placed-3 .cell__glyph--placed { background: #8A5F30; }
+
+
+/* ── Podium medal chip (GRID-3e) ────────────────────────────
+   Corner emblem at top-right — opposite the numbered badge —
+   spelling out WON / 2ND / 3RD so a glance answers "did our
+   pick land?" without decoding a crown + number. */
+
+.cell__medal {
+  position: absolute;
+  top: -8px;
+  right: -6px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font: 800 10.5px/1.2 "DM Sans", sans-serif;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: #1A1712;
+  box-shadow: 0 2px 6px rgba(26,23,18,0.20);
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.cell__medal--gold {
+  background: linear-gradient(180deg, #F4D77A 0%, #C99B1E 100%);
+  color: #4A3405;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+}
+
+.cell__medal--silver {
+  background: linear-gradient(180deg, #F1F1EE 0%, #B6BBBA 100%);
+  color: #2D3231;
+}
+
+.cell__medal--bronze {
+  background: linear-gradient(180deg, #E9C79A 0%, #A26932 100%);
+  color: #402512;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.20);
+}
+
+/* LOST medal — same chrome as the podium medals so the corner
+   position reads as a consistent result badge, but a muted
+   rose-grey palette that clearly reads "consequence, not
+   celebration". Sits at 0.85 opacity to nest under the parent
+   .cell--lost dim without becoming hard to read. */
+.cell__medal--lost {
+  background: linear-gradient(180deg, #E4DED4 0%, #B8B0A0 100%);
+  color: #3A342A;
+  box-shadow: 0 2px 6px rgba(26,23,18,0.14);
+  opacity: 0.9;
+}
+
+@media (min-width: 720px) {
+  .cell__medal { padding: 3px 10px; font-size: 11px; }
+}
+
+
+/* WON × Smoker collision (GRID-3d):
+   A gold-winning Smoker keeps its green interior — the Smoker
+   identity survives — but the outer frame goes gold to celebrate
+   the win. Best of both news items in one cell. */
+.cell--won.cell--tier-4 {
+  background: linear-gradient(180deg, #E9F5EC 0%, #D5EBDD 100%);
+  border-color: var(--trail-gold-bright);
+  box-shadow:
+    inset 0 0 0 1px var(--smoker-green-bright),
+    0 3px 12px var(--trail-gold-glow);
+}
+.cell--won.cell--tier-4 .cell__horse { color: #0F2C1B; }
+.cell--won.cell--tier-4 .cell__time  { color: var(--smoker-green); }
+
+/* Lost cells: settled + beaten. Distinct from no_fancy (empty seat,
+   dashed) and void (abandoned, cross-hash). Solid border stays so
+   the cell reads as "a real race that ran"; a subtle warm-grey
+   diagonal ground reinforces "settled result"; strike-through on
+   the horse name says "this pick lost"; the LOST pill in the state
+   slot names the outcome plainly. Opacity lifted from 0.42 → 0.72
+   so losers no longer blend into the no-fancy ghost neighbours. */
+.cell--lost {
+  opacity: 0.72;
+  animation: none;
+  background:
+    repeating-linear-gradient(-45deg,
+      var(--trail-cell) 0 8px,
+      rgba(138, 132, 120, 0.08) 8px 16px);
+}
+.cell--lost:hover { opacity: 0.92; }
+.cell--lost .cell__horse {
+  text-decoration: line-through;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: rgba(138, 132, 120, 0.7);
+  color: var(--trail-ink-2);
+}
+.cell--lost .cell__odds { text-decoration: line-through; }
+
+/* Live cells pulse the outer ring */
+.cell--live {
+  border-color: var(--trail-live);
+  box-shadow: 0 0 0 2px rgba(194,74,44,0.14);
+  animation: liveCellRing 1.8s ease-in-out infinite;
+}
+
+@keyframes liveCellRing {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(194,74,44,0.14); }
+  50%      { box-shadow: 0 0 0 5px rgba(194,74,44,0.08); }
+}
+
+/* Voided cells: hashed */
+.cell--void {
+  background:
+    repeating-linear-gradient(-45deg,
+      var(--trail-cell) 0 6px,
+      rgba(26,23,18,0.04) 6px 12px);
+  color: var(--trail-ink-3);
+}
+.cell--void .cell__horse { text-decoration: line-through; color: var(--trail-ink-3); }
+
+/* Future tipped cells: contrast lift so they don't collapse into the
+   no-fancy treatment. Formalises 4 clear states — PAST (result colour),
+   NOW (fox pulse), FUTURE (this rule), NO_FANCY (dashed ghost below).
+   Horse-name weight up, border strengthened, badge outlined in brand
+   ink so the seat number reads as navigational, not editorial. */
+.cell--pending {
+  border-color: var(--trail-hair-strong);
+}
+.cell--pending .cell__horse { font-weight: 600; color: var(--trail-ink); }
+.cell--pending .cell__course { color: var(--trail-ink-2); }
+.cell--pending .cell__badge {
+  background: transparent;
+  color: var(--trail-ink);
+  border: 1.5px solid var(--badge-bg);
+  font-weight: 600;
+  box-shadow: none;
+}
+
+/* No-fancy cells: quiet ghost */
+.cell--no_fancy {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--trail-hair-strong);
+  min-height: 132px;
+}
+
+@media (min-width: 720px) { .cell--no_fancy { min-height: 148px; } }
+
+/* ── PW-5: Backup cells (NO_FANCY filled by Pick Winner) ────
+   Inherit the NO_FANCY dashed idiom so the reader learns:
+   dashed body = machine fallback, solid body = editorial call.
+   Horse name + odds fill in, but everything else recedes: no
+   chip strip (redundant with the tag), no tier crown (Whisper
+   status is redundant with the tag), no gold body-tint on WON
+   (medal ribbon still fires up top). The PICK WINNER tag sits
+   where the chip strip normally does so the strip's spatial
+   affordance carries the tag instead.
+
+   State ribbons (WON/LOST/2ND/3RD) still fire the same way —
+   backup picks are honestly graded, just visibly distinct from
+   editorial wins. */
+.cell--backup {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--trail-hair-strong);
+}
+
+/* Match the NO_FANCY badge treatment — the numbered spot ring
+   sheds its editorial orange fill and reads as a muted outline
+   instead. Reinforces "this row seat isn't an editorial call"
+   at scan-speed, before the reader even reaches the tag. */
+.cell--backup .cell__badge {
+  background: transparent;
+  color: var(--trail-ink-3);
+  border: 1px solid var(--trail-hair-strong);
+}
+
+.cell--backup .cell__horse,
+.cell--backup .cell__odds {
+  color: var(--trail-ink-2);
+}
+
+/* When a backup Pick Winner cell actually WINS, the story shifts:
+   the result matters more than the "this was a fallback" caveat.
+   Card goes gold — but a paler cream-gold than the editorial win
+   above (#F5E7B4→#EBD383), so the reader can still tell a machine
+   pick from an editorial call at scan speed.
+
+   Kept: the outlined number badge (still not an editorial spot)
+   and the PICK WINNER tag (honest attribution — "yes, we won,
+   and yes, it was the machine"). Dropped: the dashed body ring
+   fills solid on victory, and the muted horse/odds ink comes back
+   to full weight so the winner reads clearly. */
+.cell--backup.cell--won {
+  background: linear-gradient(180deg, #FCF4D8 0%, #F4E5B4 100%);
+  border: 2px solid #E4CE7F;
+  border-style: solid;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55),
+    0 2px 6px rgba(212, 175, 55, 0.22);
+}
+
+.cell--backup.cell--won .cell__horse {
+  color: var(--trail-ink);
+  font-weight: 700;
+}
+
+.cell--backup.cell--won .cell__odds {
+  background: rgba(179, 130, 22, 0.10);
+  color: var(--trail-crown);
+}
+
+/* Pick Winner tag sits in the chip strip's slot so the footer
+   layout doesn't shift between editorial and backup cells. */
+.cell__backup-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px 2px 6px;
+  background: var(--src-pick-winner);
+  color: #FBF7ED;
+  font: 700 8.5px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+@media (max-width: 400px) {
+  .cell__backup-tag {
+    padding: 2px 5px 2px 5px;
+    font-size: 7.5px;
+    letter-spacing: 0.10em;
+  }
+}
+
+/* No-fancy badge: outlined + muted so the seat number recedes and
+   the eye tracks tipped cells first. Keeps the numeral for row
+   scanning without competing with the editorial cells. */
+.cell--no_fancy .cell__badge {
+  background: transparent;
+  color: var(--trail-ink-3);
+  border: 1px solid var(--trail-hair-strong);
+  font-weight: 500;
+  box-shadow: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Legend — persistent left rail on desktop, mobile drawer body.
+   Sidebar shell (.trail__nav) handles positioning; this styles the
+   contents. Quiet rail: no card treatment, no border, transparent
+   ground — reads as a nav, not a slab.
+   ═══════════════════════════════════════════════════════════════ */
+
+.trail__legend {
+  font: 500 12px/1.45 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+}
+
+.trail__legend-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 0 10px;
+  margin: 0 0 12px;
+  border-bottom: 1px solid var(--trail-hair);
+  font: 700 11px/1 "DM Sans", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: var(--trail-crown);
+}
+
+.trail__legend-head-icon {
+  font-size: 14px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.trail__legend-block + .trail__legend-block { margin-top: 14px; }
+
+.trail__legend-title {
+  font: 700 10.5px/1 "DM Sans", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--trail-ink-3);
+  margin: 0 0 8px;
+}
+
+.trail__legend-tiers,
+.trail__legend-sources {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.trail__legend-tier,
+.trail__legend-sources li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* GRID-3f: each source in the legend routes to its Honest Record
+   / product page. Style the anchor so the whole row is a clickable
+   target, not just the label text. */
+
+.trail__legend-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 6px;
+  margin: -3px -6px;
+  border-radius: 6px;
+  color: inherit;
+  text-decoration: none;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.trail__legend-source:hover,
+.trail__legend-source:focus-visible {
+  background: rgba(122, 90, 15, 0.08);
+  color: var(--trail-crown);
+  outline: none;
+}
+
+.trail__legend-source-label {
+  border-bottom: 1px dotted transparent;
+  transition: border-color 140ms ease;
+}
+
+.trail__legend-source:hover .trail__legend-source-label,
+.trail__legend-source:focus-visible .trail__legend-source-label {
+  border-bottom-color: currentColor;
+}
+
+.trail__legend-pips {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.trail__legend-pips i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--trail-hair-strong);
+  display: inline-block;
+}
+
+.trail__legend-pips i.is-lit { background: var(--trail-gold); }
+
+.trail__legend-note {
+  margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--trail-hair);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--trail-ink-3);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Empty state — GRID-2c
+   Renders when production has no picks yet for the day. Design
+   intent: honest, editorial, links onward to what IS there today
+   (racecards, newsroom). Never fabricated data.
+   ═══════════════════════════════════════════════════════════════ */
+
+.trail__empty {
+  grid-column: 1 / -1;
+  background: var(--trail-cell);
+  border: 1px dashed var(--trail-hair-strong);
+  border-radius: 14px;
+  padding: 56px 24px 60px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  color: var(--trail-ink-2);
+}
+
+@media (min-width: 720px) {
+  .trail__empty { padding: 80px 40px 88px; gap: 18px; }
+}
+
+.trail__empty-mark {
+  width: 48px;
+  height: 48px;
+  color: var(--trail-ink-3);
+  opacity: 0.55;
+}
+
+.trail__empty-mark svg { width: 100%; height: 100%; }
+
+.trail__empty-title {
+  font: 700 22px/1.2 "Playfair Display", Georgia, serif;
+  color: var(--trail-ink);
+  margin: 0;
+  text-wrap: balance;
+}
+
+@media (min-width: 720px) {
+  .trail__empty-title { font-size: 28px; }
+}
+
+.trail__empty-body {
+  font: 400 14px/1.6 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+  max-width: 44ch;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.trail__empty-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0 0;
+  font: 500 13px/1 "DM Sans", sans-serif;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.trail__empty-link {
+  color: var(--trail-crown);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(122,90,15,0.35);
+  padding-bottom: 1px;
+  transition: border-color 140ms ease;
+}
+
+.trail__empty-link:hover { border-color: var(--trail-crown); }
+
+.trail__empty-sep { color: var(--trail-ink-3); opacity: 0.55; }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Freshness pill + live update flash (GRID-3c)
+   ═══════════════════════════════════════════════════════════════ */
+
+.trail__freshness {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 3px 10px 3px 8px;
+  border-radius: 999px;
+  background: rgba(30, 126, 75, 0.10);
+  border: 1px solid rgba(30, 126, 75, 0.35);
+  font: 500 11px/1 "DM Sans", sans-serif;
+  color: var(--smoker-green);
+  font-variant-numeric: tabular-nums;
+  transition: background 200ms ease, color 200ms ease, border-color 200ms ease;
+}
+
+.trail__freshness-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--smoker-green-bright);
+  box-shadow: 0 0 0 0 var(--smoker-glow);
+  animation: freshnessPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes freshnessPulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--smoker-glow); }
+  50%      { box-shadow: 0 0 0 5px rgba(55,178,109,0); }
+}
+
+.trail__freshness.is-stale {
+  background: rgba(122, 90, 15, 0.10);
+  border-color: rgba(122, 90, 15, 0.35);
+  color: var(--trail-crown);
+}
+.trail__freshness.is-stale .trail__freshness-dot {
+  background: var(--trail-crown);
+  animation: none;
+}
+
+.trail__freshness.is-final {
+  background: rgba(122, 90, 15, 0.14);
+  border-color: rgba(122, 90, 15, 0.45);
+  color: var(--trail-crown);
+}
+.trail__freshness.is-final .trail__freshness-dot {
+  background: var(--trail-crown);
+  animation: none;
+}
+
+/* When a cell's state flips during a poll — soft flash so the
+   reader sees "something just changed here" without needing a
+   full-page reload. Removed after ~1.4s by the JS. */
+.cell--just-updated {
+  animation: cellJustUpdated 1400ms ease-out;
+}
+
+@keyframes cellJustUpdated {
+  0%   { box-shadow: 0 0 0 0 rgba(55, 178, 109, 0.55); }
+  40%  { box-shadow: 0 0 0 6px rgba(55, 178, 109, 0.20); }
+  100% { box-shadow: 0 0 0 0 rgba(55, 178, 109, 0); }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Cell drawer (GRID-3b) — per-source evidence for one race.
+   Right-hand slide-in on desktop, bottom-sheet on mobile.
+   ═══════════════════════════════════════════════════════════════ */
+
+.cell-drawer[hidden] { display: none; }
+
+.cell-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cell-drawer__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(26, 23, 18, 0.45);
+  animation: drawerScrimIn 180ms ease-out both;
+}
+
+.cell-drawer__panel {
+  position: relative;
+  width: min(460px, 100%);
+  max-height: 100vh;
+  overflow-y: auto;
+  background: var(--trail-cream);
+  border-left: 1px solid var(--trail-hair);
+  padding: 20px 22px 24px;
+  animation: drawerPanelIn 220ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+@keyframes drawerScrimIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes drawerPanelIn {
+  from { transform: translateX(24px); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+/* Lock body scroll while drawer is open. */
+body.has-cell-drawer-open { overflow: hidden; }
+
+/* ── Head ─────────────────────────────────────────────────── */
+
+.cell-drawer__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cell-drawer__eyebrow {
+  font: 700 10px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--badge-bg);
+}
+
+.cell-drawer__title {
+  margin: 4px 0 0;
+  font: 700 22px/1.15 "Playfair Display", Georgia, serif;
+  color: var(--trail-ink);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.cell-drawer__title time {
+  font-variant-numeric: tabular-nums;
+  color: var(--trail-crown);
+}
+
+.cell-drawer__tier {
+  margin: 6px 0 0;
+  font: 700 10.5px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--trail-ink-2);
+}
+
+.cell-drawer__tier--nod     { color: var(--nod-warm); }
+.cell-drawer__tier--chorus  { color: var(--chorus-red); }
+.cell-drawer__tier--smoker  { color: var(--smoker-green); }
+.cell-drawer__tier--whisper { color: var(--trail-ink-3); }
+
+.cell-drawer__close {
+  appearance: none;
+  border: 1px solid var(--trail-hair);
+  background: var(--trail-cell);
+  color: var(--trail-ink-2);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 22px;
+  line-height: 30px;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+}
+
+.cell-drawer__close:hover,
+.cell-drawer__close:focus-visible {
+  background: var(--trail-crown);
+  color: #FBF7ED;
+  outline: none;
+}
+
+/* ── State block ──────────────────────────────────────────── */
+
+.cell-drawer__state {
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: rgba(122, 90, 15, 0.06);
+  border: 1px solid var(--trail-hair);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cell-drawer__state-label {
+  font: 700 11px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  align-self: flex-start;
+  background: rgba(122, 90, 15, 0.10);
+  color: var(--trail-ink-2);
+}
+.cell-drawer__state-label.is-won     { color: #7A5A0F; background: rgba(212,175,55,0.20); }
+.cell-drawer__state-label.is-placed  { color: #2D3231; background: rgba(184,189,188,0.28); }
+.cell-drawer__state-label.is-lost    { color: #A5382B; background: rgba(165,56,43,0.10); }
+.cell-drawer__state-label.is-live    { color: #1E7E4B; background: rgba(30,126,75,0.12); }
+.cell-drawer__state-label.is-pending { color: var(--trail-ink-3); background: rgba(26,23,18,0.06); }
+.cell-drawer__state-label.is-void    { color: var(--trail-ink-3); background: rgba(26,23,18,0.06); }
+
+.cell-drawer__state-detail {
+  font: 500 13.5px/1.4 "DM Sans", sans-serif;
+  color: var(--trail-ink);
+}
+
+/* ── Per-source rows ──────────────────────────────────────── */
+
+.cell-drawer__sources {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cell-drawer__source {
+  padding: 12px 14px;
+  border-radius: 8px;
+  background: var(--trail-cell);
+  border: 1px solid var(--trail-hair);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cell-drawer__source.is-off {
+  background: rgba(26, 23, 18, 0.02);
+  opacity: 0.65;
+}
+
+.cell-drawer__source.is-anchor {
+  border-left: 3px solid var(--trail-crown);
+  padding-left: 12px;
+}
+
+.cell-drawer__source-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cell-drawer__source-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  font: 700 11px/1 "DM Sans", sans-serif;
+  color: #FBF7ED;
+  background: var(--trail-ink-3);
+}
+
+.cell-drawer__source--bod         .cell-drawer__source-mark { background: var(--src-bod); }
+.cell-drawer__source--top_rated   .cell-drawer__source-mark { background: var(--src-top-rated); }
+.cell-drawer__source--htw         .cell-drawer__source-mark { background: var(--src-htw); }
+.cell-drawer__source--steamer     .cell-drawer__source-mark { background: var(--src-steamer); }
+.cell-drawer__source--pick_winner .cell-drawer__source-mark { background: var(--src-pick-winner); }
+
+.cell-drawer__source.is-off .cell-drawer__source-mark {
+  background: var(--trail-hair);
+  color: var(--trail-ink-3);
+}
+
+.cell-drawer__source-label {
+  font: 700 12px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--trail-ink-2);
+}
+
+.cell-drawer__source-pick {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cell-drawer__source-horse {
+  font: 700 15px/1.2 "Playfair Display", Georgia, serif;
+  color: var(--trail-ink);
+}
+
+.cell-drawer__source-horse--off {
+  font-style: italic;
+  color: var(--trail-ink-3);
+  font-weight: 500;
+}
+
+.cell-drawer__source-odds {
+  font: 700 12px/1 "DM Sans", sans-serif;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(122, 90, 15, 0.10);
+  color: var(--trail-crown);
+  font-variant-numeric: tabular-nums;
+}
+
+.cell-drawer__source-reasoning {
+  margin: 0;
+  font: 400 13px/1.5 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+}
+
+.cell-drawer__source-pill {
+  align-self: flex-start;
+  font: 500 10.5px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: var(--trail-crown);
+  background: rgba(212, 175, 55, 0.14);
+}
+.cell-drawer__source-pill.is-alt { color: var(--trail-ink-3); background: rgba(26,23,18,0.06); }
+.cell-drawer__source-pill.is-off { color: var(--trail-ink-3); background: transparent; border: 1px dashed var(--trail-hair); }
+
+/* ── Foot caveat ──────────────────────────────────────────── */
+
+.cell-drawer__foot {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px dashed var(--trail-hair);
+}
+
+.cell-drawer__caveat {
+  margin: 0;
+  font: 400 11px/1.45 "DM Sans", sans-serif;
+  color: var(--trail-ink-3);
+}
+
+/* Mobile: bottom sheet, capped height, slide up. */
+@media (max-width: 640px) {
+  .cell-drawer { align-items: flex-end; justify-content: stretch; }
+  .cell-drawer__panel {
+    width: 100%;
+    max-height: 88vh;
+    border-left: none;
+    border-top: 1px solid var(--trail-hair);
+    border-radius: 12px 12px 0 0;
+    animation: drawerSheetIn 240ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .cell-drawer__title { font-size: 20px; }
+}
+
+@keyframes drawerSheetIn {
+  from { transform: translateY(30px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Accessibility + motion preferences
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+  .cell,
+  .cell--live,
+  .cell--tier-4,
+  .cell__glyph--live,
+  .smoker,
+  .trail__freshness-dot,
+  .cell--just-updated {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Publish gate — premature panel (GRID-5C)
+   Rendered when is_publish_gated(day) is True, i.e. before the
+   morning cron cluster has fired for race day. Same design
+   language as .trail__empty so a returning visitor recognises the
+   pattern; the copy is what changes.
+   ═══════════════════════════════════════════════════════════════ */
+
+.trail__premature {
+  background: var(--trail-cell);
+  border: 1px dashed var(--trail-hair-strong);
+  border-radius: 14px;
+  padding: 56px 24px 60px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  color: var(--trail-ink-2);
+}
+
+@media (min-width: 720px) {
+  .trail__premature { padding: 80px 40px 88px; gap: 18px; }
+}
+
+.trail__premature-mark {
+  width: 48px;
+  height: 48px;
+  color: var(--trail-ink-3);
+  opacity: 0.65;
+}
+
+.trail__premature-mark svg { width: 100%; height: 100%; }
+
+.trail__premature-title {
+  font: 700 22px/1.2 "Playfair Display", Georgia, serif;
+  color: var(--trail-ink);
+  margin: 0;
+  text-wrap: balance;
+}
+
+@media (min-width: 720px) {
+  .trail__premature-title { font-size: 28px; }
+}
+
+.trail__premature-body {
+  font: 400 14px/1.6 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+  max-width: 52ch;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.trail__premature-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0 0;
+  font: 500 13px/1 "DM Sans", sans-serif;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.trail__premature-link {
+  color: var(--trail-crown);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(122,90,15,0.35);
+  padding-bottom: 1px;
+  transition: border-color 140ms ease;
+}
+
+.trail__premature-link:hover { border-color: var(--trail-crown); }
+
+.trail__premature-sep { color: var(--trail-ink-3); opacity: 0.55; }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Early signals banner (GRID-5C)
+   Sits above the grid when 0 < cell count < SPARSE_CELL_THRESHOLD,
+   framing the sparsity as "quiet card" rather than "broken page".
+   ═══════════════════════════════════════════════════════════════ */
+
+.trail__early-signals {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 14px auto 20px;
+  padding: 14px 18px;
+  max-width: 720px;
+  background: var(--trail-cell);
+  border: 1px solid var(--trail-hair);
+  border-left: 3px solid var(--trail-crown);
+  border-radius: 8px;
+  color: var(--trail-ink-2);
+}
+
+@media (min-width: 720px) {
+  .trail__early-signals { padding: 16px 22px; gap: 14px; }
+}
+
+.trail__early-signals-mark {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  color: var(--trail-crown);
+  margin-top: 1px;
+}
+
+.trail__early-signals-mark svg { width: 100%; height: 100%; }
+
+.trail__early-signals-body {
+  margin: 0;
+  font: 400 14px/1.55 "DM Sans", sans-serif;
+  text-wrap: pretty;
+}
+
+.trail__early-signals-lede {
+  color: var(--trail-ink);
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Anatomy card (GRID-5) — rendered inside the premature-state so
+   a first-time visitor learns how to READ the board before it
+   goes live. Three cards side-by-side on desktop, stacked on
+   mobile; visual language reuses tier / medal / chip tokens so
+   the anatomy IS the legend in miniature.
+   ═══════════════════════════════════════════════════════════════ */
+
+.trail__anatomy {
+  margin: 22px auto 8px;
+  padding: 22px 20px 6px;
+  max-width: 1080px;
+  background: var(--trail-cell);
+  border: 1px solid var(--trail-hair);
+  border-radius: 14px;
+}
+
+@media (min-width: 720px) {
+  .trail__anatomy { padding: 30px 32px 12px; margin-top: 28px; }
+}
+
+.anatomy__head { margin: 0 0 16px; text-align: center; }
+
+.anatomy__eyebrow {
+  display: block;
+  font: 500 11px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--trail-ink-3);
+  margin-bottom: 6px;
+}
+
+.anatomy__title {
+  margin: 0;
+  font: 700 22px/1.2 "Playfair Display", Georgia, serif;
+  color: var(--trail-ink);
+  text-wrap: balance;
+}
+
+@media (min-width: 720px) { .anatomy__title { font-size: 28px; } }
+
+.anatomy__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+@media (min-width: 900px) {
+  .anatomy__grid { grid-template-columns: repeat(3, 1fr); gap: 22px; }
+}
+
+.anatomy__card {
+  padding: 18px 18px 16px;
+  background: var(--trail-page);
+  border: 1px solid var(--trail-hair);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.anatomy__card-title {
+  margin: 0;
+  font: 600 15px/1.2 "DM Sans", sans-serif;
+  color: var(--trail-ink);
+  letter-spacing: 0.02em;
+}
+
+.anatomy__card-lede {
+  margin: 0;
+  font: 400 13px/1.55 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+  text-wrap: pretty;
+}
+
+/* ── Confidence tiers ─────────────────────────────────── */
+
+.anatomy__tiers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.anatomy__tier {
+  display: grid;
+  grid-template-columns: 66px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--trail-cell);
+}
+
+.anatomy__pips {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.anatomy__pips i {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--trail-hair-strong);
+  background: transparent;
+}
+
+.anatomy__pips i.is-lit {
+  background: var(--trail-crown);
+  border-color: var(--trail-crown);
+}
+
+.anatomy__tier-name {
+  font: 600 13px/1 "DM Sans", sans-serif;
+  color: var(--trail-ink);
+}
+
+.anatomy__tier-detail {
+  font: 400 12px/1 "DM Sans", sans-serif;
+  color: var(--trail-ink-3);
+  justify-self: end;
+}
+
+/* ── Live scoring — medal row ─────────────────────────── */
+
+.anatomy__medals {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.anatomy__medals li {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--trail-cell);
+}
+
+.anatomy__medal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font: 700 10px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.08em;
+  border: 1px solid transparent;
+  color: #3a2900;
+}
+
+.anatomy__medal--gold   { background: #f4c34a; border-color: #b08a1c; }
+.anatomy__medal--silver { background: #d5dae0; border-color: #8a95a1; color: #2b3238; }
+.anatomy__medal--bronze { background: #cf9866; border-color: #8f5c2a; color: #3a1e08; }
+
+.anatomy__medal-detail {
+  font: 400 13px/1.35 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+}
+
+/* ── Counter tally dl ─────────────────────────────────── */
+
+.anatomy__tally {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.anatomy__tally > div {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--trail-cell);
+}
+
+.anatomy__tally dt {
+  margin: 0;
+  font: 600 12px/1 "DM Sans", sans-serif;
+  color: var(--trail-ink);
+  letter-spacing: 0.02em;
+}
+
+.anatomy__tally dd {
+  margin: 0;
+  font: 400 12px/1.35 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+}
+
+/* ── Foot note ────────────────────────────────────────── */
+
+.anatomy__foot {
+  margin: 18px 0 4px;
+  padding: 14px 12px 0;
+  border-top: 1px solid var(--trail-hair);
+  font: 400 13px/1.55 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+  text-align: center;
+  text-wrap: pretty;
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Ghost cells (GRID-5F) — pad the serpentine on light days so the
+   board looks like a game board with empty seats rather than a
+   layout with broken gaps. Non-interactive, dashed outline, no
+   chrome. Inherit the base .cell grid slot so the :nth-child
+   serpentine rules place them correctly.
+   ═══════════════════════════════════════════════════════════════ */
+
+.cell--ghost {
+  background: transparent;
+  border: 1px dashed var(--trail-hair-strong, var(--trail-hair));
+  box-shadow: none;
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.55;
+  min-height: 130px;
+  padding: 0;
+}
+
+@media (min-width: 720px) {
+  .cell--ghost { min-height: 164px; }
+}
+
+/* Subtle centre dot so an empty seat still reads as "a seat" */
+.cell--ghost::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: var(--trail-hair-strong, var(--trail-hair));
+  opacity: 0.6;
+}
+
+/* Kill the serpentine arrow chevron on ghosts — nothing to point at */
+.trail__grid .cell--ghost::after {
+  content: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GRID slice 2 — Legend as control panel
+   Clicking a tier or signal in the legend dims cells that don't
+   match. Filter state lives on the grid element as data attributes;
+   button visual state and the status pill are driven from JS.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Legend rows become buttons. Reset the browser default button chrome
+   so the row still reads as a legend entry. */
+.trail__legend-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  margin: -4px -8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease;
+  flex: 1;
+  min-width: 0;
+}
+.trail__legend-row:hover,
+.trail__legend-row:focus-visible {
+  background: rgba(122, 90, 15, 0.08);
+  color: var(--trail-crown);
+  outline: none;
+}
+.trail__legend-row.is-active {
+  background: rgba(122, 90, 15, 0.14);
+  color: var(--trail-crown);
+  box-shadow: inset 0 0 0 1px rgba(122, 90, 15, 0.32);
+}
+.trail__legend-row .trail__legend-source-label {
+  border-bottom: 1px dotted transparent;
+  transition: border-color 140ms ease;
+}
+.trail__legend-row:hover .trail__legend-source-label,
+.trail__legend-row:focus-visible .trail__legend-source-label,
+.trail__legend-row.is-active .trail__legend-source-label {
+  border-bottom-color: currentColor;
+}
+
+/* Signal rows are two-column: filter button on the left, tiny goto
+   chevron on the right that deep-links to the source's editorial page. */
+.trail__legend-sources li {
+  justify-content: space-between;
+}
+.trail__legend-goto {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  color: var(--trail-ink-3);
+  text-decoration: none;
+  font: 700 14px/1 "DM Sans", sans-serif;
+  transition: background 140ms ease, color 140ms ease;
+  flex-shrink: 0;
+}
+.trail__legend-goto:hover,
+.trail__legend-goto:focus-visible {
+  background: rgba(122, 90, 15, 0.10);
+  color: var(--trail-crown);
+  outline: none;
+}
+
+/* Filter status pill — sits above the grid frame when a filter is on.
+   trail_filter.js toggles [hidden], but an author `display` beats the
+   browser's own [hidden] rule, so the pill opts out explicitly below.
+   Without that, the empty "Showing only" bar shows on every load. */
+.trail__filter-status[hidden] {
+  display: none;
+}
+
+.trail__filter-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  margin: 0 0 12px;
+  background: var(--trail-cell);
+  border: 1px solid var(--trail-hair-strong);
+  border-radius: 999px;
+  font: 500 12.5px/1 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+  width: fit-content;
+}
+.trail__filter-label strong {
+  color: var(--trail-crown);
+  font-weight: 700;
+}
+.trail__filter-clear {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--trail-ink-3);
+  font: 600 12px/1 "DM Sans", sans-serif;
+  cursor: pointer;
+  padding: 4px 8px;
+  margin: -4px -6px -4px 0;
+  border-radius: 4px;
+  transition: background 140ms ease, color 140ms ease;
+}
+.trail__filter-clear:hover,
+.trail__filter-clear:focus-visible {
+  background: rgba(26, 23, 18, 0.06);
+  color: var(--trail-ink);
+  outline: none;
+}
+
+/* The filter effect itself. Any cell in a filtered grid dims to .28
+   opacity by default; the matching-cell rules below lift it back to 1.
+   `pointer-events: none` on dimmed cells prevents accidental drawer
+   opens while filtering (they can still be tabbed to). */
+.trail__grid--filtered .cell {
+  opacity: 0.28;
+  transition: opacity 220ms ease;
+}
+.trail__grid--filtered .cell--ghost { opacity: 0.12; }
+
+.trail__grid[data-filter-tier="1"] .cell--tier-1,
+.trail__grid[data-filter-tier="2"] .cell--tier-2,
+.trail__grid[data-filter-tier="3"] .cell--tier-3,
+.trail__grid[data-filter-tier="4"] .cell--tier-4 { opacity: 1; }
+
+.trail__grid[data-filter-source="bod"]         .cell[data-sources~="bod"],
+.trail__grid[data-filter-source="top_rated"]   .cell[data-sources~="top_rated"],
+.trail__grid[data-filter-source="htw"]         .cell[data-sources~="htw"],
+.trail__grid[data-filter-source="steamer"]     .cell[data-sources~="steamer"],
+.trail__grid[data-filter-source="letters"]     .cell[data-sources~="letters"],
+.trail__grid[data-filter-source="featured"]    .cell[data-sources~="featured"],
+.trail__grid[data-filter-source="pick_winner"] .cell[data-sources~="pick_winner"] { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .trail__grid--filtered .cell { transition: none; }
+}
+
+/* Hover cross-highlight — slice 3. Softer dim (0.4) so hover feels
+   like a preview, not a commitment; the click-filter class always
+   wins because trail__grid--filtered fires the harder 0.28 dim
+   above. Legend row hover and cell-chip hover both flow through
+   this same rule set via data-hover-source on the grid. */
+.trail__grid--hovered .cell {
+  opacity: 0.4;
+  transition: opacity 160ms ease;
+}
+.trail__grid[data-hover-source="bod"]       .cell[data-sources~="bod"],
+.trail__grid[data-hover-source="top_rated"] .cell[data-sources~="top_rated"],
+.trail__grid[data-hover-source="htw"]       .cell[data-sources~="htw"],
+.trail__grid[data-hover-source="steamer"]   .cell[data-sources~="steamer"],
+.trail__grid[data-hover-source="letters"]   .cell[data-sources~="letters"],
+.trail__grid[data-hover-source="featured"]  .cell[data-sources~="featured"] { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .trail__grid--hovered .cell { transition: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   GRID slice 4 — live-result celebrations
+   Fires layered on top of the existing cell--just-updated flash
+   when a race lands with a WIN, when the fox marker arrives on a
+   fresh cell, when the trail counter numbers change, and when a
+   today-tier row's stats update. All wrapped in reduced-motion
+   guards so the page stays static for anyone who's asked for it.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* WON celebration — richer than the baseline flash. Gold ripple +
+   ring pulse; the WON medal chip drops in via the ribbon rule
+   below. Timed to complete inside the 1.5s window before the JS
+   removes the class. */
+.cell--just-won {
+  animation: cellJustWon 1500ms ease-out;
+  z-index: 3;
+}
+@keyframes cellJustWon {
+  0% {
+    box-shadow:
+      0 0 0 0    rgba(196, 145, 20, 0.70),
+      0 0 0 0    rgba(255, 214, 92, 0.55);
+    transform: translateY(0);
+  }
+  25% {
+    box-shadow:
+      0 0 0 4px  rgba(196, 145, 20, 0.55),
+      0 0 22px   rgba(255, 214, 92, 0.75);
+    transform: translateY(-2px);
+  }
+  60% {
+    box-shadow:
+      0 0 0 8px  rgba(196, 145, 20, 0.18),
+      0 0 32px   rgba(255, 214, 92, 0.45);
+    transform: translateY(-1px);
+  }
+  100% {
+    box-shadow:
+      0 0 0 0    rgba(196, 145, 20, 0),
+      0 0 0 0    rgba(255, 214, 92, 0);
+    transform: translateY(0);
+  }
+}
+.cell--just-won .cell__medal--gold {
+  animation: medalDropIn 600ms cubic-bezier(0.34, 1.56, 0.64, 1) 40ms both;
+}
+@keyframes medalDropIn {
+  from { transform: translateY(-16px) scale(0.8); opacity: 0; }
+  to   { transform: translateY(0)     scale(1);   opacity: 1; }
+}
+
+/* Fox marker arriving — plays when the "you are here" pill lands
+   on a new cell. Softer than a WON celebration; this is the fox
+   walking, not the race finishing. */
+.cell--fox-arriving .cell__now {
+  animation: foxArriving 900ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transform-origin: 22px 50%;
+}
+@keyframes foxArriving {
+  0%   { transform: scale(0.4)  translateY(-6px); opacity: 0; }
+  55%  { transform: scale(1.08) translateY(0);    opacity: 1; }
+  100% { transform: scale(1)    translateY(0);    opacity: 1; }
+}
+
+/* Counter numbers (gold / live / pending) pulse when they change,
+   so a viewer reading the trail sees the totals move rather than
+   silently ticking. */
+[data-role="gold-count"].is-just-bumped,
+[data-role="live-count"].is-just-bumped,
+[data-role="pending-count"].is-just-bumped {
+  animation: numberBump 900ms ease-out;
+  display: inline-block;
+}
+@keyframes numberBump {
+  0%   { transform: scale(1);    color: inherit; }
+  30%  { transform: scale(1.24); color: var(--trail-crown, #7a5a0f); }
+  100% { transform: scale(1);    color: inherit; }
+}
+
+/* Today track record — flash the tier row when its stats change so
+   the reader's eye catches the increment. The row itself is the
+   scope so the whole cluster (rate + won/settled + P/L) pulses
+   together. */
+.record__tier--just-updated {
+  animation: recordTierPulse 1400ms ease-out;
+}
+@keyframes recordTierPulse {
+  0%   { background: transparent; }
+  20%  { background: rgba(196, 145, 20, 0.14); }
+  100% { background: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cell--just-won,
+  .cell--just-won .cell__medal--gold,
+  .cell--fox-arriving .cell__now,
+  [data-role="gold-count"].is-just-bumped,
+  [data-role="live-count"].is-just-bumped,
+  [data-role="pending-count"].is-just-bumped,
+  .record__tier--just-updated {
+    animation: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GRID-FLIP · Magic flip on settled cards
+   ─────────────────────────────────────────────────────────────
+   A toggle chip above the grid flips every card whose result is
+   in (`[data-settled="1"]`) to reveal a big finish position. Pre-
+   race and live cells stay put — nothing to reveal. Toggle state
+   persists in localStorage; the live poll re-applies the class
+   when a new race settles.
+
+   The 3D flip is done on `.cell__flip` (grid child of `.cell`),
+   which stacks two `.cell__face` faces via CSS grid so both
+   occupy the same box and the cell keeps its natural height.
+   Corner chrome (badge, ribbon, now-marker) stays fixed on the
+   cell; only the medal fades out because the big back-face
+   figure already carries that information.
+*/
+
+.trail__reveal {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 0 12px;
+}
+
+.trail__reveal-chip {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--trail-hair-strong);
+  border-radius: 999px;
+  background: var(--trail-cell);
+  color: var(--trail-ink-2);
+  font: 600 12.5px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+.trail__reveal-chip:hover,
+.trail__reveal-chip:focus-visible {
+  border-color: var(--trail-crown);
+  color: var(--trail-ink);
+  outline: none;
+}
+
+.trail__reveal-chip[aria-pressed="true"] {
+  background: var(--trail-crown);
+  border-color: var(--trail-crown);
+  color: #FBF7ED;
+}
+
+.trail__reveal-icon {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 260ms ease;
+}
+
+.trail__reveal-chip[aria-pressed="true"] .trail__reveal-icon {
+  transform: rotate(180deg);
+}
+
+/* ── The flip mechanic itself ───────────────────────────────── */
+
+.cell { perspective: 1000px; }
+
+.cell__flip {
+  display: grid;
+  grid-template-rows: 1fr;
+  flex: 1 1 auto;
+  min-width: 0;
+  transform-style: preserve-3d;
+  transition: transform 640ms cubic-bezier(0.35, 0.05, 0.25, 1);
+}
+
+.cell.is-flipped .cell__flip {
+  transform: rotateY(180deg);
+}
+
+.cell__face {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+
+.cell__face--back {
+  transform: rotateY(180deg);
+}
+
+/* Front-face medal duplicates the big back figure — fade it out
+   during the flip so it doesn't peek through the transition. */
+.cell.is-flipped .cell__medal {
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+/* ── Back face — the race result ────────────────────────────── */
+
+.cell__back {
+  justify-content: flex-start;
+  padding: 2px 2px 4px;
+  border-radius: 6px;
+  gap: 6px;
+}
+
+.cell__back-head {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 0 2px 4px;
+  border-bottom: 1px solid var(--trail-hair);
+}
+
+.cell__back-time {
+  font: 700 12px/1 "DM Sans", sans-serif;
+  font-variant-numeric: tabular-nums;
+  color: var(--trail-ink);
+  letter-spacing: -0.01em;
+}
+
+.cell__back-course {
+  font: 600 10.5px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--trail-ink-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.cell__back-title {
+  align-self: center;
+  font: 800 9px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--trail-ink-3);
+  padding-top: 2px;
+}
+
+.cell__back-podium {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cell__back-slot {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 6px;
+  padding: 3px 4px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.cell__back-sp {
+  font: 600 10px/1 "DM Sans", sans-serif;
+  color: var(--trail-ink-3);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.cell__back-slot--pos-1 { background: rgba(176, 133, 51, 0.14); }
+.cell__back-slot--pos-2 { background: rgba(123, 122, 120, 0.14); }
+.cell__back-slot--pos-3 { background: rgba(164, 106, 46, 0.14); }
+
+.cell__back-slot.is-our-pick {
+  outline: 1.5px solid var(--trail-crown);
+  outline-offset: -1.5px;
+}
+
+.cell__back-pos {
+  font: 800 11px/1 "DM Sans", sans-serif;
+  letter-spacing: -0.01em;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.cell__back-slot--pos-1 .cell__back-pos { color: #B08533; }
+.cell__back-slot--pos-2 .cell__back-pos { color: #7B7A78; }
+.cell__back-slot--pos-3 .cell__back-pos { color: #A46A2E; }
+
+.cell__back-horse {
+  font: 600 11px/1.15 "DM Sans", sans-serif;
+  color: var(--trail-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.cell__back-pick {
+  margin-top: auto;
+  padding: 4px 6px;
+  border-radius: 4px;
+  border-top: 1px solid var(--trail-hair);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.cell__back-pick-label {
+  font: 700 8.5px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--trail-ink-3);
+}
+
+.cell__back-pick-fin {
+  font: 800 12px/1.1 "DM Sans", sans-serif;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  color: var(--trail-ink);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cell__back-pick-sp {
+  font: 700 10px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.06em;
+  color: var(--trail-ink-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.cell__back-pick--won  .cell__back-pick-fin { color: #B08533; }
+.cell__back-pick--placed .cell__back-pick-fin { color: var(--trail-ink); }
+.cell__back-pick--lost .cell__back-pick-fin { color: var(--trail-ink-2); }
+
+.cell__back-pick-horse {
+  font: 500 10.5px/1.15 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cell__back-void {
+  align-self: center;
+  margin-top: auto;
+  font: 800 16px/1 "DM Sans", sans-serif;
+  color: var(--trail-ink-2);
+  letter-spacing: -0.01em;
+}
+
+.cell__back-note {
+  align-self: center;
+  margin-bottom: auto;
+  padding-top: 4px;
+  font: 500 10px/1 "DM Sans", sans-serif;
+  color: var(--trail-ink-3);
+}
+
+/* Reduced motion — cross-fade instead of 3D flip. Still swaps
+   faces cleanly; just no rotation. */
+@media (prefers-reduced-motion: reduce) {
+  .cell__flip {
+    transition: none;
+    transform-style: flat;
+  }
+  .cell.is-flipped .cell__flip {
+    transform: none;
+  }
+  .cell__face {
+    transition: opacity 240ms ease;
+  }
+  .cell__face--back {
+    transform: none;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .cell.is-flipped .cell__face--front {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .cell.is-flipped .cell__face--back {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Nav shell — persistent left rail on desktop, drawer on mobile.
+   The panel holds the legend (_legend.html). Trigger + backdrop
+   are hidden on desktop by CSS, so trail_nav.js effectively no-ops
+   there.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* --- Mobile drawer (default) --- */
+
+.trail__nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(320px, 88vw);
+  background: var(--trail-ground);
+  border-right: 1px solid var(--trail-hair);
+  padding: 22px 22px 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  z-index: 60;
+  transform: translateX(-100%);
+  transition: transform 240ms ease;
+  visibility: hidden;
+}
+
+.trail__nav.is-open {
+  transform: translateX(0);
+  visibility: visible;
+  box-shadow: 4px 0 24px rgba(30, 20, 6, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trail__nav { transition: none; }
+}
+
+.trail__nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 14, 4, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  z-index: 55;
+  transition: opacity 200ms ease, visibility 200ms;
+}
+
+.trail__nav-backdrop.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trail__nav-backdrop { transition: none; }
+}
+
+/* Body lock while drawer is open — stops the page scrolling
+   behind the panel on mobile. Desktop drops the class anyway
+   because the panel never opens as a drawer up there. */
+body.trail-nav-lock { overflow: hidden; }
+
+/* --- Trigger chip (mobile only) --- */
+
+.trail__nav-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  margin: 4px 0 12px;
+  border-radius: 999px;
+  background: var(--trail-cell);
+  border: 1px solid var(--trail-hair-strong);
+  color: var(--trail-ink-1);
+  font: 600 12px/1 "DM Sans", sans-serif;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+.trail__nav-trigger:hover,
+.trail__nav-trigger:focus-visible {
+  background: var(--trail-hair);
+  border-color: var(--trail-crown);
+  outline: none;
+}
+
+.trail__nav-trigger-icon { font-size: 15px; line-height: 1; }
+
+/* --- Close chevron inside the drawer head (mobile only) --- */
+
+.trail__nav-close {
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  color: var(--trail-ink-3);
+  font: 400 24px/1 "DM Sans", sans-serif;
+  padding: 0 2px;
+  cursor: pointer;
+  transition: color 140ms ease;
+}
+
+.trail__nav-close:hover,
+.trail__nav-close:focus-visible {
+  color: var(--trail-crown);
+  outline: none;
+}
+
+/* --- Desktop: promote panel to a quiet left rail --- */
+
+@media (min-width: 1080px) {
+  .trail__nav {
+    position: sticky;
+    top: 128px;
+    left: auto;
+    bottom: auto;
+    width: auto;
+    max-height: calc(100vh - 148px);
+    padding: 20px 24px 20px 0;
+    background: transparent;
+    border-right: 1px solid var(--trail-hair);
+    box-shadow: none;
+    transform: none;
+    visibility: visible;
+    transition: none;
+  }
+
+  .trail__nav-backdrop,
+  .trail__nav-trigger,
+  .trail__nav-close { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   7-col serpentine — wider desktops (>= 1600px)
+   The 6-col serpentine at 1080px uses :nth-child(12n+7..12) to
+   reverse row 2. At the 7-col tier we reset those explicit
+   grid-column assignments and lay a fresh 14n serpentine over
+   the top: row 1 = cells 1-7 LTR, row 2 = cells 8-14 RTL,
+   row 3 = 15-21 LTR, and so on. Arrow rules follow the same swap.
+   ═══════════════════════════════════════════════════════════════ */
+
+@media (min-width: 1600px) {
+  .trail__grid {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  /* Reset the 6-col explicit placements so cells 8-14 flow into
+     row 2 by grid-auto-flow (still :dense from the 1080 breakpoint). */
+  .trail__grid .cell:nth-child(12n+7),
+  .trail__grid .cell:nth-child(12n+8),
+  .trail__grid .cell:nth-child(12n+9),
+  .trail__grid .cell:nth-child(12n+10),
+  .trail__grid .cell:nth-child(12n+11),
+  .trail__grid .cell:nth-child(12n+12) { grid-column: auto; }
+
+  /* New 14n serpentine: row 2 (cells 8-14) reverses column order. */
+  .trail__grid .cell:nth-child(14n+8)  { grid-column: 7; }
+  .trail__grid .cell:nth-child(14n+9)  { grid-column: 6; }
+  .trail__grid .cell:nth-child(14n+10) { grid-column: 5; }
+  .trail__grid .cell:nth-child(14n+11) { grid-column: 4; }
+  .trail__grid .cell:nth-child(14n+12) { grid-column: 3; }
+  .trail__grid .cell:nth-child(14n+13) { grid-column: 2; }
+  .trail__grid .cell:nth-child(14n+14) { grid-column: 1; }
+
+  /* Reset arrow overrides from the 6-col tier, then re-apply for 14n. */
+  .trail__grid .cell::after {
+    right: -16px;
+    left: auto;
+    transform: translateY(-50%) rotate(-45deg);
+    content: '';
+  }
+  .trail__grid .cell:nth-child(6n)::after { content: ''; }
+  .trail__grid .cell:nth-child(7n)::after { content: none; }
+
+  .trail__grid .cell:nth-child(14n+8)::after,
+  .trail__grid .cell:nth-child(14n+9)::after,
+  .trail__grid .cell:nth-child(14n+10)::after,
+  .trail__grid .cell:nth-child(14n+11)::after,
+  .trail__grid .cell:nth-child(14n+12)::after,
+  .trail__grid .cell:nth-child(14n+13)::after {
+    right: auto;
+    left: -16px;
+    transform: translateY(-50%) rotate(135deg);
+  }
+  .trail__grid .cell:nth-child(14n)::after { content: none; }
+
+  /* Row-wrap down-arrows for 7-col. Reset 6-col down-arrows first. */
+  .trail__grid .cell:nth-child(12n+6)::before,
+  .trail__grid .cell:nth-child(12n+12)::before { content: none; }
+
+  /* Cells 7, 21, 35... (14n+7) end an odd row on the right → down-right. */
+  .trail__grid .cell:nth-child(14n+7)::before {
+    content: '';
+    position: absolute;
+    bottom: -22px;
+    right: 4px;
+    width: 18px;
+    height: 18px;
+    border: solid var(--arrow);
+    border-width: 0 4px 4px 0;
+    transform: rotate(45deg);
+    filter: drop-shadow(0 2px 2px rgba(120, 84, 12, 0.42));
+    z-index: 2;
+  }
+
+  /* Cells 14, 28, 42... (14n) end an even row on the left → down-left. */
+  .trail__grid .cell:nth-child(14n)::before {
+    content: '';
+    position: absolute;
+    bottom: -22px;
+    left: 4px;
+    width: 18px;
+    height: 18px;
+    border: solid var(--arrow);
+    border-width: 0 4px 4px 0;
+    transform: rotate(45deg);
+    filter: drop-shadow(0 2px 2px rgba(120, 84, 12, 0.42));
+    z-index: 2;
+  }
+}

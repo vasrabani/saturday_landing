@@ -18,9 +18,12 @@ const BASELINE_FILE = join(ROOT, 'tools', 'quality-baseline.json');
 // Folders this repo owns. static/races, letters, news and voting are
 // shared with other pages of the live site and treated as read-only, so
 // only reference checks look at them.
-const OWNED_DIRS = ['static/css', 'static/js', 'static/public', 'static/fonts'];
+const OWNED_DIRS = ['static/css', 'static/js', 'static/public', 'static/fonts', 'static/grid'];
 const LANDING_IMAGE_DIR = 'static/public/img';
-const ENTRY_HTML = 'index.html';
+// The pages the contractor works on. Every rule that reads "the page"
+// reads all of them, so a problem introduced on the trail fails the
+// run exactly as one on the landing page does.
+const ENTRY_PAGES = ['index.html', 'trail.html'];
 
 const IMAGE_BUDGET_BYTES = 300 * 1024;
 const RASTER_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif']);
@@ -97,14 +100,16 @@ const RULES = {
   },
 
   'html-ref-missing': {
-    help: 'index.html references a local file that does not exist',
+    help: 'a page references a local file that does not exist',
     run: () =>
       countBy(
-        [...read(ENTRY_HTML).matchAll(/\s(?:src|href|srcset|poster)="([^"]+)"/g)]
-          .flatMap((match) => match[1].split(',').map((candidate) => candidate.trim().split(/\s+/)[0]))
-          .filter((reference) => reference && !isExternal(reference) && !reference.startsWith('data:'))
-          .filter((reference) => !exists(localPath(reference).replace(/^\//, '') || ENTRY_HTML))
-          .map((reference) => reference),
+        ENTRY_PAGES.flatMap((page) =>
+          [...read(page).matchAll(/\s(?:src|href|srcset|poster)="([^"]+)"/g)]
+            .flatMap((match) => match[1].split(',').map((candidate) => candidate.trim().split(/\s+/)[0]))
+            .filter((reference) => reference && !isExternal(reference) && !reference.startsWith('data:'))
+            .filter((reference) => !exists(localPath(reference).replace(/^\//, '')))
+            .map((reference) => `${page} -> ${reference}`),
+        ),
       ),
   },
 
@@ -112,7 +117,7 @@ const RULES = {
     help: 'shipped code calls a localhost address',
     run: () =>
       countBy(
-        [ENTRY_HTML, ...ownedOfType('.js', '.css', '.html')].flatMap((file) =>
+        [...ENTRY_PAGES, ...ownedOfType('.js', '.css', '.html')].flatMap((file) =>
           [...read(file).matchAll(LOCAL_ENDPOINT)].map((match) => `${file} -> ${match[0]}`),
         ),
       ),
@@ -122,16 +127,16 @@ const RULES = {
     help: 'debug scaffolding left in shipped code',
     run: () =>
       countBy(
-        [ENTRY_HTML, ...ownedOfType('.js')].flatMap((file) =>
+        [...ENTRY_PAGES, ...ownedOfType('.js')].flatMap((file) =>
           DEBUG_MARKERS.filter((marker) => marker.test(read(file))).map((marker) => `${file} -> ${marker.source}`),
         ),
       ),
   },
 
   'third-party-script': {
-    help: 'index.html loads a script from a host that is not allow-listed (analytics must not run in the sandbox)',
+    help: 'a page loads a script from a host that is not allow-listed (analytics must not run in the sandbox)',
     run: () => {
-      const html = read(ENTRY_HTML);
+      const html = ENTRY_PAGES.map(read).join('\n');
       const hosts = [
         ...[...html.matchAll(/<script[^>]*\ssrc="(https?:)?\/\/([^/"]+)/g)].map((match) => match[2]),
         ...[...html.matchAll(/<script(?![^>]*\ssrc=)([^>]*)>([\s\S]*?)<\/script>/g)]
@@ -145,7 +150,11 @@ const RULES = {
   'hidden-section': {
     help: 'a section of the page is commented out',
     run: () =>
-      countBy([...read(ENTRY_HTML).matchAll(/<!--\s*TEMP HIDDEN:?\s*([^\n]*)/g)].map((match) => match[1].trim())),
+      countBy(
+        ENTRY_PAGES.flatMap((page) =>
+          [...read(page).matchAll(/<!--\s*TEMP HIDDEN:?\s*([^\n]*)/g)].map((match) => `${page} -> ${match[1].trim()}`),
+        ),
+      ),
   },
 
   'image-over-budget': {
@@ -161,7 +170,7 @@ const RULES = {
   'unused-image': {
     help: 'landing image that no HTML, CSS or JS file references',
     run: () => {
-      const corpus = [ENTRY_HTML, ...ownedOfType('.css', '.js', '.html')].map(read).join('\n');
+      const corpus = [...ENTRY_PAGES, ...ownedOfType('.css', '.js', '.html')].map(read).join('\n');
       return countBy(
         walk(LANDING_IMAGE_DIR)
           .filter((file) => IMAGE_EXTENSIONS.has(extname(file).toLowerCase()))
@@ -235,7 +244,7 @@ const RULES = {
       const loaded = new Set(
         [...css.matchAll(/@font-face\s*{[^}]*font-family:\s*['"]?([^'";]+)/g)].map((match) => match[1].trim().toLowerCase()),
       );
-      for (const match of read(ENTRY_HTML).matchAll(/fonts\.googleapis\.com\/css2?\?family=([^"&:]+)/g)) {
+      for (const match of ENTRY_PAGES.map(read).join('\n').matchAll(/fonts\.googleapis\.com\/css2?\?family=([^"&:]+)/g)) {
         loaded.add(decodeURIComponent(match[1]).replace(/\+/g, ' ').toLowerCase());
       }
       return countBy(

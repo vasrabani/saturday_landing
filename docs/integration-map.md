@@ -1,18 +1,25 @@
 # Integration map
 
 Where each part of this snapshot lives in the Django site, and how a change
-made here gets there. The redesign has been ported: since 2026-09-18 it is
-the live home page. So this repo is now the design workspace for that page,
-and a change made here is ported into the matching template by hand.
+made here gets there. Two pages live here now.
+
+- **The home page** (`index.html`). Ported and live since 2026-09-18, so
+  this repo is its design workspace: a change made here is ported into
+  the matching template by hand.
+- **The Fox Trail** (`trail.html`). Snapshot taken 2026-09-30 for the
+  revamp — see `trail-brief.md`. Nothing has been ported back yet.
 
 Repositories:
 
-- **Here:** `saturday_landing` — the static snapshot.
-- **There:** the Saturday Racing app. The page is
-  `public/templates/public/landing_v2.html`, which includes one partial per
-  section from `public/templates/public/components/v2/`. Its context comes
-  from `public/views/landing.py`, and its CSS, JS and images live under
-  `public/static/public/v2/`.
+- **Here:** `saturday_landing` — the static snapshots.
+- **There:** the Saturday Racing app.
+  - Home page: `public/templates/public/landing_v2.html`, one partial per
+    section from `public/templates/public/components/v2/`, context from
+    `public/views/landing.py`, assets under `public/static/public/v2/`.
+  - Fox Trail: the `grid` app — `grid/templates/grid/trail.html` plus 12
+    partials, `grid/views.py`, the board itself built by
+    `grid/services/` (consolidator, trail, track_record, source adapters),
+    assets under `grid/static/grid/`.
 
 ## In sync with production as of
 
@@ -80,6 +87,40 @@ will be ported on top of an old version of the section.
 | Nav and footer | `templates/base/base.html`, `templates/partials/footer.html` | `user`, `featured`, `site_contact` |
 
 The day hub's icons are shared includes in `components/v2/icons/`.
+
+## The Fox Trail, part by part
+
+| In the sandbox | Template there | Notes |
+| --- | --- | --- |
+| `trail.html` shell, masthead | `grid/templates/grid/trail.html` | `is_today`, `page_day`, `trail.*`; historic days come from `?date=` |
+| Counter | `grid/_counter.html` | `trail.counter` from `compute_counter` |
+| Freshness pill, live updates | `trail.html` + `grid/static/grid/js/trail_live.js` | polls `grid:trail_live`, the JSON in `grid/views.py` |
+| The grid, one cell per race | `grid/_cell.html` | the biggest branch set on the page: state, tier, split, featured, backup, flagship, fox marker |
+| Cell back (the result) | `grid/_cell_back.html` | shown by `trail_flip.js`; podium from the cell |
+| Cell drawer | `grid/_drawer.html` | filled by `trail_drawer.js` from `#trailCellData` (`drawer_payloads`) |
+| Legend and filters | `grid/_legend.html` | `trail_filter.js` reads `data-filter-source` / `data-filter-tier` |
+| Spotlight | `grid/_spotlight.html` | `trail.spotlight` |
+| Today's record | `grid/_track_record_today.html` | `trail.today_record`, bumped live by the poller |
+| History | `grid/_track_record_history.html` | `trail.track_record` |
+| Proposition | `grid/_proposition.html` | fixed copy |
+| Anatomy panel | `grid/_trail_anatomy.html` | only on the not-published-yet day |
+| Early signals banner | `grid/_early_signals_banner.html` | only before the card firms up |
+| No racing / too early | `grid/_empty.html`, `grid/_empty_premature.html` | `partials/trail-empty*.html` here |
+
+**The sandbox's day is a fixture.** `GRID_FORCE_FIXTURES=True` renders a
+24-race demo day that exercises every cell state and tier, which is what
+`trail.html` was snapshotted from (`grid/services/fixtures.py`). The
+featured, backup and flagship cells are not in that day; they are
+rendered separately into `partials/trail-cell-*.html`.
+
+**The live feed is recorded.** `fixtures/trail-live-timeline.json` is a
+day of the board settling, built by walking the fixture day forward and
+recomputing `compute_counter` / `build_today_tier_record` at each step, so
+every number in it is the app's own. `tools/serve.mjs` replays it.
+
+**One production change went with the snapshot:** `trail_live.js` reads
+its poll interval from `data-live-poll-ms`, falling back to 45s, so the
+sandbox can replay a day in minutes. Port that line back with the revamp.
 
 ## Porting a change
 
