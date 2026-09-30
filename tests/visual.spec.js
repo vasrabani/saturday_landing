@@ -13,6 +13,7 @@
  */
 import { test, expect } from '@playwright/test';
 import { FIXED_CHROME, NON_DETERMINISTIC_ART, SECTIONS, openLanding } from './support/landing.js';
+import { TRAIL_NON_DETERMINISTIC, TRAIL_SECTIONS, openTrail } from './support/trail.js';
 import { showsDesktopNav, showsDrawerNav } from './support/viewports.js';
 
 const RANDOM_SEED = 20260825;
@@ -124,6 +125,39 @@ for (const section of SECTIONS) {
       // Scroll by the section's own position, re-read every time: content
       // above can still be settling, which would drift a fixed target by a
       // few pixels and show up as a whole-tile difference.
+      await page.evaluate(
+        ([selector, offset]) => {
+          const el = document.querySelector(selector);
+          const target = Math.round(el.getBoundingClientRect().top + window.scrollY) + offset;
+          window.scrollTo(0, target);
+        },
+        [section.selector, tile * windowHeight],
+      );
+      await page.waitForTimeout(PAINT_SETTLE_MS);
+      const name = tiles === 1 ? `${section.name}.png` : `${section.name}-${tile + 1}.png`;
+      await expect(page).toHaveScreenshot(name);
+    }
+  });
+}
+
+// ── The Fox Trail ─────────────────────────────────────────────────────
+// Same treatment as the landing's sections. The live feed is blocked so
+// the day stands still: races settling mid-capture would change the
+// board between one tile and the next.
+const TRAIL_STYLE = [hide(FIXED_CHROME), hide(NON_DETERMINISTIC_ART), hide(TRAIL_NON_DETERMINISTIC), INSTANT_SCROLL].join('\n');
+
+for (const section of TRAIL_SECTIONS) {
+  test(`trail section: ${section.name}`, async ({ page }) => {
+    await openTrail(page, { live: false, waitUntil: 'load' });
+    await settle(page);
+    await page.addStyleTag({ content: TRAIL_STYLE });
+
+    const height = await page.locator(section.selector).first()
+      .evaluate((el) => Math.round(el.getBoundingClientRect().height));
+    const windowHeight = page.viewportSize().height;
+    const tiles = Math.min(Math.ceil(height / windowHeight), MAX_TILES);
+
+    for (let tile = 0; tile < tiles; tile += 1) {
       await page.evaluate(
         ([selector, offset]) => {
           const el = document.querySelector(selector);

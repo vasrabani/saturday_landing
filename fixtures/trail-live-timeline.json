@@ -1,0 +1,3546 @@
+{
+ "note": "A recorded day of the trail settling, replayed by the sandbox server one frame per poll. Built by scripts/build_trail_timeline.py against the app, so every number is the real calculation.",
+ "date": "2026-09-30",
+ "frames": [
+  {
+   "generated_at": "2026-09-30T07:45:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 3,
+    "lost": 1,
+    "placed": 2,
+    "live": 1,
+    "pending": 13,
+    "voided": 1,
+    "no_fancy": 3,
+    "resolved": 7,
+    "hit_rate_pct": 50,
+    "pl": 16.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 1,
+      "won": 0,
+      "lost": 1,
+      "hit_rate_pct": 0,
+      "pl_units": -1.0,
+      "has_sample": true,
+      "headline": "1 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 2,
+      "won": 2,
+      "lost": 0,
+      "hit_rate_pct": 100,
+      "pl_units": 7.25,
+      "has_sample": true,
+      "headline": "2 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 1,
+      "won": 0,
+      "lost": 1,
+      "hit_rate_pct": 0,
+      "pl_units": -1.0,
+      "has_sample": true,
+      "headline": "1 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T07:52:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 3,
+    "lost": 1,
+    "placed": 2,
+    "live": 1,
+    "pending": 12,
+    "voided": 2,
+    "no_fancy": 3,
+    "resolved": 8,
+    "hit_rate_pct": 50,
+    "pl": 16.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    },
+    {
+     "race_id": 1009,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 1,
+      "won": 0,
+      "lost": 1,
+      "hit_rate_pct": 0,
+      "pl_units": -1.0,
+      "has_sample": true,
+      "headline": "1 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 2,
+      "won": 2,
+      "lost": 0,
+      "hit_rate_pct": 100,
+      "pl_units": 7.25,
+      "has_sample": true,
+      "headline": "2 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 1,
+      "won": 0,
+      "lost": 1,
+      "hit_rate_pct": 0,
+      "pl_units": -1.0,
+      "has_sample": true,
+      "headline": "1 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T07:59:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 3,
+    "lost": 2,
+    "placed": 2,
+    "live": 1,
+    "pending": 11,
+    "voided": 2,
+    "no_fancy": 3,
+    "resolved": 9,
+    "hit_rate_pct": 43,
+    "pl": 15.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "lost",
+     "finish_position": 5,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    },
+    {
+     "race_id": 1010,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 2,
+      "won": 0,
+      "lost": 2,
+      "hit_rate_pct": 0,
+      "pl_units": -2.0,
+      "has_sample": true,
+      "headline": "2 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 2,
+      "won": 2,
+      "lost": 0,
+      "hit_rate_pct": 100,
+      "pl_units": 7.25,
+      "has_sample": true,
+      "headline": "2 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 1,
+      "won": 0,
+      "lost": 1,
+      "hit_rate_pct": 0,
+      "pl_units": -1.0,
+      "has_sample": true,
+      "headline": "1 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T08:06:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 3,
+    "lost": 3,
+    "placed": 2,
+    "live": 1,
+    "pending": 10,
+    "voided": 2,
+    "no_fancy": 3,
+    "resolved": 10,
+    "hit_rate_pct": 38,
+    "pl": 14.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "lost",
+     "finish_position": 5,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "lost",
+     "finish_position": 6,
+     "winning_horse": "Toco Madera",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    },
+    {
+     "race_id": 1011,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 2,
+      "won": 0,
+      "lost": 2,
+      "hit_rate_pct": 0,
+      "pl_units": -2.0,
+      "has_sample": true,
+      "headline": "2 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 2,
+      "won": 2,
+      "lost": 0,
+      "hit_rate_pct": 100,
+      "pl_units": 7.25,
+      "has_sample": true,
+      "headline": "2 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 1,
+      "won": 0,
+      "lost": 1,
+      "hit_rate_pct": 0,
+      "pl_units": -1.0,
+      "has_sample": true,
+      "headline": "1 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T08:13:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 4,
+    "lost": 3,
+    "placed": 2,
+    "live": 1,
+    "pending": 9,
+    "voided": 2,
+    "no_fancy": 3,
+    "resolved": 11,
+    "hit_rate_pct": 44,
+    "pl": 17.75,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "lost",
+     "finish_position": 5,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "lost",
+     "finish_position": 6,
+     "winning_horse": "Toco Madera",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Empire Rising",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    },
+    {
+     "race_id": 1012,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 2,
+      "won": 0,
+      "lost": 2,
+      "hit_rate_pct": 0,
+      "pl_units": -2.0,
+      "has_sample": true,
+      "headline": "2 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 2,
+      "won": 2,
+      "lost": 0,
+      "hit_rate_pct": 100,
+      "pl_units": 7.25,
+      "has_sample": true,
+      "headline": "2 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 1,
+      "won": 0,
+      "lost": 1,
+      "hit_rate_pct": 0,
+      "pl_units": -1.0,
+      "has_sample": true,
+      "headline": "1 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T08:20:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 5,
+    "lost": 3,
+    "placed": 2,
+    "live": 1,
+    "pending": 8,
+    "voided": 2,
+    "no_fancy": 3,
+    "resolved": 12,
+    "hit_rate_pct": 50,
+    "pl": 22.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "lost",
+     "finish_position": 5,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "lost",
+     "finish_position": 6,
+     "winning_horse": "Toco Madera",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Empire Rising",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Meadow Chase",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 3,
+      "won": 1,
+      "lost": 2,
+      "hit_rate_pct": 33,
+      "pl_units": 2.5,
+      "has_sample": true,
+      "headline": "3 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 2,
+      "won": 2,
+      "lost": 0,
+      "hit_rate_pct": 100,
+      "pl_units": 7.25,
+      "has_sample": true,
+      "headline": "2 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 1,
+      "won": 0,
+      "lost": 1,
+      "hit_rate_pct": 0,
+      "pl_units": -1.0,
+      "has_sample": true,
+      "headline": "1 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T08:27:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 5,
+    "lost": 4,
+    "placed": 2,
+    "live": 1,
+    "pending": 7,
+    "voided": 2,
+    "no_fancy": 3,
+    "resolved": 13,
+    "hit_rate_pct": 45,
+    "pl": 21.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "lost",
+     "finish_position": 5,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "lost",
+     "finish_position": 6,
+     "winning_horse": "Toco Madera",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Empire Rising",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Meadow Chase",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "lost",
+     "finish_position": 9,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    },
+    {
+     "race_id": 1015,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 4,
+      "won": 1,
+      "lost": 3,
+      "hit_rate_pct": 25,
+      "pl_units": 1.5,
+      "has_sample": true,
+      "headline": "4 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 2,
+      "won": 2,
+      "lost": 0,
+      "hit_rate_pct": 100,
+      "pl_units": 7.25,
+      "has_sample": true,
+      "headline": "2 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 1,
+      "won": 0,
+      "lost": 1,
+      "hit_rate_pct": 0,
+      "pl_units": -1.0,
+      "has_sample": true,
+      "headline": "1 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T08:34:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 5,
+    "lost": 5,
+    "placed": 2,
+    "live": 1,
+    "pending": 6,
+    "voided": 2,
+    "no_fancy": 3,
+    "resolved": 14,
+    "hit_rate_pct": 42,
+    "pl": 20.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "lost",
+     "finish_position": 5,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "lost",
+     "finish_position": 6,
+     "winning_horse": "Toco Madera",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Empire Rising",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Meadow Chase",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "lost",
+     "finish_position": 9,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "lost",
+     "finish_position": 4,
+     "winning_horse": "Shelbourne Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    },
+    {
+     "race_id": 1016,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 4,
+      "won": 1,
+      "lost": 3,
+      "hit_rate_pct": 25,
+      "pl_units": 1.5,
+      "has_sample": true,
+      "headline": "4 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 3,
+      "won": 2,
+      "lost": 1,
+      "hit_rate_pct": 67,
+      "pl_units": 6.25,
+      "has_sample": true,
+      "headline": "3 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 1,
+      "won": 0,
+      "lost": 1,
+      "hit_rate_pct": 0,
+      "pl_units": -1.0,
+      "has_sample": true,
+      "headline": "1 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T08:41:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 5,
+    "lost": 5,
+    "placed": 3,
+    "live": 1,
+    "pending": 5,
+    "voided": 2,
+    "no_fancy": 3,
+    "resolved": 15,
+    "hit_rate_pct": 38,
+    "pl": 19.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "lost",
+     "finish_position": 5,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "lost",
+     "finish_position": 6,
+     "winning_horse": "Toco Madera",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Empire Rising",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Meadow Chase",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "lost",
+     "finish_position": 9,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "lost",
+     "finish_position": 4,
+     "winning_horse": "Shelbourne Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Harbour Master",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    },
+    {
+     "race_id": 1017,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 4,
+      "won": 1,
+      "lost": 3,
+      "hit_rate_pct": 25,
+      "pl_units": 1.5,
+      "has_sample": true,
+      "headline": "4 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 3,
+      "won": 2,
+      "lost": 1,
+      "hit_rate_pct": 67,
+      "pl_units": 6.25,
+      "has_sample": true,
+      "headline": "3 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 1,
+      "won": 0,
+      "lost": 1,
+      "hit_rate_pct": 0,
+      "pl_units": -1.0,
+      "has_sample": true,
+      "headline": "1 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T08:48:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 5,
+    "lost": 5,
+    "placed": 3,
+    "live": 1,
+    "pending": 4,
+    "voided": 3,
+    "no_fancy": 3,
+    "resolved": 16,
+    "hit_rate_pct": 38,
+    "pl": 19.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "lost",
+     "finish_position": 5,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "lost",
+     "finish_position": 6,
+     "winning_horse": "Toco Madera",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Empire Rising",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Meadow Chase",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "lost",
+     "finish_position": 9,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "lost",
+     "finish_position": 4,
+     "winning_horse": "Shelbourne Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Harbour Master",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 4,
+      "won": 1,
+      "lost": 3,
+      "hit_rate_pct": 25,
+      "pl_units": 1.5,
+      "has_sample": true,
+      "headline": "4 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 3,
+      "won": 2,
+      "lost": 1,
+      "hit_rate_pct": 67,
+      "pl_units": 6.25,
+      "has_sample": true,
+      "headline": "3 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 1,
+      "won": 0,
+      "lost": 1,
+      "hit_rate_pct": 0,
+      "pl_units": -1.0,
+      "has_sample": true,
+      "headline": "1 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T08:55:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 5,
+    "lost": 6,
+    "placed": 3,
+    "live": 1,
+    "pending": 3,
+    "voided": 3,
+    "no_fancy": 3,
+    "resolved": 17,
+    "hit_rate_pct": 36,
+    "pl": 18.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "lost",
+     "finish_position": 5,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "lost",
+     "finish_position": 6,
+     "winning_horse": "Toco Madera",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Empire Rising",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Meadow Chase",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "lost",
+     "finish_position": 9,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "lost",
+     "finish_position": 4,
+     "winning_horse": "Shelbourne Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Harbour Master",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Harbour Master",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    },
+    {
+     "race_id": 1020,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 4,
+      "won": 1,
+      "lost": 3,
+      "hit_rate_pct": 25,
+      "pl_units": 1.5,
+      "has_sample": true,
+      "headline": "4 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 3,
+      "won": 2,
+      "lost": 1,
+      "hit_rate_pct": 67,
+      "pl_units": 6.25,
+      "has_sample": true,
+      "headline": "3 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 2,
+      "won": 0,
+      "lost": 2,
+      "hit_rate_pct": 0,
+      "pl_units": -2.0,
+      "has_sample": true,
+      "headline": "2 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T09:02:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 6,
+    "lost": 6,
+    "placed": 3,
+    "live": 1,
+    "pending": 2,
+    "voided": 3,
+    "no_fancy": 3,
+    "resolved": 18,
+    "hit_rate_pct": 40,
+    "pl": 38.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "lost",
+     "finish_position": 5,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "lost",
+     "finish_position": 6,
+     "winning_horse": "Toco Madera",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Empire Rising",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Meadow Chase",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "lost",
+     "finish_position": 9,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "lost",
+     "finish_position": 4,
+     "winning_horse": "Shelbourne Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Harbour Master",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Harbour Master",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Late Postcard",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 4,
+      "won": 1,
+      "lost": 3,
+      "hit_rate_pct": 25,
+      "pl_units": 1.5,
+      "has_sample": true,
+      "headline": "4 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 3,
+      "won": 2,
+      "lost": 1,
+      "hit_rate_pct": 67,
+      "pl_units": 6.25,
+      "has_sample": true,
+      "headline": "3 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 2,
+      "won": 0,
+      "lost": 2,
+      "hit_rate_pct": 0,
+      "pl_units": -2.0,
+      "has_sample": true,
+      "headline": "2 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T09:09:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 7,
+    "lost": 6,
+    "placed": 3,
+    "live": 1,
+    "pending": 1,
+    "voided": 3,
+    "no_fancy": 3,
+    "resolved": 19,
+    "hit_rate_pct": 44,
+    "pl": 44.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "lost",
+     "finish_position": 5,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "lost",
+     "finish_position": 6,
+     "winning_horse": "Toco Madera",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Empire Rising",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Meadow Chase",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "lost",
+     "finish_position": 9,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "lost",
+     "finish_position": 4,
+     "winning_horse": "Shelbourne Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Harbour Master",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Harbour Master",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Late Postcard",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Grand Ledger",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    },
+    {
+     "race_id": 1023,
+     "state": "pending",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 5,
+      "won": 2,
+      "lost": 3,
+      "hit_rate_pct": 40,
+      "pl_units": 7.5,
+      "has_sample": true,
+      "headline": "5 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 3,
+      "won": 2,
+      "lost": 1,
+      "hit_rate_pct": 67,
+      "pl_units": 6.25,
+      "has_sample": true,
+      "headline": "3 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 2,
+      "won": 0,
+      "lost": 2,
+      "hit_rate_pct": 0,
+      "pl_units": -2.0,
+      "has_sample": true,
+      "headline": "2 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T09:16:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": false,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 8,
+    "lost": 6,
+    "placed": 3,
+    "live": 1,
+    "pending": 0,
+    "voided": 3,
+    "no_fancy": 3,
+    "resolved": 20,
+    "hit_rate_pct": 47,
+    "pl": 58.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "lost",
+     "finish_position": 5,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "lost",
+     "finish_position": 6,
+     "winning_horse": "Toco Madera",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Empire Rising",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Meadow Chase",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "lost",
+     "finish_position": 9,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "lost",
+     "finish_position": 4,
+     "winning_horse": "Shelbourne Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Harbour Master",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Harbour Master",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Late Postcard",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Grand Ledger",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Silent Meadow",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "live",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": true
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 5,
+      "won": 2,
+      "lost": 3,
+      "hit_rate_pct": 40,
+      "pl_units": 7.5,
+      "has_sample": true,
+      "headline": "5 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 3,
+      "won": 2,
+      "lost": 1,
+      "hit_rate_pct": 67,
+      "pl_units": 6.25,
+      "has_sample": true,
+      "headline": "3 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 2,
+      "won": 0,
+      "lost": 2,
+      "hit_rate_pct": 0,
+      "pl_units": -2.0,
+      "has_sample": true,
+      "headline": "2 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  },
+  {
+   "generated_at": "2026-09-30T09:23:03.581330+00:00",
+   "date": "2026-09-30",
+   "is_final": true,
+   "counter": {
+    "total": 24,
+    "fancied": 21,
+    "gold": 8,
+    "lost": 7,
+    "placed": 3,
+    "live": 0,
+    "pending": 0,
+    "voided": 3,
+    "no_fancy": 3,
+    "resolved": 21,
+    "hit_rate_pct": 44,
+    "pl": 57.25,
+    "backup_settled": 0,
+    "backup_gold": 0,
+    "backup_lost": 0,
+    "backup_placed": 0,
+    "backup_pl": 0.0
+   },
+   "cells": [
+    {
+     "race_id": 1000,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Winter Wonder",
+     "is_now": false
+    },
+    {
+     "race_id": 1001,
+     "state": "placed",
+     "finish_position": 2,
+     "winning_horse": "Kestrel Watch",
+     "is_now": false
+    },
+    {
+     "race_id": 1002,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Fenland Rider",
+     "is_now": false
+    },
+    {
+     "race_id": 1003,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Silver Bramble",
+     "is_now": false
+    },
+    {
+     "race_id": 1004,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Riverbank Lily",
+     "is_now": false
+    },
+    {
+     "race_id": 1005,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1006,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1007,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Southern Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1008,
+     "state": "lost",
+     "finish_position": 5,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1009,
+     "state": "lost",
+     "finish_position": 6,
+     "winning_horse": "Toco Madera",
+     "is_now": false
+    },
+    {
+     "race_id": 1010,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Empire Rising",
+     "is_now": false
+    },
+    {
+     "race_id": 1011,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Meadow Chase",
+     "is_now": false
+    },
+    {
+     "race_id": 1012,
+     "state": "lost",
+     "finish_position": 9,
+     "winning_horse": "Ardbeg Boy",
+     "is_now": false
+    },
+    {
+     "race_id": 1013,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1014,
+     "state": "lost",
+     "finish_position": 4,
+     "winning_horse": "Shelbourne Star",
+     "is_now": false
+    },
+    {
+     "race_id": 1015,
+     "state": "placed",
+     "finish_position": 3,
+     "winning_horse": "Harbour Master",
+     "is_now": false
+    },
+    {
+     "race_id": 1016,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1017,
+     "state": "lost",
+     "finish_position": 7,
+     "winning_horse": "Harbour Master",
+     "is_now": false
+    },
+    {
+     "race_id": 1018,
+     "state": "no_fancy",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1019,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Late Postcard",
+     "is_now": false
+    },
+    {
+     "race_id": 1020,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Grand Ledger",
+     "is_now": false
+    },
+    {
+     "race_id": 1021,
+     "state": "void",
+     "finish_position": null,
+     "winning_horse": "",
+     "is_now": false
+    },
+    {
+     "race_id": 1022,
+     "state": "won",
+     "finish_position": 1,
+     "winning_horse": "Silent Meadow",
+     "is_now": false
+    },
+    {
+     "race_id": 1023,
+     "state": "lost",
+     "finish_position": 9,
+     "winning_horse": "Shelbourne Star",
+     "is_now": false
+    }
+   ],
+   "today_record": {
+    "has_data": true,
+    "tiers": [
+     {
+      "tier": 2,
+      "tier_slug": "nod",
+      "tier_name": "Nod",
+      "settled": 5,
+      "won": 2,
+      "lost": 3,
+      "hit_rate_pct": 40,
+      "pl_units": 7.5,
+      "has_sample": true,
+      "headline": "5 settled"
+     },
+     {
+      "tier": 3,
+      "tier_slug": "chorus",
+      "tier_name": "Chorus",
+      "settled": 4,
+      "won": 2,
+      "lost": 2,
+      "hit_rate_pct": 50,
+      "pl_units": 5.25,
+      "has_sample": true,
+      "headline": "4 settled"
+     },
+     {
+      "tier": 4,
+      "tier_slug": "smoker",
+      "tier_name": "Smoker",
+      "settled": 2,
+      "won": 0,
+      "lost": 2,
+      "hit_rate_pct": 0,
+      "pl_units": -2.0,
+      "has_sample": true,
+      "headline": "2 settled"
+     }
+    ]
+   },
+   "source_health": {}
+  }
+ ]
+}
