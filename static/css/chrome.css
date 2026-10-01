@@ -156,9 +156,19 @@
 }
 .site-nav__link.active {
   color: var(--c-gold);
-  background: transparent;
   font-weight: 700;
-  box-shadow: none;
+  padding: 6px 12px;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.4);
+  transform: skewX(-14deg);
+  box-shadow:
+    inset 0 1.5px 0 var(--c-gold),
+    inset 0 -1.5px 0 var(--c-gold),
+    0 0 14px color-mix(in srgb, var(--c-gold) 35%, transparent);
+}
+/* Un-skew label / icon so only the chip is slanted. */
+.site-nav__link.active > * {
+  transform: skewX(14deg);
 }
 .site-nav__link.active .site-nav__link-ico,
 .site-nav__link.active .site-nav__caret {
@@ -169,27 +179,17 @@
   border-color: rgba(212, 175, 55, 0.55);
 }
 
-/* Exact layout active underline — thicker gold streak, starts under label */
-.site-nav__link.active::after {
-  content: "";
-  position: absolute;
-  /* Start after icon (15px) + gap (6px) + left pad (8px) ≈ under "Home" text */
-  left: calc(8px + 15px + 6px);
-  right: 6px;
-  bottom: -1px;
-  width: auto;
-  height: 14px;
-  transform: none;
-  background: url("../public/img/nav-active-underline.webp") center / 100% 100%
-    no-repeat;
-  pointer-events: none;
-  opacity: 1;
-  filter: none;
-}
+.site-nav__link.active::after,
 .site-nav__dropdown-trigger.site-nav__link.active::after {
-  /* dropdown triggers also have caret — keep underline under label only */
-  right: 18px;
-  bottom: -1px;
+  content: none;
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-nav__link.active,
+  .site-nav__link.active > * {
+    transform: none;
+  }
 }
 
 /* Right actions */
