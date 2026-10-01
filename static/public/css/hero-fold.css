@@ -216,6 +216,25 @@
   gap: var(--space-4);
 }
 
+/* THIS SATURDAY + Pick 6 on one row (space-between). */
+.hf-emblem-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-3, 12px);
+  /* Clear the absolute CHALLENGE stamp above the badge. */
+  padding-top: var(--space-3, 12px);
+}
+
+.hf-emblem-row .hf-race-reveal__eyebrow--pill {
+  margin-bottom: 0;
+  flex: 0 0 auto;
+}
+
+.hf-emblem-row .pick6 {
+  flex: 0 0 auto;
+}
+
 /* ── DESKTOP LAYOUT — 768px+ ───────────────────────────── */
 
 @media (min-width: 768px) {
@@ -2429,6 +2448,15 @@
   /* Race context lives in the today card on mobile */
   .hero-fold__col--title .hf-race-reveal {
     display: none !important;
+  }
+
+  .hero-fold__col--title .hf-emblem-row .hf-race-reveal__eyebrow--pill {
+    display: none;
+  }
+
+  .hero-fold__col--title .hf-emblem-row {
+    justify-content: flex-start;
+    padding-top: var(--space-2, 8px);
   }
 
   .hero-fold__col--countdown {
