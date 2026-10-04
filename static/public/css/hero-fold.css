@@ -195,7 +195,8 @@
   z-index: 2;
   display: flex;
   flex-direction: column;
-  padding: var(--space-5) var(--page-gutter) var(--space-5);
+  /* Same gutter as .container / upper sections; equal vertical inset. */
+  padding: var(--space-5) var(--page-gutter);
   gap: var(--space-5);
   max-width: var(--max-w);
   margin: 0 auto;
@@ -216,6 +217,36 @@
   gap: var(--space-4);
 }
 
+/* Left: THIS SATURDAY + race title. Right: Pick 6 (top-aligned). */
+.hf-emblem-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.hf-emblem-row__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.hf-emblem-row .hf-race-reveal__eyebrow--pill {
+  margin-bottom: 0;
+  flex: 0 0 auto;
+}
+
+.hf-emblem-row .hf-race-reveal__name {
+  margin: 0;
+}
+
+.hf-emblem-row .pick6 {
+  flex: 0 0 auto;
+}
+
 /* ── DESKTOP LAYOUT — 768px+ ───────────────────────────── */
 
 @media (min-width: 768px) {
@@ -223,7 +254,7 @@
     flex-direction: row;
     align-items: stretch; /* balance left fox + right stack heights */
     gap: var(--space-7);
-    padding: var(--space-6) var(--page-gutter) var(--space-5);
+    padding: var(--space-6) var(--page-gutter);
     /* Shared: fox→Latest News == picks→CTAs */
     --hf-bottom-gap: 12px;
   }
@@ -307,7 +338,7 @@
   }
 
   .hero-fold__layout {
-    padding: var(--space-7) var(--page-gutter) var(--space-5);
+    padding: var(--space-7) var(--page-gutter);
     gap: var(--space-8, 64px);
   }
 }
@@ -2417,8 +2448,8 @@
   .hero-fold__layout {
     display: flex;
     flex-direction: column;
-    gap: 22px;
-    padding: 16px var(--page-gutter) 28px;
+    gap: var(--space-5);
+    padding: var(--space-4) var(--page-gutter);
   }
 
   .hero-fold__col--title {
@@ -2429,6 +2460,14 @@
   /* Race context lives in the today card on mobile */
   .hero-fold__col--title .hf-race-reveal {
     display: none !important;
+  }
+
+  .hero-fold__col--title .hf-emblem-row__copy {
+    display: none;
+  }
+
+  .hero-fold__col--title .hf-emblem-row {
+    justify-content: flex-start;
   }
 
   .hero-fold__col--countdown {
