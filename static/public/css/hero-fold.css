@@ -2488,6 +2488,12 @@
     justify-content: flex-start;
   }
 
+  /* With no Pick 6 the row has nothing to show on phones; drop it so it
+     doesn't leave an empty gap above the title. */
+  .hero-fold__col--title .hf-emblem-row--no-badge {
+    display: none;
+  }
+
   .hero-fold__col--countdown {
     order: 2;
     display: flex;
