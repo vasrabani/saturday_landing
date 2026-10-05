@@ -139,8 +139,8 @@
   color: rgba(242, 236, 223, 0.72);
   /* 8px each side, not the redesign's 12px: at 12px the seven links ran
      12px past their row and into the Join button on every page. 8px
-     leaves 44px to spare in the 1280px nav. The active underline below
-     is positioned from this padding. */
+     leaves 44px to spare in the 1280px nav. The active chip below keeps
+     the same side padding. */
   padding: 7px 8px 10px;
   border-radius: 0;
   background: transparent;
@@ -157,7 +157,18 @@
 .site-nav__link.active {
   color: var(--c-gold);
   font-weight: 700;
-  padding: 6px 12px;
+  /* Same 8px sides as every other link, so the row doesn't shift when the
+     active page changes. */
+  padding: 6px 8px;
+  isolation: isolate;
+}
+/* The slanted chip is drawn behind the link, so the icon and label stay
+   upright and crisp — skewing the link itself slanted the bare "Home" text. */
+.site-nav__link.active::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   border-radius: 5px;
   background: rgba(0, 0, 0, 0.4);
   transform: skewX(-14deg);
@@ -165,10 +176,7 @@
     inset 0 1.5px 0 var(--c-gold),
     inset 0 -1.5px 0 var(--c-gold),
     0 0 14px color-mix(in srgb, var(--c-gold) 35%, transparent);
-}
-/* Un-skew label / icon so only the chip is slanted. */
-.site-nav__link.active > * {
-  transform: skewX(14deg);
+  pointer-events: none;
 }
 .site-nav__link.active .site-nav__link-ico,
 .site-nav__link.active .site-nav__caret {
@@ -186,8 +194,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .site-nav__link.active,
-  .site-nav__link.active > * {
+  .site-nav__link.active::before {
     transform: none;
   }
 }

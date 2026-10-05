@@ -247,6 +247,24 @@
   flex: 0 0 auto;
 }
 
+/* Tablet / small laptop: the title column is too narrow to share a row
+   with the badge (at 820px it sat on THIS SATURDAY; at 1024px it squeezed
+   the race name to five lines). Give the badge its own row above, as on
+   mobile, until the column is wide enough. */
+@media (min-width: 768px) and (max-width: 1279px) {
+  .hf-emblem-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-5);
+    /* clear the CHALLENGE stamp that hangs above the badge */
+    margin-top: var(--space-3);
+  }
+
+  .hf-emblem-row .pick6 {
+    order: -1;
+  }
+}
+
 /* ── DESKTOP LAYOUT — 768px+ ───────────────────────────── */
 
 @media (min-width: 768px) {
