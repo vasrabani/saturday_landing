@@ -50,6 +50,18 @@ const cellHtml = (selector) =>
     return el ? el.outerHTML : null;
   }, selector);
 
+/**
+ * The whole board: the frame, which holds the grid and the track that
+ * trail_track.js has drawn under it. The track is geometry for the cards
+ * where they stood, so the case is pinned to the width it was captured at.
+ */
+const boardHtml = () =>
+  page.evaluate(() => {
+    const frame = document.querySelector('.trail__frame');
+    if (!frame) return document.getElementById('trailGrid')?.outerHTML ?? '';
+    return `<div class="states-board" style="width: ${frame.getBoundingClientRect().width}px">${frame.outerHTML}</div>`;
+  });
+
 const STATES = [];
 const add = (name, when, markup) => {
   if (!markup) {
@@ -113,15 +125,15 @@ if (flip) {
 const filterBtn = await page.$('[data-filter-source]');
 if (filterBtn) {
   await filterBtn.click();
+  // Pointing at a legend row previews its filter, more softly. Take the
+  // pointer away, or the preview is captured on top of the filter.
+  await page.mouse.move(0, 0);
   await page.waitForTimeout(400);
   add('Grid · filtered to one source',
     'trail_filter.js adds .trail__grid--filtered and hides cells that do not match',
-    await page.evaluate(() => {
-      const legend = document.querySelector('.trail__legend')?.outerHTML ?? '';
-      const grid = document.getElementById('trailGrid')?.outerHTML ?? '';
-      return legend + grid;
-    }));
+    (await page.evaluate(() => document.querySelector('.trail__legend')?.outerHTML ?? '')) + (await boardHtml()));
   await filterBtn.click();
+  await page.mouse.move(0, 0);
   await page.waitForTimeout(300);
 }
 
@@ -130,16 +142,14 @@ await page.unroute('**/trail/live/**');
 const timeline = JSON.parse(readFileSync(join('fixtures', 'trail-live-timeline.json'), 'utf8'));
 await page.route('**/trail/live/**', (route) =>
   route.fulfill({ contentType: 'application/json', body: JSON.stringify(timeline.frames.at(-1)) }));
-await page.evaluate(() => document.querySelector('main.trail').setAttribute('data-live-poll-ms', '300'));
 await page.reload({ waitUntil: 'load' });
+// The poller's first tick comes a few seconds after load. Wait for it to
+// call the day final, then for the flashes on the settled cells to end.
+await page.waitForSelector('#trailFreshness.is-final', { timeout: 20_000 });
 await page.waitForTimeout(2500);
 add('Day · every race settled',
   'the poller sees is_final and stops — counter, freshness pill and grid at the end of the day',
-  await page.evaluate(() => {
-    const masthead = document.querySelector('.trail__masthead')?.outerHTML ?? '';
-    const grid = document.getElementById('trailGrid')?.outerHTML ?? '';
-    return masthead + grid;
-  }));
+  (await page.evaluate(() => document.querySelector('.trail__masthead')?.outerHTML ?? '')) + (await boardHtml()));
 
 await browser.close();
 server.close?.();
@@ -167,10 +177,10 @@ const html = `<!doctype html>
 ${head}
     <style>
       /* Page furniture only — the cases below use the real stylesheets.
-         The trail is a cream page, so the doc and the frames match it:
-         a case should look the way it does in situ. */
+         The trail is an off-white page, so the doc and the frames match
+         it: a case should look the way it does in situ. */
       .states-doc { max-width: 1280px; margin: 0 auto; padding: 48px 24px 96px; font-family: var(--font-body, system-ui); color: #1a1712; }
-      .states-doc h1 { font-family: var(--font-display, Georgia, serif); font-size: 36px; margin: 0 0 8px; }
+      .states-doc > h1 { font-family: var(--font-display, Georgia, serif); font-size: 36px; margin: 0 0 8px; }
       .states-doc__intro { color: rgba(26,23,18,0.72); line-height: 1.7; max-width: 70ch; }
       .states-case { margin-top: 56px; border-top: 1px solid rgba(26,23,18,0.14); padding-top: 20px; }
       .states-case__name { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
@@ -178,11 +188,16 @@ ${head}
       /* Paint containment keeps a case inside its own frame: the drawer
          and the cell overlays are fixed/absolute on the real page and
          would otherwise float across every case below them. */
-      .states-frame { border: 1px solid rgba(26,23,18,0.14); border-radius: 12px; overflow: hidden; margin-top: 16px; padding: 16px; background: #f4efe4; position: relative; contain: layout paint; }
+      .states-frame { border: 1px solid rgba(26,23,18,0.14); border-radius: 12px; overflow: hidden; margin-top: 16px; padding: 16px; background: var(--c-paper, #fafaf7); position: relative; contain: layout paint; }
       .states-frame:has(.cell-drawer) { min-height: 560px; }
-      /* Cells are grid children on the real page; give them a box to sit in. */
+      /* Cells are grid children on the real page, where they lie on the
+         turf of the track; give them a box to sit in, and the turf. */
+      .states-frame:has(> .cell) { padding: 28px; background: var(--trail-turf, #4c7a3c) url("static/grid/img/turf.webp") 0 0 / 96px 96px; }
       .states-frame > .cell { max-width: 320px; }
-      .states-frame > .cell + .cell { margin-top: 16px; }
+      .states-frame > .cell + .cell { margin-top: 28px; }
+      /* The legend is a narrow rail beside the board; keep it narrow above it. */
+      .states-frame > .trail__legend { max-width: 220px; margin-bottom: 24px; }
+      .states-frame > .trail__masthead { margin-bottom: 16px; }
     </style>
   </head>
   <body class="page-trail">
