@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+  <!-- The site's fox mark, as the footer draws it. A CSS mask: only the shape matters. -->
+  <g fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke-width="1.15" d="M3 6.8L5.8 2.6h6.4L15 6.8l-2.2 7.6H5.2z"/>
+    <path stroke-width="1.05" d="M5.8 2.6L7.5 7M12.2 2.6L10.5 7M8.2 11.6c.5.7 1.1.7 1.6 0"/>
+    <path stroke-width=".9" d="M7.6 10.55h2.8"/>
+  </g>
+  <circle cx="7" cy="9.1" r=".9"/>
+  <circle cx="11" cy="9.1" r=".9"/>
+</svg>

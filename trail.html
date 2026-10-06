@@ -1373,7 +1373,7 @@
     <aside class="trail__nav" id="trailNavPanel" data-role="nav-panel" aria-label="Legend and filters">
       <nav class="trail__legend" aria-label="How the Fox Trail works">
   <header class="trail__legend-head">
-    <span class="trail__legend-head-icon" aria-hidden="true">&#9432;</span>
+    <span class="trail__legend-head-icon" aria-hidden="true"></span>
     <span class="trail__legend-head-label">How the Trail works</span>
     <button type="button" class="trail__nav-close" data-role="nav-close" aria-label="Close legend">&times;</button>
   </header>
@@ -1388,7 +1388,7 @@
           <span class="trail__legend-star trail__legend-star--bod" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 2.5l2.9 6.4 7 .7-5.3 4.7 1.6 6.9L12 17.7l-6.2 3.5 1.6-6.9L2.1 9.6l7-.7z" fill="currentColor" stroke="#3A2A05" stroke-width="1.2" stroke-linejoin="round"/></svg>
           </span>
-          <span class="trail__legend-source-label">Sly&rsquo;s Bet &middot; the day&rsquo;s single conviction bet</span>
+          <span class="trail__legend-source-label"><span class="trail__legend-name">Sly&rsquo;s Bet</span><span class="trail__legend-sep"> &middot; </span><span class="trail__legend-hint">the day&rsquo;s single conviction bet</span></span>
         </button>
       </li>
       <li>
@@ -1398,7 +1398,7 @@
           <span class="trail__legend-star trail__legend-star--lead" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 2l2.1 7.9L22 12l-7.9 2.1L12 22l-2.1-7.9L2 12l7.9-2.1z" fill="currentColor"/></svg>
           </span>
-          <span class="trail__legend-source-label">Lead Signal &middot; Top Rated&rsquo;s conviction hit per race</span>
+          <span class="trail__legend-source-label"><span class="trail__legend-name">Lead Signal</span><span class="trail__legend-sep"> &middot; </span><span class="trail__legend-hint">Top Rated&rsquo;s conviction hit per race</span></span>
         </button>
       </li>
     </ul>
@@ -1412,7 +1412,7 @@
                 data-filter-tier="1" aria-pressed="false"
                 aria-label="Show only Whisper cells">
           <span class="trail__legend-pips"><i class="is-lit"></i><i></i><i></i><i></i></span>
-          <span class="trail__legend-source-label">Whisper &middot; one source</span>
+          <span class="trail__legend-source-label"><span class="trail__legend-name">Whisper</span><span class="trail__legend-sep"> &middot; </span><span class="trail__legend-hint">one source</span></span>
         </button>
       </li>
       <li>
@@ -1420,7 +1420,7 @@
                 data-filter-tier="2" aria-pressed="false"
                 aria-label="Show only Nod cells">
           <span class="trail__legend-pips"><i class="is-lit"></i><i class="is-lit"></i><i></i><i></i></span>
-          <span class="trail__legend-source-label">Nod &middot; two agree</span>
+          <span class="trail__legend-source-label"><span class="trail__legend-name">Nod</span><span class="trail__legend-sep"> &middot; </span><span class="trail__legend-hint">two agree</span></span>
         </button>
       </li>
       <li>
@@ -1428,7 +1428,7 @@
                 data-filter-tier="3" aria-pressed="false"
                 aria-label="Show only Chorus cells">
           <span class="trail__legend-pips"><i class="is-lit"></i><i class="is-lit"></i><i class="is-lit"></i><i></i></span>
-          <span class="trail__legend-source-label">Chorus &middot; three-way</span>
+          <span class="trail__legend-source-label"><span class="trail__legend-name">Chorus</span><span class="trail__legend-sep"> &middot; </span><span class="trail__legend-hint">three-way</span></span>
         </button>
       </li>
       <li>
@@ -1436,7 +1436,7 @@
                 data-filter-tier="4" aria-pressed="false"
                 aria-label="Show only Smoker cells">
           <span class="trail__legend-pips"><i class="is-lit"></i><i class="is-lit"></i><i class="is-lit"></i><i class="is-lit"></i></span>
-          <span class="trail__legend-source-label">Smoker &middot; four or more</span>
+          <span class="trail__legend-source-label"><span class="trail__legend-name">Smoker</span><span class="trail__legend-sep"> &middot; </span><span class="trail__legend-hint">four or more</span></span>
         </button>
       </li>
     </ul>
@@ -1522,7 +1522,7 @@
                 data-filter-source="pick_winner" aria-pressed="false"
                 aria-label="Show only cells filled by Mr Fox's Pick Winner">
           <span class="cell__chip cell__chip--pick_winner">PW</span>
-          <span class="trail__legend-source-label">Pick Winner &middot; fills races no editorial signal backed</span>
+          <span class="trail__legend-source-label"><span class="trail__legend-name">Pick Winner</span><span class="trail__legend-sep"> &middot; </span><span class="trail__legend-hint">fills races no editorial signal backed</span></span>
         </button>
       </li>
     </ul>
@@ -1546,7 +1546,7 @@
               aria-label="Open trail legend and filters"
               aria-controls="trailNavPanel"
               aria-expanded="false">
-        <span class="trail__nav-trigger-icon" aria-hidden="true">&#9776;</span>
+        <span class="trail__nav-trigger-icon" aria-hidden="true"></span>
         <span class="trail__nav-trigger-label">How the Trail works</span>
       </button>
     
@@ -1626,13 +1626,26 @@
   </p>
   <p class="trail__proposition-model">
     <strong>Four signals</strong> determine confidence &mdash;
-    <span class="cell__chip cell__chip--bod">B</span> Bet of the Day,
-    <span class="cell__chip cell__chip--top_rated">T</span> Top Rated,
-    <span class="cell__chip cell__chip--htw">W</span> Horses to Watch,
-    <span class="cell__chip cell__chip--steamer">S</span> Steamer.
+    <span class="trail__proposition-pair"><span class="cell__chip cell__chip--bod">B</span> Bet of the Day,</span>
+    <span class="trail__proposition-pair"><span class="cell__chip cell__chip--top_rated">T</span> Top Rated,</span>
+    <span class="trail__proposition-pair"><span class="cell__chip cell__chip--htw">W</span> Horses to Watch,</span>
+    <span class="trail__proposition-pair"><span class="cell__chip cell__chip--steamer">S</span> Steamer.</span>
     <strong>Two editorial overlays</strong> add context &mdash;
-    <span class="cell__chip cell__chip--letters">L</span> Letters,
-    <span class="cell__chip cell__chip--featured">F</span> Featured Tip.
+    <span class="trail__proposition-pair"><span class="cell__chip cell__chip--letters">L</span> Letters,</span>
+    <span class="trail__proposition-pair"><span class="cell__chip cell__chip--featured">F</span> Featured Tip.</span>
+  </p>
+  <p class="trail__next">
+    <a class="trail__next-link" href="#trailCourse" data-role="next-race"
+       data-next="Next race" data-first="First race" data-live="Running now"
+       data-done="The day is run" data-walk="walk the course">
+      <span class="trail__next-fox" aria-hidden="true"></span>
+      <span class="trail__next-text">
+        <span data-role="next-lead">Running now:</span>
+        <b data-role="next-name">14:10 Ascot</b>
+        <span class="trail__next-more" data-role="next-more">Coral Reef</span>
+      </span>
+      <span class="trail__next-arrow" aria-hidden="true">&darr;</span>
+    </a>
   </p>
 </section>
 
@@ -1701,18 +1714,53 @@
         <button type="button" class="trail__filter-clear" data-role="filter-clear" aria-label="Clear filter">Clear &times;</button>
       </div>
 
-      <div class="trail__reveal">
+      <nav class="trail__course" data-role="course" aria-label="Race day">
+        <button type="button" class="course__step" data-role="course-prev"
+                aria-label="Previous race" disabled>&lsaquo;</button>
+        <ol class="course__map" data-role="course-map" aria-hidden="true"></ol>
+        <button type="button" class="course__step course__step--next" data-role="course-next"
+                aria-label="Next race">&rsaquo;</button>
+        <p class="course__readout">
+          <span class="course__long">Race </span><b data-role="course-number">1</b><span class="course__long"> of </span><span class="course__short">/</span><span data-role="course-total">24</span>
+          <span aria-hidden="true">&middot;</span>
+          <span data-role="course-race">13:15 Ascot</span>
+        </p>
+        <span class="sr-only" role="status" data-role="course-status"
+              data-say="Race {n} of {total}"></span>
+        <button type="button" class="course__fox" data-role="course-fox"
+                aria-label="Go to Mr Fox, at the next race">
+          <span class="course__fox-mark" aria-hidden="true"></span>
+          <span class="course__label">Mr Fox</span>
+        </button>
         <button type="button" class="trail__reveal-chip" data-role="reveal-toggle"
                 aria-pressed="false"
                 aria-label="Reveal results on settled cards">
           <span class="trail__reveal-icon" aria-hidden="true">&#8635;</span>
-          <span class="trail__reveal-text"
-                data-off="Reveal results"
-                data-on="Show picks">Reveal results</span>
+          <span class="trail__reveal-text course__label"
+                data-off="Results"
+                data-on="Picks">Results</span>
         </button>
-      </div>
+        <div class="course__links">
+          <a class="course__link" href="#trailCourse">Course</a>
+          <a class="course__link" href="#trailSignals">Signals</a>
+          <a class="course__link" href="#trailRecord">Record</a>
+        </div>
+      </nav>
 
-      <div class="trail__frame">
+      <div class="trail__frame" id="trailCourse">
+        <div class="trail__track" data-role="track" aria-hidden="true">
+          <svg class="track__rails" data-role="track-rails" focusable="false">
+            <path class="track__edge"/>
+            <path class="track__posts"/>
+            <path class="track__rail"/>
+          </svg>
+          <div class="track__turf" data-role="track-turf"></div>
+          <div class="track__hoofs" data-role="track-hoofs"></div>
+          <span class="track__start-line" data-role="track-start-line"></span>
+          <span class="track__start" data-role="track-start">Start</span>
+          <span class="track__post" data-role="track-post"></span>
+          <span class="track__post-label" data-role="track-post-label">Winning post</span>
+        </div>
         <section class="trail__grid" id="trailGrid" aria-label="Race grid for Wednesday 30 September 2026">
           
             <article class="cell cell--won cell--tier-3"
@@ -4169,7 +4217,7 @@
       </div>
 
       
-<section class="trail__spotlight" aria-label="Today's strongest signals">
+<section class="trail__spotlight" id="trailSignals" aria-label="Today's strongest signals">
 
   
     
@@ -4341,7 +4389,7 @@
     
 
     
-<aside class="trail__record" aria-label="Trail track record — last 30 days">
+<aside class="trail__record" id="trailRecord" aria-label="Trail track record — last 30 days">
 
   <header class="record__head">
     <span class="record__eyebrow">Track record</span>
@@ -4408,6 +4456,9 @@
 <script src="static/grid/js/trail_filter.js" defer></script>
 <script src="static/grid/js/trail_flip.js" defer></script>
 <script src="static/grid/js/trail_nav.js" defer></script>
+<script src="static/grid/js/trail_cards.js" defer></script>
+<script src="static/grid/js/trail_track.js" defer></script>
+<script src="static/grid/js/trail_course.js" defer></script>
 
 
 <script src="static/grid/js/trail_live.js" defer></script>
