@@ -130,7 +130,9 @@
    ]
   },
   "trail.html": {
-   "mobile-375": [],
+   "mobile-375": [
+    "color-contrast"
+   ],
    "tablet-768": [
     "color-contrast"
    ],

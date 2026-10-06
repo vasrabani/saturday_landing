@@ -50,8 +50,10 @@ function fastPoll(ms) {
  *
  * `pollMs` overrides the page's own poll interval; `live: false` blocks
  * the feed entirely, for tests that need the day to stand still.
+ * `revealed: true` opens the page as a viewer who left the results
+ * showing last time.
  */
-export async function openTrail(page_, { pollMs, live = true, waitUntil = 'domcontentloaded' } = {}) {
+export async function openTrail(page_, { pollMs, live = true, revealed = false, waitUntil = 'domcontentloaded' } = {}) {
   const { origin } = new URL(test.info().project.use.baseURL);
   const offsite = [];
   const problems = [];
@@ -60,9 +62,12 @@ export async function openTrail(page_, { pollMs, live = true, waitUntil = 'domco
   // trail_flip.js remembers the reveal toggle per viewer, so a page can
   // open with the settled cells already turned over. Tests start from the
   // same place every time.
-  await page_.addInitScript(() => {
-    try { window.localStorage.removeItem('trail_flip_revealed'); } catch { /* private mode */ }
-  });
+  await page_.addInitScript((on) => {
+    try {
+      if (on) window.localStorage.setItem('trail_flip_revealed', '1');
+      else window.localStorage.removeItem('trail_flip_revealed');
+    } catch { /* private mode */ }
+  }, revealed);
   if (pollMs) await page_.addInitScript(fastPoll, pollMs);
   if (!live) await page_.route('**/trail/live/**', (route) => route.abort());
 
@@ -79,6 +84,21 @@ export async function openTrail(page_, { pollMs, live = true, waitUntil = 'domco
   await page_.goto('/trail.html', { waitUntil });
   return { offsite, problems, polls };
 }
+
+/**
+ * Serve trail.html with a change made to its markup first, for a day the
+ * fixture is not: a past day without its spotlight, a morning with
+ * nothing settled yet. Call it before openTrail.
+ */
+export async function rewriteTrail(page_, change) {
+  await page_.route('**/trail.html', async (route) => {
+    const response = await route.fetch();
+    await route.fulfill({ response, body: change(await response.text()) });
+  });
+}
+
+/** The cells that are races, in the order they are run. */
+export const raceCards = (page_) => page_.locator('#trailGrid .cell[data-race-id]:not(.cell--ghost)');
 
 /** State + tier of every cell on the grid, in page order. */
 export function cellStates(page_) {

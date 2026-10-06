@@ -10,8 +10,12 @@
  * These are behaviour tests, not design tests: they say what must still
  * work after a restyle, and they leave every visual decision open.
  */
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { test, expect } from '@playwright/test';
-import { CELL_STATES, CELL_TIERS, TRAIL_SECTIONS, cellStates, openLegend, openTrail } from './support/trail.js';
+import {
+  CELL_STATES, CELL_TIERS, TRAIL_SECTIONS, cellStates, openLegend, openTrail, raceCards, rewriteTrail,
+} from './support/trail.js';
 
 const LOCAL_DEBUG_URL = /\/\/(localhost|127\.0\.0\.1)[:/]/;
 
@@ -144,8 +148,218 @@ test.describe('result flip', () => {
   });
 });
 
+test.describe('course bar', () => {
+  const part = (page, role) => page.locator(`[data-role="course-${role}"]`);
+
+  test('steps one race at a time and says where it went', async ({ page }) => {
+    await openTrail(page, { live: false });
+    const cards = raceCards(page);
+    await expect(part(page, 'number')).toHaveText('1');
+    await expect(part(page, 'total')).toHaveText(String(await cards.count()));
+    await expect(part(page, 'prev')).toBeDisabled();
+
+    await part(page, 'next').click();
+    await expect(part(page, 'number')).toHaveText('2');
+    await expect(cards.nth(1)).toHaveClass(/cell--just-reached/);
+    await expect(cards.nth(1)).toBeInViewport();
+    // The button keeps the focus so it can be pressed again; a polite
+    // status line says where the page went instead.
+    await expect(part(page, 'next')).toBeFocused();
+    await expect(part(page, 'status')).toHaveText(/^Race 2 of \d+, /);
+
+    await part(page, 'prev').click();
+    await expect(part(page, 'number')).toHaveText('1');
+    await expect(part(page, 'prev')).toBeDisabled();
+  });
+
+  test('"Mr Fox" goes to the fox marker and takes the keyboard there', async ({ page }) => {
+    await openTrail(page, { live: false });
+    const fox = page.locator('#trailGrid .cell--now');
+    await part(page, 'fox').click();
+    await expect(fox).toBeFocused();
+    await expect(fox).toBeInViewport();
+    await expect(fox).toHaveClass(/cell--just-reached/);
+  });
+
+  test('the call under the introduction names the fox marker\'s race, and goes to it', async ({ page }) => {
+    await openTrail(page, { live: false });
+    const fox = page.locator('#trailGrid .cell--now');
+    const time = (await fox.locator('.cell__time').textContent()).trim();
+    const course = (await fox.locator('.cell__course').textContent()).trim();
+    const call = page.locator('[data-role="next-race"]');
+    await expect(call.locator('[data-role="next-name"]')).toHaveText(`${time} ${course}`);
+
+    await call.click();
+    await expect(fox).toBeFocused();
+    await expect(fox).toBeInViewport();
+  });
+
+  test('arrow keys step from the card that has the focus', async ({ page }) => {
+    await openTrail(page, { live: false });
+    const cards = raceCards(page);
+    await cards.nth(2).focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(cards.nth(3)).toBeFocused();
+    await page.keyboard.press('ArrowLeft');
+    await expect(cards.nth(2)).toBeFocused();
+  });
+
+  test('arrow keys leave the page alone when nothing is focused and the board is out of sight', async ({ page }) => {
+    await openTrail(page, { live: false });
+    await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }));
+    await expect(page.locator('#trailGrid')).not.toBeInViewport();
+    const before = await page.evaluate(() => window.scrollY);
+
+    await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(400); // a step would have set the page scrolling by now
+    expect(await page.evaluate(() => window.scrollY)).toBe(before);
+    expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);
+  });
+
+  test('the map has a tick a race, and a race with no pick counts as run once the fox marker is past it', async ({ page }) => {
+    await openTrail(page, { live: false });
+    const cells = (await cellStates(page)).filter((cell) => !cell.hidden);
+    const fox = cells.findIndex((cell) => cell.isNow);
+    const expected = cells.map((cell, i) => {
+      if (cell.state === 'won' || cell.state === 'live') return cell.state;
+      if (['placed', 'lost', 'void'].includes(cell.state)) return 'run';
+      return cell.state === 'no_fancy' && i < fox ? 'run' : 'to come';
+    });
+    // The fixture has to put the rule to the test.
+    expect(cells.some((cell, i) => cell.state === 'no_fancy' && i < fox), 'a race with no pick behind the fox marker').toBe(true);
+
+    const ticks = page.locator('.course__tick');
+    await expect(ticks).toHaveCount(cells.length);
+    const shown = await ticks.evaluateAll((els) =>
+      els.map((el) => ['won', 'run', 'live'].find((kind) => el.classList.contains(`is-${kind}`)) ?? 'to come'));
+    expect(shown).toEqual(expected);
+    await expect(ticks.nth(fox)).toHaveClass(/is-now/);
+  });
+
+  test('a link to a section the page does not have is put away', async ({ page }) => {
+    // A past day is rendered without its spotlight.
+    await rewriteTrail(page, (html) => html.replace(' id="trailSignals"', ''));
+    await openTrail(page, { live: false });
+    await expect(page.locator('.course__link[href="#trailSignals"]')).toHaveJSProperty('hidden', true);
+    await expect(page.locator('.course__link[href="#trailRecord"]')).toHaveJSProperty('hidden', false);
+  });
+
+  test.describe('on a morning with nothing run yet', () => {
+    const morning = (html) =>
+      html.replace(/cell--(?:won|placed|lost|void|live)\b/g, 'cell--pending').replace(/ data-settled="1"/g, '');
+
+    test('the reveal toggle waits for a result', async ({ page }) => {
+      await rewriteTrail(page, morning);
+      await openTrail(page, { live: false });
+      await expect(page.locator('[data-role="reveal-toggle"]')).toBeDisabled();
+    });
+
+    test('a results choice kept from another day can still be switched off', async ({ page }) => {
+      await rewriteTrail(page, morning);
+      await openTrail(page, { live: false, revealed: true });
+      const toggle = page.locator('[data-role="reveal-toggle"]');
+      await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+      await expect(toggle).toBeEnabled();
+      await toggle.click();
+      await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    });
+  });
+});
+
+test.describe('the track', () => {
+  test('is drawn under the cards, with hoof prints as far as the fox marker', async ({ page }) => {
+    await openTrail(page, { live: false, waitUntil: 'load' });
+    const track = page.locator('[data-role="track"]');
+    await expect(track).toHaveClass(/is-drawn/);
+    await expect(track).toHaveCSS('pointer-events', 'none');
+    expect(await track.locator('path').first().getAttribute('d')).toMatch(/^M[\d.]+ [\d.]+H/);
+
+    const prints = await track.locator('.track__hoof').count();
+    const run = await track.locator('.track__hoof.is-run').count();
+    expect(prints).toBeGreaterThan(0);
+    // The fixture's fox marker is partway round.
+    expect(run).toBeGreaterThan(0);
+    expect(run).toBeLessThan(prints);
+  });
+
+  test('is drawn again when the board changes width', async ({ page }) => {
+    await openTrail(page, { live: false, waitUntil: 'load' });
+    await expect(page.locator('[data-role="track"]')).toHaveClass(/is-drawn/);
+    const outline = () => page.locator('[data-role="track-rails"] path').first().getAttribute('d');
+    const before = await outline();
+    const { width, height } = page.viewportSize();
+    await page.setViewportSize({ width: width - 48, height });
+    await expect.poll(outline).not.toBe(before);
+  });
+});
+
+test.describe('race cards', () => {
+  test('a name that is one long word is sized to fit', async ({ page }) => {
+    await openTrail(page, { live: false, waitUntil: 'load' });
+    const name = page.locator('#trailGrid .cell__horse').first();
+    const natural = await name.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+    await name.evaluate((el) => { el.textContent = 'Sunriseontheboynewater'; });
+
+    // Names are fitted again when the board changes width.
+    const { width, height } = page.viewportSize();
+    await page.setViewportSize({ width: width - 48, height });
+    await expect
+      .poll(() => name.evaluate((el) => el.style.getPropertyValue('--cell-horse-size')))
+      .toMatch(/^\d+(\.5)?px$/);
+    const fitted = await name.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
+    expect(fitted).toBeLessThan(natural);
+    expect(fitted).toBeGreaterThanOrEqual(11);
+  });
+
+  test('cards in the window are there from the start, and the rest come up when reached', async ({ page }) => {
+    await openTrail(page, { live: false });
+    const cards = raceCards(page);
+    const { height } = page.viewportSize();
+    const atLoad = await cards.evaluateAll((els) =>
+      els.map((el) => ({ top: el.getBoundingClientRect().top, opacity: getComputedStyle(el).opacity })));
+    expect(atLoad.filter((card) => card.top < height && card.opacity !== '1')).toEqual([]);
+
+    const last = cards.last();
+    await expect(last).toHaveCSS('opacity', '0');
+    await last.scrollIntoViewIfNeeded();
+    await expect(last).toHaveClass(/is-seen/);
+    await expect(last).toHaveCSS('opacity', '1');
+  });
+
+  test.describe('with reduced motion', () => {
+    test.use({ contextOptions: { reducedMotion: 'reduce' } });
+
+    test('every card is on the board at once', async ({ page }) => {
+      await openTrail(page, { live: false });
+      const waiting = await raceCards(page).evaluateAll((els) =>
+        els.filter((el) => getComputedStyle(el).opacity !== '1').length);
+      expect(waiting).toBe(0);
+      await expect(page.locator('main.trail')).not.toHaveClass(/trail--entrance/);
+    });
+  });
+});
+
+test.describe('a day with no race cards', () => {
+  test('shows its notice without the course bar, the call or the course', async ({ page }) => {
+    await openTrail(page, { live: false });
+    // What the template renders on a day with no racing: the notice in
+    // the frame, where the board would be.
+    const notice = readFileSync(join(process.cwd(), 'partials', 'trail-empty.html'), 'utf8');
+    await page.evaluate((html) => {
+      document.getElementById('trailGrid').remove();
+      document.querySelector('.trail__frame').insertAdjacentHTML('beforeend', html);
+    }, notice);
+
+    await expect(page.locator('.trail__empty')).toBeVisible();
+    await expect(page.locator('.trail__course')).toBeHidden();
+    await expect(page.locator('.trail__next')).toBeHidden();
+    await expect(page.locator('.trail__frame')).toHaveCSS('padding-top', '0px');
+    await expect(page.locator('.trail__frame')).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  });
+});
+
 test.describe('live day', () => {
-  // These two watch several polls go by, so they need more than the
+  // These watch several polls go by, so they need more than the
   // default budget when the machine is busy with the other widths.
   test.slow();
 
@@ -185,5 +399,22 @@ test.describe('live day', () => {
     const settled = polls.length;
     await page.waitForTimeout(3000);
     expect(polls.length, 'no further polls after is_final').toBeLessThanOrEqual(settled + 1);
+  });
+
+  test('once the day is run the bar, the call and the track all say so', async ({ page }) => {
+    await page.route('**/trail/live/**', (route) => route.continue({ url: `${new URL(route.request().url()).origin}/trail/live/?sim=last` }));
+    await openTrail(page, { pollMs: 400 });
+    await expect(page.locator('#trailFreshness')).toHaveClass(/is-final/, { timeout: 15_000 });
+
+    // The fox marker has left the board, and the way to it with it.
+    await expect(page.locator('[data-role="course-fox"]')).toBeHidden();
+    const gold = (await page.locator('[data-role="gold-count"]').textContent()).trim();
+    await expect(page.locator('[data-role="next-lead"]')).toHaveText('The day is run:');
+    await expect(page.locator('[data-role="next-name"]')).toHaveText(new RegExp(`^${gold} `));
+    // No race is left "to come", with or without a pick...
+    await expect(page.locator('.course__tick:not(.is-won):not(.is-run)')).toHaveCount(0);
+    // ...and every hoof print on the track is behind the day.
+    await expect(page.locator('.track__hoof:not(.is-run)')).toHaveCount(0);
+    expect(await page.locator('.track__hoof').count()).toBeGreaterThan(0);
   });
 });

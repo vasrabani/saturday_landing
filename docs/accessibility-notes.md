@@ -31,21 +31,23 @@ dark enough to read brown. The options, in the order I would consider them:
 
 ## The Fox Trail
 
-What the revamp changed, measured with every card on the board showing
-(the scan `npm test` runs sees the first screen: cards further down are
-waiting to come up when it looks).
+What the revamp changed. The trail brings its cards up as the reader
+scrolls down to them, so `npm test` opens it with reduced motion, where
+every card is on the board at once: axe scans the whole board, not just
+the first screen of it.
 
 | Was | Now |
 | --- | --- |
 | 35 contrast failures in the trail's own content at 1440px, 28 on a phone: the tier names on the gold strips (1.9:1 to 2.5:1), course names, prices, the spotlight and track-record small print, the legend's headings | One, below. Text is the paper palette's ink; where gold carries words it is a darker gold (`--trail-gold-ink`) that keeps 4.5:1 on every ground it is used on |
 | The card drawer and the phone legend opened underneath the fixed nav (`z-index: 60` against the nav's 200), and the drawer's background was a variable that is never defined, so the board showed through it | Both open over the nav, on the page's ground |
 | The legend's rows and arrows and the drawer's close button had their focus outline taken off, leaving a faint tint | One ink ring, on every control |
-| No way along the board from the keyboard except Tab through every card | Left and right arrows step race by race, from the board or the course bar; the bar's buttons say where they went (a polite status line) |
+| No way along the board from the keyboard except Tab through every card | Left and right arrows step race by race in the order they are run, from a card or the course bar; the bar's buttons say where they went (a polite status line) |
 
-`tools/quality-baseline.json` is shorter by one: `trail.html` reports
-nothing at 375px. At 768, 1024 and 1440px what remains is the site nav
-(`.site-nav__wordmark-sub`, and `.site-nav__date` at 1024px), which this
-work does not touch.
+The known list in `tools/quality-baseline.json` is as it was: `trail.html`
+still reports `color-contrast` at all four widths. What stands behind that
+entry is now one node on the trail (below) and, from 768px up, the site
+nav (`.site-nav__wordmark-sub`, and `.site-nav__date` at 1024px), which
+this work does not touch.
 
 **Still open on the trail: one contrast failure, and a decision for you.**
 The race number on the saddle cloth of a beaten or void race is white on

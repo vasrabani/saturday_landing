@@ -146,7 +146,8 @@ stylesheet depends on nothing outside the app.
 The three scripts load with `defer` after `trail_nav.js`, in the order
 above. They read the classes the template and the poller already set on
 the cells, and read again when a cell's class changes; none of them calls
-another script, and none changes a cell's markup.
+another script, and none changes a cell's markup. `tests/trail.spec.js`
+says what each of the three has to keep doing.
 
 Browser support is the site's own. Container queries are new to the site,
 but they are older than `color-mix()`, which `chrome.css` already relies
