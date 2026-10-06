@@ -106,6 +106,9 @@ The day hub's icons are shared includes in `components/v2/icons/`.
 | Anatomy panel | `grid/_trail_anatomy.html` | only on the not-published-yet day |
 | Early signals banner | `grid/_early_signals_banner.html` | only before the card firms up |
 | No racing / too early | `grid/_empty.html`, `grid/_empty_premature.html` | `partials/trail-empty*.html` here |
+| Course bar | `grid/trail.html`, above the grid | new in the revamp: `trail_course.js`. The Reveal results toggle sits in it |
+| The track under the cells | `grid/trail.html`, first child of `.trail__frame` | new in the revamp: an empty shell that `trail_track.js` draws into |
+| "Next race" call | `grid/_proposition.html` | new in the revamp: rendered from the `is_now` cell, kept current by `trail_course.js` |
 
 **The sandbox's day is a fixture.** `GRID_FORCE_FIXTURES=True` renders a
 24-race demo day that exercises every cell state and tier, which is what
@@ -121,6 +124,128 @@ every number in it is the app's own. `tools/serve.mjs` replays it.
 **One production change went with the snapshot:** `trail_live.js` reads
 its poll interval from `data-live-poll-ms`, falling back to 45s, so the
 sandbox can replay a day in minutes. Port that line back with the revamp.
+
+## The Fox Trail revamp: what to port
+
+The racecourse board. The stylesheet is rewritten, three scripts and an
+image folder are new, and the five production scripts are untouched.
+
+**Files.** Each goes to the same name under `grid/static/grid/`. Every
+`url()` in `trail.css` points inside that folder (`../img/…`), so the
+stylesheet depends on nothing outside the app.
+
+| File | What it is |
+| --- | --- |
+| `css/trail.css` | The whole page, rewritten. No `!important`; page-level steps only at 768, 1024 and 1280px; the cards, the board and the course bar size themselves with container queries |
+| `js/trail_cards.js` | New. Fits a one-word horse name to its card, and brings cards up as the reader reaches them |
+| `js/trail_track.js` | New. Draws the track under the cards, from where the grid has laid them |
+| `js/trail_course.js` | New. The course bar, and the "next race" call under the introduction |
+| `img/silk-*.svg` (8), `img/horseshoe.svg`, `img/fox.svg` | New. CSS masks, under 1 KB each |
+| `img/turf.webp`, `img/lawn.webp` | New. Two grass tiles, 29 KB each |
+
+The three scripts load with `defer` after `trail_nav.js`, in the order
+above. They read the classes the template and the poller already set on
+the cells, and read again when a cell's class changes; none of them calls
+another script, and none changes a cell's markup. `tests/trail.spec.js`
+says what each of the three has to keep doing.
+
+Browser support is the site's own. Container queries are new to the site,
+but they are older than `color-mix()`, which `chrome.css` already relies
+on; without them the board falls back to a single column.
+
+**Markup. STRUCTURAL — needs moving into the Django templates.**
+
+| Template | Change |
+| --- | --- |
+| `grid/trail.html` | The `.trail__reveal` wrapper becomes `<nav class="trail__course" data-role="course">`, the course bar. The Reveal results button is inside it with its hooks as they were; only its two words are shorter (see `content-notes.md`) |
+| `grid/trail.html` | `.trail__frame` gains `id="trailCourse"` and, as its first child, the `.trail__track` shell |
+| `grid/trail.html` | The `☰` glyph comes out of `.trail__nav-trigger-icon`: the stylesheet draws the icon. Three `<script defer>` tags |
+| `grid/_legend.html` | The `ⓘ` glyph comes out of `.trail__legend-head-icon`. Each row's label is split into `.trail__legend-name`, `.trail__legend-sep` and `.trail__legend-hint`, so a name and its hint can take a line each. The words are the same |
+| `grid/_proposition.html` | Each silk and its name are wrapped in `.trail__proposition-pair`, so a line never breaks between the two. A new last paragraph, `.trail__next`: the call to the next race |
+| `grid/_spotlight.html` | `id="trailSignals"` on the section |
+| `grid/_track_record_history.html` | `id="trailRecord"` on the aside |
+
+`_cell.html`, `_cell_back.html`, `_drawer.html`, `_counter.html`,
+`_track_record_today.html`, the two empty states, the anatomy panel and
+the early-signals banner are restyled only. Their markup is as it was.
+
+**What the template fills in.** `trail_course.js` rewrites all of these
+when it loads and keeps them current, so they only have to be right for
+the first paint and for a reader without JavaScript.
+
+| Hook | Value |
+| --- | --- |
+| `[data-role="course-total"]` | how many races the board has (the cells, not the `cell--ghost` seats) |
+| `[data-role="course-number"]`, `[data-role="course-race"]` | `1`, and the first race's time and course |
+| `[data-role="next-lead"]` | "Running now:" when the `is_now` cell is live, "First race:" when it is the first cell, otherwise "Next race:" |
+| `[data-role="next-name"]`, `[data-role="next-more"]` | the `is_now` cell's time and course, and its horse |
+
+Once the day is over there is no `is_now` cell: the call then reads "The
+day is run: 8 gold" with "walk the course" after it, the count being the
+masthead's own. The words are `data-*` attributes on the markup
+(`data-next`, `data-first`, `data-live`, `data-done`, `data-walk` on the
+call; `data-say` on the bar's status line), in the way `data-on` and
+`data-off` already carry the toggle's.
+
+**Days with no cards.** On a day with no racing the template renders
+`_empty.html` inside `.trail__frame`; on a day too early for the card it
+renders neither the frame nor the legend. In both cases the page has no
+`.cell[data-race-id]`, and the stylesheet keys off that: the frame drops
+its racecourse, and the course bar and the call hide themselves if they
+are there. So they need no template condition of their own, though
+leaving them out on those days is tidier. Both pages were checked with
+the live site's markup for such a day (`?date=` on a day without racing,
+and on a date still to come), since the sandbox has those states only as
+bare partials; that is also where the anatomy panel was checked.
+
+**A past day.** Rendered without the freshness pill, today's record, the
+spotlight or a fox marker. Nothing needs a condition for that: with no
+`is_now` cell the call reads "The day is run", the bar's "Mr Fox" button
+is hidden, and `trail_course.js` puts away any section link whose section
+is not on the page (here "Signals"). Checked with the live site's markup
+for a finished Saturday of 44 races.
+
+**Words that are not in the template.** The confidence word in a cell's
+top corner (Whisper, Nod, Chorus, Smoker) and the Live and Void plaques
+are CSS `content`, keyed on classes the template and the poller already
+set (`cell--tier-N`, `cell__glyph--live`, `cell__glyph--void`). That way
+the poller needed no change. If they should be text in `_cell.html`
+instead, it is one `<span>` and a few lines of CSS.
+
+**Hidden, not removed.** These are still in the markup, and the poller
+still writes some of them; the stylesheet hides them because the new
+design says the same thing another way: `.cell__mark`, `.cell__star`,
+`.cell__crown`, `.cell__finish`, `.cell__glyph--placed`,
+`.cell__glyph--pending`, `.cell__back-title`, `.smoker__flame`, and the
+emoji inside `.cell__now-glyph`. Taking them out of the templates is
+optional, and for the glyphs would need the poller changed to match.
+
+**What the new scripts need.** As with the contract in `trail-brief.md`:
+lose one of these and that script quietly does nothing.
+
+| Hook | Used for |
+| --- | --- |
+| `#trailGrid`, `.cell[data-race-id]`, `.cell__time`, `.cell__course`, `.cell__horse` | reading the day off the board |
+| `cell--now`, `cell--live/won/placed/lost/void` | where the fox marker is, and what has been run |
+| `[data-role="course"]`, `course-prev`, `course-next`, `course-map`, `course-number`, `course-total`, `course-race`, `course-status`, `course-fox` | the course bar |
+| `[data-role="next-race"]`, `next-lead`, `next-name`, `next-more` | the call to the next race |
+| `[data-role="track"]`, `track-rails`, `track-turf`, `track-hoofs`, `track-start-line`, `track-start`, `track-post`, `track-post-label` | the track |
+| `#trailCourse`, `#trailSignals`, `#trailRecord` | the bar's links to the page's sections |
+| `[data-role="gold-count"]` | the tally the finished day's call quotes |
+| `body.has-cell-drawer-open`, `body.trail-nav-lock` | the arrow keys stand down behind an open panel |
+
+They set, and only the stylesheet reads: `is-drawn` on the track,
+`is-seen` on a cell, `trail--entrance` on `main.trail`,
+`cell--just-reached` on a cell, `--cell-horse-size` on a horse's name,
+and `is-won`, `is-run`, `is-live`, `is-now`, `is-current` on the map's
+ticks. The track's width comes from `--trail-track-band` in the
+stylesheet.
+
+**One thing in `site.js`.** It scrolls every in-page `#` link to 76px
+from the top of the window, which is under the header whenever the tour
+banner shows and under the course bar here. The trail's own links step
+round it; the lasting fix is for `site.js` to honour the target's
+`scroll-margin-top`.
 
 ## Porting a change
 

@@ -39,7 +39,6 @@
   "important-count": {
    "static/css/base.css": 13,
    "static/css/chrome.css": 19,
-   "static/grid/css/trail.css": 3,
    "static/public/css/battle-section.css": 36,
    "static/public/css/day_hub.css": 5,
    "static/public/css/defer-bg.css": 1,
@@ -51,7 +50,6 @@
    "static/public/css/pick.css": 2
   },
   "token-colour-hardcoded": {
-   "static/grid/css/trail.css -> #d4af37 (use --c-gold)": 3,
    "static/public/experiences/pick-hero/css/pick-hero.css -> #0b0b0f (use --c-midnight)": 1,
    "static/public/experiences/pick-hero/css/pick-hero.css -> #1c1c28 (use --c-navy-card)": 1,
    "static/public/experiences/pick-hero/css/pick-hero.css -> #d4af37 (use --c-gold)": 9,
@@ -68,16 +66,6 @@
    "static/css/chrome.css -> max-width:700px": 1,
    "static/css/chrome.css -> max-width:720px": 2,
    "static/css/chrome.css -> max-width:900px": 5,
-   "static/grid/css/trail.css -> max-width:400px": 2,
-   "static/grid/css/trail.css -> max-width:520px": 1,
-   "static/grid/css/trail.css -> max-width:640px": 1,
-   "static/grid/css/trail.css -> max-width:720px": 2,
-   "static/grid/css/trail.css -> min-width:1080px": 5,
-   "static/grid/css/trail.css -> min-width:1600px": 2,
-   "static/grid/css/trail.css -> min-width:520px": 1,
-   "static/grid/css/trail.css -> min-width:720px": 25,
-   "static/grid/css/trail.css -> min-width:900px": 1,
-   "static/grid/css/trail.css -> min-width:960px": 1,
    "static/public/css/ai_chamber.css -> max-width:560px": 1,
    "static/public/css/ai_chamber.css -> max-width:900px": 2,
    "static/public/css/battle-section.css -> max-width:480px": 1,

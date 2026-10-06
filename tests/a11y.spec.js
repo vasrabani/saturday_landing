@@ -9,11 +9,20 @@ const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 const BASELINE_FILE = join(__dirname, '..', 'tools', 'quality-baseline.json');
 const knownViolations = JSON.parse(readFileSync(BASELINE_FILE, 'utf8')).axe;
 
+// The trail brings its cards up as the reader scrolls down to them, so on
+// load only the first screen of the board is showing. With reduced motion
+// every card is on the board at once: it is opened that way here, so the
+// scan sees the whole board and not just the top of it.
+async function openWholeTrail(page) {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  return openTrail(page, { live: false });
+}
+
 // Both pages the contractor works on, each with its own known list: a
 // violation introduced on one must not be excused by the other's.
 const PAGES = [
   { file: 'index.html', open: (page) => openLanding(page) },
-  { file: 'trail.html', open: (page) => openTrail(page, { live: false }) },
+  { file: 'trail.html', open: openWholeTrail },
 ];
 
 // Ratchet: a rule not on the known list fails the run, and a known rule

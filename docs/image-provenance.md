@@ -34,3 +34,13 @@ rests on the generator terms rather than a stock licence.
 | `nav-active-underline.png` | 560x70 | 14 KB | No tag |
 | `course-horse.png` | 160x106 | 10 KB | No tag |
 | `how-it-works/icon-trophy-card.png` | 21x21 | 1 KB | No tag |
+
+## The Fox Trail (`static/grid/img/`)
+
+Nothing here is a photograph or the output of an image model.
+
+| Image | Size | Where it came from |
+| --- | --- | --- |
+| `turf.webp`, `lawn.webp` | 192x192, 29 KB each | Grass tiles drawn by a script (noise and mowing bands, made to repeat without a seam). They paint at 96px, so this is the 2× size |
+| `silk-*.svg` (8), `horseshoe.svg` | under 1 KB each | Drawn by hand as paths, for use as CSS masks |
+| `fox.svg` | under 1 KB | The fox mark from the footer (`static/public/img/footer/icon-fox.svg`), redrawn as a mask so the trail's stylesheet needs no file outside its own folder |
