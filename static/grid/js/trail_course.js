@@ -125,6 +125,12 @@
     return (el && el.getAttribute('data-' + key)) || fallback;
   }
 
+  /* Only what has changed is written: syncDay runs on every class
+   * change in the grid, and most of those leave the day where it was. */
+  function write(el, value) {
+    if (el.textContent !== value) el.textContent = value;
+  }
+
   function sayNextRace(fox) {
     if (!call) return;
     var lead = call.querySelector('[data-role="next-lead"]');
@@ -137,18 +143,18 @@
       var which = has(cards[fox], 'live') ? label(call, 'live', 'Running now')
                 : fox === 0               ? label(call, 'first', 'First race')
                 :                           label(call, 'next', 'Next race');
-      lead.textContent = which + ':';
-      name.textContent = race.time + ' ' + race.course;
-      more.textContent = race.horse;
+      write(lead, which + ':');
+      write(name, race.time + ' ' + race.course);
+      write(more, race.horse);
       return;
     }
     // No fox marker: the day is over. The tally is the masthead's own
     // number and word ("8 gold"), so the two can never disagree.
     var gold = document.querySelector('[data-role="gold-count"]');
     var tally = gold ? text(gold.parentNode) : '';
-    lead.textContent = label(call, 'done', 'The day is run') + (tally ? ':' : '');
-    name.textContent = tally;
-    more.textContent = label(call, 'walk', 'walk the course');
+    write(lead, label(call, 'done', 'The day is run') + (tally ? ':' : ''));
+    write(name, tally);
+    write(more, label(call, 'walk', 'walk the course'));
   }
 
   function syncDay() {
@@ -156,14 +162,20 @@
     if (map) {
       Array.prototype.forEach.call(map.children, function (tick, i) {
         var card = cards[i];
+        // A race with no pick has no result of its own: it is run once
+        // the fox marker has passed it, or has left the board.
+        var passed = has(card, 'no_fancy') && (fox < 0 || i < fox);
         tick.classList.toggle('is-won', has(card, 'won'));
-        tick.classList.toggle('is-run', has(card, 'placed') || has(card, 'lost') || has(card, 'void'));
+        tick.classList.toggle('is-run', has(card, 'placed') || has(card, 'lost') || has(card, 'void') || passed);
         tick.classList.toggle('is-live', has(card, 'live'));
         tick.classList.toggle('is-now', i === fox);
       });
     }
     if (foxBtn) foxBtn.hidden = fox < 0;
-    if (toggle) toggle.disabled = !cards.some(isSettled);
+    // The reveal toggle has nothing to turn until a race is settled. It
+    // is held back only while it is off: a "revealed" choice remembered
+    // from another day can still be switched off.
+    if (toggle) toggle.disabled = toggle.getAttribute('aria-pressed') !== 'true' && !cards.some(isSettled);
     sayNextRace(fox);
   }
 
@@ -317,19 +329,31 @@
   bar.addEventListener('click', followHere, true);
   if (call && call.parentNode) call.parentNode.addEventListener('click', followHere, true);
 
-  /* Left and right step along the course, from the board, the bar, or
-   * with nothing in particular focused. Anywhere else the keys belong
-   * to whatever has the focus. */
+  function boardInWindow() {
+    var box = grid.getBoundingClientRect();
+    return box.bottom > 0 && box.top < window.innerHeight;
+  }
+
+  /* Left and right step along the course in the order it is run: right
+   * is the next race, as on the bar, even on the rows of the snake that
+   * run right to left, so one key walks the whole day. They work from a
+   * card or the bar, and with nothing focused while the board is in the
+   * window. Anywhere else the keys belong to whatever has the focus. */
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
     if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
     var from = e.target;
-    if (from !== document.body && !grid.contains(from) && !bar.contains(from)) return;
+    var card = grid.contains(from) ? from.closest('.cell[data-race-id]') : null;
+    if (!card && !bar.contains(from) && !(from === document.body && boardInWindow())) return;
     // Not behind an open panel: the cell drawer, or the legend on a phone.
     var page = document.body.classList;
     if (page.contains('has-cell-drawer-open') || page.contains('trail-nav-lock')) return;
+    // From a card, the step is from that card; otherwise from the race
+    // the reader is level with.
+    var at = card ? cards.indexOf(card) : -1;
+    if (at < 0) at = current;
     e.preventDefault();
-    goTo(current + (e.key === 'ArrowRight' ? 1 : -1), true);
+    goTo(at + (e.key === 'ArrowRight' ? 1 : -1), true);
   });
 
   var scrollQueued = false;
@@ -357,12 +381,11 @@
   if ('ResizeObserver' in window) new ResizeObserver(remeasure).observe(grid);
 
   // A race settling or the fox marker moving shows up as a class
-  // change on a cell. So does a card flashing or flipping, which costs
-  // one cheap pass here and changes nothing.
-  new MutationObserver(debounce(function () {
-    syncDay();
-    measure();
-  }, REFRESH_MS)).observe(grid, {
+  // change on a cell. So does a card flashing, flipping or coming up
+  // onto the track: for those syncDay reads the board, finds the day
+  // where it was and writes nothing. Where the cards stand is measured
+  // again only when the board changes size (above).
+  new MutationObserver(debounce(syncDay, REFRESH_MS)).observe(grid, {
     attributes:      true,
     attributeFilter: ['class'],
     subtree:         true,
