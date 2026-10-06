@@ -53,13 +53,15 @@ const cellHtml = (selector) =>
 /**
  * The whole board: the frame, which holds the grid and the track that
  * trail_track.js has drawn under it. The track is geometry for the cards
- * where they stood, so the case is pinned to the width it was captured at.
+ * where they stood, so the board keeps the width it was captured at, and
+ * scrolls sideways in a window narrower than that.
  */
 const boardHtml = () =>
   page.evaluate(() => {
     const frame = document.querySelector('.trail__frame');
     if (!frame) return document.getElementById('trailGrid')?.outerHTML ?? '';
-    return `<div class="states-board" style="width: ${frame.getBoundingClientRect().width}px">${frame.outerHTML}</div>`;
+    const width = Math.round(frame.getBoundingClientRect().width);
+    return `<div class="states-board" role="group" tabindex="0" aria-label="The board, ${width}px wide"><div style="width: ${width}px">${frame.outerHTML}</div></div>`;
   });
 
 const STATES = [];
@@ -198,6 +200,8 @@ ${head}
       /* The legend is a narrow rail beside the board; keep it narrow above it. */
       .states-frame > .trail__legend { max-width: 220px; margin-bottom: 24px; }
       .states-frame > .trail__masthead { margin-bottom: 16px; }
+      /* A captured board is as wide as the page it came from; let it scroll. */
+      .states-board { overflow-x: auto; }
     </style>
   </head>
   <body class="page-trail">

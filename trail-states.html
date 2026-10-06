@@ -40,6 +40,8 @@
       /* The legend is a narrow rail beside the board; keep it narrow above it. */
       .states-frame > .trail__legend { max-width: 220px; margin-bottom: 24px; }
       .states-frame > .trail__masthead { margin-bottom: 16px; }
+      /* A captured board is as wide as the page it came from; let it scroll. */
+      .states-board { overflow-x: auto; }
     </style>
   </head>
   <body class="page-trail">
@@ -1551,7 +1553,7 @@
     isn’t backing this pick. Every gold cell has a verify chip —
     the pick was published before the off.
   </p>
-</nav><div class="states-board" style="width: 1136px"><div class="trail__frame" id="trailCourse">
+</nav><div class="states-board" role="group" tabindex="0" aria-label="The board, 1136px wide"><div style="width: 1136px"><div class="trail__frame" id="trailCourse">
         <div class="trail__track is-drawn" data-role="track" aria-hidden="true">
           <svg class="track__rails" data-role="track-rails" focusable="false">
             <path class="track__edge" d="M54 22H1058A34 34 0 0 1 1092 56V253A34 34 0 0 1 1058 287H54A34 34 0 0 1 20 253V56A34 34 0 0 1 54 22ZM889 22H1058A34 34 0 0 1 1092 56V595A34 34 0 0 1 1058 629H889A34 34 0 0 1 855 595V56A34 34 0 0 1 889 22ZM855 287H837A18 18 0 0 1 855 305ZM855 323H837A18 18 0 0 0 855 305ZM54 323H1058A34 34 0 0 1 1092 357V595A34 34 0 0 1 1058 629H54A34 34 0 0 1 20 595V357A34 34 0 0 1 54 323ZM54 323H223A34 34 0 0 1 257 357V896A34 34 0 0 1 223 930H54A34 34 0 0 1 20 896V357A34 34 0 0 1 54 323ZM257 629H275A18 18 0 0 0 257 647ZM257 665H275A18 18 0 0 1 257 647ZM54 665H1058A34 34 0 0 1 1092 699V896A34 34 0 0 1 1058 930H54A34 34 0 0 1 20 896V699A34 34 0 0 1 54 665ZM889 665H1058A34 34 0 0 1 1092 699V1175A34 34 0 0 1 1058 1209H889A34 34 0 0 1 855 1175V699A34 34 0 0 1 889 665ZM855 930H837A18 18 0 0 1 855 948ZM855 966H837A18 18 0 0 0 855 948ZM54 966H1058A34 34 0 0 1 1092 1000V1175A34 34 0 0 1 1058 1209H54A34 34 0 0 1 20 1175V1000A34 34 0 0 1 54 966ZM54 966H223A34 34 0 0 1 257 1000V1455A34 34 0 0 1 223 1489H54A34 34 0 0 1 20 1455V1000A34 34 0 0 1 54 966ZM257 1209H275A18 18 0 0 0 257 1227ZM257 1245H275A18 18 0 0 1 257 1227ZM54 1245H849A34 34 0 0 1 883 1279V1455A34 34 0 0 1 849 1489H54A34 34 0 0 1 20 1455V1279A34 34 0 0 1 54 1245Z"></path>
@@ -3426,7 +3428,7 @@
           
           
         </section>
-      </div></div>
+      </div></div></div>
         </div>
       </section>
       <section class="states-case">
@@ -3490,7 +3492,7 @@
     </div>
     
   </div>
-</header><div class="states-board" style="width: 1136px"><div class="trail__frame" id="trailCourse">
+</header><div class="states-board" role="group" tabindex="0" aria-label="The board, 1136px wide"><div style="width: 1136px"><div class="trail__frame" id="trailCourse">
         <div class="trail__track is-drawn" data-role="track" aria-hidden="true">
           <svg class="track__rails" data-role="track-rails" focusable="false">
             <path class="track__edge" d="M54 22H1058A34 34 0 0 1 1092 56V253A34 34 0 0 1 1058 287H54A34 34 0 0 1 20 253V56A34 34 0 0 1 54 22ZM889 22H1058A34 34 0 0 1 1092 56V595A34 34 0 0 1 1058 629H889A34 34 0 0 1 855 595V56A34 34 0 0 1 889 22ZM855 287H837A18 18 0 0 1 855 305ZM855 323H837A18 18 0 0 0 855 305ZM54 323H1058A34 34 0 0 1 1092 357V595A34 34 0 0 1 1058 629H54A34 34 0 0 1 20 595V357A34 34 0 0 1 54 323ZM54 323H223A34 34 0 0 1 257 357V896A34 34 0 0 1 223 930H54A34 34 0 0 1 20 896V357A34 34 0 0 1 54 323ZM257 629H275A18 18 0 0 0 257 647ZM257 665H275A18 18 0 0 1 257 647ZM54 665H1058A34 34 0 0 1 1092 699V896A34 34 0 0 1 1058 930H54A34 34 0 0 1 20 896V699A34 34 0 0 1 54 665ZM889 665H1058A34 34 0 0 1 1092 699V1175A34 34 0 0 1 1058 1209H889A34 34 0 0 1 855 1175V699A34 34 0 0 1 889 665ZM855 930H837A18 18 0 0 1 855 948ZM855 966H837A18 18 0 0 0 855 948ZM54 966H1058A34 34 0 0 1 1092 1000V1175A34 34 0 0 1 1058 1209H54A34 34 0 0 1 20 1175V1000A34 34 0 0 1 54 966ZM54 966H223A34 34 0 0 1 257 1000V1455A34 34 0 0 1 223 1489H54A34 34 0 0 1 20 1455V1000A34 34 0 0 1 54 966ZM257 1209H275A18 18 0 0 0 257 1227ZM257 1245H275A18 18 0 0 1 257 1227ZM54 1245H849A34 34 0 0 1 883 1279V1455A34 34 0 0 1 849 1489H54A34 34 0 0 1 20 1455V1279A34 34 0 0 1 54 1245Z"></path>
@@ -5306,7 +5308,7 @@
           
           
         </section>
-      </div></div>
+      </div></div></div>
         </div>
       </section>
       <section class="states-case">
