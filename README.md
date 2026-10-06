@@ -45,7 +45,7 @@ saturday_landing/
 │   ├── js/                site.js — nav + footer + shared JS
 │   ├── img/               favicon + shared images
 │   ├── public/            landing-page-specific CSS/JS/images
-│   ├── grid/              the Fox Trail's own CSS + JS
+│   ├── grid/              the Fox Trail's own CSS + JS + images
 │   ├── races/             race picker + Pick 6 emblem CSS
 │   ├── letters/           LLaMa portrait
 │   ├── news/              Sly Man portrait + fox mark
@@ -73,7 +73,7 @@ The contract is **navbar, footer, and home page only**. In the bundle those tran
 | Fox Trail **styling**        | `static/grid/css/trail.css`                                            |
 | Fonts / type scale           | `static/fonts/saturday-fonts.css` + `static/css/base.css`              |
 
-**`static/grid/js/*.js`** — the trail's five scripts are production code and come back unchanged. They key off attributes and classes in the markup; `docs/trail-brief.md` lists every one of them. Restyle freely, but keep the hooks.
+**`static/grid/js/*.js`** — the trail's five scripts (`trail_live`, `trail_flip`, `trail_filter`, `trail_drawer`, `trail_nav`) are production code and come back unchanged. They key off attributes and classes in the markup; `docs/trail-brief.md` lists every one of them. Restyle freely, but keep the hooks. The revamp's own three (`trail_cards`, `trail_track`, `trail_course`) sit beside them; `docs/integration-map.md` says what they need.
 
 **Anything under `static/races/`, `static/letters/`, `static/news/`, `static/voting/`** — treat as read-only. Those are shared across the whole site and appear on the landing page for legitimate reasons (e.g. the `race_picker` CSS themes a widget the hero uses). Changing them affects other pages you can't see in this sandbox.
 

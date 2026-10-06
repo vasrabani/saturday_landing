@@ -29,6 +29,45 @@ dark enough to read brown. The options, in the order I would consider them:
 3. Make it larger and heavier (18.66px bold or more), which only needs
    3:1 — a design change, but it keeps the colour.
 
+## The Fox Trail
+
+What the revamp changed, measured with every card on the board showing
+(the scan `npm test` runs sees the first screen: cards further down are
+waiting to come up when it looks).
+
+| Was | Now |
+| --- | --- |
+| 35 contrast failures in the trail's own content at 1440px, 28 on a phone: the tier names on the gold strips (1.9:1 to 2.5:1), course names, prices, the spotlight and track-record small print, the legend's headings | One, below. Text is the paper palette's ink; where gold carries words it is a darker gold (`--trail-gold-ink`) that keeps 4.5:1 on every ground it is used on |
+| The card drawer and the phone legend opened underneath the fixed nav (`z-index: 60` against the nav's 200), and the drawer's background was a variable that is never defined, so the board showed through it | Both open over the nav, on the page's ground |
+| The legend's rows and arrows and the drawer's close button had their focus outline taken off, leaving a faint tint | One ink ring, on every control |
+| No way along the board from the keyboard except Tab through every card | Left and right arrows step race by race, from the board or the course bar; the bar's buttons say where they went (a polite status line) |
+
+`tools/quality-baseline.json` is shorter by one: `trail.html` reports
+nothing at 375px. At 768, 1024 and 1440px what remains is the site nav
+(`.site-nav__wordmark-sub`, and `.site-nav__date` at 1024px), which this
+work does not touch.
+
+**Still open on the trail: one contrast failure, and a decision for you.**
+The race number on the saddle cloth of a beaten or void race is white on
+`--c-ink-40` grey: 2.5:1, in small bold type. It is the approved design,
+and the old page had a void race's number at 2.6:1 (white on orange). The
+card's `aria-label` carries the number for a screen reader; this is about
+sighted readers. The options, in the order I would take them:
+
+1. A darker cloth, `--trail-ink-soft`: 6.3:1, and the cloth still reads
+   as a faded version of the black one.
+2. Keep the cloth and print the number in ink: 7.2:1, but it is then the
+   only cloth without a white number.
+3. Leave it: the number is the least important thing on a card whose race
+   is over.
+
+Two more that axe cannot measure, because the plates are drawn as
+pseudo-elements: the white "B" on the gold silk (2.6:1) and "PW" on the
+grey one (2.2:1). The letters repeat what the silk's pattern, its tooltip
+and the legend already say, so they are a reinforcement rather than the
+only way to read a signal; a dark letter on those two plates would pass
+if you want them to.
+
 ## Noise in the report
 
 The remaining 14 `color-contrast` nodes are false positives. They are

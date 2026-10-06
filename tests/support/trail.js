@@ -94,7 +94,7 @@ export function cellStates(page_) {
 }
 
 /**
- * Show the legend. Below 1080px it is an off-canvas panel behind a
+ * Show the legend. Below 1280px it is an off-canvas panel behind a
  * trigger (trail_nav.js); at desktop width it is a permanent rail and
  * the trigger is display:none, so this is a no-op there.
  */

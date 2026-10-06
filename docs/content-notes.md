@@ -60,6 +60,27 @@ a real source.
   build-up headline, or the Fox's Wire line when there is none.
 - **Market intelligence with no moves:** the section is hidden.
 
+## The Fox Trail revamp: words that are new
+
+The racecourse board adds a course bar, a call to the next race and a
+track, and each needed a few words. Every horse, time, course and count
+they show is read from the page's own cells and tally; nothing below is a
+new field.
+
+| Where | Words | Note |
+| --- | --- | --- |
+| Call under the introduction | "Next race:", "First race:", "Running now:", then the race and the horse; "The day is run: 8 gold · walk the course" once it is over | `data-*` attributes on `.trail__next-link` |
+| Course bar | "Race 2 of 24", "Mr Fox", and the section links "Course", "Signals", "Record" | |
+| Course bar, for screen readers | "Race day", "Previous race", "Next race", "Go to Mr Fox, at the next race", and "Race 2 of 24, 13:20 Doncaster, Marlow Street" as the reader steps | `data-say` carries the pattern |
+| Reveal results button | "Results" and "Picks", where it said "Reveal results" and "Show picks" | It shares the bar, so the words are shorter. Its `aria-label` is unchanged |
+| The track | "Start", "Winning post" | Hidden from screen readers: decoration |
+| A cell's top corner | "Whisper", "Nod", "Chorus", "Smoker" | The legend's own names, now beside the bars. Asked for in review: four bars are hard to tell from three |
+| A cell's status | "Live", "Void" | Were glyphs. Both are CSS `content` (see `integration-map.md`) |
+
+The sample call on `trail.html` reads "Running now: 14:10 Ascot · Coral
+Reef", and the bar "Race 1 of 24 · 13:15 Ascot": the fixture's fox-marker
+cell, its first cell and its cell count.
+
 ## Decisions for you
 
 1. **Terms and Cookies.** Most sites this size have both, and the site has

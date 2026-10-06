@@ -39,7 +39,7 @@ test.describe('the board', () => {
   for (const section of TRAIL_SECTIONS) {
     test(`renders ${section.name}`, async ({ page }) => {
       await openTrail(page, { live: false });
-      // The legend is an off-canvas panel below 1080px; the rest of the
+      // The legend is an off-canvas panel below 1280px; the rest of the
       // page is always on screen.
       if (section.name === 'trail-legend') await openLegend(page);
       await expect(page.locator(section.selector).first()).toBeVisible();
