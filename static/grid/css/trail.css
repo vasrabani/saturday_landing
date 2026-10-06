@@ -655,9 +655,11 @@ body.trail-nav-lock { overflow: hidden; }
 .trail__legend-row .trail__legend-star,
 .trail__legend-row .trail__legend-pips { transition: transform 160ms ease; }
 
-.trail__legend-row:hover .cell__chip,
-.trail__legend-row:hover .trail__legend-star,
-.trail__legend-row:hover .trail__legend-pips { transform: translateY(-3px); }
+@media (hover: hover) {
+  .trail__legend-row:hover .cell__chip,
+  .trail__legend-row:hover .trail__legend-star,
+  .trail__legend-row:hover .trail__legend-pips { transform: translateY(-3px); }
+}
 
 /* Silks at legend size */
 .trail__legend-row .cell__chip {
@@ -1983,10 +1985,14 @@ body.trail-nav-lock { overflow: hidden; }
   }
 }
 
-/* Pointing at a card picks it up; pressing puts it down. */
-.cell:hover {
-  --cell-drop: 0 18px 26px -14px var(--trail-ink-50);
-  transform: translateY(-3px);
+/* Pointing at a card picks it up; pressing puts it down. Only where
+   the pointer can hover: on a touch screen :hover latches after a tap,
+   and the card would stay up once its drawer was closed. */
+@media (hover: hover) {
+  .cell:hover {
+    --cell-drop: 0 18px 26px -14px var(--trail-ink-50);
+    transform: translateY(-3px);
+  }
 }
 
 .cell:active { transform: none; }
@@ -2159,8 +2165,10 @@ body.trail-nav-lock { overflow: hidden; }
   transition: translate 160ms ease;
 }
 
-.cell:hover .cell__pick--primary::before { transform: translateY(-2px) rotate(-4deg); }
-.cell:hover .cell__pick--primary::after { translate: 0 -2px; }
+@media (hover: hover) {
+  .cell:hover .cell__pick--primary::before { transform: translateY(-2px) rotate(-4deg); }
+  .cell:hover .cell__pick--primary::after { translate: 0 -2px; }
+}
 
 /* Two lines at most. A name that is one long word steps down in size
    until it fits (trail_cards.js sets --cell-horse-size); only below
@@ -2452,7 +2460,9 @@ body.trail-nav-lock { overflow: hidden; }
   border-style: dashed;
 }
 
-.cell--backup:not(.cell--won):hover { --cell-face: var(--c-card); }
+@media (hover: hover) {
+  .cell--backup:not(.cell--won):hover { --cell-face: var(--c-card); }
+}
 
 /* On its warm card the cloth is a white plate, outlined; so is the
    plaque of one that was placed. */
