@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { test, expect } from '@playwright/test';
 
 // Both pages were captured on the evening of Friday 9 October 2026: the
@@ -10,6 +12,19 @@ export const MEETING_PAGES = {
   results: '/meeting.html',
   upcoming: '/meeting-upcoming.html',
 };
+
+// bet_slip.js keeps a day's slip in localStorage under the key that
+// day's page carries; a test that opens a page with a slip already made
+// seeds it there, as the live page would have left it.
+export const slipStorageKey = (day = 'results') =>
+  /data-storage-key="([^"]+)"/.exec(readFileSync(join(process.cwd(), MEETING_PAGES[day]), 'utf8'))[1];
+
+/** A slip of `n` picks made at another meeting, as bet_slip.js records them. */
+export const slipFromElsewhere = (n) =>
+  Array.from({ length: n }, (_, i) => ({
+    runnerId: String(9000 + i), raceId: String(8000 + i), raceTime: `1${i}:00`, raceName: `Race ${i + 1}`,
+    course: 'Chepstow', horseName: `Horse ${i + 1}`, oddsFractional: '5/1', oddsDecimal: 6,
+  }));
 
 // Every band of the page, in page order. Feature tests assert each one
 // renders; visual tests screenshot each one. The race is the first of
@@ -38,10 +53,18 @@ export const MASTHEAD_COLUMN_MAX_WIDTH = 767;
  * the live site; every attempt is still recorded in `offsite` for the
  * tests that police them.
  */
-export async function openMeeting(page, { day = 'results', waitUntil = 'domcontentloaded' } = {}) {
+export async function openMeeting(page, { day = 'results', waitUntil = 'domcontentloaded', slip } = {}) {
   const { origin } = new URL(test.info().project.use.baseURL);
   const offsite = [];
   const problems = [];
+
+  if (slip) {
+    await page.addInitScript(([key, picks]) => {
+      try {
+        window.localStorage.setItem(key, JSON.stringify(picks));
+      } catch { /* private mode */ }
+    }, [slipStorageKey(day), slip]);
+  }
 
   page.on('request', (request) => {
     if (new URL(request.url()).origin !== origin) offsite.push(request.url());
@@ -54,6 +77,17 @@ export async function openMeeting(page, { day = 'results', waitUntil = 'domconte
   await page.clock.setFixedTime(MEETING_TIME);
   await page.goto(MEETING_PAGES[day], { waitUntil });
   return { offsite, problems };
+}
+
+/**
+ * Serve a meeting page with a change made to its markup first, for a
+ * card the captures are not. Call it before openMeeting.
+ */
+export async function rewriteMeeting(page, day, change) {
+  await page.route(`**${MEETING_PAGES[day]}`, async (route) => {
+    const response = await route.fetch();
+    await route.fulfill({ response, body: change(await response.text()) });
+  });
 }
 
 /** The races on the page, in running order. */

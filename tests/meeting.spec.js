@@ -11,9 +11,12 @@
  * These are behaviour tests, not design tests: they say what must still
  * work after a restyle, and they leave every visual decision open.
  */
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { test, expect } from '@playwright/test';
 import {
-  MASTHEAD_COLUMN_MAX_WIDTH, MEETING_SECTIONS, openMeeting, openSlip, pick, races, runnersOf, settled, showsSlipSheet, tickets,
+  MASTHEAD_COLUMN_MAX_WIDTH, MEETING_SECTIONS, openMeeting, openSlip, pick, races, rewriteMeeting, runnersOf, settled,
+  showsSlipSheet, slipFromElsewhere, slipStorageKey, tickets,
 } from './support/meeting.js';
 
 const LOCAL_DEBUG_URL = /\/\/(localhost|127\.0\.0\.1)[:/]/;
@@ -125,15 +128,18 @@ test.describe('race strip', () => {
 });
 
 test.describe('runners', () => {
-  test('every trip is spelt out and drawn to its length', async ({ page }) => {
+  test('every trip is spelt out, and its ruler is drawn to the same trip', async ({ page }) => {
     await openMeeting(page);
     const rulers = page.locator('.mf-race__meta .mfr-furlongs');
     expect(await rulers.count()).toBe(await races(page).count());
     const wrong = await rulers.evaluateAll((els) =>
       els.filter((el) => {
-        const furlongs = +el.style.getPropertyValue('--mfr-f');
         const words = el.parentElement.textContent.trim();
-        return !(furlongs > 0) || /\d[mf]\d/.test(words) || Math.abs(el.getBoundingClientRect().width - (furlongs * 4 - 2)) > 0.6;
+        // "1m 4f", "2m 16y", "7f": eight furlongs to the mile, 220 yards to the furlong.
+        const part = (unit) => +((new RegExp(`(\\d+)${unit}`).exec(words) || [])[1] || 0);
+        const spelt = Math.round(part('m') * 8 + part('f') + part('y') / 220);
+        const drawn = +el.style.getPropertyValue('--mfr-f');
+        return /\d[mf]\d/.test(words) || !(drawn > 0) || drawn !== spelt || !el.getClientRects().length;
       }).length,
     );
     expect(wrong).toBe(0);
@@ -176,16 +182,21 @@ test.describe('runners', () => {
       (els) => els.filter((el) => el.getClientRects().length).length,
     );
     expect(questionMarks).toBe(0);
-    // A race in which no runner is numbered loses its number column; one
-    // with any numbered runner keeps it. (On this card every race has
-    // some numbered runners, so none is marked.)
-    const mismarked = await page.locator('[data-racecard]').evaluateAll((cards) =>
-      cards.filter((card) => {
-        const none = !Array.from(card.querySelectorAll('.racecard__runner')).some((row) => +row.dataset.number > 0);
-        return (card.getAttribute('data-mfr-numbers') === 'none') !== none;
-      }).length,
-    );
-    expect(mismarked).toBe(0);
+    // A race with any numbered runner keeps its number column. (On this
+    // card every race has some, so none is marked; the next test makes
+    // a card with none.)
+    expect(await page.locator('[data-racecard][data-mfr-numbers="none"]').count()).toBe(0);
+  });
+
+  test('upcoming: a race in which no runner is numbered loses its number column', async ({ page }) => {
+    // The captured card has a few numbers in every race; here it has none.
+    await rewriteMeeting(page, 'upcoming', (html) => html.replace(/data-number="\d+"/g, 'data-number="0"'));
+    await openMeeting(page, { day: 'upcoming' });
+    const cards = page.locator('[data-racecard]');
+    expect(await cards.count()).toBeGreaterThan(0);
+    await expect(page.locator('[data-racecard][data-mfr-numbers="none"]')).toHaveCount(await cards.count());
+    const shown = await page.locator('.racecard__number, .racecard__col--number').evaluateAll((els) => els.filter((el) => el.getClientRects().length).length);
+    expect(shown).toBe(0);
   });
 });
 
@@ -211,6 +222,28 @@ test.describe('filters and sorting', () => {
     expect(ratings).toEqual([...ratings].sort((a, b) => b - a));
   });
 
+  test('Steamers and Form up each keep only the runners they name', async ({ page }) => {
+    await openMeeting(page);
+    const race = races(page).first();
+    const shown = () => race.locator('.racecard__runner:not([data-mfr-hidden])');
+    await race.locator('.mfr-filter[data-filter="steamers"]').click();
+    expect(await shown().count()).toBeGreaterThan(0);
+    expect(await shown().locator(':scope:not(:has(.runner-market-chip--in))').count()).toBe(0);
+    // Form up: the last three runs better than the three before, as
+    // racecard_collapse.js scores them (letters count 9).
+    await race.locator('.mfr-filter[data-filter="form-up"]').click();
+    const trends = await shown().evaluateAll((rows) =>
+      rows.map((row) => {
+        const raw = (row.querySelector('.racecard__cell--form')?.textContent || '').replace(/[^0-9PFURS]/gi, '').slice(-6);
+        const score = (ch) => (/[0-9]/.test(ch) ? parseInt(ch, 10) || 9 : 9);
+        const mean = (xs) => xs.reduce((a, b) => a + b, 0) / xs.length;
+        return mean(raw.slice(-6, -3).split('').map(score)) - mean(raw.slice(-3).split('').map(score));
+      }),
+    );
+    expect(trends.length).toBeGreaterThan(0);
+    expect(trends.filter((t) => !(t > 0.5))).toEqual([]);
+  });
+
   test('the Comments switch folds every comment away, and back', async ({ page }) => {
     await openMeeting(page);
     const toggle = page.locator('.mfr-switch').first();
@@ -222,6 +255,46 @@ test.describe('filters and sorting', () => {
     await expect(toggle).toHaveAttribute('aria-checked', 'false');
     await toggle.click();
     await expect(html).not.toHaveAttribute('data-mfr-compact');
+  });
+
+  test('a filter puts a sorted column back to rest, so its next click starts again', async ({ page }) => {
+    await openMeeting(page);
+    const race = races(page).first();
+    const head = race.locator('.racecard__col[data-sortable][data-col="sr"]');
+    test.skip(!(await head.isVisible()), 'no column heads in this layout');
+    const order = () => runnersOf(race).evaluateAll((rows) => rows.map((row) => row.dataset.runnerId));
+    const card = await order();
+
+    await head.click();
+    const first = await head.getAttribute('aria-sort');
+    expect(first).toMatch(/ascending|descending/);
+    // racecard.js counts its own clicks on the head; the filter takes
+    // the order over, so the head and that count both go back to rest.
+    await race.locator('.mfr-filter[data-filter="top-ai"]').click();
+    await expect(head).toHaveAttribute('aria-sort', 'none');
+    await race.locator('.mfr-filter[data-filter="all"]').click();
+    expect(await order()).toEqual(card);
+    // A first click again, not a second.
+    await head.click();
+    await expect(head).toHaveAttribute('aria-sort', first);
+  });
+
+  test('a column head takes the order back from Sort by SR, and leaves a filter pressed', async ({ page }) => {
+    await openMeeting(page);
+    const race = races(page).first();
+    const head = race.locator('.racecard__col[data-sortable][data-col="number"]');
+    test.skip(!(await head.isVisible()), 'no column heads in this layout');
+    const pressed = () => race.locator('.mfr-filter[aria-pressed="true"]').getAttribute('data-filter');
+
+    // Sort by SR is an order: once a head sorts, it is no longer shown.
+    await race.locator('.mfr-filter[data-filter="sr-sort"]').click();
+    expect(await pressed()).toBe('sr-sort');
+    await head.click();
+    expect(await pressed()).toBe('all');
+    // Top AI hides runners: the head sorts what is left, and it stays.
+    await race.locator('.mfr-filter[data-filter="top-ai"]').click();
+    await head.click();
+    expect(await pressed()).toBe('top-ai');
   });
 
   test('a column head sorts on a click and on Enter', async ({ page }) => {
@@ -255,7 +328,12 @@ test.describe('bet slip', () => {
   test('another runner in the same race replaces the pick; the ticket can be taken out', async ({ page }) => {
     await openMeeting(page);
     const [first] = await pick(page, 1);
-    const other = races(page).first().locator(`.racecard__runner:not([data-horse-name="${first.horse}"]):not([data-odds-decimal=""])`).first();
+    const race = races(page).first();
+    const at = await runnersOf(race).evaluateAll(
+      (rows, name) => rows.findIndex((row) => row.dataset.horseName !== name && Number.isFinite(parseFloat(row.dataset.oddsDecimal))),
+      first.horse,
+    );
+    const other = runnersOf(race).nth(at);
     await other.locator('[data-action="add-to-slip"]').click();
     await expect(page.locator('#slipLegs .mf-slip__leg')).toHaveCount(1);
     await expect(page.locator('#slipLegs .mf-slip__leg-horse')).toHaveText(await other.getAttribute('data-horse-name'));
@@ -306,6 +384,71 @@ test.describe('bet slip', () => {
     await expect(page.locator('[data-action="add-to-slip"][data-mfr-shut]')).toHaveCount(0);
   });
 
+  test('a slip that arrives with more than six is kept, counted over, and takes no more', async ({ page }) => {
+    await openMeeting(page, { slip: slipFromElsewhere(7) });
+    await expect(page.locator('#slipLegs .mf-slip__leg')).toHaveCount(7);
+    await expect(page.locator('.mfr-card')).toHaveAttribute('data-mfr-state', 'over');
+    await expect(page.locator('.mfr-card__count')).toHaveText('7 picks · 1 over the six · 7 at other meetings');
+    // Every pick came from elsewhere: a jockey's cap stands in for silks.
+    await expect(page.locator('#slipLegs .mfr-leg__silks .mfr-i--cap')).toHaveCount(7);
+    // Nothing more is taken.
+    const button = page.locator('.racecard__runner[data-odds-decimal]:not([data-odds-decimal=""]) [data-action="add-to-slip"]').first();
+    await expect(button).toHaveAttribute('aria-disabled', 'true');
+    await button.click({ force: true });
+    await expect(page.locator('#slipLegs .mf-slip__leg')).toHaveCount(7);
+    await expect(page.locator('.mfr-toast')).toHaveText(/Six races is the most you can pick/);
+    // Two out: back to six, then five with a place free.
+    await openSlip(page);
+    await page.locator('#slipLegs .mf-slip__leg-remove').first().click();
+    await expect(page.locator('.mfr-card__count')).toHaveText('6 of 6 · full · 6 at other meetings');
+    await page.locator('#slipLegs .mf-slip__leg-remove').first().click();
+    await expect(page.locator('.mfr-card__count')).toHaveText('5 of 6 picks · one place left · 5 at other meetings');
+    await expect(page.locator('[data-action="add-to-slip"][data-mfr-shut]')).toHaveCount(0);
+  });
+
+  test('the limit is the page\'s to set: data-pick-limit on the wrapper', async ({ page }) => {
+    // The template can carry the day's limit; here it is two.
+    await rewriteMeeting(page, 'results', (html) => html.replace('<div class="mf-wrap"', '<div class="mf-wrap" data-pick-limit="2"'));
+    await openMeeting(page);
+    await expect(page.locator('.mfr-card__place')).toHaveCount(2);
+    await expect(page.locator('.mfr-card__count')).toHaveText('Up to two picks, one a race');
+    await pick(page, 2);
+    await expect(page.locator('.mfr-card__count')).toHaveText('2 of 2 · full');
+    await expect(page.locator('#slipHandleCount')).toHaveAttribute('data-mfr-of', '/2');
+    const third = page.locator('.mf-race[id]:not(.mf-race--has-selection) .racecard__runner[data-odds-decimal]:not([data-odds-decimal=""]) [data-action="add-to-slip"]').first();
+    await third.click({ force: true });
+    await expect(page.locator('#slipLegs .mf-slip__leg')).toHaveCount(2);
+    await expect(page.locator('.mfr-toast')).toHaveText(/^Two races is the most you can pick/);
+  });
+
+  test('a pick made at another meeting keeps its silks; what was kept for an old day is cleared', async ({ page }) => {
+    // meeting_slip.js keeps each pick's silks, number and jockey beside
+    // the day's slip, under the slip's own key, so a pick made at another
+    // meeting is still dressed here. Seeded as that meeting would leave it.
+    const key = slipStorageKey();
+    const day = /(\d{4}-\d{2}-\d{2})$/.exec(key)[1];
+    const before = (days) => new Date(Date.parse(`${day}T00:00:00Z`) - days * 86_400_000).toISOString().slice(0, 10);
+    const kitKey = (date) => `mfr-slip-kit:${key.replace(day, date)}`;
+    const [elsewhere] = slipFromElsewhere(1);
+    const silks = `static/meeting/img/silks/${readdirSync(join(process.cwd(), 'static', 'meeting', 'img', 'silks'))[0]}`;
+    const id = [elsewhere.course, elsewhere.raceTime, elsewhere.horseName].map((s) => s.trim().toLowerCase()).join('|');
+    await page.addInitScript((entries) => {
+      for (const [name, value] of entries) window.localStorage.setItem(name, value);
+    }, [
+      [kitKey(day), JSON.stringify({ [id]: { silks, number: '4', jockey: 'A. Rider' } })],
+      [kitKey(before(1)), '{}'],    // yesterday's: a visitor may go back to it
+      [kitKey(before(30)), '{}'],   // a month old: no use to anyone
+    ]);
+    await openMeeting(page, { slip: [elsewhere] });
+
+    await openSlip(page);
+    await expect.poll(async () => (await tickets(page))[0]?.silksLoaded).toBe(true);
+    const [ticket] = await tickets(page);
+    expect(ticket).toMatchObject({ horse: elsewhere.horseName, number: '4', jockey: 'A. Rider', silks });
+    const kept = await page.evaluate(() => Object.keys(window.localStorage).filter((name) => name.startsWith('mfr-slip-kit:')));
+    expect(kept.sort()).toEqual([kitKey(before(1)), kitKey(day)].sort());
+  });
+
   test('the sheet opens from the bar, and closes on Escape and on a tap outside', async ({ page }) => {
     test.skip(!showsSlipSheet(page), 'the slip is docked at this width');
     await openMeeting(page);
@@ -337,6 +480,15 @@ test.describe('results', () => {
     await expect(pill).toHaveAttribute('aria-pressed', 'false');
     await pill.click();
     await expect(pill).toHaveAttribute('aria-pressed', 'true');
+  });
+});
+
+test.describe('keyboard', () => {
+  test('no runner row is a tab stop of its own', async ({ page }) => {
+    // On a phone racecard_collapse.js makes every row one, for a compact
+    // view this page does not show; Details is the way in.
+    await openMeeting(page, { waitUntil: 'load' });
+    await expect(page.locator('.racecard__runner[tabindex="0"]')).toHaveCount(0);
   });
 });
 
