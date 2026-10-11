@@ -61,7 +61,10 @@ still pressable, with a tooltip. Changing the horse in a race already
 picked, and taking a pick out, go through as ever. A slip that arrives
 with more than six (made where the limit is not kept) is not cut down:
 the card says how many are over, and nothing more is taken until they
-are out.
+are out. The six is `data-pick-limit` on `.mf-wrap` if the template sets
+it, else six; every word that names the number follows it. What the page
+cannot know is how many picks a member has already submitted today: that
+part of the day's limit stays the server's.
 
 **Nothing removed.** Every feature of the live page is there: sorting by
 column (and from the keyboard now), the filters, the vote buttons, the
@@ -112,6 +115,7 @@ silently, because nothing throws.
 | `.pick6`, `.pick6__num`, `.pick6__lbl`, `.pick6__stamp`, `.pick6__sub` | the stickers; the stamp's lettering is the link's own two words |
 | `.cv`, `.cv-hero`, `.cv-ring` | the AI verdict panel before racing |
 | `--nav-h`, `--banner-h` (on `body`, measured by the tour strip's script) | where the page's pinned things start |
+| `.mf-wrap[data-pick-limit]` (optional) | the day's pick limit, when it is not six |
 
 What the revamp's scripts set, and only the stylesheet reads: an
 `mfr-` class on every element they add, and on the page's own elements
@@ -130,7 +134,13 @@ request and we will change it on both sides. Do not rename it quietly.
   They are on all 141 pages of the site. Two things the live chrome does
   on this page are left as they are for that reason: the tour strip's
   sentence ends in "…" on a narrow phone, and the race badge on a tablet
-  cuts the featured race's name at 220px.
+  cuts the featured race's name at 220px. One thing the page does to the
+  chrome, on purpose and on this page only: `body.page-meeting-full` sets
+  `--max-w: 1520px` and `--page-gutter: 24px`, which `chrome.css` reads,
+  so the navigation, the tour strip and the footer take the page's own
+  column and line up with the races (the site's frame is set for 1280px
+  and a 48px gutter). Dropping those two lines gives the frame back its
+  own widths; nothing else depends on them.
 - **The four `static/races/js/*.js` files** are production code and come
   back unchanged. `static/races/`, `static/voting/` and the rest of the
   shared folders are read-only.
@@ -185,3 +195,37 @@ The page is ported into the Django template on our side:
 `docs/integration-map.md` says what goes where, what the template has
 to change (the stylesheet links and three `<script>` tags, nothing
 else), and what to check once it is in.
+
+## Trade-offs, made knowingly
+
+- **A refused press goes no further.** The seventh press is stopped on
+  its way down, before `bet_slip.js`; that also keeps it from `site.js`'s
+  document listener, which closes an open navigation dropdown on any
+  click, so a refused press leaves such a dropdown open until the next
+  click. The alternative — letting the press through and undoing the
+  add — would flash a ticket and write to storage.
+- **The sort counter is kept honest by clicking.** `racecard.js` counts
+  clicks on a column head (ascending, descending, back to the card's
+  order) in a closure nothing else can read. A filter re-orders the
+  rows, so before it does, `meeting_racecard.js` clicks any sorted head
+  back to rest; the arrow and the count then both agree with what is
+  shown. And the other way round: "Sort by SR" is an order, not a
+  filter, so when a column head sorts the race the bar goes back to
+  All (a filter that hides runners stays pressed, and the head sorts
+  what is left). A reset in `racecard.js` itself would be cleaner.
+- **The ticket reads `bet_slip.js`'s markup.** Each ticket is matched to
+  its runner on the course, time and horse `bet_slip.js` writes into the
+  leg (the course as the first text of the "where" line), and the jockey
+  is added inside `.mf-slip__leg-info`. One line in `bet_slip.js`'s
+  `render()` — `data-course`, `data-race-time` and `data-horse-name` on
+  the `<li>` — would make the match explicit; `meeting_slip.js` already
+  prefers those attributes when they are there.
+- **The phone script's tab stops come off.** `racecard_collapse.js` makes
+  every runner row a tab stop that opens its own compact view, which
+  this page does not show; `meeting_racecard.js` removes the stops (and
+  again whenever the script puts them back), since Details is a button
+  in the tab order already. Its tap-to-expand is left alone: it toggles
+  an attribute nothing reads.
+- **Three scripts, each with its own three helpers.** `make`, `icon` and
+  `reword` are a dozen lines, copied so each script loads and reads on
+  its own, as the trail's three do.

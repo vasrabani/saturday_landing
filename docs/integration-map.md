@@ -367,7 +367,7 @@ the picture is beside it.
 | `js/meeting_racecard.js` | New. The labels, the form's colours, the numbers, the line under a runner's name, Details, the filters and the Comments switch, the favourite and the top rating, sorting from the keyboard |
 | `js/meeting_masthead.js` | New. The stamp's lettering, "8 races", the strip's rows and height, "you are here" for big fields, jumps that land below the pinned bars |
 | `js/meeting_slip.js` | New. The ticket, the six places, the bar's silks, the sheet's backdrop and Escape, the six-pick limit |
-| `img/icons/*.svg` (35) | New. CSS masks, under 1 KB each |
+| `img/icons/*.svg` (22) | New. CSS masks, under 1 KB each |
 | `img/masthead.webp` | The homepage's hero picture (108 KB), a copy so the stylesheet points inside its folder |
 
 The three scripts load with `defer` after `meeting_full.js`, in the
@@ -387,6 +387,8 @@ the trail's board falls back to one column.
 | --- | --- |
 | the full-field meeting template, `<head>` | The six page-level stylesheet links (`racecard`, `racecard_prices`, `meeting_full`, `pick6_emblem`, `ai_pick_chip`, `chamber_verdict`) become one, `races/css/meeting.css`; the page-local `<style>` block comes out. `base`, `paper`, `chrome` and `picks_budget` stay |
 | the full-field meeting template, before `</body>` | Three `<script defer>` tags after `meeting_full.js` |
+| the full-field meeting template, `.mf-wrap` | Optional: `data-pick-limit="{{ daily_pick_limit }}"`, so the page's six follows the setting; without it the scripts assume six |
+| the site's chrome, on this page only | `body.page-meeting-full` sets `--max-w: 1520px` and `--page-gutter: 24px`, which `chrome.css` reads: the nav, the tour strip and the footer take the page's column here. Deliberate; drop the two lines to give the frame back its 1280px and 48px |
 
 Nothing else in the template changes: every element the revamp adds, it
 adds itself (the filters, the Details button, the rulers, the number
@@ -413,7 +415,7 @@ lose one of these and that script quietly does nothing.
 | `.mf-race__meta > span` (the trip), `.mf-race__tag`, `.mf-race__cta`, `.mf-switcher__count` | the labels |
 | `.pick6__num`, `.pick6__lbl`, `.pick6__stamp` | the stamp's lettering |
 | `[data-mf-jump]`, `.mf-jump__chip[data-jump-target]` | the strip |
-| `#betSlip`, `#slipHandle`, `#slipHandleCount`, `#slipLegs`, `.mf-slip__head`, `.mf-slip__leg` and its `-where`, `-time`, `-horse`, `-info` | the ticket and the places |
+| `#betSlip`, `#slipHandle`, `#slipHandleCount`, `#slipLegs`, `.mf-slip__head`, `.mf-slip__leg` and its `-where`, `-time`, `-horse`, `-info` | the ticket and the places. A ticket is matched to its runner on the course `bet_slip.js` writes as the first text of `-where`, the time and the horse; `data-course`, `data-race-time` and `data-horse-name` on the `<li>`, one line in `render()`, would make that explicit, and the script prefers them when present |
 | `img.racecard__silk`, `.racecard__jockey-name` | what a ticket copies |
 | `[data-action="add-to-slip"]`, `.mf-race--has-selection`, `.mf-toast` | the limit |
 | `a.mf-switcher__chip[href]`, `.mf-switcher__course` | where a place goes for a pick made at another meeting |

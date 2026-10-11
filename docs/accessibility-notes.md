@@ -112,6 +112,10 @@ What the revamp did for the keyboard and the screen reader:
   can still be reached and still explains itself.
 - The sheet closes on Escape and on the backdrop, which is a button with
   a label, out of the tab order.
+- On a phone `racecard_collapse.js` makes every runner row a tab stop for
+  its own compact view, which this page does not show; those stops (a
+  hundred or more) are removed, and removed again whenever the script
+  puts them back. Details is the way in, a button in the tab order.
 - The AI stars are one `role="img"` with the rating in words; the age
   and weight under a runner's name on a phone are `aria-hidden`, because
   the row's own cells carry them for a screen reader.

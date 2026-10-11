@@ -99,8 +99,9 @@ revamp's words rather than the template's:
 - The slip's count under its places ("Up to six picks, one a race",
   "6 of 6 · full", "7 picks · 1 over the six") and the refusal message
   ("Six races is the most you can pick. Take one out to add …") are set
-  in `meeting_slip.js`. The six is the server's `daily_pick_limit`; if
-  that ever changes, `SIX` at the top of the script changes with it.
+  in `meeting_slip.js`. The six is the server's `daily_pick_limit`; the
+  script reads `data-pick-limit` on `.mf-wrap` when the template sets it
+  (else six), and every word that names the number is derived from it.
 - "Race card" on each race's link (the template says "Open"), "8 races"
   on a tab (the template says "8r"), and the trip spelt out ("1m 4f" for
   "1m4f0y") are rewordings in `meeting_racecard.js` and

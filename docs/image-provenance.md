@@ -50,7 +50,7 @@ Nothing here is a photograph or the output of an image model.
 - `static/meeting/img/masthead.webp` is a copy of `hero-fold-bg.webp`
   above (AI-generated, OpenAI C2PA), so the page's stylesheet points
   inside its own folder; nothing new was generated.
-- `static/meeting/img/icons/*.svg` are 35 line icons drawn for the
+- `static/meeting/img/icons/*.svg` are 22 line icons drawn for the
   prototype (most after the Feather set; the winning post, the horseshoe
   and the jockey's cap are the page's own), under 1 KB each.
 - `static/meeting/img/silks/*.svg` are the 152 jockeys' silks the two
