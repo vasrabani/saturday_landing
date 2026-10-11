@@ -1,13 +1,16 @@
 # Integration map
 
 Where each part of this snapshot lives in the Django site, and how a change
-made here gets there. Two pages live here now.
+made here gets there. Three pages live here now.
 
 - **The home page** (`index.html`). Ported and live since 2026-09-18, so
   this repo is its design workspace: a change made here is ported into
   the matching template by hand.
 - **The Fox Trail** (`trail.html`). Snapshot taken 2026-09-30 for the
   revamp — see `trail-brief.md`. Nothing has been ported back yet.
+- **The meeting page** (`meeting.html`, `meeting-upcoming.html`). Snapshots
+  of Newmarket taken 2026-10-09 and 2026-10-10 for the revamp — see
+  `meeting-brief.md`. Nothing has been ported back yet.
 
 Repositories:
 
@@ -20,6 +23,13 @@ Repositories:
     partials, `grid/views.py`, the board itself built by
     `grid/services/` (consolidator, trail, track_record, source adapters),
     assets under `grid/static/grid/`.
+  - Meeting page: the `races` app — the full-field meeting template and
+    the racecard component it includes, the view behind
+    `/races/meeting/<course>/<date>/full/`, assets under
+    `races/static/races/` (`css/racecard.css`, `racecard_prices.css`,
+    `meeting_full.css`, `pick6_emblem.css`, `ai_pick_chip.css`,
+    `chamber_verdict.css`; `js/racecard.js`, `racecard_collapse.js`,
+    `bet_slip.js`, `meeting_full.js`) and `voting/static/voting/`.
 
 ## In sync with production as of
 
@@ -315,3 +325,115 @@ the snapshot:
 - axe with no new violations (`docs/accessibility-notes.md` records the one
   open contrast decision).
 - The section against `states.html` for each branch it can take.
+
+## The meeting page, part by part
+
+| In the sandbox | Template there | Notes |
+| --- | --- | --- |
+| `meeting.html` shell, masthead | the full-field meeting template | the course, the date, `race_count`, `runner_count`, the first off, the going / type / track / headline chips; the `<style>` block in its head is replaced by `meeting.css` |
+| Pick Six | `pick6_emblem` include | the emblem's own markup; `meeting_masthead.js` letters the stamp from `.pick6__lbl` and `.pick6__stamp` |
+| Meeting tabs | the meeting switcher partial | the day's meetings, `?r` counts; `meeting_masthead.js` rewords "8r" |
+| Race strip | the jump nav, `data-mf-jump` | one chip a race: `--next`, `--done`, `--featured`; `meeting_full.js` marks the race in view, `meeting_masthead.js` corrects it for big fields |
+| One race | the race partial | time, name, tags, the trip and class, prize, runners, Reveal winner, the Race card link; `meeting_racecard.js` adds the filters above it |
+| The runners | the racecard component | one `.racecard__runner` a horse with its `data-*`; the table's column heads; the comment and the AI verdict rows |
+| AI verdict panel | `chamber_verdict` include, before the off | restyled only |
+| The slip | the bet slip partial | `bet_slip.js` fills `#slipLegs`; `meeting_slip.js` dresses each leg and keeps the six places under the head |
+| Previous / next meeting | the paddles at the foot | restyled only |
+
+**The sandbox's days are captures, not fixtures.** Both pages are the live
+page as it was, with the silks the live page loads from
+`silks.theracingapi.com` copied into `static/meeting/img/silks/` (named by
+the sha1 of the live URL), so the sandbox asks no other server for
+anything. The Friday page has every result in; the Saturday page is the
+evening before, with no numbers, most runners at SP and the AI verdict
+panels — between them, every state the template can take, apart from a
+race running now, which neither capture caught.
+
+## The meeting page revamp: what to port
+
+One stylesheet, three scripts and an image folder are new; the four
+production scripts are untouched; the template changes are the asset
+links.
+
+**Files.** Each goes under `races/static/races/` with the folder's name
+dropped (`static/meeting/css/meeting.css` → `races/static/races/css/meeting.css`,
+and so on). Every `url()` in `meeting.css` points inside the folder
+(`../img/…`), so the stylesheet depends on nothing outside the app once
+the picture is beside it.
+
+| File | What it is |
+| --- | --- |
+| `css/meeting.css` | The whole page, replacing six stylesheets and the template's `<style>` block. No `!important`; page-level steps only at 768, 1024 and 1280px; the runners choose table, two lines or a card by a container query on `.mf-races` |
+| `js/meeting_racecard.js` | New. The labels, the form's colours, the numbers, the line under a runner's name, Details, the filters and the Comments switch, the favourite and the top rating, sorting from the keyboard |
+| `js/meeting_masthead.js` | New. The stamp's lettering, "8 races", the strip's rows and height, "you are here" for big fields, jumps that land below the pinned bars |
+| `js/meeting_slip.js` | New. The ticket, the six places, the bar's silks, the sheet's backdrop and Escape, the six-pick limit |
+| `img/icons/*.svg` (35) | New. CSS masks, under 1 KB each |
+| `img/masthead.webp` | The homepage's hero picture (108 KB), a copy so the stylesheet points inside its folder |
+
+The three scripts load with `defer` after `meeting_full.js`, in the
+order above. They read the classes and attributes the template and the
+production scripts already set, and none of them changes a production
+element's markup beyond adding an element beside it or an attribute to
+it. `tests/meeting.spec.js` says what each has to keep doing.
+
+Browser support is the site's own. Container queries and `:has()` are
+new to this page (Chrome / Edge 105, Safari 16, Firefox 121); without
+them a runner's cells stack in one column, readable but plain, the way
+the trail's board falls back to one column.
+
+**Markup. STRUCTURAL — needs moving into the Django template.**
+
+| Template | Change |
+| --- | --- |
+| the full-field meeting template, `<head>` | The six page-level stylesheet links (`racecard`, `racecard_prices`, `meeting_full`, `pick6_emblem`, `ai_pick_chip`, `chamber_verdict`) become one, `races/css/meeting.css`; the page-local `<style>` block comes out. `base`, `paper`, `chrome` and `picks_budget` stay |
+| the full-field meeting template, before `</body>` | Three `<script defer>` tags after `meeting_full.js` |
+
+Nothing else in the template changes: every element the revamp adds, it
+adds itself (the filters, the Details button, the rulers, the number
+cloths, the ticket's silks, the six places, the backdrop, the message).
+If any of those should be in the template instead — the filters and the
+Details button are the natural candidates — it is one block of markup
+each, and the script already checks before adding one.
+
+**The six-pick limit and the server.** The limit on the page is the same
+six the server applies when a member submits (`daily_pick_limit`). It is
+kept in `meeting_slip.js` rather than `bet_slip.js` so that
+`bet_slip.js` comes back unchanged; moving the gate into `bet_slip.js`'s
+own click handler (before `addOrReplace`) would be a six-line change and
+would make the stood-down buttons' state part of `render()`. Either way
+the server's check on submit stays as it is.
+
+**What the new scripts need.** As with the contract in `meeting-brief.md`:
+lose one of these and that script quietly does nothing.
+
+| Hook | Used for |
+| --- | --- |
+| `.mf-race[id]`, `.racecard__runner` and its `data-*` (`runner-id`, `race-id`, `horse-name`, `course`, `race-time`, `odds-decimal`, `odds-fractional`, `number`, `stars`, `sr`, `nr`) | the filters, the marks, the numbers, the ticket, the limit |
+| `.racecard__form .rcf`, `rcf--sep`, `rcf--dnf` | the form's colours |
+| `.mf-race__meta > span` (the trip), `.mf-race__tag`, `.mf-race__cta`, `.mf-switcher__count` | the labels |
+| `.pick6__num`, `.pick6__lbl`, `.pick6__stamp` | the stamp's lettering |
+| `[data-mf-jump]`, `.mf-jump__chip[data-jump-target]` | the strip |
+| `#betSlip`, `#slipHandle`, `#slipHandleCount`, `#slipLegs`, `.mf-slip__head`, `.mf-slip__leg` and its `-where`, `-time`, `-horse`, `-info` | the ticket and the places |
+| `img.racecard__silk`, `.racecard__jockey-name` | what a ticket copies |
+| `[data-action="add-to-slip"]`, `.mf-race--has-selection`, `.mf-toast` | the limit |
+| `a.mf-switcher__chip[href]`, `.mf-switcher__course` | where a place goes for a pick made at another meeting |
+
+They set, and only the stylesheet reads: `mfr-` classes on what they add;
+`data-mfr-run`, `data-mfr-latest`, `data-mfr-once`, `data-mfr-numbers`,
+`data-mfr-open`, `data-mfr-hidden`, `data-mfr-fav`, `data-mfr-top`,
+`data-mfr-compact` (on `<html>`), `data-mfr-taken`, `data-mfr-state`,
+`data-mfr-shut`, `data-mfr-six`, `data-mfr-of`, `data-mfr-nudge` on the
+page's own elements; `--mfr-f` on a ruler; `--mfr-strip` on `body`.
+
+**Hidden, not removed.** Still in the markup, and `racecard_collapse.js`
+still writes some of them; the stylesheet hides them because the page
+says the same thing at every width now: `.rc-mob-filterbar`,
+`.rc-mob-compact`, `.rc-ribbon`, `.rc-mob-snackbar`,
+`.rc-mob-picks-counter`, and the "?" the template prints for a runner
+with no number yet. Taking them out of the template is optional.
+
+**One thing in `site.js`, again.** It scrolls every in-page `#` link to
+76px from the top of the window, which here is under the tour strip and
+the race strip. `meeting_masthead.js` steps round it for the race
+links; the lasting fix is the one the trail asked for, `site.js`
+honouring the target's `scroll-margin-top`.

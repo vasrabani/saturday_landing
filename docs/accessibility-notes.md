@@ -79,3 +79,39 @@ sits behind the gradient, and reports foreground and background as nearly
 the same — ratios like 1.01:1. The rendered text has real contrast. They
 stay on the known list in `tools/quality-baseline.json` so that a genuine
 new contrast failure still fails the run.
+
+## The meeting page
+
+`npm test` runs axe on `meeting.html` and `meeting-upcoming.html` at the
+four widths. Four rules fire, all of them on markup the page arrives
+with; all four are on the known list in `tools/quality-baseline.json`,
+page by page and width by width, so nothing new can join them unseen.
+
+| Rule | Where | What it is, and the fix on the template side |
+| --- | --- | --- |
+| `aria-prohibited-attr` | every market chip (`.runner-market-chip--in`, `--out`): 21 to 41 a page | an `aria-label` on a `<span>` with no role. The chip's `title` already says "Market shortener" or "Market drifter"; give the span `role="img"`, or drop the `aria-label` |
+| `aria-required-children`, `aria-required-parent` | every race: `.racecard__grid[role="rowgroup"]` and the `.racecard__runners[role="rowgroup"]` inside it | two row groups nested, with no `role="table"` above them. Put `role="table"` on `.racecard` (it already labels itself) and let `.racecard__grid` be a plain `div`, so the column heads' row group and the runners' row group are the table's own children |
+| `color-contrast` | `.site-nav__wordmark-sub` from 768px, and `.site-nav__date` from 1024px (both 4.06:1) | the shared navigation: the same finding the other two pages carry |
+
+Nothing the revamp adds fires a rule: every word it sets was checked
+against the pixels behind it at 4.5 to 1 or better (3 to 1 for large
+type), including the words over the masthead's picture, and its one
+element inside an ARIA row — the phone card's Details button — sits in a
+cell of its own.
+
+What the revamp did for the keyboard and the screen reader:
+
+- The sortable column heads are in the tab order and sort on Enter or
+  Space (`racecard.js` only listens for a click).
+- The filters are buttons with `aria-pressed`; the Comments switch is a
+  `role="switch"` with `aria-checked`; Details is a button with
+  `aria-expanded` and the runner's name in its label.
+- The slip's six places are links with a label each ("Pick 2 of 6: Carry
+  The Flag, Newmarket 13:15"); the refusal message is a `role="status"`.
+- A Pick stood down by the limit is `aria-disabled`, not disabled, so it
+  can still be reached and still explains itself.
+- The sheet closes on Escape and on the backdrop, which is a button with
+  a label, out of the tab order.
+- The AI stars are one `role="img"` with the rating in words; the age
+  and weight under a runner's name on a phone are `aria-hidden`, because
+  the row's own cells carry them for a screen reader.
