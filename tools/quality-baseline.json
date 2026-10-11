@@ -142,6 +142,56 @@
    "desktop-1440": [
     "color-contrast"
    ]
+  },
+  "meeting.html": {
+   "mobile-375": [
+    "aria-prohibited-attr",
+    "aria-required-children",
+    "aria-required-parent"
+   ],
+   "tablet-768": [
+    "aria-prohibited-attr",
+    "aria-required-children",
+    "aria-required-parent",
+    "color-contrast"
+   ],
+   "laptop-1024": [
+    "aria-prohibited-attr",
+    "aria-required-children",
+    "aria-required-parent",
+    "color-contrast"
+   ],
+   "desktop-1440": [
+    "aria-prohibited-attr",
+    "aria-required-children",
+    "aria-required-parent",
+    "color-contrast"
+   ]
+  },
+  "meeting-upcoming.html": {
+   "mobile-375": [
+    "aria-prohibited-attr",
+    "aria-required-children",
+    "aria-required-parent"
+   ],
+   "tablet-768": [
+    "aria-prohibited-attr",
+    "aria-required-children",
+    "aria-required-parent",
+    "color-contrast"
+   ],
+   "laptop-1024": [
+    "aria-prohibited-attr",
+    "aria-required-children",
+    "aria-required-parent",
+    "color-contrast"
+   ],
+   "desktop-1440": [
+    "aria-prohibited-attr",
+    "aria-required-children",
+    "aria-required-parent",
+    "color-contrast"
+   ]
   }
  }
 }
