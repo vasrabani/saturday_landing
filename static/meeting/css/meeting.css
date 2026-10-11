@@ -63,6 +63,7 @@ body.page-meeting-full {
   --mfr-ink: var(--c-ink);                 /* text, and the chosen state */
   --mfr-ink-hover: #2A2F3D;                /* an ink button under the pointer */
   --mfr-ink-2: var(--c-ink-70);            /* secondary text */
+  --mfr-white: #FFF;                       /* words and marks on ink; the picture's lights */
   --mfr-ink-3: #666B73;                    /* labels and captions: paper.css's --c-ink-40
                                               is 2.5:1 on white; this is 5.4:1, and at
                                               least 4.7:1 on every tint below */
@@ -168,7 +169,9 @@ body.page-meeting-full {
    of the text beside it. The drawings are static/meeting/img/icons/,
    24px line art on a 24px grid (stroke 2), most from the Feather set;
    post, horseshoe and cap are the page's own. The scripts make one as
-   <span class="mfr-i mfr-i--name" aria-hidden="true">. */
+   <span class="mfr-i mfr-i--name" aria-hidden="true">, and the names
+   below are the ones they make; every other drawing in the folder is a
+   mask on one of the page's own elements, named where it is used. */
 .mfr-i {
   display: inline-block;
   flex: none;
@@ -181,40 +184,14 @@ body.page-meeting-full {
 }
 
 .mfr-i--arrow-down { --i: url("../img/icons/arrow-down.svg"); }
-.mfr-i--arrow-left { --i: url("../img/icons/arrow-left.svg"); }
-.mfr-i--arrow-right { --i: url("../img/icons/arrow-right.svg"); }
-.mfr-i--arrow-up { --i: url("../img/icons/arrow-up.svg"); }
-.mfr-i--award { --i: url("../img/icons/award.svg"); }
 .mfr-i--cap { --i: url("../img/icons/cap.svg"); }
 .mfr-i--check { --i: url("../img/icons/check.svg"); }
 .mfr-i--chevron-down { --i: url("../img/icons/chevron-down.svg"); }
-.mfr-i--chevron-right { --i: url("../img/icons/chevron-right.svg"); }
-.mfr-i--chevron-up { --i: url("../img/icons/chevron-up.svg"); }
-.mfr-i--clock { --i: url("../img/icons/clock.svg"); }
-.mfr-i--compass { --i: url("../img/icons/compass.svg"); }
-.mfr-i--copy { --i: url("../img/icons/copy.svg"); }
-.mfr-i--dot { --i: url("../img/icons/dot.svg"); }
-.mfr-i--eye { --i: url("../img/icons/eye.svg"); }
-.mfr-i--eye-off { --i: url("../img/icons/eye-off.svg"); }
-.mfr-i--flag { --i: url("../img/icons/flag.svg"); }
-.mfr-i--grid { --i: url("../img/icons/grid.svg"); }
-.mfr-i--help { --i: url("../img/icons/help.svg"); }
 .mfr-i--horseshoe { --i: url("../img/icons/horseshoe.svg"); }
-.mfr-i--info { --i: url("../img/icons/info.svg"); }
-.mfr-i--log-in { --i: url("../img/icons/log-in.svg"); }
-.mfr-i--message { --i: url("../img/icons/message.svg"); }
-.mfr-i--plus { --i: url("../img/icons/plus.svg"); }
-.mfr-i--post { --i: url("../img/icons/post.svg"); }
-.mfr-i--reset { --i: url("../img/icons/reset.svg"); }
-.mfr-i--slip { --i: url("../img/icons/slip.svg"); }
-.mfr-i--sort { --i: url("../img/icons/sort.svg"); }
-.mfr-i--sparkle { --i: url("../img/icons/sparkle.svg"); }
 .mfr-i--star { --i: url("../img/icons/star.svg"); }
 .mfr-i--star-fill { --i: url("../img/icons/star-fill.svg"); }
 .mfr-i--trend-down { --i: url("../img/icons/trend-down.svg"); }
 .mfr-i--trend-up { --i: url("../img/icons/trend-up.svg"); }
-.mfr-i--user-plus { --i: url("../img/icons/user-plus.svg"); }
-.mfr-i--x { --i: url("../img/icons/x.svg"); }
 
 /* ── 2. Masthead ────────────────────────────────────────────────── */
 
@@ -341,7 +318,7 @@ body.page-meeting-full {
 
 .mf-hero__mins {
   padding: 2px 9px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-green-line);
   border-radius: 999px;
   font-size: 12px;
@@ -378,7 +355,7 @@ body.page-meeting-full {
   gap: 7px;
   min-height: 32px;
   padding: 4px 12px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-rule);
   border-radius: 8px;
   font-size: 13px;
@@ -429,7 +406,7 @@ body.page-meeting-full {
 }
 
 .mf-chip--headline:hover {
-  background: #fff;
+  background: var(--mfr-card);
   border-color: var(--mfr-gold);
 }
 
@@ -588,7 +565,7 @@ body.page-meeting-full {
   font-weight: 800;
   line-height: 28px;
   letter-spacing: -0.01em;
-  color: #fff;
+  color: var(--mfr-white);
   white-space: nowrap;
   transform: rotate(var(--mfr-tilt));
   transform-origin: 50% 100%;
@@ -617,7 +594,7 @@ body.page-meeting-full {
   line-height: 16px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--mfr-white);
   white-space: nowrap;
   transform: rotate(var(--mfr-tilt));
   transform-origin: 50% 0;
@@ -768,7 +745,7 @@ body.page-meeting-full {
 }
 
 .mf-switcher__home:hover {
-  background: #fff;
+  background: var(--mfr-card);
 }
 
 .mf-switcher__home > span[aria-hidden] {
@@ -799,7 +776,7 @@ body.page-meeting-full {
   gap: 8px;
   min-height: 36px;
   padding: 0 12px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-rule);
   border-radius: 8px;
   font-size: 13.5px;
@@ -823,7 +800,7 @@ a.mf-switcher__chip:hover {
   background: var(--mfr-ink);
   border-color: var(--mfr-ink);
   box-shadow: none;
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 .mf-switcher__chip--current .mf-switcher__course {
@@ -850,7 +827,7 @@ a.mf-switcher__chip:hover {
 
 .mf-switcher__chip--current .mf-switcher__count {
   background: rgb(255 255 255 / 16%);
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 /* ── 2b. The masthead's picture ──────────────────────────────────
@@ -879,7 +856,7 @@ a.mf-switcher__chip:hover {
   justify-content: center;
   min-height: 300px;
   padding: 34px 0 30px;
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 .mf-hero::before {
@@ -920,7 +897,7 @@ a.mf-switcher__chip:hover {
 }
 
 .mf-hero__title {
-  color: #fff;
+  color: var(--mfr-white);
   text-shadow: 0 2px 22px rgb(7 9 16 / 80%);
 }
 
@@ -942,7 +919,7 @@ a.mf-switcher__chip:hover {
 }
 
 .mf-hero__sub strong {
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 .mf-hero__mins {
@@ -964,7 +941,7 @@ a.mf-switcher__chip:hover {
 .mf-chip {
   background: rgb(7 9 16 / 62%);
   border-color: rgb(255 255 255 / 24%);
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 .mf-chip__lbl {
@@ -1162,7 +1139,7 @@ a.mf-switcher__chip:hover {
   position: absolute;
   inset: 0 -100vmax;
   z-index: -1;
-  background: #fff;
+  background: var(--mfr-card);
   border-bottom: 1px solid var(--mfr-rule);
   box-shadow: 0 4px 14px rgb(17 21 31 / 5%);
 }
@@ -1176,7 +1153,7 @@ a.mf-switcher__chip:hover {
   min-width: 0;
   height: 36px;
   padding: 0 6px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-rule);
   border-radius: 8px;
   font-size: 12px;
@@ -1283,7 +1260,7 @@ a.mf-switcher__chip:hover {
   gap: 8px 12px;
   margin: 0 0 20px;
   padding: 12px 16px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-rule);
   border-left: 3px solid var(--mfr-green);
   border-radius: 10px;
@@ -1344,7 +1321,7 @@ a.mf-switcher__chip:hover {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-variant-numeric: tabular-nums;
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 /* ── 4. Race card ───────────────────────────────────────────────── */
@@ -1363,7 +1340,7 @@ a.mf-switcher__chip:hover {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   margin: 0 0 22px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-rule);
   border-radius: 12px;
   box-shadow: var(--mfr-shadow-2);
@@ -1443,7 +1420,7 @@ a.mf-switcher__chip:hover {
   align-items: center;
   gap: 4px;
   padding: 2px 8px 2px 6px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-rule-2);
   border-radius: 999px;
   font-size: 10.5px;
@@ -1471,7 +1448,7 @@ a.mf-switcher__chip:hover {
 .mf-race__tag--next {
   background: var(--mfr-green);
   border-color: var(--mfr-green);
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 .mf-race__tag .mfr-text {
@@ -1563,7 +1540,7 @@ a.mf-switcher__chip:hover {
   gap: 6px;
   height: 36px;
   padding: 0 12px 0 14px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-rule-2);
   border-radius: 8px;
   font-size: 13px;
@@ -1610,7 +1587,7 @@ a.mf-switcher__chip:hover {
   margin: 0 18px 12px 10px;
   padding: 0 14px;
   min-height: 34px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-green-line);
   border-radius: 8px;
   font: inherit;
@@ -1738,7 +1715,7 @@ a.mf-switcher__chip:hover {
   content: "Hide";
   margin-left: auto;
   padding: 3px 10px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-green-line);
   border-radius: 999px;
   font-size: 12px;
@@ -1768,7 +1745,7 @@ a.mf-switcher__chip:hover {
   gap: 6px;
   min-height: 34px;
   padding: 0 12px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-rule);
   border-radius: 999px;
   font: inherit;
@@ -1806,7 +1783,7 @@ a.mf-switcher__chip:hover {
   border-color: var(--mfr-ink);
   box-shadow: none;
   font-weight: 700;
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 .mfr-filter[aria-pressed="true"] .mfr-i {
@@ -1866,7 +1843,7 @@ a.mf-switcher__chip:hover {
   left: 3px;
   width: 12px;
   height: 12px;
-  background: #fff;
+  background: var(--mfr-card);
   border-radius: 50%;
   box-shadow: 0 1px 2px rgb(17 21 31 / 30%);
   transition: transform 0.15s;
@@ -2039,7 +2016,7 @@ a.mf-switcher__chip:hover {
   min-width: 24px;
   height: 22px;
   padding: 0 4px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1.5px solid var(--mfr-ink);
   border-radius: 5px;
   font-size: 12.5px;
@@ -2138,7 +2115,7 @@ a.racecard__name:hover {
 }
 
 .racecard__badge--7day {
-  background: #fff;
+  background: var(--mfr-card);
   border-color: var(--mfr-rule-2);
   border-style: dashed;
   color: var(--mfr-ink-2);
@@ -2316,7 +2293,7 @@ a.racecard__name:hover {
   background: linear-gradient(145deg, #cb4232 0%, #a3281c 100%);
   border-color: #9b271c;
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 22%);
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 /* A new season ("-") or a long break ("/") between two runs. */
@@ -2501,7 +2478,7 @@ a.racecard__name:hover {
 /* An outsider's price is plain; the favourite's (marked by the script:
    the shortest price in the race) is a shade deeper, edged in gold. */
 .racecard__odds--outsider {
-  background: #fff;
+  background: var(--mfr-card);
   border-color: var(--mfr-rule-2);
   font-weight: 700;
   color: var(--mfr-ink-2);
@@ -2515,7 +2492,7 @@ a.racecard__name:hover {
 }
 
 .racecard__odds--unpriced {
-  background: #fff;
+  background: var(--mfr-card);
   border-style: dashed;
   border-color: var(--mfr-rule-2);
   font-size: 12.5px;
@@ -2634,7 +2611,7 @@ a.racecard__name:hover {
   width: 100%;
   min-height: 36px;
   padding: 0 12px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1.5px solid var(--mfr-ink);
   border-radius: 8px;
   font: inherit;
@@ -2663,7 +2640,7 @@ a.racecard__name:hover {
   cursor: not-allowed;
 }
 
-/* The slip is full (six picks; meeting.js, "six at most"): Pick in a
+/* The slip is full (six picks; meeting_slip.js, "six at most"): Pick in a
    race not yet picked stands down. It can still be pressed, and then
    says why. */
 .racecard__slip-btn[data-mfr-shut] {
@@ -2687,7 +2664,7 @@ a.racecard__name:hover {
 .racecard__runner.is-selected .racecard__slip-btn {
   background: var(--mfr-green);
   border-color: var(--mfr-green);
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 .racecard__runner--in-slip .racecard__slip-btn:hover,
@@ -3298,7 +3275,7 @@ a.racecard__name:hover {
     width: 100%;
     min-height: 42px;
     padding: 0 12px;
-    background: #fff;
+    background: var(--mfr-card);
     border: 1px solid var(--mfr-rule);
     border-radius: 8px;
     font: inherit;
@@ -3425,7 +3402,7 @@ a.racecard__name:hover {
 
 .cv__compact-lens {
   padding: 2px 9px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-rule);
   border-radius: 999px;
   font-size: 12px;
@@ -3439,7 +3416,7 @@ a.racecard__name:hover {
   align-items: center;
   gap: 16px;
   padding: 16px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-rule);
   border-top: 2px solid var(--mfr-gold);
   border-radius: 10px;
@@ -3517,7 +3494,7 @@ a.racecard__name:hover {
 }
 
 .cv-pill--quiet {
-  background: #fff;
+  background: var(--mfr-card);
   border-color: var(--mfr-rule);
   font-weight: 600;
   color: var(--mfr-ink-2);
@@ -3629,7 +3606,7 @@ a.racecard__name:hover {
 
 /* Shared: the panel's contents. */
 .mf-slip {
-  background: #fff;
+  background: var(--mfr-card);
   color: var(--mfr-ink);
   font-size: 13.5px;
 }
@@ -3661,7 +3638,7 @@ a.racecard__name:hover {
   position: relative;
   padding: 20px 16px 12px;
   background: var(--mfr-ink);
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 /* Its trim: a row of gold diamonds. */
@@ -3688,7 +3665,7 @@ a.racecard__name:hover {
   font-family: var(--font-body);
   font-size: 17px;
   font-weight: 800;
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 .mf-slip__title > span[aria-hidden],
@@ -3772,7 +3749,7 @@ a.racecard__name:hover {
   color: var(--mfr-gold);
 }
 
-/* A seventh was asked for (meeting.js, "six at most"): the rail and the
+/* A seventh was asked for (meeting_slip.js, "six at most"): the rail and the
    bar's count shake their heads. */
 .mf-slip[data-mfr-nudge] .mfr-card__rail,
 .mf-slip[data-mfr-nudge] .mf-slip__handle-count {
@@ -3837,7 +3814,7 @@ a.racecard__name:hover {
   place-items: center;
   width: min(30px, 100%);
   aspect-ratio: 1;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1.5px solid var(--mfr-rule-2);
   border-radius: 50%;
   color: var(--mfr-ink-3);
@@ -3931,7 +3908,7 @@ a.racecard__name:hover {
   width: 16px;
   height: 16px;
   margin-left: -8px;
-  background: radial-gradient(circle, #fff 0 24%, var(--mfr-red) 28% 100%);
+  background: radial-gradient(circle, var(--mfr-white) 0 24%, var(--mfr-red) 28% 100%);
   border-radius: 50%;
 }
 
@@ -4017,8 +3994,8 @@ a.racecard__name:hover {
   right: calc(var(--mfr-stub) - 6px);
   width: 12px;
   background:
-    radial-gradient(circle at 50% 0, #fff 0 4.5px, var(--mfr-rule) 4.5px 5.5px, rgb(255 255 255 / 0%) 5.5px) top / 100% 6px no-repeat,
-    radial-gradient(circle at 50% 100%, #fff 0 4.5px, var(--mfr-rule) 4.5px 5.5px, rgb(255 255 255 / 0%) 5.5px) bottom / 100% 6px no-repeat,
+    radial-gradient(circle at 50% 0, var(--mfr-white) 0 4.5px, var(--mfr-rule) 4.5px 5.5px, rgb(255 255 255 / 0%) 5.5px) top / 100% 6px no-repeat,
+    radial-gradient(circle at 50% 100%, var(--mfr-white) 0 4.5px, var(--mfr-rule) 4.5px 5.5px, rgb(255 255 255 / 0%) 5.5px) bottom / 100% 6px no-repeat,
     repeating-linear-gradient(180deg, var(--mfr-rule-2) 0 4px, rgb(255 255 255 / 0%) 4px 8px) center / 1px calc(100% - 18px) no-repeat;
 }
 
@@ -4039,7 +4016,7 @@ a.racecard__name:hover {
   height: 100%;
   padding: 3px;
   object-fit: contain;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-rule);
   border-radius: 8px;
 }
@@ -4070,7 +4047,7 @@ a.racecard__name:hover {
   min-width: 18px;
   height: 17px;
   padding: 0 4px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1.5px solid var(--mfr-ink);
   border-radius: 5px;
   font-size: 10.5px;
@@ -4156,12 +4133,12 @@ a.racecard__name:hover {
 }
 
 .mf-slip__leg--unpriced {
-  background: #fff;
+  background: var(--mfr-card);
   border-style: dashed;
 }
 
 .mf-slip__leg--unpriced .mf-slip__leg-odds {
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px dashed var(--mfr-rule-2);
   color: var(--mfr-ink-3);
 }
@@ -4200,7 +4177,7 @@ a.racecard__name:hover {
   padding: 13px 14px 12px;
   background: var(--mfr-ink);
   border-radius: 12px;
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 .mf-slip__totals[hidden] {
@@ -4230,7 +4207,7 @@ a.racecard__name:hover {
   font-variant-numeric: tabular-nums;
   letter-spacing: 0;
   text-transform: none;
-  color: #fff;
+  color: var(--mfr-white);
   text-align: right;
   overflow-wrap: anywhere;
 }
@@ -4342,7 +4319,7 @@ a.racecard__name:hover {
   font-size: 17px; /* 16px or more: iOS does not zoom the page on focus */
   font-weight: 800;
   font-variant-numeric: tabular-nums;
-  color: #fff;
+  color: var(--mfr-white);
 }
 
 .mf-slip__stake:focus {
@@ -4412,7 +4389,7 @@ a.racecard__name:hover {
 /* Not signed in: an invitation, not the main action. */
 .mf-wrap a.mf-slip__submit--guest,
 .mf-slip__submit--guest {
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-gold-line);
   color: var(--mfr-gold-ink);
 }
@@ -4477,7 +4454,7 @@ a.racecard__name:hover {
   font: inherit;
   font-size: 13px;
   font-weight: 700;
-  color: #fff;
+  color: var(--mfr-white);
   white-space: nowrap;
   cursor: pointer;
   /* The words fade with the ground, so they never sit white on white
@@ -4500,7 +4477,7 @@ a.racecard__name:hover {
 }
 
 .mf-slip__action--ghost {
-  background: #fff;
+  background: var(--mfr-card);
   border-color: var(--mfr-rule);
   color: var(--mfr-ink-2);
 }
@@ -4523,7 +4500,7 @@ a.racecard__name:hover {
 
 /* Nothing to copy or reset yet: both are quiet outlines, not a grey block. */
 .mf-slip__action:disabled {
-  background: #fff;
+  background: var(--mfr-card);
   border-color: var(--mfr-rule);
   color: var(--mfr-ink-3);
   opacity: 0.7;
@@ -4575,7 +4552,7 @@ a.racecard__name:hover {
   font: inherit;
   font-size: 12.5px;
   font-weight: 800;
-  color: #fff;
+  color: var(--mfr-white);
   cursor: pointer;
 }
 
@@ -4712,7 +4689,7 @@ a.racecard__name:hover {
     width: 100%;
     min-height: 54px;
     padding: 0 12px 0 16px;
-    background: #fff;
+    background: var(--mfr-card);
     border: 0;
     font: inherit;
     font-size: 15px;
@@ -4798,7 +4775,7 @@ a.racecard__name:hover {
     margin-left: -7px;
     padding: 2px;
     object-fit: contain;
-    background: #fff;
+    background: var(--mfr-card);
     border: 1.5px solid var(--mfr-gold);
     border-radius: 50%;
   }
@@ -4915,7 +4892,7 @@ a.racecard__name:hover {
   font-family: var(--font-body);
   font-size: 14px;
   font-weight: 700;
-  color: #fff;
+  color: var(--mfr-white);
   pointer-events: none;
   opacity: 0;
   transform: translateX(-50%) translateY(12px);
@@ -4966,7 +4943,7 @@ a.racecard__name:hover {
   gap: 14px;
   min-width: 0;
   padding: 16px 18px;
-  background: #fff;
+  background: var(--mfr-card);
   border: 1px solid var(--mfr-rule);
   border-radius: 12px;
   box-shadow: var(--mfr-shadow-1);

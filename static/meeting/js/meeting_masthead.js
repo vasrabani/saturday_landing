@@ -129,6 +129,7 @@
     if (!chips.length || races.some((race) => !race)) return;
 
     function current() {
+      /* The line is a little over a third of the way down the window. */
       const line = window.innerHeight * 0.35;
       let at = -1;
       races.forEach((race, i) => {
@@ -157,7 +158,11 @@
     };
     window.addEventListener('scroll', soon, { passive: true });
     window.addEventListener('resize', soon);
-    /* The page's script may write its own answer at any time. */
+    /* meeting_full.js writes its own answer at any time (from an
+       IntersectionObserver), so every change of class is answered with
+       this one. That settles rather than loops: mark() writes only where
+       the class differs, and setting a class an element already has is
+       not a mutation, so a correction fires no further callback. */
     const watch = new MutationObserver(soon);
     chips.forEach((chip) => watch.observe(chip, { attributes: true, attributeFilter: ['class'] }));
     mark();

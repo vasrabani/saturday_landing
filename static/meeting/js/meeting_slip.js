@@ -44,8 +44,20 @@
 (function () {
   'use strict';
 
-  /* A slip holds six picks: Pick Six. */
-  const SIX = 6;
+  /* A slip holds six picks: Pick Six. The template can say otherwise
+     with data-pick-limit on .mf-wrap, should the day's limit
+     (daily_pick_limit on the server) ever change; every word below that
+     names the number is derived from it. */
+  const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+  const word = (n) => WORDS[n] || String(n);
+  const capital = (text) => text.charAt(0).toUpperCase() + text.slice(1);
+  const picksOf = (n) => word(n) + (n === 1 ? ' pick' : ' picks');   /* "six picks" */
+  const racesOf = (n) => word(n) + (n === 1 ? ' race' : ' races');   /* "six races" */
+  function pickLimit() {
+    const wrap = document.querySelector('.mf-wrap');
+    const n = parseInt((wrap && wrap.dataset.pickLimit) || '', 10);
+    return n > 0 ? n : 6;
+  }
 
   const shown = (node) => !!node && node.offsetParent !== null;
 
@@ -86,12 +98,12 @@
       if (e.key === 'Escape' && shown(handle)) close();
     });
 
-    ticket(panel, handle, close);
+    ticket(panel, handle, close, pickLimit());
   }
 
   /* ── 1–3. The ticket ─────────────────────────────────────────── */
 
-  function ticket(panel, handle, close) {
+  function ticket(panel, handle, close, LIMIT) {
     const list = document.getElementById('slipLegs');
     const head = panel.querySelector('.mf-slip__head');
     if (!list || !head) return;
@@ -105,7 +117,7 @@
     /* Where this page's silks come from: the same place for every
        runner. A kept kit (from storage) is only drawn from there, or
        from the silks service the site uses, never from anywhere else. */
-    const first = document.querySelector('img.racecard__silk');
+    const first = document.querySelector('img.racecard__silk[src]');
     const folder = first ? first.getAttribute('src').replace(/[^/?]*$/, '') : '';
     const picture = (src) => {
       if (!src || !(folder && src.startsWith(folder)) && !/^https:\/\/silks\.theracingapi\.com\/silk\?/.test(src)) return null;
@@ -114,8 +126,13 @@
       copy.alt = '';
       return copy;
     };
-    /* A pick's key: its course, time and horse, as its ticket has them. */
+    /* A pick's key: its course, time and horse, as its ticket has them.
+       bet_slip.js writes the course as the first text of the ticket's
+       "where" line; should it ever stamp the ticket with data-course,
+       data-race-time and data-horse-name instead, those come first. */
     const keyOf = (leg) => {
+      const d = leg.dataset;
+      if (d.course && d.raceTime && d.horseName) return key(d.course, d.raceTime, d.horseName);
       const where = leg.querySelector('.mf-slip__leg-where');
       const time = leg.querySelector('.mf-slip__leg-time');
       const horse = leg.querySelector('.mf-slip__leg-horse');
@@ -135,7 +152,26 @@
       };
     };
     const wrap = document.querySelector('.mf-wrap');
-    const KEPT = 'mfr-slip-kit:' + ((wrap && wrap.dataset.storageKey) || 'slip');
+    const KIT = 'mfr-slip-kit:';
+    const KEPT = KIT + ((wrap && wrap.dataset.storageKey) || 'slip');
+    /* A day's kits are kept with that day's slip, whose key ends in its
+       date, so a visitor can move between today's card and tomorrow's
+       and find both dressed. One from more than a week before this
+       page's day is no use to anyone, and is cleared. */
+    const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+    const dayOf = (name) => {
+      const m = /(\d{4})-(\d{2})-(\d{2})$/.exec(name);
+      return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) : NaN;
+    };
+    try {
+      const today = dayOf(KEPT);
+      for (let i = localStorage.length - 1; i >= 0; i--) {
+        const name = localStorage.key(i);
+        if (name && name.indexOf(KIT) === 0 && today - dayOf(name) > WEEK_MS) localStorage.removeItem(name);
+      }
+    } catch (e) {
+      /* No storage: nothing was kept. */
+    }
     const kept = () => {
       try {
         return JSON.parse(localStorage.getItem(KEPT)) || {};
@@ -155,10 +191,10 @@
        Each pick takes the next place, in the order picked; the rest stay
        open, a horseshoe in each. */
     const card = make('nav', 'mfr-card');
-    card.setAttribute('aria-label', 'Your six picks');
+    card.setAttribute('aria-label', 'Your ' + picksOf(LIMIT));
     const rail = card.appendChild(make('ol', 'mfr-card__rail'));
     const marks = [];
-    for (let i = 0; i < SIX; i++) {
+    for (let i = 0; i < LIMIT; i++) {
       const mark = rail.appendChild(make('li')).appendChild(make('a', 'mfr-card__place'));
       mark.appendChild(icon('horseshoe'));
       marks.push(mark);
@@ -180,6 +216,7 @@
       if (course) meetings.set(course.textContent.trim().toLowerCase(), chip.getAttribute('href'));
     });
     const courseOf = (leg) => {
+      if (leg.dataset.course) return leg.dataset.course.trim().toLowerCase();
       const where = leg.querySelector('.mf-slip__leg-where');
       const node = where && where.firstChild;
       return node && node.nodeType === Node.TEXT_NODE ? node.nodeValue.trim().toLowerCase() : '';
@@ -191,7 +228,7 @@
     if (chevron) handle.insertBefore(bar, chevron);
     else handle.appendChild(bar);
 
-    const limit = six(panel, head, list);
+    const limit = atMost(panel, head, list, LIMIT);
 
     function dress() {
       const legs = Array.from(list.children).filter((leg) => leg.classList.contains('mf-slip__leg'));
@@ -236,7 +273,7 @@
         if (old) old.remove();
         mark.removeAttribute('href');
         mark.setAttribute('data-mfr-taken', String(!!leg));
-        let label = 'Place ' + (i + 1) + ' of ' + SIX + ': open';
+        let label = 'Place ' + (i + 1) + ' of ' + LIMIT + ': open';
         if (leg) {
           /* A pick never seen being made has no silks: a jockey's cap. */
           const kit = kits[i] || {};
@@ -245,7 +282,7 @@
           mark.appendChild(pic);
           const horse = leg.querySelector('.mf-slip__leg-horse');
           const where = leg.querySelector('.mf-slip__leg-where');
-          label = 'Pick ' + (i + 1) + ' of ' + SIX + ': ' + (horse ? horse.textContent.trim() : '') + (where ? ', ' + where.textContent.replace(/\s+/g, ' ').trim() : '');
+          label = 'Pick ' + (i + 1) + ' of ' + LIMIT + ': ' + (horse ? horse.textContent.trim() : '') + (where ? ', ' + where.textContent.replace(/\s+/g, ' ').trim() : '');
           if (race) {
             mark.href = '#' + race.id;
           } else {
@@ -265,15 +302,17 @@
         const k = keyOf(leg);
         return !(k && rows.has(k));
       }).length;
-      card.setAttribute('data-mfr-state', n > SIX ? 'over' : n === SIX ? 'full' : n === SIX - 1 ? 'last' : 'open');
+      card.setAttribute('data-mfr-state', n > LIMIT ? 'over' : n === LIMIT ? 'full' : n === LIMIT - 1 ? 'last' : 'open');
       count.textContent = '';
       if (n === 0) {
-        count.appendChild(document.createTextNode('Up to six picks, one a race'));
+        count.appendChild(document.createTextNode('Up to ' + picksOf(LIMIT) + ', one a race'));
       } else {
         count.appendChild(make('strong', '', String(n)));
         count.appendChild(
           document.createTextNode(
-            n > SIX ? ' picks · ' + (n - SIX) + ' over the six' : ' of ' + SIX + (n === SIX ? ' · full' : n === SIX - 1 ? ' picks · one place left' : ' picks')
+            n > LIMIT
+              ? ' picks · ' + (n - LIMIT) + ' over the ' + word(LIMIT)
+              : ' of ' + LIMIT + (n === LIMIT ? ' · full' : n === LIMIT - 1 ? ' picks · one place left' : ' picks')
           )
         );
         if (elsewhere > 0) {
@@ -283,10 +322,10 @@
         }
       }
       help.textContent =
-        n > SIX
-          ? 'A slip holds six picks. Take ' + (n - SIX) + ' out.'
-          : n === SIX
-            ? 'That’s your six. Change a horse, or take one out to pick another race.'
+        n > LIMIT
+          ? 'A slip holds ' + picksOf(LIMIT) + '. Take ' + (n - LIMIT) + ' out.'
+          : n === LIMIT
+            ? 'That’s your ' + word(LIMIT) + '. Change a horse, or take one out to pick another race.'
             : '';
 
       /* Up to four in the bar; the count beside them is the whole slip. */
@@ -306,7 +345,7 @@
 
   /* Returns the function that brings the limit's state up to date for
      a number of picks; ticket() calls it whenever the slip changes. */
-  function six(panel, head, list) {
+  function atMost(panel, head, list, LIMIT) {
     const picks = () => Array.from(list.children).filter((leg) => leg.classList.contains('mf-slip__leg')).length;
 
     /* The runner a Pick button would add as one more race: none where
@@ -349,7 +388,7 @@
         btn.setAttribute('data-mfr-shut', '');
         btn.setAttribute('aria-disabled', 'true');
         if (btn.hasAttribute('title')) btn.dataset.mfrTitle = btn.getAttribute('title');
-        btn.title = 'Your slip is full: six picks at most. Take one out to pick this one.';
+        btn.title = 'Your slip is full: ' + picksOf(LIMIT) + ' at most. Take one out to pick this one.';
         return;
       }
       btn.removeAttribute('data-mfr-shut');
@@ -364,26 +403,32 @@
 
     const buttons = Array.from(document.querySelectorAll('[data-action="add-to-slip"]'));
     const inBar = document.getElementById('slipHandleCount');
-    if (inBar) inBar.setAttribute('data-mfr-of', '/' + SIX);
+    if (inBar) inBar.setAttribute('data-mfr-of', '/' + LIMIT);
 
     function limit(n) {
-      panel.setAttribute('data-mfr-six', n > SIX ? 'over' : n === SIX ? 'full' : n === SIX - 1 ? 'last' : 'open');
-      buttons.forEach((btn) => stand(btn, n >= SIX && !!fresh(btn)));
+      panel.setAttribute('data-mfr-six', n > LIMIT ? 'over' : n === LIMIT ? 'full' : n === LIMIT - 1 ? 'last' : 'open');
+      buttons.forEach((btn) => stand(btn, n >= LIMIT && !!fresh(btn)));
     }
 
     /* The seventh. Heard on the way down, before bet_slip.js (which
-       listens on the document, on the way back up), and stopped there. */
+       listens on the document, on the way back up), and stopped there.
+       Stopping it there also keeps the press from site.js's document
+       listener, which closes an open navigation dropdown on any click,
+       so a refused press leaves such a dropdown open until the next
+       click: a smaller wrong than the alternative, letting the press
+       through and undoing bet_slip.js's add, which would flash a ticket
+       and write to storage. */
     let nudged = 0;
     document.addEventListener(
       'click',
       (e) => {
-        if (picks() < SIX) return;
+        if (picks() < LIMIT) return;
         const btn = e.target.closest && e.target.closest('[data-action="add-to-slip"]');
         const row = btn && fresh(btn);
         if (!row) return;
         e.preventDefault();
         e.stopImmediatePropagation();
-        say('Six races is the most you can pick. Take one out to add ' + row.dataset.horseName + '.');
+        say(capital(racesOf(LIMIT)) + ' is the most you can pick. Take one out to add ' + row.dataset.horseName + '.');
 
         /* And the card answers: brought into view, with a shake of the
            head. */

@@ -314,7 +314,20 @@
       bar.appendChild(button);
     });
 
+    const press = (key) => bar.querySelectorAll('.mfr-filter').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === key)));
+    let applying = false;
+
     function apply(key) {
+      /* The order is the filter's now. racecard.js counts its own clicks
+         on each column head (ascending, descending, back to the card's
+         order), so a sorted head is clicked back to rest first: its
+         arrow and its count then both agree with what is shown. */
+      applying = true;
+      card.querySelectorAll('.racecard__col[aria-sort]:not([aria-sort="none"])').forEach((th) => {
+        for (let i = 0; i < 2 && th.getAttribute('aria-sort') !== 'none'; i++) th.click();
+      });
+      applying = false;
+
       /* A hidden row carries an attribute: the page's own scripts keep
          finding it by its class. */
       const hide = (r, off) => r.toggleAttribute('data-mfr-hidden', off);
@@ -331,17 +344,24 @@
       } else if (key === 'form-up') {
         rows.forEach((r) => hide(r, formTrend(r) <= 0.5));
       }
-
-      /* The order is the filter's now: a column's sort arrow would be
-         out of date. */
-      card.querySelectorAll('.racecard__col[aria-sort]').forEach((th) => th.setAttribute('aria-sort', 'none'));
     }
 
     bar.addEventListener('click', (e) => {
       const button = e.target.closest('.mfr-filter');
       if (!button || button.disabled) return;
-      bar.querySelectorAll('.mfr-filter').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+      press(button.dataset.filter);
       apply(button.dataset.filter);
+    });
+
+    /* And the other way round: "Sort by SR" is an order, not a filter,
+       so once a column head sorts the race (racecard.js, on a click of
+       the head) it is no longer what is shown, and the bar goes back to
+       All. A filter that hides runners stays pressed: the head sorts
+       what is left. */
+    card.addEventListener('click', (e) => {
+      if (applying || !e.target.closest('.racecard__col[data-sortable]')) return;
+      const pressed = bar.querySelector('.mfr-filter[aria-pressed="true"]');
+      if (pressed && pressed.dataset.filter === 'sr-sort') press('all');
     });
 
     /* Comments on / off, where this race has any (see comments()). */
@@ -418,6 +438,27 @@
     });
   }
 
+  /* ── 8b. The phone script's tab stops ────────────────────────── */
+
+  /* On a phone racecard_collapse.js makes every runner row a tab stop
+     that opens its own compact view on Enter or Space. That view is
+     not shown here (Details is the way in, a button in the tab order),
+     so the stops would be a hundred or more dead ones. They are taken
+     off, and taken off again whenever the script puts them back (it
+     sets itself up afresh each time the window crosses 640px). Its
+     tap-to-expand is left alone: it toggles an attribute nothing reads. */
+  function untab() {
+    const strip = (row) => {
+      if (row.matches && row.matches('.racecard__runner') && row.getAttribute('tabindex') === '0') row.removeAttribute('tabindex');
+    };
+    document.querySelectorAll('.racecard__runner').forEach(strip);
+    new MutationObserver((records) => records.forEach((r) => strip(r.target))).observe(document.body, {
+      attributes: true,
+      attributeFilter: ['tabindex'],
+      subtree: true,
+    });
+  }
+
   /* ── 9. Sorting from the keyboard ────────────────────────────── */
 
   /* The page's script sorts a column on a click of its head. The heads
@@ -446,6 +487,7 @@
     document.querySelectorAll('[data-racecard]').forEach(filters);
     document.querySelectorAll('[data-racecard]').forEach(marks);
     comments();
+    untab();
     sortKeys();
   }
 
