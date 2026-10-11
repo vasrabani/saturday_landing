@@ -1,0 +1,5179 @@
+/* ═══════════════════════════════════════════════════════════════
+   The meeting page: every race at a meeting, every runner, and the
+   accumulator slip
+   ---------------------------------------------------------------
+   This stylesheet is the whole page: it takes the place of the
+   page-level stylesheets the template links (racecard.css,
+   racecard_prices.css, meeting_full.css, pick6_emblem.css,
+   ai_pick_chip.css, chamber_verdict.css) and of the page's own
+   <style> block, so every class the page's markup and scripts use is
+   styled here. The site-wide sheets (base, paper, chrome, the picks
+   budget) stay as they are.
+
+   Palette: the site's own. The paper tokens (paper.css) under the
+   races, the brand gold, green and red (base.css), each with one job:
+   gold on what matters most (the off time, the prize, the big race,
+   the favourite, the top rating), ink for structure and "you are
+   here", green for landed and in, red for out. The form has a scale
+   of its own, one colour a place. The masthead is the homepage's own
+   picture under gradients in the site's night colour.
+
+   Type: DM Sans throughout, upright; nothing on the page is italic.
+
+   Widths: the page steps at the site's own breakpoints (768px, 1024px,
+   1280px): the masthead's phone column below 768, the slip docked
+   beside the races from 1024, the masthead's wide layout from 1280.
+   Inside those, the runners are a table, a two-line row or a card by
+   the room the race list actually has (a container query on
+   .mf-races, at 660 and 1000px), not the width of the window.
+
+   Scripts: racecard.js, racecard_collapse.js, bet_slip.js and
+   meeting_full.js are the production ones and keep their hooks;
+   meeting_racecard.js, meeting_masthead.js and meeting_slip.js are
+   this design's own. What they add carries an mfr- class ("meeting
+   full, revamp") or a data-mfr-* attribute; a rule that exists for
+   one of them names it.
+
+   base.css resets margins, padding and box-sizing on every element,
+   so rules here state only what they add to that.
+
+   Contents
+     1. Tokens, page shell, icons
+     2. Masthead: title, Pick Six, facts, meeting tabs
+        2b. …with the homepage's picture
+     3. Race strip (sticky)
+     4. Race card: header, winner, filters
+     5. Runners: shared parts
+     6. Runners: table · two-line · card
+     7. AI verdict panel (before racing)
+     8. Bet slip
+     9. Toast, paddles, odds and ends
+    10. Reduced motion
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 1. Tokens, page shell, icons ───────────────────────────────── */
+
+body.page-meeting-full {
+  /* ── Paper and ink (paper.css) ─────────────────────────────── */
+  --mfr-paper: var(--c-paper);
+  --mfr-card: var(--c-card);
+  --mfr-warm: var(--c-card-warm);          /* bands, table heads, hover */
+  --mfr-rule: var(--c-rule);               /* hairline */
+  --mfr-rule-2: var(--c-rule-strong);      /* a firmer edge */
+  --mfr-ink: var(--c-ink);                 /* text, and the chosen state */
+  --mfr-ink-hover: #2A2F3D;                /* an ink button under the pointer */
+  --mfr-ink-2: var(--c-ink-70);            /* secondary text */
+  --mfr-white: #FFF;                       /* words and marks on ink; the picture's lights */
+  --mfr-ink-3: #666B73;                    /* labels and captions: paper.css's --c-ink-40
+                                              is 2.5:1 on white; this is 5.4:1, and at
+                                              least 4.7:1 on every tint below */
+
+  /* ── Gold (base.css) ───────────────────────────────────────── */
+  --mfr-gold: var(--c-gold);               /* fills, marks, lines; never small text */
+  --mfr-gold-deep: #C29E2C;                /* a gold button under the pointer */
+  --mfr-gold-ink: #856510;                 /* gold as text: paper.css's --c-gold-ink
+                                              is 4:1 on white; this is 5.4:1, and
+                                              4.8:1 on the wash */
+  --mfr-gold-wash: var(--c-gold-wash);     /* gold tint */
+  --mfr-gold-line: #E6D6A0;                /* an edge on the wash */
+
+  /* ── Green and red (paper.css, base.css) ───────────────────── */
+  --mfr-green: var(--c-green);
+  --mfr-green-dark: #156A3E;
+  --mfr-green-wash: #EDF5F0;               /* the site's 8% green over white */
+  --mfr-green-line: #B9D9C7;
+  --mfr-red: var(--c-red);
+  --mfr-red-wash: #FBEEEC;
+  --mfr-red-line: #ECC4BE;
+
+  /* ── Second and third, in the form ─────────────────────────── */
+  --mfr-silver: #E2E5EA;
+  --mfr-silver-line: #CBD0D8;
+  --mfr-bronze: #ECD3B9;
+  --mfr-bronze-line: #DCB890;
+
+  /* ── Shadows ───────────────────────────────────────────────── */
+  --mfr-shadow-1: 0 1px 2px rgb(17 21 31 / 5%);
+  --mfr-shadow-2: 0 1px 2px rgb(17 21 31 / 4%), 0 6px 20px rgb(17 21 31 / 6%);
+  --mfr-shadow-3: 0 2px 6px rgb(17 21 31 / 8%), 0 18px 44px rgb(17 21 31 / 16%);
+
+  /* The fixed navigation plus the tour stripbody.page-meeting-full {
+  /* The fixed navigation plus the tour strip: where the page's own
+     pinned things start. --banner-h is measured by the page's script. */
+  --mfr-top: calc(var(--nav-h, 60px) + var(--banner-h, 0px));
+  --mfr-strip: 53px;
+
+  /* This page's column is 1520px wide; the site's frame is set for
+     1280px, so on a wide screen the logo and the page's left edge sit
+     at different places. On this page the frame takes the page's
+     column: navigation, tour strip and footer line up with the races. */
+  --max-w: 1520px;
+  --page-gutter: 24px;
+
+  color: var(--mfr-ink);
+}
+
+/* The tour strip's words keep to the page's gutter, so the strip and
+   the races line up at the left; the gutter itself is set on body
+   above, and narrows on a phone (section 9). */
+.page-meeting-full .demo-banner__inner {
+  padding-inline: var(--page-gutter);
+}
+
+.page-meeting-full .site-main {
+  background: var(--mfr-paper);
+  color: var(--mfr-ink);
+}
+
+.mf-wrap {
+  color-scheme: light;
+  max-width: 1520px;
+  margin: 0 auto;
+  padding: 0 24px 72px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--mfr-ink);
+}
+
+.mf-wrap a {
+  color: inherit;
+}
+
+.mf-wrap ::selection {
+  background: var(--mfr-gold-wash);
+  color: var(--mfr-ink);
+}
+
+.mf-wrap :focus-visible {
+  outline: 2px solid var(--mfr-gold-ink);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Icons ─────────────────────────────────────────────────────── */
+
+/* A line icon is a mask over the current colour, so it takes the colour
+   of the text beside it. The drawings are static/meeting/img/icons/,
+   24px line art on a 24px grid (stroke 2), most from the Feather set;
+   post, horseshoe and cap are the page's own. The scripts make one as
+   <span class="mfr-i mfr-i--name" aria-hidden="true">, and the names
+   below are the ones they make; every other drawing in the folder is a
+   mask on one of the page's own elements, named where it is used. */
+.mfr-i {
+  display: inline-block;
+  flex: none;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.14em;
+  background-color: currentColor;
+  -webkit-mask: var(--i) center / contain no-repeat;
+  mask: var(--i) center / contain no-repeat;
+}
+
+.mfr-i--arrow-down { --i: url("../img/icons/arrow-down.svg"); }
+.mfr-i--cap { --i: url("../img/icons/cap.svg"); }
+.mfr-i--check { --i: url("../img/icons/check.svg"); }
+.mfr-i--chevron-down { --i: url("../img/icons/chevron-down.svg"); }
+.mfr-i--horseshoe { --i: url("../img/icons/horseshoe.svg"); }
+.mfr-i--star { --i: url("../img/icons/star.svg"); }
+.mfr-i--star-fill { --i: url("../img/icons/star-fill.svg"); }
+.mfr-i--trend-down { --i: url("../img/icons/trend-down.svg"); }
+.mfr-i--trend-up { --i: url("../img/icons/trend-up.svg"); }
+
+/* ── 2. Masthead ────────────────────────────────────────────────── */
+
+/* The band runs the full width of the window: it is drawn by a
+   pseudo-element that reaches past the page's column, so the content
+   keeps the column's edges. Everything in it is centred — the course's
+   name is the middle of the page — in this order: the eyebrow, the date
+   and the name, the three figures, the chips, Pick Six. */
+.mf-hero,
+.mf-switcher {
+  position: relative;
+  isolation: isolate;
+}
+
+.mf-hero::before,
+.mf-switcher::before {
+  content: "";
+  position: absolute;
+  inset: 0 -100vmax;
+  z-index: -1;
+  background: var(--mfr-warm);
+}
+
+.mf-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 36px 0 26px;
+  text-align: center;
+}
+
+/* The title row's two children (the name, Pick Six) take their places
+   in the masthead's own column, so Pick Six can come last. */
+.mf-hero__title-row {
+  display: contents;
+}
+
+.mf-hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mfr-gold-ink);
+}
+
+/* The spacing after the last letter is not part of the word: without
+   it the word, not its box, is what sits in the middle. */
+.mf-hero__eyebrow > span {
+  margin-right: -0.16em;
+}
+
+.mf-hero__eyebrow::before,
+.mf-hero__eyebrow::after {
+  content: "";
+  flex: none;
+  width: 26px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--mfr-gold);
+}
+
+.mf-hero__title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--mfr-ink);
+}
+
+.mf-hero__title-eyeline {
+  font-size: clamp(14.5px, 1.4vw, 17px);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--mfr-ink-2);
+}
+
+.mf-hero__title-name {
+  max-width: 100%;
+  font-size: clamp(34px, 11vw, 72px);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+
+/* Facts */
+.mf-hero__sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px 0;
+  margin: 16px 0 0;
+  font-size: 13.5px;
+  color: var(--mfr-ink-2);
+}
+
+.mf-hero__sub > span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 0 16px;
+  border-left: 1px solid var(--mfr-rule-2);
+}
+
+.mf-hero__sub > span:first-child {
+  border-left: 0;
+}
+
+.mf-hero__sub strong {
+  font-size: 19px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-ink);
+}
+
+.mf-hero__mins {
+  padding: 2px 9px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-green-line);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mfr-green);
+}
+
+.mf-hero__crumbs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  font-size: 12.5px;
+  color: var(--mfr-ink-3);
+}
+
+.mf-hero__crumbs a {
+  font-weight: 700;
+  color: var(--mfr-gold-ink);
+}
+
+.mf-hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.mf-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  padding: 4px 12px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mfr-ink);
+  text-decoration: none;
+}
+
+.mf-chip__lbl {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mfr-ink-3);
+}
+
+.mf-chip__val {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* The site's own code for the surface: gold for the Flat, green over
+   jumps. The going is in green, as the site has it. */
+.mf-chip--going .mf-chip__val {
+  color: var(--mfr-green);
+}
+
+.mf-chip--type-flat,
+.mf-chip--type-dual {
+  background: var(--mfr-gold-wash);
+  border-color: var(--mfr-gold-line);
+  color: var(--mfr-gold-ink);
+}
+
+.mf-chip--type-jumps {
+  background: var(--mfr-green-wash);
+  border-color: var(--mfr-green-line);
+  color: var(--mfr-green);
+}
+
+.mf-chip--headline {
+  background: var(--mfr-gold-wash);
+  border-color: var(--mfr-gold-line);
+  color: var(--mfr-gold-ink);
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.mf-chip--headline:hover {
+  background: var(--mfr-card);
+  border-color: var(--mfr-gold);
+}
+
+.mf-chip--headline .mf-chip__lbl,
+.mf-chip--headline .mf-chip__val {
+  color: inherit;
+}
+
+.mf-chip__star {
+  font-size: 0;
+}
+
+.mf-chip__star::before,
+.mf-chip--headline::after {
+  content: "";
+  display: block;
+  width: 13px;
+  height: 13px;
+  background-color: currentColor;
+  -webkit-mask: url("../img/icons/star.svg") center / contain no-repeat;
+  mask: url("../img/icons/star.svg") center / contain no-repeat;
+}
+
+.mf-chip--headline::after {
+  -webkit-mask-image: url("../img/icons/arrow-down.svg");
+  mask-image: url("../img/icons/arrow-down.svg");
+}
+
+/* Pick Six — three stickers, as on a noticeboard, and one link:
+
+     a round stamp   the six in a double ring, lettered round like a
+                     seal: the name over the top, "Challenge" under
+                     (the lettering is drawn by the script from the
+                     link's own words; without it the stamp is the six
+                     in its rings)
+     a tilted badge  "Pick Six ★" over "VS THE FOX", in the green the
+                     site gives Pick Six
+     a tilted pill   the line beneath, in the site's gold
+
+   The pieces are the link's own elements, in the page's own markup;
+   only their shapes are new, and the colours are the live emblem's (a
+   green badge with a gold ribbon). The link is a grid and the three
+   stickers are its cells, so each width can set them out its own way:
+   in a row here, with the pill under the other two on a phone.
+
+   The badge is two elements (its two lines) over a fill drawn by the
+   link's ::before. The three turn as one piece because they turn by the
+   same angle about the same point: the middle of the line where the
+   two lines meet, which is --mfr-lbl below the badge's top. */
+.mf-hero .pick6 {
+  --mfr-stamp: 100px;
+  --mfr-lbl: 41px;
+  --mfr-tilt: -4deg;
+
+  order: 5;
+  display: grid;
+  grid-template:
+    "stamp .   sub" 1fr
+    "stamp lbl sub" auto
+    "stamp vs  sub" auto
+    "stamp .   sub" 1fr
+    / auto auto auto;
+  justify-content: center;
+  column-gap: 22px;
+  max-width: 100%;
+  margin-top: 22px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  text-decoration: none;
+}
+
+.pick6__body {
+  display: contents;
+}
+
+/* Its word, "Challenge", is on the stamp's ring. */
+.pick6__stamp {
+  display: none;
+}
+
+.pick6__num {
+  grid-area: stamp;
+  align-self: center;
+  justify-self: center;
+  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: var(--mfr-stamp);
+  height: var(--mfr-stamp);
+  background: rgb(255 255 255 / 72%);
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  font-size: calc(var(--mfr-stamp) * 0.33);
+  font-weight: 800;
+  line-height: 1;
+  transform: rotate(-10deg);
+  transition: transform 0.2s;
+}
+
+/* The inner ring. */
+.pick6__num::before {
+  content: "";
+  position: absolute;
+  inset: 18%;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  opacity: 0.5;
+}
+
+.mfr-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.mfr-ring text {
+  font-family: var(--font-body);
+  font-size: 10.6px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-anchor: middle;
+  fill: currentColor;
+}
+
+.mfr-ring circle {
+  fill: currentColor;
+}
+
+/* The badge's fill. */
+.mf-hero .pick6::before {
+  content: "";
+  grid-area: 2 / 2 / 4 / 3;
+  background: linear-gradient(135deg, var(--mfr-green) 0%, var(--mfr-green-dark) 100%);
+  border-radius: 14px;
+  box-shadow:
+    0 10px 22px rgb(17 21 31 / 22%),
+    inset 0 1px 0 rgb(255 255 255 / 22%);
+  transform: rotate(var(--mfr-tilt));
+  transform-origin: 50% var(--mfr-lbl);
+  transition: transform 0.2s;
+}
+
+.pick6__lbl {
+  grid-area: lbl;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: var(--mfr-lbl);
+  padding: 13px 22px 0;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 28px;
+  letter-spacing: -0.01em;
+  color: var(--mfr-white);
+  white-space: nowrap;
+  transform: rotate(var(--mfr-tilt));
+  transform-origin: 50% 100%;
+  transition: transform 0.2s;
+}
+
+.pick6__lbl::after {
+  content: "";
+  flex: none;
+  width: 18px;
+  height: 18px;
+  background-color: var(--mfr-gold);
+  -webkit-mask: url("../img/icons/star-fill.svg") center / contain no-repeat;
+  mask: url("../img/icons/star-fill.svg") center / contain no-repeat;
+}
+
+.pick6__vs {
+  grid-area: vs;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 5px;
+  padding: 2px 22px 12px;
+  font-size: 10.5px;
+  font-weight: 800;
+  line-height: 16px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mfr-white);
+  white-space: nowrap;
+  transform: rotate(var(--mfr-tilt));
+  transform-origin: 50% 0;
+  transition: transform 0.2s;
+}
+
+.pick6__fox-glyph {
+  display: none;
+}
+
+.pick6__sub {
+  grid-area: sub;
+  align-self: center;
+  justify-self: center;
+  max-width: 100%;
+  padding: 9px 18px;
+  background: var(--mfr-gold);
+  border-radius: 20px;
+  box-shadow:
+    0 8px 18px rgb(17 21 31 / 18%),
+    inset 0 1px 0 rgb(255 255 255 / 35%);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--mfr-ink);
+  text-wrap: balance;
+  transform: rotate(5deg);
+  transition: transform 0.2s;
+}
+
+.mf-hero .pick6:hover {
+  --mfr-tilt: -2deg;
+}
+
+.pick6:hover .pick6__num {
+  transform: rotate(-5deg);
+}
+
+.pick6:hover .pick6__sub {
+  transform: rotate(3deg);
+}
+
+/* On a phone the stamp and the badge share a line and the pill goes
+   under the two, over their bottom edge. */
+@media (max-width: 767px) {
+  .mf-hero .pick6 {
+    --mfr-stamp: 88px;
+    --mfr-lbl: 38px;
+
+    grid-template:
+      "stamp .  " 1fr
+      "stamp lbl" auto
+      "stamp vs " auto
+      "stamp .  " 1fr
+      "sub   sub" auto
+      / auto auto;
+    column-gap: 16px;
+    margin-top: 18px;
+  }
+
+  .pick6__lbl {
+    padding-top: 11px;
+    font-size: 22px;
+    line-height: 27px;
+  }
+
+  .pick6__sub {
+    margin-top: 6px;
+    font-size: 13.5px;
+    transform: rotate(4deg);
+  }
+}
+
+/* On a phone the masthead is the live page's own column, not the centred
+   one: everything starts at the left edge, in the live page's order —
+   the eyebrow, the date, the name, Pick Six, the three figures, the
+   chips — so it reads down one edge instead of across a crowd. The
+   pieces themselves are what they are at every other width. (Only on a
+   phone: from 720px it is the centred masthead above.) */
+@media (max-width: 767px) {
+  .mf-hero {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  /* One line before the eyebrow, as on the live page, not one each side. */
+  .mf-hero__eyebrow::after {
+    content: none;
+  }
+
+  .mf-hero__eyebrow > span {
+    margin-right: 0;
+  }
+
+  .mf-hero__title {
+    align-items: flex-start;
+  }
+
+  /* Pick Six comes straight after the name. */
+  .mf-hero .pick6 {
+    order: 0;
+    justify-content: start;
+    margin-top: 16px;
+    padding-left: 4px;
+  }
+
+  .mf-hero__sub,
+  .mf-hero__chips {
+    justify-content: flex-start;
+  }
+
+  .mf-hero__sub > span:first-child {
+    padding-left: 0;
+  }
+}
+
+/* Meeting tabs. The live page pins these with the race strip; here the
+   meeting is chosen once, at the top, and only the races stay pinned.
+   They wrap instead of scrolling sideways, so no course is off-screen. */
+.mf-subnav {
+  display: contents;
+}
+
+.mf-switcher {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px 14px;
+  flex-wrap: wrap;
+  padding: 4px 0 20px;
+}
+
+.mf-switcher::before {
+  border-bottom: 1px solid var(--mfr-rule);
+}
+
+.mf-switcher__home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px 0 8px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mfr-gold-ink);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.mf-switcher__home:hover {
+  background: var(--mfr-card);
+}
+
+.mf-switcher__home > span[aria-hidden] {
+  font-size: 0;
+}
+
+.mf-switcher__home > span[aria-hidden]::before {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  background-color: currentColor;
+  -webkit-mask: url("../img/icons/arrow-left.svg") center / contain no-repeat;
+  mask: url("../img/icons/arrow-left.svg") center / contain no-repeat;
+}
+
+.mf-switcher__list {
+  display: flex;
+  flex: 1 1 320px;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 0;
+}
+
+.mf-switcher__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 12px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--mfr-ink-2);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+a.mf-switcher__chip:hover {
+  background: var(--mfr-gold-wash);
+  border-color: var(--mfr-gold-line);
+  color: var(--mfr-ink);
+}
+
+.mf-switcher__chip--current {
+  background: var(--mfr-ink);
+  border-color: var(--mfr-ink);
+  box-shadow: none;
+  color: var(--mfr-white);
+}
+
+.mf-switcher__chip--current .mf-switcher__course {
+  font-weight: 800;
+}
+
+.mf-switcher__dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mfr-gold);
+}
+
+.mf-switcher__count {
+  padding: 1px 6px;
+  background: var(--mfr-warm);
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-ink-3);
+}
+
+.mf-switcher__chip--current .mf-switcher__count {
+  background: rgb(255 255 255 / 16%);
+  color: var(--mfr-white);
+}
+
+/* ── 2b. The masthead's picture ──────────────────────────────────
+
+   The whole masthead is the picture the homepage opens with — the
+   racehorse at dusk, the site's own file (img/masthead.webp is a copy
+   of the landing's hero-fold-bg.webp), so no new image is needed and
+   the two pages share one look. It covers the masthead from edge to edge
+   of the window and from the navigation down to the meeting tabs, and it
+   is seen through gradients, not bare:
+
+     night at the top     so the navigation runs into it without a line
+     a shade along the foot so it ends before the paper below
+     a veil left to right deeper at the left, none over the horse
+     a shade in the middle behind the words, which are read over the sky
+     a low sun            a warm glow rising from the bottom edge
+     a little gold        in the sky at the left
+
+   All of it is one pseudo-element: the picture is the bottom layer of
+   its background and the gradients are the layers above (no mask, no
+   blend mode, no filter).
+*/
+.mf-hero {
+  --mfr-night: #070910;
+
+  justify-content: center;
+  min-height: 300px;
+  padding: 34px 0 30px;
+  color: var(--mfr-white);
+}
+
+.mf-hero::before {
+  background: var(--mfr-night);
+  border-bottom: 1px solid rgb(212 175 55 / 34%);
+}
+
+/* The picture's box is the window's width (the masthead's own column is
+   centred in the window, so half a window either side of its middle),
+   up to the picture's limit: on a screen wider than 1920px it stays that
+   wide, in the middle, and dissolves into the band at each side. */
+.mf-hero::after {
+  /* What differs by width (see the phone's, the laptop's and the wide
+     screen's below): three of the gradients, and where the picture sits
+     and how big. The rest is the same everywhere. */
+  --mfr-sides: linear-gradient(90deg, rgb(7 9 16 / 0%), rgb(7 9 16 / 0%));
+  --mfr-shade: radial-gradient(42% 62% at 50% 44%, rgb(7 9 16 / 52%) 0%, rgb(7 9 16 / 0%) 100%);
+  --mfr-veil: linear-gradient(90deg, rgb(7 9 16 / 52%) 0%, rgb(7 9 16 / 34%) 44%, rgb(7 9 16 / 0%) 72%, rgb(7 9 16 / 0%) 90%, rgb(7 9 16 / 24%) 100%);
+  --mfr-pic: 78% 37% / cover;
+
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0 calc(50% - min(50vw, 960px));
+  border-bottom: 1px solid rgb(212 175 55 / 34%);
+  background:
+    var(--mfr-sides),
+    var(--mfr-shade),
+    radial-gradient(90% 60% at 64% 112%, rgb(214 118 40 / 42%) 0%, rgb(214 118 40 / 0%) 72%),
+    radial-gradient(40% 80% at 12% 30%, rgb(212 175 55 / 14%) 0%, rgb(212 175 55 / 0%) 66%),
+    linear-gradient(180deg, rgb(7 9 16 / 72%) 0%, rgb(7 9 16 / 8%) 30%, rgb(7 9 16 / 0%) 60%, rgb(7 9 16 / 0%) 78%, rgb(7 9 16 / 50%) 100%),
+    var(--mfr-veil),
+    url("../img/masthead.webp") var(--mfr-pic) no-repeat var(--mfr-night);
+}
+
+.mf-hero__eyebrow {
+  color: var(--mfr-gold);
+}
+
+.mf-hero__title {
+  color: var(--mfr-white);
+  text-shadow: 0 2px 22px rgb(7 9 16 / 80%);
+}
+
+.mf-hero__title-eyeline {
+  color: rgb(255 255 255 / 88%);
+}
+
+/* The figures can be over the rider: they carry their own shade. */
+.mf-hero__sub {
+  color: rgb(255 255 255 / 92%);
+  text-shadow:
+    0 0 2px rgb(7 9 16 / 85%),
+    0 1px 4px rgb(7 9 16 / 85%),
+    0 2px 14px rgb(7 9 16 / 90%);
+}
+
+.mf-hero__sub > span {
+  border-left-color: rgb(255 255 255 / 28%);
+}
+
+.mf-hero__sub strong {
+  color: var(--mfr-white);
+}
+
+.mf-hero__mins {
+  background: rgb(7 9 16 / 60%);
+  border-color: rgb(212 175 55 / 50%);
+  color: var(--mfr-gold);
+}
+
+.mf-hero__crumbs {
+  color: rgb(255 255 255 / 80%);
+}
+
+.mf-hero__crumbs a {
+  color: var(--mfr-gold);
+}
+
+/* Chips: smoked glass, so the picture shows through them and their
+   words still read; gold where the paper version is gold. */
+.mf-chip {
+  background: rgb(7 9 16 / 62%);
+  border-color: rgb(255 255 255 / 24%);
+  color: var(--mfr-white);
+}
+
+.mf-chip__lbl {
+  color: var(--mfr-gold);
+}
+
+/* The site's lighter green, which reads on the dark. */
+.mf-chip--going .mf-chip__val {
+  color: var(--c-emerald-lt);
+}
+
+.mf-chip--type-flat,
+.mf-chip--type-dual,
+.mf-chip--headline {
+  background: rgb(40 31 7 / 72%);
+  border-color: rgb(212 175 55 / 58%);
+  color: var(--c-gold-lt);
+}
+
+.mf-chip--type-jumps {
+  background: rgb(7 32 20 / 72%);
+  border-color: rgb(45 189 122 / 52%);
+  color: var(--c-emerald-lt);
+}
+
+.mf-chip--headline:hover {
+  background: rgb(66 52 12 / 82%);
+  border-color: var(--mfr-gold);
+}
+
+/* Pick Six: the stamp is in gold on smoked glass; the badge and the
+   pill are as on paper, with deeper shadows. */
+.mf-hero .pick6 {
+  color: var(--mfr-gold);
+}
+
+.pick6__num {
+  background: rgb(7 9 16 / 62%);
+}
+
+.mf-hero .pick6::before {
+  box-shadow:
+    0 12px 26px rgb(0 0 0 / 45%),
+    inset 0 1px 0 rgb(255 255 255 / 22%);
+}
+
+.pick6__sub {
+  box-shadow:
+    0 10px 22px rgb(0 0 0 / 42%),
+    inset 0 1px 0 rgb(255 255 255 / 35%);
+}
+
+.mf-hero :focus-visible {
+  outline-color: var(--mfr-gold);
+}
+
+/* The meeting tabs follow on paper, under the picture. */
+.mf-switcher {
+  padding: 16px 0;
+}
+
+/* On a phone the words keep to the left (see the column above), so the
+   picture is set against them. The horse is drawn hard against the right
+   edge, the rider beside the stickers; the veil is deep at the left,
+   where the words are, and gone by the horse; there is no shade in the
+   middle; and the chips are clearer glass.
+
+   Where the picture sits: its nose is 88% of the way across it, and a
+   percentage in background-position lines up the same fraction of the
+   picture and of the box. So 88% puts the nose 88% of the way across the
+   window, and adding the other 12% of the window, less 12px, puts it
+   12px in from the right edge however tall the masthead is. (What that
+   leaves bare at the far left is under the deepest veil and is the
+   night colour, as the sky there is.) */
+@media (max-width: 767px) {
+  .mf-hero {
+    padding: 24px 0 22px;
+  }
+
+  .mf-hero::after {
+    --mfr-shade: linear-gradient(90deg, rgb(7 9 16 / 0%), rgb(7 9 16 / 0%));
+    --mfr-veil: linear-gradient(90deg, rgb(7 9 16 / 84%) 0%, rgb(7 9 16 / 70%) 40%, rgb(7 9 16 / 26%) 72%, rgb(7 9 16 / 0%) 96%);
+    --mfr-pic: calc(88% + 12vw - 12px) 37% / cover;
+  }
+
+  .mf-chip {
+    background: rgb(7 9 16 / 48%);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+  }
+
+  .mf-chip--type-flat,
+  .mf-chip--type-dual,
+  .mf-chip--headline {
+    background: rgb(40 31 7 / 58%);
+  }
+
+  .mf-chip--type-jumps {
+    background: rgb(7 32 20 / 58%);
+  }
+}
+
+/* From a laptop up the masthead is three columns: the stickers at the
+   left, the words in the middle of the window, and the right left
+   empty, which is where the rider and the horse's head are. The two
+   outer columns are equal, so the name stays in the middle. The
+   masthead grows with the window (to 500px), so the same part of the
+   picture — the rider's cap down to the horse's muzzle — is in it at
+   every width. */
+@media (min-width: 1280px) {
+  .mf-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, clamp(600px, 46vw, 680px)) minmax(0, 1fr);
+    align-content: center;
+    justify-items: center;
+    min-height: clamp(390px, 29vw, 500px);
+    padding: 40px 0 38px;
+  }
+
+  /* Drawn a little wider than the window and from its left edge, which
+     moves the rider to the right, clear of the name. From about 1600px
+     the name is clear of the rider without that, so the picture eases
+     back to the window's own width (a touch higher, so the horse's
+     muzzle stays above the masthead's foot on a 1920px screen). Wider
+     than the picture's 1920px limit the band runs on to the window's
+     edges in the night colour, and the picture dissolves into it at
+     each side, so it does not end in a line: the fade is 211px wide
+     from 1921px and nothing below that. */
+  .mf-hero::after {
+    --mfr-fade: clamp(0px, (100vw - 1920px) * 1000, 211px);
+    --mfr-sides: linear-gradient(90deg, var(--mfr-night) 0, rgb(7 9 16 / 0%) var(--mfr-fade), rgb(7 9 16 / 0%) calc(100% - var(--mfr-fade)), var(--mfr-night) 100%);
+    --mfr-pic: 0% 39% / clamp(100%, 108% - (100vw - 1280px) / 40, 108%) auto;
+  }
+
+  .mf-hero > *,
+  .mf-hero__title {
+    grid-column: 2;
+  }
+
+  /* Scattered, as stickers are: the stamp above, the badge under it and
+     a step to the right, the pill under that, over the badge's edge. */
+  .mf-hero .pick6 {
+    grid-column: 1;
+    grid-row: 1 / span 6;
+    align-self: center;
+    grid-template:
+      "stamp stamp stamp" auto
+      ".     lbl   .    " auto
+      ".     vs    .    " auto
+      "sub   sub   sub  " auto
+      / 46px auto 1fr;
+    column-gap: 0;
+    margin-top: 0;
+  }
+
+  .pick6__num {
+    --mfr-stamp: 104px;
+
+    justify-self: start;
+    margin-bottom: -6px;
+  }
+
+  .mf-hero .pick6::before {
+    grid-area: 2 / 2 / 4 / 3;
+  }
+
+  .pick6__sub {
+    justify-self: start;
+    margin: -4px 0 0 10px;
+  }
+}
+
+/* ── 3. Race strip ──────────────────────────────────────────────── */
+
+/* Pinned under the navigation (the live one pins at the very top of the
+   window, behind it). The races share one row and shrink to fit; when
+   there are too many for the screen they take a second row. Nothing
+   scrolls sideways. */
+.mf-jump {
+  --mfr-chip-min: 96px;
+
+  position: sticky;
+  top: var(--mfr-top);
+  z-index: 40;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--mfr-chip-min), 1fr));
+  gap: 6px;
+  margin: 0 0 22px;
+  padding: 8px 0;
+  isolation: isolate;
+}
+
+.mf-jump::before {
+  content: "";
+  position: absolute;
+  inset: 0 -100vmax;
+  z-index: -1;
+  background: var(--mfr-card);
+  border-bottom: 1px solid var(--mfr-rule);
+  box-shadow: 0 4px 14px rgb(17 21 31 / 5%);
+}
+
+.mf-jump__chip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  height: 36px;
+  padding: 0 6px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 8px;
+  font-size: 12px;
+  color: var(--mfr-ink-3);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.mf-jump__chip:hover {
+  background: var(--mfr-gold-wash);
+  border-color: var(--mfr-gold-line);
+}
+
+.mf-jump__time {
+  font-size: 13.5px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-ink);
+}
+
+.mf-jump__count {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.mf-jump__count::after {
+  content: " runners";
+}
+
+/* A race that has been run: quieter, with a tick (no strike-through —
+   that reads as "abandoned"). */
+.mf-jump__chip--done .mf-jump__time {
+  font-weight: 700;
+  color: var(--mfr-ink-2);
+}
+
+.mf-jump__status {
+  font-size: 0;
+}
+
+.mf-jump__status--done::before,
+.mf-jump__chip--featured::before {
+  content: "";
+  display: block;
+  width: 13px;
+  height: 13px;
+  background-color: var(--mfr-green);
+  -webkit-mask: url("../img/icons/check.svg") center / contain no-repeat;
+  mask: url("../img/icons/check.svg") center / contain no-repeat;
+}
+
+.mf-jump__chip--featured::before {
+  background-color: var(--mfr-gold);
+  -webkit-mask-image: url("../img/icons/star-fill.svg");
+  mask-image: url("../img/icons/star-fill.svg");
+}
+
+.mf-jump__chip--featured {
+  background: var(--mfr-gold-wash);
+  border-color: var(--mfr-gold-line);
+}
+
+.mf-jump__status--next {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mfr-green);
+}
+
+.mf-jump__chip--next {
+  border-color: var(--mfr-green);
+  border-style: dashed;
+}
+
+/* The race on screen (the page's script marks it). */
+.mf-jump__chip.is-active {
+  background: var(--mfr-ink);
+  border: 1px solid var(--mfr-ink);
+  box-shadow: none;
+}
+
+.mf-jump__chip.is-active .mf-jump__time {
+  font-weight: 800;
+  color: var(--mfr-gold);
+}
+
+.mf-jump__chip.is-active .mf-jump__count {
+  color: rgb(255 255 255 / 82%);
+}
+
+/* On the ink of the chosen race, the tick is white; the star stays gold. */
+.mf-jump__chip.is-active .mf-jump__status--done::before {
+  background-color: rgb(255 255 255 / 82%);
+}
+
+/* Next-off line (race day, before the first race) */
+.mf-next-off {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin: 0 0 20px;
+  padding: 12px 16px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-left: 3px solid var(--mfr-green);
+  border-radius: 10px;
+  font-size: 13.5px;
+}
+
+.mf-next-off__pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mfr-green);
+}
+
+.mf-next-off__kicker {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mfr-green);
+}
+
+.mf-next-off__race {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  text-decoration: none;
+}
+
+.mf-next-off__time {
+  font-size: 17px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.mf-next-off__name {
+  font-weight: 600;
+  color: var(--mfr-ink-2);
+}
+
+.mf-next-off__race:hover .mf-next-off__name {
+  color: var(--mfr-green);
+  text-decoration: underline;
+}
+
+.mf-next-off__count {
+  font-size: 12px;
+  color: var(--mfr-ink-3);
+}
+
+.mf-next-off__countdown {
+  margin-left: auto;
+  padding: 4px 10px;
+  background: var(--mfr-ink);
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-white);
+}
+
+/* ── 4. Race card ───────────────────────────────────────────────── */
+.mf-grid {
+  display: block;
+}
+
+.mf-races {
+  display: block;
+  min-width: 0;
+  container: races / inline-size;
+}
+
+.mf-race {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  margin: 0 0 22px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 12px;
+  box-shadow: var(--mfr-shadow-2);
+  scroll-margin-top: calc(var(--mfr-top) + var(--mfr-strip) + 14px);
+}
+
+.mf-race > * {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.mf-race--has-selection {
+  border-color: var(--mfr-green-line);
+}
+
+.mf-race--featured {
+  border-color: var(--mfr-gold-line);
+}
+
+/* Header: time tile · name · facts · open */
+.mf-race__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "time name cta"
+    "time meta cta";
+  align-items: center;
+  gap: 4px 14px;
+  padding: 16px 18px 14px;
+}
+
+.mf-race--featured .mf-race__head {
+  background: var(--mfr-gold-wash);
+  border-radius: 11px 11px 0 0;
+}
+
+.mf-race__time {
+  grid-area: time;
+  align-self: start;
+  display: grid;
+  place-items: center;
+  min-width: 62px;
+  height: 44px;
+  padding: 0 8px;
+  background: var(--mfr-gold-wash);
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  color: var(--mfr-gold-ink);
+}
+
+.mf-race--featured .mf-race__time {
+  background: var(--mfr-gold);
+  box-shadow: none;
+  color: var(--mfr-ink);
+}
+
+.mf-race__name {
+  grid-area: name;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 17.5px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--mfr-ink);
+}
+
+.mf-race__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px 2px 6px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule-2);
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  color: var(--mfr-ink-2);
+  white-space: nowrap;
+}
+
+/* Result in: green. The big race: gold. Next off: solid green. */
+.mf-race__tag--green {
+  background: var(--mfr-green-wash);
+  border-color: var(--mfr-green-line);
+  color: var(--mfr-green);
+}
+
+.mf-race__tag--gold {
+  background: var(--mfr-gold);
+  border-color: var(--mfr-gold);
+  color: var(--mfr-ink);
+}
+
+.mf-race__tag--next {
+  background: var(--mfr-green);
+  border-color: var(--mfr-green);
+  color: var(--mfr-white);
+}
+
+.mf-race__tag .mfr-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mf-race__tag .mfr-i {
+  font-size: 12px;
+}
+
+/* The facts are divided by hairlines instead of the page's "·" marks.
+   Each fact carries its divider on its left, and the row is shifted and
+   clipped by the same 10px, so a divider that would start a line is cut
+   off: no stray mark at either end when the facts wrap on a phone. */
+.mf-race__meta {
+  grid-area: meta;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  row-gap: 4px;
+  margin-left: -10px;
+  clip-path: inset(0 0 0 10px);
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--mfr-ink-2);
+}
+
+.mf-race__meta > span {
+  padding: 0 10px;
+  border-left: 1px solid var(--mfr-rule);
+}
+
+.mf-race__meta > .mf-dot {
+  display: none;
+}
+
+.mf-race__meta > .mf-race__class {
+  margin: 0 10px;
+  padding: 1px 7px;
+  border: 1px solid var(--mfr-rule);
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mfr-ink-3);
+}
+
+.mf-race__meta > .mf-race__class + span {
+  padding-left: 0;
+  border-left: 0;
+}
+
+/* The trip, drawn: a mark a furlong, each mile's last one in ink, so a
+   sprint and a stayers' race look as different as they are. */
+.mfr-furlongs {
+  display: inline-block;
+  width: calc(var(--mfr-f, 0) * 4px - 2px);
+  height: 9px;
+  margin-left: 7px;
+  vertical-align: -1px;
+  background:
+    repeating-linear-gradient(90deg, rgb(17 21 31 / 0%) 0 28px, var(--mfr-ink) 28px 30px, rgb(17 21 31 / 0%) 30px 32px),
+    repeating-linear-gradient(90deg, var(--mfr-gold) 0 2px, rgb(212 175 55 / 0%) 2px 4px);
+}
+
+.mf-dot {
+  color: var(--mfr-rule-2);
+}
+
+.mf-gold {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-gold-ink);
+}
+
+.mf-green {
+  font-weight: 700;
+  color: var(--mfr-green);
+}
+
+.mf-race__cta {
+  grid-area: cta;
+  align-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px 0 14px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule-2);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mfr-ink);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.mf-race__cta:hover {
+  background: var(--mfr-gold-wash);
+  border-color: var(--mfr-gold);
+  color: var(--mfr-gold-ink);
+}
+
+.mf-race__cta > span[aria-hidden],
+.mf-paddle__arrow,
+.mf-paddle__home-cta > span[aria-hidden] {
+  font-size: 0;
+}
+
+.mf-race__cta > span[aria-hidden]::before,
+.mf-paddle__arrow::before,
+.mf-paddle__home-cta > span[aria-hidden]::before {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  background-color: currentColor;
+  -webkit-mask: url("../img/icons/arrow-right.svg") center / contain no-repeat;
+  mask: url("../img/icons/arrow-right.svg") center / contain no-repeat;
+}
+
+/* Winner — hidden until asked for, as on the live page. */
+.mf-result-pill {
+  order: 3;
+  grid-column: 2;
+  justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  margin: 0 18px 12px 10px;
+  padding: 0 14px;
+  min-height: 34px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-green-line);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mfr-green);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.mf-result-pill:hover {
+  background: var(--mfr-green-wash);
+  border-color: var(--mfr-green);
+}
+
+.mf-result-pill__face {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+}
+
+.mf-result-pill[aria-pressed="false"] .mf-result-pill__face--revealed,
+.mf-result-pill[aria-pressed="true"] .mf-result-pill__face--hidden {
+  display: none;
+}
+
+.mf-result-pill__eye,
+.mf-result-pill__trophy {
+  font-size: 0;
+}
+
+.mf-result-pill__eye::before,
+.mf-result-pill__trophy::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: currentColor;
+  -webkit-mask: url("../img/icons/eye.svg") center / contain no-repeat;
+  mask: url("../img/icons/eye.svg") center / contain no-repeat;
+}
+
+.mf-result-pill[aria-pressed="true"] {
+  order: 1;
+  grid-column: 1 / -1;
+  justify-self: stretch;
+  margin: 0 18px 12px;
+  padding: 10px 14px;
+  background: var(--mfr-green-wash);
+  border-color: var(--mfr-green-line);
+  border-left: 3px solid var(--mfr-green);
+  color: var(--mfr-ink);
+}
+
+.mf-result-pill[aria-pressed="true"]:hover {
+  border-color: var(--mfr-green);
+}
+
+.mf-result-pill[aria-pressed="true"] .mf-result-pill__face {
+  width: 100%;
+  gap: 6px 14px;
+}
+
+.mf-result-pill__trophy {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  background: var(--mfr-gold-wash);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--mfr-gold-line);
+  color: var(--mfr-gold-ink);
+}
+
+.mf-result-pill__trophy::before {
+  width: 19px;
+  height: 19px;
+  -webkit-mask-image: url("../img/icons/award.svg");
+  mask-image: url("../img/icons/award.svg");
+}
+
+.mf-result-pill__block {
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.mf-result-pill__lbl {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mfr-green);
+}
+
+.mf-result-pill__name {
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.mf-result-pill__sp {
+  padding: 2px 9px;
+  background: var(--mfr-gold-wash);
+  border: 1px solid var(--mfr-gold-line);
+  color: var(--mfr-gold-ink);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.mf-result-pill__jockey {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mfr-ink-2);
+}
+
+/* "Hide" at the far end of the open band, so it is clear it closes. */
+.mf-result-pill[aria-pressed="true"] .mf-result-pill__face--revealed::after {
+  content: "Hide";
+  margin-left: auto;
+  padding: 3px 10px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-green-line);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mfr-green);
+}
+
+/* Filters (added by the redesign's script; the same five the live page
+   offers on phones only). */
+.mfr-tools {
+  order: 2;
+  grid-column: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 0 18px 12px;
+}
+
+.mf-result-pill[aria-pressed="true"] ~ .mfr-tools {
+  grid-column: 1 / -1;
+}
+
+.mfr-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 12px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mfr-ink-2);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.mfr-filter .mfr-i {
+  font-size: 13px;
+  color: var(--mfr-ink-3);
+}
+
+.mfr-filter__n {
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-ink-3);
+}
+
+.mfr-filter:hover:not(:disabled) {
+  background: var(--mfr-gold-wash);
+  border-color: var(--mfr-gold-line);
+  color: var(--mfr-ink);
+}
+
+.mfr-filter[aria-pressed="true"] {
+  background: var(--mfr-ink);
+  border-color: var(--mfr-ink);
+  box-shadow: none;
+  font-weight: 700;
+  color: var(--mfr-white);
+}
+
+.mfr-filter[aria-pressed="true"] .mfr-i {
+  color: var(--mfr-gold);
+}
+
+.mfr-filter[aria-pressed="true"] .mfr-filter__n {
+  color: rgb(255 255 255 / 78%);
+}
+
+.mfr-filter:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Comments on / off: a switch at the far end of the filters. It shows
+   wherever the comments run under the rows (so, not on the phone card,
+   where each runner has its own Details). */
+.mfr-switch {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  min-height: 34px;
+  margin-left: auto;
+  padding: 0 2px 0 8px;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--mfr-ink-2);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.mfr-switch:hover {
+  color: var(--mfr-ink);
+}
+
+.mfr-switch__track {
+  position: relative;
+  flex: none;
+  width: 32px;
+  height: 18px;
+  background: var(--mfr-rule);
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--mfr-rule-2);
+  transition:
+    background 0.15s,
+    box-shadow 0.15s;
+}
+
+.mfr-switch__track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  background: var(--mfr-card);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgb(17 21 31 / 30%);
+  transition: transform 0.15s;
+}
+
+.mfr-switch[aria-checked="true"] .mfr-switch__track {
+  background: var(--mfr-green);
+  box-shadow: inset 0 0 0 1px var(--mfr-green);
+}
+
+.mfr-switch[aria-checked="true"] .mfr-switch__track::after {
+  transform: translateX(14px);
+}
+
+@container races (min-width: 660px) {
+  .mfr-switch {
+    display: inline-flex;
+  }
+
+  html[data-mfr-compact] .racecard__cell--comment,
+  html[data-mfr-compact] .racecard__runner > .rc-spotlight {
+    display: none;
+  }
+}
+
+
+.racecard {
+  order: 4;
+}
+
+.cv {
+  order: 5;
+}
+
+.mf-empty {
+  padding: 18px;
+  font-size: 13.5px;
+  color: var(--mfr-ink-3);
+  text-align: center;
+}
+
+/* ── 5. Runners: shared parts ───────────────────────────────────── */
+
+/* The phone-only pieces the page's script adds below 640px (its filter
+   bar, tier ribbon and chip row) have their counterparts above at every
+   width, so they are not shown twice. */
+.rc-mob-filterbar,
+.rc-mob-compact,
+.rc-ribbon,
+.rc-mob-snackbar,
+.rc-mob-picks-counter {
+  display: none;
+}
+
+.racecard__columns {
+  display: none;
+}
+
+.racecard__runner {
+  position: relative;
+  display: grid;
+  align-items: center;
+  border-top: 1px solid var(--mfr-rule);
+  transition: background 0.12s;
+}
+
+.racecard__runner.is-hidden,
+.racecard__runner[data-mfr-hidden] {
+  display: none;
+}
+
+.racecard__runner:last-child {
+  border-radius: 0 0 11px 11px;
+}
+
+.racecard__runner--in-slip,
+.racecard__runner.is-selected,
+.racecard__runner--voted,
+.racecard__runner--guest-pick {
+  background: var(--mfr-green-wash);
+  box-shadow: inset 3px 0 0 var(--mfr-green);
+}
+
+.racecard__runner--featured,
+.racecard__runner--leader {
+  box-shadow: inset 3px 0 0 var(--mfr-gold);
+}
+
+.racecard__cell {
+  min-width: 0;
+}
+
+.racecard__cell--number {
+  grid-area: num;
+}
+
+.racecard__cell--silk {
+  grid-area: silk;
+}
+
+.racecard__cell--horse {
+  grid-area: horse;
+}
+
+.racecard__cell--form {
+  grid-area: form;
+}
+
+.racecard__cell--conn {
+  grid-area: conn;
+}
+
+.racecard__cell--or {
+  grid-area: or;
+}
+
+.racecard__cell--sr {
+  grid-area: sr;
+}
+
+.racecard__cell--age {
+  grid-area: age;
+}
+
+.racecard__cell--wgt {
+  grid-area: wgt;
+}
+
+.racecard__cell--odds {
+  grid-area: odds;
+}
+
+.racecard__cell--pick {
+  grid-area: pick;
+}
+
+.racecard__cell--comment {
+  grid-area: comment;
+}
+
+.racecard__runner > .rc-spotlight {
+  grid-area: verdict;
+}
+
+.racecard__runner > .rc-mob {
+  grid-area: mob;
+  display: none;
+}
+
+/* Details (the phone card): meeting_racecard.js puts the button in a
+   cell of its own, since the runner is an ARIA row. */
+.racecard__runner > .mfr-more-cell {
+  grid-area: more;
+  display: none;
+}
+
+/* Number, silk, name */
+
+/* The number is on a number cloth, as it is under the saddle: a white
+   cloth with a dark edge. (The same cloth is on each pick in the slip.) */
+.racecard__cell--number {
+  display: grid;
+  justify-items: center;
+}
+
+.racecard__number {
+  box-sizing: border-box;
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 22px;
+  padding: 0 4px;
+  background: var(--mfr-card);
+  border: 1.5px solid var(--mfr-ink);
+  border-radius: 5px;
+  font-size: 12.5px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--mfr-ink);
+}
+
+/* Not numbered yet (the evening before, the live page prints a "?" for
+   each): there is nothing to show, so nothing is shown. A runner without
+   a number has no cloth, and a race in which none has one (the script
+   marks it) has no number column at all. */
+.racecard__runner[data-number="0"] .racecard__number,
+.racecard[data-mfr-numbers="none"] .racecard__cell--number,
+.racecard[data-mfr-numbers="none"] .racecard__col.racecard__col--number {
+  display: none;
+}
+
+.racecard[data-mfr-numbers="none"] {
+  --mfr-num: 0px;
+}
+
+.racecard__silk {
+  display: block;
+  width: 34px;
+  height: 38px;
+  padding: 2px;
+  object-fit: contain;
+  background: var(--mfr-warm);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 7px;
+}
+
+.racecard__name {
+  font-size: 15.5px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  color: var(--mfr-ink);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+a.racecard__name:hover {
+  color: var(--mfr-gold-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.racecard__name-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-left: 4px;
+  vertical-align: 1px;
+}
+
+.racecard__name-tags:empty,
+.racecard__name-tags:not(:has(*)) {
+  display: none;
+}
+
+.racecard__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 7px;
+  background: var(--mfr-gold-wash);
+  border: 1px solid var(--mfr-gold-line);
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mfr-gold-ink);
+}
+
+.racecard__badge--fav,
+.racecard__badge--big-race {
+  background: var(--mfr-gold);
+  border-color: var(--mfr-gold);
+  color: var(--mfr-ink);
+}
+
+.racecard__badge--result {
+  background: var(--mfr-green-wash);
+  border-color: var(--mfr-green-line);
+  color: var(--mfr-green);
+}
+
+.racecard__badge--nr {
+  background: var(--mfr-red-wash);
+  border-color: var(--mfr-red-line);
+  color: var(--mfr-red);
+}
+
+.racecard__badge--7day {
+  background: var(--mfr-card);
+  border-color: var(--mfr-rule-2);
+  border-style: dashed;
+  color: var(--mfr-ink-2);
+}
+
+/* The page's "Age 2 · 9-3" line is repeated by the script inside the
+   line below (.mfr-meta), where it can sit beside the AI tier. */
+.racecard__name-meta {
+  display: none;
+}
+
+/* Under the name: the AI tier in stars and words (from the row's own
+   data-stars; the live page shows it on phones only) and, where age and
+   weight have no column of their own, those too. */
+.mfr-sub {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 10px;
+  margin-top: 3px;
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--mfr-ink-3);
+}
+
+.mfr-meta {
+  display: none;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mfr-ai {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.mfr-ai__stars {
+  display: inline-flex;
+  gap: 1px;
+  font-size: 11px;
+  color: var(--mfr-rule-2);
+}
+
+.mfr-ai__stars .mfr-i--star-fill {
+  color: var(--mfr-gold);
+}
+
+.mfr-ai[data-tier="strong"] .mfr-ai__tier {
+  color: var(--mfr-green);
+}
+
+.mfr-ai[data-tier="solid"] .mfr-ai__tier {
+  color: var(--mfr-gold-ink);
+}
+
+/* A non-runner: struck through and quiet. */
+.racecard__runner--nr {
+  background: var(--mfr-paper);
+}
+
+.racecard__runner--nr .racecard__name,
+.racecard__runner--nr .racecard__number {
+  color: var(--mfr-ink-3);
+  text-decoration: line-through;
+}
+
+.racecard__runner--nr .racecard__number {
+  border-color: var(--mfr-rule-2);
+}
+
+.racecard__runner--nr .racecard__form,
+.racecard__runner--nr .racecard__odds,
+.racecard__runner--nr .racecard__jockey,
+.racecard__runner--nr .racecard__trainer,
+.racecard__runner--nr .racecard__sr {
+  opacity: 0.6;
+}
+
+/* Form: a token a run, the oldest on the left and the latest on the
+   right, marked with a gold line under it. Each finishing place has a
+   colour of its own, from the podium's metals down through jewel tints:
+
+     1  gold       2  silver       3  bronze      medals, and round
+     4  emerald    5, 6  sapphire  7 to 9  amethyst
+     0  slate      tenth or worse
+     F, U, P...    ruby: did not finish
+
+   The figure is still the place; the colour is a second way to read it,
+   and the row a horse's last six runs at a glance. (The live page has
+   green for a win and one red for everything out of the first three.)
+   The script gives each token its place, so a 4 can be told from a 9;
+   without it, 4 to 0 are all slate. These colours are the form's alone. */
+.racecard__form {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding-bottom: 5px;
+}
+
+.rcf {
+  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  background: #eef0f3;
+  border: 1px solid #d2d7de;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: #4b5462;
+  transition: transform 0.15s;
+}
+
+.rcf:hover {
+  transform: translateY(-1px);
+}
+
+/* The medals. */
+.rcf--win,
+.rcf--silver,
+.rcf--bronze {
+  border-radius: 50%;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 60%),
+    0 1px 2px rgb(17 21 31 / 16%);
+  color: var(--mfr-ink);
+}
+
+.rcf--win {
+  background: linear-gradient(145deg, #f6de8d 0%, var(--mfr-gold) 52%, #b8922a 100%);
+  border-color: #b8922a;
+}
+
+.rcf--silver {
+  background: linear-gradient(145deg, #f8f9fb 0%, #d7dbe2 52%, #aab1bc 100%);
+  border-color: #a4abb7;
+}
+
+.rcf--bronze {
+  background: linear-gradient(145deg, #f4dfc7 0%, #dba978 52%, #b97f4c 100%);
+  border-color: #b07a48;
+}
+
+/* The jewels. */
+.rcf[data-mfr-run="4"] {
+  background: #e3f3ea;
+  border-color: #a7d5bc;
+  color: #12633b;
+}
+
+.rcf[data-mfr-run="5"],
+.rcf[data-mfr-run="6"] {
+  background: #e4ecfb;
+  border-color: #afc4ee;
+  color: #1c479a;
+}
+
+.rcf[data-mfr-run="7"],
+.rcf[data-mfr-run="8"],
+.rcf[data-mfr-run="9"] {
+  background: #efe7fa;
+  border-color: #cbb6ec;
+  color: #56309f;
+}
+
+.rcf--dnf {
+  background: linear-gradient(145deg, #cb4232 0%, #a3281c 100%);
+  border-color: #9b271c;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 22%);
+  color: var(--mfr-white);
+}
+
+/* A new season ("-") or a long break ("/") between two runs. */
+.rcf--sep {
+  width: 7px;
+  background: none;
+  border: 0;
+  font-weight: 600;
+  color: var(--mfr-ink-3);
+}
+
+.rcf--sep:hover {
+  transform: none;
+}
+
+/* The latest run. */
+.rcf[data-mfr-latest]::after {
+  content: "";
+  position: absolute;
+  inset: auto 1px -6px;
+  height: 2px;
+  background: var(--mfr-gold);
+  border-radius: 2px;
+}
+
+/* Where the page has no comment for a runner it prints the AI verdict in
+   the comment's place, and the verdict under it: the same sentence
+   twice. On such a row (the script marks it) the comment gives way and
+   the verdict, with its label, is what is read. (The attribute and the
+   cell's two classes are there for weight: this has to hold over each
+   layout's own rule for showing the comment, the phone card's opened
+   one included.) */
+.racecard__runner[data-mfr-once][data-mfr-once] > .racecard__cell.racecard__cell--comment {
+  display: none;
+}
+
+.racecard__form--empty,
+.racecard__sr--empty {
+  color: var(--mfr-ink-3);
+}
+
+/* Jockey and trainer, each with the career strike rate: green for a
+   hot one, gold for a warm one, plain otherwise (the site's own code).
+   Names wrap; none is cut short. */
+.racecard__cell--conn {
+  display: grid;
+  gap: 3px;
+}
+
+.racecard__jockey,
+.racecard__trainer {
+  display: grid;
+  grid-template-columns: 16px minmax(0, max-content) auto;
+  align-items: baseline;
+  justify-content: start;
+  gap: 6px;
+  min-width: 0;
+  font-size: 13.5px;
+  line-height: 1.3;
+}
+
+.racecard__jockey::before,
+.racecard__trainer::before {
+  content: "J";
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  background: var(--mfr-warm);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--mfr-ink-3);
+  transform: translateY(-1px);
+}
+
+.racecard__trainer::before {
+  content: "T";
+}
+
+.racecard__jockey-name {
+  font-weight: 600;
+  color: var(--mfr-ink);
+}
+
+.racecard__trainer-name {
+  color: var(--mfr-ink-2);
+}
+
+.connection-link {
+  text-decoration: none;
+}
+
+.connection-link:hover {
+  color: var(--mfr-gold-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.rc-rate {
+  display: inline-flex;
+  align-items: baseline;
+  padding: 0 6px;
+  border: 1px solid var(--mfr-rule);
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.5;
+  color: var(--mfr-ink-3);
+  white-space: nowrap;
+}
+
+.rc-rate__dot {
+  display: none;
+}
+
+.rc-rate__num small {
+  font-size: 0.86em;
+}
+
+.rc-rate--neutral {
+  color: var(--mfr-ink-2);
+}
+
+.rc-rate--warm {
+  background: var(--mfr-gold-wash);
+  border-color: var(--mfr-gold-line);
+  color: var(--mfr-gold-ink);
+}
+
+.rc-rate--hot {
+  background: var(--mfr-green-wash);
+  border-color: var(--mfr-green-line);
+  color: var(--mfr-green);
+}
+
+/* Ratings, age, weight */
+.racecard__cell--or,
+.racecard__cell--sr,
+.racecard__cell--age,
+.racecard__cell--wgt {
+  font-size: 13.5px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  color: var(--mfr-ink-2);
+}
+
+.racecard__sr {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mfr-ink);
+}
+
+/* Price: picked out, but quietly: a gold tint with the figures in ink,
+   so the eye finds the column without it shouting down the row. */
+.racecard__cell--odds {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 3px 6px;
+}
+
+.racecard__odds {
+  order: 1;
+  display: inline-grid;
+  place-items: center;
+  min-width: 54px;
+  height: 30px;
+  padding: 0 9px;
+  background: var(--mfr-gold-wash);
+  border: 1px solid var(--mfr-gold-line);
+  border-radius: 7px;
+  font-size: 15px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-ink);
+  white-space: nowrap;
+}
+
+/* An outsider's price is plain; the favourite's (marked by the script:
+   the shortest price in the race) is a shade deeper, edged in gold. */
+.racecard__odds--outsider {
+  background: var(--mfr-card);
+  border-color: var(--mfr-rule-2);
+  font-weight: 700;
+  color: var(--mfr-ink-2);
+}
+
+.racecard__runner[data-mfr-fav] .racecard__odds {
+  background: #f5e3a3;
+  border-color: var(--mfr-gold);
+  box-shadow: inset 0 0 0 1px var(--mfr-gold);
+  color: var(--mfr-ink);
+}
+
+.racecard__odds--unpriced {
+  background: var(--mfr-card);
+  border-style: dashed;
+  border-color: var(--mfr-rule-2);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--mfr-ink-3);
+}
+
+/* Steamer / drifter: money in is green, money out is red, and each says
+   which it is in a word and an arrow as well. */
+.runner-market-chip {
+  order: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0 7px 0 5px;
+  background: var(--mfr-green-wash);
+  border: 1px solid var(--mfr-green-line);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.7;
+  color: var(--mfr-green);
+  white-space: nowrap;
+}
+
+.runner-market-chip--out {
+  background: var(--mfr-red-wash);
+  border-color: var(--mfr-red-line);
+  color: var(--mfr-red);
+}
+
+.runner-market-chip > span[aria-hidden] {
+  font-size: 0;
+}
+
+.runner-market-chip > span[aria-hidden]::before {
+  content: "";
+  display: block;
+  width: 12px;
+  height: 12px;
+  background-color: currentColor;
+  -webkit-mask: url("../img/icons/trend-down.svg") center / contain no-repeat;
+  mask: url("../img/icons/trend-down.svg") center / contain no-repeat;
+}
+
+.runner-market-chip--out > span[aria-hidden]::before {
+  -webkit-mask-image: url("../img/icons/trend-up.svg");
+  mask-image: url("../img/icons/trend-up.svg");
+}
+
+.runner-market-chip--in::after {
+  content: "Steamer";
+}
+
+.runner-market-chip--out::after {
+  content: "Drifter";
+}
+
+.racecard__odds-trail,
+.racecard__odds-forecast {
+  order: 3;
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.3;
+  color: var(--mfr-ink-3);
+  white-space: nowrap;
+}
+
+.racecard__odds-trail-step--current,
+.racecard__odds-forecast-val {
+  font-weight: 700;
+  color: var(--mfr-ink-2);
+}
+
+.racecard__odds-trail--in .racecard__odds-trail-step--current {
+  color: var(--mfr-green);
+}
+
+.racecard__odds-trail--out .racecard__odds-trail-step--current {
+  color: var(--mfr-red);
+}
+
+.racecard__odds-trail-arrow {
+  font-size: 0;
+}
+
+.racecard__odds-trail-arrow::before {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-color: currentColor;
+  -webkit-mask: url("../img/icons/arrow-right.svg") center / contain no-repeat;
+  mask: url("../img/icons/arrow-right.svg") center / contain no-repeat;
+}
+
+.racecard__odds-forecast-lbl {
+  font-size: 0;
+}
+
+.racecard__odds-forecast-lbl::before {
+  content: "Forecast";
+  font-size: 11.5px;
+}
+
+/* Pick / Picked */
+.racecard__slip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 36px;
+  padding: 0 12px;
+  background: var(--mfr-card);
+  border: 1.5px solid var(--mfr-ink);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--mfr-ink);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s,
+    transform 0.08s;
+}
+
+.racecard__slip-btn:hover:not(:disabled) {
+  background: var(--mfr-gold-wash);
+}
+
+.racecard__slip-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.racecard__slip-btn:disabled {
+  border-color: var(--mfr-rule);
+  color: var(--mfr-ink-3);
+  cursor: not-allowed;
+}
+
+/* The slip is full (six picks; meeting_slip.js, "six at most"): Pick in a
+   race not yet picked stands down. It can still be pressed, and then
+   says why. */
+.racecard__slip-btn[data-mfr-shut] {
+  background: var(--mfr-warm);
+  border-color: var(--mfr-rule-2);
+  color: var(--mfr-ink-3);
+  cursor: not-allowed;
+}
+
+.racecard__slip-btn[data-mfr-shut]:hover,
+.racecard__slip-btn[data-mfr-shut]:active {
+  background: var(--mfr-warm);
+  transform: none;
+}
+
+.racecard__slip-btn-tick {
+  display: none;
+}
+
+.racecard__runner--in-slip .racecard__slip-btn,
+.racecard__runner.is-selected .racecard__slip-btn {
+  background: var(--mfr-green);
+  border-color: var(--mfr-green);
+  color: var(--mfr-white);
+}
+
+.racecard__runner--in-slip .racecard__slip-btn:hover,
+.racecard__runner.is-selected .racecard__slip-btn:hover {
+  background: var(--mfr-green-dark);
+  border-color: var(--mfr-green-dark);
+}
+
+.racecard__runner--in-slip .racecard__slip-btn-plus,
+.racecard__runner.is-selected .racecard__slip-btn-plus {
+  display: none;
+}
+
+.racecard__runner--in-slip .racecard__slip-btn-tick,
+.racecard__runner.is-selected .racecard__slip-btn-tick {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.racecard__slip-btn-tick::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  background-color: currentColor;
+  -webkit-mask: url("../img/icons/check.svg") center / contain no-repeat;
+  mask: url("../img/icons/check.svg") center / contain no-repeat;
+}
+
+/* Comment and AI verdict: in full, under the row. The live table shows
+   two lines of the comment and "…"; the rest is only in a tooltip. */
+.racecard__cell--comment:has(.racecard__comment--empty) {
+  display: none;
+}
+
+.racecard__comment {
+  display: block;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--mfr-ink-2);
+}
+
+.rc-spotlight {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  margin: 0;
+}
+
+.rc-spotlight__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--mfr-gold-ink);
+  white-space: nowrap;
+}
+
+.rc-spotlight__star {
+  font-size: 0;
+}
+
+.rc-spotlight__star::before {
+  content: "";
+  display: block;
+  width: 13px;
+  height: 13px;
+  background-color: currentColor;
+  -webkit-mask: url("../img/icons/sparkle.svg") center / contain no-repeat;
+  mask: url("../img/icons/sparkle.svg") center / contain no-repeat;
+}
+
+.rc-spotlight__body {
+  flex: 1 1 240px;
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--mfr-ink-2);
+}
+
+/* ── 6a. Runners as a table (the race list is 1000px or wider) ──── */
+@container races (min-width: 1000px) {
+  /* Every row is its own grid, so the columns line up only because the
+     tracks are the same fixed sizes and shares in each. */
+  .racecard__columns,
+  .racecard__runner {
+    grid-template-columns:
+      var(--mfr-num, 30px) 38px minmax(150px, 1fr) 136px minmax(200px, 1.2fr)
+      40px 48px 34px 46px 138px 84px;
+    column-gap: 12px;
+    padding-inline: 18px;
+  }
+
+  /* No numbers in this race yet: the number's track is nothing, and the
+     row starts one gap further left, so the silks stand where the edge
+     of every other row's content is. */
+  .racecard[data-mfr-numbers="none"] .racecard__columns,
+  .racecard[data-mfr-numbers="none"] .racecard__runner {
+    padding-left: 6px;
+  }
+
+  .racecard__columns {
+    display: grid;
+    grid-template-areas: "num silk horse form conn or sr age wgt odds pick";
+    align-items: center;
+    padding-block: 9px;
+    background: var(--mfr-warm);
+    border-block: 1px solid var(--mfr-rule);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--mfr-ink-3);
+  }
+
+  .racecard__runner {
+    grid-template-areas:
+      "num silk horse form conn or sr age wgt odds pick"
+      ". . comment comment comment comment comment comment comment comment comment"
+      ". . verdict verdict verdict verdict verdict verdict verdict verdict verdict";
+    padding-block: 13px;
+  }
+
+  .racecard__runners > .racecard__runner:first-child {
+    border-top: 0;
+  }
+
+  .racecard__runner:hover {
+    background: var(--mfr-warm);
+  }
+
+  .racecard__runner--in-slip:hover,
+  .racecard__runner.is-selected:hover {
+    background: var(--mfr-green-wash);
+  }
+
+  .racecard__cell--comment {
+    padding-top: 8px;
+  }
+
+  .racecard__runner > .rc-spotlight {
+    padding-top: 4px;
+  }
+
+  .racecard__cell--sr .racecard__sr {
+    display: inline-block;
+    min-width: 40px;
+    padding: 2px 5px;
+    background: var(--mfr-warm);
+    border: 1px solid var(--mfr-rule);
+    border-radius: 6px;
+  }
+
+  /* The top Saturday Rating in the race, in gold. */
+  .racecard__runner[data-mfr-top] .racecard__cell--sr .racecard__sr {
+    background: var(--mfr-gold-wash);
+    border-color: var(--mfr-gold-line);
+    color: var(--mfr-gold-ink);
+  }
+}
+
+/* A narrower table (the race list is 1000–1099px, as on a 1440px
+   laptop with the slip beside it): age and weight move under the name,
+   so jockey and trainer keep the room their names need. */
+@container races (min-width: 1000px) and (max-width: 1099.98px) {
+  .racecard__columns,
+  .racecard__runner {
+    grid-template-columns:
+      var(--mfr-num, 30px) 38px minmax(150px, 1fr) 136px minmax(200px, 1.2fr)
+      40px 48px 138px 84px;
+  }
+
+  .racecard__columns {
+    grid-template-areas: "num silk horse form conn or sr odds pick";
+  }
+
+  .racecard__runner {
+    grid-template-areas:
+      "num silk horse form conn or sr odds pick"
+      ". . comment comment comment comment comment comment comment"
+      ". . verdict verdict verdict verdict verdict verdict verdict";
+  }
+
+  .racecard__col.racecard__col--age,
+  .racecard__col.racecard__col--wgt {
+    display: none;
+  }
+
+  /* Out of sight, still read out (see the card layout below). */
+  .racecard__cell--age,
+  .racecard__cell--wgt {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .mfr-meta {
+    display: inline;
+  }
+}
+
+/* The column heads (shown only with the table). */
+.racecard__col--number {
+  grid-area: num;
+}
+
+.racecard__col--silk {
+  grid-area: silk;
+}
+
+.racecard__col--horse {
+  grid-area: horse;
+}
+
+.racecard__col--form {
+  grid-area: form;
+}
+
+.racecard__col--conn {
+  grid-area: conn;
+}
+
+.racecard__col--or {
+  grid-area: or;
+}
+
+.racecard__col--sr {
+  grid-area: sr;
+}
+
+.racecard__col--age {
+  grid-area: age;
+}
+
+.racecard__col--wgt {
+  grid-area: wgt;
+}
+
+.racecard__col--odds {
+  grid-area: odds;
+}
+
+.racecard__col--pick {
+  grid-area: pick;
+}
+
+.racecard__col {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+/* The comment has no column: it runs under the row. */
+.racecard__col.racecard__col--comment {
+  display: none;
+}
+
+.racecard__col--number,
+.racecard__col--or,
+.racecard__col--sr,
+.racecard__col--age,
+.racecard__col--wgt,
+.racecard__col--pick {
+  justify-content: center;
+}
+
+.racecard__col[data-sortable] {
+  cursor: pointer;
+  user-select: none;
+}
+
+.racecard__col[data-sortable]:hover,
+.racecard__col[aria-sort="ascending"],
+.racecard__col[aria-sort="descending"] {
+  color: var(--mfr-gold-ink);
+}
+
+.racecard__col-icon {
+  font-size: 0;
+}
+
+.racecard__col-icon::before {
+  content: "";
+  display: block;
+  width: 11px;
+  height: 11px;
+  background-color: currentColor;
+  opacity: 0.7;
+  -webkit-mask: url("../img/icons/sort.svg") center / contain no-repeat;
+  mask: url("../img/icons/sort.svg") center / contain no-repeat;
+}
+
+.racecard__col[aria-sort="ascending"] .racecard__col-icon::before {
+  opacity: 1;
+  -webkit-mask-image: url("../img/icons/arrow-up.svg");
+  mask-image: url("../img/icons/arrow-up.svg");
+}
+
+.racecard__col[aria-sort="descending"] .racecard__col-icon::before {
+  opacity: 1;
+  -webkit-mask-image: url("../img/icons/arrow-down.svg");
+  mask-image: url("../img/icons/arrow-down.svg");
+}
+
+.racecard__col-help {
+  font-size: 0;
+  color: var(--mfr-ink-3);
+}
+
+.racecard__col-help::before {
+  content: "";
+  display: block;
+  width: 13px;
+  height: 13px;
+  background-color: currentColor;
+  -webkit-mask: url("../img/icons/help.svg") center / contain no-repeat;
+  mask: url("../img/icons/help.svg") center / contain no-repeat;
+}
+
+.racecard__col-help:hover {
+  color: var(--mfr-gold-ink);
+}
+
+/* ── 6b. Two lines a runner (the race list is 660–999px wide) ───── */
+
+/* Name and price on the first line; everything the table has on the
+   second, each figure under its own small label. */
+@container races (min-width: 660px) and (max-width: 999.98px) {
+  .racecard__runner {
+    grid-template-columns: var(--mfr-num, 28px) 38px 136px minmax(0, 1fr) 50px 50px 44px 52px;
+    grid-template-areas:
+      "num silk horse horse odds odds pick pick"
+      ". . form conn or sr age wgt"
+      ". . comment comment comment comment comment comment"
+      ". . verdict verdict verdict verdict verdict verdict";
+    column-gap: 10px;
+    padding: 14px 16px;
+  }
+
+  .racecard[data-mfr-numbers="none"] .racecard__runner {
+    padding-left: 6px;
+  }
+
+  .racecard__cell--form,
+  .racecard__cell--conn,
+  .racecard__cell--or,
+  .racecard__cell--sr,
+  .racecard__cell--age,
+  .racecard__cell--wgt {
+    margin-top: 10px;
+  }
+
+  .racecard__cell--form,
+  .racecard__cell--conn {
+    align-self: center;
+  }
+
+  .racecard__cell--comment {
+    padding-top: 10px;
+  }
+
+  .racecard__runner > .rc-spotlight {
+    padding-top: 4px;
+  }
+
+  .racecard__cell--odds {
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  .racecard__odds-trail,
+  .racecard__odds-forecast {
+    justify-content: flex-end;
+  }
+}
+
+/* The small label over each figure, wherever the column heads are not
+   shown. */
+@container races (max-width: 999.98px) {
+  .racecard__cell--or,
+  .racecard__cell--sr,
+  .racecard__cell--age,
+  .racecard__cell--wgt {
+    display: grid;
+    justify-items: center;
+    gap: 1px;
+    padding: 4px 2px 5px;
+    background: var(--mfr-warm);
+    border-radius: 7px;
+    font-weight: 700;
+    color: var(--mfr-ink);
+  }
+
+  .racecard__cell--or::before,
+  .racecard__cell--sr::before,
+  .racecard__cell--age::before,
+  .racecard__cell--wgt::before {
+    content: "OR";
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mfr-ink-3);
+  }
+
+  .racecard__cell--sr::before {
+    content: "SR";
+  }
+
+  .racecard__runner[data-mfr-top] .racecard__cell--sr,
+  .racecard__runner[data-mfr-top] .rc-stat-tile:first-child {
+    background: var(--mfr-gold-wash);
+    box-shadow: inset 0 0 0 1px var(--mfr-gold-line);
+  }
+
+  .racecard__runner[data-mfr-top] .racecard__cell--sr,
+  .racecard__runner[data-mfr-top] .racecard__cell--sr::before,
+  .racecard__runner[data-mfr-top] .rc-stat-tile:first-child > * {
+    color: var(--mfr-gold-ink);
+  }
+
+  .racecard__cell--age::before {
+    content: "Age";
+  }
+
+  .racecard__cell--wgt::before {
+    content: "Wgt";
+  }
+}
+
+/* ── 6c. A card a runner (the race list is under 660px wide) ────── */
+
+/* The card carries what the live phone card does — name, price, tier,
+   jockey and trainer, form, SR · RPR · OR — and the comment and AI
+   verdict open under it from a real button. */
+@container races (max-width: 659.98px) {
+  .racecard__runner {
+    grid-template-columns: var(--mfr-num, 26px) 38px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "num silk horse odds"
+      "conn conn conn conn"
+      "mob mob mob mob"
+      "pick pick pick more"
+      "comment comment comment comment"
+      "verdict verdict verdict verdict";
+    align-items: start;
+    column-gap: 10px;
+    padding: 14px;
+  }
+
+  /* A card is on its own (no column to keep in line with the cards above
+     and below), so here a single runner without a number does without
+     the number's track too: its silks start at the card's edge. */
+  .racecard[data-mfr-numbers="none"] .racecard__runner,
+  .racecard__runner[data-number="0"] {
+    --mfr-num: 0px;
+
+    padding-left: 4px;
+  }
+
+  .racecard__runner[data-number="0"] .racecard__cell--number {
+    display: none;
+  }
+
+  .racecard__cell--number,
+  .racecard__cell--silk {
+    align-self: start;
+  }
+
+  /* The cloth sits level with the middle of the silks beside it. */
+  .racecard__cell--number {
+    align-content: center;
+    height: 38px;
+  }
+
+  .racecard__name {
+    font-size: 16px;
+  }
+
+  .mfr-meta {
+    display: inline;
+  }
+
+  /* Price, mover and the opening price stacked at the right edge: the
+     column is then only as wide as its widest line, and the name gets
+     the rest. */
+  .racecard__cell--odds {
+    display: grid;
+    justify-items: end;
+    gap: 3px;
+  }
+
+  /* The table's own cells for these give way, to the eye, to the page's
+     phone block, which has the same form and adds RPR. That block is
+     marked aria-hidden in the page, so the cells stay in place for
+     screen readers: out of sight, not removed. */
+  .racecard__cell--form,
+  .racecard__cell--or,
+  .racecard__cell--sr,
+  .racecard__cell--age,
+  .racecard__cell--wgt {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .racecard__cell--conn {
+    gap: 4px;
+    margin-top: 12px;
+  }
+
+  /* Form on the left, the three ratings on the right, on one line down
+     to a 360px phone; below that the ratings take a line of their own. */
+  .racecard__runner > .rc-mob {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 10px;
+    margin-top: 12px;
+  }
+
+  .rc-mob__section {
+    display: flex;
+    align-items: center;
+  }
+
+  /* "Form · last 6": the boxes say as much. */
+  .rc-mob__heading {
+    display: none;
+  }
+
+  .rc-mob__stats {
+    display: flex;
+    gap: 4px;
+  }
+
+  .rc-stat-tile {
+    display: grid;
+    justify-items: center;
+    min-width: 42px;
+    padding: 4px 5px 5px;
+    background: var(--mfr-warm);
+    border-radius: 7px;
+  }
+
+  .rc-stat-tile__label {
+    order: -1;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mfr-ink-3);
+  }
+
+  .rc-stat-tile__value {
+    font-size: 14px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.3;
+    color: var(--mfr-ink);
+  }
+
+  .rc-stat-tile--empty .rc-stat-tile__value {
+    font-weight: 500;
+    color: var(--mfr-ink-3);
+  }
+
+  .racecard__cell--pick,
+  .racecard__runner > .mfr-more-cell {
+    margin-top: 12px;
+  }
+
+  .racecard__slip-btn {
+    min-height: 42px;
+    font-size: 14px;
+  }
+
+  .racecard__runner:not(:has(> .mfr-more-cell)) .racecard__cell--pick {
+    grid-column: 1 / -1;
+  }
+
+  .racecard__runner > .mfr-more-cell {
+    display: block;
+  }
+
+  .mfr-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    min-height: 42px;
+    padding: 0 12px;
+    background: var(--mfr-card);
+    border: 1px solid var(--mfr-rule);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--mfr-ink-2);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .mfr-more .mfr-i {
+    font-size: 15px;
+    transition: transform 0.18s;
+  }
+
+  .mfr-more[aria-expanded="true"] {
+    background: var(--mfr-warm);
+    border-color: var(--mfr-rule-2);
+    color: var(--mfr-ink);
+  }
+
+  .mfr-more[aria-expanded="true"] .mfr-i {
+    transform: rotate(180deg);
+  }
+
+  .racecard__cell--comment,
+  .racecard__runner > .rc-spotlight {
+    display: none;
+  }
+
+  .racecard__runner[data-mfr-open="true"] > .racecard__cell--comment:not(:has(.racecard__comment--empty)) {
+    display: block;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--mfr-rule);
+  }
+
+  .racecard__runner[data-mfr-open="true"] > .rc-spotlight {
+    display: flex;
+    margin-top: 8px;
+  }
+
+  /* Race header and toolbar, stacked. */
+  .mf-race__head {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "time name"
+      "meta meta"
+      "cta cta";
+    gap: 8px 12px;
+    padding: 14px 14px 12px;
+  }
+
+  .mf-race__time {
+    min-width: 56px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .mf-race__name {
+    font-size: 16.5px;
+  }
+
+  .mf-race__cta {
+    justify-content: center;
+    height: 40px;
+  }
+
+  .mfr-tools {
+    grid-column: 1 / -1;
+    padding: 0 14px 12px;
+  }
+
+  .mf-result-pill,
+  .mf-result-pill[aria-pressed="true"] {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+    justify-content: center;
+    min-height: 40px;
+    margin: 0 14px 12px;
+  }
+
+  .mf-result-pill[aria-pressed="true"] {
+    justify-content: flex-start;
+  }
+}
+
+/* ── 7. AI verdict panel (before racing) ────────────────────────── */
+.cv {
+  margin: 0;
+  padding: 16px 18px 18px;
+  background: var(--mfr-warm);
+  border-top: 1px solid var(--mfr-rule);
+  border-radius: 0 0 11px 11px;
+}
+
+.cv__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  margin-bottom: 12px;
+}
+
+.cv__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mfr-gold-ink);
+}
+
+.cv__eyebrow-dot {
+  width: 14px;
+  height: 14px;
+  background-color: currentColor;
+  -webkit-mask: url("../img/icons/sparkle.svg") center / contain no-repeat;
+  mask: url("../img/icons/sparkle.svg") center / contain no-repeat;
+}
+
+.cv__compact-lens {
+  padding: 2px 9px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mfr-ink-2);
+}
+
+.cv-hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-top: 2px solid var(--mfr-gold);
+  border-radius: 10px;
+}
+
+.cv-hero__silk {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  background: var(--mfr-ink);
+  border-radius: 10px;
+  font-size: 19px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-gold);
+}
+
+.cv-hero__body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 6px 10px;
+  min-width: 0;
+}
+
+.cv-hero__horse {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--mfr-ink);
+}
+
+.cv-band {
+  justify-self: start;
+  padding: 2px 9px;
+  background: var(--mfr-gold-wash);
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mfr-gold-ink);
+  white-space: nowrap;
+}
+
+.cv-hero__summary {
+  grid-column: 1 / -1;
+  max-width: 78ch;
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--mfr-ink-2);
+}
+
+.cv-hero__meta {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cv-pill {
+  padding: 2px 9px;
+  background: var(--mfr-gold-wash);
+  border: 1px solid var(--mfr-gold-line);
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-gold-ink);
+}
+
+.cv-pill--quiet {
+  background: var(--mfr-card);
+  border-color: var(--mfr-rule);
+  font-weight: 600;
+  color: var(--mfr-ink-2);
+}
+
+.cv-ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+}
+
+.cv-ring__svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.cv-ring__track,
+.cv-ring__fill {
+  fill: none;
+  stroke: var(--mfr-rule);
+  stroke-width: 8;
+}
+
+.cv-ring__fill {
+  stroke: var(--mfr-green);
+  stroke-linecap: round;
+  stroke-dasharray: 264;
+}
+
+.cv-ring__inner {
+  display: grid;
+  justify-items: center;
+  line-height: 1.15;
+}
+
+.cv-ring__value {
+  font-size: 19px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-ink);
+}
+
+.cv-ring__label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mfr-ink-3);
+}
+
+@container races (max-width: 659.98px) {
+  .cv {
+    padding: 14px;
+  }
+
+  .cv-hero {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .cv-hero__body {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cv-ring {
+    justify-self: end;
+    width: 84px;
+    height: 84px;
+  }
+
+  .cv-ring__value {
+    font-size: 17px;
+  }
+
+  .cv-ring__label {
+    font-size: 8px;
+    letter-spacing: 0.04em;
+  }
+}
+
+/* ── 8. Bet slip ────────────────────────────────────────────────── */
+
+/* The slip is a racecourse betting ticket, top to bottom:
+
+     the head    the site's ink, trimmed with a row of gold diamonds as
+                 on a jockey's silks, and a winning post beside the title
+     the card    the slip's six places on a running rail that ends at
+                 the winning post: a horseshoe in each place still open,
+                 the pick's silks in each taken, and each pick's place
+                 goes to its race
+     the picks   a ticket each: the jockey's silks with the horse's
+                 number cloth, the off time, the horse and its jockey,
+                 and the price on a tear-off stub
+     the board   the odds, the stake and the returns, lit on a dark
+                 board like the one beside the course
+     the stub    the small print, under a perforation
+
+   The silks, the numbers and the jockeys are copied by the script from
+   the runners on the page (mfr- elements); the rest is the page's own
+   markup, and the page's own script still does all the work. */
+
+/* Shared: the panel's contents. */
+.mf-slip {
+  background: var(--mfr-card);
+  color: var(--mfr-ink);
+  font-size: 13.5px;
+}
+
+/* The body is a column, so the "cleared" message the page's script puts
+   first can be shown under the head instead of over it. */
+.mf-slip__body {
+  flex-direction: column;
+}
+
+.mf-slip__body > * {
+  flex: none;
+}
+
+.mf-slip__head {
+  order: -3;
+}
+
+.mfr-card {
+  order: -2;
+}
+
+.mf-slip__undo {
+  order: -1;
+}
+
+/* The head. */
+.mf-slip__head {
+  position: relative;
+  padding: 20px 16px 12px;
+  background: var(--mfr-ink);
+  color: var(--mfr-white);
+}
+
+/* Its trim: a row of gold diamonds. */
+.mf-slip__head::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 8px;
+  background: repeating-conic-gradient(from 45deg, var(--mfr-gold) 0 25%, transparent 0 50%) 0 0 / 8px 8px;
+}
+
+.mf-slip__head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mf-slip__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--mfr-white);
+}
+
+.mf-slip__title > span[aria-hidden],
+.mf-slip__handle-icon,
+.mf-slip__action > span[aria-hidden],
+.mf-slip__submit-icon,
+.mf-slip__handle-chevron {
+  font-size: 0;
+  color: var(--mfr-gold-ink);
+}
+
+.mf-slip__title > span[aria-hidden]::before,
+.mf-slip__handle-icon::before,
+.mf-slip__action > span[aria-hidden]::before,
+.mf-slip__submit-icon::before,
+.mf-slip__handle-chevron::before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: currentColor;
+  -webkit-mask: url("../img/icons/post.svg") center / contain no-repeat;
+  mask: url("../img/icons/post.svg") center / contain no-repeat;
+}
+
+.mf-slip__title > span[aria-hidden] {
+  color: var(--mfr-gold);
+}
+
+.mf-slip__type {
+  padding: 3px 10px;
+  background: rgb(212 175 55 / 16%);
+  box-shadow: inset 0 0 0 1px rgb(212 175 55 / 55%);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-gold-lt);
+}
+
+.mf-slip.is-empty .mf-slip__type {
+  background: rgb(255 255 255 / 8%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 24%);
+  color: rgb(255 255 255 / 76%);
+}
+
+/* Nothing picked yet: what to do, beside a horseshoe. */
+.mf-slip__hint {
+  position: relative;
+  min-height: 24px;
+  margin: 12px 0 2px;
+  padding-left: 34px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgb(255 255 255 / 86%);
+}
+
+.mf-slip__hint::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 24px;
+  height: 24px;
+  background-color: var(--mfr-gold);
+  -webkit-mask: url("../img/icons/horseshoe.svg") center / contain no-repeat;
+  mask: url("../img/icons/horseshoe.svg") center / contain no-repeat;
+}
+
+/* The live hint says "Tap +", but the button on every runner reads
+   "Pick". */
+.mf-slip__hint strong {
+  font-size: 0;
+}
+
+.mf-slip__hint strong::before {
+  content: "Pick";
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--mfr-gold);
+}
+
+/* A seventh was asked for (meeting_slip.js, "six at most"): the rail and the
+   bar's count shake their heads. */
+.mf-slip[data-mfr-nudge] .mfr-card__rail,
+.mf-slip[data-mfr-nudge] .mf-slip__handle-count {
+  animation: mfr-six-no 0.5s ease 1;
+}
+
+@keyframes mfr-six-no {
+  20% {
+    transform: translateX(-3px);
+  }
+
+  45% {
+    transform: translateX(3px);
+  }
+
+  70% {
+    transform: translateX(-2px);
+  }
+}
+
+/* The card: the slip's six places on a rail, the winning post at its
+   end. A place still open shows a horseshoe; one taken shows the pick's
+   silks, ringed in gold, and goes to its race. */
+.mfr-card {
+  padding: 12px 16px 10px;
+  background: var(--mfr-warm);
+  border-bottom: 1px solid var(--mfr-rule);
+}
+
+.mfr-card__rail {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mfr-card__rail::before {
+  content: "";
+  position: absolute;
+  inset: 50% 8px auto 6px;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--mfr-rule-2);
+  border-radius: 2px;
+}
+
+.mfr-card__rail > li {
+  position: relative;
+  flex: 1 1 0;
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.mfr-card__place,
+.mf-wrap a.mfr-card__place {
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: min(30px, 100%);
+  aspect-ratio: 1;
+  background: var(--mfr-card);
+  border: 1.5px solid var(--mfr-rule-2);
+  border-radius: 50%;
+  color: var(--mfr-ink-3);
+  text-decoration: none;
+  overflow: hidden;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    transform 0.15s;
+}
+
+/* An open place: a horseshoe, quietly. */
+.mfr-card__place > .mfr-i--horseshoe {
+  width: 14px;
+  height: 14px;
+  color: var(--mfr-silver-line);
+}
+
+/* One place left: it is marked. */
+.mfr-card[data-mfr-state="last"] .mfr-card__place[data-mfr-taken="false"] {
+  border-style: dashed;
+  border-color: var(--mfr-gold);
+}
+
+.mfr-card[data-mfr-state="last"] .mfr-card__place[data-mfr-taken="false"] > .mfr-i--horseshoe {
+  color: var(--mfr-gold-ink);
+}
+
+/* A place with a pick goes somewhere; an open one does not. */
+.mfr-card__place:not([href]) {
+  cursor: default;
+}
+
+.mfr-card__place[href]:hover {
+  border-color: var(--mfr-gold);
+  transform: translateY(-1px);
+}
+
+/* A place taken: the pick's silks, ringed in gold. */
+.mfr-card__place[data-mfr-taken="true"] {
+  border: 2px solid var(--mfr-gold);
+  box-shadow: 0 0 0 2px var(--mfr-gold-wash);
+}
+
+.mfr-card__place[data-mfr-taken="true"] > .mfr-i--horseshoe {
+  display: none;
+}
+
+.mfr-card__silk {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 2px;
+  object-fit: contain;
+}
+
+/* A pick never seen being made has no silks: a jockey's cap. */
+.mfr-i.mfr-card__silk {
+  width: 62%;
+  height: 62%;
+  padding: 0;
+  color: var(--mfr-ink-3);
+}
+
+/* The winning post: a red disc on a pole, as beside the course (and in
+   the site's own mark). */
+.mfr-card__rail > .mfr-card__post {
+  flex: none;
+  width: 18px;
+  height: 36px;
+}
+
+.mfr-card__post::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 12px;
+  bottom: 0;
+  width: 2px;
+  margin-left: -1px;
+  background: var(--mfr-silver-line);
+  border-radius: 1px;
+}
+
+.mfr-card__post::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  background: radial-gradient(circle, var(--mfr-white) 0 24%, var(--mfr-red) 28% 100%);
+  border-radius: 50%;
+}
+
+/* The count under the rail, and what to do once the six are in. */
+.mfr-card__count {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--mfr-ink-2);
+}
+
+.mfr-card__count strong {
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-ink);
+}
+
+.mfr-card[data-mfr-state="last"] .mfr-card__count strong,
+.mfr-card[data-mfr-state="full"] .mfr-card__count,
+.mfr-card[data-mfr-state="full"] .mfr-card__count strong {
+  color: var(--mfr-gold-ink);
+}
+
+.mfr-card[data-mfr-state="full"] .mfr-card__count {
+  font-weight: 700;
+}
+
+/* More than six: a slip filled where the limit is not kept (the live
+   page's own slip, before this). */
+.mfr-card[data-mfr-state="over"] .mfr-card__count,
+.mfr-card[data-mfr-state="over"] .mfr-card__count strong {
+  font-weight: 700;
+  color: var(--mfr-red);
+}
+
+.mfr-card__help {
+  margin: 2px 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--mfr-ink-2);
+}
+
+.mfr-card__help:empty {
+  display: none;
+}
+
+/* The picks: a ticket each. */
+.mf-slip__legs {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 12px 12px 2px;
+  list-style: none;
+}
+
+.mf-slip__legs:empty {
+  display: none;
+}
+
+.mf-slip__leg {
+  --mfr-stub: 66px;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) var(--mfr-stub);
+  grid-template-areas:
+    "silks info odds"
+    "silks info remove";
+  align-items: center;
+  column-gap: 11px;
+  padding: 8px 0 8px 10px;
+  background: var(--mfr-paper);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 10px;
+}
+
+/* The tear line between the pick and its stub, a notch at each end. */
+.mf-slip__leg::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  right: calc(var(--mfr-stub) - 6px);
+  width: 12px;
+  background:
+    radial-gradient(circle at 50% 0, var(--mfr-white) 0 4.5px, var(--mfr-rule) 4.5px 5.5px, rgb(255 255 255 / 0%) 5.5px) top / 100% 6px no-repeat,
+    radial-gradient(circle at 50% 100%, var(--mfr-white) 0 4.5px, var(--mfr-rule) 4.5px 5.5px, rgb(255 255 255 / 0%) 5.5px) bottom / 100% 6px no-repeat,
+    repeating-linear-gradient(180deg, var(--mfr-rule-2) 0 4px, rgb(255 255 255 / 0%) 4px 8px) center / 1px calc(100% - 18px) no-repeat;
+}
+
+/* The jockey's silks, with the horse's number cloth at their corner. */
+.mfr-leg__silks {
+  grid-area: silks;
+  position: relative;
+  display: block;
+  width: 36px;
+  height: 40px;
+}
+
+.mfr-leg__silks img,
+.mfr-leg__silks .mfr-i {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 3px;
+  object-fit: contain;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 8px;
+}
+
+/* A pick at another meeting: its runner is not on this page, so there
+   are no silks to show; a jockey's cap stands in. */
+.mfr-leg__silks .mfr-i {
+  padding: 0;
+  background: var(--mfr-warm);
+  -webkit-mask: none;
+  mask: none;
+}
+
+.mfr-leg__silks .mfr-i::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: var(--mfr-ink-3);
+  -webkit-mask: url("../img/icons/cap.svg") center / 22px no-repeat;
+  mask: url("../img/icons/cap.svg") center / 22px no-repeat;
+}
+
+.mfr-cloth {
+  box-sizing: border-box;
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 17px;
+  padding: 0 4px;
+  background: var(--mfr-card);
+  border: 1.5px solid var(--mfr-ink);
+  border-radius: 5px;
+  font-size: 10.5px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--mfr-ink);
+}
+
+.mfr-leg__silks .mfr-cloth {
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+}
+
+.mf-slip__leg-info {
+  grid-area: info;
+  min-width: 0;
+}
+
+.mf-slip__leg-where {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--mfr-ink-3);
+}
+
+.mf-slip__leg-time {
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-gold-ink);
+}
+
+.mf-slip__leg-horse {
+  font-size: 14.5px;
+  font-weight: 800;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.mfr-leg__jockey {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--mfr-ink-2);
+}
+
+.mfr-leg__jockey .mfr-i {
+  font-size: 13px;
+  color: var(--mfr-gold-ink);
+}
+
+.mf-slip__leg-note {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mfr-ink-3);
+}
+
+/* The stub: the price, as on the runner's row, and the way to take the
+   pick out. */
+.mf-slip__leg-odds {
+  grid-area: odds;
+  justify-self: center;
+  align-self: end;
+  margin-bottom: 3px;
+  padding: 4px 8px;
+  background: var(--mfr-gold-wash);
+  border: 1px solid var(--mfr-gold-line);
+  border-radius: 7px;
+  font-size: 13.5px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  color: var(--mfr-ink);
+  white-space: nowrap;
+}
+
+.mf-slip__leg--unpriced {
+  background: var(--mfr-card);
+  border-style: dashed;
+}
+
+.mf-slip__leg--unpriced .mf-slip__leg-odds {
+  background: var(--mfr-card);
+  border: 1px dashed var(--mfr-rule-2);
+  color: var(--mfr-ink-3);
+}
+
+.mf-slip__leg-remove {
+  grid-area: remove;
+  justify-self: center;
+  align-self: start;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 26px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--mfr-ink-3);
+  cursor: pointer;
+}
+
+.mf-slip__leg-remove:hover {
+  background: var(--mfr-red-wash);
+  border-color: var(--mfr-red-line);
+  color: var(--mfr-red);
+}
+
+/* The board. */
+.mf-slip__totals {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 10px 12px 2px;
+  padding: 13px 14px 12px;
+  background: var(--mfr-ink);
+  border-radius: 12px;
+  color: var(--mfr-white);
+}
+
+.mf-slip__totals[hidden] {
+  display: none;
+}
+
+.mf-slip__totals-row {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 10px;
+  margin: 0;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mfr-gold);
+}
+
+.mf-slip__totals-row strong {
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--mfr-white);
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.mf-slip__totals-row--big {
+  grid-row: 4;
+  align-items: center;
+  margin-top: 2px;
+  padding-top: 10px;
+  border-top: 1px solid rgb(255 255 255 / 16%);
+}
+
+.mf-slip__totals-row--big strong {
+  font-size: 23px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--mfr-gold);
+}
+
+/* Profit, the last line: the site's lighter green, which reads on ink. */
+.mf-slip__totals-row--big ~ .mf-slip__totals-row {
+  grid-row: 5;
+}
+
+.mf-slip__totals-row--big ~ .mf-slip__totals-row strong {
+  color: var(--c-emerald-lt);
+}
+
+.mf-slip__totals-pending {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgb(255 255 255 / 76%);
+}
+
+.mf-slip__stake-label {
+  grid-area: 2 / 1;
+  display: block;
+  margin: 0;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mfr-gold);
+}
+
+.mf-slip__currency {
+  grid-area: 2 / 2;
+  display: flex;
+  gap: 2px;
+  margin: 0;
+  padding: 2px;
+  background: rgb(255 255 255 / 8%);
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 8px;
+}
+
+.mf-slip__cur {
+  min-height: 26px;
+  padding: 0 9px;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  color: rgb(255 255 255 / 80%);
+  cursor: pointer;
+}
+
+.mf-slip__cur.is-active {
+  background: var(--mfr-gold);
+  color: var(--mfr-ink);
+}
+
+.mf-slip__stake-wrap {
+  grid-area: 3 / 1 / 4 / -1;
+  display: flex;
+  align-items: stretch;
+  background: rgb(255 255 255 / 7%);
+  border: 1px solid rgb(255 255 255 / 26%);
+  border-radius: 9px;
+  overflow: hidden;
+}
+
+.mf-slip__stake-wrap:focus-within {
+  border-color: var(--mfr-gold);
+  box-shadow: 0 0 0 3px rgb(212 175 55 / 28%);
+}
+
+.mf-slip__cur-sym {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  background: rgb(255 255 255 / 8%);
+  border-right: 1px solid rgb(255 255 255 / 18%);
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--mfr-gold);
+}
+
+.mf-slip__stake {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 10px;
+  background: transparent;
+  border: 0;
+  color-scheme: dark;
+  font: inherit;
+  font-size: 17px; /* 16px or more: iOS does not zoom the page on focus */
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-white);
+}
+
+.mf-slip__stake:focus {
+  outline: none;
+}
+
+.mf-slip__submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 24px);
+  min-height: 42px;
+  margin: 12px 12px 6px;
+  padding: 0 14px;
+  background: var(--mfr-gold);
+  border: 1px solid var(--mfr-gold);
+  border-radius: 9px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--mfr-ink);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.mf-wrap a.mf-slip__submit,
+.mf-slip__submit {
+  color: var(--mfr-ink);
+}
+
+.mf-slip__submit:hover:not(:disabled) {
+  background: var(--mfr-gold-deep);
+  border-color: var(--mfr-gold-deep);
+}
+
+.mf-slip__submit:disabled,
+.mf-slip__submit.is-loading {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.mf-slip__submit .mf-slip__submit-icon {
+  color: inherit;
+}
+
+.mf-slip__submit-icon::before {
+  width: 16px;
+  height: 16px;
+  -webkit-mask-image: url("../img/icons/check.svg");
+  mask-image: url("../img/icons/check.svg");
+}
+
+.mf-slip__submit-count {
+  min-width: 22px;
+  padding: 0 7px;
+  background: var(--mfr-ink);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.7;
+  color: var(--mfr-gold);
+  text-align: center;
+}
+
+/* Not signed in: an invitation, not the main action. */
+.mf-wrap a.mf-slip__submit--guest,
+.mf-slip__submit--guest {
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-gold-line);
+  color: var(--mfr-gold-ink);
+}
+
+.mf-slip__submit--guest:hover {
+  background: var(--mfr-gold-wash);
+}
+
+.mf-slip__submit--guest .mf-slip__submit-icon::before {
+  -webkit-mask-image: url("../img/icons/user-plus.svg");
+  mask-image: url("../img/icons/user-plus.svg");
+}
+
+.mf-slip__submit-feedback {
+  margin: 0 12px 8px;
+  padding: 8px 12px;
+  background: var(--mfr-warm);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: var(--mfr-ink-2);
+}
+
+.mf-slip__submit-feedback.is-success {
+  background: var(--mfr-green-wash);
+  border-color: var(--mfr-green-line);
+  font-weight: 700;
+  color: var(--mfr-green);
+}
+
+.mf-slip__submit-feedback.is-partial {
+  background: var(--mfr-gold-wash);
+  border-color: var(--mfr-gold-line);
+  font-weight: 700;
+  color: var(--mfr-gold-ink);
+}
+
+.mf-slip__submit-feedback.is-error {
+  background: var(--mfr-red-wash);
+  border-color: var(--mfr-red-line);
+  font-weight: 700;
+  color: var(--mfr-red);
+}
+
+.mf-slip__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 6px 12px 10px;
+}
+
+.mf-slip__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 0 10px;
+  background: var(--mfr-ink);
+  border: 1px solid var(--mfr-ink);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mfr-white);
+  white-space: nowrap;
+  cursor: pointer;
+  /* The words fade with the ground, so they never sit white on white
+     for the instant the first pick turns the button on. */
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.mf-slip__action > span[aria-hidden] {
+  color: inherit;
+}
+
+.mf-slip__action > span[aria-hidden]::before {
+  width: 15px;
+  height: 15px;
+  -webkit-mask-image: url("../img/icons/copy.svg");
+  mask-image: url("../img/icons/copy.svg");
+}
+
+.mf-slip__action--ghost {
+  background: var(--mfr-card);
+  border-color: var(--mfr-rule);
+  color: var(--mfr-ink-2);
+}
+
+.mf-slip__action--ghost > span[aria-hidden]::before {
+  -webkit-mask-image: url("../img/icons/reset.svg");
+  mask-image: url("../img/icons/reset.svg");
+}
+
+.mf-slip__action:hover:not(:disabled) {
+  background: var(--mfr-ink-hover);
+  border-color: var(--mfr-ink-hover);
+}
+
+.mf-slip__action--ghost:hover:not(:disabled) {
+  background: var(--mfr-red-wash);
+  border-color: var(--mfr-red-line);
+  color: var(--mfr-red);
+}
+
+/* Nothing to copy or reset yet: both are quiet outlines, not a grey block. */
+.mf-slip__action:disabled {
+  background: var(--mfr-card);
+  border-color: var(--mfr-rule);
+  color: var(--mfr-ink-3);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.mf-slip__copied {
+  margin: 0 12px 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--mfr-green);
+  text-align: center;
+}
+
+.mf-slip__copied[hidden],
+.mf-slip__hint[hidden] {
+  display: none;
+}
+
+.mf-slip__undo {
+  position: relative;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 12px 0;
+  padding: 9px 12px;
+  background: var(--mfr-gold-wash);
+  border: 1px solid var(--mfr-gold-line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mf-slip__undo.is-visible {
+  display: flex;
+}
+
+.mf-slip__undo-text {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.mf-slip__undo-btn {
+  min-height: 30px;
+  padding: 0 12px;
+  background: var(--mfr-ink);
+  border: 1px solid var(--mfr-ink);
+  border-radius: 6px;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--mfr-white);
+  cursor: pointer;
+}
+
+.mf-slip__undo-btn:hover {
+  background: var(--mfr-ink-hover);
+}
+
+.mf-slip__undo-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--mfr-gold);
+  transform-origin: left center;
+}
+
+.mf-slip__undo.is-visible .mf-slip__undo-bar {
+  animation: mfr-undo-drain 6s linear forwards;
+}
+
+@keyframes mfr-undo-drain {
+  to {
+    transform: scaleX(0);
+  }
+}
+
+/* The stub: the small print, under a perforation with a notch punched
+   at each edge. */
+.mf-slip__foot {
+  position: relative;
+  margin: 6px 0 0;
+  padding: 14px 20px 16px;
+  border-top: 1.5px dashed var(--mfr-rule-2);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--mfr-ink-3);
+  text-align: center;
+}
+
+.mf-slip__foot::before,
+.mf-slip__foot::after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  width: 14px;
+  height: 14px;
+  background: var(--mfr-paper);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--mfr-rule-2);
+}
+
+.mf-slip__foot::before {
+  left: -8px;
+}
+
+.mf-slip__foot::after {
+  right: -8px;
+}
+
+/* 8a. Beside the races, from 1024px. Always open, so the table does
+   not jump sideways when the first horse is picked. 280px wide until
+   1280px, so the race list beside it keeps two lines a runner. */
+@media (min-width: 1024px) {
+  .mf-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    align-items: start;
+    gap: 20px;
+  }
+
+  .mf-slip {
+    position: sticky;
+    top: calc(var(--mfr-top) + var(--mfr-strip) + 16px);
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - var(--mfr-top) - var(--mfr-strip) - 32px);
+    border: 1px solid var(--mfr-rule-2);
+    border-radius: 14px;
+    box-shadow: var(--mfr-shadow-2);
+    overflow: hidden;
+  }
+
+  .mf-slip__handle {
+    display: none;
+  }
+
+  .mf-slip__body {
+    display: flex;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+
+  .mfr-slip-backdrop {
+    display: none;
+  }
+}
+
+@media (min-width: 1280px) {
+  .mf-grid {
+    grid-template-columns: minmax(0, 1fr) 320px;
+  }
+}
+
+/* 8b. A bar at the foot of the screen below 1024px; it opens upward. */
+@media (max-width: 1023px) {
+  .mf-wrap {
+    padding-bottom: 104px;
+  }
+
+  .mf-slip {
+    position: fixed;
+    left: 50%;
+    bottom: 12px;
+    z-index: 120;
+    display: flex;
+    flex-direction: column;
+    width: min(560px, calc(100% - 24px));
+    max-height: calc(100vh - var(--mfr-top) - 24px);
+    max-height: calc(100dvh - var(--mfr-top) - 24px);
+    border: 1px solid var(--mfr-rule-2);
+    border-radius: 14px;
+    box-shadow: var(--mfr-shadow-3);
+    overflow: hidden;
+    transform: translateX(-50%);
+  }
+
+  .mf-slip__handle {
+    order: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 54px;
+    padding: 0 12px 0 16px;
+    background: var(--mfr-card);
+    border: 0;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--mfr-ink);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .mf-slip__handle:focus-visible {
+    outline-offset: -3px;
+  }
+
+  .mf-slip__handle-text {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  .mf-slip__handle-count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 7px;
+    background: var(--mfr-warm);
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: var(--mfr-ink-3);
+  }
+
+  .mf-slip__handle-count.is-positive {
+    background: var(--mfr-gold);
+    color: var(--mfr-ink);
+  }
+
+  /* The count is out of six ("4/6"); the script says of what. (The pill
+     is a grid: its second item goes beside the first, not under it.) */
+  .mf-slip__handle-count[data-mfr-of] {
+    grid-auto-flow: column;
+    gap: 1px;
+  }
+
+  .mf-slip__handle-count[data-mfr-of]::after {
+    content: attr(data-mfr-of);
+    font-size: 11px;
+    font-weight: 700;
+    opacity: 0.8;
+  }
+
+  /* Full: the count turned over, gold on ink. Over: in red. */
+  .mf-slip[data-mfr-six="full"] .mf-slip__handle-count.is-positive {
+    background: var(--mfr-ink);
+    color: var(--mfr-gold);
+  }
+
+  .mf-slip[data-mfr-six="over"] .mf-slip__handle-count.is-positive {
+    background: var(--mfr-red-wash);
+    box-shadow: inset 0 0 0 1px var(--mfr-red-line);
+    color: var(--mfr-red);
+  }
+
+  /* The picks' silks, in the bar: what is in the slip without opening it. */
+  .mfr-bar__silks {
+    flex: none;
+    display: flex;
+    align-items: center;
+  }
+
+  .mfr-bar__silks:empty {
+    display: none;
+  }
+
+  .mfr-bar__silks img {
+    box-sizing: border-box;
+    width: 28px;
+    height: 28px;
+    margin-left: -7px;
+    padding: 2px;
+    object-fit: contain;
+    background: var(--mfr-card);
+    border: 1.5px solid var(--mfr-gold);
+    border-radius: 50%;
+  }
+
+  .mfr-bar__silks img:first-child {
+    margin-left: 0;
+  }
+
+  .mfr-bar__more {
+    margin-left: 5px;
+    font-size: 12px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: var(--mfr-ink-3);
+  }
+
+  .mf-slip__handle-chevron {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    background: var(--mfr-warm);
+    border-radius: 50%;
+  }
+
+  .mf-slip__handle-chevron::before {
+    width: 17px;
+    height: 17px;
+    -webkit-mask-image: url("../img/icons/chevron-up.svg");
+    mask-image: url("../img/icons/chevron-up.svg");
+    transition: transform 0.2s;
+  }
+
+  .mf-slip.is-open .mf-slip__handle-chevron::before {
+    transform: rotate(180deg);
+  }
+
+  .mf-slip__body {
+    order: 1;
+    display: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-bottom: 1px solid var(--mfr-rule);
+  }
+
+  .mf-slip.is-open .mf-slip__body {
+    display: flex;
+  }
+
+  .mf-slip__legs {
+    max-height: none;
+  }
+
+  /* Fingers, not a pointer. */
+  .mf-slip__cur {
+    min-height: 32px;
+    padding: 0 12px;
+  }
+
+  .mf-slip__leg-remove {
+    width: 34px;
+    height: 30px;
+  }
+
+  .mfr-slip-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 110;
+    display: none;
+    background: rgb(11 11 15 / 40%);
+    border: 0;
+    cursor: default;
+  }
+
+  .mf-slip.is-open + .mfr-slip-backdrop {
+    display: block;
+  }
+}
+
+/* On a phone the bar runs edge to edge. */
+@media (max-width: 767px) {
+  .mf-slip {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    border-width: 1px 0 0;
+    border-radius: 16px 16px 0 0;
+    transform: none;
+  }
+}
+
+/* ── 9. Toast, paddles, odds and ends ───────────────────────────── */
+
+/* The page's own message ("Added…", "Removed…") and the redesign's
+   ("Six races is the most…"), alike. */
+.mf-toast,
+.mfr-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 210;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100% - 32px);
+  padding: 10px 16px 10px 12px;
+  background: var(--mfr-ink);
+  border: 1px solid var(--mfr-ink);
+  border-left: 4px solid var(--mfr-gold);
+  border-radius: 10px;
+  box-shadow: var(--mfr-shadow-3);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--mfr-white);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%) translateY(12px);
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+.mf-toast.is-visible,
+.mfr-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* With the slip at the foot of the screen, the toast goes to the top,
+   under the pinned bars, where neither the bar nor the open sheet is
+   ever in its way. */
+@media (max-width: 1023px) {
+  .mf-toast,
+  .mfr-toast {
+    top: calc(var(--mfr-top) + var(--mfr-strip) + 10px);
+    bottom: auto;
+    transform: translateX(-50%) translateY(-12px);
+  }
+
+  .mf-toast.is-visible,
+  .mfr-toast.is-visible {
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Next / all meetings, at the foot of the page */
+.mf-paddles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 12px;
+  margin: 28px 0 0;
+}
+
+.mf-paddles > span:empty {
+  display: none;
+}
+
+.mf-paddle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px 18px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 12px;
+  box-shadow: var(--mfr-shadow-1);
+  text-decoration: none;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    transform 0.15s;
+}
+
+.mf-paddle:hover {
+  border-color: var(--mfr-gold);
+  box-shadow: var(--mfr-shadow-2);
+  transform: translateY(-1px);
+}
+
+.mf-paddle__body {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.mf-paddle__lbl {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mfr-ink-3);
+}
+
+.mf-paddle__course {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--mfr-ink);
+}
+
+.mf-paddle__sub {
+  font-size: 12.5px;
+  color: var(--mfr-ink-2);
+}
+
+.mf-paddle__home-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--mfr-gold-ink);
+}
+
+.mf-paddle__arrow {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  background: var(--mfr-gold-wash);
+  border-radius: 50%;
+  color: var(--mfr-gold-ink);
+}
+
+/* Back to the previous meeting on the left, its arrow pointing back; on
+   to the next on the right. (The day's first meeting has no previous
+   one, and its last no next.) */
+.mf-paddle--prev {
+  justify-content: flex-start;
+}
+
+.mf-paddle--prev .mf-paddle__arrow::before {
+  -webkit-mask-image: url("../img/icons/arrow-left.svg");
+  mask-image: url("../img/icons/arrow-left.svg");
+}
+
+.mf-paddle--next {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+/* The navigation's own gutter is 14px from 900px down. */
+/* Phones: the gutter eases from 14px at 375px to 10px at 359px and
+   below, so a 320px phone keeps the masthead's three figures on one
+   line. (Every size that follows the width eases the same way: from
+   its full value at 375px to its smallest at 320px.) */
+@media (max-width: 767px) {
+  .mf-wrap {
+    padding-inline: clamp(10px, 14px - (375px - 100vw) / 4, 14px);
+  }
+
+  body.page-meeting-full {
+    --page-gutter: clamp(10px, 14px - (375px - 100vw) / 4, 14px);
+  }
+}
+
+/* Phones */
+@media (max-width: 767px) {
+
+  .mf-hero {
+    padding: 26px 0 18px;
+  }
+
+  /* The three figures stay on one line down to a 320px phone. */
+  .mf-hero__sub {
+    font-size: clamp(12.5px, 13.5px - (375px - 100vw) / 55, 13.5px);
+  }
+
+  .mf-hero__sub > span {
+    gap: clamp(5px, 6px - (375px - 100vw) / 55, 6px);
+    padding: 0 clamp(8px, 12px - (375px - 100vw) / 14, 12px);
+  }
+
+  .mf-hero__sub strong {
+    font-size: clamp(17px, 19px - (375px - 100vw) / 27.5, 19px);
+  }
+
+  .mf-switcher {
+    padding-bottom: 16px;
+  }
+
+  .mf-switcher__home {
+    flex-basis: 100%;
+    padding-left: 0;
+  }
+
+  .mf-switcher__home:hover {
+    background: none;
+  }
+
+  /* Two courses a row, each the same width. */
+  .mf-switcher__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    flex-basis: 100%;
+  }
+
+  .mf-switcher__chip {
+    min-height: 40px;
+    white-space: normal;
+  }
+
+  /* The count goes to the right edge and is short here ("8r", as on the
+     live page, not "8 races"), so a long course name has the room and
+     nothing breaks onto a second line. */
+  .mf-switcher__count {
+    flex: none;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  .mf-switcher__count .mfr-word {
+    display: none;
+  }
+
+  .mf-switcher__count .mfr-text::after {
+    content: "r";
+  }
+
+  .mf-race {
+    margin-bottom: 16px;
+  }
+}
+
+/* The race strip on smaller screens: the count loses its word, then
+   goes, so eight races still share one row on a 320px phone. */
+@media (max-width: 1279px) {
+  .mf-jump {
+    --mfr-chip-min: 74px;
+  }
+
+  .mf-jump__count::after {
+    content: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .mf-jump {
+    --mfr-chip-min: clamp(34px, 38px - (375px - 100vw) / 14, 38px);
+
+    gap: clamp(3px, 4px - (375px - 100vw) / 55, 4px);
+    margin-bottom: 16px;
+  }
+
+  .mf-jump__chip {
+    padding: 0 2px;
+  }
+
+  .mf-jump__time {
+    font-size: clamp(11.5px, 12.5px - (375px - 100vw) / 55, 12.5px);
+    letter-spacing: clamp(-0.25px, (100vw - 375px) / 220, 0px);
+  }
+
+  .mf-jump__count,
+  .mf-jump__status,
+  .mf-jump__chip--featured::before {
+    display: none;
+  }
+
+  .mf-jump__chip--done {
+    background: var(--mfr-warm);
+  }
+
+  .mf-jump__chip.is-active {
+    background: var(--mfr-ink);
+  }
+
+  .mf-jump__chip--featured:not(.is-active) {
+    border-color: var(--mfr-gold-line);
+  }
+}
+
+/* ── 10. Reduced motion ──────────────────────────────────────────── */
+
+/* chrome.css already brings every animation and transition on the site
+   to a stop for a reader who has asked for less motion: the stickers
+   do not tilt further, the count does not shake, the toast does not
+   rise. What is left is the movement that is neither: the lift under
+   the pointer, and the press on a Pick button. */
+@media (prefers-reduced-motion: reduce) {
+  .pick6:hover .pick6__num {
+    transform: rotate(-10deg);
+  }
+
+  .pick6:hover .pick6__sub {
+    transform: rotate(5deg);
+  }
+
+  .rcf:hover,
+  .mfr-card__place[href]:hover,
+  .mf-paddle:hover,
+  .racecard__slip-btn:active:not(:disabled) {
+    transform: none;
+  }
+}

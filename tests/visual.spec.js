@@ -11,8 +11,11 @@
  *
  * Use it to review a diff before and after a change, not as a pass/fail.
  */
+import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 import { FIXED_CHROME, NON_DETERMINISTIC_ART, SECTIONS, openLanding } from './support/landing.js';
+import { MEETING_SECTIONS, openMeeting, showsSlipSheet } from './support/meeting.js';
 import { TRAIL_NON_DETERMINISTIC, TRAIL_SECTIONS, openTrail } from './support/trail.js';
 import { showsDesktopNav, showsDrawerNav } from './support/viewports.js';
 
@@ -152,6 +155,59 @@ for (const section of TRAIL_SECTIONS) {
     await settle(page);
     await page.addStyleTag({ content: TRAIL_STYLE });
 
+    const height = await page.locator(section.selector).first()
+      .evaluate((el) => Math.round(el.getBoundingClientRect().height));
+    const windowHeight = page.viewportSize().height;
+    const tiles = Math.min(Math.ceil(height / windowHeight), MAX_TILES);
+
+    for (let tile = 0; tile < tiles; tile += 1) {
+      await page.evaluate(
+        ([selector, offset]) => {
+          const el = document.querySelector(selector);
+          const target = Math.round(el.getBoundingClientRect().top + window.scrollY) + offset;
+          window.scrollTo(0, target);
+        },
+        [section.selector, tile * windowHeight],
+      );
+      await page.waitForTimeout(PAINT_SETTLE_MS);
+      const name = tiles === 1 ? `${section.name}.png` : `${section.name}-${tile + 1}.png`;
+      await expect(page).toHaveScreenshot(name);
+    }
+  });
+}
+
+// ── The meeting page ──────────────────────────────────────────────────
+// Same treatment again. Below 1024px the slip is a bar fixed to the foot
+// of the screen, so it is hidden from the other sections' tiles the way
+// the fixed chrome is, and captured on its own.
+//
+// The design reference commit may be older than the page: `npm run
+// baseline` then has no meeting.html to screenshot, and there is nothing
+// to compare with. These run once tools/visual-baseline-ref names a
+// commit that has the page (the README's "Intentional visual changes").
+const BASELINE_REF = readFileSync('tools/visual-baseline-ref', 'utf8').trim();
+const referenceHas = (file) => {
+  try {
+    execFileSync('git', ['cat-file', '-e', `${BASELINE_REF}:${file}`], { stdio: 'ignore' });
+    return true;
+  } catch {
+    return false;
+  }
+};
+const REFERENCE_HAS_MEETING = referenceHas('meeting.html');
+
+for (const section of MEETING_SECTIONS) {
+  test(`meeting section: ${section.name}`, async ({ page }) => {
+    test.skip(!REFERENCE_HAS_MEETING, `no reference: ${BASELINE_REF} (tools/visual-baseline-ref) predates meeting.html`);
+    await openMeeting(page, { waitUntil: 'load' });
+    await settle(page);
+    const slipIsFixed = showsSlipSheet(page) && section.selector !== '#betSlip';
+    await page.addStyleTag({ content: [SECTION_STYLE, slipIsFixed ? hide(['#betSlip']) : ''].join('\n') });
+
+    if (section.selector === '#betSlip') {
+      await expect(page.locator(section.selector)).toHaveScreenshot(`${section.name}.png`);
+      return;
+    }
     const height = await page.locator(section.selector).first()
       .evaluate((el) => Math.round(el.getBoundingClientRect().height));
     const windowHeight = page.viewportSize().height;

@@ -44,3 +44,17 @@ Nothing here is a photograph or the output of an image model.
 | `turf.webp`, `lawn.webp` | 192x192, 29 KB each | Grass tiles drawn by a script (noise and mowing bands, made to repeat without a seam). They paint at 96px, so this is the 2× size |
 | `silk-*.svg` (8), `horseshoe.svg` | under 1 KB each | Drawn by hand as paths, for use as CSS masks |
 | `fox.svg` | under 1 KB | The fox mark from the footer (`static/public/img/footer/icon-fox.svg`), redrawn as a mask so the trail's stylesheet needs no file outside its own folder |
+
+## The meeting page
+
+- `static/meeting/img/masthead.webp` is a copy of `hero-fold-bg.webp`
+  above (AI-generated, OpenAI C2PA), so the page's stylesheet points
+  inside its own folder; nothing new was generated.
+- `static/meeting/img/icons/*.svg` are 22 line icons drawn for the
+  prototype (most after the Feather set; the winning post, the horseshoe
+  and the jockey's cap are the page's own), under 1 KB each.
+- `static/meeting/img/silks/*.svg` are the 152 jockeys' silks the two
+  captured pages show, exactly as `silks.theracingapi.com` served them on
+  9 and 10 October 2026 (the largest is 132 KB; the service does not
+  optimise them). They are the live page's images, copied so the sandbox
+  works offline; the template keeps loading them from the service.

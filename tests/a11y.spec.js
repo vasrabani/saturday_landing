@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { openLanding } from './support/landing.js';
+import { openMeeting } from './support/meeting.js';
 import { openTrail } from './support/trail.js';
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
@@ -18,11 +19,13 @@ async function openWholeTrail(page) {
   return openTrail(page, { live: false });
 }
 
-// Both pages the contractor works on, each with its own known list: a
-// violation introduced on one must not be excused by the other's.
+// Every page the contractor works on, each with its own known list: a
+// violation introduced on one must not be excused by another's.
 const PAGES = [
   { file: 'index.html', open: (page) => openLanding(page) },
   { file: 'trail.html', open: openWholeTrail },
+  { file: 'meeting.html', open: (page) => openMeeting(page) },
+  { file: 'meeting-upcoming.html', open: (page) => openMeeting(page, { day: 'upcoming' }) },
 ];
 
 // Ratchet: a rule not on the known list fails the run, and a known rule

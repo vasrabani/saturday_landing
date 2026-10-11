@@ -300,15 +300,22 @@ test.describe('race cards', () => {
     const natural = await name.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
     await name.evaluate((el) => { el.textContent = 'Sunriseontheboynewater'; });
 
-    // Names are fitted again when the board changes width.
+    // Names are fitted again when the board changes width: each goes
+    // back to the stylesheet's size at once and is fitted a moment later,
+    // and that can happen more than once while the board settles. So the
+    // fitting and the size it gave are read together, until both are there
+    // (read apart, the size could be caught between the two).
     const { width, height } = page.viewportSize();
     await page.setViewportSize({ width: width - 48, height });
-    await expect
-      .poll(() => name.evaluate((el) => el.style.getPropertyValue('--cell-horse-size')))
-      .toMatch(/^\d+(\.5)?px$/);
-    const fitted = await name.evaluate((el) => parseFloat(getComputedStyle(el).fontSize));
-    expect(fitted).toBeLessThan(natural);
-    expect(fitted).toBeGreaterThanOrEqual(11);
+    const fitting = () =>
+      name.evaluate((el) => ({
+        set: el.style.getPropertyValue('--cell-horse-size'),
+        size: parseFloat(getComputedStyle(el).fontSize),
+      }));
+    await expect.poll(async () => {
+      const { set, size } = await fitting();
+      return /^\d+(\.5)?px$/.test(set) && size < natural && size >= 11;
+    }).toBe(true);
   });
 
   test('cards in the window are there from the start, and the rest come up when reached', async ({ page }) => {

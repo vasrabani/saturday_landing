@@ -89,3 +89,21 @@ cell, its first cell and its cell count.
    wire it up.
 2. **Racecourses.** The redesign invented this link. If you want the page,
    it needs a source; if not, nothing more to do.
+
+## The meeting page
+
+Both pages are captures of the live page, so every horse, price, rating
+and comment is the site's own, not sample data. Two things are the
+revamp's words rather than the template's:
+
+- The slip's count under its places ("Up to six picks, one a race",
+  "6 of 6 · full", "7 picks · 1 over the six") and the refusal message
+  ("Six races is the most you can pick. Take one out to add …") are set
+  in `meeting_slip.js`. The six is the server's `daily_pick_limit`; the
+  script reads `data-pick-limit` on `.mf-wrap` when the template sets it
+  (else six), and every word that names the number is derived from it.
+- "Race card" on each race's link (the template says "Open"), "8 races"
+  on a tab (the template says "8r"), and the trip spelt out ("1m 4f" for
+  "1m4f0y") are rewordings in `meeting_racecard.js` and
+  `meeting_masthead.js`; the template's own text is what they start
+  from, so a change there comes through.

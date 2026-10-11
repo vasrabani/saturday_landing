@@ -1,15 +1,17 @@
 # Saturday Racing — Design Sandbox
 
-Self-contained snapshots of the live site, so you can work on it without Django, a database or any backend. Two pages:
+Self-contained snapshots of the live site, so you can work on it without Django, a database or any backend. Four pages:
 
 | Page | What it is |
 | --- | --- |
 | `index.html` | the home page, plus the navbar and footer that appear on every page |
 | `trail.html` | [the Fox Trail](https://www.saturday-racing.com/trail/) — the day's tips on one board, live |
+| `meeting.html` | [the meeting page](https://www.saturday-racing.com/races/meeting/newmarket/2026-10-09/full/) — every race at a meeting, every runner, and the Pick Six slip; Newmarket with the results in |
+| `meeting-upcoming.html` | the same page the evening before: Newmarket's next card, no numbers yet, most runners at SP, an AI verdict under each race |
 
 Everything is baked into those files + the assets under `static/` — the same HTML, CSS, JS, images and fonts production ships. No template engine involved.
 
-The trail is a **live** page: races settle while it is open. The sandbox replays a recorded day so that works here too, which is why it needs the Node server below rather than any static one. If you are working on the trail, start with **`docs/trail-brief.md`**.
+The trail is a **live** page: races settle while it is open. The sandbox replays a recorded day so that works here too, which is why it needs the Node server below rather than any static one. If you are working on the trail, start with **`docs/trail-brief.md`**; on the meeting page, with **`docs/meeting-brief.md`**.
 
 ---
 
@@ -20,7 +22,7 @@ npm install
 npm run serve
 ```
 
-Then open <http://localhost:8080/> for the home page and <http://localhost:8080/trail.html> for the trail.
+Then open <http://localhost:8080/> for the home page, <http://localhost:8080/trail.html> for the trail, and <http://localhost:8080/meeting.html> (or `meeting-upcoming.html`) for the meeting page.
 
 You must serve through a local web server: opening the files with `file://` breaks the fonts and some images. Use `npm run serve` rather than any other static server — it also answers `/trail/live/`, which is what makes the trail's board move.
 
@@ -33,8 +35,11 @@ saturday_landing/
 ├── README.md              this file
 ├── index.html             the landing page snapshot
 ├── trail.html             the Fox Trail snapshot (a fixture day: every cell variant)
+├── meeting.html           the meeting page snapshot, with the results in
+├── meeting-upcoming.html  the meeting page the evening before
 ├── states.html            every state the landing page can render
 ├── trail-states.html      every state the trail can render
+├── meeting-states.html    every state the meeting page can render
 ├── docs/                  the briefs, the integration map, the decisions
 ├── fixtures/              the recorded day the trail's live feed replays
 ├── partials/              states that live outside the pages themselves
@@ -46,7 +51,8 @@ saturday_landing/
 │   ├── img/               favicon + shared images
 │   ├── public/            landing-page-specific CSS/JS/images
 │   ├── grid/              the Fox Trail's own CSS + JS + images
-│   ├── races/             race picker + Pick 6 emblem CSS
+│   ├── meeting/           the meeting page revamp's CSS + JS + images
+│   ├── races/             race picker + Pick 6 emblem CSS, and the meeting page's four production scripts
 │   ├── letters/           LLaMa portrait
 │   ├── news/              Sly Man portrait + fox mark
 │   └── voting/            picks budget CSS
@@ -71,11 +77,14 @@ The contract is **navbar, footer, and home page only**. In the bundle those tran
 | Shared JS (nav/footer)       | `static/js/site.js`                                                    |
 | Fox Trail **structure**      | `trail.html` (the `<main class="trail">` block)                        |
 | Fox Trail **styling**        | `static/grid/css/trail.css`                                            |
+| Meeting page **structure**   | `meeting.html` / `meeting-upcoming.html` (the `<div class="mf-wrap">` block) |
+| Meeting page **styling**     | `static/meeting/css/meeting.css`                                       |
+| Meeting page **JS**          | `static/meeting/js/meeting_racecard.js`, `meeting_masthead.js`, `meeting_slip.js` |
 | Fonts / type scale           | `static/fonts/saturday-fonts.css` + `static/css/base.css`              |
 
 **`static/grid/js/*.js`** — the trail's five scripts (`trail_live`, `trail_flip`, `trail_filter`, `trail_drawer`, `trail_nav`) are production code and come back unchanged. They key off attributes and classes in the markup; `docs/trail-brief.md` lists every one of them. Restyle freely, but keep the hooks. The revamp's own three (`trail_cards`, `trail_track`, `trail_course`) sit beside them; `docs/integration-map.md` says what they need.
 
-**Anything under `static/races/`, `static/letters/`, `static/news/`, `static/voting/`** — treat as read-only. Those are shared across the whole site and appear on the landing page for legitimate reasons (e.g. the `race_picker` CSS themes a widget the hero uses). Changing them affects other pages you can't see in this sandbox.
+**Anything under `static/races/`, `static/letters/`, `static/news/`, `static/voting/`** — treat as read-only. Those are shared across the whole site and appear on the landing page for legitimate reasons (e.g. the `race_picker` CSS themes a widget the hero uses). Changing them affects other pages you can't see in this sandbox. The meeting page's four scripts (`static/races/js/racecard.js`, `racecard_collapse.js`, `bet_slip.js`, `meeting_full.js`) are production code and come back unchanged; `docs/meeting-brief.md` lists every hook they key off.
 
 ---
 
@@ -103,6 +112,8 @@ Keep commits scoped ("Navbar mobile drawer refresh", "Footer newsletter block re
 
 `trail-states.html` does the same for the Fox Trail: 23 states, including the ones that only exist while the page is running — the open drawer, a flipped cell, the filtered grid, the finished day. Rebuild it with `node tools/build-trail-states.mjs`, which drives the real page in a browser and captures what it produces.
 
+`meeting-states.html` does the same for the meeting page: 20 states from both days and a phone — the slip empty, with three picks, full, over six and as the phone's sheet, a seventh race refused, a race filtered, the comments folded away, the winner revealed, the card before the off. Rebuild it with `node tools/build-meeting-states.mjs`.
+
 **The trail's live day.** `tools/serve.mjs` answers `/trail/live/` from `fixtures/trail-live-timeline.json`, a recorded day of 15 frames built from the app's own figures, one frame per poll. The page polls every 4 seconds here (`data-live-poll-ms`), against 45 in production. `?sim=reset` restarts the day, `?sim=last` jumps to the finished board, `?sim=7` to any frame, and every response carries an `X-Trail-Frame` header.
 
 The `docs/` folder carries the decisions and the handover:
@@ -110,6 +121,7 @@ The `docs/` folder carries the decisions and the handover:
 | File | What it is |
 | --- | --- |
 | `trail-brief.md` | **The Fox Trail revamp: scope, the states, the live day, and the hooks the page must keep** |
+| `meeting-brief.md` | **The meeting page revamp: what it did, the states, the six-pick limit, and the hooks the page must keep** |
 | `integration-map.md` | How this becomes Django templates: section by section, with the context each one needs |
 | `content-notes.md` | Which numbers are sample data, and the content decisions still open |
 | `accessibility-notes.md` | What was fixed, the one open contrast decision, and why some axe findings are false positives |
@@ -133,7 +145,7 @@ npx playwright install chromium
 | Command | What it proves |
 | --- | --- |
 | `npm run check` | No debug code or localhost calls, every CSS `url()` resolves, images within 300 KB, no unused images, no new `!important`s, hardcoded token colours, off-scale breakpoints or unloaded fonts. |
-| `npm test` | Every feature works at 375, 768, 1024 and 1440px: nav dropdowns and mobile drawer, countdowns, day hub filters and course switcher, tabs, Saturday Draw, tilt and reduced motion, no horizontal scroll, no new accessibility violations. |
+| `npm test` | Every feature works at 375, 768, 1024 and 1440px: nav dropdowns and mobile drawer, countdowns, day hub filters and course switcher, tabs, Saturday Draw, tilt and reduced motion, the trail's board, filters, drawer and flip, the meeting page's sorting, filters, slip, six-pick limit, sheet and reveal, no horizontal scroll, no new accessibility violations. |
 | `npm run baseline` then `npm run test:visual` | **Advisory.** Screenshots each section at all four widths and compares them with the design reference commit (`tools/visual-baseline-ref`). |
 
 `npm run verify` runs all of them in order. The first two must pass; the third is for review.
@@ -148,6 +160,8 @@ npx playwright install chromium
 - Feature tests for known defects are marked `knownIssue('PR n', …)`. They must fail today; when the fix lands, Playwright reports them as unexpectedly passing, so the marker comes out in the PR that fixes it.
 
 **Intentional visual changes** fail `test:visual` by design. Say so in the PR description, attach the diff images from `test-results/`, and once the PR is approved move `tools/visual-baseline-ref` to the merged commit.
+
+**A new page has no reference yet.** The meeting page's visual tests skip themselves while `tools/visual-baseline-ref` names a commit without `meeting.html`, and say so; they start comparing once the reference moves to a commit that has it.
 
 ---
 
