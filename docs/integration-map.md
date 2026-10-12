@@ -411,6 +411,25 @@ all of which go with it:
 | 44px to press under a finger; hover only where the pointer hovers | `meeting.css` |
 | `bet_slip.js`: the stake and the currency are read from storage inside a guard | **A production script.** Two small edits to carry back: `loadStake`, `loadCurrency` |
 
+**Another meeting, in place (after the first look at the preview).** A
+slip is built across the day's meetings, so choosing another one in the
+tabs should read as turning to that part of the card. Each meeting stays
+a page of its own, with its own address, and all seven scripts start
+cleanly on it; what changed is that nothing jumps.
+
+| What | Where |
+| --- | --- |
+| The tabs' distance from the top of the window is noted on the way out (`sessionStorage`, `mfr-meeting-turn`, good for 15 seconds) | `meeting_masthead.js`, `meetings()` |
+| ...and given back on the way in, before the races are parsed | An inline `<script>` straight after `</nav>` in the meeting switcher partial (here, after the tabs in both captured pages). It does nothing unless the note is there |
+| The pressed tab looks chosen at once | `meeting.css`: `[data-mfr-going]`, `[data-mfr-turning]` |
+| The two pages cross-fade with the tabs and the slip held still, where the browser has cross-document view transitions; not under reduced motion | `meeting.css`: `@view-transition`, `view-transition-name` |
+| The next meeting is fetched when its tab is pointed at, where the browser has speculation rules | `meeting_masthead.js` |
+| A staff preview's `?design=` goes along with the tab | `meeting_masthead.js` |
+
+The captured pages' tabs go to the live site, another origin, so here a
+press is an ordinary link; `tests/meeting.spec.js` serves the page with
+same-site tabs to cover it.
+
 Still to settle in the port, against the real templates: a race in
 progress, a closed race, a non-runner and a member's Submit (none is in
 either capture), and the OR column, which sorts nothing because no row

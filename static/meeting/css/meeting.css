@@ -819,6 +819,35 @@ body.page-meeting-full {
   font-weight: 800;
 }
 
+/* A tab that has been pressed takes the current one's look at once, and
+   the one being left gives it up, while the next meeting comes
+   (meeting_masthead.js, "another meeting, in place"). */
+.mf-switcher__chip[data-mfr-going] {
+  background: var(--mfr-ink);
+  border-color: var(--mfr-ink);
+  color: var(--mfr-white);
+}
+
+.mf-switcher__chip[data-mfr-going] .mf-switcher__course { font-weight: 800; }
+
+.mf-switcher__chip[data-mfr-going] .mf-switcher__count {
+  background: rgb(255 255 255 / 16%);
+  color: var(--mfr-white);
+}
+
+.mf-switcher[data-mfr-turning] .mf-switcher__chip--current {
+  background: var(--mfr-card);
+  border-color: var(--mfr-rule);
+  color: var(--mfr-ink-2);
+}
+
+.mf-switcher[data-mfr-turning] .mf-switcher__chip--current .mf-switcher__dot { visibility: hidden; }
+
+.mf-switcher[data-mfr-turning] .mf-switcher__chip--current .mf-switcher__count {
+  background: var(--mfr-warm);
+  color: var(--mfr-ink-3);
+}
+
 .mf-switcher__dot {
   flex: none;
   width: 7px;
@@ -5285,6 +5314,29 @@ body.page-meeting-full {
    holds the focus so the next Tab starts there. It is not a control,
    so it shows no ring of its own. */
 .mf-race[tabindex="-1"]:focus { outline: none; }
+
+/* ══ From one meeting to the next ═══════════════════════════════════
+   Each meeting is a page; turning from one to another should not look
+   like it. Where the browser can, the two pages cross-fade, and what
+   is the same on both (the tabs, the slip) is held still through it.
+   Both pages must ask for this, and only these pages do, so a link to
+   anywhere else on the site is an ordinary one. Not for a reader who
+   has asked for less motion. */
+@view-transition {
+  navigation: auto;
+}
+
+.mf-switcher { view-transition-name: mf-meetings; }
+#betSlip { view-transition-name: mf-slip; }
+
+::view-transition-old(root),
+::view-transition-new(root) { animation-duration: 180ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+}
 
 /* ══ Under a finger ════════════════════════════════════════════════
    Where the pointer is coarse the things to press are 44px: Pick and
