@@ -181,6 +181,11 @@
       e.preventDefault();
       const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       target.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' });
+      /* The keyboard goes to the race too, or the next Tab would carry
+         on from the strip, a screen away from what is now on it. The
+         race is made focusable for this and nothing else. */
+      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
       if (history.replaceState) history.replaceState(null, '', link.getAttribute('href'));
     });
   }

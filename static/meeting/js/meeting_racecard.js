@@ -378,28 +378,52 @@
     race.insertBefore(bar, card);
   }
 
-  /* Every runner's comment and AI verdict are shown in full by default,
-     which makes a long page. One switch (repeated on every race, all in
-     step) folds them away for a compact card of figures only; the
-     choice is remembered on the device. The phone card is not affected:
-     there the comment already opens from each runner's Details. */
+  /* Every runner's comment and AI verdict can be shown in full, which
+     makes a long page. One switch (repeated on every race, all in step)
+     folds them away for a compact card of figures only; the choice is
+     remembered on the device. The phone card is not affected: there the
+     comment already opens from each runner's Details.
+
+     Until a reader has chosen, the comments start shown where a runner
+     is a row of a table, and folded where the race list is only wide
+     enough for two lines a runner (a laptop, beside the docked slip):
+     there a comment under every runner made a 13-runner race some
+     3,500px long. The widths are the stylesheet's own two steps. */
   function comments() {
     const KEY = 'mfr-comments';
+    const TWO_LINES = [660, 1000];
     const switches = () => document.querySelectorAll('.mfr-switch');
+    const list = document.querySelector('.mf-races');
     function set(on) {
       document.documentElement.toggleAttribute('data-mfr-compact', !on);
       switches().forEach((button) => button.setAttribute('aria-checked', String(on)));
     }
-    let on = true;
+    const byRoom = () => {
+      const width = list ? list.clientWidth : 0;
+      return !(width >= TWO_LINES[0] && width < TWO_LINES[1]);
+    };
+    let chosen = null;
     try {
-      on = localStorage.getItem(KEY) !== 'off';
+      chosen = localStorage.getItem(KEY);
     } catch (e) {
       /* private mode: the default, and the choice lasts for this visit */
     }
+    let on = chosen === 'on' ? true : chosen === 'off' ? false : byRoom();
     set(on);
+    /* With no choice made, the default follows the room as it changes
+       (a window resized, a tablet turned). */
+    if (chosen == null && list && 'ResizeObserver' in window) {
+      const follow = new ResizeObserver(() => {
+        if (chosen != null) return;
+        const next = byRoom();
+        if (next !== on) { on = next; set(on); }
+      });
+      follow.observe(list);
+    }
     document.addEventListener('click', (e) => {
       if (!e.target.closest || !e.target.closest('.mfr-switch')) return;
       on = !on;
+      chosen = on ? 'on' : 'off';
       set(on);
       try {
         localStorage.setItem(KEY, on ? 'on' : 'off');

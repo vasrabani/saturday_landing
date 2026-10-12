@@ -405,9 +405,11 @@ body.page-meeting-full {
     border-color 0.15s;
 }
 
-.mf-chip--headline:hover {
-  background: var(--mfr-card);
-  border-color: var(--mfr-gold);
+@media (hover: hover) {
+  .mf-chip--headline:hover {
+    background: var(--mfr-card);
+    border-color: var(--mfr-gold);
+  }
 }
 
 .mf-chip--headline .mf-chip__lbl,
@@ -625,16 +627,22 @@ body.page-meeting-full {
   transition: transform 0.2s;
 }
 
-.mf-hero .pick6:hover {
-  --mfr-tilt: -2deg;
+@media (hover: hover) {
+  .mf-hero .pick6:hover {
+    --mfr-tilt: -2deg;
+  }
 }
 
-.pick6:hover .pick6__num {
-  transform: rotate(-5deg);
+@media (hover: hover) {
+  .pick6:hover .pick6__num {
+    transform: rotate(-5deg);
+  }
 }
 
-.pick6:hover .pick6__sub {
-  transform: rotate(3deg);
+@media (hover: hover) {
+  .pick6:hover .pick6__sub {
+    transform: rotate(3deg);
+  }
 }
 
 /* On a phone the stamp and the badge share a line and the pill goes
@@ -744,8 +752,10 @@ body.page-meeting-full {
   white-space: nowrap;
 }
 
-.mf-switcher__home:hover {
-  background: var(--mfr-card);
+@media (hover: hover) {
+  .mf-switcher__home:hover {
+    background: var(--mfr-card);
+  }
 }
 
 .mf-switcher__home > span[aria-hidden] {
@@ -790,10 +800,12 @@ body.page-meeting-full {
     color 0.15s;
 }
 
-a.mf-switcher__chip:hover {
-  background: var(--mfr-gold-wash);
-  border-color: var(--mfr-gold-line);
-  color: var(--mfr-ink);
+@media (hover: hover) {
+  a.mf-switcher__chip:hover {
+    background: var(--mfr-gold-wash);
+    border-color: var(--mfr-gold-line);
+    color: var(--mfr-ink);
+  }
 }
 
 .mf-switcher__chip--current {
@@ -967,9 +979,11 @@ a.mf-switcher__chip:hover {
   color: var(--c-emerald-lt);
 }
 
-.mf-chip--headline:hover {
-  background: rgb(66 52 12 / 82%);
-  border-color: var(--mfr-gold);
+@media (hover: hover) {
+  .mf-chip--headline:hover {
+    background: rgb(66 52 12 / 82%);
+    border-color: var(--mfr-gold);
+  }
 }
 
 /* Pick Six: the stamp is in gold on smoked glass; the badge and the
@@ -1165,9 +1179,11 @@ a.mf-switcher__chip:hover {
     border-color 0.15s;
 }
 
-.mf-jump__chip:hover {
-  background: var(--mfr-gold-wash);
-  border-color: var(--mfr-gold-line);
+@media (hover: hover) {
+  .mf-jump__chip:hover {
+    background: var(--mfr-gold-wash);
+    border-color: var(--mfr-gold-line);
+  }
 }
 
 .mf-jump__time {
@@ -1301,9 +1317,11 @@ a.mf-switcher__chip:hover {
   color: var(--mfr-ink-2);
 }
 
-.mf-next-off__race:hover .mf-next-off__name {
-  color: var(--mfr-green);
-  text-decoration: underline;
+@media (hover: hover) {
+  .mf-next-off__race:hover .mf-next-off__name {
+    color: var(--mfr-green);
+    text-decoration: underline;
+  }
 }
 
 .mf-next-off__count {
@@ -1553,10 +1571,12 @@ a.mf-switcher__chip:hover {
     border-color 0.15s;
 }
 
-.mf-race__cta:hover {
-  background: var(--mfr-gold-wash);
-  border-color: var(--mfr-gold);
-  color: var(--mfr-gold-ink);
+@media (hover: hover) {
+  .mf-race__cta:hover {
+    background: var(--mfr-gold-wash);
+    border-color: var(--mfr-gold);
+    color: var(--mfr-gold-ink);
+  }
 }
 
 .mf-race__cta > span[aria-hidden],
@@ -1601,9 +1621,11 @@ a.mf-switcher__chip:hover {
     border-color 0.15s;
 }
 
-.mf-result-pill:hover {
-  background: var(--mfr-green-wash);
-  border-color: var(--mfr-green);
+@media (hover: hover) {
+  .mf-result-pill:hover {
+    background: var(--mfr-green-wash);
+    border-color: var(--mfr-green);
+  }
 }
 
 .mf-result-pill__face {
@@ -1646,8 +1668,10 @@ a.mf-switcher__chip:hover {
   color: var(--mfr-ink);
 }
 
-.mf-result-pill[aria-pressed="true"]:hover {
-  border-color: var(--mfr-green);
+@media (hover: hover) {
+  .mf-result-pill[aria-pressed="true"]:hover {
+    border-color: var(--mfr-green);
+  }
 }
 
 .mf-result-pill[aria-pressed="true"] .mf-result-pill__face {
@@ -1772,10 +1796,12 @@ a.mf-switcher__chip:hover {
   color: var(--mfr-ink-3);
 }
 
-.mfr-filter:hover:not(:disabled) {
-  background: var(--mfr-gold-wash);
-  border-color: var(--mfr-gold-line);
-  color: var(--mfr-ink);
+@media (hover: hover) {
+  .mfr-filter:hover:not(:disabled) {
+    background: var(--mfr-gold-wash);
+    border-color: var(--mfr-gold-line);
+    color: var(--mfr-ink);
+  }
 }
 
 .mfr-filter[aria-pressed="true"] {
@@ -1819,8 +1845,10 @@ a.mf-switcher__chip:hover {
   cursor: pointer;
 }
 
-.mfr-switch:hover {
-  color: var(--mfr-ink);
+@media (hover: hover) {
+  .mfr-switch:hover {
+    color: var(--mfr-ink);
+  }
 }
 
 .mfr-switch__track {
@@ -2061,10 +2089,12 @@ a.mf-switcher__chip:hover {
   overflow-wrap: anywhere;
 }
 
-a.racecard__name:hover {
-  color: var(--mfr-gold-ink);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+@media (hover: hover) {
+  a.racecard__name:hover {
+    color: var(--mfr-gold-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
 }
 
 .racecard__name-tags {
@@ -2237,8 +2267,10 @@ a.racecard__name:hover {
   transition: transform 0.15s;
 }
 
-.rcf:hover {
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .rcf:hover {
+    transform: translateY(-1px);
+  }
 }
 
 /* The medals. */
@@ -2305,8 +2337,10 @@ a.racecard__name:hover {
   color: var(--mfr-ink-3);
 }
 
-.rcf--sep:hover {
-  transform: none;
+@media (hover: hover) {
+  .rcf--sep:hover {
+    transform: none;
+  }
 }
 
 /* The latest run. */
@@ -2388,10 +2422,12 @@ a.racecard__name:hover {
   text-decoration: none;
 }
 
-.connection-link:hover {
-  color: var(--mfr-gold-ink);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+@media (hover: hover) {
+  .connection-link:hover {
+    color: var(--mfr-gold-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
 }
 
 .rc-rate {
@@ -2626,8 +2662,10 @@ a.racecard__name:hover {
     transform 0.08s;
 }
 
-.racecard__slip-btn:hover:not(:disabled) {
-  background: var(--mfr-gold-wash);
+@media (hover: hover) {
+  .racecard__slip-btn:hover:not(:disabled) {
+    background: var(--mfr-gold-wash);
+  }
 }
 
 .racecard__slip-btn:active:not(:disabled) {
@@ -2642,18 +2680,36 @@ a.racecard__name:hover {
 
 /* The slip is full (six picks; meeting_slip.js, "six at most"): Pick in a
    race not yet picked stands down. It can still be pressed, and then
-   says why. */
-.racecard__slip-btn[data-mfr-shut] {
+   says why.
+
+   So does Pick on a runner with no price yet (the template's
+   racecard__slip-btn--unpriced): bet_slip.js takes no pick without one,
+   and says so when the button is pressed. Drawn as ready, it was a
+   button that looked as if it worked and did not; the evening before a
+   meeting that is most of the card. Its edge is dashed, like the SP in
+   the price's place, to tell "no price yet" from "slip full". */
+.racecard__slip-btn[data-mfr-shut],
+.racecard__slip-btn--unpriced {
   background: var(--mfr-warm);
   border-color: var(--mfr-rule-2);
   color: var(--mfr-ink-3);
   cursor: not-allowed;
 }
 
-.racecard__slip-btn[data-mfr-shut]:hover,
-.racecard__slip-btn[data-mfr-shut]:active {
+.racecard__slip-btn--unpriced { border-style: dashed; }
+
+.racecard__slip-btn[data-mfr-shut]:active,
+.racecard__slip-btn--unpriced:active:not(:disabled) {
   background: var(--mfr-warm);
   transform: none;
+}
+
+@media (hover: hover) {
+  .racecard__slip-btn[data-mfr-shut]:hover,
+  .racecard__slip-btn--unpriced:hover:not(:disabled) {
+    background: var(--mfr-warm);
+    transform: none;
+  }
 }
 
 .racecard__slip-btn-tick {
@@ -2667,10 +2723,12 @@ a.racecard__name:hover {
   color: var(--mfr-white);
 }
 
-.racecard__runner--in-slip .racecard__slip-btn:hover,
-.racecard__runner.is-selected .racecard__slip-btn:hover {
-  background: var(--mfr-green-dark);
-  border-color: var(--mfr-green-dark);
+@media (hover: hover) {
+  .racecard__runner--in-slip .racecard__slip-btn:hover,
+  .racecard__runner.is-selected .racecard__slip-btn:hover {
+    background: var(--mfr-green-dark);
+    border-color: var(--mfr-green-dark);
+  }
 }
 
 .racecard__runner--in-slip .racecard__slip-btn-plus,
@@ -2796,13 +2854,19 @@ a.racecard__name:hover {
     border-top: 0;
   }
 
-  .racecard__runner:hover {
-    background: var(--mfr-warm);
+  @media (hover: hover) {
+    .racecard__runner:hover {
+      background: var(--mfr-warm);
+  
+    }
   }
 
-  .racecard__runner--in-slip:hover,
-  .racecard__runner.is-selected:hover {
-    background: var(--mfr-green-wash);
+  @media (hover: hover) {
+    .racecard__runner--in-slip:hover,
+    .racecard__runner.is-selected:hover {
+      background: var(--mfr-green-wash);
+  
+    }
   }
 
   .racecard__cell--comment {
@@ -2947,10 +3011,15 @@ a.racecard__name:hover {
   user-select: none;
 }
 
-.racecard__col[data-sortable]:hover,
 .racecard__col[aria-sort="ascending"],
 .racecard__col[aria-sort="descending"] {
   color: var(--mfr-gold-ink);
+}
+
+@media (hover: hover) {
+  .racecard__col[data-sortable]:hover {
+    color: var(--mfr-gold-ink);
+  }
 }
 
 .racecard__col-icon {
@@ -2995,8 +3064,10 @@ a.racecard__name:hover {
   mask: url("../img/icons/help.svg") center / contain no-repeat;
 }
 
-.racecard__col-help:hover {
-  color: var(--mfr-gold-ink);
+@media (hover: hover) {
+  .racecard__col-help:hover {
+    color: var(--mfr-gold-ink);
+  }
 }
 
 /* ── 6b. Two lines a runner (the race list is 660–999px wide) ───── */
@@ -3848,9 +3919,11 @@ a.racecard__name:hover {
   cursor: default;
 }
 
-.mfr-card__place[href]:hover {
-  border-color: var(--mfr-gold);
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .mfr-card__place[href]:hover {
+    border-color: var(--mfr-gold);
+    transform: translateY(-1px);
+  }
 }
 
 /* A place taken: the pick's silks, ringed in gold. */
@@ -4161,10 +4234,12 @@ a.racecard__name:hover {
   cursor: pointer;
 }
 
-.mf-slip__leg-remove:hover {
-  background: var(--mfr-red-wash);
-  border-color: var(--mfr-red-line);
-  color: var(--mfr-red);
+@media (hover: hover) {
+  .mf-slip__leg-remove:hover {
+    background: var(--mfr-red-wash);
+    border-color: var(--mfr-red-line);
+    color: var(--mfr-red);
+  }
 }
 
 /* The board. */
@@ -4352,9 +4427,11 @@ a.racecard__name:hover {
   color: var(--mfr-ink);
 }
 
-.mf-slip__submit:hover:not(:disabled) {
-  background: var(--mfr-gold-deep);
-  border-color: var(--mfr-gold-deep);
+@media (hover: hover) {
+  .mf-slip__submit:hover:not(:disabled) {
+    background: var(--mfr-gold-deep);
+    border-color: var(--mfr-gold-deep);
+  }
 }
 
 .mf-slip__submit:disabled,
@@ -4394,8 +4471,10 @@ a.racecard__name:hover {
   color: var(--mfr-gold-ink);
 }
 
-.mf-slip__submit--guest:hover {
-  background: var(--mfr-gold-wash);
+@media (hover: hover) {
+  .mf-slip__submit--guest:hover {
+    background: var(--mfr-gold-wash);
+  }
 }
 
 .mf-slip__submit--guest .mf-slip__submit-icon::before {
@@ -4487,15 +4566,19 @@ a.racecard__name:hover {
   mask-image: url("../img/icons/reset.svg");
 }
 
-.mf-slip__action:hover:not(:disabled) {
-  background: var(--mfr-ink-hover);
-  border-color: var(--mfr-ink-hover);
+@media (hover: hover) {
+  .mf-slip__action:hover:not(:disabled) {
+    background: var(--mfr-ink-hover);
+    border-color: var(--mfr-ink-hover);
+  }
 }
 
-.mf-slip__action--ghost:hover:not(:disabled) {
-  background: var(--mfr-red-wash);
-  border-color: var(--mfr-red-line);
-  color: var(--mfr-red);
+@media (hover: hover) {
+  .mf-slip__action--ghost:hover:not(:disabled) {
+    background: var(--mfr-red-wash);
+    border-color: var(--mfr-red-line);
+    color: var(--mfr-red);
+  }
 }
 
 /* Nothing to copy or reset yet: both are quiet outlines, not a grey block. */
@@ -4556,8 +4639,10 @@ a.racecard__name:hover {
   cursor: pointer;
 }
 
-.mf-slip__undo-btn:hover {
-  background: var(--mfr-ink-hover);
+@media (hover: hover) {
+  .mf-slip__undo-btn:hover {
+    background: var(--mfr-ink-hover);
+  }
 }
 
 .mf-slip__undo-bar {
@@ -4954,10 +5039,12 @@ a.racecard__name:hover {
     transform 0.15s;
 }
 
-.mf-paddle:hover {
-  border-color: var(--mfr-gold);
-  box-shadow: var(--mfr-shadow-2);
-  transform: translateY(-1px);
+@media (hover: hover) {
+  .mf-paddle:hover {
+    border-color: var(--mfr-gold);
+    box-shadow: var(--mfr-shadow-2);
+    transform: translateY(-1px);
+  }
 }
 
 .mf-paddle__body {
@@ -5068,8 +5155,11 @@ a.racecard__name:hover {
     padding-left: 0;
   }
 
-  .mf-switcher__home:hover {
-    background: none;
+  @media (hover: hover) {
+    .mf-switcher__home:hover {
+      background: none;
+  
+    }
   }
 
   /* Two courses a row, each the same width. */
@@ -5162,18 +5252,64 @@ a.racecard__name:hover {
    rise. What is left is the movement that is neither: the lift under
    the pointer, and the press on a Pick button. */
 @media (prefers-reduced-motion: reduce) {
-  .pick6:hover .pick6__num {
-    transform: rotate(-10deg);
+  @media (hover: hover) {
+    .pick6:hover .pick6__num {
+      transform: rotate(-10deg);
+  
+    }
   }
 
-  .pick6:hover .pick6__sub {
-    transform: rotate(5deg);
+  @media (hover: hover) {
+    .pick6:hover .pick6__sub {
+      transform: rotate(5deg);
+  
+    }
   }
 
-  .rcf:hover,
-  .mfr-card__place[href]:hover,
-  .mf-paddle:hover,
   .racecard__slip-btn:active:not(:disabled) {
     transform: none;
+  
   }
+
+  @media (hover: hover) {
+    .rcf:hover,
+    .mfr-card__place[href]:hover,
+    .mf-paddle:hover {
+      transform: none;
+  
+    }
+  }
+}
+
+/* A race the strip has taken the keyboard to (meeting_masthead.js): it
+   holds the focus so the next Tab starts there. It is not a control,
+   so it shows no ring of its own. */
+.mf-race[tabindex="-1"]:focus { outline: none; }
+
+/* ══ Under a finger ════════════════════════════════════════════════
+   Where the pointer is coarse the things to press are 44px: Pick and
+   the filters grow to it; the small round ones (a ticket's remove, a
+   place on the card) keep their size and take the room round them. */
+@media (pointer: coarse) {
+  .racecard__slip-btn,
+  .mfr-filter,
+  .mfr-switch { min-height: 44px; }
+
+  .mf-slip__leg-remove,
+  .mfr-card__place,
+  .mf-wrap a.mfr-card__place { position: relative; }
+
+  .mf-slip__leg-remove::after,
+  .mfr-card__place::after {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 44px;
+    height: 44px;
+    translate: -50% -50%;
+  }
+
+  /* The places stand closer than 44px: each takes its own width, and
+     the full height. */
+  .mfr-card__place::after { width: 100%; }
 }

@@ -398,6 +398,24 @@ the snapshot:
 | The slip | the bet slip partial | `bet_slip.js` fills `#slipLegs`; `meeting_slip.js` dresses each leg and keeps the six places under the head |
 | Previous / next meeting | the paddles at the foot | restyled only |
 
+**After the review (12 October).** Changes made here before the port,
+all of which go with it:
+
+| What | Where |
+| --- | --- |
+| Pick on a runner with no price stands down, with a dashed edge | `meeting.css`: `.racecard__slip-btn--unpriced`, the class the template already gives it |
+| Comments start folded where a runner takes two lines (the race list 660 to 1000px wide), until the reader chooses | `meeting_racecard.js`, `comments()` |
+| Closing the sheet from inside it gives the focus back to the bar; a strip chip takes the focus to its race | `meeting_slip.js`, `meeting_masthead.js` |
+| The kit is written, and the Pick buttons walked, only when the picks change, not on every keystroke in the stake | `meeting_slip.js`, `dress()` |
+| The same refusal is announced the second time | `meeting_slip.js`, `say()` |
+| 44px to press under a finger; hover only where the pointer hovers | `meeting.css` |
+| `bet_slip.js`: the stake and the currency are read from storage inside a guard | **A production script.** Two small edits to carry back: `loadStake`, `loadCurrency` |
+
+Still to settle in the port, against the real templates: a race in
+progress, a closed race, a non-runner and a member's Submit (none is in
+either capture), and the OR column, which sorts nothing because no row
+has `data-or`.
+
 **The sandbox's days are captures, not fixtures.** Both pages are the live
 page as it was, with the silks the live page loads from
 `silks.theracingapi.com` copied into `static/meeting/img/silks/` (named by

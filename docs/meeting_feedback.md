@@ -5,6 +5,12 @@ Review of PR #8 (`feat/meeting-full`, merged as `0df61d2` on 11 October
 captured days, beside the live page at
 <https://www.saturday-racing.com/races/meeting/kempton-aw/2026-10-12/full/>.
 
+> **Update, 12 October.** Points 1 and 3 and the smaller points in the
+> scripts and the stylesheet have since been dealt with in
+> `fix/meeting-before-port`; this page is kept as feedback. Point 2 (the
+> states the two days do not have) and the OR sort are being settled in
+> the port, against the app's own templates.
+
 ## Overall: 8 / 10
 
 A good redesign, well built and well handed over. Three things stand
