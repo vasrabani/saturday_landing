@@ -225,6 +225,18 @@ things taken from an outside review of the page.
 | Filter the board by course | `grid/_cell.html`: `data-course="<slug>"` on the article. `grid/v2/_legend.html`: a "Courses" block above "Signals", one `.trail__legend-row--course` per course with `data-filter-course`, `data-filter-label` and its number of races in `.trail__legend-count`; the view lists the day's courses in the order they first run. `trail_filter.js` (shared with the previous board) marks the matching cells `cell--in-filter`, since the stylesheet cannot know the day's courses |
 | "Archive · final results" and a link to today, on a past day | `grid/_counter.html`, where the live pill stands on today's page: `.trail__freshness--archive` and `.trail__today-link`. A day still to come gets the link and "Not yet run" |
 
+**Other days.** Under the date in `grid/_counter.html`, a
+`<nav class="trail__days">`: a link to the race day before this one
+(`rel="prev"`), a form with a date field (`data-role="day-form"`,
+`method="get"` to the trail, `name="date"`), and a link to the race day
+after (`rel="next"`), which today's page does not have. The app finds
+the nearest days that had racing, so neither link lands on an empty
+board; the field's `min` is the first day the trail has and its `max` is
+today. `js/trail_day.js` is new and loads on every state of the page,
+empty days included: it hides the field behind a calendar button and
+goes to a day as soon as one is chosen. Without it the form is a date
+field and a Go button.
+
 **Long days.** The fixture day has 24 races; a busy day has 45 to 50.
 With `data-density="long"` on the grid the board goes one more abreast
 from three up (six at 1440px, four on a tablet) and keeps less lawn

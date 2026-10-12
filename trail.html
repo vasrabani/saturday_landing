@@ -1603,6 +1603,18 @@
             <span class="trail__freshness-dot" aria-hidden="true"></span>
             <span class="trail__freshness-label">Live &middot; <span data-role="freshness-age">just now</span></span>
           </span>
+
+          <nav class="trail__days" aria-label="Other days">
+            <a class="trail__day" rel="prev" href="https://www.saturday-racing.com/trail/?date=2026-09-29"
+               aria-label="The race day before: Tuesday 29 September"><span class="trail__day-arrow" aria-hidden="true">&lsaquo;</span> Tue 29 Sep</a>
+            <form class="trail__day-form" data-role="day-form" method="get" action="https://www.saturday-racing.com/trail/">
+              <button type="button" class="trail__day trail__day--pick" data-role="day-pick" aria-label="Choose a day" hidden></button>
+              <label class="sr-only" for="trailDay">Choose a day</label>
+              <input class="trail__day-field" type="date" id="trailDay" name="date"
+                     value="2026-09-30" min="2026-07-01" max="2026-09-30">
+              <button type="submit" class="trail__day trail__day--go">Go</button>
+            </form>
+          </nav>
         
       </div>
     </div>
@@ -4498,6 +4510,7 @@
 <script src="static/grid/js/trail_filter.js" defer></script>
 <script src="static/grid/js/trail_flip.js" defer></script>
 <script src="static/grid/js/trail_nav.js" defer></script>
+<script src="static/grid/js/trail_day.js" defer></script>
 <script src="static/grid/js/trail_cards.js" defer></script>
 <script src="static/grid/js/trail_track.js" defer></script>
 <script src="static/grid/js/trail_course.js" defer></script>

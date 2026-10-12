@@ -239,6 +239,68 @@ test.describe('course filter', () => {
   });
 });
 
+test.describe('other days', () => {
+  const days = (page) => page.locator('.trail__days');
+
+  test('the masthead links to the race day before, and has no day after today', async ({ page }) => {
+    await openTrail(page, { live: false });
+    const prev = days(page).locator('a[rel="prev"]');
+    await expect(prev).toBeVisible();
+    expect(await prev.getAttribute('href')).toMatch(/\/trail\/\?date=\d{4}-\d{2}-\d{2}$/);
+    await expect(days(page).locator('a[rel="next"]')).toHaveCount(0);
+  });
+
+  test('the calendar button stands for the date field, which stays in the page', async ({ page }) => {
+    await openTrail(page, { live: false });
+    const form = page.locator('[data-role="day-form"]');
+    await expect(form).toHaveClass(/is-enhanced/);
+    await expect(form.locator('[data-role="day-pick"]')).toBeVisible();
+    await expect(form.locator('.trail__day--go')).toBeHidden();
+    const field = form.locator('input[type="date"]');
+    await expect(field).toBeAttached();
+    // Not later than the day on the page, which is today here.
+    expect(await field.getAttribute('max')).toBe(await field.getAttribute('value'));
+    // Pressing it must not throw, whether or not this browser has a picker to open.
+    const { problems } = await openTrail(page, { live: false });
+    await form.locator('[data-role="day-pick"]').click();
+    expect(problems).toEqual([]);
+  });
+
+  test('choosing a day goes to that day, and a day out of range goes nowhere', async ({ page }) => {
+    const asked = [];
+    await page.route('https://www.saturday-racing.com/**', (route) => {
+      asked.push(route.request().url());
+      return route.fulfill({ status: 200, contentType: 'text/html', body: '<title>another day</title>' });
+    });
+    await openTrail(page, { live: false });
+    const field = page.locator('[data-role="day-form"] input[type="date"]');
+    const choose = (day) => field.evaluate((input, value) => {
+      input.value = value;
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }, day);
+
+    await choose('2031-01-01');           // after today
+    await page.waitForTimeout(300);
+    expect(asked).toEqual([]);
+
+    await choose('2026-09-12');
+    await expect.poll(() => asked.length).toBe(1);
+    expect(asked[0]).toBe('https://www.saturday-racing.com/trail/?date=2026-09-12');
+  });
+
+  test.describe('without scripts', () => {
+    test.use({ javaScriptEnabled: false });
+
+    test('the form is a date field and a Go button', async ({ page }) => {
+      await page.goto('/trail.html');
+      const form = page.locator('[data-role="day-form"]');
+      await expect(form.locator('input[type="date"]')).toBeVisible();
+      await expect(form.locator('.trail__day--go')).toBeVisible();
+      await expect(form.locator('[data-role="day-pick"]')).toBeHidden();
+    });
+  });
+});
+
 test.describe('a day that is not today', () => {
   test('says it is the archive, and offers the way back to today', async ({ page }) => {
     // As the template renders a past day: no live pill, an archive one.
