@@ -417,6 +417,35 @@ test.describe('the track', () => {
     expect(run).toBeLessThan(prints);
   });
 
+  test('the start sign names the first race', async ({ page }) => {
+    await openTrail(page, { live: false });
+    await expect(page.locator('[data-role="track"]')).toHaveClass(/is-drawn/);
+    const first = raceCards(page).first();
+    const race = `${(await first.locator('.cell__time').textContent()).trim()} ${(await first.locator('.cell__course').textContent()).trim()}`;
+    await expect(page.locator('[data-role="track-start"]')).toContainText('Start');
+    await expect(page.locator('[data-role="track-start-race"]')).toHaveText(race);
+  });
+
+  test('the arrows point the way the course runs', async ({ page }) => {
+    await openTrail(page, { live: false });
+    await expect(page.locator('[data-role="track"]')).toHaveClass(/is-drawn/);
+    const rows = await rowsOfBoard(page);
+    const abreast = rows[0].length;
+    const turns = (selector) => page.locator(selector).evaluateAll((arrows) =>
+      arrows.map((arrow) => arrow.style.getPropertyValue('--turn')));
+
+    // Round a bend: down to the next row, one bend per row but the last.
+    const bends = await turns('.track__hoof--bend');
+    expect(bends.length).toBeGreaterThanOrEqual(rows.length - 1);
+    expect(new Set(bends)).toEqual(new Set(['90deg']));
+
+    // Along a row: left to right, and right to left on the rows that run back.
+    const along = await turns('.track__hoof:not(.track__hoof--bend)');
+    const expected = rows.flatMap((row, k) =>
+      Array(row.length - 1).fill(abreast >= 3 && k % 2 === 1 ? '180deg' : '0deg'));
+    expect(along).toEqual(expected);
+  });
+
   test('is drawn again when the board changes width', async ({ page }) => {
     await openTrail(page, { live: false, waitUntil: 'load' });
     await expect(page.locator('[data-role="track"]')).toHaveClass(/is-drawn/);
@@ -429,6 +458,47 @@ test.describe('the track', () => {
 });
 
 test.describe('race cards', () => {
+  test('a race that is run flies a flag, and one still to come does not', async ({ page }) => {
+    await openTrail(page, { live: false });
+    // The flag stands after the time on a card with room and before the
+    // course on a narrow one: one or the other, never neither.
+    const flags = await page.locator('#trailGrid .cell[data-race-id]').evaluateAll((cells) =>
+      cells.map((cell) => {
+        const shown = (el, pseudo) => {
+          if (!el) return false;
+          const style = getComputedStyle(el, pseudo);
+          return style.content !== 'none' && style.display !== 'none';
+        };
+        return {
+          state: (cell.className.match(/cell--(pending|live|won|placed|lost|void|no_fancy)/) || [])[1],
+          flags: [shown(cell.querySelector('.cell__time'), '::after'), shown(cell.querySelector('.cell__course'), '::before')]
+            .filter(Boolean).length,
+        };
+      }));
+    const run = flags.filter((cell) => ['won', 'placed', 'lost', 'void'].includes(cell.state));
+    const toCome = flags.filter((cell) => ['pending', 'live', 'no_fancy'].includes(cell.state));
+    expect(run.length).toBeGreaterThan(0);
+    expect(run.filter((cell) => cell.flags !== 1), 'run races without exactly one flag').toEqual([]);
+    expect(toCome.filter((cell) => cell.flags !== 0), 'races to come with a flag').toEqual([]);
+  });
+
+  test("a pick wears its horse's silks, and the signal's jacket only when there are none", async ({ page }) => {
+    await openTrail(page, { live: false });
+    const picks = await page.locator('#trailGrid .cell__pick--primary').evaluateAll((list) =>
+      list.map((pick) => ({
+        silk: Boolean(pick.querySelector(':scope > .cell__silk')),
+        jacket: getComputedStyle(pick, '::before').content !== 'none',
+      })));
+    expect(picks.filter((pick) => pick.silk).length, 'picks with silks').toBeGreaterThan(0);
+    expect(picks.filter((pick) => !pick.silk).length, 'picks without').toBeGreaterThan(0);
+    // One or the other beside every horse.
+    expect(picks.filter((pick) => pick.silk === pick.jacket)).toEqual([]);
+    // The images are there to be seen.
+    const broken = await page.locator('#trailGrid img.cell__silk').evaluateAll((images) =>
+      Promise.all(images.map((image) => image.decode().then(() => null, () => image.getAttribute('src')))));
+    expect(broken.filter(Boolean)).toEqual([]);
+  });
+
   test('a name that is one long word is sized to fit', async ({ page }) => {
     await openTrail(page, { live: false, waitUntil: 'load' });
     const name = page.locator('#trailGrid .cell__horse').first();

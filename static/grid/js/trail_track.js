@@ -8,9 +8,10 @@
  *     the running rail around the whole of it;
  *   - a start line and the START sign at the first race, and the
  *     winning post after the last;
- *   - a trail of hoof prints along the running line, gold as far as
- *     the fox marker has come, so the day's progress shows on the
- *     course itself.
+ *   - arrows along the running line, each pointing at the next race,
+ *     gold as far as the fox marker has come, so the way round and
+ *     the day's progress both show on the course itself. (They were
+ *     hoof prints, and the names here still say so.)
  *
  * Markup: the .trail__track block in trail.html, a layer behind the
  * grid. It carries the parts and their words; this file gives them
@@ -37,6 +38,7 @@
   var hoofs     = part('hoofs');
   var startLine = part('start-line');
   var startSign = part('start');
+  var startRace = part('start-race');
   var post      = part('post');
   var postLabel = part('post-label');
   if (!rails || !turf || !hoofs) return;
@@ -44,9 +46,7 @@
   var STATES = ['pending', 'live', 'won', 'placed', 'lost', 'void', 'no_fancy'];
 
   var SAME_ROW_PX   = 2;    // cards whose tops are this close share a row
-  var STRIDE_PX     = 7;    // prints step either side of the running line...
-  var GAIT_PX       = 9;    // ...and wider round a bend
-  var LONG_BEND_PX  = 70;   // a bend this deep takes three prints, not two
+  var LONG_BEND_PX  = 70;   // a bend this deep takes two arrows, not one
   var MIN_BEND_PX   = 4;    // below this the gap between rows is too thin to round
   var LINE_INSET_PX = 2;    // the start line stops this short of each rail...
   var POST_INSET_PX = 5;    // ...and the winning post this short
@@ -174,8 +174,9 @@
 
   /* ── Hoof prints ───────────────────────────────────────────── */
 
-  /* One print in the gap between each race and the next, stepping
-   * either side of the running line, and two or three round each bend. */
+  /* One arrow in the gap between each race and the next, pointing the
+   * way the row runs, and two or three round each bend, pointing down
+   * it. `turn` is the arrow's heading in degrees: 0 is left to right. */
   function hoofPrints(rows, run) {
     var prints = [];
     var passed = 0;
@@ -187,7 +188,8 @@
         var race = passed + i;                         // the gap after this race
         prints.push({
           x: (Math.min(a.r, b.r) + Math.max(a.l, b.l)) / 2,
-          y: (a.t + a.b) / 2 + (race % 2 ? STRIDE_PX : -STRIDE_PX),
+          y: (a.t + a.b) / 2,
+          turn: b.l > a.l ? 0 : 180,
           run: race < run,
         });
       }
@@ -198,11 +200,13 @@
       var next = rows[k + 1].items[0];
       var centre = (Math.max(last.l, next.l) + Math.min(last.r, next.r)) / 2;
       var gap = next.t - last.b;
-      var count = gap >= LONG_BEND_PX ? 3 : 2;
+      var count = gap >= LONG_BEND_PX ? 2 : 1;
       for (var step = 0; step < count; step++) {
         prints.push({
-          x: centre + (step % 2 ? GAIT_PX : -GAIT_PX),
+          x: centre,
           y: last.b + gap * (step + 0.5) / count,
+          turn: 90,                    // down to the next row
+          bend: true,
           run: passed <= run,
         });
       }
@@ -214,9 +218,10 @@
     var fragment = document.createDocumentFragment();
     prints.forEach(function (print) {
       var el = document.createElement('i');
-      el.className = 'track__hoof' + (print.run ? ' is-run' : '');
+      el.className = 'track__hoof' + (print.bend ? ' track__hoof--bend' : '') + (print.run ? ' is-run' : '');
       el.style.left = print.x + 'px';
       el.style.top = print.y + 'px';
+      el.style.setProperty('--turn', print.turn + 'deg');
       fragment.appendChild(el);
     });
     hoofs.textContent = '';
@@ -241,6 +246,17 @@
     // The sign hangs on the rail over the first card; the stylesheet
     // lifts it clear by its own height.
     place(startSign, first.l, first.t);
+  }
+
+  /* The race the day starts with, after the word on the sign. */
+  function nameStart(card) {
+    if (!startRace) return;
+    var bit = function (cls) {
+      var el = card.querySelector(cls);
+      return el ? el.textContent.replace(/\s+/g, ' ').trim() : '';
+    };
+    var race = [bit('.cell__time'), bit('.cell__course')].filter(Boolean).join(' ');
+    if (startRace.textContent !== race) startRace.textContent = race;
   }
 
   function placePost(rows, band, square) {
@@ -285,6 +301,7 @@
     turf.style.clipPath = 'path("' + outline + '")';
     paintHoofPrints(prints);
     placeStart(rows, boxes, band);
+    nameStart(cards[0]);
     placePost(rows, band, square);
     track.classList.add('is-drawn');
   }

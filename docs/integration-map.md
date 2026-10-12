@@ -202,6 +202,21 @@ masthead's own. The words are `data-*` attributes on the markup
 call; `data-say` on the bar's status line), in the way `data-on` and
 `data-off` already carry the toggle's.
 
+**After the first look on real data (12 October).** Four changes asked
+for once the board was in the staff preview:
+
+| What | Where |
+| --- | --- |
+| A bigger Start sign, carrying the first race ("Start · 13:15 Ascot") | `trail.css`; `trail_track.js` fills `[data-role="track-start-race"]`, a new span inside the sign in `grid/v2/trail.html`, which the template renders too |
+| Arrows along the course in place of the hoof prints, each turned to point at the next race | `trail_track.js` sets `--turn` on each `.track__hoof`; `trail.css` draws the arrow. The class keeps its name |
+| A chequered flag on every race that is run, whatever became of the pick | `trail.css` only: after the time on a card with room, before the course on a narrow one |
+| The horse's own silks beside its name, in place of the signal's jacket | `grid/_cell.html` gains `.cell__silk` as the first child of `.cell__pick--primary`: an `<img>` of the racing data's silks, or a `<span class="cell__silk--drawn">` with `--silk-1` and `--silk-2` when it gives only two colours. The app adds `TrailCell.silk`, matched to the runner by name. A pick with no runner, or a runner with no colours of its own, has no `.cell__silk` and keeps the jacket. The signals' jackets along the foot are unchanged |
+
+`_cell.html` is shared with the live board, whose stylesheet hides
+`.cell__silk`. Here the fixture day's silks are the meeting page's
+(`static/meeting/img/silks/`), with three drawn from colours and one
+pick left without.
+
 **Long days.** The fixture day has 24 races; a busy day has 45 to 50.
 With `data-density="long"` on the grid the board goes one more abreast
 from three up (six at 1440px, four on a tablet) and keeps less lawn

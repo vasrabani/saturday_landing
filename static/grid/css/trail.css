@@ -92,6 +92,7 @@
   --trail-turf-edge:     #2F5228;   /* the dark line outside the rail */
   --trail-lawn:          #98BC82;   /* under the lawn tile */
   --trail-hoof:          rgba(12, 32, 12, 0.4);
+  --trail-arrow:         rgba(255, 255, 255, 0.82);   /* the way round, ahead of the fox marker */
 
   /* ── The signals' racing colours ───────────────────────────── */
   /* A classic set, one for each of the four signals. Bet of the Day
@@ -182,8 +183,7 @@
 .trail__legend-head-icon,
 .trail__nav-trigger-icon,
 .trail__next-fox::after,
-.course__fox-mark,
-.track__hoof {
+.course__fox-mark {
   -webkit-mask: var(--mask) center / contain no-repeat;
           mask: var(--mask) center / contain no-repeat;
 }
@@ -1884,8 +1884,12 @@ body.trail-nav-lock { overflow: hidden; }
   background: var(--trail-turf) url("../img/turf.webp") 0 0 / 96px 96px;
 }
 
-/* Hoof prints along the running line: gold where the fox marker has
-   been, faint ahead of it. They come up after the course does. */
+/* The way round, along the running line: an arrow in the gap after
+   each race and a larger one round each bend, turned by the script to
+   point at the next race (--turn). Gold where the fox marker has been,
+   pale ahead of it. They come up after the course does. (The class is
+   still "hoof": these were hoof prints, which showed the line but not
+   which way it ran.) */
 .track__hoofs {
   position: absolute;
   inset: 0;
@@ -1896,54 +1900,75 @@ body.trail-nav-lock { overflow: hidden; }
 .trail__track.is-drawn .track__hoofs { opacity: 1; }
 
 .track__hoof {
-  --mask: var(--trail-horseshoe);
+  --arrow: 15px;
   position: absolute;
-  width: 12px;
-  height: 12px;
-  background: var(--trail-hoof);
+  width: var(--arrow);
+  height: var(--arrow);
+  background: var(--trail-arrow);
+  clip-path: polygon(14% 0, 52% 0, 100% 50%, 52% 100%, 14% 100%, 62% 50%);
   translate: -50% -50%;
+  rotate: var(--turn, 0deg);
+  filter: drop-shadow(0 1px 0 var(--trail-ink-32));
 }
+
+.track__hoof--bend { --arrow: 20px; }
 
 .track__hoof.is-run { background: var(--trail-gold-fill); }
 
 /* The start: a white line across the track before the first race... */
 .track__start-line {
   position: absolute;
-  width: 3px;
+  width: 5px;
   background: var(--trail-on-dark);
   box-shadow: 0 0 0 1px var(--trail-ink-13);
   translate: -50% 0;
 }
 
-/* ...and a sign hung on the rail over that race, with a flag. The
-   script puts it at the card's top left corner; it lifts itself clear. */
+/* ...and a sign hung on the rail over that race, with a flag: the word,
+   and the race the day starts with. The script puts it at the card's
+   top left corner; it lifts itself clear. It is the first thing to find
+   on the board, so it is as large as the lawn above the card allows. */
 .track__start {
   position: absolute;
+  z-index: 2;                        /* over the rail it hangs on */
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  height: 20px;
-  padding: 0 10px 0 11px;
-  border: 1.5px solid var(--trail-gold-fill);
-  border-radius: 5px;
+  gap: 7px;
+  height: 24px;
+  padding: 0 11px 0 10px;
+  border: 2px solid var(--trail-gold-fill);
+  border-radius: 6px;
   background: var(--c-ink);
-  color: var(--trail-on-dark);
-  font-size: 9.5px;
+  box-shadow: 0 4px 10px -4px var(--trail-ink-65);
+  color: var(--trail-gold-fill);
+  font-size: 12px;
   font-weight: 800;
   line-height: 1;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   white-space: nowrap;
-  translate: -4px calc(-100% - 2px);
+  translate: -4px calc(-100% + 3px);
 }
 
 .track__start::before {
   content: "";
-  width: 9px;
-  height: 10px;
+  width: 12px;
+  height: 14px;
   background: var(--trail-gold-fill);
-  clip-path: polygon(0 100%, 0 0, 1.6px 0, 1.6px 1.2px, 8.6px 3.8px, 1.6px 6.4px, 1.6px 100%);
+  clip-path: polygon(0 100%, 0 0, 16% 0, 16% 10%, 100% 36%, 16% 62%, 16% 100%);
 }
+
+/* The first race, after the word. */
+.track__start-race {
+  padding-left: 8px;
+  border-left: 1px solid color-mix(in srgb, var(--trail-gold-fill) 45%, transparent);
+  color: var(--trail-on-dark);
+  font-size: 0.84em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.track__start-race:empty { display: none; }
 
 /* The winning post, after the last race: a chequered line across the
    track. The script makes it a whole number of squares long. */
@@ -1980,20 +2005,25 @@ body.trail-nav-lock { overflow: hidden; }
     stroke-dasharray: 2.5 29.5;
   }
 
-  .track__hoof {
-    width: 14.4px;
-    height: 14.4px;
-  }
+  .track__hoof { --arrow: 18px; }
+  .track__hoof--bend { --arrow: 26px; }
+
+  .track__start-line { width: 6px; }
 
   .track__start {
-    height: 25px;
-    padding-right: 16px;
-    font-size: 11.5px;
+    gap: 9px;
+    height: 38px;
+    padding: 0 16px 0 13px;
+    border-radius: 8px;
+    font-size: 16px;
     letter-spacing: 0.2em;
-    translate: -4px calc(-100% - 3px);
+    translate: -4px calc(-100% + 4px);
   }
 
-  .track__start::before { height: 12px; }
+  .track__start::before {
+    width: 16px;
+    height: 20px;
+  }
 
   .track__post { --post-square: 7px; }
 
@@ -2194,6 +2224,43 @@ body.trail-nav-lock { overflow: hidden; }
 /* The crown that marked Nod and above: the meter says it now. */
 .cell__mark { display: none; }
 
+/* Run, and the result declared: a chequered flag after the time, on
+   every such card whatever became of the pick. Won, placed or beaten
+   is the plaque's to say; this says only that the race is over, the
+   one thing to tell apart from the races still to come. */
+.cell--won .cell__time::after,
+.cell--placed .cell__time::after,
+.cell--lost .cell__time::after,
+.cell--void .cell__time::after,
+.cell--won .cell__course::before,
+.cell--placed .cell__course::before,
+.cell--lost .cell__course::before,
+.cell--void .cell__course::before {
+  --flag-square: 4px;
+  content: "";
+  display: inline-block;
+  width: calc(4 * var(--flag-square) + 3px);
+  height: calc(3 * var(--flag-square) + 5px);
+  margin-left: 7px;
+  vertical-align: -4px;
+  /* a pole down the left, and three rows of four squares flying from
+     it: black and white on any card, edged in the card's own ink */
+  background:
+    linear-gradient(var(--cell-ink) 0 0) 0 0 / 2px 100% no-repeat,
+    repeating-conic-gradient(var(--c-ink) 0 25%, var(--trail-on-dark) 0 50%)
+      3px 0 / calc(2 * var(--flag-square)) calc(2 * var(--flag-square));
+  clip-path: polygon(0 0, 100% 0, 100% calc(3 * var(--flag-square)), 3px calc(3 * var(--flag-square)), 3px 100%, 0 100%);
+  outline: 1px solid var(--cell-ink);
+  outline-offset: -1px;
+}
+
+/* Beside the time on a card with room; on a narrow one (below) it
+   stands before the course instead, clear of the result's plaque. */
+.cell--won .cell__course::before,
+.cell--placed .cell__course::before,
+.cell--lost .cell__course::before,
+.cell--void .cell__course::before { display: none; }
+
 /* ── Body: the pick, beside its silks ──────────────────────── */
 
 .cell__body {
@@ -2254,6 +2321,39 @@ body.trail-nav-lock { overflow: hidden; }
 @media (hover: hover) {
   .cell:hover .cell__pick--primary::before { transform: translateY(-2px) rotate(-4deg); }
   .cell:hover .cell__pick--primary::after { translate: 0 -2px; }
+}
+
+/* The horse's own silks, where the race card has them, in place of the
+   signal's jacket: the owner's colours are how a horse is known on the
+   course. An image from the racing data (.cell__silk), or the two
+   colours it gives, drawn on the plain jacket (.cell__silk--drawn). The
+   signals behind the pick keep their jackets along the foot. */
+.cell__silk {
+  grid-area: 1 / 1 / span 2;
+  width: var(--pick-silk);
+  height: var(--pick-silk);
+  margin-top: -3px;
+  object-fit: contain;
+  transition: transform 160ms ease;
+}
+
+.cell__silk--drawn {
+  -webkit-mask: var(--trail-silk-plain) center / contain no-repeat;
+          mask: var(--trail-silk-plain) center / contain no-repeat;
+  /* body in the first colour, sleeves in the second */
+  background: linear-gradient(90deg,
+    var(--silk-2, var(--trail-on-dark)) 0 24%,
+    var(--silk-1, var(--trail-royal)) 24% 76%,
+    var(--silk-2, var(--trail-on-dark)) 76%);
+  /* an edge, so white sleeves still show on a white card */
+  filter: drop-shadow(0 0 0.6px var(--trail-ink-65)) drop-shadow(0 0 0.6px var(--trail-ink-65));
+}
+
+.cell__pick--primary:has(> .cell__silk)::before,
+.cell__pick--primary:has(> .cell__silk)::after { content: none; }
+
+@media (hover: hover) {
+  .cell:hover .cell__silk { transform: translateY(-2px) rotate(-4deg); }
 }
 
 /* Two lines at most. A name that is one long word steps down in size
@@ -3017,6 +3117,15 @@ body.trail-nav-lock { overflow: hidden; }
     font-size: 8.5px;
   }
 
+  /* The horse's own silks go where the jacket did, a size up from it:
+     there is a pattern to read. */
+  .cell__body:has(.cell__silk) { --pick-silk: 30px; }
+
+  .cell__silk {
+    grid-area: 2 / 1;
+    margin-top: 0;
+  }
+
   .cell__odds { grid-area: 2 / 2; }
   .cell--split .cell__pick--alt { padding-left: 0; }
   .cell__chips { gap: 2px; }
@@ -3066,6 +3175,23 @@ body.trail-nav-lock { overflow: hidden; }
    little; the silks lose their letters, and the rosette is a size down
    to clear the course name beneath it and the words of a banner. */
 @container trail-cell (width <= 132px) {
+  /* The flag of a race that is run, before the course: the time's line
+     is full. */
+  .cell--won .cell__time::after,
+  .cell--placed .cell__time::after,
+  .cell--lost .cell__time::after,
+  .cell--void .cell__time::after { content: none; }
+
+  .cell--won .cell__course::before,
+  .cell--placed .cell__course::before,
+  .cell--lost .cell__course::before,
+  .cell--void .cell__course::before {
+    --flag-square: 3px;
+    display: inline-block;
+    margin: 0 6px 0 0;
+    vertical-align: -3px;
+  }
+
   .cell__badge {
     min-width: 19px;
     height: 19px;
