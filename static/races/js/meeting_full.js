@@ -61,7 +61,12 @@
     io.observe(sentinel);
   }
 
+  // One countdown at a time: the meeting page can bring another
+  // meeting in without a reload and start this again.
+  var nextOffTimer = null;
+
   function initNextOffCountdown() {
+    if (nextOffTimer) { clearInterval(nextOffTimer); nextOffTimer = null; }
     var strip = document.querySelector('[data-next-off-iso]');
     if (!strip) return;
     var iso = strip.getAttribute('data-next-off-iso');
@@ -89,7 +94,7 @@
       }
     }
     tick();
-    setInterval(tick, 1000);
+    nextOffTimer = setInterval(tick, 1000);
   }
 
   // Spoiler controls — winner-name reveal pill on resulted races.
@@ -162,6 +167,12 @@
     initNextOffCountdown();
     initSpoilers();
   }
+
+  // For the meeting page's in-place turn to another meeting: the strip,
+  // the next-off bar and the races are new elements then, and each of
+  // the four binds to what it finds. (The races container itself must
+  // be new, or the spoiler clicks would be heard twice.)
+  window.SaturdayMeetingFull = { init: boot };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', boot);

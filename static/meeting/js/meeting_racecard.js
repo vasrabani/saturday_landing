@@ -393,13 +393,16 @@
     const KEY = 'mfr-comments';
     const TWO_LINES = [660, 1000];
     const switches = () => document.querySelectorAll('.mfr-switch');
-    const list = document.querySelector('.mf-races');
+    /* Looked up each time: the race list is a new element after a turn
+       to another meeting (meeting_masthead.js). */
+    const list = () => document.querySelector('.mf-races');
     function set(on) {
       document.documentElement.toggleAttribute('data-mfr-compact', !on);
       switches().forEach((button) => button.setAttribute('aria-checked', String(on)));
     }
     const byRoom = () => {
-      const width = list ? list.clientWidth : 0;
+      const races = list();
+      const width = races ? races.clientWidth : 0;
       return !(width >= TWO_LINES[0] && width < TWO_LINES[1]);
     };
     let chosen = null;
@@ -410,16 +413,15 @@
     }
     let on = chosen === 'on' ? true : chosen === 'off' ? false : byRoom();
     set(on);
+    /* New races have new switches: bring them into step. */
+    resync = () => set(on);
     /* With no choice made, the default follows the room as it changes
        (a window resized, a tablet turned). */
-    if (chosen == null && list && 'ResizeObserver' in window) {
-      const follow = new ResizeObserver(() => {
-        if (chosen != null) return;
-        const next = byRoom();
-        if (next !== on) { on = next; set(on); }
-      });
-      follow.observe(list);
-    }
+    window.addEventListener('resize', () => {
+      if (chosen != null) return;
+      const next = byRoom();
+      if (next !== on) { on = next; set(on); }
+    });
     document.addEventListener('click', (e) => {
       if (!e.target.closest || !e.target.closest('.mfr-switch')) return;
       on = !on;
@@ -471,10 +473,12 @@
      off, and taken off again whenever the script puts them back (it
      sets itself up afresh each time the window crosses 640px). Its
      tap-to-expand is left alone: it toggles an attribute nothing reads. */
+  const untabRow = (row) => {
+    if (row.matches && row.matches('.racecard__runner') && row.getAttribute('tabindex') === '0') row.removeAttribute('tabindex');
+  };
+
   function untab() {
-    const strip = (row) => {
-      if (row.matches && row.matches('.racecard__runner') && row.getAttribute('tabindex') === '0') row.removeAttribute('tabindex');
-    };
+    const strip = untabRow;
     document.querySelectorAll('.racecard__runner').forEach(strip);
     new MutationObserver((records) => records.forEach((r) => strip(r.target))).observe(document.body, {
       attributes: true,
@@ -487,8 +491,11 @@
 
   /* The page's script sorts a column on a click of its head. The heads
      are given a place in the tab order, and Enter or Space sorts. */
-  function sortKeys() {
+  const sortHeads = () =>
     document.querySelectorAll('.racecard__col[data-sortable]').forEach((th) => th.setAttribute('tabindex', '0'));
+
+  function sortKeys() {
+    sortHeads();
     document.addEventListener('keydown', (e) => {
       if (e.key !== 'Enter' && e.key !== ' ') return;
       const th = e.target.closest && e.target.closest('.racecard__col[data-sortable]');
@@ -498,7 +505,12 @@
     });
   }
 
-  function init() {
+  /* What is done to the races themselves. Run at the start, and again
+     by meeting_masthead.js when a turn to another meeting has put new
+     races in the page: every race and runner is new then, so nothing is
+     done twice. */
+  let resync = () => {};
+  function dressRaces() {
     labels();
     form();
     numbers();
@@ -510,10 +522,22 @@
     });
     document.querySelectorAll('[data-racecard]').forEach(filters);
     document.querySelectorAll('[data-racecard]').forEach(marks);
+  }
+
+  function init() {
+    dressRaces();
     comments();
     untab();
     sortKeys();
   }
+
+  window.mfrMeeting = window.mfrMeeting || {};
+  window.mfrMeeting.races = () => {
+    dressRaces();
+    resync();
+    document.querySelectorAll('.racecard__runner').forEach(untabRow);
+    sortHeads();
+  };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();

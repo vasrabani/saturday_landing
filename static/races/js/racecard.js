@@ -33,17 +33,29 @@
     const cards = document.querySelectorAll('[data-racecard]');
     if (!cards.length) return;
 
-    cards.forEach((card) => {
-      initSort(card);
-      initFilter(card);
-      initPick(card);
-    });
+    cards.forEach(initCard);
 
     // Vote polling + guest-pick bar are page-scoped (single race), so
     // they bind once and use the first racecard they find.
     initVotes(cards[0]);
     initGuestBar(cards[0]);
   }
+
+  // One card's own wiring, once. The meeting page brings another
+  // meeting's races into the page without a reload, and calls
+  // SaturdayRacecard.initCards() for the cards that have just arrived.
+  function initCard(card) {
+    if (card._rcWired) return;
+    card._rcWired = true;
+    initSort(card);
+    initFilter(card);
+    initPick(card);
+  }
+  window.SaturdayRacecard = {
+    initCards: function (root) {
+      (root || document).querySelectorAll('[data-racecard]').forEach(initCard);
+    },
+  };
 
   /* ── Helpers ────────────────────────────────────────────────── */
   function $(card, sel)         { return card.querySelector(sel); }

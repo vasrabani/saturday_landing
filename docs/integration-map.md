@@ -411,24 +411,36 @@ all of which go with it:
 | 44px to press under a finger; hover only where the pointer hovers | `meeting.css` |
 | `bet_slip.js`: the stake and the currency are read from storage inside a guard | **A production script.** Two small edits to carry back: `loadStake`, `loadCurrency` |
 
-**Another meeting, in place (after the first look at the preview).** A
-slip is built across the day's meetings, so choosing another one in the
-tabs should read as turning to that part of the card. Each meeting stays
-a page of its own, with its own address, and all seven scripts start
-cleanly on it; what changed is that nothing jumps.
+**Another meeting, in place.** A slip is built across the day's
+meetings, so choosing another one in the tabs turns to that part of the
+day's card without leaving the page. The first version kept each turn a
+page load and made it land where the reader stood; on the live site the
+load was still felt. Now the other meeting is fetched and swapped in.
 
 | What | Where |
 | --- | --- |
-| The tabs' distance from the top of the window is noted on the way out (`sessionStorage`, `mfr-meeting-turn`, good for 15 seconds) | `meeting_masthead.js`, `meetings()` |
-| ...and given back on the way in, before the races are parsed | An inline `<script>` straight after `</nav>` in the meeting switcher partial (here, after the tabs in both captured pages). It does nothing unless the note is there |
-| The pressed tab looks chosen at once | `meeting.css`: `[data-mfr-going]`, `[data-mfr-turning]` |
-| The two pages cross-fade with the tabs and the slip held still, where the browser has cross-document view transitions; not under reduced motion | `meeting.css`: `@view-transition`, `view-transition-name` |
-| The next meeting is fetched when its tab is pointed at, where the browser has speculation rules | `meeting_masthead.js` |
+| A tab (or a paddle, or a slip place for a pick made elsewhere) fetches its meeting and replaces `.mf-hero`, `.mf-subnav`, `.mf-next-off` and `.mf-races`; the slip is not touched. The title and the address change (`pushState`), and Back turns back | `meeting_masthead.js`, `meetings()` |
+| Each script starts again on what has arrived | **Three production scripts publish an entry point**, additive, each still starting itself as before: `SaturdayRacecard.initCards()` (`racecard.js`, a card wired once however often asked), `SaturdayRacecardCollapse.init()` (`racecard_collapse.js`), `SaturdayMeetingFull.init()` (`meeting_full.js`, which now runs one countdown at a time). The revamp's: `mfrMeeting.races()`, `mfrMeeting.slip()`. `bet_slip.js` is unchanged: it is sent the `storage` event it already listens for, and draws the slip again |
+| The meeting is fetched when its tab is pointed at or touched, and kept for a minute | `meeting_masthead.js` |
+| The pressed tab looks chosen at once; the races stand back while the meeting comes | `meeting.css`: `[data-mfr-going]`, `[data-mfr-turning]`, `.mf-races[aria-busy]` |
+| The swap happens inside a view transition where the browser has them, the tabs and the slip held still; not under reduced motion | `meeting_masthead.js`; `meeting.css`: `view-transition-name` |
 | A staff preview's `?design=` goes along with the tab | `meeting_masthead.js` |
 
-The captured pages' tabs go to the live site, another origin, so here a
-press is an ordinary link; `tests/meeting.spec.js` serves the page with
-same-site tabs to cover it.
+**When the tab is a plain link again.** No `fetch`, an entry point
+missing, a response that is not a meeting page, a meeting of another day
+(another day's slip), or any error on the way: the browser goes to the
+meeting's own page, as it always did. On that road the tabs' place in
+the window is noted (`sessionStorage`, `mfr-meeting-turn`, good for 15
+seconds) and the inline script straight after the tabs in the meeting
+switcher partial gives it back before the races are parsed, so even then
+nothing jumps to the top.
+
+**What the swap needs from the template.** `.mf-wrap[data-storage-key]`
+with `.mf-hero`, `.mf-subnav` and `.mf-races` inside it, `.mf-races`
+inside `.mf-grid` beside `#betSlip`, and no `<script>` inside the parts
+that are swapped (a script brought in this way does not run).
+`tests/meeting.spec.js` ("another meeting, in place") serves a second
+meeting of the same day to cover it, since the sandbox has one.
 
 Still to settle in the port, against the real templates: a race in
 progress, a closed race, a non-runner and a member's Submit (none is in
