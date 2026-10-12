@@ -190,12 +190,106 @@
     });
   }
 
+  /* ── 6. Another meeting, in place ────────────────────────────── */
+
+  /* A slip is built across the day's meetings, so choosing another one
+     in the tabs should read as turning to that part of the card, not as
+     leaving the page. Each meeting is still a page of its own (its
+     address can be kept, sent and gone back to), and all seven scripts
+     start cleanly on it. What makes the move feel in place:
+
+       - where the reader stood. The tabs' distance from the top of the
+         window is noted on the way out and given back on the way in,
+         by the two lines of script the template puts straight after
+         the tabs, before the races under them are even parsed. Nothing
+         jumps to the top of a new masthead;
+       - the slip, which bet_slip.js keeps on the device for the day;
+       - the turn itself: where the browser can, the two pages
+         cross-fade with the tabs and the slip held still (the
+         stylesheet's @view-transition), and the next meeting is
+         fetched as soon as a tab is pointed at.
+
+     A staff preview's ?design= goes along, so the preview is not left
+     by its own tabs. */
+  function meetings() {
+    const tabs = document.querySelector('[data-mf-switcher]');
+    if (!tabs) return;
+    const KEY = 'mfr-meeting-turn';
+    const links = Array.from(document.querySelectorAll('a.mf-switcher__chip[href], .mf-paddles a[href]'));
+    const isMeeting = (url) => url.origin === window.location.origin && /\/full\/?$/.test(url.pathname);
+
+    const design = new URLSearchParams(window.location.search).get('design');
+    links.forEach((link) => {
+      let url;
+      try {
+        url = new URL(link.href);
+      } catch (e) {
+        return;
+      }
+      if (!isMeeting(url)) return;
+      link.setAttribute('data-mfr-meeting', '');
+      if (design && !url.searchParams.has('design')) {
+        url.searchParams.set('design', design);
+        link.href = url.pathname + url.search + url.hash;
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const link = e.target.closest && e.target.closest('a[data-mfr-meeting]');
+      if (!link) return;
+      /* The tabs' place in the window, for the page that is coming. A
+         paddle at the foot of the page is a different thing to have
+         pressed: from there the next meeting starts at its tabs. */
+      const fromTabs = tabs.contains(link);
+      try {
+        window.sessionStorage.setItem(KEY, JSON.stringify({
+          at: Date.now(),
+          offset: fromTabs ? Math.round(tabs.getBoundingClientRect().top) : null,
+        }));
+      } catch (err) {
+        /* private mode: the next meeting opens at its top, as before */
+      }
+      /* Pressed, and it shows at once: the tab takes the current one's
+         look while the next meeting comes. */
+      if (fromTabs) {
+        tabs.setAttribute('data-mfr-turning', '');
+        link.setAttribute('data-mfr-going', '');
+        link.setAttribute('aria-busy', 'true');
+      }
+    });
+
+    /* A page restored from the back/forward cache comes back as it was
+       left, mid-turn. Put its tabs right. */
+    window.addEventListener('pageshow', (e) => {
+      if (!e.persisted) return;
+      tabs.removeAttribute('data-mfr-turning');
+      links.forEach((link) => {
+        link.removeAttribute('data-mfr-going');
+        link.removeAttribute('aria-busy');
+      });
+    });
+
+    /* Fetch a meeting when its tab is pointed at or pressed, where the
+       browser has speculation rules; elsewhere the tab is a link like
+       any other. */
+    if (window.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules')) {
+      const rules = document.createElement('script');
+      rules.type = 'speculationrules';
+      rules.textContent = JSON.stringify({
+        prefetch: [{ where: { selector_matches: 'a[data-mfr-meeting]' }, eagerness: 'moderate' }],
+      });
+      document.head.appendChild(rules);
+    }
+  }
+
   function init() {
     ring();
     counts();
     strip();
     here();
     jumps();
+    meetings();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

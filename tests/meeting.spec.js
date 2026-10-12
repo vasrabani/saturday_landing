@@ -15,7 +15,7 @@ import { readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { test, expect } from '@playwright/test';
 import {
-  MASTHEAD_COLUMN_MAX_WIDTH, MEETING_SECTIONS, openMeeting, openSlip, pick, races, rewriteMeeting, runnersOf, settled,
+  MASTHEAD_COLUMN_MAX_WIDTH, MEETING_SECTIONS, MEETING_TIME, openMeeting, openSlip, pick, races, rewriteMeeting, runnersOf, settled,
   showsSlipSheet, slipFromElsewhere, slipStorageKey, tickets,
 } from './support/meeting.js';
 
@@ -124,6 +124,71 @@ test.describe('race strip', () => {
     expect(top).toBeGreaterThanOrEqual(under - 1);
     expect(top).toBeLessThanOrEqual(under + 40);
     await expect(chip).toHaveClass(/is-active/);
+  });
+});
+
+test.describe('another meeting, in place', () => {
+  const NOTE = 'mfr-meeting-turn';
+  const tabsTop = (page) => page.locator('[data-mf-switcher]').evaluate((nav) => Math.round(nav.getBoundingClientRect().top));
+  // The captured pages' tabs go to the live site, which is another
+  // origin from here, and a turn is only kept in place between pages of
+  // the same site. Serve the page with its tabs pointing at this one.
+  const sameSite = (page) => page.route('**/meeting.html', async (route) => {
+    const response = await route.fetch();
+    const body = (await response.text()).split('https://www.saturday-racing.com/races/meeting/').join('/races/meeting/');
+    await route.fulfill({ response, body });
+  });
+  // The page's clock is pinned (openMeeting), so a note's time is told by it.
+  const noteAt = (page, ago, offset) => page.addInitScript(([key, at, offset]) => {
+    sessionStorage.setItem(key, JSON.stringify({ at, offset }));
+  }, [NOTE, MEETING_TIME.getTime() - ago, offset]);
+
+  test('a tab pressed notes where the tabs stood, and looks chosen at once', async ({ page }) => {
+    await sameSite(page);
+    await openMeeting(page);
+    const tab = page.locator('a.mf-switcher__chip[data-mfr-meeting]').first();
+    // Hold the press where it is, to look at the page it leaves behind.
+    await page.evaluate(() => document.addEventListener('click', (e) => {
+      if (e.target.closest('a.mf-switcher__chip')) e.preventDefault();
+    }));
+    await page.locator('[data-mf-switcher]').evaluate((nav) =>
+      window.scrollTo({ top: nav.getBoundingClientRect().top + window.scrollY - 150, behavior: 'instant' }));
+    const stood = await tabsTop(page);
+    await tab.click();
+    const note = await page.evaluate((key) => JSON.parse(sessionStorage.getItem(key)), NOTE);
+    expect(note.offset).toBe(stood);
+    await expect(tab).toHaveAttribute('data-mfr-going', '');
+    await expect(page.locator('[data-mf-switcher]')).toHaveAttribute('data-mfr-turning', '');
+  });
+
+  test('a page turned to from the tabs opens with its tabs where they stood', async ({ page }) => {
+    await noteAt(page, 2_000, 150);
+    await openMeeting(page);
+    await expect.poll(() => tabsTop(page)).toBe(150);
+    // The note is for one turn only.
+    expect(await page.evaluate((key) => sessionStorage.getItem(key), NOTE)).toBeNull();
+  });
+
+  test('a page opened any other way starts at its top', async ({ page }) => {
+    await openMeeting(page);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  });
+
+  test('an old note is not acted on', async ({ page }) => {
+    await noteAt(page, 60_000, 150);
+    await openMeeting(page);
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  });
+
+  test('the two pages ask to cross-fade, with the tabs and the slip held still', async ({ page }) => {
+    await openMeeting(page);
+    const names = await page.evaluate(() => ({
+      tabs: getComputedStyle(document.querySelector('.mf-switcher')).viewTransitionName,
+      slip: getComputedStyle(document.querySelector('#betSlip')).viewTransitionName,
+    }));
+    // Browsers without view transitions report nothing: there the turn is a plain one.
+    test.skip(names.tabs === undefined, 'no view transitions in this browser');
+    expect(names).toEqual({ tabs: 'mf-meetings', slip: 'mf-slip' });
   });
 });
 
