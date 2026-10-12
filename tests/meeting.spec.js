@@ -130,57 +130,162 @@ test.describe('race strip', () => {
 test.describe('another meeting, in place', () => {
   const NOTE = 'mfr-meeting-turn';
   const tabsTop = (page) => page.locator('[data-mf-switcher]').evaluate((nav) => Math.round(nav.getBoundingClientRect().top));
-  // The captured pages' tabs go to the live site, which is another
-  // origin from here, and a turn is only kept in place between pages of
-  // the same site. Serve the page with its tabs pointing at this one.
-  const sameSite = (page) => page.route('**/meeting.html', async (route) => {
-    const response = await route.fetch();
-    const body = (await response.text()).split('https://www.saturday-racing.com/races/meeting/').join('/races/meeting/');
-    await route.fulfill({ response, body });
-  });
-  // The page's clock is pinned (openMeeting), so a note's time is told by it.
-  const noteAt = (page, ago, offset) => page.addInitScript(([key, at, offset]) => {
-    sessionStorage.setItem(key, JSON.stringify({ at, offset }));
-  }, [NOTE, MEETING_TIME.getTime() - ago, offset]);
+  const courseName = (page) => page.locator('.mf-hero__title-name').textContent();
 
-  test('a tab pressed notes where the tabs stood, and looks chosen at once', async ({ page }) => {
-    await sameSite(page);
-    await openMeeting(page);
-    const tab = page.locator('a.mf-switcher__chip[data-mfr-meeting]').first();
-    // Hold the press where it is, to look at the page it leaves behind.
-    await page.evaluate(() => document.addEventListener('click', (e) => {
-      if (e.target.closest('a.mf-switcher__chip')) e.preventDefault();
-    }));
+  // The sandbox has one meeting a day, and its tabs go to the live site.
+  // So: a second meeting of the same day is served at /meeting-b.html
+  // (this page under another course's name), and the first two tabs are
+  // pointed at it and at the other captured day.
+  const OTHER = 'Otherfield';
+  // The stand-in meeting is this 800KB page fetched and served again by the
+  // test itself: slow on a busy machine, and nothing to do with the page.
+  const ARRIVES = { timeout: 30_000 };
+  async function twoMeetings(page, { failFetch = false } = {}) {
+    const rename = (html) => html.split('>Newmarket<').join(`>${OTHER}<`);
+    await page.route('**/meeting-b.html', async (route) => {
+      if (failFetch && route.request().resourceType() === 'fetch') return route.fulfill({ status: 500, body: 'no' });
+      const response = await page.request.get('/meeting.html');
+      return route.fulfill({ status: 200, contentType: 'text/html', body: rename(await response.text()) });
+    });
+    await page.route('**/meeting.html', async (route) => {
+      const response = await route.fetch();
+      let seen = 0;
+      const body = (await response.text()).replace(/(<a class="mf-switcher__chip"\s+href=")[^"]*"/g, (whole, lead) => {
+        seen += 1;
+        return lead + (seen === 1 ? '/meeting-b.html' : seen === 2 ? '/meeting-upcoming.html' : '#') + '"';
+      });
+      await route.fulfill({ response, body });
+    });
+  }
+  const samePage = async (page) => {
+    await page.evaluate(() => { window.__same = true; });
+    return () => page.evaluate(() => window.__same === true);
+  };
+  const tab = (page, n) => page.locator('a.mf-switcher__chip[data-mfr-meeting]').nth(n);
+  const legs = (page) => page.locator('#slipLegs .mf-slip__leg');
+  // Pick the first priced runner of the nth race.
+  const pickIn = (page, n) => races(page).nth(n)
+    .locator('.racecard__runner:not([data-odds-decimal=""]) [data-action="add-to-slip"]').first().click();
+
+  test('a tab brings its meeting into the page: no reload, the tabs where they stood, the address changed', async ({ page }) => {
+    await twoMeetings(page);
+    const { problems } = await openMeeting(page);
+    const still = await samePage(page);
     await page.locator('[data-mf-switcher]').evaluate((nav) =>
       window.scrollTo({ top: nav.getBoundingClientRect().top + window.scrollY - 150, behavior: 'instant' }));
     const stood = await tabsTop(page);
-    await tab.click();
-    const note = await page.evaluate((key) => JSON.parse(sessionStorage.getItem(key)), NOTE);
-    expect(note.offset).toBe(stood);
-    await expect(tab).toHaveAttribute('data-mfr-going', '');
-    await expect(page.locator('[data-mf-switcher]')).toHaveAttribute('data-mfr-turning', '');
+
+    await tab(page, 0).click();
+    await expect(page.locator('.mf-hero__title-name')).toHaveText(OTHER, ARRIVES);
+    expect(await still(), 'the same page').toBe(true);
+    await expect(page).toHaveURL(/\/meeting-b\.html$/);
+    expect(Math.abs((await tabsTop(page)) - stood)).toBeLessThanOrEqual(1);
+    await expect(page.locator('.mf-races')).not.toHaveAttribute('aria-busy', 'true');
+    await expect(page.locator('[data-mfr-turning], [data-mfr-going]')).toHaveCount(0);
+    expect(problems).toEqual([]);
   });
 
-  test('a page turned to from the tabs opens with its tabs where they stood', async ({ page }) => {
-    await noteAt(page, 2_000, 150);
+  test('the races that arrive are set up like the ones that left', async ({ page }) => {
+    await twoMeetings(page);
+    await openMeeting(page);
+    const count = () => page.evaluate(() => ({
+      filters: document.querySelectorAll('.mfr-filter').length,
+      heads: document.querySelectorAll('.racecard__col[data-sortable][tabindex="0"]').length,
+      runs: document.querySelectorAll('.racecard__form [data-mfr-run]').length,
+      rowStops: document.querySelectorAll('.racecard__runner[tabindex="0"]').length,
+      stamp: document.querySelectorAll('.pick6 svg').length,
+      strip: document.querySelectorAll('.mf-jump__chip').length,
+      switches: document.querySelectorAll('.mfr-switch').length,
+    }));
+    const before = await count();
+    expect(before.filters).toBeGreaterThan(0);
+    const comments = await page.locator('.mfr-switch').first().getAttribute('aria-checked').catch(() => null);
+    await tab(page, 0).click();
+    await expect(page.locator('.mf-hero__title-name')).toHaveText(OTHER, ARRIVES);
+    expect(await count()).toEqual(before);
+    // The Comments switches that arrived are in step with the reader's setting.
+    if (comments != null) await expect(page.locator('.mfr-switch').first()).toHaveAttribute('aria-checked', comments);
+
+    // And they work: a column sorts, and the strip follows the reader.
+    const head = races(page).first().locator('.racecard__col[data-col="sr"]');
+    if (await head.isVisible()) {
+      await head.click();
+      await expect(head).toHaveAttribute('aria-sort', /ascending|descending/);
+    }
+    const third = races(page).nth(2);
+    await third.evaluate((el) => window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 200, behavior: 'instant' }));
+    await expect(page.locator('.mf-jump__chip').nth(2)).toHaveClass(/is-active/);
+  });
+
+  test('the slip comes too: its picks, their runners marked, and room for more', async ({ page }) => {
+    await twoMeetings(page);
+    await openMeeting(page);
+    await pickIn(page, 0);
+    await expect(legs(page)).toHaveCount(1);
+    await tab(page, 0).click();
+    await expect(page.locator('.mf-hero__title-name')).toHaveText(OTHER, ARRIVES);
+    // The same ticket, dressed, and (the stand-in meeting has the same
+    // runners) its runner marked on the page that arrived.
+    await expect(legs(page)).toHaveCount(1);
+    await expect(legs(page).first().locator('.mfr-leg__silks')).toHaveCount(1);
+    await expect(page.locator('.racecard__runner--in-slip')).toHaveCount(1);
+    await expect(page.locator('.mf-race--has-selection')).toHaveCount(1);
+    // A pick made on what arrived is taken.
+    await pickIn(page, 1);
+    await expect(legs(page)).toHaveCount(2);
+  });
+
+  test('Back turns back, in place', async ({ page }) => {
+    await twoMeetings(page);
+    await openMeeting(page);
+    const still = await samePage(page);
+    const here = await courseName(page);
+    await tab(page, 0).click();
+    await expect(page.locator('.mf-hero__title-name')).toHaveText(OTHER, ARRIVES);
+    await page.goBack();
+    await expect(page.locator('.mf-hero__title-name')).toHaveText(here, ARRIVES);
+    await expect(page).toHaveURL(/\/meeting\.html$/);
+    expect(await still()).toBe(true);
+  });
+
+  test('a meeting of another day is gone to as a page, its tabs where they stood', async ({ page }) => {
+    await twoMeetings(page);
+    await openMeeting(page);
+    await page.locator('[data-mf-switcher]').evaluate((nav) =>
+      window.scrollTo({ top: nav.getBoundingClientRect().top + window.scrollY - 150, behavior: 'instant' }));
+    const stood = await tabsTop(page);
+    // Another day has another day's slip: not one to swap under this page.
+    await Promise.all([page.waitForURL(/\/meeting-upcoming\.html$/, { waitUntil: 'domcontentloaded' }), tab(page, 1).click()]);
+    await expect(page.locator('.mf-hero__sub')).toContainText('189');
+    await expect.poll(() => tabsTop(page)).toBe(stood);
+  });
+
+  test('if the meeting cannot be fetched, the tab is a link again', async ({ page }) => {
+    await twoMeetings(page, { failFetch: true });
+    await openMeeting(page);
+    await Promise.all([page.waitForURL(/\/meeting-b\.html$/, { waitUntil: 'domcontentloaded' }), tab(page, 0).click()]);
+    await expect(page.locator('.mf-hero__title-name')).toHaveText(OTHER, ARRIVES);
+  });
+
+  test('a page turned to as a page opens with its tabs where they stood, once', async ({ page }) => {
+    // The page's clock is pinned (openMeeting), so the note's time is told by it.
+    await page.addInitScript(([key, at]) => {
+      sessionStorage.setItem(key, JSON.stringify({ at, offset: 150 }));
+    }, [NOTE, MEETING_TIME.getTime() - 2_000]);
     await openMeeting(page);
     await expect.poll(() => tabsTop(page)).toBe(150);
-    // The note is for one turn only.
     expect(await page.evaluate((key) => sessionStorage.getItem(key), NOTE)).toBeNull();
   });
 
-  test('a page opened any other way starts at its top', async ({ page }) => {
+  test('an old note is not acted on: the page starts at its top', async ({ page }) => {
+    await page.addInitScript(([key, at]) => {
+      sessionStorage.setItem(key, JSON.stringify({ at, offset: 150 }));
+    }, [NOTE, MEETING_TIME.getTime() - 60_000]);
     await openMeeting(page);
     expect(await page.evaluate(() => window.scrollY)).toBe(0);
   });
 
-  test('an old note is not acted on', async ({ page }) => {
-    await noteAt(page, 60_000, 150);
-    await openMeeting(page);
-    expect(await page.evaluate(() => window.scrollY)).toBe(0);
-  });
-
-  test('the two pages ask to cross-fade, with the tabs and the slip held still', async ({ page }) => {
+  test('the turn asks to cross-fade, with the tabs and the slip held still', async ({ page }) => {
     await openMeeting(page);
     const names = await page.evaluate(() => ({
       tabs: getComputedStyle(document.querySelector('.mf-switcher')).viewTransitionName,

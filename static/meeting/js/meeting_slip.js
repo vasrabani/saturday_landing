@@ -115,10 +115,16 @@
     if (!list || !head) return;
 
     const key = (course, time, horse) => [course, time, horse].map((s) => String(s || '').trim().toLowerCase()).join('|');
+    /* The runners on the page, by key. Read again when a turn to
+       another meeting has changed them (survey(), below). */
     const rows = new Map();
-    document.querySelectorAll('.racecard__runner').forEach((row) => {
-      rows.set(key(row.dataset.course, row.dataset.raceTime, row.dataset.horseName), row);
-    });
+    const readRows = () => {
+      rows.clear();
+      document.querySelectorAll('.racecard__runner').forEach((row) => {
+        rows.set(key(row.dataset.course, row.dataset.raceTime, row.dataset.horseName), row);
+      });
+    };
+    readRows();
 
     /* Where this page's silks come from: the same place for every
        runner. A kept kit (from storage) is only drawn from there, or
@@ -218,10 +224,14 @@
     /* The day's other meetings, by course, from the tabs: where a place
        goes for a pick made at one of them. */
     const meetings = new Map();
-    document.querySelectorAll('a.mf-switcher__chip[href]').forEach((chip) => {
-      const course = chip.querySelector('.mf-switcher__course');
-      if (course) meetings.set(course.textContent.trim().toLowerCase(), chip.getAttribute('href'));
-    });
+    const readMeetings = () => {
+      meetings.clear();
+      document.querySelectorAll('a.mf-switcher__chip[href]').forEach((chip) => {
+        const course = chip.querySelector('.mf-switcher__course');
+        if (course) meetings.set(course.textContent.trim().toLowerCase(), chip.getAttribute('href'));
+      });
+    };
+    readMeetings();
     const courseOf = (leg) => {
       if (leg.dataset.course) return leg.dataset.course.trim().toLowerCase();
       const where = leg.querySelector('.mf-slip__leg-where');
@@ -356,6 +366,21 @@
     let lastCount = -1;
     new MutationObserver(dress).observe(list, { childList: true });
     dress();
+
+    /* A turn to another meeting (meeting_masthead.js) has put other
+       races, and other tabs, in the page. The picks are the same, but
+       what they are matched against is not: read it again, and bring
+       the tickets, the places and the Pick buttons up to date as if the
+       picks had changed. */
+    window.mfrMeeting = window.mfrMeeting || {};
+    window.mfrMeeting.slip = () => {
+      readRows();
+      readMeetings();
+      limit.survey();
+      lastPicked = null;
+      list.querySelectorAll('.mfr-leg__silks, .mfr-leg__jockey').forEach((node) => node.remove());
+      dress();
+    };
   }
 
   /* ── 5. Six at most ──────────────────────────────────────────── */
@@ -421,7 +446,11 @@
       }
     };
 
-    const buttons = Array.from(document.querySelectorAll('[data-action="add-to-slip"]'));
+    let buttons = [];
+    const survey = () => {
+      buttons = Array.from(document.querySelectorAll('[data-action="add-to-slip"]'));
+    };
+    survey();
     const inBar = document.getElementById('slipHandleCount');
     if (inBar) inBar.setAttribute('data-mfr-of', '/' + LIMIT);
 
@@ -463,10 +492,12 @@
       true
     );
 
-    return (n) => {
+    const update = (n) => {
       hush();
       limit(n);
     };
+    update.survey = survey;
+    return update;
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', slip);

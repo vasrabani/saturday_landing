@@ -472,6 +472,12 @@
     init();
   }
 
+  // The meeting page brings another meeting's races into the page
+  // without a reload; the rows that have just arrived are set up by
+  // calling this. (init() wires every row it finds, so it is only for
+  // content that is all new.)
+  window.SaturdayRacecardCollapse = { init: init };
+
   // Re-init on viewport resize across the breakpoint.
   let lastIsMobile = isMobile();
   window.addEventListener('resize', () => {

@@ -123,26 +123,45 @@
 
   /* ── 4. "You are here" ───────────────────────────────────────── */
 
-  function here() {
-    const chips = Array.from(document.querySelectorAll('[data-jump-target]'));
-    const races = chips.map((chip) => document.getElementById(chip.getAttribute('data-jump-target')));
-    if (!chips.length || races.some((race) => !race)) return;
+  let hereChips = [];
+  let hereRaces = [];
+  let hereWatch = null;
+  let hereMark = () => {};
 
+  /* The strip's chips and the races they go to, as the page has them
+     now: read at the start, and again when a turn to another meeting
+     has replaced both. */
+  function hereRead() {
+    hereChips = Array.from(document.querySelectorAll('[data-jump-target]'));
+    hereRaces = hereChips.map((chip) => document.getElementById(chip.getAttribute('data-jump-target')));
+    if (hereRaces.some((race) => !race)) {
+      hereChips = [];
+      hereRaces = [];
+    }
+    if (hereWatch) {
+      hereWatch.disconnect();
+      hereChips.forEach((chip) => hereWatch.observe(chip, { attributes: true, attributeFilter: ['class'] }));
+    }
+    hereMark();
+  }
+
+  function here() {
     function current() {
       /* The line is a little over a third of the way down the window. */
       const line = window.innerHeight * 0.35;
       let at = -1;
-      races.forEach((race, i) => {
+      hereRaces.forEach((race, i) => {
         if (race.getBoundingClientRect().top <= line) at = i;
       });
       /* Past the end of the last race: nowhere. */
-      if (at === races.length - 1 && races[at].getBoundingClientRect().bottom < line) at = -1;
+      if (at >= 0 && at === hereRaces.length - 1 && hereRaces[at].getBoundingClientRect().bottom < line) at = -1;
       return at;
     }
 
     function mark() {
+      if (!hereChips.length) return;
       const at = current();
-      chips.forEach((chip, i) => {
+      hereChips.forEach((chip, i) => {
         if (chip.classList.contains('is-active') !== (i === at)) chip.classList.toggle('is-active', i === at);
       });
     }
@@ -163,9 +182,9 @@
        this one. That settles rather than loops: mark() writes only where
        the class differs, and setting a class an element already has is
        not a mutation, so a correction fires no further callback. */
-    const watch = new MutationObserver(soon);
-    chips.forEach((chip) => watch.observe(chip, { attributes: true, attributeFilter: ['class'] }));
-    mark();
+    hereWatch = new MutationObserver(soon);
+    hereMark = mark;
+    hereRead();
   }
 
   /* ── 5. Jumps to a race ──────────────────────────────────────── */
@@ -193,94 +212,250 @@
   /* ── 6. Another meeting, in place ────────────────────────────── */
 
   /* A slip is built across the day's meetings, so choosing another one
-     in the tabs should read as turning to that part of the card, not as
-     leaving the page. Each meeting is still a page of its own (its
-     address can be kept, sent and gone back to), and all seven scripts
-     start cleanly on it. What makes the move feel in place:
+     in the tabs turns to that part of the day's card without leaving
+     the page: the other meeting is fetched, and its masthead, tabs,
+     strip, next-off bar and races take the place of this one's. The
+     slip is not touched. The address and the title change with it, and
+     Back turns back.
 
-       - where the reader stood. The tabs' distance from the top of the
-         window is noted on the way out and given back on the way in,
-         by the two lines of script the template puts straight after
-         the tabs, before the races under them are even parsed. Nothing
-         jumps to the top of a new masthead;
-       - the slip, which bet_slip.js keeps on the device for the day;
-       - the turn itself: where the browser can, the two pages
-         cross-fade with the tabs and the slip held still (the
-         stylesheet's @view-transition), and the next meeting is
-         fetched as soon as a tab is pointed at.
+     Seven scripts have set this page up, and the races they set up have
+     just gone. Each is asked to start again on what has arrived: the
+     site's own three through the entry points they now publish
+     (SaturdayRacecard, SaturdayRacecardCollapse, SaturdayMeetingFull),
+     the revamp's through window.mfrMeeting, and bet_slip.js by the
+     storage event it already listens for, which makes it draw the slip
+     again and mark the runners that are in it.
 
-     A staff preview's ?design= goes along, so the preview is not left
-     by its own tabs. */
+     If anything about this is not as expected (no fetch, a page that is
+     not a meeting, another day's slip, an error on the way), the tab
+     does what it always did and the browser goes to the meeting's own
+     page. On that road the tabs' place in the window is noted, and the
+     template gives it back straight after the tabs, so even then
+     nothing jumps.
+
+     A staff preview's ?design= goes along. */
   function meetings() {
-    const tabs = document.querySelector('[data-mf-switcher]');
-    if (!tabs) return;
-    const KEY = 'mfr-meeting-turn';
-    const links = Array.from(document.querySelectorAll('a.mf-switcher__chip[href], .mf-paddles a[href]'));
-    const isMeeting = (url) => url.origin === window.location.origin && /\/full\/?$/.test(url.pathname);
+    const NOTE = 'mfr-meeting-turn';
+    const wrap = document.querySelector('.mf-wrap');
+    if (!wrap || !document.querySelector('[data-mf-switcher]')) return;
 
+    /* A link to another meeting's page: on this site, a /full/ page (or,
+       in the design sandbox, the other captured day). */
+    const isMeeting = (url) =>
+      url.origin === window.location.origin && (/\/full\/?$/.test(url.pathname) || /\/meeting[-\w]*\.html$/.test(url.pathname));
+    const WHERE = '[data-mf-switcher] a[href], .mf-paddles a[href], .mfr-card a[href]';
     const design = new URLSearchParams(window.location.search).get('design');
-    links.forEach((link) => {
-      let url;
+
+    function prepare() {
+      document.querySelectorAll(WHERE).forEach((link) => {
+        let url;
+        try {
+          url = new URL(link.href);
+        } catch (e) {
+          return;
+        }
+        if (!isMeeting(url) || url.pathname === window.location.pathname) return;
+        link.setAttribute('data-mfr-meeting', '');
+        if (design && !url.searchParams.has('design')) {
+          url.searchParams.set('design', design);
+          link.href = url.pathname + url.search + url.hash;
+        }
+      });
+    }
+
+    /* ── fetching ── */
+    const pages = new Map();          // address → { at, text: Promise<string> }
+    const FRESH_MS = 60000;
+    function fetchPage(address) {
+      const kept = pages.get(address);
+      if (kept && Date.now() - kept.at < FRESH_MS) return kept.text;
+      const text = fetch(address, { credentials: 'same-origin', headers: { 'X-Requested-With': 'fetch' } }).then((response) => {
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        return response.text();
+      });
+      pages.set(address, { at: Date.now(), text });
+      text.catch(() => pages.delete(address));
+      return text;
+    }
+    /* Pointed at, or touched: the page is on its way before the press. */
+    /* One spelling of a meeting's address, for the fetch, its keeping
+       and the history entry alike. */
+    const addressOf = (link) => {
+      const url = new URL(link.href);
+      return url.pathname + url.search;
+    };
+    const eager = (e) => {
+      const link = e.target.closest && e.target.closest('a[data-mfr-meeting]');
+      if (link && window.fetch) fetchPage(addressOf(link)).catch(() => {});
+    };
+    document.addEventListener('pointerover', eager, { passive: true });
+    document.addEventListener('touchstart', eager, { passive: true });
+    document.addEventListener('focusin', eager);
+
+    /* ── the old road: the browser goes to the page ── */
+    function leaveFor(address, fromTabs) {
+      const tabs = document.querySelector('[data-mf-switcher]');
       try {
-        url = new URL(link.href);
-      } catch (e) {
-        return;
+        window.sessionStorage.setItem(NOTE, JSON.stringify({
+          at: Date.now(),
+          offset: fromTabs && tabs ? Math.round(tabs.getBoundingClientRect().top) : null,
+        }));
+      } catch (err) {
+        /* private mode: the next meeting opens at its top */
       }
-      if (!isMeeting(url)) return;
-      link.setAttribute('data-mfr-meeting', '');
-      if (design && !url.searchParams.has('design')) {
-        url.searchParams.set('design', design);
-        link.href = url.pathname + url.search + url.hash;
+      window.location.assign(address);
+    }
+
+    /* ── the turn ── */
+    const PARTS = ['.mf-hero', '.mf-subnav', '.mf-races'];
+
+    function swap(doc, fromTabs) {
+      const fresh = doc.querySelector('.mf-wrap');
+      const tabs = document.querySelector('[data-mf-switcher]');
+      const stood = tabs ? tabs.getBoundingClientRect().top : null;
+
+      PARTS.forEach((selector) => wrap.querySelector(selector).replaceWith(fresh.querySelector(selector)));
+      const oldBar = wrap.querySelector('.mf-next-off');
+      if (oldBar) oldBar.remove();
+      const bar = fresh.querySelector('.mf-next-off');
+      if (bar) wrap.insertBefore(bar, wrap.querySelector('.mf-grid'));
+      Array.from(fresh.attributes).forEach((attr) => {
+        if (attr.name !== 'class' && attr.name !== 'style') wrap.setAttribute(attr.name, attr.value);
+      });
+      if (doc.title) document.title = doc.title;
+
+      /* Everyone starts again on what has arrived, in the order they
+         load in. */
+      const again = (name, call) => {
+        try {
+          call();
+        } catch (err) {
+          if (window.console) console.error('meeting turn: ' + name, err);
+        }
+      };
+      again('racecard', () => window.SaturdayRacecard.initCards(wrap));
+      again('collapse', () => window.SaturdayRacecardCollapse.init());
+      again('meeting_full', () => window.SaturdayMeetingFull.init());
+      again('races', () => window.mfrMeeting.races());
+      again('masthead', () => {
+        ring();
+        counts();
+        strip();
+        hereRead();
+        prepare();
+      });
+      /* bet_slip.js draws the slip again and marks this meeting's
+         runners that are in it; then the ticket's side is brought up to
+         date against the new rows, tabs and buttons. */
+      again('bet_slip', () => window.dispatchEvent(new StorageEvent('storage', { key: wrap.dataset.storageKey })));
+      again('slip', () => window.mfrMeeting.slip());
+
+      /* Stand where the reader stood. From the tabs, they stay put;
+         from a paddle at the foot of the page, the next meeting starts
+         at its tabs. */
+      const now = document.querySelector('[data-mf-switcher]');
+      if (now) {
+        const top = now.getBoundingClientRect().top;
+        const pinned = parseFloat(getComputedStyle(document.body).getPropertyValue('--nav-h')) || 64;
+        const want = fromTabs && stood != null ? stood : pinned + 16;
+        if (Math.abs(top - want) > 1) window.scrollBy({ top: top - want, behavior: 'instant' });
+        /* The keyboard stays on the tabs, on the meeting now shown. */
+        const current = now.querySelector('.mf-switcher__chip--current');
+        if (current && fromTabs) {
+          current.setAttribute('tabindex', '-1');
+          current.focus({ preventScroll: true });
+        }
       }
-    });
+    }
+
+    const ready = () =>
+      window.fetch && window.DOMParser && window.SaturdayRacecard && window.SaturdayRacecardCollapse
+      && window.SaturdayMeetingFull && window.mfrMeeting && window.mfrMeeting.races && window.mfrMeeting.slip;
+
+    let turning = 0;
+    function turnTo(address, { push, fromTabs }) {
+      const turn = ++turning;
+      const races = wrap.querySelector('.mf-races');
+      if (races) races.setAttribute('aria-busy', 'true');
+      return fetchPage(address)
+        .then((html) => {
+          if (turn !== turning) return;      // another tab was pressed meanwhile
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          const fresh = doc.querySelector('.mf-wrap');
+          const whole = fresh && PARTS.every((selector) => fresh.querySelector(selector) && wrap.querySelector(selector));
+          /* Another day's meeting has another day's slip: that is a
+             different page, and is gone to as one. */
+          if (!whole || fresh.dataset.storageKey !== wrap.dataset.storageKey) throw new Error('not a meeting of this day');
+          const go = () => swap(doc, fromTabs);
+          const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (document.startViewTransition && !calm) {
+            const moving = document.startViewTransition(go);
+            /* swap() throwing rejects this; the catch below then takes
+               the old road. */
+            return moving.updateCallbackDone;
+          }
+          go();
+        })
+        .then(() => {
+          if (turn !== turning) return;
+          if (push) window.history.pushState({ mfrMeeting: true }, '', address);
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', 'page_view', { page_location: window.location.href, page_title: document.title });
+          }
+        })
+        .catch(() => {
+          if (turn === turning) leaveFor(address, fromTabs);
+        });
+    }
+
+    prepare();
+    /* So that Back, after a turn, has somewhere of this page's to come
+       back to. */
+    if (window.history.replaceState) {
+      window.history.replaceState(Object.assign({}, window.history.state, { mfrMeeting: true }), '');
+    }
 
     document.addEventListener('click', (e) => {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       const link = e.target.closest && e.target.closest('a[data-mfr-meeting]');
-      if (!link) return;
-      /* The tabs' place in the window, for the page that is coming. A
-         paddle at the foot of the page is a different thing to have
-         pressed: from there the next meeting starts at its tabs. */
-      const fromTabs = tabs.contains(link);
-      try {
-        window.sessionStorage.setItem(KEY, JSON.stringify({
-          at: Date.now(),
-          offset: fromTabs ? Math.round(tabs.getBoundingClientRect().top) : null,
-        }));
-      } catch (err) {
-        /* private mode: the next meeting opens at its top, as before */
-      }
+      if (!link || link.target === '_blank') return;
+      const tabs = document.querySelector('[data-mf-switcher]');
+      const fromTabs = !!tabs && tabs.contains(link);
+      e.preventDefault();
       /* Pressed, and it shows at once: the tab takes the current one's
-         look while the next meeting comes. */
+         look while the meeting comes. */
       if (fromTabs) {
         tabs.setAttribute('data-mfr-turning', '');
+        tabs.querySelectorAll('[data-mfr-going]').forEach((other) => other.removeAttribute('data-mfr-going'));
         link.setAttribute('data-mfr-going', '');
         link.setAttribute('aria-busy', 'true');
       }
+      const address = addressOf(link);
+      if (!ready()) {
+        leaveFor(address, fromTabs);
+        return;
+      }
+      turnTo(address, { push: true, fromTabs });
+    });
+
+    /* Back and Forward between meetings turned to in place. */
+    window.addEventListener('popstate', (e) => {
+      if (!e.state || !e.state.mfrMeeting) return;
+      const address = window.location.pathname + window.location.search;
+      if (ready()) turnTo(address, { push: false, fromTabs: true });
+      else window.location.reload();
     });
 
     /* A page restored from the back/forward cache comes back as it was
-       left, mid-turn. Put its tabs right. */
+       left, perhaps mid-turn on the old road. Put its tabs right. */
     window.addEventListener('pageshow', (e) => {
       if (!e.persisted) return;
-      tabs.removeAttribute('data-mfr-turning');
-      links.forEach((link) => {
-        link.removeAttribute('data-mfr-going');
-        link.removeAttribute('aria-busy');
+      document.querySelectorAll('[data-mfr-turning]').forEach((node) => node.removeAttribute('data-mfr-turning'));
+      document.querySelectorAll('[data-mfr-going]').forEach((node) => {
+        node.removeAttribute('data-mfr-going');
+        node.removeAttribute('aria-busy');
       });
     });
-
-    /* Fetch a meeting when its tab is pointed at or pressed, where the
-       browser has speculation rules; elsewhere the tab is a link like
-       any other. */
-    if (window.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports('speculationrules')) {
-      const rules = document.createElement('script');
-      rules.type = 'speculationrules';
-      rules.textContent = JSON.stringify({
-        prefetch: [{ where: { selector_matches: 'a[data-mfr-meeting]' }, eagerness: 'moderate' }],
-      });
-      document.head.appendChild(rules);
-    }
   }
 
   function init() {
