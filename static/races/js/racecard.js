@@ -135,7 +135,9 @@
         return span ? (voteCounts[span.dataset.runner] || 0) : 0;
       }
       const raw = row.dataset[col] || '';
-      if (col === 'number' || col === 'sr' || col === 'rpr' || col === 'stars') return parseFloat(raw) || 0;
+      // 'or' with the rest: the row carries data-or now. Read as text, an
+      // absent rating compared as NaN and the column sorted nothing.
+      if (col === 'number' || col === 'sr' || col === 'rpr' || col === 'or' || col === 'stars') return parseFloat(raw) || 0;
       return raw.toLowerCase();
     }
 

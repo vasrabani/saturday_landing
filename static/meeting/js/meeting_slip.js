@@ -122,11 +122,12 @@
 
     /* Where this page's silks come from: the same place for every
        runner. A kept kit (from storage) is only drawn from there, or
-       from the silks service the site uses, never from anywhere else. */
+       from the silks services the racing data has used, never from
+       anywhere else. */
     const first = document.querySelector('img.racecard__silk[src]');
     const folder = first ? first.getAttribute('src').replace(/[^/?]*$/, '') : '';
     const picture = (src) => {
-      if (!src || !(folder && src.startsWith(folder)) && !/^https:\/\/silks\.theracingapi\.com\/silk\?/.test(src)) return null;
+      if (!src || !(folder && src.startsWith(folder)) && !/^https:\/\/(silks\.theracingapi\.com\/silk\?|www\.rp-assets\.com\/svg\/)/.test(src)) return null;
       const copy = make('img');
       copy.src = src;
       copy.alt = '';
