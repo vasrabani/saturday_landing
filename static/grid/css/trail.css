@@ -83,6 +83,17 @@
   --trail-gold-wash:     #FBF5E4;   /* a tinted ground */
   --trail-gold-rule:     #EEDFB3;   /* a rule on a tinted ground */
   --trail-gold-ring:     color-mix(in srgb, var(--trail-gold-ink) 35%, transparent);
+
+  /* Second and third: silver and bronze, as the winner is gold. A face,
+     an edge, a fill for the cloth and the plaque, and the ink on it. */
+  --trail-silver-face:   #F2F4F7;
+  --trail-silver-edge:   #98A2B0;
+  --trail-silver-fill:   #CBD2DB;
+  --trail-silver-deep:   #1F252D;
+  --trail-bronze-face:   #F9EDE1;
+  --trail-bronze-edge:   #B37840;
+  --trail-bronze-fill:   #DDA873;
+  --trail-bronze-deep:   #33200C;
   --trail-rosette:       #D5B04A;   /* the rosette's pleats and tails */
   --trail-win-face:      #FFF9E8;   /* the winner's card... */
   --trail-win-edge:      #DDBF62;   /* ...and its edge */
@@ -1538,6 +1549,8 @@ body.trail-nav-lock { overflow: hidden; }
 
 .course__tick.is-run  { background: var(--trail-ink-soft); }
 .course__tick.is-won  { background: var(--trail-gold); }
+.course__tick.is-second { background: var(--trail-silver-edge); }
+.course__tick.is-third  { background: var(--trail-bronze-edge); }
 .course__tick.is-live { background: var(--c-red); }
 
 .course__tick.is-now {
@@ -2758,6 +2771,47 @@ body.trail-nav-lock { overflow: hidden; }
   font-weight: 800;
 }
 
+/* Placed: the silver card for second, the bronze for third, made the
+   way the gold one is: the face, the edge, the cloth and the plaque.
+   (A place the result gives no number for keeps the plain card.) */
+.cell--placed-2 {
+  --place-face: var(--trail-silver-face);
+  --place-edge: var(--trail-silver-edge);
+  --place-fill: var(--trail-silver-fill);
+  --place-deep: var(--trail-silver-deep);
+}
+
+.cell--placed-3 {
+  --place-face: var(--trail-bronze-face);
+  --place-edge: var(--trail-bronze-edge);
+  --place-fill: var(--trail-bronze-fill);
+  --place-deep: var(--trail-bronze-deep);
+}
+
+.cell--placed-2,
+.cell--placed-3 {
+  --cell-face: var(--place-face);
+  --cell-edge: var(--place-edge);
+  --cell-rule: color-mix(in srgb, var(--place-edge) 38%, transparent);
+  --cell-tag: color-mix(in srgb, var(--place-fill) 45%, var(--place-face));
+  --cell-tag-ink: var(--place-deep);
+  --cell-ring: 0 0 0 1px var(--place-edge);
+  --cell-drop: 0 8px 18px -10px color-mix(in srgb, var(--place-edge) 70%, transparent);
+  border-style: solid;
+}
+
+.cell--placed-2 .cell__badge,
+.cell--placed-3 .cell__badge,
+.cell--placed-2 .cell__medal,
+.cell--placed-3 .cell__medal {
+  background: var(--place-fill);
+  box-shadow: inset 0 0 0 1.5px var(--place-edge);
+  color: var(--place-deep);
+}
+
+.cell--placed-2 .cell__horse,
+.cell--placed-3 .cell__horse { font-weight: 800; }
+
 /* A Pick Winner card that is running, or next: a card like the rest. */
 .cell--backup.cell--live,
 .cell--backup.cell--now {
@@ -2783,6 +2837,13 @@ body.trail-nav-lock { overflow: hidden; }
 }
 
 .cell--won.cell--tier-4 { --cell-edge: var(--trail-gold-fill); }
+
+/* Placed, it is black still, edged in its silver or bronze. */
+.cell--placed-2.cell--tier-4,
+.cell--placed-3.cell--tier-4 {
+  --cell-edge: var(--place-fill);
+  --cell-ring: 0 0 0 1px var(--place-fill);
+}
 
 .cell--tier-4 .cell__badge {
   background: var(--trail-gold-fill);
