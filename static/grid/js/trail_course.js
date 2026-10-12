@@ -167,6 +167,8 @@
         var passed = has(card, 'no_fancy') && (fox < 0 || i < fox);
         tick.classList.toggle('is-won', has(card, 'won'));
         tick.classList.toggle('is-run', has(card, 'placed') || has(card, 'lost') || has(card, 'void') || passed);
+        tick.classList.toggle('is-second', has(card, 'placed-2'));
+        tick.classList.toggle('is-third', has(card, 'placed-3'));
         tick.classList.toggle('is-live', has(card, 'live'));
         tick.classList.toggle('is-now', i === fox);
       });

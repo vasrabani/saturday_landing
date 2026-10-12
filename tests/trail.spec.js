@@ -458,6 +458,26 @@ test.describe('the track', () => {
 });
 
 test.describe('race cards', () => {
+  test('second is a silver card and third a bronze one, as the winner is gold', async ({ page }) => {
+    await openTrail(page, { live: false });
+    const face = (selector) => page.locator(`#trailGrid ${selector}`).first()
+      .evaluate((card) => getComputedStyle(card).getPropertyValue('--cell-edge').trim()
+        && getComputedStyle(card).borderTopColor);
+    // The Smoker stays black whatever its result, so look at the others.
+    const [gold, silver, plain] = await Promise.all([
+      face('.cell--won:not(.cell--tier-4)'),
+      face('.cell--placed-2:not(.cell--tier-4)'),
+      face('.cell--pending:not(.cell--tier-4, .cell--now)'),
+    ]);
+    expect(new Set([gold, silver, plain]).size, 'three different edges').toBe(3);
+    // The fixture's third is the Smoker: its plaque and edge carry the bronze.
+    const third = page.locator('#trailGrid .cell--placed-3').first();
+    const bronze = await third.locator('.cell__medal').evaluate((plaque) => getComputedStyle(plaque).backgroundColor);
+    const secondPlaque = await page.locator('#trailGrid .cell--placed-2 .cell__medal').first()
+      .evaluate((plaque) => getComputedStyle(plaque).backgroundColor);
+    expect(bronze).not.toBe(secondPlaque);
+  });
+
   test('a race that is run flies a flag, and one still to come does not', async ({ page }) => {
     await openTrail(page, { live: false });
     // The flag stands after the time on a card with room and before the
