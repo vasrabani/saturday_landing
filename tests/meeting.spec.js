@@ -127,6 +127,16 @@ test.describe('race strip', () => {
   });
 });
 
+test.describe('race strip: the keyboard', () => {
+  test('a chip takes the focus to its race', async ({ page }) => {
+    await openMeeting(page);
+    const chip = page.locator('.mf-jump__chip[href^="#race-"]').nth(2);
+    const id = (await chip.getAttribute('href')).slice(1);
+    await chip.click();
+    await expect(page.locator('#' + id)).toBeFocused();
+  });
+});
+
 test.describe('runners', () => {
   test('every trip is spelt out, and its ruler is drawn to the same trip', async ({ page }) => {
     await openMeeting(page);
@@ -250,11 +260,28 @@ test.describe('filters and sorting', () => {
     // The phone card opens each comment from its own Details instead.
     test.skip(!(await toggle.isVisible()), 'no switch in the card layout');
     const html = page.locator('html');
+    // It starts folded where a runner takes two lines (see below), so
+    // bring it to "shown" first, whichever way it started.
+    if ((await toggle.getAttribute('aria-checked')) === 'false') await toggle.click();
+    await expect(html).not.toHaveAttribute('data-mfr-compact');
     await toggle.click();
     await expect(html).toHaveAttribute('data-mfr-compact', '');
     await expect(toggle).toHaveAttribute('aria-checked', 'false');
     await toggle.click();
     await expect(html).not.toHaveAttribute('data-mfr-compact');
+  });
+
+  test('comments start folded where a runner takes two lines, and shown in the table', async ({ page }) => {
+    await openMeeting(page);
+    const toggle = page.locator('.mfr-switch').first();
+    test.skip(!(await toggle.isVisible()), 'no switch in the card layout');
+    const room = await page.locator('.mf-races').evaluate((list) => list.clientWidth);
+    const twoLines = room >= 660 && room < 1000;
+    await expect(toggle).toHaveAttribute('aria-checked', String(!twoLines));
+    // A reader's own choice wins over the room, and is kept.
+    await toggle.click();
+    await page.reload();
+    await expect(page.locator('.mfr-switch').first()).toHaveAttribute('aria-checked', String(twoLines));
   });
 
   test('a filter puts a sorted column back to rest, so its next click starts again', async ({ page }) => {
@@ -464,12 +491,57 @@ test.describe('bet slip', () => {
     await expect(panel).not.toHaveClass(/is-open/);
   });
 
+  test('closing the sheet from inside it gives the keyboard back to the bar', async ({ page }) => {
+    test.skip(!showsSlipSheet(page), 'the slip is docked at this width');
+    await openMeeting(page);
+    await page.locator('.racecard__runner:not([data-odds-decimal=""]) [data-action="add-to-slip"]').first().click();
+    await page.locator('#slipHandle').click();
+    await expect(page.locator('#betSlip')).toHaveClass(/is-open/);
+    await page.locator('#slipStake').focus();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#betSlip')).not.toHaveClass(/is-open/);
+    await expect(page.locator('#slipHandle')).toBeFocused();
+  });
+
   test('upcoming: a runner without a price cannot be picked', async ({ page }) => {
     await openMeeting(page, { day: 'upcoming' });
     const button = page.locator('.racecard__runner[data-odds-decimal=""] [data-action="add-to-slip"]').first();
     await button.click();
     await expect(page.locator('.mf-toast')).toHaveText(/No priced market/);
     await expect(page.locator('#slipLegs .mf-slip__leg')).toHaveCount(0);
+  });
+
+  test('upcoming: Pick on a runner without a price does not look ready', async ({ page }) => {
+    await openMeeting(page, { day: 'upcoming' });
+    const look = (selector) => page.locator(selector).first().evaluate((button) => {
+      const style = getComputedStyle(button);
+      return { edge: style.borderTopStyle, ink: style.color, cursor: style.cursor };
+    });
+    const unpriced = await look('.racecard__slip-btn--unpriced');
+    const ready = await look('.racecard__slip-btn:not(.racecard__slip-btn--unpriced)');
+    expect(unpriced.edge).toBe('dashed');
+    expect(unpriced.cursor).toBe('not-allowed');
+    expect(unpriced.ink).not.toBe(ready.ink);
+    // Every button on a runner with no price carries the class.
+    const bare = await page.locator('.racecard__runner[data-odds-decimal=""] .racecard__slip-btn:not(.racecard__slip-btn--unpriced)').count();
+    expect(bare).toBe(0);
+  });
+
+  test('the same refusal is said again when the same runner is pressed twice', async ({ page }) => {
+    await openMeeting(page, { slip: slipFromElsewhere(6) });
+    const note = page.locator('.mfr-toast');
+    const seventh = page.locator('.mf-race:not(.mf-race--has-selection) .racecard__runner:not([data-odds-decimal=""]) [data-action="add-to-slip"]').first();
+    await seventh.click({ force: true });
+    await expect(note).toHaveText(/is the most you can pick/);
+    const said = [];
+    await note.evaluate((node) => {
+      window.__said = [];
+      new MutationObserver(() => window.__said.push(node.textContent)).observe(node, { childList: true, characterData: true, subtree: true });
+    });
+    await seventh.click({ force: true });
+    await expect.poll(() => page.evaluate(() => window.__said.filter(Boolean).length)).toBeGreaterThan(0);
+    // Emptied, then said: that is what makes a status region speak again.
+    expect(await page.evaluate(() => window.__said.includes(''))).toBe(true);
   });
 });
 

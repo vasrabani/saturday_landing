@@ -98,14 +98,18 @@
       catch (e) { /* localStorage full / disabled — ignore, runtime state still works */ }
     }
     function loadStake() {
-      const raw = parseFloat(localStorage.getItem(STAKE_KEY));
+      // Guarded like the writes: storage that throws (blocked, private
+      // mode) must not stop init before a single listener is bound.
+      let raw = NaN;
+      try { raw = parseFloat(localStorage.getItem(STAKE_KEY)); } catch (e) {}
       return Number.isFinite(raw) && raw > 0 ? raw : 10;
     }
     function saveStake() {
       try { localStorage.setItem(STAKE_KEY, String(stake)); } catch (e) {}
     }
     function loadCurrency() {
-      const v = localStorage.getItem(CUR_KEY);
+      let v = null;
+      try { v = localStorage.getItem(CUR_KEY); } catch (e) {}
       return v === 'EUR' ? 'EUR' : 'GBP';
     }
     function saveCurrency() {

@@ -91,7 +91,13 @@
     /* bet_slip.js owns the open state; closing is a click on its own
        handle. */
     const close = () => {
-      if (panel.classList.contains('is-open')) handle.click();
+      if (!panel.classList.contains('is-open')) return;
+      /* What is inside the sheet is about to be hidden. If the keyboard
+         is in there (the stake, a ticket's remove), it goes back to the
+         handle, or it would be left on nothing. */
+      const inside = panel.contains(document.activeElement) && document.activeElement !== handle;
+      handle.click();
+      if (inside) handle.focus();
     };
     backdrop.addEventListener('click', close);
     document.addEventListener('keydown', (e) => {
@@ -244,7 +250,15 @@
         if (k && kit) now[k] = kit;
         return kit;
       });
-      keep(now);
+      /* bet_slip.js draws the whole slip again on every keystroke in the
+         stake. The tickets need dressing again each time, since they are
+         new; the kit only needs writing, and the Pick buttons walking
+         (below), when the picks themselves have changed. */
+      const picked = JSON.stringify(now);
+      const changed = picked !== lastPicked || legs.length !== lastCount;
+      lastPicked = picked;
+      lastCount = legs.length;
+      if (changed) keep(now);
 
       legs.forEach((leg, i) => {
         if (leg.querySelector('.mfr-leg__silks')) return;
@@ -334,9 +348,11 @@
       inBar.forEach((img) => bar.appendChild(img));
       if (inBar.length && legs.length > inBar.length) bar.appendChild(make('span', 'mfr-bar__more', '+' + (legs.length - inBar.length)));
 
-      limit(legs.length);
+      if (changed) limit(legs.length);
     }
 
+    let lastPicked = null;
+    let lastCount = -1;
     new MutationObserver(dress).observe(list, { childList: true });
     dress();
   }
@@ -375,8 +391,11 @@
     const say = (text) => {
       const theirs = document.querySelector('.mf-toast.is-visible');
       if (theirs) theirs.classList.remove('is-visible');
-      note.textContent = text;
+      /* Emptied first: a status region set to the words it already has
+         says nothing, and the same horse can be refused twice. */
+      note.textContent = '';
       note.classList.add('is-visible');
+      requestAnimationFrame(() => { note.textContent = text; });
       clearTimeout(showing);
       showing = setTimeout(hush, 4500);
     };
