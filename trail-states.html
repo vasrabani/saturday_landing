@@ -3506,12 +3506,22 @@
       </span>
       <div class="trail__masthead-title">
         <span class="trail__eyebrow">The Fox Trail</span>
-        <h1 class="trail__date">Wednesday 30 September 2026</h1>
+        <h1 class="trail__date is-pickable">Wednesday 30 September 2026</h1>
         
           <span class="trail__freshness is-final" id="trailFreshness" data-role="freshness-pill" data-final="true" aria-live="polite">
             <span class="trail__freshness-dot" aria-hidden="true"></span>
             <span class="trail__freshness-label">Final · all races settled</span>
           </span>
+
+          <nav class="trail__days" aria-label="Other days">
+            <a class="trail__day" rel="prev" href="https://www.saturday-racing.com/trail/?date=2026-09-29" aria-label="The race day before: Tuesday 29 September"><span class="trail__day-arrow" aria-hidden="true">‹</span> Tue 29 Sep</a>
+            <form class="trail__day-form is-enhanced" data-role="day-form" method="get" action="https://www.saturday-racing.com/trail/">
+              <button type="button" class="trail__day trail__day--pick" data-role="day-pick" aria-label="Choose a day"></button>
+              <label class="sr-only" for="trailDay">Choose a day</label>
+              <input class="trail__day-field" type="date" id="trailDay" name="date" value="2026-09-30" min="2026-07-01" max="2026-09-30">
+              <button type="submit" class="trail__day trail__day--go">Go</button>
+            </form>
+          </nav>
         
       </div>
     </div>
