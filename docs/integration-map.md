@@ -217,6 +217,14 @@ for once the board was in the staff preview:
 (`static/meeting/img/silks/`), with three drawn from colours and one
 pick left without.
 
+**A course filter, and a label on days that are not today.** Two
+things taken from an outside review of the page.
+
+| What | Where |
+| --- | --- |
+| Filter the board by course | `grid/_cell.html`: `data-course="<slug>"` on the article. `grid/v2/_legend.html`: a "Courses" block above "Signals", one `.trail__legend-row--course` per course with `data-filter-course`, `data-filter-label` and its number of races in `.trail__legend-count`; the view lists the day's courses in the order they first run. `trail_filter.js` (shared with the previous board) marks the matching cells `cell--in-filter`, since the stylesheet cannot know the day's courses |
+| "Archive · final results" and a link to today, on a past day | `grid/_counter.html`, where the live pill stands on today's page: `.trail__freshness--archive` and `.trail__today-link`. A day still to come gets the link and "Not yet run" |
+
 **Long days.** The fixture day has 24 races; a busy day has 45 to 50.
 With `data-density="long"` on the grid the board goes one more abreast
 from three up (six at 1440px, four on a tablet) and keeps less lawn
