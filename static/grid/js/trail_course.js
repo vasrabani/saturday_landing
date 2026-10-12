@@ -179,14 +179,22 @@
     sayNextRace(fox);
   }
 
+  function hold(button, back) {
+    if (!button) return;
+    button.disabled = false;      // markup from before this was aria-disabled
+    button.setAttribute('aria-disabled', back ? 'true' : 'false');
+  }
+
   function setCurrent(i) {
     current = i;
     var race = raceOf(cards[i]);
     if (number) number.textContent = i + 1;
     if (total) total.textContent = cards.length;
     if (raceEl) raceEl.textContent = race.time + ' ' + race.course;
-    if (prevBtn) prevBtn.disabled = i <= 0;
-    if (nextBtn) nextBtn.disabled = i >= cards.length - 1;
+    // aria-disabled, not disabled: a button that disables itself under
+    // the keyboard drops the focus, and the reader's place with it.
+    hold(prevBtn, i <= 0);
+    hold(nextBtn, i >= cards.length - 1);
     if (map) {
       Array.prototype.forEach.call(map.children, function (tick, k) {
         tick.classList.toggle('is-current', k === i);
@@ -295,8 +303,8 @@
     link.hidden = !document.getElementById(link.getAttribute('href').slice(1));
   });
 
-  if (prevBtn) prevBtn.addEventListener('click', function () { goTo(current - 1, false); });
-  if (nextBtn) nextBtn.addEventListener('click', function () { goTo(current + 1, false); });
+  if (prevBtn) prevBtn.addEventListener('click', function () { if (current > 0) goTo(current - 1, false); });
+  if (nextBtn) nextBtn.addEventListener('click', function () { if (current < cards.length - 1) goTo(current + 1, false); });
   if (foxBtn)  foxBtn.addEventListener('click', goToFox);
   if (map) {
     map.addEventListener('click', function (e) {
@@ -329,22 +337,27 @@
   bar.addEventListener('click', followHere, true);
   if (call && call.parentNode) call.parentNode.addEventListener('click', followHere, true);
 
-  function boardInWindow() {
+  /* The reader is in the board once it has reached the middle of the
+   * window. Its top edge showing under the introduction is not enough:
+   * an arrow pressed there would take the page away from what is being
+   * read. */
+  function readerInBoard() {
     var box = grid.getBoundingClientRect();
-    return box.bottom > 0 && box.top < window.innerHeight;
+    var middle = window.innerHeight / 2;
+    return box.top < middle && box.bottom > middle;
   }
 
   /* Left and right step along the course in the order it is run: right
    * is the next race, as on the bar, even on the rows of the snake that
    * run right to left, so one key walks the whole day. They work from a
-   * card or the bar, and with nothing focused while the board is in the
-   * window. Anywhere else the keys belong to whatever has the focus. */
+   * card or the bar, and with nothing focused once the reader is in the
+   * board. Anywhere else the keys belong to whatever has the focus. */
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
     if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
     var from = e.target;
     var card = grid.contains(from) ? from.closest('.cell[data-race-id]') : null;
-    if (!card && !bar.contains(from) && !(from === document.body && boardInWindow())) return;
+    if (!card && !bar.contains(from) && !(from === document.body && readerInBoard())) return;
     // Not behind an open panel: the cell drawer, or the legend on a phone.
     var page = document.body.classList;
     if (page.contains('has-cell-drawer-open') || page.contains('trail-nav-lock')) return;
