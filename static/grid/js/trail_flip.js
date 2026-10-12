@@ -99,10 +99,12 @@
    *    the class change and (if toggle is on) mirror `.is-flipped`
    *    so the newly-settled result reveals without a page reload.
    *    Also promotes `[data-settled="1"]` so the front-face medal
-   *    fade works on freshly-settled cells too. */
+   *    fade works on freshly-settled cells too. That happens whether
+   *    or not results are showing: reveal() turns cells by that
+   *    attribute, so a race that settled while the toggle was off
+   *    must still turn when it is switched on. */
 
   var mo = new MutationObserver(function (records) {
-    if (!isRevealed) return;
     for (var i = 0; i < records.length; i++) {
       var r = records[i];
       if (r.type !== 'attributes' || r.attributeName !== 'class') continue;
@@ -112,6 +114,7 @@
       if (article.getAttribute('data-settled') !== '1') {
         article.setAttribute('data-settled', '1');
       }
+      if (!isRevealed) continue;
       if (!article.classList.contains('is-flipped')) {
         article.classList.add('is-flipped');
       }

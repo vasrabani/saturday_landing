@@ -4,6 +4,11 @@ Review of the racecourse board (`feat/trail-racecourse`, merged as `d3a6abd`
 on 6 October 2026), looked at on 12 October at 1440, 1024, 768 and 375px,
 beside the live page at <https://www.saturday-racing.com/trail/>.
 
+> **Update, 12 October.** These points have since been dealt with in
+> `fix/trail-real-days`; this page is kept as feedback. Two of them were
+> corrected after the 47 races of that day were put into the new design:
+> see the notes under point 2 and under "No current race".
+
 **In short:** this is a strong redesign and it is well built. It is not
 ready to port yet, because it has only been designed against a 24-race
 day and a real day is about twice that. One more round, on the four
@@ -62,6 +67,12 @@ Compare the live page, where most cards are "PICK WINNER":
 
 Please design a shorter card for Whisper and Pick Winner races, and make
 the fixture's mix of tiers closer to a real day's.
+
+*Correction:* the design already had a Pick Winner card, with its own
+silk and a tag in place of the row of silks, and with real data it reads
+well. It was not on the fixture day, which is why the review missed it.
+What stands is the second half: 44 of that day's 47 races were
+single-source, so the fixture should have more of them.
 
 ### 3. Straight order on phones
 
@@ -123,6 +134,10 @@ These can be fixed in the same round or during the port.
   ever sends today with no `cell--now`, the call says "The day is run"
   and every hoof print goes gold. Please confirm when `is_now` can be
   absent, and handle "between races" separately from "finished".
+  *Correction:* checked in the app (`grid/services/trail.py`,
+  `_mark_you_are_here`). The marker is on a live race, or else the next
+  pending one, and is only absent once no race is live or pending. So
+  the page reads it correctly; nothing to change.
 - **The snake depends on each card's position in the grid**
   (`trail.css:1707-1745`, `:nth-child`). Any other element inside
   `#trailGrid` in the Django template shifts every reversed row. Note it

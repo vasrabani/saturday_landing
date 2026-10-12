@@ -138,7 +138,9 @@ sandbox can replay a day in minutes. Port that line back with the revamp.
 ## The Fox Trail revamp: what to port
 
 The racecourse board. The stylesheet is rewritten, three scripts and an
-image folder are new, and the five production scripts are untouched.
+image folder are new, and four of the five production scripts are
+untouched. The fifth, `trail_flip.js`, carries one fix that production
+needs too (below).
 
 **Files.** Each goes to the same name under `grid/static/grid/`. Every
 `url()` in `trail.css` points inside that folder (`../img/…`), so the
@@ -150,6 +152,7 @@ stylesheet depends on nothing outside the app.
 | `js/trail_cards.js` | New. Fits a one-word horse name to its card, and brings cards up as the reader reaches them |
 | `js/trail_track.js` | New. Draws the track under the cards, from where the grid has laid them |
 | `js/trail_course.js` | New. The course bar, and the "next race" call under the introduction |
+| `js/trail_flip.js` | One fix. A race settled by the poller is marked `data-settled="1"` whether or not results are showing, so the Results toggle turns it. Before, a race that settled while the toggle was off stayed on its pick when the toggle was switched on |
 | `img/silk-*.svg` (8), `img/horseshoe.svg`, `img/fox.svg` | New. CSS masks, under 1 KB each |
 | `img/turf.webp`, `img/lawn.webp` | New. Two grass tiles, 29 KB each |
 
@@ -172,6 +175,8 @@ on; without them the board falls back to a single column.
 | `grid/trail.html` | The `☰` glyph comes out of `.trail__nav-trigger-icon`: the stylesheet draws the icon. Three `<script defer>` tags |
 | `grid/_legend.html` | The `ⓘ` glyph comes out of `.trail__legend-head-icon`. Each row's label is split into `.trail__legend-name`, `.trail__legend-sep` and `.trail__legend-hint`, so a name and its hint can take a line each. The words are the same |
 | `grid/_proposition.html` | Each silk and its name are wrapped in `.trail__proposition-pair`, so a line never breaks between the two. A new last paragraph, `.trail__next`: the call to the next race |
+| `grid/trail.html` | The Previous button starts with `aria-disabled="true"`, not `disabled`: the script holds the step buttons back that way so one that runs out of races keeps the keyboard's focus |
+| `grid/trail.html` | `data-density="long"` on `#trailGrid` when the day has more than 30 races (see "Long days") |
 | `grid/_spotlight.html` | `id="trailSignals"` on the section |
 | `grid/_track_record_history.html` | `id="trailRecord"` on the aside |
 
@@ -196,6 +201,24 @@ masthead's own. The words are `data-*` attributes on the markup
 (`data-next`, `data-first`, `data-live`, `data-done`, `data-walk` on the
 call; `data-say` on the bar's status line), in the way `data-on` and
 `data-off` already carry the toggle's.
+
+**Long days.** The fixture day has 24 races; a busy day has 45 to 50.
+With `data-density="long"` on the grid the board goes one more abreast
+from three up (six at 1440px, four on a tablet) and keeps less lawn
+between its rows. Measured with the 47 races of 12 October 2026 in the
+grid, the board is 2,099px tall at 1440px, where without the attribute it
+is 2,800px and the page it replaces is 1,572px. The template sets the
+attribute past 30 races; `tests/trail.spec.js` ("a long day") runs the
+fixture day twice over to cover it.
+
+**Phones read straight.** Two abreast, every row runs left to right: a
+row that ran back only put the later race first. The track is drawn all
+the same, as one course down the page. From three abreast the rows
+snake, as the live page's do.
+
+**The cards are counted among themselves.** The rows that run back are
+placed with `:nth-child(… of .cell)`, so an element in the grid that is
+not a card cannot shift them.
 
 **Days with no cards.** On a day with no racing the template renders
 `_empty.html` inside `.trail__frame`; on a day too early for the card it

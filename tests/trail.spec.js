@@ -19,6 +19,44 @@ import {
 
 const LOCAL_DEBUG_URL = /\/\/(localhost|127\.0\.0\.1)[:/]/;
 
+/**
+ * The fixture day run twice over, as the template renders a long one:
+ * 48 races, and data-density="long" on the grid. The second run is all
+ * still to come, so the day keeps its one fox marker.
+ */
+function asLongDay(html) {
+  const open = html.indexOf('<section class="trail__grid" id="trailGrid"');
+  const start = html.indexOf('>', open) + 1;
+  const end = html.indexOf('</section>', start);
+  const cells = html.slice(start, end);
+  const again = cells
+    .replace(/data-race-id="/g, 'data-race-id="9')
+    .replace(/ cell--now/g, '')
+    .replace(/ data-settled="1"/g, '')
+    .replace(/cell--(live|won|placed(-\d)?|lost|void)\b/g, 'cell--pending');
+  return html.slice(0, open)
+    + '<section data-density="long" class="trail__grid" id="trailGrid"'
+    + html.slice(open + '<section class="trail__grid" id="trailGrid"'.length, end)
+    + again
+    + html.slice(end);
+}
+
+/** The board's rows, top to bottom: the race numbers in each, left to right. */
+function rowsOfBoard(page) {
+  return raceCards(page).evaluateAll((cards) => {
+    const rows = [];
+    cards
+      .map((card, i) => ({ i, left: card.offsetLeft, top: card.offsetTop }))
+      .sort((a, b) => a.top - b.top || a.left - b.left)
+      .forEach((card) => {
+        const row = rows[rows.length - 1];
+        if (row && Math.abs(row.top - card.top) <= 2) row.races.push(card.i);
+        else rows.push({ top: card.top, races: [card.i] });
+      });
+    return rows.map((row) => row.races);
+  });
+}
+
 test.describe('page health', () => {
   test('loads without script errors or failed requests', async ({ page }) => {
     const { problems } = await openTrail(page, { live: false, waitUntil: 'load' });
@@ -71,6 +109,54 @@ test.describe('the board', () => {
   test('exactly one cell is the fox marker', async ({ page }) => {
     await openTrail(page, { live: false });
     expect((await cellStates(page)).filter((cell) => cell.isNow)).toHaveLength(1);
+  });
+
+  test('rows snake from three abreast, and read straight at two', async ({ page }) => {
+    await openTrail(page, { live: false });
+    const rows = await rowsOfBoard(page);
+    const abreast = rows[0].length;
+    const ascending = (row) => row.every((race, i) => i === 0 || race > row[i - 1]);
+    const descending = (row) => row.every((race, i) => i === 0 || race < row[i - 1]);
+    rows.forEach((row, k) => {
+      const runsBack = abreast >= 3 && k % 2 === 1;
+      expect(runsBack ? descending(row) : ascending(row), `row ${k + 1}: ${row.map((r) => r + 1).join(' ')}`).toBe(true);
+    });
+    // Whichever way a row runs, the rows themselves are in race order.
+    const firsts = rows.map((row) => Math.min(...row));
+    expect(firsts).toEqual([...firsts].sort((a, b) => a - b));
+  });
+});
+
+test.describe('a long day', () => {
+  const columns = async (page) => (await rowsOfBoard(page))[0].length;
+
+  test('goes one more abreast from three up, and nothing else in the grid shifts a row', async ({ page }) => {
+    await openTrail(page, { live: false });
+    const usual = await columns(page);
+
+    // A template may put something that is not a card in the grid.
+    await rewriteTrail(page, (html) => asLongDay(html)
+      .replace(/(<section data-density="long"[^>]*>)/, '$1<p hidden>not a card</p>'));
+    await page.reload();
+    await expect(raceCards(page)).toHaveCount(48);
+
+    const rows = await rowsOfBoard(page);
+    expect(rows[0].length).toBe(usual >= 3 && usual < 6 ? usual + 1 : usual);
+    // Still a snake: the second row starts where the first one ended.
+    if (rows[0].length >= 3) expect(rows[1][rows[1].length - 1]).toBe(rows[0][rows[0].length - 1] + 1);
+    else expect(rows[1][0]).toBe(rows[0][rows[0].length - 1] + 1);
+  });
+
+  test('its map and its bar still fit', async ({ page }) => {
+    await rewriteTrail(page, asLongDay);
+    await openTrail(page, { live: false });
+    await expect(page.locator('[data-role="track"]')).toHaveClass(/is-drawn/);
+    const bar = page.locator('[data-role="course"]');
+    expect(await bar.evaluate((el) => el.scrollWidth <= el.clientWidth + 1), 'the bar holds what is in it').toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    await expect(page.locator('[data-role="course-map"] .course__tick')).toHaveCount(48);
+    await expect(page.locator('[data-role="course-total"]')).toHaveText('48');
+    await expect(page.locator('[data-role="track"]')).toHaveClass(/is-drawn/);
   });
 });
 
@@ -146,6 +232,24 @@ test.describe('result flip', () => {
     await toggle.click();
     await expect(flipped).toHaveCount(0);
   });
+
+  test('a race that settles while results are hidden still turns when they are shown', async ({ page }) => {
+    test.slow();
+    await openTrail(page, { pollMs: 600 });
+    const settledNow = () => page.locator('#trailGrid .cell').evaluateAll((cells) =>
+      cells.filter((cell) => /cell--(won|placed|lost|void)\b/.test(cell.className)).length);
+    const before = await settledNow();
+    await expect.poll(settledNow, { timeout: 20_000 }).toBeGreaterThan(before);
+
+    await page.locator('[data-role="reveal-toggle"]').click();
+    // Every settled race, however it came to be settled; more may settle
+    // while this is checked, and those turn as they do.
+    await expect
+      .poll(() => page.locator('#trailGrid .cell').evaluateAll((cells) =>
+        cells.filter((cell) => /cell--(won|placed|lost|void)\b/.test(cell.className)
+          && !cell.classList.contains('is-flipped')).length), { timeout: 10_000 })
+      .toBe(0);
+  });
 });
 
 test.describe('course bar', () => {
@@ -156,7 +260,7 @@ test.describe('course bar', () => {
     const cards = raceCards(page);
     await expect(part(page, 'number')).toHaveText('1');
     await expect(part(page, 'total')).toHaveText(String(await cards.count()));
-    await expect(part(page, 'prev')).toBeDisabled();
+    await expect(part(page, 'prev')).toHaveAttribute('aria-disabled', 'true');
 
     await part(page, 'next').click();
     await expect(part(page, 'number')).toHaveText('2');
@@ -169,7 +273,21 @@ test.describe('course bar', () => {
 
     await part(page, 'prev').click();
     await expect(part(page, 'number')).toHaveText('1');
-    await expect(part(page, 'prev')).toBeDisabled();
+    await expect(part(page, 'prev')).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  test('a step button that runs out of races keeps the focus and does nothing', async ({ page }) => {
+    await openTrail(page, { live: false });
+    await part(page, 'next').click();
+    await part(page, 'prev').focus();
+    await page.keyboard.press('Enter');
+    await expect(part(page, 'number')).toHaveText('1');
+    // At the first race now: held back, but still where the keyboard is.
+    await expect(part(page, 'prev')).toHaveAttribute('aria-disabled', 'true');
+    await expect(part(page, 'prev')).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(part(page, 'number')).toHaveText('1');
+    await expect(part(page, 'prev')).toBeFocused();
   });
 
   test('"Mr Fox" goes to the fox marker and takes the keyboard there', async ({ page }) => {
@@ -212,6 +330,23 @@ test.describe('course bar', () => {
 
     await page.keyboard.press('ArrowRight');
     await page.waitForTimeout(400); // a step would have set the page scrolling by now
+    expect(await page.evaluate(() => window.scrollY)).toBe(before);
+    expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);
+  });
+
+  test('arrow keys leave the page alone while only the top of the board is showing', async ({ page }) => {
+    await openTrail(page, { live: false, waitUntil: 'load' });
+    // The board's top edge four-fifths of the way down the window: the
+    // reader is still in the introduction.
+    await page.evaluate(() => {
+      const top = document.getElementById('trailGrid').getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: Math.max(0, top - window.innerHeight * 0.8), behavior: 'instant' });
+    });
+    await expect(page.locator('#trailGrid')).toBeInViewport();
+    const before = await page.evaluate(() => window.scrollY);
+
+    await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(400);
     expect(await page.evaluate(() => window.scrollY)).toBe(before);
     expect(await page.evaluate(() => document.activeElement === document.body)).toBe(true);
   });
