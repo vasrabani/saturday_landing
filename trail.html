@@ -1443,6 +1443,28 @@
   </div>
 
   <div class="trail__legend-block">
+    <h2 class="trail__legend-title">Courses &middot; click to filter</h2>
+    <ul class="trail__legend-sources">
+      <li>
+        <button type="button" class="trail__legend-row trail__legend-row--course"
+                data-filter-course="ascot" data-filter-label="Ascot" aria-pressed="false"
+                aria-label="Show only races at Ascot">
+          <span class="trail__legend-source-label">Ascot</span>
+          <span class="trail__legend-count">12</span>
+        </button>
+      </li>
+      <li>
+        <button type="button" class="trail__legend-row trail__legend-row--course"
+                data-filter-course="doncaster" data-filter-label="Doncaster" aria-pressed="false"
+                aria-label="Show only races at Doncaster">
+          <span class="trail__legend-source-label">Doncaster</span>
+          <span class="trail__legend-count">12</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="trail__legend-block">
     <h2 class="trail__legend-title">Signals &middot; click to filter</h2>
     <ul class="trail__legend-sources">
       <li>
@@ -1763,7 +1785,7 @@
         </div>
         <section class="trail__grid" id="trailGrid" aria-label="Race grid for Wednesday 30 September 2026">
           
-            <article class="cell cell--won cell--tier-3"
+            <article data-course="ascot" class="cell cell--won cell--tier-3"
          data-cell-index="0"
          data-race-id="1000"
          data-sources="bod top_rated htw "
@@ -1901,7 +1923,7 @@
 </article>
 
           
-            <article class="cell cell--placed cell--placed-2 cell--tier-1"
+            <article data-course="doncaster" class="cell cell--placed cell--placed-2 cell--tier-1"
          data-cell-index="1"
          data-race-id="1001"
          data-sources="steamer "
@@ -2031,7 +2053,7 @@
 </article>
 
           
-            <article class="cell cell--won cell--tier-3"
+            <article data-course="ascot" class="cell cell--won cell--tier-3"
          data-cell-index="2"
          data-race-id="1002"
          data-sources="top_rated htw steamer "
@@ -2169,7 +2191,7 @@
 </article>
 
           
-            <article class="cell cell--placed cell--placed-3 cell--tier-4"
+            <article data-course="doncaster" class="cell cell--placed cell--placed-3 cell--tier-4"
          data-cell-index="3"
          data-race-id="1003"
          data-sources="bod top_rated htw steamer "
@@ -2306,7 +2328,7 @@
 </article>
 
           
-            <article class="cell cell--won cell--tier-1"
+            <article data-course="ascot" class="cell cell--won cell--tier-1"
          data-cell-index="4"
          data-race-id="1004"
          data-sources="htw "
@@ -2437,7 +2459,7 @@
 </article>
 
           
-            <article class="cell cell--no_fancy"
+            <article data-course="doncaster" class="cell cell--no_fancy"
          data-cell-index="5"
          data-race-id="1005"
          data-sources=""
@@ -2477,7 +2499,7 @@
 </article>
 
           
-            <article class="cell cell--live cell--tier-2 cell--now"
+            <article data-course="ascot" class="cell cell--live cell--tier-2 cell--now"
          data-cell-index="6"
          data-race-id="1006"
          data-sources="top_rated steamer "
@@ -2586,7 +2608,7 @@
 </article>
 
           
-            <article class="cell cell--lost cell--tier-2"
+            <article data-course="doncaster" class="cell cell--lost cell--tier-2"
          data-cell-index="7"
          data-race-id="1007"
          data-sources="bod htw "
@@ -2722,7 +2744,7 @@
 </article>
 
           
-            <article class="cell cell--pending cell--tier-2 cell--split"
+            <article data-course="ascot" class="cell cell--pending cell--tier-2 cell--split"
          data-cell-index="8"
          data-race-id="1008"
          data-sources="bod top_rated "
@@ -2834,7 +2856,7 @@
 </article>
 
           
-            <article class="cell cell--pending cell--tier-1"
+            <article data-course="doncaster" class="cell cell--pending cell--tier-1"
          data-cell-index="9"
          data-race-id="1009"
          data-sources="steamer "
@@ -2931,7 +2953,7 @@
 </article>
 
           
-            <article class="cell cell--pending cell--tier-1"
+            <article data-course="ascot" class="cell cell--pending cell--tier-1"
          data-cell-index="10"
          data-race-id="1010"
          data-sources="bod "
@@ -3028,7 +3050,7 @@
 </article>
 
           
-            <article class="cell cell--pending cell--tier-2"
+            <article data-course="doncaster" class="cell cell--pending cell--tier-2"
          data-cell-index="11"
          data-race-id="1011"
          data-sources="top_rated htw "
@@ -3131,7 +3153,7 @@
 </article>
 
           
-            <article class="cell cell--pending cell--tier-2"
+            <article data-course="ascot" class="cell cell--pending cell--tier-2"
          data-cell-index="12"
          data-race-id="1012"
          data-sources="htw steamer "
@@ -3235,7 +3257,7 @@
 </article>
 
           
-            <article class="cell cell--no_fancy"
+            <article data-course="doncaster" class="cell cell--no_fancy"
          data-cell-index="13"
          data-race-id="1013"
          data-sources=""
@@ -3275,7 +3297,7 @@
 </article>
 
           
-            <article class="cell cell--pending cell--tier-3"
+            <article data-course="ascot" class="cell cell--pending cell--tier-3"
          data-cell-index="14"
          data-race-id="1014"
          data-sources="top_rated htw steamer "
@@ -3379,7 +3401,7 @@
 </article>
 
           
-            <article class="cell cell--pending cell--tier-1"
+            <article data-course="doncaster" class="cell cell--pending cell--tier-1"
          data-cell-index="15"
          data-race-id="1015"
          data-sources="bod "
@@ -3476,7 +3498,7 @@
 </article>
 
           
-            <article class="cell cell--pending cell--tier-1"
+            <article data-course="ascot" class="cell cell--pending cell--tier-1"
          data-cell-index="16"
          data-race-id="1016"
          data-sources="steamer "
@@ -3573,7 +3595,7 @@
 </article>
 
           
-            <article class="cell cell--pending cell--tier-4"
+            <article data-course="doncaster" class="cell cell--pending cell--tier-4"
          data-cell-index="17"
          data-race-id="1017"
          data-sources="bod top_rated htw steamer "
@@ -3677,7 +3699,7 @@
 </article>
 
           
-            <article class="cell cell--no_fancy"
+            <article data-course="ascot" class="cell cell--no_fancy"
          data-cell-index="18"
          data-race-id="1018"
          data-sources=""
@@ -3717,7 +3739,7 @@
 </article>
 
           
-            <article class="cell cell--pending cell--tier-1"
+            <article data-course="doncaster" class="cell cell--pending cell--tier-1"
          data-cell-index="19"
          data-race-id="1019"
          data-sources="htw "
@@ -3814,7 +3836,7 @@
 </article>
 
           
-            <article class="cell cell--pending cell--tier-2"
+            <article data-course="ascot" class="cell cell--pending cell--tier-2"
          data-cell-index="20"
          data-race-id="1020"
          data-sources="top_rated steamer "
@@ -3918,7 +3940,7 @@
 </article>
 
           
-            <article class="cell cell--void cell--tier-1"
+            <article data-course="doncaster" class="cell cell--void cell--tier-1"
          data-cell-index="21"
          data-race-id="1021"
          data-sources="bod "
@@ -4031,7 +4053,7 @@
 </article>
 
           
-            <article class="cell cell--pending cell--tier-1"
+            <article data-course="ascot" class="cell cell--pending cell--tier-1"
          data-cell-index="22"
          data-race-id="1022"
          data-sources="htw "
@@ -4128,7 +4150,7 @@
 </article>
 
           
-            <article class="cell cell--pending cell--tier-3"
+            <article data-course="doncaster" class="cell cell--pending cell--tier-3"
          data-cell-index="23"
          data-race-id="1023"
          data-sources="top_rated htw steamer "

@@ -622,6 +622,23 @@ body.trail-nav-lock { overflow: hidden; }
 
 .trail__legend-source-label { font-weight: 600; }
 
+/* A course: its name, and how many races it has today. */
+.trail__legend-row--course { justify-content: space-between; }
+
+.trail__legend-count {
+  flex: 0 0 auto;
+  min-width: 22px;
+  padding: 3px 6px;
+  border-radius: var(--r-pill);
+  background: var(--trail-wash);
+  color: var(--c-ink-70);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
 /* "Sly's Bet · the day's single conviction bet": the name, and what it
    means on a line of its own. The dot between them stays in the text
    for anything that reads the page rather than looks at it. */
@@ -917,6 +934,35 @@ body.trail-nav-lock { overflow: hidden; }
   background: var(--c-ink-40);
   animation: none;
 }
+
+/* A day that is not today says so where the live pill would be, with
+   the way back: a reader sent to an old day by a search or a saved link
+   should not take it for this afternoon's card. */
+.trail__freshness--archive {
+  border-color: var(--c-rule-strong);
+  background: var(--trail-wash);
+  color: var(--c-ink);
+  font-weight: 700;
+}
+
+.trail__freshness--archive .trail__freshness-dot {
+  border-radius: 2px;
+  background: var(--c-ink-40);
+  animation: none;
+}
+
+.trail__today-link {
+  align-self: flex-start;
+  margin-top: 6px;
+  color: var(--trail-gold-ink);
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.trail__today-link:hover,
+.trail__today-link:focus-visible { color: var(--c-ink); }
 
 /* The beat of a live dot: here, and on a card whose race is running. */
 @keyframes liveDotPulse {
@@ -3021,7 +3067,8 @@ body.trail-nav-lock { overflow: hidden; }
 .trail__grid[data-filter-source="steamer"] .cell[data-sources~="steamer"],
 .trail__grid[data-filter-source="letters"] .cell[data-sources~="letters"],
 .trail__grid[data-filter-source="featured"] .cell[data-sources~="featured"],
-.trail__grid[data-filter-source="pick_winner"] .cell[data-sources~="pick_winner"] { opacity: 1; }
+.trail__grid[data-filter-source="pick_winner"] .cell[data-sources~="pick_winner"],
+.trail__grid[data-filter-course] .cell--in-filter { opacity: 1; }
 
 .trail__grid--hovered .cell { opacity: 0.4; }
 

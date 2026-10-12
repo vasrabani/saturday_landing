@@ -193,6 +193,75 @@ test.describe('legend filters', () => {
   });
 });
 
+test.describe('course filter', () => {
+  test('a course in the legend lights its own races and dims the rest', async ({ page }) => {
+    await openTrail(page, { live: false });
+    await openLegend(page);
+    const row = page.locator('[data-filter-course]').first();
+    const course = await row.getAttribute('data-filter-course');
+    const name = await row.getAttribute('data-filter-label');
+    const races = Number(await row.locator('.trail__legend-count').textContent());
+    const marked = page.locator('#trailGrid .cell--in-filter');
+
+    await row.click();
+    await expect(row).toHaveAttribute('aria-pressed', 'true');
+    await expect(marked).toHaveCount(races);
+    expect(await marked.evaluateAll((cells) => [...new Set(cells.map((cell) => cell.dataset.course))])).toEqual([course]);
+    await expect(page.locator('[data-role="filter-name"]')).toHaveText(name);
+
+    // Again to clear, as the other filters do.
+    await row.click();
+    await expect(row).toHaveAttribute('aria-pressed', 'false');
+    await expect(marked).toHaveCount(0);
+    await expect(page.locator('[data-role="filter-status"]')).toBeHidden();
+  });
+
+  test('every course on the board is in the legend, with its number of races', async ({ page }) => {
+    await openTrail(page, { live: false });
+    const onBoard = await raceCards(page).evaluateAll((cards) => {
+      const counts = {};
+      cards.forEach((card) => { counts[card.dataset.course] = (counts[card.dataset.course] || 0) + 1; });
+      return counts;
+    });
+    const inLegend = await page.locator('[data-filter-course]').evaluateAll((rows) =>
+      Object.fromEntries(rows.map((row) => [row.dataset.filterCourse, Number(row.querySelector('.trail__legend-count').textContent)])));
+    expect(inLegend).toEqual(onBoard);
+  });
+
+  test('choosing a tier or a signal takes the course filter off', async ({ page }) => {
+    await openTrail(page, { live: false });
+    await openLegend(page);
+    await page.locator('[data-filter-course]').first().click();
+    await expect(page.locator('#trailGrid .cell--in-filter').first()).toBeAttached();
+    await page.locator('[data-filter-tier]').first().click();
+    await expect(page.locator('#trailGrid .cell--in-filter')).toHaveCount(0);
+    await expect(page.locator('[data-filter-course]').first()).toHaveAttribute('aria-pressed', 'false');
+  });
+});
+
+test.describe('a day that is not today', () => {
+  test('says it is the archive, and offers the way back to today', async ({ page }) => {
+    // As the template renders a past day: no live pill, an archive one.
+    await rewriteTrail(page, (html) => {
+      const start = html.indexOf('<span class="trail__freshness"');
+      const end = html.indexOf('</div>', start);
+      return html.slice(0, start)
+        + '<span class="trail__freshness trail__freshness--archive"><span class="trail__freshness-dot" aria-hidden="true"></span>'
+        + '<span class="trail__freshness-label">Archive &middot; final results</span></span>'
+        + '<a class="trail__today-link" href="trail.html">Go to today&rsquo;s trail &rarr;</a>'
+        + html.slice(end);
+    });
+    await openTrail(page, { live: false });
+    const pill = page.locator('.trail__freshness--archive');
+    await expect(pill).toBeVisible();
+    await expect(pill).toContainText('Archive');
+    // Still, not beating: nothing on an old day is live.
+    await expect(pill.locator('.trail__freshness-dot')).toHaveCSS('animation-name', 'none');
+    await expect(page.locator('.trail__today-link')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
+});
+
 test.describe('cell drawer', () => {
   test('opens on a cell, names its sources, and closes on Escape', async ({ page }) => {
     await openTrail(page, { live: false });

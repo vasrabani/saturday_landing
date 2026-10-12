@@ -9,6 +9,11 @@
  * All visual state is driven by data-filter-tier / data-filter-source
  * attributes on the grid element; CSS does the rest. This file just
  * wires the buttons and updates the status pill above the grid.
+ *
+ * A course is a filter too (data-filter-course on a legend row, matched
+ * against data-course on the cells). The day's courses are not known to
+ * the stylesheet, so for this one the matching cells are marked here
+ * (`cell--in-filter`) and the stylesheet keeps those lit.
  */
 (function () {
   'use strict';
@@ -38,14 +43,24 @@
   function currentFilter() {
     if (grid.dataset.filterTier)   return { kind: 'tier',   value: grid.dataset.filterTier };
     if (grid.dataset.filterSource) return { kind: 'source', value: grid.dataset.filterSource };
+    if (grid.dataset.filterCourse) return { kind: 'course', value: grid.dataset.filterCourse };
     return null;
+  }
+
+  function markCourse(value) {
+    grid.querySelectorAll('.cell[data-course]').forEach(function (cell) {
+      cell.classList.toggle('cell--in-filter', Boolean(value) && cell.dataset.course === value);
+    });
   }
 
   function setFilter(kind, value) {
     delete grid.dataset.filterTier;
     delete grid.dataset.filterSource;
+    delete grid.dataset.filterCourse;
     if (kind === 'tier')   grid.dataset.filterTier   = value;
     if (kind === 'source') grid.dataset.filterSource = value;
+    if (kind === 'course') grid.dataset.filterCourse = value;
+    markCourse(kind === 'course' ? value : null);
     grid.classList.toggle('trail__grid--filtered', Boolean(kind));
     syncButtons();
     syncStatus();
@@ -65,22 +80,42 @@
       btn.setAttribute('aria-pressed', on ? 'true' : 'false');
       btn.classList.toggle('is-active', on);
     });
+    legend.querySelectorAll('[data-filter-course]').forEach(function (btn) {
+      var on = cur && cur.kind === 'course' && cur.value === btn.dataset.filterCourse;
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.classList.toggle('is-active', on);
+    });
+  }
+
+  /* A course's name is the day's, not this file's: its row carries it. */
+  function courseName(value) {
+    var rows = legend.querySelectorAll('[data-filter-course]');
+    for (var i = 0; i < rows.length; i++) {
+      if (rows[i].dataset.filterCourse === value) return rows[i].dataset.filterLabel || value;
+    }
+    return value;
   }
 
   function syncStatus() {
     if (!statusEl) return;
     var cur = currentFilter();
     if (!cur) { statusEl.hidden = true; return; }
-    var label = (LABELS[cur.kind] || {})[cur.value] || cur.value;
+    var label = cur.kind === 'course' ? courseName(cur.value)
+              : (LABELS[cur.kind] || {})[cur.value] || cur.value;
     if (nameEl) nameEl.textContent = label;
     statusEl.hidden = false;
   }
 
   legend.addEventListener('click', function (e) {
-    var btn = e.target.closest('[data-filter-tier], [data-filter-source]');
+    var btn = e.target.closest('[data-filter-tier], [data-filter-source], [data-filter-course]');
     if (!btn) return;
     e.preventDefault();
     var cur = currentFilter();
+    if (btn.dataset.filterCourse) {
+      var c = btn.dataset.filterCourse;
+      if (cur && cur.kind === 'course' && cur.value === c) return clearFilter();
+      return setFilter('course', c);
+    }
     if (btn.dataset.filterTier) {
       var t = btn.dataset.filterTier;
       if (cur && cur.kind === 'tier' && cur.value === t) return clearFilter();
