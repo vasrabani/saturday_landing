@@ -3,6 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { openLanding } from './support/landing.js';
+import { openIndex } from './support/llama.js';
 import { openMeeting } from './support/meeting.js';
 import { openTrail } from './support/trail.js';
 
@@ -26,6 +27,7 @@ const PAGES = [
   { file: 'trail.html', open: openWholeTrail },
   { file: 'meeting.html', open: (page) => openMeeting(page) },
   { file: 'meeting-upcoming.html', open: (page) => openMeeting(page, { day: 'upcoming' }) },
+  { file: 'llama-index.html', open: (page) => openIndex(page) },
 ];
 
 // Ratchet: a rule not on the known list fails the run, and a known rule

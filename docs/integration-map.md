@@ -1,7 +1,7 @@
 # Integration map
 
 Where each part of this snapshot lives in the Django site, and how a change
-made here gets there. Three pages live here now.
+made here gets there. Four pages live here now.
 
 - **The home page** (`index.html`). Ported and live since 2026-09-18, so
   this repo is its design workspace: a change made here is ported into
@@ -546,3 +546,36 @@ with no number yet. Taking them out of the template is optional.
 the race strip. `meeting_masthead.js` steps round it for the race
 links; the lasting fix is the one the trail asked for, `site.js`
 honouring the target's `scroll-margin-top`.
+
+## The LLaMa Index
+
+`llama-index.html` is not a snapshot to redesign from: the page was
+built in the Django site and copied here, so that the sandbox holds
+every page that shares the meeting page's stylesheet and slip, and the
+tests here catch a change to either that breaks it.
+
+- **There:** `/llama-index/` — `races/views/llama_index.py`, rows built
+  by `races/services/llama_index.py`, templates
+  `races/templates/races/llama_index/` (`index.html`, `_row.html`), the
+  slip from `races/templates/races/components/_bet_slip.html` (shared
+  with the meeting page), assets under `races/static/races/llama/`.
+  Staff only until `LLAMA_INDEX_LIVE` is on.
+- **Here:** `llama-index.html` (Monday 12 October 2026: three meetings,
+  246 horses, in `meeting.html`'s shell), `static/llama/css/llama_index.css`
+  and `static/llama/js/llama_index.js`, byte for byte the Django files.
+  Its signals and comments are stand-ins; its silks are borrowed from
+  `static/meeting/img/silks/`.
+
+| Part | In Django | What it needs |
+|---|---|---|
+| Masthead | `index.html`, `.mf-hero.li-hero` | the day, the counts, the days either side |
+| Tools | `.li-tools` | the courses with their horse counts; the letters with a horse; `llama_index.js` does the rest on the rows rendered |
+| A horse | `_row.html` | a `.racecard__runner` with the meeting page's `data-*` (so `bet_slip.js` and `meeting_slip.js` pick from it) and the `data-li-*` the search, filters and sorts read |
+| Signals | `IndexRow.signals` | every source's pick for the race from `grid.services.source_adapters`, one chip a source |
+| The slip | `_bet_slip.html` | `data-storage-key="saturday:slip:<date>"` on `.mf-wrap`, the meeting pages' key: one slip a day; a hidden `#race-<id>` mark for each race, which the slip's scripts look for |
+
+The row's layout follows the list's width, not the window's (a container
+query on `.li-main`): a table from 970px, two lines a horse from 620px,
+a card below. `llama_index.css` loads after `meeting.css` and sets
+`--mfr-strip` to the height of its pinned tools, which is how the docked
+slip and the toast stand clear of them.
