@@ -4,6 +4,10 @@ Review of the racecourse board (`feat/trail-racecourse`, merged as `d3a6abd`
 on 6 October 2026), looked at on 12 October at 1440, 1024, 768 and 375px,
 beside the live page at <https://www.saturday-racing.com/trail/>.
 
+> **Update, 13 October.** This page is live. What was done after this
+> review, and what to take from it, is in
+> [`developer_feedback.md`](developer_feedback.md).
+>
 > **Update, 12 October.** These points have since been dealt with in
 > `fix/trail-real-days`; this page is kept as feedback. Two of them were
 > corrected after the 47 races of that day were put into the new design:
