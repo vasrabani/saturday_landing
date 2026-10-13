@@ -5,6 +5,10 @@ Review of PR #8 (`feat/meeting-full`, merged as `0df61d2` on 11 October
 captured days, beside the live page at
 <https://www.saturday-racing.com/races/meeting/kempton-aw/2026-10-12/full/>.
 
+> **Update, 13 October.** This page is live. What was done after this
+> review, and what to take from it, is in
+> [`developer_feedback.md`](developer_feedback.md).
+>
 > **Update, 12 October.** Points 1 and 3 and the smaller points in the
 > scripts and the stylesheet have since been dealt with in
 > `fix/meeting-before-port`; this page is kept as feedback. Point 2 (the
