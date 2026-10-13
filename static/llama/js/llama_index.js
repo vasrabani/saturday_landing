@@ -298,32 +298,10 @@
     button.setAttribute('aria-expanded', String(open));
   }
 
-  var RUNS = {
-    1: 'Won', 2: 'Second', 3: 'Third', 4: 'Fourth', 5: 'Fifth', 6: 'Sixth', 7: 'Seventh', 8: 'Eighth', 9: 'Ninth',
-    0: 'Tenth or worse', P: 'Pulled up', F: 'Fell', U: 'Unseated rider', R: 'Refused', B: 'Brought down',
-  };
-
-  /* The same attributes meeting_racecard.js sets on a meeting's page,
-     which meeting.css colours: a place a colour, the latest run marked. */
+  /* The marking is meeting_form.js's, which the meeting page shares:
+     a place a colour, the latest run marked. */
   function form() {
-    Array.prototype.forEach.call(list.querySelectorAll('.racecard__form'), function (strip) {
-      var runs = [];
-      Array.prototype.forEach.call(strip.querySelectorAll('.rcf'), function (box) {
-        var mark = box.textContent.trim().toUpperCase();
-        if (box.classList.contains('rcf--sep')) {
-          box.title = mark === '/' ? 'A long break between runs' : 'A new season';
-          return;
-        }
-        box.setAttribute('data-mfr-run', /^\d$/.test(mark) ? mark : 'x');
-        box.title = RUNS[mark] || 'Did not finish';
-        runs.push(box);
-      });
-      var latest = runs[runs.length - 1];
-      if (latest) {
-        latest.setAttribute('data-mfr-latest', '');
-        latest.title += ' (latest run)';
-      }
-    });
+    if (window.mfrForm) window.mfrForm.colour(list);
   }
 
   /* ── A place in the slip goes to its horse ─────────────────── */

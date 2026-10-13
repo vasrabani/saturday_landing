@@ -131,31 +131,9 @@
 
   /* ── 2. Form ─────────────────────────────────────────────────── */
 
-  const RUNS = {
-    1: 'Won', 2: '2nd', 3: '3rd', 4: '4th', 5: '5th', 6: '6th', 7: '7th', 8: '8th', 9: '9th', 0: '10th or worse',
-    F: 'Fell', U: 'Unseated rider', P: 'Pulled up', B: 'Brought down', R: 'Refused', O: 'Ran out',
-    S: 'Slipped up', C: 'Carried out', D: 'Disqualified', V: 'Void race', L: 'Left at the start',
-  };
-
+  /* The marking is meeting_form.js's, which the LLaMa Index shares. */
   function form() {
-    document.querySelectorAll('.racecard__form').forEach((strip) => {
-      const runs = [];
-      strip.querySelectorAll('.rcf').forEach((box) => {
-        const mark = box.textContent.trim().toUpperCase();
-        if (box.classList.contains('rcf--sep')) {
-          box.title = mark === '/' ? 'A long break between runs' : 'A new season';
-          return;
-        }
-        box.setAttribute('data-mfr-run', /^\d$/.test(mark) ? mark : 'x');
-        box.title = RUNS[mark] || 'Did not finish';
-        runs.push(box);
-      });
-      const latest = runs[runs.length - 1];
-      if (latest) {
-        latest.setAttribute('data-mfr-latest', '');
-        latest.title += ' (latest run)';
-      }
-    });
+    if (window.mfrForm) window.mfrForm.colour(document);
   }
 
   /* ── 3. Numbers ──────────────────────────────────────────────── */

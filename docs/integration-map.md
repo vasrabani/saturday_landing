@@ -556,15 +556,23 @@ tests here catch a change to either that breaks it.
 
 - **There:** `/llama-index/` — `races/views/llama_index.py`, rows built
   by `races/services/llama_index.py`, templates
-  `races/templates/races/llama_index/` (`index.html`, `_row.html`), the
-  slip from `races/templates/races/components/_bet_slip.html` (shared
-  with the meeting page), assets under `races/static/races/llama/`.
+  `races/templates/races/llama_index/` (`index.html` around `_top.html`
+  and `_list.html`, which the view renders once and keeps for a minute;
+  `_row.html`; `_staff.html`, the staff's signals check), the slip from
+  `races/templates/races/components/_bet_slip.html` (shared with the
+  meeting page), assets under `races/static/races/llama/`.
   Staff only until `LLAMA_INDEX_LIVE` is on.
 - **Here:** `llama-index.html` (Monday 12 October 2026: three meetings,
   246 horses, in `meeting.html`'s shell), `static/llama/css/llama_index.css`
   and `static/llama/js/llama_index.js`, byte for byte the Django files.
   Its signals and comments are stand-ins; its silks are borrowed from
-  `static/meeting/img/silks/`.
+  `static/meeting/img/silks/`. `tools/build-llama-index.py` writes the
+  page from the Django site (its docstring says how to run it); run it
+  again whenever the page's markup changes there.
+- **Shared with the meeting page:** `static/meeting/js/meeting_form.js`
+  (Django: `races/static/races/meeting/js/`), the colours of a horse's
+  form. Both pages load it before their own script and call
+  `window.mfrForm.colour(root)`.
 
 | Part | In Django | What it needs |
 |---|---|---|
