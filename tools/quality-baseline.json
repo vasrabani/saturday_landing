@@ -39,6 +39,7 @@
   "important-count": {
    "static/css/base.css": 13,
    "static/css/chrome.css": 19,
+   "static/fox_signals/css/fox_signals_shell.css": 2,
    "static/public/css/battle-section.css": 36,
    "static/public/css/day_hub.css": 5,
    "static/public/css/defer-bg.css": 1,
@@ -50,6 +51,7 @@
    "static/public/css/pick.css": 2
   },
   "token-colour-hardcoded": {
+   "static/fox_signals/css/fox_signals_shell.css -> #d4af37 (use --c-gold)": 14,
    "static/public/experiences/pick-hero/css/pick-hero.css -> #0b0b0f (use --c-midnight)": 1,
    "static/public/experiences/pick-hero/css/pick-hero.css -> #1c1c28 (use --c-navy-card)": 1,
    "static/public/experiences/pick-hero/css/pick-hero.css -> #d4af37 (use --c-gold)": 9,
@@ -66,6 +68,9 @@
    "static/css/chrome.css -> max-width:700px": 1,
    "static/css/chrome.css -> max-width:720px": 2,
    "static/css/chrome.css -> max-width:900px": 5,
+   "static/fox_signals/css/fox_signals_shell.css -> max-width:720px": 11,
+   "static/fox_signals/css/fox_signals_v2.css -> max-width:1079px": 1,
+   "static/fox_signals/css/fox_signals_v2.css -> max-width:719px": 1,
    "static/public/css/ai_chamber.css -> max-width:560px": 1,
    "static/public/css/ai_chamber.css -> max-width:900px": 2,
    "static/public/css/battle-section.css -> max-width:480px": 1,

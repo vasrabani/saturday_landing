@@ -91,6 +91,32 @@ export function startServer({ root, port = DEFAULT_PORT } = {}) {
       serveLiveFrame(url, req, res);
       return;
     }
+    // Fox Signals. A race page asks for its race's live.json once a
+    // minute and repaints from it. fixtures/fox-race-live.json (written
+    // by tools/build-fox-signals.py) holds the recorded answer for each
+    // race that has a page here, by the race's id, so a page stays
+    // "live" and still.
+    const liveRace = /^\/fox-signals\/race\/(\d+)\/live\.json$/.exec(urlPath);
+    if (liveRace) {
+      let feeds = {};
+      try {
+        feeds = JSON.parse(readFileSync(join(siteRoot, 'fixtures', 'fox-race-live.json'), 'utf8'));
+      } catch {
+        // No recording: every race answers 404, below.
+      }
+      const feed = feeds[liveRace[1]];
+      res.writeHead(feed ? 200 : 404, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+      res.end(JSON.stringify(feed ?? { error: 'no recorded live.json for this race' }));
+      return;
+    }
+    // Starring a race posts here. There is no Stable to save to, so the
+    // answer says only that it arrived, and board_star.js keeps the star
+    // as the press left it.
+    if (urlPath === '/fox-signals/api/stable/toggle/') {
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+      res.end(JSON.stringify({ ok: true }));
+      return;
+    }
     let filePath = normalize(join(siteRoot, urlPath));
     if (filePath !== siteRoot && !filePath.startsWith(siteRoot + sep)) {
       res.writeHead(403).end();
