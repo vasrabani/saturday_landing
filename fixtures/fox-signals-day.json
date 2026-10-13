@@ -1,0 +1,1806 @@
+{
+ "day": "Tuesday 13 October 2026",
+ "clock": "17:10",
+ "board": [
+  {
+   "race_id": 6393,
+   "time": "13:24",
+   "course": "Leicester",
+   "race_class": "Class 6",
+   "going": "Good to Soft",
+   "field_size": 10,
+   "name": "Every Race Live On Racing TV Nursery Handicap Stakes",
+   "pick": "King of Persia",
+   "sr": 70,
+   "odds": "9/2",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "class_drop",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 3,
+   "result": "won"
+  },
+  {
+   "race_id": 6417,
+   "time": "13:35",
+   "course": "Punchestown",
+   "race_class": "",
+   "going": "Good",
+   "field_size": 9,
+   "name": "William Hill Challenge Series 3-Y-O Hurdle",
+   "pick": "Danny Power",
+   "sr": 104,
+   "odds": "5/6",
+   "conviction": "medium",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "going_match",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "medium"
+    }
+   ],
+   "more_signals": 3,
+   "result": "2nd"
+  },
+  {
+   "race_id": 6387,
+   "time": "13:45",
+   "course": "Hereford",
+   "race_class": "Class 4",
+   "going": "Good to Firm",
+   "field_size": 5,
+   "name": "Betting.Bet Free Racing Tips Mares' 'National Hunt' Maiden Hurdle Race (GBB Race)",
+   "pick": "Miss Denver",
+   "sr": 101,
+   "odds": "4/5",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "market_leader",
+     "strength": "medium"
+    }
+   ],
+   "more_signals": 0,
+   "result": "2nd"
+  },
+  {
+   "race_id": 6394,
+   "time": "13:54",
+   "course": "Leicester",
+   "race_class": "Class 5",
+   "going": "Good to Soft",
+   "field_size": 12,
+   "name": "British EBF Fillies' Restricted Novice Stakes (For Horses In Bands C And D) (Div I) (GBB Race)",
+   "pick": "Atlantic Grace",
+   "sr": 155,
+   "odds": "11/4",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 3,
+   "result": "won"
+  },
+  {
+   "race_id": 6401,
+   "time": "14:00",
+   "course": "Southwell",
+   "race_class": "Class 4",
+   "going": "Good",
+   "field_size": 3,
+   "name": "Gents Night Saturday 24th October Handicap Steeple Chase (gbb Race)",
+   "pick": "Axel Bleue",
+   "sr": 129,
+   "odds": "Evs",
+   "conviction": "medium",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "going_match",
+     "strength": "strong"
+    },
+    {
+     "kind": "market_leader",
+     "strength": "medium"
+    }
+   ],
+   "more_signals": 1,
+   "result": "2nd"
+  },
+  {
+   "race_id": 6418,
+   "time": "14:10",
+   "course": "Punchestown",
+   "race_class": "",
+   "going": "Good",
+   "field_size": 12,
+   "name": "William Hill Challenge Series Handicap Hurdle",
+   "pick": "Build A Bridge",
+   "sr": 92,
+   "odds": "9/2",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 3,
+   "result": "won"
+  },
+  {
+   "race_id": 6388,
+   "time": "14:20",
+   "course": "Hereford",
+   "race_class": "Class 4",
+   "going": "Good to Firm",
+   "field_size": 4,
+   "name": "Betting.Bet New Betting Sites Handicap Hurdle Race",
+   "pick": "Jackstell",
+   "sr": 112,
+   "odds": "11/8",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "going_match",
+     "strength": "strong"
+    },
+    {
+     "kind": "market_leader",
+     "strength": "medium"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "medium"
+    }
+   ],
+   "more_signals": 1,
+   "result": "3rd"
+  },
+  {
+   "race_id": 6395,
+   "time": "14:29",
+   "course": "Leicester",
+   "race_class": "Class 5",
+   "going": "Good to Soft",
+   "field_size": 11,
+   "name": "British EBF Fillies' Restricted Novice Stakes (For Horses In Bands C And D) (Div II) (GBB Race)",
+   "pick": "Hoya Bella",
+   "sr": 157,
+   "odds": "2/1",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_drift",
+     "strength": "medium"
+    }
+   ],
+   "more_signals": 3,
+   "result": "unplaced"
+  },
+  {
+   "race_id": 6402,
+   "time": "14:35",
+   "course": "Southwell",
+   "race_class": "Class 4",
+   "going": "Good",
+   "field_size": 6,
+   "name": "Heb Group \"the Power Behind Everyday\" Novices' Handicap Steeple Chase (gbb Race)",
+   "pick": "Lady Kara",
+   "sr": 117,
+   "odds": "7/2",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "class_drop",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 4,
+   "result": "unplaced"
+  },
+  {
+   "race_id": 6419,
+   "time": "14:45",
+   "course": "Punchestown",
+   "race_class": "",
+   "going": "Good",
+   "field_size": 5,
+   "name": "William Hill Challenge Series Hurdle",
+   "pick": "Buddy One",
+   "sr": 137,
+   "odds": "15/8",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "going_match",
+     "strength": "strong"
+    },
+    {
+     "kind": "jockey_upgrade",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 3,
+   "result": "3rd"
+  },
+  {
+   "race_id": 6389,
+   "time": "14:55",
+   "course": "Hereford",
+   "race_class": "Class 5",
+   "going": "Good to Firm",
+   "field_size": 8,
+   "name": "Betting.Bet Play Champion Tipster Novices' Limited Handicap Hurdle Race",
+   "pick": "Carrhill",
+   "sr": 96,
+   "odds": "2/1",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "medium"
+    }
+   ],
+   "more_signals": 2,
+   "result": "2nd"
+  },
+  {
+   "race_id": 6396,
+   "time": "15:04",
+   "course": "Leicester",
+   "race_class": "Class 3",
+   "going": "Good to Soft",
+   "field_size": 7,
+   "name": "British EBF Fillies' Novice Stakes (GBB/GBBPlus Race)",
+   "pick": "Lady Phillips",
+   "sr": 157,
+   "odds": "7/4",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 2,
+   "result": "2nd"
+  },
+  {
+   "race_id": 6403,
+   "time": "15:10",
+   "course": "Southwell",
+   "race_class": "Class 4",
+   "going": "Good",
+   "field_size": 5,
+   "name": "Case Ih Drive Performance Drive Puma Handicap Steeple Chase (gbb Race)",
+   "pick": "Dream Diamond",
+   "sr": 119,
+   "odds": "11/8",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "class_drop",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 3,
+   "result": "unplaced"
+  },
+  {
+   "race_id": 6420,
+   "time": "15:20",
+   "course": "Punchestown",
+   "race_class": "",
+   "going": "Good",
+   "field_size": 18,
+   "name": "William Hill Challenge Series Handicap Hurdle",
+   "pick": "Live To Laugh",
+   "sr": 109,
+   "odds": "7/2",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 2,
+   "result": "won"
+  },
+  {
+   "race_id": 6390,
+   "time": "15:30",
+   "course": "Hereford",
+   "race_class": "Class 4",
+   "going": "Good to Firm",
+   "field_size": 8,
+   "name": "Betting.Bet Free Bets Handicap Hurdle Race",
+   "pick": "Donnie Azoff",
+   "sr": 116,
+   "odds": "3/1",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "class_drop",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 4,
+   "result": "2nd"
+  },
+  {
+   "race_id": 6397,
+   "time": "15:39",
+   "course": "Leicester",
+   "race_class": "Class 5",
+   "going": "Good to Soft",
+   "field_size": 18,
+   "name": "Join Racing TV Now Handicap Stakes",
+   "pick": "Fenlander",
+   "sr": 70,
+   "odds": "8/1",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "going_match",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 3,
+   "result": "3rd"
+  },
+  {
+   "race_id": 6404,
+   "time": "15:45",
+   "course": "Southwell",
+   "race_class": "Class 5",
+   "going": "Good",
+   "field_size": 4,
+   "name": "Case Ih Dealer Network Top Class Open National Hunt Flat Race (Category 1 Elimination) (GBB Race)",
+   "pick": "Masterius",
+   "sr": 113,
+   "odds": "4/7",
+   "conviction": "medium",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "market_leader",
+     "strength": "medium"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "weak"
+    }
+   ],
+   "more_signals": 0,
+   "result": "won"
+  },
+  {
+   "race_id": 6421,
+   "time": "15:55",
+   "course": "Punchestown",
+   "race_class": "",
+   "going": "Good",
+   "field_size": 15,
+   "name": "William Hill Challenge Series Maiden Hurdle",
+   "pick": "Pat O's Rock",
+   "sr": 160,
+   "odds": "9/4",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 2,
+   "result": "won"
+  },
+  {
+   "race_id": 6391,
+   "time": "16:05",
+   "course": "Hereford",
+   "race_class": "Class 5",
+   "going": "Good to Firm",
+   "field_size": 7,
+   "name": "tigerbet.co.uk Download Our App Mares' Handicap Hurdle Race",
+   "pick": "Lady Dapple Rose",
+   "sr": 87,
+   "odds": "10/3",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "going_match",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "medium"
+    }
+   ],
+   "more_signals": 2,
+   "result": "unplaced"
+  },
+  {
+   "race_id": 6398,
+   "time": "16:14",
+   "course": "Leicester",
+   "race_class": "Class 5",
+   "going": "Good to Soft",
+   "field_size": 10,
+   "name": "Christmas Parties At Leicester Racecourse Book Now Handicap Stakes",
+   "pick": "Francesi",
+   "sr": 71,
+   "odds": "11/2",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "class_drop",
+     "strength": "strong"
+    },
+    {
+     "kind": "going_match",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 4,
+   "result": "3rd"
+  },
+  {
+   "race_id": 6405,
+   "time": "16:20",
+   "course": "Southwell",
+   "race_class": "Class 4",
+   "going": "Good",
+   "field_size": 6,
+   "name": "Book The Bistro In Seasons Restaurant Mares' Maiden Hurdle Race (gbb Race)",
+   "pick": "L'Amandine",
+   "sr": 165,
+   "odds": "8/15",
+   "conviction": "medium",
+   "signals": [
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 4,
+   "result": "won"
+  },
+  {
+   "race_id": 6408,
+   "time": "16:25",
+   "course": "Wolverhampton (AW)",
+   "race_class": "Class 6",
+   "going": "Good",
+   "field_size": 9,
+   "name": "Download The Raceday Ready App Apprentice Handicap Stakes (Div I)",
+   "pick": "Midnight's Dream",
+   "sr": 66,
+   "odds": "15/8",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_drift",
+     "strength": "medium"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "medium"
+    }
+   ],
+   "more_signals": 1,
+   "result": "won"
+  },
+  {
+   "race_id": 6422,
+   "time": "16:30",
+   "course": "Punchestown",
+   "race_class": "",
+   "going": "Good",
+   "field_size": 18,
+   "name": "William Hill Challenge Series Handicap Hurdle (Div I)",
+   "pick": "Granlahan",
+   "sr": 95,
+   "odds": "2/1",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 3,
+   "result": "unplaced"
+  },
+  {
+   "race_id": 6392,
+   "time": "16:38",
+   "course": "Hereford",
+   "race_class": "Class 5",
+   "going": "Good to Firm",
+   "field_size": 4,
+   "name": "Hereford Halloween Family Raceday 26th October Open Maiden National Hunt Flat Race (Category 3 Elimination) (GBB Race)",
+   "pick": "Lucy Glitters",
+   "sr": 158,
+   "odds": "10/11",
+   "conviction": "medium",
+   "signals": [
+    {
+     "kind": "price_cut",
+     "strength": "medium"
+    },
+    {
+     "kind": "market_leader",
+     "strength": "medium"
+    },
+    {
+     "kind": "class_drop",
+     "strength": "medium"
+    }
+   ],
+   "more_signals": 0,
+   "result": "unplaced"
+  },
+  {
+   "race_id": 6399,
+   "time": "16:47",
+   "course": "Leicester",
+   "race_class": "Class 3",
+   "going": "Good to Soft",
+   "field_size": 18,
+   "name": "Happy 80th Reg Ling Handicap Stakes",
+   "pick": "Flight Control",
+   "sr": 98,
+   "odds": "9/2",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "going_match",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 4,
+   "result": "unplaced"
+  },
+  {
+   "race_id": 6406,
+   "time": "16:52",
+   "course": "Southwell",
+   "race_class": "Class 5",
+   "going": "Good",
+   "field_size": 12,
+   "name": "Celebrate With Sponsorship At Southwell Racecourse Novices' Limited Handicap Hurdle Race",
+   "pick": "Winston's Oath",
+   "sr": 93,
+   "odds": "5/4",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 4,
+   "result": "3rd"
+  },
+  {
+   "race_id": 6409,
+   "time": "17:00",
+   "course": "Wolverhampton (AW)",
+   "race_class": "Class 6",
+   "going": "Good",
+   "field_size": 9,
+   "name": "Download The Raceday Ready App Apprentice Handicap Stakes (Div II)",
+   "pick": "Snooze Lane",
+   "sr": 62,
+   "odds": "7/2",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 3,
+   "result": "2nd"
+  },
+  {
+   "race_id": 6423,
+   "time": "17:07",
+   "course": "Punchestown",
+   "race_class": "",
+   "going": "Good",
+   "field_size": 18,
+   "name": "William Hill Challenge Series Handicap Hurdle (Div II)",
+   "pick": "Gatehouse Boy",
+   "sr": 75,
+   "odds": "14/1",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 2,
+   "result": "unplaced"
+  },
+  {
+   "race_id": 6400,
+   "time": "17:17",
+   "course": "Leicester",
+   "race_class": "Class 6",
+   "going": "Good to Soft",
+   "field_size": 17,
+   "name": "racingtv.com Handicap Stakes",
+   "pick": "Ricardo Phillips",
+   "sr": 70,
+   "odds": "11/2",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "class_drop",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 4,
+   "result": "3rd"
+  },
+  {
+   "race_id": 6407,
+   "time": "17:23",
+   "course": "Southwell",
+   "race_class": "Class 5",
+   "going": "Good",
+   "field_size": 6,
+   "name": "Golf And Gallop Handicap Hurdle Race",
+   "pick": "Trigger The Light",
+   "sr": 81,
+   "odds": "4/1",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "going_match",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_drift",
+     "strength": "medium"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "medium"
+    }
+   ],
+   "more_signals": 2,
+   "result": "unplaced"
+  },
+  {
+   "race_id": 6410,
+   "time": "17:30",
+   "course": "Wolverhampton (AW)",
+   "race_class": "Class 6",
+   "going": "Good",
+   "field_size": 6,
+   "name": "Follow @attheraces On Instagram Handicap Stakes",
+   "pick": "Royal County Glory",
+   "sr": 80,
+   "odds": "10/11",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "going_match",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 3,
+   "result": "won"
+  },
+  {
+   "race_id": 6424,
+   "time": "17:40",
+   "course": "Punchestown",
+   "race_class": "",
+   "going": "Good",
+   "field_size": 14,
+   "name": "Irish Stallion Farms EBF Mares Flat Race",
+   "pick": "Eastern Whisper",
+   "sr": 97,
+   "odds": "2/1",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 3,
+   "result": "won"
+  },
+  {
+   "race_id": 6411,
+   "time": "18:00",
+   "course": "Wolverhampton (AW)",
+   "race_class": "Class 4",
+   "going": "Good",
+   "field_size": 9,
+   "name": "Sky Sports Racing Sky 415 Novice Stakes (gbb Race)",
+   "pick": "Bella Angelina",
+   "sr": 161,
+   "odds": "5/6",
+   "conviction": "medium",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 2,
+   "result": "unplaced"
+  },
+  {
+   "race_id": 6412,
+   "time": "18:30",
+   "course": "Wolverhampton (AW)",
+   "race_class": "Class 4",
+   "going": "Good",
+   "field_size": 9,
+   "name": "Hotel & Conferencing At Wolverhampton Racecourse Ebf Maiden Stakes (gbb Race)",
+   "pick": "Muhandes",
+   "sr": 154,
+   "odds": "6/4",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "class_drop",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 3,
+   "result": null
+  },
+  {
+   "race_id": 6413,
+   "time": "19:00",
+   "course": "Wolverhampton (AW)",
+   "race_class": "Class 4",
+   "going": "Good",
+   "field_size": 7,
+   "name": "Stay At The Wolverhampton Holiday Inn Handicap Stakes (gbbplus Race)",
+   "pick": "Zachary Hickes",
+   "sr": 87,
+   "odds": "6/5",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 4,
+   "result": null
+  },
+  {
+   "race_id": 6414,
+   "time": "19:30",
+   "course": "Wolverhampton (AW)",
+   "race_class": "Class 6",
+   "going": "Good",
+   "field_size": 13,
+   "name": "Cavani Champion Style Handicap Stakes",
+   "pick": "Koffee And Kale",
+   "sr": 77,
+   "odds": "9/4",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    },
+    {
+     "kind": "going_match",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 4,
+   "result": null
+  },
+  {
+   "race_id": 6415,
+   "time": "20:00",
+   "course": "Wolverhampton (AW)",
+   "race_class": "Class 6",
+   "going": "Good",
+   "field_size": 12,
+   "name": "Race & Rest - Wolverhampton Holiday Inn Handicap Stakes",
+   "pick": "Meritocratic",
+   "sr": 62,
+   "odds": "6/1",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    },
+    {
+     "kind": "jockey_upgrade",
+     "strength": "strong"
+    },
+    {
+     "kind": "coordinated_move",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 5,
+   "result": null
+  },
+  {
+   "race_id": 6416,
+   "time": "20:30",
+   "course": "Wolverhampton (AW)",
+   "race_class": "Class 6",
+   "going": "Good",
+   "field_size": 11,
+   "name": "Cavani Raceday Style Handicap Stakes",
+   "pick": "Midnight Media",
+   "sr": 76,
+   "odds": "5/4",
+   "conviction": "low",
+   "signals": [
+    {
+     "kind": "jockey_upgrade",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_drift",
+     "strength": "strong"
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong"
+    }
+   ],
+   "more_signals": 4,
+   "result": null
+  }
+ ],
+ "races": [
+  {
+   "race_id": 6411,
+   "time": "18:00",
+   "course": "Wolverhampton (AW)",
+   "name": "Sky Sports Racing Sky 415 Novice Stakes (gbb Race)",
+   "start_at": "2026-10-13T08:00:03.227488+00:00",
+   "span_min": 570,
+   "runners": [
+    {
+     "runner_id": 64628,
+     "number": 1,
+     "horse": "Ceo Stealth Mode",
+     "trainer": "Suzzanne France",
+     "jockey": "Tom Kiely-Marshall(3)",
+     "sr": 56
+    },
+    {
+     "runner_id": 64629,
+     "number": 2,
+     "horse": "Blue Point Gold",
+     "trainer": "James Tate",
+     "jockey": "Hector Crouch",
+     "sr": 144
+    },
+    {
+     "runner_id": 64630,
+     "number": 3,
+     "horse": "Eagle Thunder",
+     "trainer": "Jennie Candlish",
+     "jockey": "Darragh Keenan",
+     "sr": 122
+    },
+    {
+     "runner_id": 64631,
+     "number": 4,
+     "horse": "Mr Keble",
+     "trainer": "Oli Rix",
+     "jockey": "Jonny Peate",
+     "sr": 139
+    },
+    {
+     "runner_id": 64632,
+     "number": 5,
+     "horse": "Paname",
+     "trainer": "Harry Eustace",
+     "jockey": "Kaiya Fraser",
+     "sr": 122
+    },
+    {
+     "runner_id": 64633,
+     "number": 6,
+     "horse": "Missmisfortune",
+     "trainer": "Charlie Pike",
+     "jockey": "Kieren Fox",
+     "sr": 125
+    },
+    {
+     "runner_id": 64634,
+     "number": 7,
+     "horse": "Red Melody",
+     "trainer": "Lisa Williamson",
+     "jockey": "Ben Ffrench Davis(5)",
+     "sr": 126
+    },
+    {
+     "runner_id": 64635,
+     "number": 8,
+     "horse": "Bella Angelina",
+     "trainer": "Harry Charlton",
+     "jockey": "Callum Rodriguez",
+     "sr": 161
+    },
+    {
+     "runner_id": 64636,
+     "number": 9,
+     "horse": "Soft Landing",
+     "trainer": "Saeed bin Suroor",
+     "jockey": "Oisin Murphy",
+     "sr": 159
+    }
+   ],
+   "prices": {
+    "64628": [
+     [
+      0,
+      "33/1"
+     ],
+     [
+      85,
+      "40/1"
+     ],
+     [
+      160,
+      "50/1"
+     ]
+    ],
+    "64629": [
+     [
+      0,
+      "17/2"
+     ],
+     [
+      85,
+      "7/1"
+     ],
+     [
+      430,
+      "11/2"
+     ],
+     [
+      490,
+      "5/1"
+     ]
+    ],
+    "64630": [
+     [
+      0,
+      "80/1"
+     ],
+     [
+      85,
+      "100/1"
+     ],
+     [
+      490,
+      "125/1"
+     ]
+    ],
+    "64631": [
+     [
+      0,
+      "12/1"
+     ],
+     [
+      85,
+      "14/1"
+     ]
+    ],
+    "64632": [
+     [
+      0,
+      "28/1"
+     ],
+     [
+      85,
+      "33/1"
+     ],
+     [
+      430,
+      "40/1"
+     ]
+    ],
+    "64633": [
+     [
+      0,
+      "28/1"
+     ],
+     [
+      430,
+      "40/1"
+     ],
+     [
+      490,
+      "33/1"
+     ]
+    ],
+    "64634": [
+     [
+      0,
+      "250/1"
+     ],
+     [
+      85,
+      "300/1"
+     ]
+    ],
+    "64635": [
+     [
+      0,
+      "5/6"
+     ],
+     [
+      430,
+      "Evs"
+     ]
+    ],
+    "64636": [
+     [
+      0,
+      "15/8"
+     ],
+     [
+      160,
+      "7/4"
+     ],
+     [
+      430,
+      "13/8"
+     ],
+     [
+      490,
+      "7/4"
+     ]
+    ]
+   },
+   "ai": {
+    "64629": [
+     [
+      34,
+      9.0
+     ],
+     [
+      94,
+      9.0
+     ],
+     [
+      155,
+      9.0
+     ],
+     [
+      214,
+      9.0
+     ],
+     [
+      275,
+      9.0
+     ],
+     [
+      334,
+      9.0
+     ],
+     [
+      395,
+      9.0
+     ],
+     [
+      454,
+      9.0
+     ],
+     [
+      514,
+      9.0
+     ]
+    ],
+    "64635": [
+     [
+      34,
+      47.0
+     ],
+     [
+      94,
+      47.0
+     ],
+     [
+      155,
+      47.0
+     ],
+     [
+      214,
+      47.0
+     ],
+     [
+      275,
+      47.0
+     ],
+     [
+      334,
+      47.0
+     ],
+     [
+      395,
+      47.0
+     ],
+     [
+      454,
+      47.0
+     ],
+     [
+      514,
+      47.0
+     ]
+    ],
+    "64636": [
+     [
+      34,
+      33.0
+     ],
+     [
+      94,
+      33.0
+     ],
+     [
+      155,
+      33.0
+     ],
+     [
+      214,
+      33.0
+     ],
+     [
+      275,
+      33.0
+     ],
+     [
+      334,
+      33.0
+     ],
+     [
+      395,
+      33.0
+     ],
+     [
+      454,
+      33.0
+     ],
+     [
+      514,
+      33.0
+     ]
+    ]
+   },
+   "signals": [
+    {
+     "kind": "coordinated_move",
+     "strength": "strong",
+     "title": "Coordinated drifted (7 runners)",
+     "description": "7 of 9 runners drifted together — book-wide re-price.",
+     "runner_id": null,
+     "earlier": 0
+    },
+    {
+     "kind": "market_leader",
+     "strength": "medium",
+     "title": "Market leader: Evs",
+     "description": "Bella Angelina has been shortest in the field at the last 3 price checks.",
+     "runner_id": 64635,
+     "earlier": 0
+    },
+    {
+     "kind": "jockey_upgrade",
+     "strength": "medium",
+     "title": "Jockey upgrade — Callum Rodriguez",
+     "description": "Now booked by Callum Rodriguez (20% strike, 1348 runs) — up from Paul Mulrennan (14% strike) at last run.",
+     "runner_id": 64635,
+     "earlier": 0
+    },
+    {
+     "kind": "price_drift",
+     "strength": "weak",
+     "title": "Drifter: 5/6 → Evs",
+     "description": "Bella Angelina drifted 9% in the last 9h 30m.",
+     "runner_id": 64635,
+     "earlier": 0
+    },
+    {
+     "kind": "jockey_upgrade",
+     "strength": "strong",
+     "title": "Jockey upgrade — Oisin Murphy",
+     "description": "Now booked by Oisin Murphy (22% strike, 2774 runs) — up from Alistair Rawlinson (11% strike) at last run.",
+     "runner_id": 64636,
+     "earlier": 0
+    },
+    {
+     "kind": "market_leader",
+     "strength": "medium",
+     "title": "Market leader: 7/4",
+     "description": "Soft Landing has been shortest in the field at the last 3 price checks.",
+     "runner_id": 64636,
+     "earlier": 0
+    },
+    {
+     "kind": "price_cut",
+     "strength": "weak",
+     "title": "Steamer: 15/8 → 13/8",
+     "description": "Soft Landing shortened 9% in the last 8h 5m.",
+     "runner_id": 64636,
+     "earlier": 0
+    },
+    {
+     "kind": "price_cut",
+     "strength": "strong",
+     "title": "Steamer: 17/2 → 5/1",
+     "description": "Blue Point Gold shortened 37% in the last 9h 30m.",
+     "runner_id": 64629,
+     "earlier": 2
+    },
+    {
+     "kind": "price_drift",
+     "strength": "medium",
+     "title": "Drifter: 12/1 → 14/1",
+     "description": "Mr Keble drifted 15% in the last 9h 30m.",
+     "runner_id": 64631,
+     "earlier": 0
+    },
+    {
+     "kind": "price_drift",
+     "strength": "weak",
+     "title": "5 outsiders drifting",
+     "description": "Missmisfortune 28/1 → 33/1, Paname 28/1 → 40/1, Ceo Stealth Mode 33/1 → 50/1, Eagle Thunder 80/1 → 125/1, Red Melody 250/1 → 300/1.",
+     "runner_id": null,
+     "earlier": 0
+    }
+   ],
+   "result": {
+    "winner": "Soft Landing (GB)",
+    "winner_sp": "13/8",
+    "winner_jockey": "Oisin Murphy",
+    "places": [
+     [
+      "Paname (USA)",
+      "40/1"
+     ],
+     [
+      "Blue Point Gold (IRE)",
+      "5/1"
+     ]
+    ]
+   }
+  },
+  {
+   "race_id": 6392,
+   "time": "16:38",
+   "course": "Hereford",
+   "name": "Hereford Halloween Family Raceday 26th October Open Maiden National Hunt Flat Race (Category 3 Elimination) (GBB Race)",
+   "start_at": "2026-10-13T08:00:03.227488+00:00",
+   "span_min": 480,
+   "runners": [
+    {
+     "runner_id": 64454,
+     "number": 1,
+     "horse": "Bombus Pascuorum",
+     "trainer": "Donald McCain",
+     "jockey": "Harry Brown(10)",
+     "sr": 147
+    },
+    {
+     "runner_id": 64455,
+     "number": 2,
+     "horse": "Indiza",
+     "trainer": "Stuart Edmunds",
+     "jockey": "Charlie Hammond",
+     "sr": 143
+    },
+    {
+     "runner_id": 64456,
+     "number": 3,
+     "horse": "Lucy Glitters",
+     "trainer": "Tom George",
+     "jockey": "Jonathan Burke",
+     "sr": 158
+    },
+    {
+     "runner_id": 64457,
+     "number": 4,
+     "horse": "Unflappable",
+     "trainer": "Ben Clarke",
+     "jockey": "David Noonan",
+     "sr": 157
+    }
+   ],
+   "prices": {
+    "64454": [
+     [
+      0,
+      "11/2"
+     ],
+     [
+      370,
+      "6/1"
+     ],
+     [
+      430,
+      "11/2"
+     ]
+    ],
+    "64455": [
+     [
+      0,
+      "9/1"
+     ],
+     [
+      80,
+      "17/2"
+     ],
+     [
+      155,
+      "15/2"
+     ],
+     [
+      370,
+      "8/1"
+     ]
+    ],
+    "64456": [
+     [
+      0,
+      "10/11"
+     ],
+     [
+      370,
+      "11/10"
+     ],
+     [
+      430,
+      "5/4"
+     ]
+    ],
+    "64457": [
+     [
+      0,
+      "9/4"
+     ],
+     [
+      80,
+      "5/2"
+     ],
+     [
+      370,
+      "15/8"
+     ],
+     [
+      430,
+      "13/8"
+     ]
+    ]
+   },
+   "ai": {
+    "64454": [
+     [
+      30,
+      9.0
+     ],
+     [
+      89,
+      9.0
+     ],
+     [
+      150,
+      9.0
+     ],
+     [
+      210,
+      9.0
+     ],
+     [
+      269,
+      9.0
+     ],
+     [
+      330,
+      9.0
+     ],
+     [
+      390,
+      9.0
+     ],
+     [
+      450,
+      9.0
+     ]
+    ],
+    "64456": [
+     [
+      30,
+      47.0
+     ],
+     [
+      89,
+      47.0
+     ],
+     [
+      150,
+      47.0
+     ],
+     [
+      210,
+      47.0
+     ],
+     [
+      269,
+      47.0
+     ],
+     [
+      330,
+      47.0
+     ],
+     [
+      390,
+      47.0
+     ],
+     [
+      450,
+      47.0
+     ]
+    ],
+    "64457": [
+     [
+      30,
+      20.0
+     ],
+     [
+      89,
+      20.0
+     ],
+     [
+      150,
+      20.0
+     ],
+     [
+      210,
+      20.0
+     ],
+     [
+      269,
+      20.0
+     ],
+     [
+      330,
+      20.0
+     ],
+     [
+      390,
+      20.0
+     ],
+     [
+      450,
+      20.0
+     ]
+    ]
+   },
+   "signals": [
+    {
+     "kind": "price_drift",
+     "strength": "medium",
+     "title": "Drifter: 10/11 → 5/4",
+     "description": "Lucy Glitters drifted 18% in the last 8h.",
+     "runner_id": 64456,
+     "earlier": 1
+    },
+    {
+     "kind": "market_leader",
+     "strength": "medium",
+     "title": "Market leader: 5/4",
+     "description": "Lucy Glitters has been shortest in the field at the last 3 price checks.",
+     "runner_id": 64456,
+     "earlier": 0
+    },
+    {
+     "kind": "class_drop",
+     "strength": "medium",
+     "title": "Class drop — 1 tier",
+     "description": "Dropped 1 class tier(s) from last run (↓1) — running today in Class 5.",
+     "runner_id": 64456,
+     "earlier": 0
+    },
+    {
+     "kind": "price_cut",
+     "strength": "medium",
+     "title": "Steamer: 9/4 → 13/8",
+     "description": "Unflappable shortened 19% in the last 8h.",
+     "runner_id": 64457,
+     "earlier": 1
+    },
+    {
+     "kind": "class_drop",
+     "strength": "medium",
+     "title": "Class drop — 1 tier",
+     "description": "Dropped 1 class tier(s) from last run (↓1) — running today in Class 5.",
+     "runner_id": 64457,
+     "earlier": 0
+    },
+    {
+     "kind": "price_cut",
+     "strength": "weak",
+     "title": "Steamer: 9/1 → 8/1",
+     "description": "Indiza shortened 10% in the last 8h.",
+     "runner_id": 64455,
+     "earlier": 1
+    }
+   ],
+   "result": {
+    "winner": "Bombus Pascuorum (IRE)",
+    "winner_sp": "5/1",
+    "winner_jockey": "Harry Brown",
+    "places": [
+     [
+      "Unflappable (GB)",
+      "11/8F"
+     ],
+     [
+      "Indiza (IRE)",
+      "11/1"
+     ]
+    ]
+   }
+  }
+ ]
+}

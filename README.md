@@ -1,6 +1,6 @@
 # Saturday Racing — Design Sandbox
 
-Self-contained snapshots of the live site, so you can work on it without Django, a database or any backend. Four pages:
+Self-contained snapshots of the live site, so you can work on it without Django, a database or any backend. The pages:
 
 | Page | What it is |
 | --- | --- |
@@ -8,10 +8,11 @@ Self-contained snapshots of the live site, so you can work on it without Django,
 | `trail.html` | [the Fox Trail](https://www.saturday-racing.com/trail/) — the day's tips on one board, live |
 | `meeting.html` | [the meeting page](https://www.saturday-racing.com/races/meeting/newmarket/2026-10-09/full/) — every race at a meeting, every runner, and the Pick Six slip; Newmarket with the results in |
 | `meeting-upcoming.html` | the same page the evening before: Newmarket's next card, no numbers yet, most runners at SP, an AI verdict under each race |
+| `fox-*.html` | [Fox Signals](https://www.saturday-racing.com/fox-signals/board/) — the Fox's pick in every race and the market behind it: ten pages (the Board, Race Trace, Alerts, the Stable, Settings), as a visitor and as a member, on one recorded day |
 
 Everything is baked into those files + the assets under `static/` — the same HTML, CSS, JS, images and fonts production ships. No template engine involved.
 
-The trail is a **live** page: races settle while it is open. The sandbox replays a recorded day so that works here too, which is why it needs the Node server below rather than any static one. If you are working on the trail, start with **`docs/trail-brief.md`**; on the meeting page, with **`docs/meeting-brief.md`**.
+The trail is a **live** page: races settle while it is open. The sandbox replays a recorded day so that works here too, which is why it needs the Node server below rather than any static one. If you are working on the trail, start with **`docs/trail-brief.md`**; on the meeting page, with **`docs/meeting-brief.md`**; on Fox Signals, with **`docs/fox-signals-brief.md`**.
 
 ---
 
@@ -40,6 +41,7 @@ saturday_landing/
 ├── states.html            every state the landing page can render
 ├── trail-states.html      every state the trail can render
 ├── meeting-states.html    every state the meeting page can render
+├── fox-*.html             Fox Signals: ten pages built from the Django site
 ├── docs/                  the briefs, the integration map, the decisions
 ├── fixtures/              the recorded day the trail's live feed replays
 ├── partials/              states that live outside the pages themselves
@@ -52,6 +54,7 @@ saturday_landing/
 │   ├── public/            landing-page-specific CSS/JS/images
 │   ├── grid/              the Fox Trail's own CSS + JS + images
 │   ├── meeting/           the meeting page revamp's CSS + JS + images
+│   ├── fox_signals/       Fox Signals' CSS + JS (the Django site's, byte for byte)
 │   ├── races/             race picker + Pick 6 emblem CSS, and the meeting page's four production scripts
 │   ├── letters/           LLaMa portrait
 │   ├── news/              Sly Man portrait + fox mark
@@ -80,6 +83,8 @@ The contract is **navbar, footer, and home page only**. In the bundle those tran
 | Meeting page **structure**   | `meeting.html` / `meeting-upcoming.html` (the `<div class="mf-wrap">` block) |
 | Meeting page **styling**     | `static/meeting/css/meeting.css`                                       |
 | Meeting page **JS**          | `static/meeting/js/meeting_racecard.js`, `meeting_masthead.js`, `meeting_slip.js` |
+| Fox Signals **styling**      | `static/fox_signals/css/fox_signals_v2.css` (and `fox_signals_shell.css`; read the brief first) |
+| Fox Signals **JS**           | `static/fox_signals/js/*.js`                                           |
 | Fonts / type scale           | `static/fonts/saturday-fonts.css` + `static/css/base.css`              |
 
 **`static/grid/js/*.js`** — the trail's five scripts (`trail_live`, `trail_flip`, `trail_filter`, `trail_drawer`, `trail_nav`) are production code and come back unchanged. They key off attributes and classes in the markup; `docs/trail-brief.md` lists every one of them. Restyle freely, but keep the hooks. The revamp's own three (`trail_cards`, `trail_track`, `trail_course`) sit beside them; `docs/integration-map.md` says what they need.
@@ -122,6 +127,7 @@ The `docs/` folder carries the decisions and the handover:
 | --- | --- |
 | `trail-brief.md` | **The Fox Trail revamp: scope, the states, the live day, and the hooks the page must keep** |
 | `meeting-brief.md` | **The meeting page revamp: what it did, the states, the six-pick limit, and the hooks the page must keep** |
+| `fox-signals-brief.md` | **Fox Signals: the ten pages, what is real and what is a stand-in, what you may change, the hooks, and how it goes back** |
 | `integration-map.md` | How this becomes Django templates: section by section, with the context each one needs |
 | `content-notes.md` | Which numbers are sample data, and the content decisions still open |
 | `accessibility-notes.md` | What was fixed, the one open contrast decision, and why some axe findings are false positives |

@@ -1,0 +1,4145 @@
+<!DOCTYPE html>
+<html lang="en" prefix="og: https://ogp.me/ns#">
+<head>
+  
+
+  <!-- Analytics — GA4 + Microsoft Clarity. Gating (env-var present,
+       not staff, not DEBUG) lives in public.context_processors.analytics —
+       empty IDs short-circuit the conditional so no tag is emitted. -->
+  
+  
+
+  <!-- ── Character set & viewport ──────────────────────────── -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- ── Primary SEO ───────────────────────────────────────── -->
+  <title>The Board · Fox Signals | Saturday Racing</title>
+  <meta name="description"    content="Every race, every runner at Newmarket on Friday 9 October 2026. Build a Saturday Racing accumulator across the meeting.">
+  <meta name="keywords"       content="horse racing tips, Saturday racing, Mr Fox tips, AI horse racing, racecard, form guide, big race">
+  <meta name="author"         content="Saturday Racing">
+  <meta name="robots"         content="index, follow">
+  <link rel="canonical"       href="https://www.saturday-racing.com/fox-signals/board/">
+
+  <!-- RSS auto-discovery — lets feed readers pick up The Fox's Wire from any site page. -->
+  <link rel="alternate" type="application/rss+xml"
+        title="The Fox's Wire — Racing news, sharpened"
+        href="https://www.saturday-racing.com/news/feed/">
+
+  <!-- ── Open Graph (Facebook, WhatsApp, LinkedIn) ──────────── -->
+  <meta property="og:site_name"    content="Saturday Racing">
+  <meta property="og:type"         content="website">
+  <meta property="og:title"        content="Saturday Racing — The Home of the Big Race">
+  <meta property="og:description"  content="Expert tips, AI analysis, full racecards and live updates. Mr Fox vs The Cub. Every big Saturday race gets the full treatment.">
+  <meta property="og:url"          content="https://www.saturday-racing.com/races/meeting/newmarket/2026-10-09/full/">
+  
+  <meta property="og:image"        content="">
+  <meta property="og:image:alt"    content="Saturday Racing — The Home of the Big Race">
+  <meta property="og:locale"       content="en_GB">
+
+  <!-- ── Twitter / X card ──────────────────────────────────── -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:site"        content="@SaturdayRacing">
+  <meta name="twitter:creator"     content="@SaturdayRacing">
+  <meta name="twitter:title"       content="Saturday Racing — The Home of the Big Race">
+  <meta name="twitter:description" content="Expert tips, AI analysis and full racecards for every big Saturday race. Mr Fox vs The Cub.">
+  <meta name="twitter:image"       content="">
+
+  <!-- ── Favicon — finishing post mark ──────────────────────── -->
+  <!-- SVG favicon scales perfectly at all sizes (Chrome 80+, Firefox 41+, Safari 12+) -->
+  <link rel="icon"              type="image/svg+xml" href="static/img/favicon.svg">
+  <!-- Fallback PNG for older browsers (generated from SVG) -->
+  <link rel="icon"              type="image/png" sizes="32x32"  href="static/img/favicon-32.png">
+  <link rel="icon"              type="image/png" sizes="16x16"  href="static/img/favicon-16.png">
+  <!-- Apple touch icon -->
+  <link rel="apple-touch-icon"  sizes="180x180" href="static/img/apple-touch-icon.png">
+  <!-- Web app manifest -->
+  <link rel="manifest"          href="static/img/site.webmanifest">
+  <meta name="theme-color"      content="#0B0B0F">
+  <meta name="msapplication-TileColor" content="#D4AF37">
+
+  <!-- ── Structured Data — Organisation ────────────────────── -->
+
+  <!-- ── Structured Data — Page-level override ─────────────── -->
+  
+
+  <!-- ── Fonts (self-hosted — no Google Fonts network call) ── -->
+  <link rel="stylesheet" href="static/fonts/saturday-fonts.css">
+
+  <!-- ── Stylesheets ───────────────────────────────────────── -->
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/paper.css">
+  <link rel="stylesheet" href="static/css/chrome.css">
+  <link rel="stylesheet" href="static/voting/css/picks_budget.css">
+
+  
+<link rel="stylesheet" href="static/meeting/css/meeting.css">
+<link rel="stylesheet" href="static/fox_signals/css/fox_signals_shell.css">
+<link rel="stylesheet" href="static/fox_signals/css/fox_signals_v2.css">
+<meta name="fx-toggle-pin-url" content="/fox-signals/api/stable/toggle/">
+
+  
+</head>
+<body class="page-meeting-full page-fox-signals">
+
+  
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  <symbol id="nav-home" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 12 L12 3 L21 12"/>
+    <path d="M5 10 V20 H9 V14 H15 V20 H19 V10"/>
+  </symbol>
+
+  <symbol id="nav-newspaper" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="4" width="18" height="16" rx="1.5"/>
+    <line x1="7" y1="8"  x2="17" y2="8"/>
+    <line x1="7" y1="12" x2="17" y2="12"/>
+    <line x1="7" y1="16" x2="13" y2="16"/>
+  </symbol>
+
+  <symbol id="nav-target" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="9"/>
+    <circle cx="12" cy="12" r="5"/>
+    <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+  </symbol>
+
+  <symbol id="nav-horseshoe" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M7 3 C4 5 4 9 4 12 C4 16 5 20 8 21"/>
+    <path d="M17 3 C20 5 20 9 20 12 C20 16 19 20 16 21"/>
+    <circle cx="6"  cy="4" r="1" fill="currentColor" stroke="none"/>
+    <circle cx="18" cy="4" r="1" fill="currentColor" stroke="none"/>
+    <circle cx="5"  cy="20" r="0.9" fill="currentColor" stroke="none"/>
+    <circle cx="19" cy="20" r="0.9" fill="currentColor" stroke="none"/>
+  </symbol>
+
+  <symbol id="nav-trending-up" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="3 17 9 11 13 15 21 7"/>
+    <polyline points="15 7 21 7 21 13"/>
+  </symbol>
+
+  <symbol id="nav-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="4" y1="22" x2="4" y2="3"/>
+    <path d="M4 4 H17 L15 8 L17 12 H4"/>
+  </symbol>
+
+  <symbol id="nav-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="5" width="18" height="16" rx="1.5"/>
+    <line x1="3" y1="10" x2="21" y2="10"/>
+    <line x1="8"  y1="3" x2="8"  y2="7"/>
+    <line x1="16" y1="3" x2="16" y2="7"/>
+    <circle cx="8"  cy="15" r="1" fill="currentColor" stroke="none"/>
+    <circle cx="12" cy="15" r="1" fill="currentColor" stroke="none"/>
+    <circle cx="16" cy="15" r="1" fill="currentColor" stroke="none"/>
+  </symbol>
+
+  <symbol id="nav-calendar-next" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="5" width="18" height="16" rx="1.5"/>
+    <line x1="3" y1="10" x2="21" y2="10"/>
+    <line x1="8"  y1="3" x2="8"  y2="7"/>
+    <line x1="16" y1="3" x2="16" y2="7"/>
+    <line x1="8"  y1="16" x2="15" y2="16"/>
+    <polyline points="13 14 15 16 13 18"/>
+  </symbol>
+
+  <symbol id="nav-calendar-prev" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="5" width="18" height="16" rx="1.5"/>
+    <line x1="3" y1="10" x2="21" y2="10"/>
+    <line x1="8"  y1="3" x2="8"  y2="7"/>
+    <line x1="16" y1="3" x2="16" y2="7"/>
+    <line x1="16" y1="16" x2="9"  y2="16"/>
+    <polyline points="11 14 9 16 11 18"/>
+  </symbol>
+
+  <symbol id="nav-star" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polygon points="12 3 14.6 9.2 21 10 16.2 14.3 17.6 21 12 17.7 6.4 21 7.8 14.3 3 10 9.4 9.2"/>
+  </symbol>
+
+  <symbol id="nav-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 4 H16 V10 A4 4 0 0 1 8 10 Z"/>
+    <path d="M5 5 A2 2 0 0 0 8 8"/>
+    <path d="M19 5 A2 2 0 0 1 16 8"/>
+    <line x1="12" y1="14" x2="12" y2="18"/>
+    <line x1="9"  y1="21" x2="15" y2="21"/>
+    <line x1="10" y1="18" x2="14" y2="18"/>
+  </symbol>
+
+  <symbol id="nav-gamepad" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="7" width="20" height="12" rx="4"/>
+    <line x1="7" y1="11" x2="7" y2="15"/>
+    <line x1="5" y1="13" x2="9" y2="13"/>
+    <circle cx="16" cy="11.5" r="1.1" fill="currentColor" stroke="none"/>
+    <circle cx="18" cy="14.5" r="1.1" fill="currentColor" stroke="none"/>
+  </symbol>
+
+  <symbol id="nav-sparkles" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 L13.2 8.5 L19 9.5 L13.2 10.5 L12 16 L10.8 10.5 L5 9.5 L10.8 8.5 Z"/>
+    <path d="M19 15 L19.5 17 L21 17.5 L19.5 18 L19 20 L18.5 18 L17 17.5 L18.5 17 Z"/>
+    <path d="M5 4 L5.4 5.6 L7 6 L5.4 6.4 L5 8 L4.6 6.4 L3 6 L4.6 5.6 Z"/>
+  </symbol>
+
+  <symbol id="nav-cpu" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="6" y="6" width="12" height="12" rx="1.5"/>
+    <rect x="9" y="9" width="6" height="6" rx="0.5"/>
+    <line x1="12" y1="3" x2="12" y2="6"/>
+    <line x1="12" y1="18" x2="12" y2="21"/>
+    <line x1="3"  y1="12" x2="6"  y2="12"/>
+    <line x1="18" y1="12" x2="21" y2="12"/>
+    <line x1="6"  y1="9"  x2="3"  y2="9"/>
+    <line x1="6"  y1="15" x2="3"  y2="15"/>
+    <line x1="18" y1="9"  x2="21" y2="9"/>
+    <line x1="18" y1="15" x2="21" y2="15"/>
+    <line x1="9"  y1="6"  x2="9"  y2="3"/>
+    <line x1="15" y1="6"  x2="15" y2="3"/>
+    <line x1="9"  y1="21" x2="9"  y2="18"/>
+    <line x1="15" y1="21" x2="15" y2="18"/>
+  </symbol>
+
+  <symbol id="nav-dice" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="4" width="16" height="16" rx="2.5"/>
+    <circle cx="8"  cy="8"  r="1.1" fill="currentColor" stroke="none"/>
+    <circle cx="16" cy="8"  r="1.1" fill="currentColor" stroke="none"/>
+    <circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/>
+    <circle cx="8"  cy="16" r="1.1" fill="currentColor" stroke="none"/>
+    <circle cx="16" cy="16" r="1.1" fill="currentColor" stroke="none"/>
+  </symbol>
+
+  <symbol id="nav-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22 C7 15 5 12 5 9 A7 7 0 0 1 19 9 C19 12 17 15 12 22 Z"/>
+    <circle cx="12" cy="9" r="2.5"/>
+  </symbol>
+
+  <symbol id="nav-film" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="4" width="18" height="16" rx="1.5"/>
+    <line x1="7"  y1="4" x2="7"  y2="20"/>
+    <line x1="17" y1="4" x2="17" y2="20"/>
+    <line x1="3"  y1="12" x2="21" y2="12"/>
+    <line x1="3"  y1="8"  x2="7"  y2="8"/>
+    <line x1="17" y1="8"  x2="21" y2="8"/>
+    <line x1="3"  y1="16" x2="7"  y2="16"/>
+    <line x1="17" y1="16" x2="21" y2="16"/>
+  </symbol>
+
+  <symbol id="nav-folder-open" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 8 V19 A2 2 0 0 0 5 21 H19 A2 2 0 0 0 21 19 V10 A2 2 0 0 0 19 8 H12 L10 5 H5 A2 2 0 0 0 3 7 Z"/>
+    <path d="M3 11 H21"/>
+  </symbol>
+
+  <symbol id="nav-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 22 C7 22 4 18 4 14 C4 10 8 7 8 4 C8 4 11 5 12 8 C13 5 16 4 16 4 C16 7 20 10 20 14 C20 18 17 22 12 22 Z"/>
+    <path d="M12 18 C10 18 9 16.5 9 15 C9 13.5 10.5 12.5 10.5 11 C10.5 11 12 12 12 14 C12 12 13.5 11 13.5 11 C13.5 12.5 15 13.5 15 15 C15 16.5 14 18 12 18 Z"/>
+  </symbol>
+
+  <symbol id="nav-swords" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 3 L5 3 L14 12 L12 14 Z"/>
+    <line x1="12" y1="14" x2="19" y2="21"/>
+    <path d="M21 3 L19 3 L10 12 L12 14 Z"/>
+    <line x1="12" y1="14" x2="5" y2="21"/>
+    <line x1="17" y1="19" x2="20" y2="20"/>
+    <line x1="7" y1="19" x2="4" y2="20"/>
+  </symbol>
+
+  <symbol id="nav-users" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="9" cy="8" r="4"/>
+    <path d="M2 21 C2 16 5 13 9 13 C13 13 16 16 16 21"/>
+    <path d="M16 4 A3.5 3.5 0 0 1 16 11"/>
+    <path d="M17 13 C20 13 22 16 22 21"/>
+  </symbol>
+
+  <symbol id="nav-paw" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="12" cy="17" rx="4.5" ry="4"/>
+    <ellipse cx="7"  cy="10" rx="2" ry="2.4"/>
+    <ellipse cx="17" cy="10" rx="2" ry="2.4"/>
+    <ellipse cx="4"  cy="14" rx="1.4" ry="1.7"/>
+    <ellipse cx="20" cy="14" rx="1.4" ry="1.7"/>
+  </symbol>
+
+  <symbol id="nav-shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3 L20 6 V12 C20 16.5 16.5 20 12 21 C7.5 20 4 16.5 4 12 V6 Z"/>
+    <path d="M8.5 12 L11 14.5 L15.5 10"/>
+  </symbol>
+
+  <symbol id="nav-crown" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 8 L6 15 L12 6 L18 15 L21 8 L19 18 H5 Z"/>
+    <circle cx="3" cy="8" r="1" fill="currentColor" stroke="none"/>
+    <circle cx="12" cy="6" r="1" fill="currentColor" stroke="none"/>
+    <circle cx="21" cy="8" r="1" fill="currentColor" stroke="none"/>
+  </symbol>
+
+</svg>
+
+
+  <!-- Skip link — keyboard/screen-reader users can jump past the nav -->
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <!-- Scroll progress indicator — filled by landing-anim.js / CSS
+       scroll-timeline. Inert, decorative. -->
+  <div class="scroll-progress" aria-hidden="true">
+    <div class="scroll-progress__bar"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SITE NAV — DESKTOP
+       Items (always visible):
+         Home · Races · Virtual · Mr Fox · Cubs
+       Right actions:
+         🐾 [Name] / Login + Register  |  [Saturday Big Race badge]
+  ════════════════════════════════════════ -->
+  <nav class="site-nav" id="siteNav" role="navigation" aria-label="Main navigation">
+    <div class="site-nav__inner">
+
+      
+
+      <!-- Brand -->
+      <a href="/" class="site-nav__brand" aria-label="Saturday Racing home">
+        <svg class="sr-mark sr-mark--nav" viewBox="0 0 44 72" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Post -->
+          <rect x="20" y="0" width="4" height="72" rx="2" fill="url(#srPost)"/>
+          <!-- Cap -->
+          <rect x="17" y="0" width="10" height="5" rx="2" fill="url(#srGoldCap)"/>
+          <!-- Disc: thick red ring -->
+          <circle cx="22" cy="28" r="18" fill="#C0392B"/>
+          <!-- Inner dark field -->
+          <circle cx="22" cy="28" r="11" fill="#111118"/>
+          <!-- Horizontal hairline divider -->
+          <line x1="12" y1="28" x2="32" y2="28" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/>
+          <!-- S — upper, gold italic -->
+          <text x="22" y="23" font-family="'Playfair Display',Georgia,serif"
+                font-size="13" font-weight="900" font-style="italic"
+                fill="#D4AF37" text-anchor="middle" dominant-baseline="middle">S</text>
+          <!-- R — lower, grey -->
+          <text x="22" y="34" font-family="'Playfair Display',Georgia,serif"
+                font-size="10" font-weight="700"
+                fill="#8A8A9A" text-anchor="middle" dominant-baseline="middle">R</text>
+          <defs>
+            <linearGradient id="srPost" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#C8C8C8"/>
+              <stop offset="100%" stop-color="#787878"/>
+            </linearGradient>
+            <linearGradient id="srGoldCap" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#F5D76E"/>
+              <stop offset="100%" stop-color="#B8900A"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="site-nav__wordmark">
+          <span class="site-nav__wordmark-main">SATURDAY</span>
+          <span class="site-nav__wordmark-sub">RACING</span>
+        </span>
+      </a>
+
+      <!-- ── Primary links (desktop, hidden ≤1024px) ── -->
+      <nav class="site-nav__links" aria-label="Site sections">
+        <a href="/"              class="site-nav__link ">
+          <svg class="site-nav__link-ico" aria-hidden="true"><use href="#nav-home"/></svg>Home
+        </a>
+
+        
+        <div class="site-nav__dropdown" id="navNewsDrop">
+          <button class="site-nav__link site-nav__dropdown-trigger "
+                  aria-expanded="false" aria-haspopup="true">
+            <svg class="site-nav__link-ico" aria-hidden="true"><use href="#nav-newspaper"/></svg>News
+            <svg class="site-nav__caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="site-nav__dropdown-menu" role="menu">
+            <a href="https://www.saturday-racing.com/news/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-newspaper"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Today&rsquo;s News</span>
+                <span class="site-nav__di-sub">The Fox&rsquo;s Wire &mdash; racing decoded</span>
+              </span>
+            </a>
+            <div class="site-nav__dropdown-section" role="presentation">Today&rsquo;s Edge</div>
+            <a href="https://www.saturday-racing.com/trail/" class="site-nav__dropdown-item site-nav__dropdown-item--gold " role="menuitem">
+              <span class="site-nav__di-icon site-nav__di-icon--gold"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-paw"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Fox Trail</span>
+                <span class="site-nav__di-sub">Every race. Every signal. One trail.</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/bet-of-the-day/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-target"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Bet of the Day</span>
+                <span class="site-nav__di-sub">Sly Man&rsquo;s daily single-horse tip</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/lay-of-the-day/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-target"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Lay of the Day</span>
+                <span class="site-nav__di-sub">Sly Man&rsquo;s weakest favourite &mdash; the fade</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/sly-mans-acca/" class="site-nav__dropdown-item " role="menuitem">
+              <img class="site-nav__portrait" src="static/img/nav/slyman-72.webp" alt="" width="22" height="22" loading="lazy">
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Dream Ticket</span>
+                <span class="site-nav__di-sub">Six legs. One shot. Sly Man&rsquo;s ACCA.</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/news/top-rated-today/latest/" class="site-nav__dropdown-item" role="menuitem">
+              <img class="site-nav__portrait" src="static/img/nav/slyman-72.webp" alt="" width="22" height="22" loading="lazy">
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Slyman Top Rated</span>
+                <span class="site-nav__di-sub">Every rating, pick and market move that matters</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/news/horses-to-watch/latest/" class="site-nav__dropdown-item" role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-horseshoe"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Horses to Watch</span>
+                <span class="site-nav__di-sub">Follow Sly Man&rsquo;s top 5</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/news/market-movers/latest/" class="site-nav__dropdown-item" role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-trending-up"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Top Steamers</span>
+                <span class="site-nav__di-sub">Today&rsquo;s sharpest market moves</span>
+              </span>
+            </a>
+            <div class="site-nav__dropdown-section" role="presentation">Read</div>
+            <a href="https://www.saturday-racing.com/letters/" class="site-nav__dropdown-item " role="menuitem">
+              <img class="site-nav__portrait" src="static/img/nav/llama-72.webp" alt="" width="22" height="22" loading="lazy">
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Newsletter</span>
+                <span class="site-nav__di-sub">The LLaMa Letters &mdash; long-form essays</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        
+
+        <!-- Races dropdown — Today · Results · Tomorrow · Yesterday
+             · Big race · Ante Post sub-section (season-long feature
+             races).
+
+             RESULTS-1 · The Results item is the only route to
+             /results/ from the chrome. Its sub-line reads
+             racecard_results_today, the same context value the
+             group's notification dot already uses, so the nav says
+             whether anything has settled before the reader clicks. -->
+        
+        <div class="site-nav__dropdown" id="navRacesDrop">
+          <button class="site-nav__link site-nav__dropdown-trigger "
+                  aria-expanded="false" aria-haspopup="true">
+            <svg class="site-nav__link-ico" aria-hidden="true"><use href="#nav-flag"/></svg>Races
+            <span class="site-nav__notif-dot" aria-label="37 results in"></span>
+            <svg class="site-nav__caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="site-nav__dropdown-menu" role="menu">
+            <a href="https://www.saturday-racing.com/races/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-calendar"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Today<span class="site-nav__di-badge">47</span></span>
+                <span class="site-nav__di-sub">37 results confirmed</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/results/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-flag"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Results<span class="site-nav__di-badge">37</span></span>
+                <span class="site-nav__di-sub">Full finishing orders &amp; SPs</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/races/tomorrow/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-calendar-next"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Tomorrow<span class="site-nav__di-badge">51</span></span>
+                <span class="site-nav__di-sub">Card declared</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/llama-index/" class="site-nav__dropdown-item" role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-horseshoe"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">LLaMa Index</span>
+                <span class="site-nav__di-sub">Every horse today, A to Z</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/races/yesterday/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-calendar-prev"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Yesterday<span class="site-nav__di-badge">47</span></span>
+                <span class="site-nav__di-sub">46 results confirmed</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/races/feature/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-star"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Race of the Day</span>
+                <span class="site-nav__di-sub">Newmarket · 14:57</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/races/big-race/" class="site-nav__dropdown-item  site-nav__dropdown-item--gold" role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-trophy"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Club Godolphin Cesarewitch Handicap Stakes (Heritage Handicap) (GBBPlus Race)</span>
+                <span class="site-nav__di-sub">Newmarket · 10 Oct 2026</span>
+              </span>
+            </a>
+
+            
+              <div class="site-nav__dropdown-subhead" aria-hidden="true">Ante Post</div>
+              
+                <a href="https://www.saturday-racing.com/ante-post/grand-national/" class="site-nav__dropdown-item " role="menuitem">
+                  <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-crown"/></svg></span>
+                  <span class="site-nav__di-body">
+                    <span class="site-nav__di-name">Grand National</span>
+                    <span class="site-nav__di-sub">Aintree &middot; 3 Apr 2027</span>
+                  </span>
+                </a>
+              
+              <a href="https://www.saturday-racing.com/ante-post/" class="site-nav__dropdown-item " role="menuitem">
+                <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-folder-open"/></svg></span>
+                <span class="site-nav__di-body">
+                  <span class="site-nav__di-name">See all &rarr;</span>
+                  <span class="site-nav__di-sub">Every book Saturday Racing tracks</span>
+                </span>
+              </a>
+            
+
+            
+          </div>
+        </div>
+        
+
+        <!-- Virtual dropdown -->
+        <div class="site-nav__dropdown" id="navVirtualDrop">
+          <button class="site-nav__link site-nav__dropdown-trigger " aria-expanded="false" aria-haspopup="true">
+            <svg class="site-nav__link-ico" aria-hidden="true"><use href="#nav-gamepad"/></svg>Virtual <svg class="site-nav__caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="site-nav__dropdown-menu" role="menu">
+            <a href="https://www.saturday-racing.com/simulation/how-it-works/?lens=balanced" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-sparkles"/></svg></span>
+              <span class="site-nav__di-body"><span class="site-nav__di-name">Virtual AI</span><span class="site-nav__di-sub">Enter the simulation chamber</span></span>
+            </a>
+            <a href="https://www.saturday-racing.com/ai/tools/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-cpu"/></svg></span>
+              <span class="site-nav__di-body"><span class="site-nav__di-name">AI Lab</span><span class="site-nav__di-sub">Three minds. One race.</span></span>
+            </a>
+            <a href="https://www.saturday-racing.com/news/papers/latest/" class="site-nav__dropdown-item " role="menuitem">
+              <img class="site-nav__portrait" src="static/img/nav/llama-72.webp" alt="" width="22" height="22" loading="lazy">
+              <span class="site-nav__di-body"><span class="site-nav__di-name">LLaMa papers</span><span class="site-nav__di-sub">1,000 simulations per race</span></span>
+            </a>
+            <a href="https://www.saturday-racing.com/immersive/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-dice"/></svg></span>
+              <span class="site-nav__di-body"><span class="site-nav__di-name">The Saturday Draw</span><span class="site-nav__di-sub">Let fate pick your horse</span></span>
+            </a>
+            <a href="https://www.saturday-racing.com/pin/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-pin"/></svg></span>
+              <span class="site-nav__di-body"><span class="site-nav__di-name">Pinsticker</span><span class="site-nav__di-sub">Cinematic horse-by-horse guides</span></span>
+            </a>
+            <a href="https://www.saturday-racing.com/cinematic/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-film"/></svg></span>
+              <span class="site-nav__di-body"><span class="site-nav__di-name">The Experience</span><span class="site-nav__di-sub">Watch the virtual race</span></span>
+            </a>
+          </div>
+        </div>
+        
+        <!-- The Honest Record dropdown — trust-family surfaces
+             (honest record + cryptographic ledger). -->
+        <div class="site-nav__dropdown" id="navHonestDrop">
+          <button class="site-nav__link site-nav__dropdown-trigger "
+                  aria-expanded="false" aria-haspopup="true">
+            <img class="site-nav__link-portrait" src="static/img/nav/fox_mark-72.webp" alt="" width="18" height="18" loading="lazy">The Honest Record <svg class="site-nav__caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="site-nav__dropdown-menu" role="menu">
+            <a href="https://www.saturday-racing.com/news/honest-record/" class="site-nav__dropdown-item " role="menuitem">
+              <img class="site-nav__portrait" src="static/img/nav/fox_mark-72.webp" alt="" width="22" height="22" loading="lazy">
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">The Honest Record</span>
+                <span class="site-nav__di-sub">Every pick · every result · fully tracked</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/verify/ledger/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-shield-check"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Fox Transparency Ledger</span>
+                <span class="site-nav__di-sub">Every pick, cryptographically sealed</span>
+              </span>
+            </a>
+            <div class="site-nav__dropdown-subhead" role="presentation">Algorithms</div>
+            <a href="https://www.saturday-racing.com/methodology/pick-winner/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-cpu"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Pick Winner</span>
+                <span class="site-nav__di-sub">How the algorithm thinks · nine stages, no black box</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/methodology/bet-of-the-day/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-cpu"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Bet of the Day</span>
+                <span class="site-nav__di-sub">How the algorithm hunts value · ten stages + flywheel</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/methodology/lay-of-the-day/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-cpu"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Lay of the Day</span>
+                <span class="site-nav__di-sub">How the algorithm fades the weakest favourite · eleven stages</span>
+              </span>
+            </a>
+            <div class="site-nav__dropdown-subhead" role="presentation">Learn</div>
+            <a href="https://www.saturday-racing.com/learn/accumulators/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-cpu"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Accumulators</span>
+                <span class="site-nav__di-sub">One stake, six horses &middot; how doubles, trebles &amp; Lucky&nbsp;63 actually work</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        <!-- Mr Fox dropdown -->
+        <div class="site-nav__dropdown" id="navFoxDrop">
+          <button class="site-nav__link site-nav__dropdown-trigger "
+                  aria-expanded="false" aria-haspopup="true">
+            <img class="site-nav__link-portrait" src="static/img/nav/mr_fox_host-72.webp" alt="" width="18" height="18" loading="lazy">Mr Fox <svg class="site-nav__caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="site-nav__dropdown-menu" role="menu">
+            <a href="https://www.saturday-racing.com/tipsters/mr-fox/" class="site-nav__dropdown-item " role="menuitem">
+              <img class="site-nav__portrait" src="static/img/nav/mr_fox_host-72.webp" alt="" width="22" height="22" loading="lazy">
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Mr Fox</span>
+                <span class="site-nav__di-sub">The pick · the reasoning · the rivalry</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/fox-signals/board/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-sparkles"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Fox Signals</span>
+                <span class="site-nav__di-sub">Board · Race Trace · Value Edge — the terminal</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/featured-results/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-folder-open"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">The Open File</span>
+                <span class="site-nav__di-sub">Every featured tip, by where it finished</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/races/steamers/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-flame"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Steamers Board</span>
+                <span class="site-nav__di-sub">Every market move · hits and misses</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/corporate/?ref=fox_dropdown" class="site-nav__dropdown-item site-nav__dropdown-item--gold " role="menuitem">
+              <span class="site-nav__di-icon site-nav__di-icon--gold"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-crown"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Corporate experience</span>
+                <span class="site-nav__di-sub">Private race days · Cup · Race Book</span>
+              </span>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Cubs dropdown -->
+        <div class="site-nav__dropdown" id="navCubsDrop">
+          <button class="site-nav__link site-nav__dropdown-trigger " aria-expanded="false" aria-haspopup="true">
+            <img class="site-nav__link-portrait" src="static/img/nav/the_pack-72.webp" alt="" width="18" height="18" loading="lazy">Cubs
+            
+            <svg class="site-nav__caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="site-nav__dropdown-menu" role="menu">
+            <a href="https://www.saturday-racing.com/cubs/" class="site-nav__dropdown-item " role="menuitem">
+              <img class="site-nav__portrait" src="static/img/nav/the_pack-72.webp" alt="" width="22" height="22" loading="lazy">
+              <span class="site-nav__di-body"><span class="site-nav__di-name">The Pack</span><span class="site-nav__di-sub">Browse all Cubs</span></span>
+            </a>
+            <a href="https://www.saturday-racing.com/cubs/challenges/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-swords"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Challenges</span>
+                <span class="site-nav__di-sub">Head-to-head pick duels</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/syndicates/my/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-users"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Syndicates</span>
+                <span class="site-nav__di-sub">Build and join teams</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/leaderboard/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-trophy"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Leaderboard</span>
+                <span class="site-nav__di-sub">Top Cubs by win rate</span>
+              </span>
+            </a>
+            <a href="https://www.saturday-racing.com/voting/leaderboard/" class="site-nav__dropdown-item " role="menuitem">
+              <span class="site-nav__di-icon"><svg class="site-nav__di-icon-svg" aria-hidden="true"><use href="#nav-paw"/></svg></span>
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">Picks League</span>
+                <span class="site-nav__di-sub">Daily score for cub picks</span>
+              </span>
+            </a>
+            
+            <a href="https://www.saturday-racing.com/den/" class="site-nav__dropdown-item " role="menuitem">
+              <img class="site-nav__portrait" src="static/img/nav/llama-72.webp" alt="" width="22" height="22" loading="lazy">
+              <span class="site-nav__di-body">
+                <span class="site-nav__di-name">The DEN</span>
+                <span class="site-nav__di-sub">Ask LLaMa &mdash; grounded in Saturday's data</span>
+              </span>
+            </a>
+            
+          </div>
+        </div>
+      </nav>
+
+      <!-- ── Right-side actions ── -->
+      <div class="site-nav__actions">
+
+        <!-- Race context: date + race badge (hidden >1024px via CSS) -->
+        
+          <span class="site-nav__date">
+            <span class="site-nav__date-dot"></span>
+            10 Oct 2026
+          </span>
+        
+        <a href="https://www.saturday-racing.com/races/big-race/" class="site-nav__badge" title="Club Godolphin Cesarewitch Handicap Stakes (Heritage Handicap) (GBBPlus Race)">
+          🏆 <span class="site-nav__badge-name">Club Godolphin Cesarewitch Handicap Stakes (Heritage Handicap) (GBBPlus Race)</span>
+        </a>
+
+        <!-- Separator -->
+        <span class="site-nav__sep" aria-hidden="true"></span>
+
+        <!-- Auth -->
+        
+          <a href="https://www.saturday-racing.com/subscription/" class="site-nav__join-btn">
+            <span>✦</span> Join Free
+          </a>
+          <a href="https://www.saturday-racing.com/members/login/" class="site-nav__login-btn">
+            <span class="site-nav__auth-icon">🔑</span> Login
+          </a>
+        
+
+        <!-- Hamburger — shown ≤900px -->
+        <button
+          class="site-nav__hamburger"
+          id="navHamburger"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          aria-controls="mobileDrawer"
+        >
+          <span class="hamburger__bar"></span>
+          <span class="hamburger__bar"></span>
+          <span class="hamburger__bar"></span>
+        </button>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════
+       MOBILE DRAWER OVERLAY
+  ════════════════════════════════════════ -->
+  <div class="mob-overlay" id="mobOverlay" aria-hidden="true"></div>
+
+  <!-- ════════════════════════════════════════
+       MOBILE DRAWER
+       Mirrors desktop nav exactly:
+         Home · Races · Virtual · Mr Fox · Cubs
+         + Login/Register  OR  Profile/Sign out
+  ════════════════════════════════════════ -->
+  <aside
+    class="mob-drawer"
+    id="mobileDrawer"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Navigation menu"
+    aria-hidden="true"
+  >
+
+    <!-- Header: brand + close -->
+    <div class="mob-drawer__head">
+      <a href="/" class="mob-drawer__brand">
+        <svg class="sr-mark sr-mark--drawer" viewBox="0 0 44 72" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="20" y="0" width="4" height="72" rx="2" fill="url(#srPostD)"/>
+          <rect x="17" y="0" width="10" height="5" rx="2" fill="url(#srGoldD)"/>
+          <circle cx="22" cy="28" r="18" fill="#C0392B"/>
+          <circle cx="22" cy="28" r="11" fill="#111118"/>
+          <line x1="12" y1="28" x2="32" y2="28" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/>
+          <text x="22" y="23" font-family="'Playfair Display',Georgia,serif"
+                font-size="13" font-weight="900" font-style="italic"
+                fill="#D4AF37" text-anchor="middle" dominant-baseline="middle">S</text>
+          <text x="22" y="34" font-family="'Playfair Display',Georgia,serif"
+                font-size="10" font-weight="700"
+                fill="#8A8A9A" text-anchor="middle" dominant-baseline="middle">R</text>
+          <defs>
+            <linearGradient id="srPostD" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#C8C8C8"/>
+              <stop offset="100%" stop-color="#787878"/>
+            </linearGradient>
+            <linearGradient id="srGoldD" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#F5D76E"/>
+              <stop offset="100%" stop-color="#B8900A"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="mob-drawer__wordmark">
+          <span class="mob-drawer__wordmark-main">SATURDAY</span>
+          <span class="mob-drawer__wordmark-sub">RACING</span>
+        </span>
+      </a>
+      <button class="mob-drawer__close" id="drawerClose" aria-label="Close navigation menu">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <line x1="1" y1="1" x2="17" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="17" y1="1" x2="1"  y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- This week pill -->
+    <div class="mob-drawer__race-pill">
+      <span class="mob-drawer__race-dot"></span>
+      <span class="mob-drawer__race-label">THIS WEEK</span>
+      <a href="https://www.saturday-racing.com/races/big-race/" class="mob-drawer__race-name">Club Godolphin Cesarewitch Handicap Stakes (Heritage Handicap) (GBBPlus Race)</a>
+    </div>
+
+    <!-- ── Nav links — same order as desktop ── -->
+    <nav class="mob-drawer__nav" aria-label="Mobile navigation">
+
+      <a href="/" class="mob-drawer__link">
+        <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-home"/></svg></span>
+        <span class="mob-drawer__link-text">Home</span>
+        <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+      </a>
+
+      <!-- News accordion — Today's News · Bet of the Day · Slyman Top Rated · Horses to Watch · Top Steamers · Newsletter -->
+      <div class="mob-drawer__accordion" id="mobNewsAccordion">
+        <button class="mob-drawer__link mob-drawer__accordion-trigger" aria-expanded="false">
+          <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-newspaper"/></svg></span>
+          <span class="mob-drawer__link-text">
+            News
+            <span class="mob-drawer__link-sub">The Fox&rsquo;s Wire &mdash; racing news, sharpened</span>
+          </span>
+          <svg class="mob-drawer__acc-caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="mob-drawer__accordion-body">
+          <a href="https://www.saturday-racing.com/news/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-newspaper"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Today&rsquo;s News
+              <span class="mob-drawer__link-sub">The Fox&rsquo;s Wire &mdash; racing decoded</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <div class="mob-drawer__section" role="presentation">Today&rsquo;s Edge</div>
+          <a href="https://www.saturday-racing.com/trail/" class="mob-drawer__link mob-drawer__link--sub mob-drawer__link--featured">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-paw"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Fox Trail
+              <span class="mob-drawer__link-sub">Every race. Every signal. One trail.</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/bet-of-the-day/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-target"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Bet of the Day
+              <span class="mob-drawer__link-sub">Sly Man&rsquo;s daily single-horse tip</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/lay-of-the-day/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-target"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Lay of the Day
+              <span class="mob-drawer__link-sub">Sly Man&rsquo;s weakest favourite &mdash; the fade</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/sly-mans-acca/" class="mob-drawer__link mob-drawer__link--sub">
+            <img class="mob-drawer__link-portrait" src="static/img/nav/slyman-72.webp" alt="" width="24" height="24" loading="lazy">
+            <span class="mob-drawer__link-text">
+              Dream Ticket
+              <span class="mob-drawer__link-sub">Six legs. One shot. Sly Man&rsquo;s ACCA.</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/news/top-rated-today/latest/" class="mob-drawer__link mob-drawer__link--sub">
+            <img class="mob-drawer__link-portrait" src="static/img/nav/slyman-72.webp" alt="" width="24" height="24" loading="lazy">
+            <span class="mob-drawer__link-text">
+              Slyman Top Rated
+              <span class="mob-drawer__link-sub">Every rating, pick and market move that matters</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/news/horses-to-watch/latest/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-horseshoe"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Horses to Watch
+              <span class="mob-drawer__link-sub">Follow Sly Man&rsquo;s top 5</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/news/market-movers/latest/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-trending-up"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Top Steamers
+              <span class="mob-drawer__link-sub">Today&rsquo;s sharpest market moves</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <div class="mob-drawer__section" role="presentation">Read</div>
+          <a href="https://www.saturday-racing.com/letters/" class="mob-drawer__link mob-drawer__link--sub">
+            <img class="mob-drawer__link-portrait" src="static/img/nav/llama-72.webp" alt="" width="24" height="24" loading="lazy">
+            <span class="mob-drawer__link-text">
+              Newsletter
+              <span class="mob-drawer__link-sub">The LLaMa Letters &mdash; long-form essays</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Races accordion — Today · Results · Tomorrow · Yesterday · Big race -->
+      <div class="mob-drawer__accordion" id="mobRacesAccordion">
+        <button class="mob-drawer__link mob-drawer__accordion-trigger" aria-expanded="false">
+          <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-flag"/></svg></span>
+          <span class="mob-drawer__link-text">
+            Races
+            <span class="mob-drawer__notif-dot" aria-label="37 results in"></span>
+            <span class="mob-drawer__link-sub">Today · Results · Tomorrow · Yesterday · Big race</span>
+          </span>
+          <svg class="mob-drawer__acc-caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="mob-drawer__accordion-body">
+          <a href="https://www.saturday-racing.com/races/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-calendar"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Today
+              <span class="mob-drawer__link-sub">47 races · ✓ 37 results</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/results/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-flag"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Results
+              <span class="mob-drawer__link-sub">37 results in</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/races/tomorrow/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-calendar-next"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Tomorrow
+              <span class="mob-drawer__link-sub">51 races</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/llama-index/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-horseshoe"/></svg></span>
+            <span class="mob-drawer__link-text">
+              LLaMa Index
+              <span class="mob-drawer__link-sub">Every horse today, A to Z</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/races/yesterday/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-calendar-prev"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Yesterday
+              <span class="mob-drawer__link-sub">47 races · ✓ 46 results</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/races/big-race/" class="mob-drawer__link mob-drawer__link--sub mob-drawer__link--featured">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-trophy"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Club Godolphin Cesarewitch Handicap Stakes (Heritage Handicap) (GBBPlus Race)
+              <span class="mob-drawer__link-sub">Newmarket · 10 Oct 2026</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+
+          
+            <div class="mob-drawer__subhead" aria-hidden="true">Ante Post</div>
+            
+              <a href="https://www.saturday-racing.com/ante-post/grand-national/" class="mob-drawer__link mob-drawer__link--sub">
+                <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-crown"/></svg></span>
+                <span class="mob-drawer__link-text">
+                  Grand National
+                  <span class="mob-drawer__link-sub">Aintree &middot; 3 Apr 2027</span>
+                </span>
+                <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+              </a>
+            
+            <a href="https://www.saturday-racing.com/ante-post/" class="mob-drawer__link mob-drawer__link--sub">
+              <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-folder-open"/></svg></span>
+              <span class="mob-drawer__link-text">
+                See all &rarr;
+                <span class="mob-drawer__link-sub">Every book Saturday Racing tracks</span>
+              </span>
+              <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+            </a>
+          
+
+          
+        </div>
+      </div>
+
+      <!-- Virtual accordion -->
+      <div class="mob-drawer__accordion" id="mobVirtualAccordion">
+        <button class="mob-drawer__link mob-drawer__accordion-trigger" aria-expanded="false">
+          <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-gamepad"/></svg></span>
+          <span class="mob-drawer__link-text">
+            Virtual
+            <span class="mob-drawer__link-sub">Virtual AI · AI Lab · LLaMa papers · Draw · Pinsticker</span>
+          </span>
+          <svg class="mob-drawer__acc-caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="mob-drawer__accordion-body">
+          <a href="https://www.saturday-racing.com/simulation/how-it-works/?lens=balanced" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-sparkles"/></svg></span>
+            <span class="mob-drawer__link-text">Virtual AI<span class="mob-drawer__link-sub">Enter the simulation chamber</span></span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/ai/tools/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-cpu"/></svg></span>
+            <span class="mob-drawer__link-text">AI War Room<span class="mob-drawer__link-sub">Three minds. One race.</span></span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/news/papers/latest/" class="mob-drawer__link mob-drawer__link--sub">
+            <img class="mob-drawer__link-portrait" src="static/img/nav/llama-72.webp" alt="" width="24" height="24" loading="lazy">
+            <span class="mob-drawer__link-text">LLaMa papers<span class="mob-drawer__link-sub">1,000 simulations per race</span></span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/immersive/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-dice"/></svg></span>
+            <span class="mob-drawer__link-text">The Saturday Draw<span class="mob-drawer__link-sub">Let fate pick your horse</span></span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/pin/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-pin"/></svg></span>
+            <span class="mob-drawer__link-text">Pinsticker<span class="mob-drawer__link-sub">Cinematic horse-by-horse guides</span></span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/cinematic/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-film"/></svg></span>
+            <span class="mob-drawer__link-text">The Experience<span class="mob-drawer__link-sub">Watch the virtual race</span></span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+        </div>
+      </div>
+
+
+      <!-- The Honest Record accordion — trust-family surfaces. -->
+      <div class="mob-drawer__accordion" id="mobHonestAccordion">
+        <button class="mob-drawer__link mob-drawer__accordion-trigger" aria-expanded="false">
+          <img class="mob-drawer__link-portrait" src="static/img/nav/fox_mark-72.webp" alt="" width="24" height="24" loading="lazy">
+          <span class="mob-drawer__link-text">
+            The Honest Record
+            <span class="mob-drawer__link-sub">Record · ledger</span>
+          </span>
+          <svg class="mob-drawer__acc-caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="mob-drawer__accordion-body">
+          <a href="https://www.saturday-racing.com/news/honest-record/" class="mob-drawer__link mob-drawer__link--sub">
+            <img class="mob-drawer__link-portrait" src="static/img/nav/fox_mark-72.webp" alt="" width="24" height="24" loading="lazy">
+            <span class="mob-drawer__link-text">
+              The Honest Record
+              <span class="mob-drawer__link-sub">Every pick · every result · fully tracked</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/verify/ledger/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-shield-check"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Fox Transparency Ledger
+              <span class="mob-drawer__link-sub">Every pick, cryptographically sealed</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <div class="mob-drawer__subhead">Algorithms</div>
+          <a href="https://www.saturday-racing.com/methodology/pick-winner/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-cpu"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Pick Winner
+              <span class="mob-drawer__link-sub">How the algorithm thinks · nine stages</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/methodology/bet-of-the-day/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-cpu"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Bet of the Day
+              <span class="mob-drawer__link-sub">How the algorithm hunts value · ten stages</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/methodology/lay-of-the-day/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-cpu"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Lay of the Day
+              <span class="mob-drawer__link-sub">How the algorithm fades the weakest fav · eleven stages</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <div class="mob-drawer__subhead">Learn</div>
+          <a href="https://www.saturday-racing.com/learn/accumulators/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-cpu"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Accumulators
+              <span class="mob-drawer__link-sub">One stake, six horses · doubles, trebles &amp; Lucky&nbsp;63 explained</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Mr Fox accordion -->
+      <div class="mob-drawer__accordion" id="mobFoxAccordion">
+        <button class="mob-drawer__link mob-drawer__accordion-trigger" aria-expanded="false">
+          <img class="mob-drawer__link-portrait" src="static/img/nav/mr_fox_host-72.webp" alt="" width="24" height="24" loading="lazy">
+          <span class="mob-drawer__link-text">
+            Mr Fox
+            <span class="mob-drawer__link-sub">Tips · signals · open file · steamers</span>
+          </span>
+          <svg class="mob-drawer__acc-caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="mob-drawer__accordion-body">
+          <a href="https://www.saturday-racing.com/tipsters/mr-fox/" class="mob-drawer__link mob-drawer__link--sub">
+            <img class="mob-drawer__link-portrait" src="static/img/nav/mr_fox_host-72.webp" alt="" width="24" height="24" loading="lazy">
+            <span class="mob-drawer__link-text">
+              Mr Fox
+              <span class="mob-drawer__link-sub">The pick · the reasoning · the rivalry</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/fox-signals/board/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-sparkles"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Fox Signals
+              <span class="mob-drawer__link-sub">Board · Race Trace · Value Edge — the terminal</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/featured-results/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-folder-open"/></svg></span>
+            <span class="mob-drawer__link-text">
+              The Open File
+              <span class="mob-drawer__link-sub">Every featured tip, by where it finished</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/races/steamers/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-flame"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Steamers Board
+              <span class="mob-drawer__link-sub">Every market move · hits and misses</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/corporate/?ref=fox_dropdown" class="mob-drawer__link mob-drawer__link--sub mob-drawer__link--gold">
+            <span class="mob-drawer__link-icon mob-drawer__link-icon--gold" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-crown"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Corporate experience
+              <span class="mob-drawer__link-sub">Private race days · Cup · Race Book</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Cubs accordion -->
+      <div class="mob-drawer__accordion" id="mobCubsAccordion">
+        <button class="mob-drawer__link mob-drawer__accordion-trigger" aria-expanded="false">
+          <img class="mob-drawer__link-portrait" src="static/img/nav/the_pack-72.webp" alt="" width="24" height="24" loading="lazy">
+          <span class="mob-drawer__link-text">
+            Cubs
+            <span class="mob-drawer__link-sub">Pack · Challenges · Syndicates</span>
+          </span>
+          <svg class="mob-drawer__acc-caret" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="mob-drawer__accordion-body">
+          <a href="https://www.saturday-racing.com/cubs/" class="mob-drawer__link mob-drawer__link--sub">
+            <img class="mob-drawer__link-portrait" src="static/img/nav/the_pack-72.webp" alt="" width="24" height="24" loading="lazy">
+            <span class="mob-drawer__link-text">The Pack<span class="mob-drawer__link-sub">Browse all Cubs</span></span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/cubs/challenges/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-swords"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Challenges
+              <span class="mob-drawer__link-sub">Head-to-head pick duels</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+          <a href="https://www.saturday-racing.com/syndicates/my/" class="mob-drawer__link mob-drawer__link--sub">
+            <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-users"/></svg></span>
+            <span class="mob-drawer__link-text">
+              Syndicates
+              <span class="mob-drawer__link-sub">Build and join teams</span>
+            </span>
+            <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+          </a>
+        </div>
+      </div>
+
+      <a href="https://www.saturday-racing.com/leaderboard/" class="mob-drawer__link">
+        <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-trophy"/></svg></span>
+        <span class="mob-drawer__link-text">
+          Cubs Leaderboard
+          <span class="mob-drawer__link-sub">Top Cubs by win rate</span>
+        </span>
+        <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+      </a>
+
+      <a href="https://www.saturday-racing.com/voting/leaderboard/" class="mob-drawer__link">
+        <span class="mob-drawer__link-icon" aria-hidden="true"><svg class="mob-drawer__link-ico"><use href="#nav-paw"/></svg></span>
+        <span class="mob-drawer__link-text">
+          Picks League
+          <span class="mob-drawer__link-sub">Daily score for cub picks</span>
+        </span>
+        <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+      </a>
+
+      
+      <a href="https://www.saturday-racing.com/den/" class="mob-drawer__link">
+        <img class="mob-drawer__link-portrait" src="static/img/nav/llama-72.webp" alt="" width="24" height="24" loading="lazy">
+        <span class="mob-drawer__link-text">
+          The DEN
+          <span class="mob-drawer__link-sub">Ask LLaMa &mdash; grounded in Saturday's data</span>
+        </span>
+        <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+      </a>
+      
+
+    </nav>
+
+    <!-- ── Divider ── -->
+    <div class="mob-drawer__divider"></div>
+
+    <!-- ── Auth section ── -->
+    <div class="mob-drawer__auth">
+
+      
+
+        <a href="https://www.saturday-racing.com/subscription/" class="mob-drawer__link mob-drawer__link--join-cta">
+          <span class="mob-drawer__link-icon" aria-hidden="true">✦</span>
+          <span class="mob-drawer__link-text">
+            Join Free
+            <span class="mob-drawer__link-sub">Create your Cub account</span>
+          </span>
+          <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+        </a>
+        <a href="https://www.saturday-racing.com/members/login/" class="mob-drawer__link mob-drawer__link--login">
+          <span class="mob-drawer__link-icon" aria-hidden="true">🔑</span>
+          <span class="mob-drawer__link-text">
+            Login
+            <span class="mob-drawer__link-sub">Sign in to your Cub account</span>
+          </span>
+          <span class="mob-drawer__link-arrow" aria-hidden="true">›</span>
+        </a>
+
+      
+
+    </div>
+
+    <!-- ── CTA buttons ── -->
+    <div class="mob-drawer__cta-group">
+      <a href="https://www.saturday-racing.com/races/big-race/" class="mob-drawer__cta-btn">
+        View Full Racecard <span aria-hidden="true">→</span>
+      </a>
+      <a href="https://www.saturday-racing.com/tipsters/mr-fox/" class="mob-drawer__cta-ghost">
+        🦊 Mr Fox's Tips
+      </a>
+    </div>
+
+    <!-- Footer note -->
+    <div class="mob-drawer__footer">
+      <p>Please gamble responsibly. 18+ only.</p>
+      <p>BeGambleAware.org</p>
+    </div>
+
+  </aside>
+
+  <!-- ════════════════════════════════════════
+       GLOBAL NOTIFICATION BANNER
+       Shown when user has pending syndicate invites or challenge requests.
+       Dismissed per-session via JS (sessionStorage key).
+  ════════════════════════════════════════ -->
+  
+<div class="demo-banner" id="demoBanner" data-demo-banner hidden>
+  <div class="demo-banner__inner">
+    <span class="demo-banner__icon" aria-hidden="true">🦊</span>
+    <span class="demo-banner__text">
+      New to Saturday Racing?
+      <a href="https://www.saturday-racing.com/demo/" class="demo-banner__link" data-demo-link>
+        Take the 60-second tour
+        <span class="demo-banner__arrow" aria-hidden="true">→</span>
+      </a>
+    </span>
+    <button type="button"
+            class="demo-banner__dismiss"
+            data-demo-dismiss
+            aria-label="Dismiss tour banner">
+      ✕
+    </button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var KEY = 'sr_demo_banner_dismissed';
+  var banner = document.getElementById('demoBanner');
+  if (!banner) return;
+
+  function readDismissed() {
+    try { return !!window.localStorage.getItem(KEY); }
+    catch (e) { return false; }
+  }
+  function setDismissed() {
+    try { window.localStorage.setItem(KEY, '1'); } catch (e) { /* private mode */ }
+  }
+
+  if (readDismissed()) {
+    banner.remove();
+    return;
+  }
+
+  banner.hidden = false;
+  document.body.classList.add('has-demo-banner');
+
+  /* Publish the banner's real height. chrome.css carries 48px/56px as a
+     pre-JS fallback, but the banner is text in a padded bar: it wraps on
+     a narrow screen and the true height drifts from the guess — 51px on
+     a desktop — which leaves a sliver of it over anything pinned
+     beneath. Measuring removes the guess, and the cinematic sizes its
+     canvas from the same number. */
+  function syncBannerHeight() {
+    document.body.style.setProperty('--banner-h', banner.offsetHeight + 'px');
+  }
+  syncBannerHeight();
+  window.dispatchEvent(new Event('resize'));
+  window.addEventListener('resize', syncBannerHeight);
+
+  // Dismiss via the ✕ button.
+  var dismissBtn = banner.querySelector('[data-demo-dismiss]');
+  if (dismissBtn) {
+    dismissBtn.addEventListener('click', function () {
+      setDismissed();
+      document.body.classList.remove('has-demo-banner');
+      window.removeEventListener('resize', syncBannerHeight);
+      document.body.style.removeProperty('--banner-h');
+      // --banner-h is back to 0. Anything sized from it has to re-measure,
+      // and the cinematic only re-lays-out on a resize.
+      window.dispatchEvent(new Event('resize'));
+      banner.classList.add('is-dismissing');
+      // Allow a brief slide-up animation before removing.
+      setTimeout(function () { banner.remove(); }, 220);
+    });
+  }
+  // Clicking the link counts as a dismiss — the user is going to the demo.
+  var link = banner.querySelector('[data-demo-link]');
+  if (link) link.addEventListener('click', setDismissed);
+})();
+</script>
+
+
+
+  
+
+  <!-- ════════════════════════════════════════
+       PAGE BODY
+  ════════════════════════════════════════ -->
+    <main id="main-content" class="site-main" tabindex="-1">
+<div class="fxv-wrap"
+     data-active-tab="board"
+     data-fx-anon-preview="1">
+
+<header class="mf-hero fxv-hero">
+  <span class="mf-hero__eyebrow"><span>FOX SIGNALS · TODAY</span></span>
+  <h1 id="fx-board-title" class="mf-hero__title">
+    <span class="mf-hero__title-eyeline">Tuesday 13 October 2026</span>
+    <span class="mf-hero__title-name">The Board</span>
+  </h1>
+  <p class="mf-hero__sub">
+
+    <span><strong>38</strong> races</span>
+    <span><strong>5</strong> meetings</span>
+
+    <span><strong>2</strong> high conviction</span>
+    <span><strong>4</strong> medium</span>
+
+  </p>
+</header>
+
+  <nav class="fxv-nav" aria-label="Fox Signals rooms">
+    <div class="fxv-nav__rooms">
+
+<a href="fox-board.html"
+   class="mfr-filter fxv-pill fxv-on"
+   aria-current="page"
+   >
+  Board
+
+</a>
+
+<a href="fox-stable.html"
+   class="mfr-filter fxv-pill fxv-pill--locked"
+
+   data-fx-locked-tab="stable">
+  Stable
+
+  <span class="fxv-pill__lock" aria-hidden="true"></span><span class="visually-hidden">(members)</span>
+</a>
+
+<a href="fox-race-trace.html"
+   class="mfr-filter fxv-pill"
+
+   >
+  Race Trace
+
+</a>
+
+<a href="fox-alerts.html"
+   class="mfr-filter fxv-pill"
+
+   >
+  Alerts
+  <span class="mfr-filter__n">225</span>
+
+</a>
+
+<a href="fox-settings.html"
+   class="mfr-filter fxv-pill fxv-pill--locked"
+
+   data-fx-locked-tab="settings">
+  Settings
+
+  <span class="fxv-pill__lock" aria-hidden="true"></span><span class="visually-hidden">(members)</span>
+</a>
+
+    </div>
+    <p class="fxv-nav__live" aria-live="polite">
+      <span class="fxv-nav__dot" aria-hidden="true"></span>
+      Live <span class="fxv-nav__time">17:10</span>
+    </p>
+  </nav>
+
+<section class="fxv-board" aria-labelledby="fx-board-title">
+
+  <div class="fxv-tools">
+
+    <nav class="fxv-tools__row fxv-tools__row--scroll" aria-label="Meeting">
+      <a class="mfr-filter fxv-on"
+         href="fox-board.html"
+         data-dim="meeting">All meetings <span class="mfr-filter__n">38</span></a>
+
+      <a class="mfr-filter"
+         href="fox-board.html?meeting=Hereford"
+         data-dim="meeting">Hereford <span class="mfr-filter__n">6</span></a>
+
+      <a class="mfr-filter"
+         href="fox-board.html?meeting=Leicester"
+         data-dim="meeting">Leicester <span class="mfr-filter__n">8</span></a>
+
+      <a class="mfr-filter"
+         href="fox-board.html?meeting=Punchestown"
+         data-dim="meeting">Punchestown <span class="mfr-filter__n">8</span></a>
+
+      <a class="mfr-filter"
+         href="fox-board.html?meeting=Southwell"
+         data-dim="meeting">Southwell <span class="mfr-filter__n">7</span></a>
+
+      <a class="mfr-filter"
+         href="fox-board.html?meeting=Wolverhampton+%28AW%29"
+         data-dim="meeting">Wolverhampton (AW) <span class="mfr-filter__n">9</span></a>
+
+    </nav>
+
+    <div class="fxv-tools__row" role="group" aria-label="Show and sort">
+
+      <a class="mfr-filter" data-dim="conviction" href="fox-board.html?conviction=notlow">High or medium only</a>
+
+      <details class="fxv-more">
+        <summary class="mfr-filter">
+          More filters
+          <span class="mfr-i mfr-i--chevron-down" aria-hidden="true"></span>
+        </summary>
+        <div class="fxv-more__sheet">
+
+<div class="fxv-more__row" role="group" aria-label="Conviction">
+  <span class="fxv-more__label">Conviction</span>
+
+  <a href="fox-board.html?conviction=all"
+     class="mfr-filter fxv-on"
+     data-dim="conviction"
+     data-value="all">All</a>
+
+  <a href="fox-board.html?conviction=high"
+     class="mfr-filter"
+     data-dim="conviction"
+     data-value="high">High</a>
+
+  <a href="fox-board.html?conviction=medium"
+     class="mfr-filter"
+     data-dim="conviction"
+     data-value="medium">Medium</a>
+
+  <a href="fox-board.html?conviction=low"
+     class="mfr-filter"
+     data-dim="conviction"
+     data-value="low">Low</a>
+
+</div>
+
+<div class="fxv-more__row" role="group" aria-label="Class">
+  <span class="fxv-more__label">Class</span>
+
+  <a href="fox-board.html?class=all"
+     class="mfr-filter fxv-on"
+     data-dim="class"
+     data-value="all">All</a>
+
+  <a href="fox-board.html?class=top"
+     class="mfr-filter"
+     data-dim="class"
+     data-value="top">Top</a>
+
+  <a href="fox-board.html?class=mid"
+     class="mfr-filter"
+     data-dim="class"
+     data-value="mid">Mid</a>
+
+  <a href="fox-board.html?class=low"
+     class="mfr-filter"
+     data-dim="class"
+     data-value="low">Low</a>
+
+</div>
+
+<div class="fxv-more__row" role="group" aria-label="Runners">
+  <span class="fxv-more__label">Runners</span>
+
+  <a href="fox-board.html?field=all"
+     class="mfr-filter fxv-on"
+     data-dim="field"
+     data-value="all">All</a>
+
+  <a href="fox-board.html?field=small"
+     class="mfr-filter"
+     data-dim="field"
+     data-value="small">≤7</a>
+
+  <a href="fox-board.html?field=medium"
+     class="mfr-filter"
+     data-dim="field"
+     data-value="medium">8–14</a>
+
+  <a href="fox-board.html?field=large"
+     class="mfr-filter"
+     data-dim="field"
+     data-value="large">15+</a>
+
+</div>
+
+<div class="fxv-more__row" role="group" aria-label="Going">
+  <span class="fxv-more__label">Going</span>
+
+  <a href="fox-board.html?going=all"
+     class="mfr-filter fxv-on"
+     data-dim="going"
+     data-value="all">All</a>
+
+  <a href="fox-board.html?going=firm"
+     class="mfr-filter"
+     data-dim="going"
+     data-value="firm">Firm</a>
+
+  <a href="fox-board.html?going=good"
+     class="mfr-filter"
+     data-dim="going"
+     data-value="good">Good</a>
+
+  <a href="fox-board.html?going=soft"
+     class="mfr-filter"
+     data-dim="going"
+     data-value="soft">Soft</a>
+
+  <a href="fox-board.html?going=heavy"
+     class="mfr-filter"
+     data-dim="going"
+     data-value="heavy">Heavy</a>
+
+</div>
+
+        </div>
+      </details>
+
+      <label class="fxv-sort">
+        <span class="visually-hidden">Sort by</span>
+        <select class="fxv-select" autocomplete="off" onchange="if (!window.fxvTurn) window.location.href = this.value;">
+
+          <option value="fox-board.html?sort=conviction">Sort: conviction</option>
+
+          <option value="fox-board.html?sort=time" selected>Sort: race time</option>
+
+          <option value="fox-board.html?sort=course">Sort: course</option>
+
+          <option value="fox-board.html?sort=field">Sort: biggest field</option>
+
+          <option value="fox-board.html?sort=price">Sort: shortest price</option>
+
+        </select>
+      </label>
+    </div>
+  </div>
+
+  <div class="fxv-list">
+    <div class="fxv-list__head" aria-hidden="true">
+      <span></span>
+      <span>Time</span>
+      <span>Race</span>
+      <span>Fox&rsquo;s pick</span>
+      <span>Price</span>
+      <span>Conviction</span>
+      <span></span>
+    </div>
+
+    <details class="fxv-done">
+      <summary class="fxv-done__bar">
+        <span class="fxv-done__n">28 finished races</span>
+        <span class="fxv-done__won">8 Fox winners</span>
+        <span class="fxv-done__hint"><span class="fxv-done__show">Show</span><span class="fxv-done__hide">Hide</span> <span class="mfr-i mfr-i--chevron-down" aria-hidden="true"></span></span>
+      </summary>
+      <div role="list" aria-label="Finished races">
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="6"
+         data-race-id="391">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="391"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="13:24">13:24</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Leicester</a>
+      <span class="fxv-row__facts">Class 6 · Good to Soft · 10&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Every Race Live On Racing TV Nursery Handicap Stakes</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">King of Persia <span class="fxv-row__sr" title="Saturday Rating">SR 70</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="class_drop">Class drop</span>
+      <span class="fxv-row__more">+3</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--won">Won</span>
+
+    <span class="fxv-price">9/2</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--medium fxv-row--off"
+         role="listitem"
+         data-outcome-id="7"
+         data-race-id="392">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="392"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="13:35">13:35</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Punchestown</a>
+      <span class="fxv-row__facts">Good · 9&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">William Hill Challenge Series 3-Y-O Hurdle</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Danny Power <span class="fxv-row__sr" title="Saturday Rating">SR 104</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="going_match">Going suits</span><span class="fxv-chip fxv-chip--medium" data-kind="price_cut">Price cut</span>
+      <span class="fxv-row__more">+3</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--placed">2nd</span>
+
+    <span class="fxv-price">5/6</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="8"
+         data-race-id="393">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="393"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="13:45">13:45</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Hereford</a>
+      <span class="fxv-row__facts">Class 4 · Good to Firm · 5&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Betting.Bet Free Racing Tips Mares&#x27; &#x27;National Hunt&#x27; Maiden Hurdle Race (GBB Race)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Miss Denver <span class="fxv-row__sr" title="Saturday Rating">SR 101</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--medium" data-kind="market_leader">Market leader</span>
+
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--placed">2nd</span>
+
+    <span class="fxv-price">4/5</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="9"
+         data-race-id="394">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="394"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="13:54">13:54</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Leicester</a>
+      <span class="fxv-row__facts">Class 5 · Good to Soft · 12&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">British EBF Fillies&#x27; Restricted Novice Stakes (For Horses In Bands C And D) (Div I) (GBB Race)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Atlantic Grace <span class="fxv-row__sr" title="Saturday Rating">SR 155</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span>
+      <span class="fxv-row__more">+3</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--won">Won</span>
+
+    <span class="fxv-price">11/4</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--medium fxv-row--off"
+         role="listitem"
+         data-outcome-id="10"
+         data-race-id="395">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="395"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="14:00">14:00</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Southwell</a>
+      <span class="fxv-row__facts">Class 4 · Good · 3&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Gents Night Saturday 24th October Handicap Steeple Chase (gbb Race)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Axel Bleue <span class="fxv-row__sr" title="Saturday Rating">SR 129</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="going_match">Going suits</span><span class="fxv-chip fxv-chip--medium" data-kind="market_leader">Market leader</span>
+      <span class="fxv-row__more">+1</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--placed">2nd</span>
+
+    <span class="fxv-price">Evs</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="11"
+         data-race-id="396">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="396"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="14:10">14:10</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Punchestown</a>
+      <span class="fxv-row__facts">Good · 12&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">William Hill Challenge Series Handicap Hurdle</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Build A Bridge <span class="fxv-row__sr" title="Saturday Rating">SR 92</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span>
+      <span class="fxv-row__more">+3</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--won">Won</span>
+
+    <span class="fxv-price">9/2</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="12"
+         data-race-id="397">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="397"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="14:20">14:20</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Hereford</a>
+      <span class="fxv-row__facts">Class 4 · Good to Firm · 4&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Betting.Bet New Betting Sites Handicap Hurdle Race</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Jackstell <span class="fxv-row__sr" title="Saturday Rating">SR 112</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="going_match">Going suits</span><span class="fxv-chip fxv-chip--medium" data-kind="market_leader">Market leader</span><span class="fxv-chip fxv-chip--medium" data-kind="price_cut">Price cut</span>
+      <span class="fxv-row__more">+1</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--placed">3rd</span>
+
+    <span class="fxv-price">11/8</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="13"
+         data-race-id="398">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="398"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="14:29">14:29</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Leicester</a>
+      <span class="fxv-row__facts">Class 5 · Good to Soft · 11&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">British EBF Fillies&#x27; Restricted Novice Stakes (For Horses In Bands C And D) (Div II) (GBB Race)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Hoya Bella <span class="fxv-row__sr" title="Saturday Rating">SR 157</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--medium" data-kind="price_drift">Drifting</span>
+      <span class="fxv-row__more">+3</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result">Unplaced</span>
+
+    <span class="fxv-price">2/1</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="14"
+         data-race-id="399">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="399"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="14:35">14:35</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Southwell</a>
+      <span class="fxv-row__facts">Class 4 · Good · 6&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Heb Group &quot;the Power Behind Everyday&quot; Novices&#x27; Handicap Steeple Chase (gbb Race)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Lady Kara <span class="fxv-row__sr" title="Saturday Rating">SR 117</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="class_drop">Class drop</span>
+      <span class="fxv-row__more">+4</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result">Unplaced</span>
+
+    <span class="fxv-price">7/2</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="15"
+         data-race-id="400">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="400"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="14:45">14:45</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Punchestown</a>
+      <span class="fxv-row__facts">Good · 5&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">William Hill Challenge Series Hurdle</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Buddy One <span class="fxv-row__sr" title="Saturday Rating">SR 137</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="going_match">Going suits</span><span class="fxv-chip fxv-chip--strong" data-kind="jockey_upgrade">Jockey upgrade</span>
+      <span class="fxv-row__more">+3</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--placed">3rd</span>
+
+    <span class="fxv-price">15/8</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="16"
+         data-race-id="401">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="401"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="14:55">14:55</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Hereford</a>
+      <span class="fxv-row__facts">Class 5 · Good to Firm · 8&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Betting.Bet Play Champion Tipster Novices&#x27; Limited Handicap Hurdle Race</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Carrhill <span class="fxv-row__sr" title="Saturday Rating">SR 96</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--medium" data-kind="price_cut">Price cut</span>
+      <span class="fxv-row__more">+2</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--placed">2nd</span>
+
+    <span class="fxv-price">2/1</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="17"
+         data-race-id="402">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="402"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="15:04">15:04</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Leicester</a>
+      <span class="fxv-row__facts">Class 3 · Good to Soft · 7&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">British EBF Fillies&#x27; Novice Stakes (GBB/GBBPlus Race)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Lady Phillips <span class="fxv-row__sr" title="Saturday Rating">SR 157</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span>
+      <span class="fxv-row__more">+2</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--placed">2nd</span>
+
+    <span class="fxv-price">7/4</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="18"
+         data-race-id="403">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="403"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="15:10">15:10</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Southwell</a>
+      <span class="fxv-row__facts">Class 4 · Good · 5&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Case Ih Drive Performance Drive Puma Handicap Steeple Chase (gbb Race)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Dream Diamond <span class="fxv-row__sr" title="Saturday Rating">SR 119</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="class_drop">Class drop</span>
+      <span class="fxv-row__more">+3</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result">Unplaced</span>
+
+    <span class="fxv-price">11/8</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="19"
+         data-race-id="404">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="404"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="15:20">15:20</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Punchestown</a>
+      <span class="fxv-row__facts">Good · 18&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">William Hill Challenge Series Handicap Hurdle</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Live To Laugh <span class="fxv-row__sr" title="Saturday Rating">SR 109</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span>
+      <span class="fxv-row__more">+2</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--won">Won</span>
+
+    <span class="fxv-price">7/2</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="20"
+         data-race-id="405">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="405"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="15:30">15:30</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Hereford</a>
+      <span class="fxv-row__facts">Class 4 · Good to Firm · 8&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Betting.Bet Free Bets Handicap Hurdle Race</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Donnie Azoff <span class="fxv-row__sr" title="Saturday Rating">SR 116</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="class_drop">Class drop</span>
+      <span class="fxv-row__more">+4</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--placed">2nd</span>
+
+    <span class="fxv-price">3/1</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="21"
+         data-race-id="406">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="406"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="15:39">15:39</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Leicester</a>
+      <span class="fxv-row__facts">Class 5 · Good to Soft · 18&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Join Racing TV Now Handicap Stakes</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Fenlander <span class="fxv-row__sr" title="Saturday Rating">SR 70</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="going_match">Going suits</span>
+      <span class="fxv-row__more">+3</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--placed">3rd</span>
+
+    <span class="fxv-price">8/1</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--medium fxv-row--off"
+         role="listitem"
+         data-outcome-id="22"
+         data-race-id="407">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="407"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="15:45">15:45</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Southwell</a>
+      <span class="fxv-row__facts">Class 5 · Good · 4&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Case Ih Dealer Network Top Class Open National Hunt Flat Race (Category 1 Elimination) (GBB Race)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Masterius <span class="fxv-row__sr" title="Saturday Rating">SR 113</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--medium" data-kind="market_leader">Market leader</span><span class="fxv-chip fxv-chip--weak" data-kind="price_cut">Price cut</span>
+
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--won">Won</span>
+
+    <span class="fxv-price">4/7</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="23"
+         data-race-id="408">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="408"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="15:55">15:55</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Punchestown</a>
+      <span class="fxv-row__facts">Good · 15&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">William Hill Challenge Series Maiden Hurdle</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Pat O&#x27;s Rock <span class="fxv-row__sr" title="Saturday Rating">SR 160</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="price_drift">Drifting</span>
+      <span class="fxv-row__more">+2</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--won">Won</span>
+
+    <span class="fxv-price">9/4</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="24"
+         data-race-id="409">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="409"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="16:05">16:05</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Hereford</a>
+      <span class="fxv-row__facts">Class 5 · Good to Firm · 7&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">tigerbet.co.uk Download Our App Mares&#x27; Handicap Hurdle Race</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Lady Dapple Rose <span class="fxv-row__sr" title="Saturday Rating">SR 87</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="going_match">Going suits</span><span class="fxv-chip fxv-chip--medium" data-kind="price_cut">Price cut</span>
+      <span class="fxv-row__more">+2</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result">Unplaced</span>
+
+    <span class="fxv-price">10/3</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="25"
+         data-race-id="410">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="410"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="16:14">16:14</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Leicester</a>
+      <span class="fxv-row__facts">Class 5 · Good to Soft · 10&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Christmas Parties At Leicester Racecourse Book Now Handicap Stakes</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Francesi <span class="fxv-row__sr" title="Saturday Rating">SR 71</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="class_drop">Class drop</span><span class="fxv-chip fxv-chip--strong" data-kind="going_match">Going suits</span>
+      <span class="fxv-row__more">+4</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--placed">3rd</span>
+
+    <span class="fxv-price">11/2</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--high fxv-row--off"
+         role="listitem"
+         data-outcome-id="26"
+         data-race-id="411">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="411"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="16:20">16:20</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Southwell</a>
+      <span class="fxv-row__facts">Class 4 · Good · 6&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Book The Bistro In Seasons Restaurant Mares&#x27; Maiden Hurdle Race (gbb Race)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">L&#x27;Amandine <span class="fxv-row__sr" title="Saturday Rating">SR 165</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span>
+      <span class="fxv-row__more">+4</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--won">Won</span>
+
+    <span class="fxv-price">8/15</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="27"
+         data-race-id="412">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="412"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="16:25">16:25</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Wolverhampton (AW)</a>
+      <span class="fxv-row__facts">Class 6 · Good · 9&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Download The Raceday Ready App Apprentice Handicap Stakes (Div I)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Midnight&#x27;s Dream <span class="fxv-row__sr" title="Saturday Rating">SR 66</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--medium" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--medium" data-kind="coordinated_move">Coordinated move</span>
+      <span class="fxv-row__more">+1</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--won">Won</span>
+
+    <span class="fxv-price">15/8</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="28"
+         data-race-id="413">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="413"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="16:30">16:30</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Punchestown</a>
+      <span class="fxv-row__facts">Good · 18&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">William Hill Challenge Series Handicap Hurdle (Div I)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Granlahan <span class="fxv-row__sr" title="Saturday Rating">SR 95</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span>
+      <span class="fxv-row__more">+3</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result">Unplaced</span>
+
+    <span class="fxv-price">2/1</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--medium fxv-row--off"
+         role="listitem"
+         data-outcome-id="29"
+         data-race-id="414">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="414"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="16:38">16:38</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-replay.html">Hereford</a>
+      <span class="fxv-row__facts">Class 5 · Good to Firm · 4&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Hereford Halloween Family Raceday 26th October Open Maiden National Hunt Flat Race (Category 3 Elimination) (GBB Race)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Lucy Glitters <span class="fxv-row__sr" title="Saturday Rating">SR 158</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--medium" data-kind="market_leader">Market leader</span><span class="fxv-chip fxv-chip--medium" data-kind="class_drop">Class drop</span><span class="fxv-chip fxv-chip--medium" data-kind="price_cut">Price cut</span>
+      <span class="fxv-row__more">+1</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result">Unplaced</span>
+
+    <span class="fxv-price">10/11</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="30"
+         data-race-id="415">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="415"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="16:47">16:47</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Leicester</a>
+      <span class="fxv-row__facts">Class 3 · Good to Soft · 18&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Happy 80th Reg Ling Handicap Stakes</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Flight Control <span class="fxv-row__sr" title="Saturday Rating">SR 98</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="going_match">Going suits</span>
+      <span class="fxv-row__more">+4</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result">Unplaced</span>
+
+    <span class="fxv-price">9/2</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="31"
+         data-race-id="416">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="416"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="16:52">16:52</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Southwell</a>
+      <span class="fxv-row__facts">Class 5 · Good · 12&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Celebrate With Sponsorship At Southwell Racecourse Novices&#x27; Limited Handicap Hurdle Race</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Winston&#x27;s Oath <span class="fxv-row__sr" title="Saturday Rating">SR 93</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span>
+      <span class="fxv-row__more">+4</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--placed">3rd</span>
+
+    <span class="fxv-price">5/4</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="32"
+         data-race-id="417">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="417"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="17:00">17:00</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Wolverhampton (AW)</a>
+      <span class="fxv-row__facts">Class 6 · Good · 9&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Download The Raceday Ready App Apprentice Handicap Stakes (Div II)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Snooze Lane <span class="fxv-row__sr" title="Saturday Rating">SR 62</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="price_drift">Drifting</span>
+      <span class="fxv-row__more">+3</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+      <span class="fxv-result fxv-result--placed">2nd</span>
+
+    <span class="fxv-price">7/2</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Result</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low fxv-row--off"
+         role="listitem"
+         data-outcome-id="33"
+         data-race-id="418">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="418"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="17:07">17:07</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Punchestown</a>
+      <span class="fxv-row__facts">Good · 18&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">William Hill Challenge Series Handicap Hurdle (Div II)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Gatehouse Boy <span class="fxv-row__sr" title="Saturday Rating">SR 75</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span>
+      <span class="fxv-row__more">+2</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+    <span class="fxv-price">14/1</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+    <span class="fxv-row__state">Off</span>
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+      </div>
+    </details>
+
+    <div role="list" aria-label="Races still to run">
+
+<article class="fxv-row fxv-row--low fxv-row--next"
+         role="listitem"
+         data-outcome-id="34"
+         data-race-id="419">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="419"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="17:17">17:17</time>
+    <span class="fxv-row__next">Next off</span>
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Leicester</a>
+      <span class="fxv-row__facts">Class 6 · Good to Soft · 17&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">racingtv.com Handicap Stakes</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Ricardo Phillips <span class="fxv-row__sr" title="Saturday Rating">SR 70</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="class_drop">Class drop</span>
+      <span class="fxv-row__more">+4</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+    <span class="fxv-price">11/2</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low"
+         role="listitem"
+         data-outcome-id="35"
+         data-race-id="420">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="420"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="17:23">17:23</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Southwell</a>
+      <span class="fxv-row__facts">Class 5 · Good · 6&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Golf And Gallop Handicap Hurdle Race</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Trigger The Light <span class="fxv-row__sr" title="Saturday Rating">SR 81</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="going_match">Going suits</span><span class="fxv-chip fxv-chip--medium" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--medium" data-kind="price_cut">Price cut</span>
+      <span class="fxv-row__more">+2</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+    <span class="fxv-price">4/1</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low"
+         role="listitem"
+         data-outcome-id="36"
+         data-race-id="421">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="421"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="17:30">17:30</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Wolverhampton (AW)</a>
+      <span class="fxv-row__facts">Class 6 · Good · 6&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Follow @attheraces On Instagram Handicap Stakes</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Royal County Glory <span class="fxv-row__sr" title="Saturday Rating">SR 80</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="going_match">Going suits</span>
+      <span class="fxv-row__more">+3</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+    <span class="fxv-price">10/11</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low"
+         role="listitem"
+         data-outcome-id="37"
+         data-race-id="422">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="422"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="17:40">17:40</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Punchestown</a>
+      <span class="fxv-row__facts">Good · 14&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Irish Stallion Farms EBF Mares Flat Race</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Eastern Whisper <span class="fxv-row__sr" title="Saturday Rating">SR 97</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span>
+      <span class="fxv-row__more">+3</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+    <span class="fxv-price">2/1</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--high"
+         role="listitem"
+         data-outcome-id="38"
+         data-race-id="423">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="423"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="18:00">18:00</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Wolverhampton (AW)</a>
+      <span class="fxv-row__facts">Class 4 · Good · 9&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Sky Sports Racing Sky 415 Novice Stakes (gbb Race)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Bella Angelina <span class="fxv-row__sr" title="Saturday Rating">SR 161</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="jockey_upgrade">Jockey upgrade</span>
+      <span class="fxv-row__more">+2</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+    <span class="fxv-price">5/6</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low"
+         role="listitem"
+         data-outcome-id="39"
+         data-race-id="424">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="424"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="18:30">18:30</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Wolverhampton (AW)</a>
+      <span class="fxv-row__facts">Class 4 · Good · 9&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Hotel &amp; Conferencing At Wolverhampton Racecourse Ebf Maiden Stakes (gbb Race)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Muhandes <span class="fxv-row__sr" title="Saturday Rating">SR 154</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="class_drop">Class drop</span>
+      <span class="fxv-row__more">+3</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+    <span class="fxv-price">6/4</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low"
+         role="listitem"
+         data-outcome-id="40"
+         data-race-id="425">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="425"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="19:00">19:00</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Wolverhampton (AW)</a>
+      <span class="fxv-row__facts">Class 4 · Good · 7&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Stay At The Wolverhampton Holiday Inn Handicap Stakes (gbbplus Race)</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Zachary Hickes <span class="fxv-row__sr" title="Saturday Rating">SR 87</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span>
+      <span class="fxv-row__more">+4</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+    <span class="fxv-price">6/5</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low"
+         role="listitem"
+         data-outcome-id="41"
+         data-race-id="426">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="426"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="19:30">19:30</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Wolverhampton (AW)</a>
+      <span class="fxv-row__facts">Class 6 · Good · 13&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Cavani Champion Style Handicap Stakes</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Koffee And Kale <span class="fxv-row__sr" title="Saturday Rating">SR 77</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span><span class="fxv-chip fxv-chip--strong" data-kind="going_match">Going suits</span>
+      <span class="fxv-row__more">+4</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+    <span class="fxv-price">9/4</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low"
+         role="listitem"
+         data-outcome-id="42"
+         data-race-id="427">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="427"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="20:00">20:00</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Wolverhampton (AW)</a>
+      <span class="fxv-row__facts">Class 6 · Good · 12&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Race &amp; Rest - Wolverhampton Holiday Inn Handicap Stakes</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Meritocratic <span class="fxv-row__sr" title="Saturday Rating">SR 62</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="price_cut">Price cut</span><span class="fxv-chip fxv-chip--strong" data-kind="jockey_upgrade">Jockey upgrade</span><span class="fxv-chip fxv-chip--strong" data-kind="coordinated_move">Coordinated move</span>
+      <span class="fxv-row__more">+5</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+    <span class="fxv-price">6/1</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+<article class="fxv-row fxv-row--low"
+         role="listitem"
+         data-outcome-id="43"
+         data-race-id="428">
+  <button type="button"
+          class="fxv-star fx-board__star"
+          data-fx-star="428"
+          aria-label="Star to Stable"
+          aria-pressed="false">
+    <span class="mfr-i mfr-i--star fx-board__star-glyph" aria-hidden="true"></span>
+  </button>
+
+  <div class="fxv-row__time">
+    <time datetime="20:30">20:30</time>
+
+  </div>
+
+  <div class="fxv-row__race">
+    <p class="fxv-row__course">
+      <a class="fxv-row__link" href="fox-race-visitor.html">Wolverhampton (AW)</a>
+      <span class="fxv-row__facts">Class 6 · Good · 11&nbsp;runners</span>
+    </p>
+    <p class="fxv-row__name">Cavani Raceday Style Handicap Stakes</p>
+  </div>
+
+  <div class="fxv-row__pick">
+    <p class="fxv-row__horse">Midnight Media <span class="fxv-row__sr" title="Saturday Rating">SR 76</span></p>
+
+    <p class="fxv-row__signals" aria-label="Live signals">
+      <span class="fxv-chip fxv-chip--strong fxv-chip--lead" data-kind="jockey_upgrade">Jockey upgrade</span><span class="fxv-chip fxv-chip--strong" data-kind="price_drift">Drifting</span><span class="fxv-chip fxv-chip--strong" data-kind="price_cut">Price cut</span>
+      <span class="fxv-row__more">+4</span>
+    </p>
+
+  </div>
+
+  <div class="fxv-row__price">
+
+    <span class="fxv-price">5/4</span>
+  </div>
+
+  <div class="fxv-row__conv">
+
+    <div class="fxv-conv fxv-conv--masked"
+         data-fx-mask="conviction"
+         aria-label="AI conviction — free to sign up to see">
+      <p class="fxv-conv__top"><span class="fxv-conv__pct" aria-hidden="true">•••</span><span class="fxv-conv__bar" aria-hidden="true"></span></p>
+      <a class="fxv-conv__cta"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=conviction_cell">Sign up free to see conviction</a>
+    </div>
+
+  </div>
+
+  <div class="fxv-row__links">
+
+    <a class="fxv-row__card" href="https://www.saturday-racing.com/races/">Racecard</a>
+  </div>
+</article>
+
+    </div>
+  </div>
+
+</section>
+
+  <p class="fxv-foot">Fox Signals · built on Saturday Racing · included with Cub membership</p>
+</div>
+
+<div class="fx-shell fx-shell--nudge">
+
+<div class="fx-nudge"
+     id="fx-nudge"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="fx-nudge-title"
+     aria-describedby="fx-nudge-body"
+     hidden>
+  <div class="fx-nudge__backdrop" data-fx-nudge-dismiss></div>
+  <div class="fx-nudge__panel" role="document">
+    <button type="button"
+            class="fx-nudge__close"
+            data-fx-nudge-dismiss
+            aria-label="Close">&times;</button>
+    <p class="fx-nudge__eyebrow">Fox Signals</p>
+    <h2 id="fx-nudge-title" class="fx-nudge__title">Free to sign up</h2>
+    <p id="fx-nudge-body" class="fx-nudge__body">
+      Sign up free to unlock the full terminal — save races to your
+      Stable, wire up Alerts, and open the LLaMa Chat DEN.
+    </p>
+    <div class="fx-nudge__actions">
+      <a class="fx-nudge__primary"
+         href="https://www.saturday-racing.com/members/register/?utm_source=fox_signals&amp;utm_content=nudge_modal"
+         data-fx-nudge-cta>
+        Sign up free
+      </a>
+      <a class="fx-nudge__secondary"
+         href="https://www.saturday-racing.com/members/login/?utm_source=fox_signals&amp;utm_content=nudge_modal_login">
+        I already have an account
+      </a>
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </main>
+
+  <!-- ════════════════════════════════════════
+       SITE FOOTER
+  ════════════════════════════════════════ -->
+  
+<footer class="sf sf--branded" role="contentinfo" aria-label="Site footer">
+  <div class="sf__aurora" aria-hidden="true"></div>
+
+  <div class="sf__shell">
+    <div class="sf__top">
+      <a href="/" class="sf__brand" aria-label="Saturday Racing home">
+        <svg class="sf__mark" viewBox="0 0 44 72" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="20" y="0" width="4" height="72" rx="2" fill="url(#sfPost)"/>
+          <rect x="17" y="0" width="10" height="5" rx="2" fill="url(#sfGold)"/>
+          <circle cx="22" cy="28" r="18" fill="#C0392B"/>
+          <circle cx="22" cy="28" r="11" fill="#111118"/>
+          <line x1="12" y1="28" x2="32" y2="28" stroke="rgba(255,255,255,0.3)" stroke-width="0.8"/>
+          <text x="22" y="23" font-family="'Playfair Display',Georgia,serif"
+                font-size="13" font-weight="900" font-style="italic"
+                fill="#D4AF37" text-anchor="middle" dominant-baseline="middle">S</text>
+          <text x="22" y="34" font-family="'Playfair Display',Georgia,serif"
+                font-size="10" font-weight="700"
+                fill="#8A8A9A" text-anchor="middle" dominant-baseline="middle">R</text>
+          <defs>
+            <linearGradient id="sfPost" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#C8C8C8"/>
+              <stop offset="100%" stop-color="#787878"/>
+            </linearGradient>
+            <linearGradient id="sfGold" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#F5D76E"/>
+              <stop offset="100%" stop-color="#B8900A"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="sf__wordmark">
+          <span class="sf__wordmark-main">SATURDAY</span>
+          <span class="sf__wordmark-sub">RACING</span>
+        </span>
+      </a>
+
+      <p class="sf__tagline">
+        The home of the big race<br>
+        <em>Free to play. Always</em>
+      </p>
+
+      
+      <div class="sf__contact">
+        <span class="sf__contact-label">GET IN TOUCH</span>
+        <div class="sf__contact-channels">
+          <a href="mailto:mrfox@saturday-racing.com"
+             class="sf__contact-email sf__contact-channel"
+             aria-label="Email Saturday Racing at mrfox@saturday-racing.com">
+            <img src="static/public/img/footer/icon-mail.svg" alt="" width="15" height="15" decoding="async">
+            mrfox@saturday-racing.com
+          </a>
+          
+          <a href="https://instagram.com/mrfox2569" target="_blank" rel="noopener me"
+             class="sf__contact-social sf__contact-channel"
+             title="Instagram"
+             aria-label="Instagram: mrfox2569">
+            <img src="static/public/img/footer/icon-ig.svg" alt="" width="15" height="15" decoding="async">
+            IG @mrfox2569
+          </a>
+          
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="sf__nav-grid">
+      <div class="sf__nav-col">
+        <h3 class="sf__nav-heading">RACING</h3>
+        <ul class="sf__nav-list">
+          <li><a href="/">Home</a></li>
+          <li><a href="https://www.saturday-racing.com/races/">Today&rsquo;s card</a></li>
+          <li><a href="https://www.saturday-racing.com/pick/">Pick</a></li>
+          <li><a href="https://www.saturday-racing.com/races/tomorrow/">Tomorrow</a></li>
+          <li><a href="https://www.saturday-racing.com/results/">Results</a></li>
+          <li><a href="https://www.saturday-racing.com/#market-movers">Market movers</a></li>
+        </ul>
+      </div>
+      <div class="sf__nav-col">
+        <h3 class="sf__nav-heading">THE FOX</h3>
+        <ul class="sf__nav-list">
+          <li><a href="https://www.saturday-racing.com/tipsters/mr-fox/">This Saturday&rsquo;s pick</a></li>
+          <li><a href="https://www.saturday-racing.com/tipsters/mr-fox/">Season form</a></li>
+          <li><a href="https://www.saturday-racing.com/track-record/">The Honest Record</a></li>
+          <li><a href="https://www.saturday-racing.com/bet-of-the-day/">Bet of the Day</a></li>
+        </ul>
+      </div>
+      <div class="sf__nav-col">
+        <h3 class="sf__nav-heading">AI</h3>
+        <ul class="sf__nav-list">
+          <li><a href="https://www.saturday-racing.com/#ai-chamber">AI Chamber</a></li>
+          <li><a href="https://www.saturday-racing.com/#ai-lab">AI Lab</a></li>
+          <li><a href="https://www.saturday-racing.com/simulation/">Consensus</a></li>
+          <li><a href="https://www.saturday-racing.com/simulation/how-it-works/">Methodology</a></li>
+        </ul>
+      </div>
+      <div class="sf__nav-col">
+        <h3 class="sf__nav-heading">COMMUNITY</h3>
+        <ul class="sf__nav-list">
+          <li><a href="https://www.saturday-racing.com/cubs/">Join the Cubs</a></li>
+          <li><a href="https://www.saturday-racing.com/cubs/challenges/">Challenges</a></li>
+          <li><a href="https://www.saturday-racing.com/cubs/leaderboard/">Standings</a></li>
+          <li><a href="https://www.saturday-racing.com/syndicates/">Syndicates</a></li>
+          <li><a href="https://www.saturday-racing.com/pinsticker/">Pinsticker</a></li>
+          <li><a href="https://www.saturday-racing.com/cinematic/">The Experience</a></li>
+          
+          <li><a href="https://www.saturday-racing.com/members/login/">Sign in</a></li>
+          <li><a href="https://www.saturday-racing.com/members/register/">Join free</a></li>
+          
+          <li><a href="https://www.saturday-racing.com/news/">News</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sf__features">
+      <a href="https://www.saturday-racing.com/simulation/" class="sf__feature-card">
+        <span class="sf__feature-icon" aria-hidden="true">
+          <img src="static/public/img/footer/icon-spark.svg" alt="" width="18" height="18" decoding="async">
+        </span>
+        <div>
+          <strong>AI Chamber</strong>
+          <span>Simulation chamber &mdash; score every runner</span>
+        </div>
+      </a>
+      <a href="https://www.saturday-racing.com/immersive/" class="sf__feature-card">
+        <span class="sf__feature-icon" aria-hidden="true">
+          <img src="static/public/img/footer/icon-draw.svg" alt="" width="18" height="18" decoding="async">
+        </span>
+        <div>
+          <strong>The Saturday Draw</strong>
+          <span>Let fate decide &mdash; weighted by the field</span>
+        </div>
+      </a>
+      <a href="https://www.saturday-racing.com/tipsters/mr-fox/" class="sf__feature-card sf__feature-card--active">
+        <span class="sf__feature-icon" aria-hidden="true">
+          <img src="static/public/img/footer/icon-fox.svg" alt="" width="18" height="18" decoding="async">
+        </span>
+        <div>
+          <strong>The Fox</strong>
+          <span class="sf__feature-desc--gold">His pick for the featured race</span>
+        </div>
+      </a>
+      <a href="https://www.saturday-racing.com/cubs/" class="sf__feature-card">
+        <span class="sf__feature-icon" aria-hidden="true">
+          <img src="static/public/img/footer/icon-paw.svg" alt="" width="18" height="18" decoding="async">
+        </span>
+        <div>
+          <strong>The Pack</strong>
+          <span>Free to play &mdash; pick and compete</span>
+        </div>
+      </a>
+      <a href="https://www.saturday-racing.com/track-record/" class="sf__feature-card">
+        <span class="sf__feature-icon" aria-hidden="true">
+          <img src="static/public/img/footer/icon-chart.svg" alt="" width="18" height="18" decoding="async">
+        </span>
+        <div>
+          <strong>The Honest Record</strong>
+          <span>Every pick. Every result. Fully tracked.</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="sf__base">
+      <p class="sf__legal">
+        Saturday Racing is a free-to-play prediction game and takes no bets.
+        If gambling is causing you harm, support is available at
+        <a class="sf__legal-link" href="https://www.begambleaware.org/">BeGambleAware.org</a>.
+      </p>
+      <p class="sf__legal sf__legal--line2">
+        <span class="sf__legal-play">Play responsibly.</span>
+        <span class="sf__legal-accent">18+ Only.</span>
+      </p>
+      <div class="sf__base-rule" aria-hidden="true"></div>
+      <div class="sf__gamble-row">
+        <a href="https://www.saturday-racing.com/gamble-aware/" class="sf__gamble-link sf__gamble-link--dim">Responsible Gambling</a>
+        <span class="sf__gamble-sep" aria-hidden="true">|</span>
+        <a href="https://www.saturday-racing.com/privacy/" class="sf__gamble-link sf__gamble-link--dim">Privacy</a>
+        
+        <span class="sf__gamble-sep" aria-hidden="true">|</span>
+        <a href="mailto:mrfox@saturday-racing.com" class="sf__gamble-link sf__gamble-link--dim">Contact</a>
+        
+      </div>
+      <p class="sf__copyright"><span class="sf__at">&copy;</span> 2026 SATURDAY RACING</p>
+    </div>
+  </div>
+</footer>
+
+
+  <script src="static/js/site.js" defer></script>
+  <script src="static/fox_signals/js/fox_v2_turn.js" defer></script>
+  <script src="static/fox_signals/js/board_star.js" defer></script>
+  <script src="static/fox_signals/js/signup_nudge.js" defer></script>
+  
+
+</body>
+</html>

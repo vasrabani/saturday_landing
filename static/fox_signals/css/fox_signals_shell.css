@@ -1,0 +1,4887 @@
+/* Fox Signals — F8 base shell
+ *
+ * The design token layer + app-frame layout for every /fox-signals/*
+ * authenticated room. Deliberately different in feel from the rest of
+ * the site: dark chrome, mono-numeric type, Bloomberg-dense spacing,
+ * signals rendered in one accent (fox orange). The tokens are named
+ * with the --fx- prefix so this file can be dropped into any Fox
+ * Signals surface without colliding with site-wide utilities.
+ *
+ * Cache-bust when tokens change: bump ?v=N on the <link> element in
+ * _shell.html so viewers refresh the layer atomically.
+ */
+
+
+/* ============================================================
+ * Design tokens
+ * ============================================================ */
+
+.fx-shell {
+  /* Palette — dark editorial */
+  --fx-bg-0: #0b0e14;         /* page background */
+  --fx-bg-1: #12161f;         /* card surface */
+  --fx-bg-2: #1c2230;         /* elevated card */
+  --fx-bg-3: #262d3d;         /* hover / active */
+  --fx-border: #2a3244;
+  --fx-border-soft: #1f2532;
+
+  /* Ink */
+  --fx-ink-1: #eef1f5;        /* primary — headings, numerics */
+  --fx-ink-2: #a4adbf;        /* secondary — labels */
+  --fx-ink-3: #6b7280;        /* tertiary — captions */
+  --fx-ink-mute: #4a5169;
+
+  /* Signal accent */
+  --fx-fox:      #ff8c42;
+  --fx-fox-soft: rgba(255, 140, 66, 0.14);
+  --fx-fox-ring: rgba(255, 140, 66, 0.30);
+
+  /* Semantic — price movement */
+  --fx-up:       #4ade80;     /* cut / shortened */
+  --fx-up-soft:  rgba(74, 222, 128, 0.14);
+  --fx-down:     #f87171;     /* drift / lengthened */
+  --fx-down-soft:rgba(248, 113, 113, 0.14);
+  --fx-neutral:  #94a3b8;
+
+  /* Strengths */
+  --fx-strong:   var(--fx-fox);
+  --fx-medium:   #7c8db2;
+  --fx-weak:     var(--fx-ink-mute);
+
+  /* Type stack */
+  --fx-font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                  'Helvetica Neue', system-ui, sans-serif;
+  --fx-font-mono: 'JetBrains Mono', 'SF Mono', ui-monospace,
+                  Menlo, Consolas, monospace;
+
+  /* Spacing — compact, Bloomberg-dense */
+  --fx-sp-0: 4px;
+  --fx-sp-1: 8px;
+  --fx-sp-2: 12px;
+  --fx-sp-3: 16px;
+  --fx-sp-4: 20px;
+  --fx-sp-5: 28px;
+  --fx-sp-6: 40px;
+
+  /* Radius — subtle */
+  --fx-r-1: 3px;
+  --fx-r-2: 6px;
+  --fx-r-3: 10px;
+
+  /* Motion */
+  --fx-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --fx-fast:   120ms;
+
+  /* Layout */
+  --fx-nav-h:  56px;
+  --fx-foot-h: 34px;
+}
+
+
+/* ============================================================
+ * Shell frame
+ * ============================================================ */
+
+.fx-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: var(--fx-nav-h) 1fr var(--fx-foot-h);
+  /* FS-PR-15 — force the shell's single column to viewport width
+   * so it can't be inflated by an intrinsic child (the tab row
+   * was ~723px min-content, which pinned .fx-shell__main to that
+   * width on a 375px phone and silently clipped everything past
+   * the viewport edge via html's overflow-x). `minmax(0, 1fr)`
+   * lets the column shrink below its content's min-content
+   * intrinsic size — child overflow is handled locally
+   * (.fx-shell__tabs already carries `overflow-x: auto`). */
+  grid-template-columns: minmax(0, 1fr);
+  background: var(--fx-bg-0);
+  color: var(--fx-ink-1);
+  font-family: var(--fx-font-body);
+  font-size: 14px;
+  line-height: 1.4;
+  font-feature-settings: 'ss01', 'cv02';   /* clean numerals */
+}
+
+/* Tabular numerals wherever a number lives. */
+.fx-shell .fx-num,
+.fx-shell .fx-mono {
+  font-family: var(--fx-font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+
+/* ============================================================
+ * Top navigation
+ * ============================================================ */
+
+.fx-shell__nav {
+  display: flex;
+  align-items: stretch;
+  gap: var(--fx-sp-4);
+  padding: 0 var(--fx-sp-4);
+  background: var(--fx-bg-1);
+  border-bottom: 1px solid var(--fx-border);
+}
+
+.fx-shell__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--fx-sp-2);
+  padding-right: var(--fx-sp-4);
+  border-right: 1px solid var(--fx-border-soft);
+  color: var(--fx-ink-1);
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.fx-shell__brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: var(--fx-r-1);
+  background: var(--fx-fox);
+  color: #0b0e14;
+  font-family: var(--fx-font-mono);
+  font-weight: 700;
+  font-size: 15px;
+}
+.fx-shell__brand-name {
+  font-size: 15px;
+}
+.fx-shell__brand-sub {
+  color: var(--fx-ink-3);
+  font-size: 11px;
+  font-family: var(--fx-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.fx-shell__tabs {
+  display: flex;
+  align-items: stretch;
+  gap: var(--fx-sp-0);
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.fx-shell__tabs::-webkit-scrollbar { display: none; }
+
+.fx-shell__tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fx-sp-1);
+  padding: 0 var(--fx-sp-3);
+  color: var(--fx-ink-2);
+  text-decoration: none;
+  font-size: 12px;
+  font-family: var(--fx-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  white-space: nowrap;
+  transition: color var(--fx-fast) var(--fx-easing);
+}
+.fx-shell__tab:hover {
+  color: var(--fx-ink-1);
+}
+.fx-shell__tab--active {
+  color: var(--fx-ink-1);
+}
+.fx-shell__tab--active::after {
+  content: "";
+  position: absolute;
+  left: var(--fx-sp-3); right: var(--fx-sp-3);
+  bottom: 0;
+  height: 2px;
+  background: var(--fx-fox);
+  border-radius: 2px 2px 0 0;
+}
+.fx-shell__tab-index {
+  display: inline-block;
+  color: var(--fx-ink-mute);
+  font-size: 10px;
+  min-width: 12px;
+}
+
+.fx-shell__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--fx-sp-3);
+  padding-left: var(--fx-sp-3);
+  border-left: 1px solid var(--fx-border-soft);
+  color: var(--fx-ink-3);
+  font-size: 11px;
+  font-family: var(--fx-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.fx-shell__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fx-sp-1);
+  color: var(--fx-ink-2);
+}
+.fx-shell__status-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--fx-up);
+  box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.12);
+}
+
+
+/* ============================================================
+ * Main content area
+ * ============================================================ */
+
+.fx-shell__main {
+  padding: var(--fx-sp-4);
+  overflow-x: hidden;
+}
+
+.fx-shell__container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+
+/* ============================================================
+ * Section header
+ * ============================================================ */
+
+.fx-section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--fx-sp-3);
+  padding-bottom: var(--fx-sp-3);
+  margin-bottom: var(--fx-sp-4);
+  border-bottom: 1px solid var(--fx-border-soft);
+}
+.fx-section-header__eyebrow {
+  color: var(--fx-ink-3);
+  font-size: 10px;
+  font-family: var(--fx-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin: 0 0 var(--fx-sp-0);
+}
+.fx-section-header__title {
+  color: var(--fx-ink-1);
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.fx-section-header__meta {
+  color: var(--fx-ink-3);
+  font-size: 11px;
+  font-family: var(--fx-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+
+/* ============================================================
+ * Card surface primitive
+ * ============================================================ */
+
+.fx-card {
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-2);
+  padding: var(--fx-sp-4);
+}
+.fx-card--flat {
+  padding: 0;
+}
+.fx-card__title {
+  margin: 0 0 var(--fx-sp-2);
+  font-size: 13px;
+  color: var(--fx-ink-2);
+  font-family: var(--fx-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+
+/* ============================================================
+ * Signal chips — the vocabulary layer
+ * ============================================================ */
+
+.fx-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fx-sp-0);
+  padding: 2px var(--fx-sp-1);
+  background: var(--fx-bg-2);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  color: var(--fx-ink-2);
+  font-size: 11px;
+  font-family: var(--fx-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+.fx-chip--fox     { color: var(--fx-fox);     background: var(--fx-fox-soft);   border-color: transparent; }
+.fx-chip--up      { color: var(--fx-up);      background: var(--fx-up-soft);    border-color: transparent; }
+.fx-chip--down    { color: var(--fx-down);    background: var(--fx-down-soft);  border-color: transparent; }
+.fx-chip--strong  { color: var(--fx-strong);  background: var(--fx-fox-soft);   border-color: transparent; font-weight: 600; }
+.fx-chip--medium  { color: var(--fx-medium); }
+.fx-chip--weak    { color: var(--fx-weak); }
+
+
+/* ============================================================
+ * Footer status bar
+ * ============================================================ */
+
+.fx-shell__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--fx-sp-3);
+  padding: 0 var(--fx-sp-4);
+  background: var(--fx-bg-1);
+  border-top: 1px solid var(--fx-border);
+  color: var(--fx-ink-3);
+  font-size: 10px;
+  font-family: var(--fx-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+.fx-shell__foot-block {
+  display: flex;
+  align-items: center;
+  gap: var(--fx-sp-2);
+}
+
+
+/* ============================================================
+ * Placeholder room — F8 stub for slices that haven't shipped yet
+ * ============================================================ */
+
+.fx-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--fx-sp-3);
+  min-height: 60vh;
+  padding: var(--fx-sp-6) var(--fx-sp-4);
+  text-align: center;
+}
+.fx-placeholder__eyebrow {
+  color: var(--fx-fox);
+  font-size: 11px;
+  font-family: var(--fx-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin: 0;
+}
+.fx-placeholder__title {
+  color: var(--fx-ink-1);
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.fx-placeholder__deck {
+  color: var(--fx-ink-2);
+  font-size: 16px;
+  line-height: 1.55;
+  max-width: 560px;
+  margin: 0;
+}
+.fx-placeholder__eta {
+  color: var(--fx-ink-3);
+  font-size: 11px;
+  font-family: var(--fx-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: var(--fx-sp-1) var(--fx-sp-3);
+  border: 1px solid var(--fx-border);
+  border-radius: var(--fx-r-1);
+  margin-top: var(--fx-sp-2);
+}
+
+
+/* ============================================================
+ * B1 — The Board (today's races, one row each)
+ * ============================================================ */
+
+.fx-board {
+  display: block;
+}
+
+
+/* B3 — filter pill rows above the Board grid. Each dimension
+ * (conviction / class / field / going) is its own row of pills;
+ * the active pill glows fox-orange with a soft ring so the user
+ * can see at-a-glance what they've narrowed on. */
+/* FS-PR-13 — filter drawer shell.
+ * Desktop: the wrapper is transparent to layout; the trigger,
+ * backdrop, and drawer close button are all hidden. The nav
+ * renders inline as before.
+ * Mobile: the wrapper flips into a bottom-sheet host — see the
+ * @media (max-width: 720px) block for the sliding behaviour. */
+.fx-board__filter-shell {
+  /* wrapper only — visual chrome lives on children */
+}
+.fx-board__filter-trigger,
+.fx-board__filter-backdrop,
+.fx-board__filter-drawer-head {
+  display: none;
+}
+
+.fx-board__filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fx-sp-1);
+  padding: var(--fx-sp-3);
+  margin-bottom: var(--fx-sp-3);
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-2);
+}
+.fx-board__filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fx-sp-1);
+}
+.fx-board__filter-label {
+  flex: 0 0 84px;
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.fx-board__filter-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  background: var(--fx-bg-2);
+  color: var(--fx-ink-2);
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color var(--fx-fast) var(--fx-easing),
+              background var(--fx-fast) var(--fx-easing),
+              border-color var(--fx-fast) var(--fx-easing);
+}
+.fx-board__filter-pill:hover {
+  color: var(--fx-ink-1);
+  background: var(--fx-bg-3);
+}
+.fx-board__filter-pill--active {
+  color: var(--fx-fox);
+  background: var(--fx-fox-soft);
+  border-color: var(--fx-fox-ring);
+}
+
+/* FS-PR-11 — Meeting <select>. Native control styled to match the
+ * pill row's chrome (border-soft, bg-2, mono type) so it belongs
+ * visually in the same filter block. Doesn't try to replace the
+ * browser's dropdown chrome — that would break keyboard/a11y for
+ * a shallow gain. */
+.fx-board__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.fx-board__meeting-select-wrap {
+  display: inline-flex;
+  align-items: center;
+}
+.fx-board__meeting-select {
+  padding: 4px 10px;
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  background: var(--fx-bg-2);
+  color: var(--fx-ink-2);
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color var(--fx-fast) var(--fx-easing),
+              background var(--fx-fast) var(--fx-easing),
+              border-color var(--fx-fast) var(--fx-easing);
+}
+.fx-board__meeting-select:hover,
+.fx-board__meeting-select:focus-visible {
+  color: var(--fx-ink-1);
+  background: var(--fx-bg-3);
+  border-color: var(--fx-fox-ring);
+  outline: none;
+}
+.fx-board__meeting-select--active {
+  color: var(--fx-fox);
+  border-color: var(--fx-fox-ring);
+  background: var(--fx-fox-soft);
+}
+.fx-board__filter-clear {
+  align-self: flex-end;
+  padding: 4px 10px;
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px dashed transparent;
+  transition: color var(--fx-fast) var(--fx-easing),
+              border-color var(--fx-fast) var(--fx-easing);
+}
+.fx-board__filter-clear:hover {
+  color: var(--fx-ink-1);
+  border-bottom-color: var(--fx-ink-mute);
+}
+
+.fx-board__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1px;
+  background: var(--fx-border-soft);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-2);
+  overflow: hidden;
+}
+
+/* Row + header share a column template so the header always aligns
+ * with the cells beneath it. First column is the star (B5); the
+ * header row leaves it blank via a bare div, so ordering stays
+ * consistent across all rows. */
+.fx-board__head,
+.fx-board__row {
+  display: grid;
+  grid-template-columns:
+    32px            /* star */
+    60px            /* time */
+    minmax(120px, 1.2fr)  /* course + class */
+    minmax(150px, 2fr)    /* race name + going */
+    72px            /* runners */
+    minmax(160px, 1.8fr)  /* pick horse + sr */
+    80px            /* price */
+    minmax(140px, 1.4fr); /* conviction */
+  align-items: center;
+  gap: var(--fx-sp-3);
+  padding: var(--fx-sp-2) var(--fx-sp-3);
+  background: var(--fx-bg-1);
+}
+
+.fx-board__head {
+  background: var(--fx-bg-2);
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding-top: var(--fx-sp-1);
+  padding-bottom: var(--fx-sp-1);
+}
+
+/* Sortable header — a plain <a>, styled to sit inline with the
+ * non-sortable header cells. Active column glows fox-orange with
+ * a downwards arrow that reads "sorted by this, natural direction". */
+.fx-board__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--fx-fast) var(--fx-easing);
+}
+.fx-board__sort:hover {
+  color: var(--fx-ink-1);
+}
+.fx-board__sort--active {
+  color: var(--fx-fox);
+}
+.fx-board__sort-arrow {
+  font-size: 10px;
+  color: var(--fx-fox);
+  line-height: 1;
+}
+
+.fx-board__row {
+  text-decoration: none;
+  color: var(--fx-ink-1);
+  transition: background var(--fx-fast) var(--fx-easing);
+  border-left: 2px solid transparent;
+}
+.fx-board__row:hover {
+  background: var(--fx-bg-2);
+}
+.fx-board__row--high {
+  border-left-color: var(--fx-fox);
+}
+.fx-board__row--medium {
+  border-left-color: var(--fx-medium);
+}
+.fx-board__row--low {
+  border-left-color: var(--fx-weak);
+}
+
+.fx-board__col {
+  min-width: 0;
+}
+.fx-board__col--time,
+.fx-board__col--field,
+.fx-board__col--price {
+  font-family: var(--fx-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.fx-board__col--time {
+  color: var(--fx-ink-1);
+  font-weight: 600;
+  font-size: 15px;
+}
+.fx-board__col--field,
+.fx-board__col--price {
+  color: var(--fx-ink-2);
+}
+
+.fx-board__course {
+  display: block;
+  font-weight: 600;
+  color: var(--fx-ink-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fx-board__class {
+  display: block;
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+  margin-top: 2px;
+}
+
+.fx-board__race-name {
+  display: block;
+  color: var(--fx-ink-2);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fx-board__going {
+  display: block;
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+  margin-top: 2px;
+}
+/* FS-PR-10 — public-racecard escape hatch. Row's primary click now
+ * deepens into Race Trace; this pill is the only way out to the
+ * public racecard, so it needs to be visible but not compete with
+ * the pick / conviction hierarchy. Muted by default, brightens on
+ * hover so it still reads as a secondary action. */
+.fx-board__racecard-pill {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 4px;
+  padding: 2px 8px;
+  background: transparent;
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--fx-fast) var(--fx-easing),
+              color      var(--fx-fast) var(--fx-easing),
+              border-color var(--fx-fast) var(--fx-easing);
+}
+.fx-board__racecard-pill:hover,
+.fx-board__racecard-pill:focus-visible {
+  background: var(--fx-bg-2);
+  color: var(--fx-ink-1);
+  border-color: var(--fx-fox-ring);
+  outline: none;
+}
+
+.fx-board__pick-horse {
+  display: block;
+  color: var(--fx-ink-1);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fx-board__pick-sr {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 1px 6px;
+  background: var(--fx-bg-2);
+  border-radius: var(--fx-r-1);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--fx-ink-2);
+}
+
+
+/* B7 — live signal chips per row. Sits under the pick horse in
+ * the pick column; wraps if the chip labels + "+N more" don't fit
+ * on one line. Chip visual comes from the shared .fx-chip token
+ * so a strong CUT reads the same colour here as anywhere else on
+ * the terminal. */
+.fx-board__signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+.fx-board__signal-chip {
+  /* Smaller than the header stats chips — these are inline row
+   * furniture, not headline metrics. */
+  padding: 1px 6px;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+.fx-board__signal-more {
+  padding: 1px 6px;
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+.fx-board__conv {
+  display: flex;
+  align-items: center;
+  gap: var(--fx-sp-2);
+}
+.fx-board__conv-pct {
+  min-width: 32px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--fx-ink-1);
+}
+.fx-board__conv-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--fx-bg-2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.fx-board__conv-bar-fill {
+  display: block;
+  height: 100%;
+  background: var(--fx-medium);
+  transition: width 240ms var(--fx-easing);
+}
+.fx-board__row--high  .fx-board__conv-bar-fill { background: var(--fx-fox); }
+.fx-board__row--low   .fx-board__conv-bar-fill { background: var(--fx-weak); }
+
+/* FS-PR-2 — Anon-preview mask for the Conviction cell. Number is
+ * dot-masked so the reader knows something's hidden here; the bar
+ * shows a faint diagonal-stripe pattern so the layout doesn't
+ * collapse. Inline CTA opens the register funnel. The row itself
+ * still routes to the Race Trace detail page (marketing preview)
+ * — the CTA calls stopPropagation so a CTA click doesn't also
+ * fire the row-level nav. */
+.fx-board__conv--masked {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+.fx-board__conv--masked .fx-board__conv-pct {
+  color: var(--fx-ink-3);
+  letter-spacing: 0.12em;
+  font-weight: 500;
+}
+.fx-board__conv-bar--masked {
+  flex: none;
+  height: 6px;
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      var(--fx-bg-2) 0,
+      var(--fx-bg-2) 4px,
+      transparent 4px,
+      transparent 8px
+    );
+  opacity: 0.5;
+}
+.fx-board__conv-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  background: rgba(255, 152, 0, 0.08);
+  color: var(--fx-fox);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: background 160ms var(--fx-easing);
+}
+.fx-board__conv-cta:hover,
+.fx-board__conv-cta:focus-visible {
+  background: rgba(255, 152, 0, 0.16);
+  text-decoration: underline;
+}
+.fx-board__conv-cta-lock {
+  font-size: 11px;
+  line-height: 1;
+}
+/* The conviction column can be 140px: the label breaks after "free"
+ * rather than wherever the button's centred text happens to wrap. */
+.fx-board__conv-cta-text {
+  text-align: left;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.fx-board__conv-cta-tail {
+  display: block;
+}
+
+
+/* B5 — star button (pin race to Stable). Sits in the row's first
+ * column, inside the anchor. Click bubbles up but the JS handler
+ * calls preventDefault so the row anchor doesn't also fire. Grid
+ * cell already reserves 32px — the button is fully clickable. */
+.fx-board__star {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--fx-r-1);
+  background: transparent;
+  color: var(--fx-ink-3);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--fx-fast) var(--fx-easing),
+              background var(--fx-fast) var(--fx-easing),
+              border-color var(--fx-fast) var(--fx-easing),
+              transform var(--fx-fast) var(--fx-easing);
+}
+.fx-board__star:hover {
+  color: var(--fx-fox);
+  background: var(--fx-fox-soft);
+  border-color: var(--fx-fox-ring);
+}
+.fx-board__star:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+.fx-board__star--on {
+  color: var(--fx-fox);
+  text-shadow: 0 0 8px var(--fx-fox-soft);
+}
+.fx-board__star--on:hover {
+  /* On-state hover reads as "click to un-star" — dim slightly so
+   * the affordance is felt without duplicating the highlight ring. */
+  transform: scale(0.95);
+  background: transparent;
+  border-color: transparent;
+}
+.fx-board__row--pinned {
+  background: linear-gradient(90deg,
+              var(--fx-fox-soft) 0%,
+              var(--fx-bg-1) 40%);
+}
+
+
+/* B4 — calibration receipt strap under the conviction bar.
+ * Compact by design: hit-rate + sample size, colour-graded by
+ * F6 trust ladder. Full bucket context lives in the tooltip.
+ * "unrated" is shown when sample size is below F6's floor —
+ * always honest, never inflates confidence with noisy numbers. */
+.fx-board__receipt {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--fx-sp-1);
+  margin-top: var(--fx-sp-0);
+  padding: 1px var(--fx-sp-1);
+  border-radius: var(--fx-r-1);
+  background: var(--fx-bg-2);
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  cursor: help;
+}
+.fx-board__receipt-rate {
+  color: var(--fx-ink-1);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.fx-board__receipt-n {
+  color: var(--fx-ink-3);
+  text-transform: uppercase;
+}
+.fx-board__receipt-insufficient {
+  color: var(--fx-ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Trust-level tinting mirrors the F6 ladder — high pulls in
+ * fox-orange, insufficient stays muted. */
+.fx-board__receipt--high     .fx-board__receipt-rate { color: var(--fx-up); }
+.fx-board__receipt--medium   .fx-board__receipt-rate { color: var(--fx-ink-1); }
+.fx-board__receipt--low      .fx-board__receipt-rate { color: var(--fx-down); }
+.fx-board__receipt--insufficient {
+  background: transparent;
+  border: 1px dashed var(--fx-border-soft);
+  padding: 0 var(--fx-sp-1);
+}
+
+
+/* B6 — the Stable page. Reuses the Board grid for today's rows;
+ * this block adds section headers + the compact upcoming list.
+ * Two sections stack vertically with breathing room between. */
+.fx-stable__section {
+  margin-bottom: var(--fx-sp-5);
+}
+.fx-stable__section-title {
+  color: var(--fx-ink-2);
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0 0 var(--fx-sp-2);
+  padding-bottom: var(--fx-sp-1);
+  border-bottom: 1px solid var(--fx-border-soft);
+}
+
+.fx-stable__upcoming {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--fx-border-soft);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-2);
+  overflow: hidden;
+}
+.fx-stable__upcoming-row {
+  display: flex;
+  align-items: center;
+  gap: var(--fx-sp-3);
+  padding: var(--fx-sp-2) var(--fx-sp-3);
+  background: var(--fx-bg-1);
+  transition: background var(--fx-fast) var(--fx-easing);
+}
+.fx-stable__upcoming-row:hover {
+  background: var(--fx-bg-2);
+}
+.fx-stable__upcoming-link {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 84px 60px minmax(120px, 1fr) 3fr;
+  align-items: baseline;
+  gap: var(--fx-sp-3);
+  color: var(--fx-ink-1);
+  text-decoration: none;
+  min-width: 0;
+}
+.fx-stable__upcoming-date {
+  color: var(--fx-fox);
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.fx-stable__upcoming-time {
+  color: var(--fx-ink-1);
+  font-weight: 600;
+  font-size: 14px;
+}
+.fx-stable__upcoming-course {
+  font-weight: 600;
+  color: var(--fx-ink-1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fx-stable__upcoming-name {
+  color: var(--fx-ink-3);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* Empty state */
+.fx-board__empty {
+  padding: var(--fx-sp-6) var(--fx-sp-4);
+  text-align: center;
+  background: var(--fx-bg-1);
+  border: 1px dashed var(--fx-border-soft);
+  border-radius: var(--fx-r-2);
+}
+.fx-board__empty-title {
+  margin: 0 0 var(--fx-sp-1);
+  color: var(--fx-ink-1);
+  font-size: 18px;
+  font-weight: 600;
+}
+.fx-board__empty-copy {
+  margin: 0;
+  color: var(--fx-ink-3);
+  font-size: 14px;
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+
+/* ============================================================
+ * T1 — Race Trace hub + detail
+ * ============================================================ */
+
+/* Hub grid — a lightweight cousin of the Board grid: same aesthetic,
+ * fewer columns (no pick / conviction, since the trace is race-first,
+ * not-Pick-Winner-first). */
+.fx-hub__grid {
+  display: grid;
+  gap: 1px;
+  background: var(--fx-border-soft);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-2);
+  overflow: hidden;
+}
+.fx-hub__head,
+.fx-hub__row {
+  display: grid;
+  grid-template-columns:
+    60px                       /* time */
+    minmax(140px, 1.2fr)       /* course + class */
+    minmax(200px, 2.4fr)       /* race name + going */
+    72px                       /* runners */
+    88px                       /* signals count */
+    88px;                      /* events count */
+  align-items: center;
+  gap: var(--fx-sp-3);
+  padding: var(--fx-sp-2) var(--fx-sp-3);
+  background: var(--fx-bg-1);
+}
+.fx-hub__head {
+  background: var(--fx-bg-2);
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding-top: var(--fx-sp-1);
+  padding-bottom: var(--fx-sp-1);
+}
+.fx-hub__row {
+  color: var(--fx-ink-1);
+  text-decoration: none;
+  transition: background var(--fx-fast) var(--fx-easing);
+  border-left: 2px solid transparent;
+}
+.fx-hub__row:hover {
+  background: var(--fx-bg-2);
+}
+.fx-hub__row--has-signals {
+  border-left-color: var(--fx-fox);
+}
+.fx-hub__col--time {
+  font-family: var(--fx-font-mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  font-size: 15px;
+}
+.fx-hub__course { display: block; font-weight: 600; }
+.fx-hub__class,
+.fx-hub__going {
+  display: block;
+  margin-top: 2px;
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.fx-hub__race-name {
+  display: block;
+  color: var(--fx-ink-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fx-hub__col--field,
+.fx-hub__col--signals,
+.fx-hub__col--events {
+  color: var(--fx-ink-2);
+}
+.fx-hub__zero {
+  color: var(--fx-ink-mute);
+}
+
+
+/* Detail — race header + 2-column layout (main runners table +
+ * side rail with signals & events). Rail collapses under main on
+ * narrow viewports. */
+.fx-trace {
+  display: block;
+}
+.fx-trace__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--fx-sp-4);
+  padding-bottom: var(--fx-sp-3);
+  margin-bottom: var(--fx-sp-4);
+  border-bottom: 1px solid var(--fx-border-soft);
+}
+.fx-trace__eyebrow {
+  margin: 0 0 var(--fx-sp-1);
+  font-size: 10px;
+  font-family: var(--fx-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--fx-ink-3);
+}
+.fx-trace__back {
+  color: var(--fx-ink-3);
+  text-decoration: none;
+  transition: color var(--fx-fast) var(--fx-easing);
+}
+.fx-trace__back:hover { color: var(--fx-fox); }
+.fx-trace__title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: baseline;
+  gap: var(--fx-sp-2);
+}
+.fx-trace__time {
+  color: var(--fx-fox);
+  font-size: 26px;
+  font-weight: 700;
+}
+.fx-trace__course {
+  color: var(--fx-ink-1);
+}
+.fx-trace__deck {
+  margin: var(--fx-sp-1) 0 0;
+  color: var(--fx-ink-2);
+  font-size: 15px;
+}
+.fx-trace__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fx-sp-1);
+}
+
+/* T15 — star chip pushed to the right of the meta strip so it
+ * reads as an action, not metadata. Star visuals themselves are
+ * inherited from .fx-board__star. On narrow the auto margin
+ * collapses (the flex wrap already handles that path). */
+.fx-trace__star-slot {
+  margin-left: auto;
+  padding-left: var(--fx-sp-2);
+}
+
+/* T14 — race-to-race navigation strip. Sits under the trace
+ * header so a Cub can hop between sibling races without going
+ * back to the hub. Fixed 3-column layout keeps the keyboard
+ * hint centred even when only one side of the day has a
+ * neighbour (empty slot placeholder). */
+.fx-trace__nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--fx-sp-2);
+  margin: var(--fx-sp-2) 0 var(--fx-sp-3);
+  padding: var(--fx-sp-1) 0;
+  border-top: 1px solid var(--fx-border-soft);
+  border-bottom: 1px solid var(--fx-border-soft);
+}
+.fx-trace__nav-slot {
+  min-height: 1px;
+}
+.fx-trace__nav-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--fx-border);
+  border-radius: var(--fx-r-1);
+  background: var(--fx-bg-1);
+  color: var(--fx-ink-1);
+  font-size: 13px;
+  text-decoration: none;
+  transition:
+    background var(--fx-fast) var(--fx-easing),
+    border-color var(--fx-fast) var(--fx-easing),
+    color var(--fx-fast) var(--fx-easing);
+}
+.fx-trace__nav-chip:hover,
+.fx-trace__nav-chip:focus-visible {
+  background: var(--fx-bg-2);
+  border-color: var(--fx-fox-ring);
+  color: var(--fx-fox);
+  outline: none;
+}
+.fx-trace__nav-chip--prev { justify-self: start; }
+.fx-trace__nav-chip--next { justify-self: end; }
+.fx-trace__nav-arrow {
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 14px;
+}
+.fx-trace__nav-chip:hover .fx-trace__nav-arrow,
+.fx-trace__nav-chip:focus-visible .fx-trace__nav-arrow {
+  color: var(--fx-fox);
+}
+.fx-trace__nav-time {
+  color: var(--fx-fox);
+  font-family: var(--fx-font-mono);
+  font-size: 13px;
+  letter-spacing: 0.02em;
+}
+.fx-trace__nav-course {
+  color: var(--fx-ink-2);
+  font-size: 12px;
+}
+.fx-trace__nav-hint {
+  color: var(--fx-ink-3);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: var(--fx-font-mono);
+  justify-self: center;
+}
+
+@media (max-width: 720px) {
+  /* Mobile: drop the keyboard hint entirely, keep just the two
+   * chips so the row can breathe on a narrow viewport. */
+  .fx-trace__nav {
+    grid-template-columns: 1fr 1fr;
+  }
+  .fx-trace__nav-hint { display: none; }
+  .fx-trace__nav-chip--prev { justify-self: start; }
+  .fx-trace__nav-chip--next { justify-self: end; }
+  .fx-trace__nav-course { display: none; }  /* just time + arrow */
+}
+
+.fx-trace__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(280px, 1.2fr);
+  gap: var(--fx-sp-4);
+}
+
+.fx-trace__section-title {
+  margin: 0 0 var(--fx-sp-2);
+  padding-bottom: var(--fx-sp-1);
+  border-bottom: 1px solid var(--fx-border-soft);
+  color: var(--fx-ink-2);
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.fx-trace__section-title--sub {
+  margin-top: var(--fx-sp-4);
+}
+
+/* Runners table */
+.fx-trace__runners {
+  display: grid;
+  gap: 1px;
+  background: var(--fx-border-soft);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-2);
+  overflow: hidden;
+}
+.fx-trace__runners-head,
+.fx-trace__runner {
+  display: grid;
+  grid-template-columns:
+    40px                       /* # */
+    minmax(0, 2.4fr)           /* horse + trainer */
+    minmax(0, 1.4fr)           /* jockey */
+    48px                       /* SR */
+    64px                       /* opened: the first price recorded */
+    64px                       /* now: the latest price */
+    72px;                      /* T8 spark */
+  /* The two name columns take what is left and may shrink (a long
+   * jockey's name is cut with an ellipsis): with Opened added, fixed
+   * minimums no longer fitted the panel at laptop width. */
+  align-items: center;
+  gap: var(--fx-sp-2);
+  padding: var(--fx-sp-2) var(--fx-sp-3);
+  background: var(--fx-bg-1);
+}
+.fx-trace__runners-head {
+  background: var(--fx-bg-2);
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding-top: var(--fx-sp-1);
+  padding-bottom: var(--fx-sp-1);
+}
+.fx-trace__runner {
+  color: var(--fx-ink-1);
+}
+.fx-trace__rcol--num {
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.fx-trace__horse-name {
+  display: block;
+  font-weight: 600;
+}
+.fx-trace__trainer {
+  display: block;
+  color: var(--fx-ink-3);
+  font-size: 11px;
+  margin-top: 2px;
+}
+.fx-trace__rcol--jockey {
+  color: var(--fx-ink-2);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fx-trace__rcol--sr,
+.fx-trace__rcol--odds,
+.fx-trace__rcol--ticks {
+  color: var(--fx-ink-2);
+}
+.fx-trace__rcol--odds {
+  color: var(--fx-ink-1);
+  font-weight: 600;
+}
+.fx-trace__rcol--opened {
+  color: var(--fx-ink-2);
+}
+/* The rail on a phone: five signals, and a button for the rest. The
+ * open state is on #fx-signal-rail, which outlives the live refresh
+ * that replaces the list inside it. */
+.fx-trace__signals-more { display: none; }
+@media (max-width: 720px) {
+  #fx-signal-rail:not(.is-open) .fx-trace__signals > li:nth-child(n+6) {
+    display: none;
+  }
+  .fx-trace__signals-more {
+    display: block;
+    width: 100%;
+    margin-top: var(--fx-sp-2);
+    padding: 10px 12px;
+    background: var(--fx-bg-1);
+    border: 1px solid var(--fx-border);
+    border-radius: var(--fx-r-2);
+    color: var(--fx-ink-1);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+}
+
+/* "+2 earlier" on a signal that stands for several of its kind. */
+.fx-trace__signal-earlier {
+  margin-left: 6px;
+  padding: 0 6px;
+  border: 1px solid var(--fx-border-soft);
+  border-radius: 999px;
+  color: var(--fx-ink-3);
+  font-size: 11px;
+  font-weight: 400;
+  white-space: nowrap;
+}
+/* The one sign-up line above the signals. */
+.fx-trace__signals-wrap > .fx-trace__signal-evidence-cta,
+.fx-trace__signal-evidence-cta { margin-bottom: var(--fx-sp-2); }
+
+/* "from 5/1" under the price: the phone's stand-in for the Opened
+ * column, which it has no room for. */
+.fx-trace__from { display: none; }
+@media (max-width: 720px) {
+  .fx-trace__rcol--opened { display: none; }
+  .fx-trace__from:not([hidden]) {
+    display: block;
+    color: var(--fx-ink-3);
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+}
+
+/* T10 — a runner row that just picked up a fresh odds/spark/tick
+ * update flashes briefly so the eye catches which rows moved
+ * on the last poll. Reduced-motion overrides to a static tint. */
+.fx-trace__runner--flashed {
+  animation: fxTraceRowFlash 1.6s var(--fx-easing);
+}
+@keyframes fxTraceRowFlash {
+  0%   { background: var(--fx-fox-soft); }
+  100% { background: var(--fx-bg-1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fx-trace__runner--flashed {
+    animation: none;
+    background: var(--fx-bg-2);
+  }
+}
+
+/* T8 — per-row sparkline column. --spark-tint switches by trend
+ * so the eye can scan a full field for movement direction in one
+ * pass. The empty-state dot keeps row heights consistent when a
+ * runner has no snapshots yet. */
+.fx-trace__rcol--spark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fx-trace__spark {
+  display: block;
+  width: 100%;
+  max-width: 64px;
+  height: 20px;
+  --spark-tint: var(--fx-ink-mute);
+}
+.fx-trace__spark--up   { --spark-tint: var(--fx-up); }
+.fx-trace__spark--down { --spark-tint: var(--fx-down); }
+.fx-trace__spark--flat { --spark-tint: var(--fx-ink-3); }
+.fx-trace__spark-line {
+  fill: none;
+  stroke: var(--spark-tint);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.fx-trace__spark-empty {
+  color: var(--fx-ink-mute);
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* Signal + event rail */
+.fx-trace__signals,
+.fx-trace__events {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fx-sp-1);
+}
+/* Event rail keeps the direct-grid layout — no disclosure body. */
+.fx-trace__event {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: var(--fx-sp-2);
+  padding: var(--fx-sp-2);
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+}
+
+/* T7 — signal rail wraps its grid inside a <details> so the
+ * evidence disclosure sits under the summary row. The card is
+ * now just a container; the grid lives on .fx-trace__signal-
+ * summary so it survives the details wrap. */
+.fx-trace__signal {
+  padding: 0;
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  overflow: hidden;
+}
+.fx-trace__signal-details { }
+.fx-trace__signal-summary {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  align-items: start;
+  gap: var(--fx-sp-2);
+  padding: var(--fx-sp-2);
+  cursor: pointer;
+  list-style: none;         /* hide default marker in Chrome/FF */
+  transition: background var(--fx-fast) var(--fx-easing);
+}
+.fx-trace__signal-summary::-webkit-details-marker {
+  display: none;            /* Safari's older marker */
+}
+.fx-trace__signal-summary:hover {
+  background: var(--fx-bg-2);
+}
+.fx-trace__signal-summary:focus-visible {
+  outline: 2px solid var(--fx-fox-ring);
+  outline-offset: -2px;
+}
+/* Custom chevron after the body so it sits on the right */
+.fx-trace__signal-summary::after {
+  content: '';
+  align-self: center;
+  width: 8px;
+  height: 8px;
+  border-right: 1.5px solid var(--fx-ink-3);
+  border-bottom: 1.5px solid var(--fx-ink-3);
+  transform: rotate(45deg);
+  transition: transform var(--fx-fast) var(--fx-easing);
+}
+/* FS-PR-4 — anon variant drops the <details> wrapper; the summary
+ * is a plain <div>, so no chevron, no cursor, no hover tint. */
+.fx-trace__signal-summary--static {
+  cursor: default;
+  grid-template-columns: 80px 1fr;
+}
+.fx-trace__signal-summary--static:hover {
+  background: transparent;
+}
+.fx-trace__signal-summary--static::after {
+  display: none;
+}
+.fx-trace__signal-evidence-cta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px var(--fx-sp-2);
+  border-top: 1px dashed var(--fx-border-soft);
+  background: var(--fx-bg-0);
+  color: var(--fx-fox);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: background 160ms var(--fx-easing);
+}
+.fx-trace__signal-evidence-cta:hover,
+.fx-trace__signal-evidence-cta:focus-visible {
+  background: rgba(255, 152, 0, 0.08);
+  text-decoration: underline;
+}
+.fx-trace__signal-details[open] .fx-trace__signal-summary::after {
+  transform: rotate(-135deg);
+}
+/* Empty-evidence: no chevron, no interactivity. */
+.fx-trace__signal-details--empty .fx-trace__signal-summary {
+  cursor: default;
+  pointer-events: none;
+}
+.fx-trace__signal-details--empty .fx-trace__signal-summary::after {
+  display: none;
+}
+.fx-trace__signal-chip {
+  align-self: flex-start;
+  justify-self: start;
+}
+
+/* T7 — evidence disclosure body */
+.fx-trace__signal-evidence {
+  margin: 0;
+  padding: var(--fx-sp-1) var(--fx-sp-2) var(--fx-sp-2);
+  border-top: 1px dashed var(--fx-border-soft);
+  background: var(--fx-bg-0);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3px;
+}
+.fx-trace__signal-evidence-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 40%) 1fr;
+  gap: var(--fx-sp-2);
+  align-items: baseline;
+  font-size: 11px;
+}
+.fx-trace__signal-evidence-key {
+  margin: 0;
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  word-break: break-word;
+}
+.fx-trace__signal-evidence-val {
+  margin: 0;
+  color: var(--fx-ink-1);
+  font-family: var(--fx-font-mono);
+  word-break: break-word;
+}
+.fx-trace__signal-title,
+.fx-trace__event-title {
+  margin: 0;
+  color: var(--fx-ink-1);
+  font-weight: 600;
+  font-size: 13px;
+}
+.fx-trace__signal-runner,
+.fx-trace__event-runner {
+  color: var(--fx-ink-3);
+  font-weight: 400;
+  font-size: 12px;
+}
+.fx-trace__signal-desc,
+.fx-trace__event-desc {
+  margin: 2px 0 0;
+  color: var(--fx-ink-2);
+  font-size: 12px;
+  line-height: 1.4;
+}
+.fx-trace__event-time {
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 12px;
+}
+.fx-trace__event--positive { border-left: 2px solid var(--fx-up); }
+.fx-trace__event--negative { border-left: 2px solid var(--fx-down); }
+.fx-trace__event--neutral  { border-left: 2px solid var(--fx-ink-mute); }
+.fx-trace__empty {
+  color: var(--fx-ink-3);
+  font-size: 12px;
+  font-style: italic;
+  margin: 0;
+  padding: var(--fx-sp-2) 0;
+}
+
+
+/* ============================================================
+ * Responsive
+ * ============================================================ */
+
+@media (max-width: 720px) {
+  .fx-shell {
+    grid-template-rows: var(--fx-nav-h) 1fr auto;
+    font-size: 13px;
+  }
+  .fx-shell__nav {
+    padding: 0 var(--fx-sp-2);
+    gap: var(--fx-sp-2);
+  }
+  .fx-shell__brand-sub,
+  .fx-shell__meta {
+    display: none;
+  }
+  .fx-shell__brand {
+    padding-right: var(--fx-sp-2);
+  }
+  .fx-shell__tab {
+    padding: 0 var(--fx-sp-2);
+  }
+  .fx-shell__main {
+    padding: var(--fx-sp-3);
+  }
+  .fx-placeholder__title {
+    font-size: 28px;
+  }
+  .fx-shell__foot {
+    flex-wrap: wrap;
+    padding: var(--fx-sp-1) var(--fx-sp-2);
+    gap: var(--fx-sp-1);
+    font-size: 9px;
+  }
+
+  /* FS-PR-12 — Board mobile compact card.
+   *
+   * The previous mobile layout stacked 4 lines with sp-3 padding,
+   * so each row ate ~180px and only 3 races fit above the fold.
+   * The rewrite collapses to 3 dense lines plus a right-edge
+   * conviction column that spans all 3, matching the desktop
+   * information density inside a phone viewport:
+   *
+   *   ┌──────────────────────────────────────────────┬─────┐
+   *   │ ★ 14:24 · Leicester [Class 3] · 3rnrs        │  62 │
+   *   │   Race name (truncates) [GOOD TO FIRM] [Card]│ ▓▓░ │
+   *   │   Al Wathba SR158 · CUT                      │ 2/7 │
+   *   └──────────────────────────────────────────────┴─────┘
+   *
+   * Header row is hidden on mobile; each field label re-lands
+   * inline via colour and typography rather than a separate row.
+   *
+   * FS-BUG-3 — a mobile bug where rows rendered 3-across instead
+   * of stacked was tracked to a browser-side quirk with the
+   * area-based grid overriding parent single-column flow. The
+   * container is now block-level on mobile; the row's own grid
+   * still handles the internal 5-col layout. Rows stack naturally
+   * because they're plain block children.
+   */
+  .fx-board__head {
+    display: none;
+  }
+  .fx-board__grid {
+    display: block;
+  }
+  .fx-board__row {
+    /* 5 columns: star | time | course+class | field | conviction.
+     * 3 rows: meta / race name / pick line.
+     * star + conviction each span all 3 rows so the middle three
+     * columns fill vertically like a compact business card. */
+    display: grid;
+    width: 100%;
+    box-sizing: border-box;
+    grid-template-columns: 22px auto minmax(0, 1fr) auto 52px;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "star  time  course  field  conv"
+      "star  race  race    race   conv"
+      "star  pick  pick    price  conv";
+    row-gap: 3px;
+    column-gap: 6px;
+    padding: 10px 12px;
+    margin-bottom: 1px;
+    background: var(--fx-bg-1);
+  }
+  .fx-board__star {
+    grid-area: star;
+    align-self: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+  }
+  .fx-board__star-glyph {
+    font-size: 14px;
+  }
+
+  /* Line 1 — dense meta strip */
+  .fx-board__col--time {
+    grid-area: time;
+    align-self: baseline;
+    padding: 0;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+  .fx-board__col--course {
+    grid-area: course;
+    align-self: baseline;
+    padding: 0;
+    line-height: 1.15;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .fx-board__course {
+    font-size: 12px;
+    color: var(--fx-ink-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .fx-board__class {
+    font-size: 9px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+  }
+  .fx-board__col--field {
+    grid-area: field;
+    align-self: baseline;
+    padding: 0;
+    font-size: 10px;
+    color: var(--fx-ink-3);
+    line-height: 1.15;
+    white-space: nowrap;
+  }
+  .fx-board__col--field::before {
+    content: '· ';
+    margin-right: 2px;
+  }
+
+  /* Line 2 — race name + going chip + racecard pill */
+  .fx-board__col--race {
+    grid-area: race;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    overflow: hidden;
+    flex-wrap: nowrap;
+    line-height: 1.2;
+  }
+  .fx-board__race-name {
+    font-size: 12px;
+    color: var(--fx-ink-1);
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .fx-board__going {
+    font-size: 9px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+  }
+  .fx-board__racecard-pill {
+    font-size: 9px;
+    padding: 2px 6px;
+    flex-shrink: 0;
+    letter-spacing: 0.04em;
+  }
+
+  /* Line 3 — pick horse + SR + capped signal chip, price at right */
+  .fx-board__col--pick {
+    grid-area: pick;
+    padding: 0;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .fx-board__pick-horse {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--fx-ink-1);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 0 1 auto;
+  }
+  .fx-board__pick-sr {
+    font-size: 9px;
+    padding: 1px 4px;
+    flex-shrink: 0;
+  }
+  .fx-board__col--price {
+    grid-area: price;
+    align-self: baseline;
+    justify-self: end;
+    padding: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--fx-ink-1);
+    text-align: right;
+    line-height: 1.15;
+  }
+  /* Signal chips — cap to 1 chip on mobile so the pick line stays
+   * one visual row. `+N` overflow marker still surfaces for parity
+   * with the desktop chip cap. */
+  .fx-board__signals {
+    display: inline-flex;
+    gap: 4px;
+    flex-shrink: 1;
+    overflow: hidden;
+  }
+  .fx-board__signal-chip {
+    font-size: 9px;
+    padding: 1px 5px;
+  }
+  .fx-board__signal-chip:nth-of-type(n+2) {
+    display: none;
+  }
+  .fx-board__signal-more {
+    font-size: 9px;
+    color: var(--fx-ink-3);
+    flex-shrink: 0;
+  }
+
+  /* Right edge — conviction pct + tiny bar spans all 3 rows */
+  .fx-board__col--conviction {
+    grid-area: conv;
+    padding: 0;
+    align-self: center;
+    justify-self: end;
+    text-align: right;
+  }
+  .fx-board__conv {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+  }
+  .fx-board__conv-pct {
+    font-size: 16px;
+    font-weight: 700;
+    min-width: unset;
+    line-height: 1;
+  }
+  .fx-board__conv-bar {
+    width: 44px;
+    height: 3px;
+  }
+  /* Anon mask CTA — shrink to a badge on mobile so the cell height
+   * doesn't blow the row past 3 lines. */
+  .fx-board__conv-cta {
+    font-size: 8px;
+    padding: 2px 5px;
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    max-width: 52px;
+    justify-content: center;
+  }
+  /* "Sign up / free" on two lines — the conv column is 52px. */
+  .fx-board__conv-cta-text {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.1;
+  }
+  .fx-board__conv-cta-lock,
+  .fx-board__conv-cta-tail {
+    display: none;
+  }
+  /* Receipt below the bar — de-emphasise on mobile. */
+  .fx-board__receipt {
+    font-size: 8px;
+    padding: 1px 4px;
+  }
+
+  /* FS-PR-13 — mobile filter drawer.
+   * Trigger chip shows inline where the filter nav used to sit;
+   * nav itself becomes a bottom sheet that slides up on tap. */
+  .fx-board__filter-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    margin-bottom: var(--fx-sp-2);
+    background: var(--fx-bg-1);
+    border: 1px solid var(--fx-border-soft);
+    border-radius: var(--fx-r-2);
+    color: var(--fx-ink-1);
+    font-family: var(--fx-font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: border-color var(--fx-fast) var(--fx-easing);
+  }
+  .fx-board__filter-trigger:hover,
+  .fx-board__filter-trigger:focus-visible {
+    border-color: var(--fx-fox-ring);
+    outline: none;
+  }
+  .fx-board__filter-trigger-icon {
+    color: var(--fx-fox);
+    font-size: 10px;
+  }
+  .fx-board__filter-trigger-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    margin-left: 2px;
+    background: var(--fx-fox);
+    color: #1a1207;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0;
+  }
+
+  /* Nav → bottom sheet (hidden by default; the shell's [data-open]
+   * flips it in). Positioned fixed so it's not affected by page
+   * scroll offset. */
+  .fx-board__filters {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9010;
+    max-height: 82vh;
+    margin: 0;
+    padding: var(--fx-sp-3) var(--fx-sp-3) calc(var(--fx-sp-3) + env(safe-area-inset-bottom, 0px));
+    border-radius: var(--fx-r-3) var(--fx-r-3) 0 0;
+    border-bottom: none;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 220ms var(--fx-easing);
+  }
+  .fx-board__filter-shell[data-open] .fx-board__filters {
+    transform: translateY(0);
+  }
+
+  /* Backdrop — appears alongside the open drawer. */
+  .fx-board__filter-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 9005;
+    background: rgba(15, 18, 24, 0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms var(--fx-easing);
+  }
+  .fx-board__filter-shell[data-open] .fx-board__filter-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Drawer own header (Title + close). Only shows on mobile inside
+   * the sheet — desktop nav has no header. */
+  .fx-board__filter-drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 var(--fx-sp-2);
+    padding-bottom: var(--fx-sp-2);
+    border-bottom: 1px solid var(--fx-border-soft);
+  }
+  .fx-board__filter-drawer-title {
+    font-family: var(--fx-font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fx-ink-2);
+  }
+  .fx-board__filter-drawer-close {
+    padding: 4px 10px;
+    background: none;
+    border: none;
+    color: var(--fx-ink-3);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .fx-board__filter-drawer-close:hover,
+  .fx-board__filter-drawer-close:focus-visible {
+    color: var(--fx-ink-1);
+  }
+
+  /* Lock body scroll while the drawer is open — mirrors the
+   * FS-PR-5 nudge modal so both drawer/modal share the same
+   * body-scroll behaviour. */
+  html.fx-board-drawer-open,
+  html.fx-board-drawer-open body {
+    overflow: hidden;
+  }
+
+  /* Stable upcoming — stack into a two-line card on narrow viewports. */
+  .fx-stable__upcoming-link {
+    grid-template-columns: 84px 60px 1fr;
+    grid-template-areas:
+      "date time course"
+      "date time name";
+    row-gap: 2px;
+  }
+  .fx-stable__upcoming-date   { grid-area: date; }
+  .fx-stable__upcoming-time   { grid-area: time; }
+  .fx-stable__upcoming-course { grid-area: course; }
+  .fx-stable__upcoming-name   { grid-area: name; }
+
+  /* Race Trace hub — hide the events column on narrow (signals matter
+   * more; events surface on the detail page). Simpler than a full
+   * card reflow at this size. */
+  .fx-hub__head,
+  .fx-hub__row {
+    grid-template-columns:
+      52px
+      minmax(96px, 1fr)
+      minmax(140px, 2fr)
+      52px
+      72px;
+    gap: var(--fx-sp-2);
+    padding: var(--fx-sp-2);
+  }
+  .fx-hub__col--events { display: none; }
+
+  /* Race Trace detail — main + rail stack vertically; runners table
+   * keeps Move + Ticks visible (FS-PR-16 restored them — the sparkline
+   * is the primary at-a-glance market signal per row, silently
+   * dropping it was killing the scan value on mobile). Jockey column
+   * is the sacrifice — user can tap the horse for detail. Trainer
+   * sub-line stays dropped for row height. */
+  .fx-trace__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .fx-trace__grid {
+    grid-template-columns: 1fr;
+  }
+  .fx-trace__runners-head,
+  .fx-trace__runner {
+    grid-template-columns:
+      24px           /* # */
+      minmax(0, 1fr) /* horse */
+      32px           /* SR */
+      56px           /* now, with "from 5/1" under it */
+      40px;          /* Move (spark) */
+    gap: 6px;
+    padding: 8px 10px;
+  }
+  .fx-trace__rcol--jockey { display: none; }
+  .fx-trace__trainer      { display: none; }
+
+  /* Sparkline tightening — the 72×24 desktop svg needs to shrink
+   * so it fits the 40px mobile column without clipping. */
+  .fx-trace__rcol--spark { padding: 0; }
+  .fx-trace__spark {
+    width: 40px;
+    height: 20px;
+  }
+
+  /* Replay adds an 8th cell (Fin). Same column drop as above +
+   * a compact chip column so the replay layout also fits. */
+  .fx-trace__runners--replay .fx-trace__runners-head,
+  .fx-trace__runners--replay .fx-trace__runner {
+    grid-template-columns:
+      24px
+      minmax(0, 1fr)
+      32px
+      56px
+      40px;         /* Fin is hidden at this width (R1 mobile) */
+  }
+  .fx-fin {
+    font-size: 10px;
+    padding: 1px 5px;
+  }
+
+  /* Horse name — keeps ellipsis so long names ("Loughrea N Roll")
+   * truncate cleanly rather than wrap the row. */
+  .fx-trace__rcol--horse {
+    overflow: hidden;
+  }
+  .fx-trace__horse-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+}
+
+
+/* ============================================================
+ * Race Trace timeline chart (T2)
+ *
+ * The scrubable market chart that sits above the runners table on
+ * the detail page. Colours are per-runner (deterministic hue set
+ * in the payload), overlaid with signal + event markers pinned to
+ * the time axis. Everything sizes off the SVG viewBox so the
+ * chart scales fluidly on any breakpoint.
+ * ============================================================ */
+
+.fx-tchart {
+  margin: 0 0 var(--fx-sp-4);
+  padding: var(--fx-sp-3);
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border);
+  border-radius: var(--fx-r-2);
+  color: var(--fx-ink-1);
+}
+
+.fx-tchart--empty {
+  padding: var(--fx-sp-5);
+  text-align: center;
+}
+.fx-tchart__empty-title {
+  margin: 0 0 var(--fx-sp-1);
+  font-family: var(--fx-font-mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fx-ink-1);
+}
+.fx-tchart__empty-copy {
+  margin: 0;
+  color: var(--fx-ink-3);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.fx-tchart__cap {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--fx-sp-2);
+  margin: 0 0 var(--fx-sp-2);
+  padding-bottom: var(--fx-sp-1);
+  border-bottom: 1px solid var(--fx-border-soft);
+}
+.fx-tchart__cap-title {
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fx-ink-2);
+}
+.fx-tchart__cap-meta {
+  font-size: 11px;
+  color: var(--fx-ink-3);
+}
+
+.fx-tchart__stage {
+  position: relative;
+  background: var(--fx-bg-0);
+  border-radius: var(--fx-r-1);
+}
+
+.fx-tchart__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1000 / 260;
+}
+
+/* Pointing at a line shows that runner's price there
+ * (race_trace_chart.js). The tip is the page's ink with its ground's
+ * colour for the words, so it reads on the terminal and on the paper. */
+.fx-tchart__stage--tip { cursor: crosshair; }
+.fx-tchart__tip {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  gap: 1px;
+  padding: 7px 10px;
+  transform: translate(12px, calc(-100% - 10px));
+  background: var(--fx-ink-1);
+  border-radius: var(--fx-r-2);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.22);
+  color: var(--fx-bg-0);
+  font-size: 12px;
+  line-height: 1.35;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.fx-tchart__tip[hidden],
+.fx-tchart__tip-dot[hidden] { display: none; }
+.fx-tchart__tip--left { transform: translate(calc(-100% - 12px), calc(-100% - 10px)); }
+.fx-tchart__tip--below { transform: translate(12px, 12px); }
+.fx-tchart__tip--left.fx-tchart__tip--below { transform: translate(calc(-100% - 12px), 12px); }
+.fx-tchart__tip-name {
+  padding-left: 7px;
+  border-left: 3px solid currentColor;
+  font-weight: 600;
+}
+.fx-tchart__tip-price {
+  font-size: 17px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.fx-tchart__tip-when {
+  font-size: 11px;
+  opacity: 0.78;
+  font-variant-numeric: tabular-nums;
+}
+.fx-tchart__tip-dot {
+  position: absolute;
+  z-index: 2;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border: 2px solid var(--fx-bg-0);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.fx-tchart__gridline {
+  stroke: var(--fx-border-soft);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}
+.fx-tchart__gridlabel {
+  fill: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+}
+
+.fx-tchart__line {
+  fill: none;
+  stroke: hsl(var(--hue, 30) 78% 62%);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  opacity: 0.9;
+  transition: opacity var(--fx-fast) var(--fx-easing),
+              stroke-width var(--fx-fast) var(--fx-easing);
+}
+.fx-tchart__svg--dim .fx-tchart__line {
+  opacity: 0.22;
+}
+.fx-tchart__svg--dim .fx-tchart__line--hi {
+  opacity: 1;
+  stroke-width: 2.4;
+}
+
+/* T4 — AI confidence dashed lines. Hidden by default; the AI
+ * overlay toggle stamps .fx-tchart__svg--show-ai on the SVG stage
+ * to reveal them. Same per-runner hue as the market line, plus a
+ * dashed stroke so the two never blur into one. */
+.fx-tchart__ai-line {
+  fill: none;
+  stroke: hsl(var(--hue, 30) 78% 68%);
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 4 3;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fx-fast) var(--fx-easing);
+}
+.fx-tchart__svg--show-ai .fx-tchart__ai-line {
+  opacity: 0.85;
+}
+.fx-tchart__svg--dim .fx-tchart__ai-line {
+  opacity: 0.15;
+}
+.fx-tchart__svg--dim .fx-tchart__ai-line[data-runner-id] { }  /* placeholder */
+
+.fx-tchart__ai-axis {
+  opacity: 0;
+  transition: opacity var(--fx-fast) var(--fx-easing);
+}
+.fx-tchart__svg--show-ai .fx-tchart__ai-axis {
+  opacity: 1;
+}
+.fx-tchart__ai-axislabel {
+  fill: var(--fx-fox);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  opacity: 0.75;
+}
+
+/* AI-overlay toggle chip in the caption strip. Pressed state
+ * inverts the palette so it's clear the overlay is active. */
+.fx-tchart__ai-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid var(--fx-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fx-ink-2);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--fx-fast) var(--fx-easing),
+              color var(--fx-fast) var(--fx-easing),
+              border-color var(--fx-fast) var(--fx-easing);
+}
+.fx-tchart__ai-toggle:hover {
+  color: var(--fx-ink-1);
+  border-color: var(--fx-fox-ring);
+}
+.fx-tchart__ai-toggle--on {
+  background: var(--fx-fox-soft);
+  color: var(--fx-fox);
+  border-color: var(--fx-fox-ring);
+}
+.fx-tchart__ai-toggle-dash {
+  width: 18px;
+  height: 0;
+  border-top: 1.5px dashed currentColor;
+}
+
+/* T5 — live-refresh freshness pill in the caption strip.
+ * Three states via data-status: 'live' (green dot, pulse),
+ * 'paused' (muted), 'stale' (red on last-fetch failure). */
+.fx-tchart__live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px 3px 10px;
+  border: 1px solid var(--fx-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fx-ink-2);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.fx-tchart__live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--fx-up);
+  box-shadow: 0 0 0 0 var(--fx-up-soft);
+  animation: fxTchartPulse 2s ease-out infinite;
+}
+@keyframes fxTchartPulse {
+  0%   { box-shadow: 0 0 0 0 var(--fx-up-soft); }
+  70%  { box-shadow: 0 0 0 6px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+.fx-tchart__live[data-status="paused"] .fx-tchart__live-dot {
+  background: var(--fx-neutral);
+  animation: none;
+}
+.fx-tchart__live[data-status="stale"] .fx-tchart__live-dot {
+  background: var(--fx-down);
+  animation: none;
+}
+.fx-tchart__live[data-status="paused"] .fx-tchart__live-label::after {
+  content: " (paused)";
+  color: var(--fx-ink-3);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.fx-tchart__live[data-status="stale"] .fx-tchart__live-label::after {
+  content: " (stale)";
+  color: var(--fx-down);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.fx-tchart__live-age {
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  min-width: 26px;
+  text-align: right;
+}
+.fx-tchart__live-pause {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--fx-ink-3);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background var(--fx-fast) var(--fx-easing),
+              color var(--fx-fast) var(--fx-easing);
+}
+.fx-tchart__live-pause:hover {
+  background: var(--fx-bg-2);
+  color: var(--fx-ink-1);
+}
+
+/* T13 — Copy-link chip in the caption strip. Same silhouette as
+ * the AI overlay chip so the strip reads as one cluster. Flashes
+ * green when the URL has been copied to clipboard. */
+.fx-tchart__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid var(--fx-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fx-ink-2);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background var(--fx-fast) var(--fx-easing),
+    color var(--fx-fast) var(--fx-easing),
+    border-color var(--fx-fast) var(--fx-easing);
+}
+.fx-tchart__copy:hover {
+  color: var(--fx-ink-1);
+  border-color: var(--fx-fox-ring);
+}
+.fx-tchart__copy--copied {
+  color: var(--fx-up);
+  background: var(--fx-up-soft);
+  border-color: var(--fx-up);
+}
+.fx-tchart__copy-icon {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.fx-tchart__marker-line {
+  stroke: var(--fx-neutral);
+  stroke-width: 1;
+  stroke-dasharray: 1 3;
+  opacity: 0.4;
+}
+.fx-tchart__marker-dot {
+  fill: var(--fx-neutral);
+  cursor: help;
+}
+.fx-tchart__marker--up .fx-tchart__marker-line  { stroke: var(--fx-up);   }
+.fx-tchart__marker--up .fx-tchart__marker-dot   { fill:   var(--fx-up);   }
+.fx-tchart__marker--down .fx-tchart__marker-line { stroke: var(--fx-down); }
+.fx-tchart__marker--down .fx-tchart__marker-dot  { fill:   var(--fx-down); }
+
+.fx-tchart__cursor {
+  stroke: var(--fx-fox);
+  stroke-width: 1;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.fx-tchart__readout {
+  display: flex;
+  align-items: center;
+  gap: var(--fx-sp-3);
+  padding: var(--fx-sp-1) var(--fx-sp-2);
+  border-top: 1px solid var(--fx-border-soft);
+  font-size: 12px;
+  color: var(--fx-ink-2);
+  min-height: 28px;
+}
+.fx-tchart__readout-time {
+  font-family: var(--fx-font-mono);
+  font-size: 13px;
+  color: var(--fx-ink-1);
+  min-width: 46px;
+}
+.fx-tchart__readout-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fx-sp-2);
+  flex: 1;
+}
+.fx-tchart__readout-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  background: var(--fx-bg-2);
+  border: 1px solid var(--fx-border-soft);
+  border-left: 3px solid hsl(var(--hue, 30) 78% 62%);
+  border-radius: var(--fx-r-1);
+  font-size: 11px;
+  color: var(--fx-ink-1);
+}
+/* "Show all 9" under the strip: a phone's, where the strip shows three. */
+.fx-tchart__readout-more {
+  display: none;
+  align-items: center;
+  padding: 2px 8px;
+  background: none;
+  border: 1px solid var(--fx-border);
+  border-radius: 999px;
+  color: var(--fx-ink-2);
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.fx-tchart__readout-num {
+  color: var(--fx-ink-3);
+}
+.fx-tchart__readout-odds {
+  color: var(--fx-fox);
+  font-family: var(--fx-font-mono);
+}
+
+.fx-tchart__scrubber-row {
+  display: flex;
+  align-items: center;
+  gap: var(--fx-sp-2);
+  padding: var(--fx-sp-2) 0 var(--fx-sp-1);
+}
+.fx-tchart__scrubber-lab {
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+  min-width: 100px;
+}
+.fx-tchart__scrubber {
+  flex: 1;
+  accent-color: var(--fx-fox);
+  cursor: ew-resize;
+}
+
+.fx-tchart__legend {
+  list-style: none;
+  margin: var(--fx-sp-2) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fx-sp-1) var(--fx-sp-2);
+}
+.fx-tchart__legend-item {
+  display: inline-flex;
+}
+.fx-tchart__legend-btn {
+  /* T6 — legend chips are togglable focus buttons. Border thickens
+   * + tints fox-orange when locked so the pressed state is
+   * unmissable across a 20-runner field. */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border: 1px solid var(--fx-border-soft);
+  border-radius: 999px;
+  background: var(--fx-bg-1);
+  color: var(--fx-ink-2);
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  transition: background var(--fx-fast) var(--fx-easing),
+              color var(--fx-fast) var(--fx-easing),
+              border-color var(--fx-fast) var(--fx-easing),
+              box-shadow var(--fx-fast) var(--fx-easing);
+}
+.fx-tchart__legend-btn:hover {
+  background: var(--fx-bg-2);
+  color: var(--fx-ink-1);
+}
+.fx-tchart__legend-btn[aria-pressed="true"] {
+  color: var(--fx-ink-1);
+  background: var(--fx-fox-soft);
+  border-color: var(--fx-fox-ring);
+  box-shadow: 0 0 0 1px var(--fx-fox-ring);
+}
+.fx-tchart__legend-btn:focus-visible {
+  outline: 2px solid var(--fx-fox-ring);
+  outline-offset: 2px;
+}
+.fx-tchart__legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: hsl(var(--hue, 30) 78% 62%);
+}
+.fx-tchart__legend-num {
+  color: var(--fx-ink-3);
+}
+
+/* T6 — locked-focus hint microcopy below the legend, with an
+ * Escape kbd chip. Hidden by default; the JS removes [hidden]
+ * when a runner is locked. */
+.fx-tchart__focus-hint {
+  margin: var(--fx-sp-2) 0 0;
+  font-size: 11px;
+  color: var(--fx-ink-3);
+}
+.fx-tchart__focus-hint-name {
+  color: var(--fx-fox);
+  font-weight: 600;
+}
+.fx-tchart__kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  background: var(--fx-bg-2);
+  border: 1px solid var(--fx-border);
+  border-radius: 3px;
+  color: var(--fx-ink-2);
+}
+
+/* T6 — focused readout: single card with room for AI% + a mins-
+ * to-latest chip. Uses the same swatch-border trick as the top-3
+ * card so the eye still pairs colour to runner. */
+.fx-tchart__readout-cell--focused {
+  padding: 3px 12px;
+  border-left-width: 4px;
+  font-size: 12px;
+}
+.fx-tchart__readout-ai {
+  color: var(--fx-fox);
+  font-family: var(--fx-font-mono);
+  padding: 0 6px;
+}
+.fx-tchart__readout-mins {
+  color: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  padding-left: 6px;
+  border-left: 1px solid var(--fx-border-soft);
+  margin-left: 6px;
+}
+.fx-tchart__readout-empty {
+  color: var(--fx-ink-mute);
+  font-style: italic;
+  font-size: 11px;
+}
+
+
+/* Race Trace timeline — mobile
+ * ─────────────────────────────
+ * FS-PR-14 — the earlier mobile block only touched the SVG aspect
+ * ratio + legend, but users still hit a silently-clipped card
+ * because .fx-shell__main uses `overflow-x: hidden`. The card
+ * plus its 16px padding was ~64px wider than the viewport inner
+ * width, and long horizontal strips (podium chips, caption meta,
+ * readout row) kept overflowing.
+ *
+ * Fixes:
+ *  - Tighter tchart padding so the chart card actually fits.
+ *  - Podium strip → horizontal scroll (1st/2nd/3rd is a sequence,
+ *    so swipe is more natural than wrap).
+ *  - Caption drops the flex row + wraps meta below title.
+ *  - Trace hero pulls in — title/date/chips all downsized to
+ *    stop the fx-trace__header pushing the page wide.
+ */
+@media (max-width: 720px) {
+  /* Chart card + inner surface pull in from sp-3 → 10px so the
+   * card actually fits inside a 320-360px phone viewport. */
+  .fx-tchart {
+    padding: 10px;
+    margin: 0 0 var(--fx-sp-3);
+  }
+  /* The script draws the chart on a 500-wide grid at this width
+   * (race_trace_chart.js), so it stands taller and its labels are
+   * twice the size. */
+  .fx-tchart__svg {
+    aspect-ratio: 500 / 260;
+  }
+
+  /* The price strip: the three shortest, and a button for the rest. */
+  .fx-tchart__readout-list:not(.is-open) .fx-tchart__readout-cell:nth-of-type(n+4) {
+    display: none;
+  }
+  .fx-tchart__readout-more { display: inline-flex; }
+
+  /* Caption strip — stack title above meta on narrow so the
+   * "MARKET TIMELINE" title never truncates its meta line. */
+  .fx-tchart__cap {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .fx-tchart__cap-meta {
+    font-size: 10px;
+  }
+
+  /* Readout inside the stage — column stack (already handled
+   * upstream, kept for parity with the extended block). */
+  .fx-tchart__readout {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--fx-sp-1);
+  }
+  .fx-tchart__scrubber-lab {
+    min-width: auto;
+    font-size: 9px;
+  }
+
+  /* Podium chip strip — 1st/2nd/3rd is a left-to-right sequence,
+   * so a horizontal scroll reads more naturally than a wrap that
+   * pushes the winner onto its own line. `-webkit-overflow-scrolling`
+   * keeps momentum scroll on iOS. */
+  .fx-tchart__podium {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: var(--fx-sp-1) var(--fx-sp-1) var(--fx-sp-1) 0;
+  }
+  .fx-tchart__podium-chip {
+    flex-shrink: 0;
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  /* Legend chip grid — same treatment; keep the max-height guard
+   * so it can't blow the page height either. */
+  .fx-tchart__legend {
+    max-height: 84px;
+    overflow-y: auto;
+    padding-right: 2px;
+  }
+  .fx-tchart__legend-btn {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  /* Trace hero — smaller title + drop the row layout so the meta
+   * chips wrap under instead of fighting the star for width. */
+  .fx-trace__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--fx-sp-2);
+    padding-bottom: var(--fx-sp-2);
+    margin-bottom: var(--fx-sp-3);
+  }
+  .fx-trace__title,
+  .fx-trace__time {
+    font-size: 20px;
+  }
+  .fx-trace__deck {
+    font-size: 13px;
+  }
+  .fx-trace__meta {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .fx-trace__meta .fx-chip {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  /* Copy-link button in the caption — hide on mobile; the URL
+   * already reflects the scrub state and Share sheet is native. */
+  .fx-tchart__copy {
+    display: none;
+  }
+}
+
+
+/* ============================================================
+ * Value Edge panel (T3)
+ *
+ * The AI-vs-market disagreement rail on Race Trace detail. Two
+ * columns: positive edges (AI backs, market slower to react) tinted
+ * with the existing --fx-up palette, negative edges (market shorter
+ * than AI thinks warranted) tinted --fx-down. Both live off the
+ * same grid tokens as the timeline chart so they read as siblings.
+ * ============================================================ */
+
+.fx-vedge {
+  margin: 0 0 var(--fx-sp-4);
+  padding: var(--fx-sp-3);
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border);
+  border-radius: var(--fx-r-2);
+}
+
+.fx-vedge__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--fx-sp-2);
+  margin: 0 0 var(--fx-sp-2);
+  padding-bottom: var(--fx-sp-2);
+  border-bottom: 1px solid var(--fx-border-soft);
+}
+.fx-vedge__title {
+  margin: 0;
+  font-family: var(--fx-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fx-ink-1);
+}
+.fx-vedge__deck {
+  margin: 0;
+  font-size: 11px;
+  color: var(--fx-ink-3);
+}
+
+/* FS-PR-3 — Anon-preview mask on the Value Edge panel. The deck
+ * swaps the analytical count for a signup CTA (the panel's most
+ * prominent surface); each row drops the AI% / Mkt% / edge_pp
+ * cells so number/horse/odds/finish still land as marketing but
+ * the pointy signal (edge_pp is a professional-punter honeypot)
+ * stays behind the paywall. */
+.fx-vedge__deck--masked {
+  display: flex;
+  align-items: center;
+  gap: var(--fx-sp-2);
+  flex-wrap: wrap;
+}
+.fx-vedge__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(255, 152, 0, 0.08);
+  color: var(--fx-fox);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: background 160ms var(--fx-easing);
+}
+.fx-vedge__cta:hover,
+.fx-vedge__cta:focus-visible {
+  background: rgba(255, 152, 0, 0.16);
+  text-decoration: underline;
+}
+
+.fx-vedge__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--fx-sp-3);
+}
+
+.fx-vedge__rail {
+  min-width: 0;
+  background: var(--fx-bg-0);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  padding: var(--fx-sp-2);
+}
+.fx-vedge__rail--up   { border-top: 2px solid var(--fx-up);   }
+.fx-vedge__rail--down { border-top: 2px solid var(--fx-down); }
+
+.fx-vedge__rail-label {
+  margin: 0 0 var(--fx-sp-2);
+  padding-bottom: var(--fx-sp-1);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fx-ink-2);
+  border-bottom: 1px dashed var(--fx-border-soft);
+}
+
+.fx-vedge__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fx-vedge__row {
+  display: grid;
+  grid-template-columns:
+    28px          /* saddle number */
+    minmax(0, 1fr) /* horse name */
+    auto          /* AI prob */
+    auto          /* market prob */
+    auto          /* odds */
+    auto;         /* edge chip */
+  align-items: center;
+  gap: var(--fx-sp-2);
+  padding: 6px 8px;
+  background: var(--fx-bg-1);
+  border: 1px solid transparent;
+  border-radius: var(--fx-r-1);
+  font-size: 12px;
+  color: var(--fx-ink-1);
+  transition: background var(--fx-fast) var(--fx-easing);
+}
+.fx-vedge__row:hover {
+  background: var(--fx-bg-2);
+}
+.fx-vedge__row--up   { border-left: 3px solid var(--fx-up);   }
+.fx-vedge__row--down { border-left: 3px solid var(--fx-down); }
+
+.fx-vedge__num {
+  color: var(--fx-ink-3);
+  text-align: center;
+}
+.fx-vedge__horse {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.fx-vedge__prob {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--fx-ink-2);
+}
+.fx-vedge__prob-lab {
+  font-family: var(--fx-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+}
+
+.fx-vedge__odds {
+  color: var(--fx-ink-1);
+  font-family: var(--fx-font-mono);
+  font-size: 12px;
+  min-width: 38px;
+  text-align: right;
+}
+
+.fx-vedge__edge {
+  padding: 2px 8px;
+  border-radius: var(--fx-r-1);
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+}
+.fx-vedge__edge--up {
+  color: var(--fx-up);
+  background: var(--fx-up-soft);
+}
+.fx-vedge__edge--down {
+  color: var(--fx-down);
+  background: var(--fx-down-soft);
+}
+
+.fx-vedge__rail-empty {
+  margin: 0;
+  padding: var(--fx-sp-2);
+  font-size: 11px;
+  color: var(--fx-ink-3);
+  font-style: italic;
+}
+
+
+/* Value Edge — mobile: stack the two rails */
+@media (max-width: 720px) {
+  .fx-vedge__grid {
+    grid-template-columns: 1fr;
+    gap: var(--fx-sp-2);
+  }
+  .fx-vedge__row {
+    grid-template-columns:
+      28px
+      minmax(0, 1fr)
+      auto
+      auto;
+    grid-template-areas:
+      "num horse odds edge"
+      "num prob-ai prob-mkt edge";
+    row-gap: 2px;
+    padding: 8px;
+  }
+  .fx-vedge__num   { grid-area: num; align-self: center; }
+  .fx-vedge__horse { grid-area: horse; }
+  .fx-vedge__odds  { grid-area: odds; }
+  .fx-vedge__edge  { grid-area: edge; align-self: center; }
+  .fx-vedge__prob:nth-of-type(1) { grid-area: prob-ai; }
+  .fx-vedge__prob:nth-of-type(2) { grid-area: prob-mkt; }
+}
+
+
+/* ============================================================
+ * T9 — Focus dim across sidebar
+ *
+ * When a runner is locked on the chart (T6), the same focus state
+ * carries over to the Value Edge rail and signals rail via
+ * .fx-focus-match / .fx-focus-dim. Race-level signals (no
+ * data-runner-id) never receive either class and stay full-
+ * brightness. The rules live below the widget blocks so they
+ * override each widget's own row styling.
+ * ============================================================ */
+
+.fx-focus-dim {
+  opacity: 0.28;
+  filter: saturate(0.5);
+  transition:
+    opacity var(--fx-fast) var(--fx-easing),
+    filter  var(--fx-fast) var(--fx-easing);
+}
+
+.fx-vedge__row.fx-focus-match {
+  outline: 1px solid var(--fx-fox-ring);
+  outline-offset: -1px;
+  box-shadow: 0 0 0 2px var(--fx-fox-soft);
+  background: var(--fx-bg-2);
+}
+.fx-trace__signal.fx-focus-match {
+  outline: 1px solid var(--fx-fox-ring);
+  outline-offset: -1px;
+  box-shadow: 0 0 0 2px var(--fx-fox-soft);
+}
+
+
+/* ============================================================
+ * R1 — Post-race Replay chrome
+ *
+ * When a race has a settled result the trace surface flips into
+ * replay mode: gold REPLAY badge in the eyebrow, winner callout
+ * card between header and nav, Fin column on the runners table,
+ * winner row glow, and the live pill freezes into "settled".
+ * ============================================================ */
+
+/* Gold — kept local to R1 so it never leaks into unrelated
+ * signals. Tuned to sit alongside the fox-orange accent without
+ * fighting it. */
+.fx-replay__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: var(--fx-sp-2);
+  padding: 2px 8px;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.55);
+  border-radius: 999px;
+  color: #d4af37;
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.fx-replay__callout {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--fx-sp-3);
+  align-items: center;
+  margin: var(--fx-sp-3) 0 var(--fx-sp-2);
+  padding: var(--fx-sp-3);
+  background: linear-gradient(
+    180deg,
+    rgba(212, 175, 55, 0.10) 0%,
+    var(--fx-bg-1) 100%
+  );
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: var(--fx-r-2);
+}
+.fx-replay__callout-eyebrow {
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #d4af37;
+}
+.fx-replay__callout-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fx-sp-1);
+  min-width: 0;
+}
+.fx-replay__callout-winner {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--fx-sp-2);
+  color: var(--fx-ink-1);
+  font-size: 15px;
+  font-weight: 600;
+}
+.fx-replay__callout-pos {
+  color: #d4af37;
+  font-family: var(--fx-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+.fx-replay__callout-name {
+  color: var(--fx-ink-1);
+}
+.fx-replay__callout-sp {
+  color: var(--fx-fox);
+  font-family: var(--fx-font-mono);
+  font-size: 13px;
+}
+.fx-replay__callout-jockey {
+  color: var(--fx-ink-3);
+  font-size: 12px;
+  font-weight: 400;
+}
+.fx-replay__callout-places {
+  display: flex;
+  gap: var(--fx-sp-3);
+  flex-wrap: wrap;
+  color: var(--fx-ink-2);
+  font-size: 12px;
+}
+.fx-replay__callout-place {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+/* Runners table — Fin cell + row treatment.
+ * The Fin column is only rendered when trace.is_replay, so the
+ * grid template widens to 8 cols via a nested rule scoped to
+ * .fx-trace__runners--replay. */
+.fx-trace__runners--replay .fx-trace__runners-head,
+.fx-trace__runners--replay .fx-trace__runner {
+  grid-template-columns:
+    40px
+    minmax(0, 2.4fr)
+    minmax(0, 1.4fr)
+    48px
+    64px                       /* opened */
+    64px                       /* last */
+    72px
+    56px;                      /* R1 Fin */
+}
+.fx-trace__rcol--fin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fx-fin {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--fx-r-1);
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.fx-fin--1 {
+  color: #d4af37;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+}
+.fx-fin--2 {
+  color: #c0c8d4;
+  background: rgba(192, 200, 212, 0.10);
+  border: 1px solid rgba(192, 200, 212, 0.35);
+}
+.fx-fin--3 {
+  color: #cd7f32;
+  background: rgba(205, 127, 50, 0.10);
+  border: 1px solid rgba(205, 127, 50, 0.35);
+}
+.fx-fin--none {
+  color: var(--fx-ink-mute);
+}
+
+/* Winner row glow — subtle gold left border + tint. The 2nd/3rd
+ * placed rows get a lighter treatment so the eye can scan the
+ * podium at a glance without the winner losing prominence. */
+.fx-trace__runner--pos-1 {
+  background: linear-gradient(
+    90deg,
+    rgba(212, 175, 55, 0.10) 0%,
+    var(--fx-bg-1) 40%
+  );
+  box-shadow: inset 3px 0 0 #d4af37;
+}
+.fx-trace__runner--pos-2 {
+  box-shadow: inset 3px 0 0 rgba(192, 200, 212, 0.55);
+}
+.fx-trace__runner--pos-3 {
+  box-shadow: inset 3px 0 0 rgba(205, 127, 50, 0.55);
+}
+
+/* Live pill "settled" state — takes over from live/paused/stale
+ * when R1 halts the poll. Dot goes gold, no pulse. */
+.fx-tchart__live[data-status="settled"] .fx-tchart__live-dot {
+  background: #d4af37;
+  animation: none;
+}
+.fx-tchart__live[data-status="settled"] .fx-tchart__live-label::after {
+  content: " · settled";
+  color: #d4af37;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+
+/* ============================================================
+ * R2 — Post-race verdict card
+ *
+ * Sits below the R1 winner callout. Reads AI's top pick and the
+ * market fav against the actual finish, with a one-line
+ * editorial verdict. Deterministic — no LLM — just the payload
+ * pattern-matched into TraceVerdict server-side.
+ * ============================================================ */
+
+.fx-verdict {
+  margin: 0 0 var(--fx-sp-2);
+  padding: var(--fx-sp-3);
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border);
+  border-radius: var(--fx-r-2);
+}
+.fx-verdict__eyebrow {
+  margin: 0 0 var(--fx-sp-2);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+}
+.fx-verdict__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fx-sp-2) var(--fx-sp-3);
+  margin: 0 0 var(--fx-sp-2);
+  padding-bottom: var(--fx-sp-2);
+  border-bottom: 1px dashed var(--fx-border-soft);
+}
+.fx-verdict__cell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fx-sp-1);
+  min-width: 0;
+}
+.fx-verdict__label {
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+}
+.fx-verdict__name {
+  color: var(--fx-ink-1);
+  font-size: 13px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+.fx-verdict__match {
+  padding: 2px 8px;
+  border-radius: var(--fx-r-1);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.fx-verdict__match--win {
+  color: var(--fx-up);
+  background: var(--fx-up-soft);
+}
+.fx-verdict__match--placed {
+  color: #d4af37;
+  background: rgba(212, 175, 55, 0.15);
+}
+.fx-verdict__match--miss {
+  color: var(--fx-ink-3);
+  background: var(--fx-bg-2);
+}
+.fx-verdict__cell--edge {
+  padding-left: var(--fx-sp-2);
+  border-left: 2px solid var(--fx-fox);
+}
+.fx-verdict__edge-hit {
+  color: var(--fx-fox);
+  font-size: 12px;
+  font-weight: 600;
+}
+.fx-verdict__narrative {
+  margin: 0;
+  color: var(--fx-ink-1);
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+
+/* ============================================================
+ * R3 — Winner-line accent + podium chip strip
+ *
+ * On the replay chart, the actual finishing 1st/2nd/3rd lines
+ * get a gold / silver / bronze accent that overrides the
+ * per-runner hue stroke — so the eye can follow the winner's
+ * trajectory through the scrub even in a 20-runner field.
+ * The podium chip strip above the chart caption doubles as a
+ * click-to-focus (reuses T6 setFocus).
+ * ============================================================ */
+
+/* Winner-line accents. Higher specificity than .fx-tchart__line
+ * so the stroke override wins without !important. Wider stroke +
+ * higher opacity so the placed lines pop above the field. */
+.fx-tchart__line.fx-tchart__line--pos-1 {
+  stroke: #d4af37;
+  stroke-width: 2.4;
+  opacity: 1;
+  filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.35));
+}
+.fx-tchart__line.fx-tchart__line--pos-2 {
+  stroke: #c0c8d4;
+  stroke-width: 2;
+  opacity: 0.95;
+}
+.fx-tchart__line.fx-tchart__line--pos-3 {
+  stroke: #cd7f32;
+  stroke-width: 2;
+  opacity: 0.95;
+}
+/* Under focus-dim (T6), a placed line that isn't the locked
+ * runner still fades — the lock's spotlight wins over the podium
+ * accent. Explicit rule so specificity wars don't leave the
+ * gold hanging on a dimmed line. */
+.fx-tchart__svg--dim
+  .fx-tchart__line--pos-1:not(.fx-tchart__line--hi),
+.fx-tchart__svg--dim
+  .fx-tchart__line--pos-2:not(.fx-tchart__line--hi),
+.fx-tchart__svg--dim
+  .fx-tchart__line--pos-3:not(.fx-tchart__line--hi) {
+  opacity: 0.22;
+}
+
+/* Podium chip strip. Sits inside .fx-tchart above the caption
+ * so it reads as part of the chart chrome, not a separate
+ * section. Only rendered when is_replay + result. */
+.fx-tchart__podium {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fx-sp-1);
+  align-items: center;
+  padding: var(--fx-sp-2) var(--fx-sp-2) var(--fx-sp-1);
+  border-bottom: 1px dashed var(--fx-border-soft);
+}
+.fx-tchart__podium-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--fx-border);
+  border-radius: 999px;
+  background: var(--fx-bg-1);
+  color: var(--fx-ink-1);
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    background var(--fx-fast) var(--fx-easing),
+    border-color var(--fx-fast) var(--fx-easing),
+    box-shadow var(--fx-fast) var(--fx-easing);
+}
+.fx-tchart__podium-chip:hover {
+  background: var(--fx-bg-2);
+}
+.fx-tchart__podium-chip--pos-1 {
+  border-color: rgba(212, 175, 55, 0.55);
+}
+.fx-tchart__podium-chip--pos-2 {
+  border-color: rgba(192, 200, 212, 0.45);
+}
+.fx-tchart__podium-chip--pos-3 {
+  border-color: rgba(205, 127, 50, 0.45);
+}
+.fx-tchart__podium-chip--locked {
+  box-shadow: 0 0 0 2px var(--fx-fox-ring);
+  background: var(--fx-fox-soft);
+}
+.fx-tchart__podium-chip:focus-visible {
+  outline: 2px solid var(--fx-fox-ring);
+  outline-offset: 2px;
+}
+.fx-tchart__podium-pos {
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--fx-ink-3);
+  min-width: 22px;
+}
+.fx-tchart__podium-chip--pos-1 .fx-tchart__podium-pos { color: #d4af37; }
+.fx-tchart__podium-chip--pos-2 .fx-tchart__podium-pos { color: #c0c8d4; }
+.fx-tchart__podium-chip--pos-3 .fx-tchart__podium-pos { color: #cd7f32; }
+.fx-tchart__podium-swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: hsl(var(--hue, 30) 78% 62%);
+}
+.fx-tchart__podium-num {
+  color: var(--fx-ink-3);
+  font-size: 11px;
+}
+.fx-tchart__podium-name {
+  color: var(--fx-ink-1);
+  font-weight: 600;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+ * R4 — Signal post-mortem: scorecard pill + outcome chips +
+ * Value Edge finish chip
+ *
+ * Pre-race the sidebar rails look identical to the live view.
+ * On Replay each runner-scoped signal picks up a green FIRED
+ * or grey MISSED chip; a scorecard pill headlines the rail
+ * with the fire-rate; and Value Edge rows carry the same
+ * medal-tinted finish chip the runners table already uses so
+ * you can see at a glance whether the edge cashed.
+ * ============================================================ */
+
+.fx-scorecard {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0 0 var(--fx-sp-2);
+  padding: 6px 12px;
+  border: 1px solid var(--fx-border);
+  border-radius: 999px;
+  background: var(--fx-bg-1);
+  color: var(--fx-ink-1);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.fx-scorecard__pos {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--fx-fox-ring);
+}
+.fx-scorecard__of,
+.fx-scorecard__total {
+  color: var(--fx-ink-3);
+}
+.fx-scorecard__label {
+  text-transform: uppercase;
+  color: var(--fx-ink-2);
+  margin-left: 4px;
+}
+
+/* Outcome chip — pinned inline against the signal title. Tone is
+ * intentionally muted (borderless with a soft-tint background) so
+ * the strength chip on the left stays the loudest element in the
+ * row; FIRED / MISSED is confirmation, not a headline. */
+.fx-outcome {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  vertical-align: baseline;
+}
+.fx-outcome--fired {
+  background: rgba(76, 175, 80, 0.14);
+  color: #4caf50;
+}
+.fx-outcome--missed {
+  background: var(--fx-bg-2);
+  color: var(--fx-ink-3);
+}
+/* Signal rows themselves get a whisper-thin left border on Replay
+ * so the eye can bulk-scan fire vs miss without reading each chip. */
+.fx-trace__signal--fired .fx-trace__signal-details {
+  border-left: 3px solid rgba(76, 175, 80, 0.55);
+  padding-left: 8px;
+}
+.fx-trace__signal--missed .fx-trace__signal-details {
+  border-left: 3px solid var(--fx-border-soft);
+  padding-left: 8px;
+  opacity: 0.75;
+}
+
+/* Value Edge finish chip. .fx-fin base + .fx-fin--N palette are
+ * defined once by R1 (runners table); .fx-vedge__fin just wraps
+ * them so the flex parent gets the tight gap it needs. */
+.fx-vedge__fin {
+  align-self: center;
+  margin-left: 4px;
+}
+
+
+/* R1 mobile — drop the Fin column on narrow so the table stays
+ * readable. Winner-row glow stays (colour, no extra column). */
+@media (max-width: 720px) {
+  .fx-trace__runners--replay .fx-trace__runners-head,
+  .fx-trace__runners--replay .fx-trace__runner {
+    grid-template-columns:
+      24px
+      minmax(0, 1fr)
+      32px
+      56px
+      40px;
+  }
+  /* T8 dropped ticks + spark on mobile; keep the same treatment
+   * for the R1 Fin column so the row layout stays consistent. */
+  .fx-trace__rcol--fin { display: none; }
+  .fx-replay__callout {
+    grid-template-columns: 1fr;
+    gap: var(--fx-sp-2);
+  }
+}
+
+
+/* ============================================================
+ * FS-PR-5 — Anon signup nudge modal + locked tabs
+ * ============================================================ */
+
+.fx-shell__tab--locked {
+  position: relative;
+}
+.fx-shell__tab-lock {
+  margin-left: 4px;
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.fx-nudge {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--fx-sp-3);
+}
+.fx-nudge[hidden] { display: none; }
+.fx-nudge__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 18, 24, 0.62);
+  backdrop-filter: blur(2px);
+  cursor: pointer;
+}
+.fx-nudge__panel {
+  position: relative;
+  max-width: 420px;
+  width: 100%;
+  padding: var(--fx-sp-3) var(--fx-sp-3) var(--fx-sp-3);
+  background: var(--fx-bg-0);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  animation: fx-nudge-in 180ms var(--fx-easing);
+}
+.fx-nudge__close {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  padding: 4px 8px;
+  background: none;
+  border: none;
+  color: var(--fx-ink-3);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--fx-fast) var(--fx-easing);
+}
+.fx-nudge__close:hover,
+.fx-nudge__close:focus-visible {
+  color: var(--fx-ink-1);
+}
+.fx-nudge__eyebrow {
+  margin: 0 0 6px;
+  color: var(--fx-fox);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.fx-nudge__title {
+  margin: 0 0 8px;
+  color: var(--fx-ink-1);
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+.fx-nudge__body {
+  margin: 0 0 var(--fx-sp-3);
+  color: var(--fx-ink-2);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.fx-nudge__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fx-sp-1);
+}
+.fx-nudge__primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  background: var(--fx-fox);
+  color: #1a1207;
+  font-family: var(--fx-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--fx-r-2);
+  transition: background var(--fx-fast) var(--fx-easing);
+}
+.fx-nudge__primary:hover,
+.fx-nudge__primary:focus-visible {
+  background: #ffa666;
+}
+.fx-nudge__secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  color: var(--fx-ink-3);
+  font-size: 12px;
+  text-decoration: none;
+  border-radius: var(--fx-r-1);
+  transition: color var(--fx-fast) var(--fx-easing);
+}
+.fx-nudge__secondary:hover,
+.fx-nudge__secondary:focus-visible {
+  color: var(--fx-ink-1);
+  text-decoration: underline;
+}
+@keyframes fx-nudge-in {
+  from { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+html.fx-nudge-open {
+  overflow: hidden;
+}
+
+
+/* ============================================================
+ * Reduced motion
+ * ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-shell * {
+    transition: none !important;
+  }
+  .fx-nudge__panel {
+    animation: none;
+  }
+}
+
+
+/* ============================================================
+ * FS-PR-17 — Runner detail page (/fox-signals/race/<id>/runner/<id>/)
+ *
+ * A per-horse deep-dive: hero + odds chart + signals + form +
+ * connection stats + fit cards + verify chip. Two-column desktop
+ * layout collapses to a single stack on mobile.
+ * ============================================================ */
+
+.fx-rtrace {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+/* Horse name deep-link inside the runners table (source of the
+ * click that brings us here). Underline on hover, Fox-gold. */
+.fx-trace__horse-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px dashed transparent;
+  transition: border-color var(--fx-fast) var(--fx-easing),
+              color var(--fx-fast) var(--fx-easing);
+}
+.fx-trace__horse-link:hover {
+  color: var(--fx-fox);
+  border-bottom-color: var(--fx-fox-ring);
+}
+
+.fx-rtrace__crumb {
+  margin: 0 0 var(--fx-sp-2);
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  color: var(--fx-ink-3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.fx-rtrace__crumb-link {
+  color: var(--fx-ink-3);
+  text-decoration: none;
+}
+.fx-rtrace__crumb-link:hover { color: var(--fx-fox); }
+
+.fx-rtrace__nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--fx-sp-2);
+  margin: 0 0 var(--fx-sp-3);
+}
+.fx-rtrace__nav-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  color: var(--fx-ink-2);
+  text-decoration: none;
+  font-size: 12px;
+}
+.fx-rtrace__nav-chip--prev { justify-self: start; }
+.fx-rtrace__nav-chip--next { justify-self: end; }
+.fx-rtrace__nav-chip:hover {
+  color: var(--fx-fox);
+  border-color: var(--fx-fox-ring);
+}
+.fx-rtrace__nav-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 140px;
+}
+
+/* Hero — big number, horse, connections, stats grid */
+.fx-rtrace__hero {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--fx-sp-3);
+  align-items: center;
+  padding: var(--fx-sp-3) var(--fx-sp-3);
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border);
+  border-radius: var(--fx-r-2);
+  margin: 0 0 var(--fx-sp-3);
+}
+.fx-rtrace__hero-num {
+  font-size: 44px;
+  font-weight: 700;
+  color: var(--fx-fox);
+  line-height: 1;
+  min-width: 60px;
+  text-align: center;
+}
+.fx-rtrace__hero-name {
+  margin: 0 0 4px;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--fx-ink-1);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.fx-rtrace__hero-connections {
+  margin: 0;
+  color: var(--fx-ink-3);
+  font-size: 12px;
+  display: flex;
+  gap: var(--fx-sp-2);
+  flex-wrap: wrap;
+}
+.fx-rtrace__hero-conn { }
+.fx-rtrace__conn-role {
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+  margin-right: 4px;
+}
+.fx-rtrace__hero-stats {
+  display: flex;
+  gap: var(--fx-sp-3);
+}
+.fx-rtrace__hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 60px;
+}
+.fx-rtrace__hero-stat-val {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--fx-ink-1);
+  line-height: 1;
+}
+.fx-rtrace__hero-stat-lab {
+  font-family: var(--fx-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+  margin-top: 4px;
+}
+.fx-rtrace__hero-stat--price .fx-rtrace__hero-stat-val { color: var(--fx-fox); }
+.fx-rtrace__hero-stat--down  .fx-rtrace__hero-stat-val { color: #67e088; }
+.fx-rtrace__hero-stat--up    .fx-rtrace__hero-stat-val { color: #f08080; }
+
+/* Chart card */
+.fx-rtrace__chart {
+  margin: 0 0 var(--fx-sp-4);
+  padding: var(--fx-sp-3);
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border);
+  border-radius: var(--fx-r-2);
+}
+.fx-rtrace__chart-cap {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--fx-sp-2);
+  margin: 0 0 var(--fx-sp-2);
+  padding-bottom: var(--fx-sp-1);
+  border-bottom: 1px solid var(--fx-border-soft);
+}
+.fx-rtrace__chart-title {
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fx-ink-2);
+}
+.fx-rtrace__chart-meta {
+  font-size: 11px;
+  color: var(--fx-ink-3);
+}
+.fx-rtrace__chart-stage {
+  position: relative;
+  background: var(--fx-bg-0);
+  border-radius: var(--fx-r-1);
+  padding: 8px;
+}
+.fx-rtrace__chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1000 / 300;
+}
+.fx-rtrace__chart-line {
+  stroke: var(--fx-fox);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.fx-rtrace__chart-ai {
+  stroke: #67c9ff;
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  stroke-dasharray: 3 3;
+  opacity: 0.9;
+}
+.fx-rtrace__chart-ylabel {
+  fill: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 9px;
+}
+.fx-rtrace__chart-xlabel {
+  fill: var(--fx-ink-3);
+  font-family: var(--fx-font-mono);
+  font-size: 9px;
+}
+.fx-rtrace__chart-empty {
+  margin: 0;
+  padding: var(--fx-sp-4);
+  text-align: center;
+  color: var(--fx-ink-3);
+  font-size: 13px;
+}
+.fx-rtrace__ai-mask {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 8px;
+  background: rgba(255,152,0,0.10);
+  border: 1px solid var(--fx-fox-ring);
+  border-radius: var(--fx-r-1);
+  color: var(--fx-fox);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  text-decoration: none;
+}
+.fx-rtrace__ai-mask:hover { background: rgba(255,152,0,0.18); }
+
+/* Two-column body */
+.fx-rtrace__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--fx-sp-4);
+  align-items: start;
+}
+.fx-rtrace__col {
+  min-width: 0;
+}
+
+.fx-rtrace__section {
+  margin: 0 0 var(--fx-sp-4);
+}
+.fx-rtrace__section-title {
+  margin: 0 0 var(--fx-sp-2);
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fx-ink-2);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--fx-border-soft);
+}
+.fx-rtrace__empty {
+  margin: 0;
+  padding: var(--fx-sp-3);
+  background: var(--fx-bg-1);
+  border: 1px dashed var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  color: var(--fx-ink-3);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* Signals list */
+.fx-rtrace__signals { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--fx-sp-1); }
+.fx-rtrace__signal {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: var(--fx-sp-2);
+  padding: var(--fx-sp-2);
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+}
+.fx-rtrace__signal-title {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fx-ink-1);
+}
+.fx-rtrace__signal-desc {
+  margin: 0 0 4px;
+  font-size: 12px;
+  color: var(--fx-ink-2);
+  line-height: 1.4;
+}
+.fx-rtrace__signal-evidence {
+  margin: 6px 0 0;
+  padding: 6px 8px;
+  background: var(--fx-bg-0);
+  border-radius: var(--fx-r-1);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3px;
+}
+.fx-rtrace__signal-evidence-row {
+  display: grid;
+  grid-template-columns: minmax(100px, 30%) 1fr;
+  gap: var(--fx-sp-1);
+  font-size: 11px;
+  font-family: var(--fx-font-mono);
+}
+.fx-rtrace__signal-evidence-row dt { color: var(--fx-ink-3); margin: 0; }
+.fx-rtrace__signal-evidence-row dd { color: var(--fx-ink-1); margin: 0; }
+.fx-rtrace__signal-evidence-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 3px 8px;
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  color: var(--fx-fox);
+  background: rgba(255,152,0,0.06);
+  border-radius: var(--fx-r-1);
+  text-decoration: none;
+}
+
+/* Events list */
+.fx-rtrace__events { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--fx-sp-1); }
+.fx-rtrace__event {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: var(--fx-sp-2);
+  padding: var(--fx-sp-2);
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+}
+.fx-rtrace__event-time {
+  font-family: var(--fx-font-mono);
+  font-size: 12px;
+  color: var(--fx-ink-3);
+}
+.fx-rtrace__event-title { margin: 0; font-size: 13px; color: var(--fx-ink-1); }
+.fx-rtrace__event-desc { margin: 3px 0 0; font-size: 12px; color: var(--fx-ink-3); }
+
+/* Form ribbon */
+.fx-rtrace__form { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.fx-rtrace__form-row {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: var(--fx-sp-2);
+  padding: 8px 10px;
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  align-items: center;
+}
+.fx-rtrace__form-pos {
+  font-family: var(--fx-font-mono);
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--fx-ink-2);
+}
+.fx-rtrace__form-row--win  { border-left: 3px solid #d4af37; }
+.fx-rtrace__form-row--win  .fx-rtrace__form-pos { color: #d4af37; }
+.fx-rtrace__form-row--place { border-left: 3px solid var(--fx-fox-ring); }
+.fx-rtrace__form-line1 { margin: 0; font-size: 12px; color: var(--fx-ink-1); }
+.fx-rtrace__form-line2 { margin: 2px 0 0; font-size: 11px; color: var(--fx-ink-3); }
+.fx-rtrace__form-line1 > span,
+.fx-rtrace__form-line2 > span { margin-right: 4px; }
+
+/* Side column — connection cards + fit cards */
+.fx-rtrace__card {
+  padding: var(--fx-sp-2) var(--fx-sp-3);
+  margin: 0 0 var(--fx-sp-2);
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+}
+.fx-rtrace__card-eyebrow {
+  margin: 0 0 2px;
+  font-family: var(--fx-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+}
+.fx-rtrace__card-title {
+  margin: 0 0 var(--fx-sp-1);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fx-ink-1);
+}
+.fx-rtrace__card-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--fx-sp-2);
+}
+.fx-rtrace__card-stat-val {
+  display: block;
+  font-family: var(--fx-font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--fx-ink-1);
+  line-height: 1;
+}
+.fx-rtrace__card-stat-lab {
+  display: block;
+  margin-top: 3px;
+  font-size: 10px;
+  color: var(--fx-ink-3);
+}
+.fx-rtrace__fit {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--fx-sp-1);
+}
+.fx-rtrace__fit-cell {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 6px 0;
+  border-bottom: 1px dashed var(--fx-border-soft);
+}
+.fx-rtrace__fit-cell:last-child { border-bottom: 0; }
+.fx-rtrace__fit-lab { font-size: 11px; color: var(--fx-ink-3); }
+.fx-rtrace__fit-val { font-family: var(--fx-font-mono); font-size: 13px; color: var(--fx-ink-1); font-weight: 600; }
+.fx-rtrace__fit-legend { margin: 6px 0 0; font-size: 10px; color: var(--fx-ink-3); text-align: right; }
+
+.fx-rtrace__verify { margin: var(--fx-sp-2) 0; }
+.fx-rtrace__back {
+  display: block;
+  padding: 8px 12px;
+  margin-top: var(--fx-sp-1);
+  color: var(--fx-ink-3);
+  font-size: 12px;
+  text-decoration: none;
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  text-align: center;
+}
+.fx-rtrace__back:hover { color: var(--fx-fox); border-color: var(--fx-fox-ring); }
+.fx-rtrace__back--sub { border-style: dashed; }
+
+/* Outcome chips reuse race_trace's — set only what's missing */
+.fx-outcome {
+  font-family: var(--fx-font-mono);
+  font-size: 9px;
+  padding: 2px 5px;
+  border-radius: var(--fx-r-1);
+  margin-left: 6px;
+}
+.fx-outcome--fired  { color: #67e088; background: rgba(103,224,136,0.10); }
+.fx-outcome--missed { color: #f08080; background: rgba(240,128,128,0.10); }
+
+/* Mobile — collapse to single column, tighten every card */
+@media (max-width: 720px) {
+  .fx-rtrace__nav { grid-template-columns: 1fr 1fr; }
+  .fx-rtrace__hero {
+    grid-template-columns: auto 1fr;
+    padding: 12px;
+  }
+  .fx-rtrace__hero-num { font-size: 32px; min-width: 44px; }
+  .fx-rtrace__hero-name { font-size: 20px; }
+  .fx-rtrace__hero-stats {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+    gap: var(--fx-sp-1);
+    padding-top: var(--fx-sp-2);
+    margin-top: var(--fx-sp-2);
+    border-top: 1px solid var(--fx-border-soft);
+  }
+  .fx-rtrace__hero-stat-val { font-size: 16px; }
+  .fx-rtrace__body { grid-template-columns: 1fr; gap: var(--fx-sp-3); }
+  .fx-rtrace__chart { padding: 10px; }
+  .fx-rtrace__chart-svg { aspect-ratio: 800 / 300; }
+  .fx-rtrace__signal { grid-template-columns: 60px 1fr; }
+  .fx-rtrace__card-stats { gap: var(--fx-sp-1); }
+  .fx-rtrace__card-stat-val { font-size: 15px; }
+}
+
+
+/* ============================================================
+ * FS-PR-18 — Alerts feed (/fox-signals/alerts/)
+ *
+ * Grouped feed: one race per group card, one signal per row.
+ * Filter row up top (window / kinds / My Stable). Anon preview
+ * masks the evidence disclosure with a UTM-tagged CTA.
+ * ============================================================ */
+
+.fx-alerts {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.fx-alerts__header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--fx-sp-3);
+  align-items: end;
+  padding-bottom: var(--fx-sp-3);
+  margin-bottom: var(--fx-sp-3);
+  border-bottom: 1px solid var(--fx-border);
+}
+.fx-alerts__eyebrow {
+  margin: 0 0 4px;
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+}
+.fx-alerts__title {
+  margin: 0 0 var(--fx-sp-1);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--fx-ink-1);
+  line-height: 1.15;
+}
+.fx-alerts__deck {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 14px;
+  color: var(--fx-ink-2);
+  line-height: 1.5;
+}
+.fx-alerts__counts {
+  display: flex;
+  gap: var(--fx-sp-3);
+  align-items: baseline;
+}
+.fx-alerts__count {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.fx-alerts__count-n {
+  font-family: var(--fx-font-mono);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--fx-fox);
+  line-height: 1;
+}
+.fx-alerts__count--sub .fx-alerts__count-n {
+  color: var(--fx-ink-2);
+  font-size: 20px;
+}
+.fx-alerts__count-lab {
+  margin-top: 4px;
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+}
+
+/* Filter row */
+.fx-alerts__filters {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  gap: var(--fx-sp-3);
+  align-items: end;
+  padding: var(--fx-sp-3);
+  margin: 0 0 var(--fx-sp-3);
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border);
+  border-radius: var(--fx-r-2);
+}
+.fx-alerts__field {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.fx-alerts__field legend {
+  padding: 0 0 6px;
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+}
+.fx-alerts__pillrow {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.fx-alerts__pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  background: var(--fx-bg-0);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: 999px;
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  color: var(--fx-ink-2);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.fx-alerts__pill:hover { border-color: var(--fx-fox-ring); color: var(--fx-fox); }
+.fx-alerts__pill.is-active {
+  background: var(--fx-fox);
+  color: #fff;
+  border-color: var(--fx-fox);
+}
+.fx-alerts__kinds {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.fx-alerts__kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 9px;
+  background: var(--fx-bg-0);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  font-size: 11px;
+  color: var(--fx-ink-2);
+  cursor: pointer;
+  user-select: none;
+}
+.fx-alerts__kind input { margin: 0; accent-color: var(--fx-fox); }
+.fx-alerts__kind.is-active {
+  color: var(--fx-fox);
+  border-color: var(--fx-fox-ring);
+  background: rgba(255,152,0,0.06);
+}
+.fx-alerts__toggle {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--fx-bg-0);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  font-size: 12px;
+  color: var(--fx-ink-2);
+  cursor: pointer;
+}
+.fx-alerts__toggle input { margin: 0; accent-color: var(--fx-fox); }
+.fx-alerts__actions {
+  display: flex;
+  gap: var(--fx-sp-1);
+  align-items: center;
+}
+.fx-alerts__submit {
+  padding: 8px 14px;
+  background: var(--fx-fox);
+  color: #fff;
+  border: 0;
+  border-radius: var(--fx-r-1);
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.fx-alerts__submit:hover { filter: brightness(1.08); }
+.fx-alerts__reset {
+  padding: 8px 12px;
+  color: var(--fx-ink-3);
+  font-size: 11px;
+  text-decoration: none;
+}
+.fx-alerts__reset:hover { color: var(--fx-fox); }
+.fx-visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); border: 0;
+}
+
+/* Grouped feed */
+.fx-alerts__groups {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--fx-sp-3);
+}
+.fx-alerts__group {
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border);
+  border-radius: var(--fx-r-2);
+  overflow: hidden;
+}
+.fx-alerts__group.is-pinned {
+  border-left: 3px solid #d4af37;
+}
+.fx-alerts__group.is-settled {
+  opacity: 0.85;
+}
+.fx-alerts__group-head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--fx-sp-3);
+  align-items: center;
+  padding: var(--fx-sp-2) var(--fx-sp-3);
+  background: var(--fx-bg-0);
+  border-bottom: 1px solid var(--fx-border-soft);
+}
+.fx-alerts__race {
+  display: flex;
+  align-items: baseline;
+  gap: var(--fx-sp-1);
+}
+.fx-alerts__race-time {
+  font-family: var(--fx-font-mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fx-ink-1);
+}
+.fx-alerts__race-course {
+  font-size: 13px;
+  color: var(--fx-ink-2);
+  font-weight: 600;
+}
+.fx-alerts__pinned {
+  color: #d4af37;
+  font-size: 14px;
+}
+.fx-alerts__settled {
+  font-family: var(--fx-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  padding: 2px 6px;
+  border-radius: var(--fx-r-1);
+  background: var(--fx-bg-1);
+  color: var(--fx-ink-3);
+}
+.fx-alerts__race-meta {
+  display: flex;
+  gap: var(--fx-sp-1);
+  align-items: baseline;
+  min-width: 0;
+  color: var(--fx-ink-3);
+  font-size: 12px;
+}
+.fx-alerts__race-name {
+  color: var(--fx-ink-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.fx-alerts__race-links a {
+  color: var(--fx-fox);
+  text-decoration: none;
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid var(--fx-fox-ring);
+  border-radius: var(--fx-r-1);
+}
+.fx-alerts__race-links a:hover {
+  background: rgba(255,152,0,0.08);
+}
+
+.fx-alerts__signals {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.fx-alerts__signal {
+  display: grid;
+  grid-template-columns: 82px minmax(0, 1fr) auto;
+  gap: var(--fx-sp-3);
+  padding: var(--fx-sp-2) var(--fx-sp-3);
+  border-top: 1px solid var(--fx-border-soft);
+}
+.fx-alerts__signal:first-child { border-top: 0; }
+.fx-alerts__signal--strong { border-left: 3px solid #f08080; }
+.fx-alerts__signal--medium { border-left: 3px solid var(--fx-fox); }
+.fx-alerts__signal--weak   { border-left: 3px solid var(--fx-ink-3); }
+.fx-alerts__chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+.fx-alerts__chip-kind {
+  display: inline-block;
+  padding: 3px 6px;
+  background: var(--fx-bg-0);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--fx-ink-1);
+  font-weight: 600;
+}
+.fx-alerts__chip-strength {
+  font-family: var(--fx-font-mono);
+  font-size: 9px;
+  color: var(--fx-ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.fx-alerts__body { min-width: 0; }
+.fx-alerts__signal-title {
+  margin: 0 0 3px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fx-ink-1);
+  line-height: 1.35;
+}
+.fx-alerts__signal-desc {
+  margin: 0 0 4px;
+  font-size: 12px;
+  color: var(--fx-ink-2);
+  line-height: 1.45;
+}
+.fx-alerts__signal-runner {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--fx-ink-3);
+}
+.fx-alerts__signal-runner a {
+  color: var(--fx-fox);
+  text-decoration: none;
+  border-bottom: 1px dashed transparent;
+}
+.fx-alerts__signal-runner a:hover { border-bottom-color: var(--fx-fox-ring); }
+.fx-alerts__signal-time {
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  color: var(--fx-ink-3);
+  white-space: nowrap;
+}
+.fx-alerts__evidence {
+  margin: 6px 0 0;
+  padding: 0;
+}
+.fx-alerts__evidence summary {
+  cursor: pointer;
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+  padding: 3px 0;
+}
+.fx-alerts__evidence summary:hover { color: var(--fx-fox); }
+.fx-alerts__evidence-rows {
+  margin: 4px 0 0;
+  padding: 6px 8px;
+  background: var(--fx-bg-0);
+  border-radius: var(--fx-r-1);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.fx-alerts__evidence-row {
+  display: grid;
+  grid-template-columns: minmax(100px, 30%) 1fr;
+  gap: var(--fx-sp-1);
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+}
+.fx-alerts__evidence-row dt { color: var(--fx-ink-3); margin: 0; }
+.fx-alerts__evidence-row dd { color: var(--fx-ink-1); margin: 0; overflow-wrap: anywhere; }
+.fx-alerts__evidence-mask {
+  margin: 6px 0 0;
+  padding: 6px 8px;
+  background: rgba(255,152,0,0.06);
+  border: 1px solid var(--fx-fox-ring);
+  border-radius: var(--fx-r-1);
+  font-size: 11px;
+}
+.fx-alerts__evidence-mask a {
+  color: var(--fx-fox);
+  text-decoration: none;
+  font-family: var(--fx-font-mono);
+}
+
+/* Empty state */
+.fx-alerts__empty {
+  padding: var(--fx-sp-4) var(--fx-sp-3);
+  background: var(--fx-bg-1);
+  border: 1px dashed var(--fx-border);
+  border-radius: var(--fx-r-2);
+  text-align: center;
+}
+.fx-alerts__empty-title {
+  margin: 0 0 var(--fx-sp-1);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--fx-ink-1);
+}
+.fx-alerts__empty-body {
+  margin: 0;
+  color: var(--fx-ink-3);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.fx-alerts__empty-body a { color: var(--fx-fox); text-decoration: none; }
+.fx-alerts__empty-body a:hover { text-decoration: underline; }
+
+.fx-alerts__footnote {
+  margin: var(--fx-sp-3) 0 0;
+  padding: var(--fx-sp-2) 0 0;
+  border-top: 1px dashed var(--fx-border-soft);
+  font-size: 11px;
+  color: var(--fx-ink-3);
+  text-align: center;
+}
+.fx-alerts__footnote a { color: var(--fx-fox); text-decoration: none; }
+
+/* Mobile — stack filters, tighten group cards */
+@media (max-width: 720px) {
+  .fx-alerts__header {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  .fx-alerts__counts {
+    padding-top: var(--fx-sp-1);
+    border-top: 1px solid var(--fx-border-soft);
+    justify-content: space-between;
+  }
+  .fx-alerts__filters {
+    grid-template-columns: 1fr;
+    padding: var(--fx-sp-2);
+    gap: var(--fx-sp-2);
+  }
+  .fx-alerts__group-head {
+    grid-template-columns: 1fr;
+    gap: var(--fx-sp-1);
+    padding: var(--fx-sp-2);
+  }
+  .fx-alerts__race-links { justify-self: start; }
+  .fx-alerts__signal {
+    grid-template-columns: 68px 1fr;
+    gap: var(--fx-sp-2);
+    padding: var(--fx-sp-2);
+  }
+  .fx-alerts__signal-time {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: 2px;
+  }
+}
+
+
+/* ============================================================
+ * FS-PR-19 — Settings page (/fox-signals/settings/)
+ *
+ * Two-column form on desktop, single stack on mobile. Groups
+ * (Alerts / Display) are fieldset cards with the shared editorial
+ * legend + help + input treatment.
+ * ============================================================ */
+
+.fx-settings {
+  max-width: 780px;
+  margin: 0 auto;
+}
+.fx-settings__header {
+  padding-bottom: var(--fx-sp-3);
+  margin-bottom: var(--fx-sp-3);
+  border-bottom: 1px solid var(--fx-border);
+}
+.fx-settings__eyebrow {
+  margin: 0 0 4px;
+  font-family: var(--fx-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fx-ink-3);
+}
+.fx-settings__title {
+  margin: 0 0 var(--fx-sp-1);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--fx-ink-1);
+  line-height: 1.15;
+}
+.fx-settings__deck {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 14px;
+  color: var(--fx-ink-2);
+  line-height: 1.5;
+}
+.fx-settings__flash {
+  margin: 0 0 var(--fx-sp-3);
+  padding: 10px 14px;
+  background: rgba(103, 224, 136, 0.08);
+  border: 1px solid rgba(103, 224, 136, 0.4);
+  border-radius: var(--fx-r-1);
+  color: #67e088;
+  font-family: var(--fx-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+.fx-settings__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fx-sp-3);
+}
+.fx-settings__group {
+  margin: 0;
+  padding: var(--fx-sp-3);
+  background: var(--fx-bg-1);
+  border: 1px solid var(--fx-border);
+  border-radius: var(--fx-r-2);
+}
+.fx-settings__legend {
+  padding: 0 6px;
+  font-family: var(--fx-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fx-ink-2);
+}
+.fx-settings__field {
+  margin: var(--fx-sp-2) 0;
+  padding: 0;
+  border: 0;
+}
+.fx-settings__field:first-of-type { margin-top: 0; }
+.fx-settings__field:last-of-type  { margin-bottom: 0; }
+.fx-settings__label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fx-ink-1);
+  margin: 0 0 3px;
+}
+.fx-settings__help {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--fx-ink-3);
+  line-height: 1.4;
+  max-width: 60ch;
+}
+.fx-settings__input {
+  display: block;
+  min-width: 220px;
+  padding: 8px 10px;
+  background: var(--fx-bg-0);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  color: var(--fx-ink-1);
+  font-family: inherit;
+  font-size: 13px;
+}
+.fx-settings__input:focus {
+  outline: none;
+  border-color: var(--fx-fox);
+  box-shadow: 0 0 0 2px var(--fx-fox-ring);
+}
+.fx-settings__kinds {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.fx-settings__kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 9px;
+  background: var(--fx-bg-0);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  font-size: 11px;
+  color: var(--fx-ink-2);
+  cursor: pointer;
+  user-select: none;
+}
+.fx-settings__kind input {
+  margin: 0;
+  accent-color: var(--fx-fox);
+}
+.fx-settings__kind.is-active {
+  color: var(--fx-fox);
+  border-color: var(--fx-fox-ring);
+  background: rgba(255,152,0,0.06);
+}
+.fx-settings__field--toggle .fx-settings__toggle {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--fx-bg-0);
+  border: 1px solid var(--fx-border-soft);
+  border-radius: var(--fx-r-1);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--fx-ink-1);
+  max-width: 460px;
+}
+.fx-settings__toggle input {
+  margin: 3px 0 0;
+  accent-color: var(--fx-fox);
+}
+.fx-settings__toggle em {
+  display: block;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--fx-ink-3);
+  margin-top: 2px;
+}
+
+.fx-settings__actions {
+  display: flex;
+  gap: var(--fx-sp-2);
+  align-items: center;
+  padding-top: var(--fx-sp-1);
+}
+.fx-settings__submit {
+  padding: 10px 18px;
+  background: var(--fx-fox);
+  color: #fff;
+  border: 0;
+  border-radius: var(--fx-r-1);
+  font-family: var(--fx-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.fx-settings__submit:hover { filter: brightness(1.08); }
+.fx-settings__cancel {
+  padding: 10px 12px;
+  color: var(--fx-ink-3);
+  font-size: 12px;
+  text-decoration: none;
+}
+.fx-settings__cancel:hover { color: var(--fx-fox); }
+
+.fx-settings__footnote {
+  margin: var(--fx-sp-3) 0 0;
+  padding: var(--fx-sp-2) 0 0;
+  border-top: 1px dashed var(--fx-border-soft);
+  font-size: 11px;
+  color: var(--fx-ink-3);
+  text-align: center;
+}
+
+/* Mobile — soften padding, keep inputs full-width */
+@media (max-width: 720px) {
+  .fx-settings__group { padding: var(--fx-sp-2); }
+  .fx-settings__input,
+  .fx-settings__field--toggle .fx-settings__toggle {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+  .fx-settings__actions { flex-direction: column; align-items: stretch; }
+  .fx-settings__submit { width: 100%; }
+  .fx-settings__cancel { text-align: center; }
+}

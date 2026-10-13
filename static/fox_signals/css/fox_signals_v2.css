@@ -1,0 +1,948 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Fox Signals, design v2
+   ───────────────────────────────────────────────────────────────────
+   The shell wears the meeting page's design: it loads meeting.css
+   first and carries its body class, so the paper, the ink, the gold,
+   the masthead and the filter chips are that stylesheet's. This one
+   adds what is Fox Signals' own:
+
+     1. the frame and the masthead's two sizes
+     2. the room pills, pinned under the navigation
+     3. the other rooms: the terminal's markup, on the paper
+     4. the Board: tools, list, rows
+     5. the Board at laptop and phone widths
+
+   The wrapper is .fxv-wrap, not .mf-wrap: that one recolours every
+   link inside it, and the v1 rooms that still render here have link
+   colours of their own.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── 1. Frame and masthead ───────────────────────────────────────── */
+
+/* The Board reads best in a 1280px column, so on these pages the
+   site's frame (navigation, tour strip, footer) takes that column,
+   as it takes the meeting page's 1520px there. */
+body.page-fox-signals {
+  --max-w: 1280px;
+  --fxv-gutter: 24px;
+  --page-gutter: var(--fxv-gutter);
+}
+
+.fxv-wrap {
+  color-scheme: light;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--fxv-gutter) 56px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--mfr-ink);
+}
+
+.fxv-wrap :focus-visible {
+  outline: 2px solid var(--mfr-gold-ink);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* :where() keeps this under every rule below that spaces a paragraph. */
+:where(.fxv-wrap) p { margin: 0; }
+
+/* The Board's masthead is the LLaMa Index's: the meeting page's,
+   shorter. */
+.fxv-hero.mf-hero {
+  min-height: 0;
+  padding-top: 40px;
+  padding-bottom: 28px;
+}
+
+/* The rooms that keep their own heading get a band, not a title. */
+.fxv-hero--slim.mf-hero {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 4px 16px;
+  padding-top: 20px;
+  padding-bottom: 18px;
+}
+
+.fxv-hero--slim .mf-hero__eyebrow { margin-bottom: 0; }
+
+.fxv-hero__room {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--mfr-white);
+  text-shadow: 0 2px 22px rgb(7 9 16 / 80%);
+}
+
+.fxv-foot {
+  margin-top: 28px;
+  font-size: 12.5px;
+  text-align: center;
+  color: var(--mfr-ink-3);
+}
+
+/* ── 2. Room pills ───────────────────────────────────────────────── */
+
+.fxv-nav {
+  position: sticky;
+  top: var(--mfr-top);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 calc(-1 * var(--fxv-gutter));
+  padding: 10px var(--fxv-gutter);
+  background: var(--mfr-paper);
+  border-bottom: 1px solid var(--mfr-rule);
+}
+
+/* The band is the window's width; its pills keep the column. */
+.fxv-nav::before {
+  content: "";
+  position: absolute;
+  inset: 0 -100vmax -1px;
+  z-index: -1;
+  background: var(--mfr-paper);
+  border-bottom: 1px solid var(--mfr-rule);
+}
+
+.fxv-nav__rooms {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.fxv-nav__rooms::-webkit-scrollbar { display: none; }
+
+/* A chip that is a link: the meeting page's chips are buttons, and
+   say they are chosen with aria-pressed, which a link cannot carry. */
+.fxv-wrap a.mfr-filter,
+.fxv-wrap summary.mfr-filter {
+  flex: none;
+  text-decoration: none;
+  color: var(--mfr-ink-2);
+}
+
+.fxv-wrap .mfr-filter.fxv-on {
+  background: var(--mfr-ink);
+  border-color: var(--mfr-ink);
+  font-weight: 700;
+  color: var(--mfr-white);
+}
+
+.fxv-wrap .mfr-filter.fxv-on .mfr-filter__n { color: rgb(255 255 255 / 78%); }
+.fxv-wrap .mfr-filter.fxv-on .mfr-i { color: var(--mfr-gold); }
+
+@media (hover: hover) {
+  .fxv-wrap a.mfr-filter:not(.fxv-on):hover,
+  .fxv-wrap summary.mfr-filter:not(.fxv-on):hover {
+    background: var(--mfr-gold-wash);
+    border-color: var(--mfr-gold-line);
+    color: var(--mfr-ink);
+  }
+}
+
+.fxv-pill { font-size: 13.5px; }
+
+/* A members' room, to a visitor: a padlock drawn in two boxes. */
+.fxv-pill__lock {
+  position: relative;
+  width: 9px;
+  height: 7px;
+  margin: 4px 0 0 1px;
+  border-radius: 2px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.fxv-pill__lock::before {
+  content: "";
+  position: absolute;
+  left: 1.5px;
+  bottom: 6px;
+  width: 6px;
+  height: 5px;
+  border: 1.5px solid currentColor;
+  border-bottom: 0;
+  border-radius: 3px 3px 0 0;
+  box-sizing: border-box;
+}
+
+.fxv-nav__live {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--mfr-green-dark);
+  white-space: nowrap;
+}
+
+.fxv-nav__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mfr-green);
+}
+
+.fxv-nav__time {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--mfr-ink-3);
+}
+
+/* While the next page is fetched (fox_v2_turn.js). */
+.fxv-turning .fxv-wrap { cursor: progress; }
+
+/* ── 3. The other rooms ──────────────────────────────────────────── */
+
+/* Stable, Race Trace, Alerts and Settings keep the terminal's markup
+   and its stylesheet (fox_signals_shell.css). That stylesheet draws
+   everything from the palette of custom properties on .fx-shell, so
+   the rooms are put on the paper by handing it the meeting page's
+   palette here: surfaces, ink, the accent (the terminal's orange is
+   the site's gold), the two price colours, radii and the typeface.
+   What follows the palette is the short list of things the terminal
+   wrote down as literal colours, or sized for a dense dark screen.
+
+   .fx-shell--nudge is the sign-up prompt's wrapper: it takes the same
+   palette and draws nothing itself. */
+.fx-shell.fx-shell--v2,
+.fx-shell.fx-shell--nudge {
+  color-scheme: light;
+
+  --fx-bg-0: var(--mfr-paper);
+  --fx-bg-1: var(--mfr-card);
+  --fx-bg-2: var(--mfr-warm);
+  --fx-bg-3: var(--mfr-gold-wash);
+  --fx-border: var(--mfr-rule-2);
+  --fx-border-soft: var(--mfr-rule);
+
+  --fx-ink-1: var(--mfr-ink);
+  --fx-ink-2: var(--mfr-ink-2);
+  --fx-ink-3: var(--mfr-ink-3);
+  --fx-ink-mute: #7b8089;
+
+  --fx-fox: var(--mfr-gold-ink);
+  --fx-fox-soft: var(--mfr-gold-wash);
+  --fx-fox-ring: var(--mfr-gold-line);
+
+  --fx-up: var(--mfr-green-dark);
+  --fx-up-soft: var(--mfr-green-wash);
+  --fx-down: #a93226;
+  --fx-down-soft: var(--mfr-red-wash);
+  --fx-neutral: var(--mfr-ink-3);
+
+  --fx-strong: var(--mfr-gold-ink);
+  --fx-medium: #46557a;
+  --fx-weak: #7b8089;
+
+  --fx-font-body: var(--font-body);
+  --fx-font-mono: var(--font-body);
+
+  --fx-r-1: 6px;
+  --fx-r-2: 10px;
+  --fx-r-3: 14px;
+}
+
+.fx-shell.fx-shell--nudge { display: contents; }
+
+.fx-shell.fx-shell--v2 {
+  display: block;
+  min-height: 50vh;
+  background: none;
+  font-size: 14px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: normal;
+}
+
+.fx-shell.fx-shell--v2 .fx-shell__main { padding: 20px 0 0; }
+.fx-shell.fx-shell--v2 .fx-shell__container { max-width: none; padding: 0; }
+
+.fx-shell.fx-shell--v2 .fx-num,
+.fx-shell.fx-shell--v2 .fx-mono { letter-spacing: 0; }
+
+/* The masthead names the room: the body's own copy of the name is
+   kept for a screen reader and taken out of sight. */
+.fx-shell--v2 .fx-section-header__eyebrow,
+.fx-shell--v2 .fx-section-header__title,
+.fx-shell--v2 .fx-alerts__eyebrow,
+.fx-shell--v2 .fx-settings__eyebrow {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.fx-shell--v2 .fx-section-header {
+  justify-content: flex-end;
+  padding-bottom: 0;
+  margin-bottom: 14px;
+  border-bottom: 0;
+}
+
+/* Cards: the list is a white card with the Board's shadow. */
+.fx-shell--v2 .fx-board__grid,
+.fx-shell--v2 .fx-hub__grid,
+.fx-shell--v2 .fx-card {
+  border-radius: 14px;
+  box-shadow: var(--mfr-shadow-1);
+}
+
+/* On the paper a filled accent takes white words, where the terminal
+   put near-black on orange. */
+.fx-shell--v2 .fx-board__filter-trigger-count,
+.fx-shell--nudge .fx-nudge__primary,
+.fx-shell--v2 .fx-alerts__submit,
+.fx-shell--v2 .fx-settings__submit {
+  color: var(--mfr-white);
+}
+
+.fx-shell--nudge .fx-nudge__primary:hover,
+.fx-shell--nudge .fx-nudge__primary:focus-visible {
+  background: var(--mfr-ink);
+}
+
+.fx-shell--nudge .fx-nudge__panel {
+  border-radius: 16px;
+  box-shadow: var(--mfr-shadow-3);
+}
+
+/* Gold, silver and bronze as words: the metals are fills on this
+   page, and too pale to read as text. */
+.fx-shell--v2 [class*="--pos-1"] [class*="-pos"],
+.fx-shell--v2 [class*="--win"] [class*="-pos"] { color: var(--mfr-gold-ink); }
+.fx-shell--v2 [class*="--pos-2"] [class*="-pos"] { color: #5c6470; }
+.fx-shell--v2 [class*="--pos-3"] [class*="-pos"] { color: #8a5320; }
+
+.fx-shell--v2 .fx-outcome--fired,
+.fx-shell--v2 .fx-rtrace__hero-stat--down .fx-rtrace__hero-stat-val { color: var(--mfr-green-dark); }
+.fx-shell--v2 .fx-outcome--fired { background: var(--mfr-green-wash); }
+.fx-shell--v2 .fx-outcome--missed,
+.fx-shell--v2 .fx-rtrace__hero-stat--up .fx-rtrace__hero-stat-val { color: #a93226; }
+.fx-shell--v2 .fx-outcome--missed { background: var(--mfr-red-wash); }
+
+/* The chart gives each runner a hue. The terminal draws it at 62%
+   lightness, for a dark ground; on the paper the same hue is deeper,
+   or the yellows and greens are lost. */
+.fx-shell--v2 .fx-tchart__line { stroke: hsl(var(--hue, 30) 72% 40%); }
+.fx-shell--v2 .fx-tchart__ai-line { stroke: hsl(var(--hue, 30) 60% 52%); }
+.fx-shell--v2 .fx-tchart__readout-cell { border-left-color: hsl(var(--hue, 30) 72% 40%); }
+.fx-shell--v2 .fx-tchart__legend-swatch,
+.fx-shell--v2 .fx-tchart__podium-swatch { background: hsl(var(--hue, 30) 72% 40%); }
+.fx-shell--v2 .fx-tchart__line.fx-tchart__line--pos-1 { stroke: #b8901a; }
+.fx-shell--v2 .fx-rtrace__chart-ai { stroke: #1f6fa8; }
+.fx-shell--v2 .fx-settings__flash { color: var(--mfr-green-dark); }
+.fx-shell--v2 .fx-alerts__signal--strong { border-left-color: var(--mfr-gold); }
+
+.fx-shell--v2 .fx-alerts__pinned { color: var(--mfr-gold-ink); }
+
+/* Chips are the Board's: round, and not spaced-out capitals. */
+.fx-shell--v2 .fx-chip {
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* The Board's rows, where a room lists races (the Stable). */
+.fx-shell--v2 .fxv-list { margin-bottom: 20px; }
+
+/* The terminal's smallest labels are 9 and 10px: here, 11px. */
+.fx-shell--v2 [class*="fx-alerts__"][class*="-lab"],
+.fx-shell--v2 [class*="fx-alerts__chip-"],
+.fx-shell--v2 .fx-alerts__signal-time,
+.fx-shell--v2 .fx-alerts legend,
+.fx-shell--v2 .fx-stable__section-title,
+.fx-shell--v2 [class*="fx-rtrace__"][class*="-lab"],
+.fx-shell--v2 .fx-rtrace__conn-role,
+.fx-shell--v2 .fx-rtrace__card-eyebrow,
+.fx-shell--v2 .fx-rtrace__fit-legend,
+.fx-shell--v2 .fx-trace__back,
+.fx-shell--v2 .fx-trace__runners-head .fx-trace__rcol,
+.fx-shell--v2 [class*="fx-tchart__"][class*="lab"],
+.fx-shell--v2 .fx-tchart__kbd,
+.fx-shell--v2 .fx-tchart__ai-toggle,
+.fx-shell--v2 .fx-tchart__live-age,
+.fx-shell--v2 [class*="fx-vedge__"][class*="lab"] { font-size: 11px; }
+
+/* ── 4. The Board ────────────────────────────────────────────────── */
+
+.fxv-board { padding-top: 16px; }
+
+.fxv-tools {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.fxv-tools__row {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.fxv-more { position: static; }
+
+.fxv-more > summary {
+  list-style: none;
+  user-select: none;
+}
+
+.fxv-more > summary::-webkit-details-marker { display: none; }
+.fxv-more[open] > summary .mfr-i { transform: rotate(180deg); }
+
+/* The sheet hangs from the row, under the chips. */
+.fxv-more__sheet {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 30;
+  display: grid;
+  gap: 10px;
+  width: min(520px, 100%);
+  padding: 16px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule-2);
+  border-radius: 14px;
+  box-shadow: var(--mfr-shadow-3);
+}
+
+.fxv-more__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.fxv-more__label {
+  width: 86px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--mfr-ink-3);
+}
+
+.fxv-clear {
+  padding: 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mfr-gold-ink);
+  text-underline-offset: 3px;
+}
+
+.fxv-sort { margin-left: auto; }
+
+.fxv-select {
+  height: 36px;
+  max-width: 100%;
+  padding: 0 34px 0 12px;
+  background:
+    linear-gradient(45deg, transparent 50%, var(--mfr-ink-2) 50%) right 17px center / 6px 6px no-repeat,
+    linear-gradient(-45deg, transparent 50%, var(--mfr-ink-2) 50%) right 11px center / 6px 6px no-repeat,
+    var(--mfr-card);
+  border: 1.5px solid var(--mfr-rule-2);
+  border-radius: 10px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--mfr-ink);
+  appearance: none;
+  cursor: pointer;
+}
+
+/* The list is one card; a race is a row of it. */
+.fxv-list {
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 14px;
+  box-shadow: var(--mfr-shadow-1);
+  overflow: hidden;
+}
+
+.fxv-list__head,
+.fxv-row {
+  display: grid;
+  grid-template-columns:
+    28px                    /* star */
+    74px                    /* time */
+    minmax(0, 1.5fr)        /* race */
+    minmax(0, 1.2fr)        /* pick */
+    104px                   /* price, result */
+    208px                   /* conviction */
+    84px;                   /* racecard */
+  align-items: center;
+  column-gap: 16px;
+  padding: 13px 18px;
+}
+
+.fxv-list__head {
+  padding-block: 9px;
+  background: var(--mfr-warm);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--mfr-ink-3);
+}
+
+.fxv-row {
+  position: relative;
+  border-top: 1px solid var(--mfr-rule);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The level is on the row's edge as well as in words. */
+/* The finished races, folded: a band that opens them. */
+.fxv-done__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 18px;
+  border-top: 1px solid var(--mfr-rule);
+  background: var(--mfr-paper);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mfr-ink-2);
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+}
+
+.fxv-done__bar::-webkit-details-marker { display: none; }
+
+.fxv-done__won {
+  padding: 1px 8px;
+  background: var(--mfr-green-wash);
+  border: 1px solid var(--mfr-green-line);
+  border-radius: 999px;
+  font-size: 11.5px;
+  color: var(--mfr-green-dark);
+}
+
+.fxv-done__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  color: var(--mfr-gold-ink);
+}
+
+.fxv-done__hide,
+.fxv-done[open] .fxv-done__show { display: none; }
+.fxv-done[open] .fxv-done__hide { display: inline; }
+.fxv-done[open] .fxv-done__bar .mfr-i { transform: rotate(180deg); }
+
+@media (hover: hover) {
+  .fxv-done__bar:hover { background: var(--mfr-warm); }
+}
+
+.fxv-row--high { box-shadow: inset 3px 0 0 var(--mfr-green); }
+.fxv-row--medium { box-shadow: inset 3px 0 0 var(--mfr-gold); }
+
+@media (hover: hover) {
+  .fxv-row:hover { background: var(--mfr-warm); }
+}
+
+.fxv-row__link {
+  font-weight: 700;
+  color: var(--mfr-ink);
+  text-decoration: none;
+}
+
+/* The course is the row's link: its box is the row. */
+.fxv-row__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.fxv-row__link:focus-visible { outline: none; }
+
+.fxv-row:has(.fxv-row__link:focus-visible) {
+  outline: 2px solid var(--mfr-gold-ink);
+  outline-offset: -2px;
+}
+
+/* What can be pressed on the row sits above that box. */
+.fxv-star,
+.fxv-row__card,
+.fxv-conv__cta {
+  position: relative;
+  z-index: 1;
+}
+
+.fxv-star {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  font-size: 17px;
+  color: var(--mfr-silver-line);
+  cursor: pointer;
+}
+
+.fxv-star.fx-board__star--on { color: var(--mfr-gold); }
+
+@media (hover: hover) {
+  .fxv-star:hover { background: var(--mfr-gold-wash); color: var(--mfr-gold-ink); }
+}
+
+.fxv-row__time {
+  display: grid;
+  justify-items: start;
+  gap: 3px;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.fxv-row__next {
+  padding: 1px 7px;
+  background: var(--mfr-green-wash);
+  border: 1px solid var(--mfr-green-line);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--mfr-green-dark);
+  white-space: nowrap;
+}
+
+.fxv-row__race,
+.fxv-row__pick { min-width: 0; }
+
+.fxv-row__course { font-size: 14.5px; }
+
+.fxv-row__facts {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 12.5px;
+  color: var(--mfr-ink-3);
+}
+
+.fxv-row__name {
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--mfr-ink-2);
+}
+
+.fxv-row__horse {
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+.fxv-row__sr {
+  margin-left: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mfr-ink-3);
+  white-space: nowrap;
+}
+
+.fxv-row__signals {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.fxv-chip {
+  padding: 1px 8px;
+  background: var(--mfr-warm);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--mfr-ink-2);
+  white-space: nowrap;
+}
+
+.fxv-chip--lead {
+  background: var(--mfr-gold-wash);
+  border-color: var(--mfr-gold-line);
+  color: var(--mfr-gold-ink);
+}
+
+.fxv-row__more {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--mfr-ink-3);
+}
+
+.fxv-row__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+}
+
+.fxv-price {
+  padding: 3px 9px;
+  background: var(--mfr-gold-wash);
+  border: 1px solid var(--mfr-gold-line);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.fxv-row__none { color: var(--mfr-ink-3); }
+
+.fxv-result {
+  padding: 1px 8px;
+  background: var(--mfr-warm);
+  border: 1px solid var(--mfr-rule-2);
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--mfr-ink-2);
+  white-space: nowrap;
+}
+
+.fxv-result--won {
+  background: var(--mfr-green-wash);
+  border-color: var(--mfr-green-line);
+  color: var(--mfr-green-dark);
+}
+
+.fxv-conv__top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fxv-conv__pct {
+  min-width: 26px;
+  font-size: 19px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.fxv-conv__bar {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--mfr-rule);
+  overflow: hidden;
+}
+
+.fxv-conv__fill {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--mfr-silver-line);
+}
+
+.fxv-row--high .fxv-conv__fill { background: var(--mfr-green); }
+.fxv-row--medium .fxv-conv__fill { background: var(--mfr-gold); }
+
+.fxv-conv__note {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--mfr-ink-3);
+}
+
+/* A visitor's: the figure is dotted out, the bar is hatched, and the
+   prompt takes the note's place. */
+.fxv-conv--masked .fxv-conv__pct {
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  color: var(--mfr-ink-3);
+}
+
+.fxv-conv--masked .fxv-conv__bar {
+  background: repeating-linear-gradient(45deg, var(--mfr-rule) 0 4px, transparent 4px 8px);
+}
+
+.fxv-conv__cta {
+  display: inline-block;
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mfr-gold-ink);
+  text-underline-offset: 3px;
+}
+
+.fxv-row__links {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+}
+
+.fxv-row__state {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--mfr-ink-3);
+}
+
+.fxv-row__card {
+  padding: 3px 10px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule-2);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--mfr-ink-2);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+@media (hover: hover) {
+  .fxv-row__card:hover {
+    background: var(--mfr-gold-wash);
+    border-color: var(--mfr-gold-line);
+    color: var(--mfr-ink);
+  }
+}
+
+/* A race that has gone: on the paper, in the quieter ink. */
+.fxv-row--off { background: var(--mfr-paper); }
+
+.fxv-row--off .fxv-row__time,
+.fxv-row--off .fxv-row__link,
+.fxv-row--off .fxv-row__horse,
+.fxv-row--off .fxv-conv__pct { color: var(--mfr-ink-2); }
+
+.fxv-row--off .fxv-price {
+  background: var(--mfr-card);
+  border-color: var(--mfr-rule-2);
+  color: var(--mfr-ink-2);
+}
+
+.fxv-row--off .fxv-conv__fill { background: var(--mfr-silver-line); }
+
+.fxv-empty {
+  padding: 48px 24px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 14px;
+  text-align: center;
+}
+
+.fxv-empty__title {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.fxv-empty__copy {
+  margin-top: 6px;
+  color: var(--mfr-ink-2);
+}
+
+.fxv-empty a { color: var(--mfr-gold-ink); }
+
+/* ── 5. Laptop and phone ─────────────────────────────────────────── */
+
+/* Under 1080px the pick moves under the race, so both keep their
+   words: a race is two lines. */
+@media (max-width: 1079px) {
+  .fxv-list__head { display: none; }
+
+  .fxv-row {
+    grid-template-columns: 28px 64px minmax(0, 1fr) auto 190px;
+    grid-template-areas:
+      "star time race price conv"
+      "star time pick links conv";
+    row-gap: 6px;
+    column-gap: 14px;
+    align-items: start;
+  }
+
+  .fxv-star { grid-area: star; }
+  .fxv-row__time { grid-area: time; padding-top: 3px; }
+  .fxv-row__race { grid-area: race; }
+  .fxv-row__pick { grid-area: pick; }
+  .fxv-row__price { grid-area: price; justify-content: flex-end; }
+  .fxv-row__conv { grid-area: conv; }
+  .fxv-row__links { grid-area: links; grid-auto-flow: column; align-items: center; gap: 8px; }
+}
+
+/* A phone: a card a race. Time, course and conviction on the first
+   line; the race; then the pick with its price. */
+@media (max-width: 719px) {
+  body.page-fox-signals { --fxv-gutter: 14px; }
+
+  .fxv-hero.mf-hero { padding-top: 28px; padding-bottom: 22px; }
+  .fxv-hero--slim.mf-hero { justify-content: flex-start; padding-top: 16px; padding-bottom: 14px; }
+
+  .fxv-nav { gap: 8px; padding-block: 8px; }
+  .fxv-nav__time { display: none; }
+
+  /* The meetings are one line that scrolls sideways. */
+  .fxv-tools__row--scroll {
+    flex-wrap: nowrap;
+    margin: 0 calc(-1 * var(--fxv-gutter));
+    padding: 0 var(--fxv-gutter);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .fxv-tools__row--scroll::-webkit-scrollbar { display: none; }
+
+  .fxv-sort { margin-left: 0; flex: 1 1 150px; }
+  .fxv-star { align-self: start; }
+  .fxv-select { width: 100%; }
+  .fxv-more__label { width: 100%; }
+
+  /* Three lines: the race and its time; the pick and its price;
+     conviction with Racecard beside it. */
+  .fxv-row {
+    grid-template-columns: 26px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "star race  time"
+      "star pick  price"
+      "star conv  links";
+    row-gap: 6px;
+    column-gap: 10px;
+    padding: 12px 14px 12px 10px;
+  }
+
+  .fxv-row__links { align-self: end; }
+  .fxv-row__state { display: none; }
+  .fxv-row__facts { font-size: 12px; }
+
+  /* A sponsor's title can run to four lines here: two, then an ellipsis. */
+  .fxv-row__name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  /* A visitor's conviction is the prompt alone: the dots and the
+     hatched bar are a line the card does not need. */
+  .fxv-conv--masked .fxv-conv__top { display: none; }
+  .fxv-conv--masked .fxv-conv__cta { margin-top: 0; }
+  .fxv-done__bar { padding-inline: 14px; }
+
+  .fxv-row__time { justify-items: end; padding-top: 0; }
+  .fxv-row__facts { display: block; margin-left: 0; }
+  .fxv-conv__note { margin-top: 3px; }
+}
+
+/* Under a finger: 44px to press. */
+@media (pointer: coarse) {
+  .fxv-star { width: 36px; height: 44px; margin-left: -6px; }
+  .fxv-row__card { padding-block: 9px; }
+  .fxv-conv__cta { padding-block: 8px; }
+  .fxv-select { height: 44px; }
+}

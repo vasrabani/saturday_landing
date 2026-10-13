@@ -18,12 +18,17 @@ const BASELINE_FILE = join(ROOT, 'tools', 'quality-baseline.json');
 // Folders this repo owns. static/races, letters, news and voting are
 // shared with other pages of the live site and treated as read-only, so
 // only reference checks look at them.
-const OWNED_DIRS = ['static/css', 'static/js', 'static/public', 'static/fonts', 'static/grid', 'static/meeting', 'static/llama'];
+const OWNED_DIRS = ['static/css', 'static/js', 'static/public', 'static/fonts', 'static/grid', 'static/meeting', 'static/llama', 'static/fox_signals'];
 const LANDING_IMAGE_DIR = 'static/public/img';
 // The pages the contractor works on. Every rule that reads "the page"
 // reads all of them, so a problem introduced on the trail or a meeting
 // page fails the run exactly as one on the landing page does.
-const ENTRY_PAGES = ['index.html', 'trail.html', 'meeting.html', 'meeting-upcoming.html', 'llama-index.html'];
+const ENTRY_PAGES = [
+  'index.html', 'trail.html', 'meeting.html', 'meeting-upcoming.html', 'llama-index.html',
+  // Fox Signals (tools/build-fox-signals.py).
+  'fox-board.html', 'fox-board-member.html', 'fox-race-trace.html', 'fox-race.html', 'fox-race-visitor.html',
+  'fox-race-replay.html', 'fox-runner.html', 'fox-alerts.html', 'fox-stable.html', 'fox-settings.html',
+];
 
 const IMAGE_BUDGET_BYTES = 300 * 1024;
 const RASTER_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.avif', '.gif']);
