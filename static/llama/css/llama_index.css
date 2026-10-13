@@ -1,0 +1,740 @@
+/* ═══════════════════════════════════════════════════════════════════
+   The LLaMa Index — every horse running on a day, A to Z
+   ───────────────────────────────────────────────────────────────────
+   The page wears the meeting page's design: it loads meeting.css
+   first and carries its body class, so the paper, the ink, the
+   masthead, the filter chips, the form's colours, Pick and the slip
+   are that stylesheet's. This one adds what is the index's own: the
+   tools (search, course, sort, filters, the A to Z), the list and its
+   rows.
+
+   A row is a .racecard__runner, so that the slip's scripts treat it as
+   one. meeting.css lays a runner out as a row of a race's table; the
+   index's row is its own grid, set here on .li-row, and its cells have
+   their own names (li-cell--*), so none of that table's cell rules
+   reach them.
+
+   Three layouts, chosen by the list's own width (a container query),
+   not the window's, because the docked slip takes room beside it:
+   a table from 970px, two lines a horse from 620px, a card under that.
+   ═══════════════════════════════════════════════════════════════════ */
+
+.li-wrap {
+  --li-tools: 148px;                 /* the pinned tools' height; llama_index.js measures it */
+  --li-pin: calc(var(--mfr-top) + var(--li-tools));
+}
+
+/* The tools are this page's pinned strip: the docked slip and the
+   toast, which meeting.css sets under the strip, go under them. */
+.mf-wrap.li-wrap { --mfr-strip: var(--li-tools); }
+
+/* ── The masthead: the meeting page's, shorter ───────────────────── */
+
+.li-hero.mf-hero { min-height: 0; padding-top: 40px; padding-bottom: 28px; }
+
+.li-days {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.li-day,
+.mf-wrap a.li-day {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 12px;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 999px;
+  color: var(--mfr-white);
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.li-day--today { border-color: var(--mfr-gold); }
+
+@media (hover: hover) {
+  .li-day:hover { background: rgb(255 255 255 / 12%); }
+}
+
+/* ── The tools: pinned under the navigation ──────────────────────── */
+
+.li-tools {
+  position: sticky;
+  top: var(--mfr-top);
+  z-index: 40;
+  display: grid;
+  gap: 10px;
+  margin: 0 -24px 14px;
+  padding: 12px 24px 10px;
+  background: var(--mfr-paper);
+  border-bottom: 1px solid var(--mfr-rule);
+}
+
+.li-tools__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.li-search {
+  position: relative;
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.li-search__icon {
+  position: absolute;
+  top: 50%;
+  left: 13px;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--mfr-ink-3);
+  border-radius: 50%;
+  translate: 0 -62%;
+  pointer-events: none;
+}
+
+.li-search__icon::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  bottom: -5px;
+  width: 7px;
+  height: 2px;
+  background: var(--mfr-ink-3);
+  border-radius: 2px;
+  rotate: 45deg;
+}
+
+.li-search__field {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px 0 40px;
+  background: var(--mfr-card);
+  border: 1.5px solid var(--mfr-rule-2);
+  border-radius: 10px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--mfr-ink);
+}
+
+.li-search__field::placeholder { color: var(--mfr-ink-3); }
+.li-search__field:focus { border-color: var(--mfr-ink); outline: none; }
+.mf-wrap .li-search__field:focus-visible { outline: 2px solid var(--mfr-gold-ink); outline-offset: 2px; }
+
+.li-select {
+  height: 38px;
+  max-width: 100%;
+  padding: 0 34px 0 12px;
+  background:
+    linear-gradient(45deg, transparent 50%, var(--mfr-ink-2) 50%) right 17px center / 6px 6px no-repeat,
+    linear-gradient(-45deg, transparent 50%, var(--mfr-ink-2) 50%) right 11px center / 6px 6px no-repeat,
+    var(--mfr-card);
+  border: 1.5px solid var(--mfr-rule-2);
+  border-radius: 10px;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--mfr-ink);
+  appearance: none;
+  cursor: pointer;
+}
+
+.li-readout {
+  margin-left: auto;
+  color: var(--mfr-ink-3);
+  font-size: 12.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* A filter with nothing to show: still there, stood back. */
+.li-tools .mfr-filter[data-li-none] {
+  opacity: 0.5;
+}
+
+/* The A to Z. One row that scrolls sideways where it does not fit. */
+.li-az {
+  display: flex;
+  gap: 2px;
+  margin: 0 -4px;
+  padding: 0 4px 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.li-az::-webkit-scrollbar { display: none; }
+.li-az[hidden] { display: none; }
+
+.li-az__l,
+.mf-wrap a.li-az__l {
+  flex: 1 0 auto;
+  display: grid;
+  place-items: center;
+  min-width: 28px;
+  height: 30px;
+  border-radius: 7px;
+  color: var(--mfr-ink);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.li-az__l--none,
+.li-az__l[data-li-off] { color: var(--mfr-rule-2); }
+
+.li-az__l[data-li-off] { pointer-events: none; }
+
+.li-az__l[aria-current="true"],
+.mf-wrap a.li-az__l[aria-current="true"] {
+  background: var(--mfr-ink);
+  color: var(--mfr-white);
+}
+
+@media (hover: hover) {
+  a.li-az__l:hover { background: var(--mfr-gold-wash); }
+}
+
+/* ── The list ────────────────────────────────────────────────────── */
+
+.li-main {
+  container: li / inline-size;
+  min-width: 0;
+}
+
+.li-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 14px;
+}
+
+/* The column heads, for the table only. */
+.li-head { display: none; }
+
+/* A letter: pinned under the tools while its horses pass. */
+.li-letter {
+  position: sticky;
+  top: var(--li-pin);
+  z-index: 5;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 16px;
+  background: var(--mfr-warm);
+  border-top: 1px solid var(--mfr-rule);
+  border-bottom: 1px solid var(--mfr-rule);
+  scroll-margin-top: var(--li-pin);
+}
+
+.li-letter:first-child {
+  border-top: 0;
+  border-radius: 13px 13px 0 0;
+}
+
+.li-letter__l {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--mfr-gold-ink);
+}
+
+.li-letter[hidden],
+.li-row[hidden] { display: none; }
+
+/* ── A horse ─────────────────────────────────────────────────────── */
+/* The card: the layout at its narrowest, and the base for the rest. */
+
+.li-list .li-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "horse  odds"
+    "signal signal"
+    "pick   pick";
+  gap: 10px 12px;
+  align-items: start;
+  margin: 0;
+  padding: 14px 16px;
+  border: 0;
+  border-top: 1px solid var(--mfr-rule);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  scroll-margin-top: calc(var(--li-pin) + 44px);
+  /* Six hundred of these: the browser lays out only the ones near the
+     window, and takes this height for the rest. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 150px;
+}
+
+.li-letter + .li-row { border-top: 0; }
+
+.li-cell { min-width: 0; }
+.li-cell--horse { grid-area: horse; display: flex; gap: 11px; align-items: flex-start; }
+.li-cell--odds { grid-area: odds; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.li-cell--signals { grid-area: signal; }
+.li-cell--pick { grid-area: pick; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+
+/* Behind Details on the card: who rides and trains it, the form, the
+   ratings and the comment. */
+.li-cell--conn,
+.li-cell--form,
+.li-cell--ratings,
+.li-cell--note { display: none; grid-column: 1 / -1; }
+
+.li-row[data-li-open="true"] .li-cell--conn,
+.li-row[data-li-open="true"] .li-cell--form,
+.li-row[data-li-open="true"] .li-cell--note { display: block; }
+.li-row[data-li-open="true"] .li-cell--ratings { display: flex; }
+
+.li-silk {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  background: var(--mfr-warm);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 8px;
+}
+
+.li-silk img,
+.li-silk svg {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.li-horse { min-width: 0; }
+
+.li-name,
+.mf-wrap a.li-name {
+  color: var(--mfr-ink);
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+@media (hover: hover) {
+  a.li-name:hover { text-decoration: underline; text-underline-offset: 3px; }
+}
+
+.li-tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: 2px;
+}
+
+.li-tag--fav { background: var(--mfr-gold); color: var(--mfr-ink); }
+.li-tag--nr { background: var(--mfr-warm); color: var(--mfr-ink-3); }
+
+.li-where {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 8px;
+  margin-top: 3px;
+  color: var(--mfr-ink-3);
+  font-size: 12.5px;
+}
+
+.li-race,
+.mf-wrap a.li-race {
+  color: var(--mfr-ink-2);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.li-race__time {
+  color: var(--mfr-ink);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (hover: hover) {
+  a.li-race:hover { text-decoration: underline; text-underline-offset: 3px; }
+}
+
+.li-where__of { white-space: nowrap; }
+
+/* Run: a chequered flag, as on the Fox Trail, and how it finished. */
+.li-result {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 7px 1px 5px;
+  background: var(--mfr-warm);
+  border-radius: 5px;
+  color: var(--mfr-ink-2);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.li-result::before {
+  content: "";
+  width: 11px;
+  height: 9px;
+  background: repeating-conic-gradient(var(--mfr-ink) 0 25%, var(--mfr-white) 0 50%) 0 0 / 6px 6px;
+  outline: 1px solid var(--mfr-ink);
+  outline-offset: -1px;
+}
+
+.li-result--won { background: var(--mfr-gold); color: var(--mfr-ink); }
+.li-result--placed { background: var(--mfr-gold-wash); color: var(--mfr-gold-ink); }
+
+/* Jockey and trainer */
+.li-conn {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.li-conn + .li-conn { margin-top: 2px; }
+
+.li-conn__k {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  background: var(--mfr-warm);
+  border-radius: 4px;
+  color: var(--mfr-ink-3);
+  font-size: 9.5px;
+  font-weight: 800;
+}
+
+.li-conn .racecard__jockey-name,
+.li-conn .racecard__trainer-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.li-conn .racecard__jockey-name { font-weight: 700; }
+
+/* The signals: a chip a source, in the Fox Trail's colours, and the
+   tier their number makes. */
+.li-signals {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  vertical-align: middle;
+}
+
+.li-signal {
+  --li-signal: var(--mfr-ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px 2px 2px;
+  background: color-mix(in srgb, var(--li-signal) 10%, var(--mfr-card));
+  border-radius: 999px;
+  color: var(--mfr-ink);
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.li-signal b {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  background: var(--li-signal);
+  border-radius: 50%;
+  color: var(--mfr-white);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.li-signal--bod { --li-signal: #A67C12; }
+.li-signal--top_rated { --li-signal: #1F4E8C; }
+.li-signal--htw { --li-signal: #7A1F2B; }
+.li-signal--steamer { --li-signal: #5B2A86; }
+.li-signal--letters,
+.li-signal--featured { --li-signal: var(--mfr-ink); }
+
+/* A source's own lead pick of the day. */
+.li-signal--flagship { box-shadow: inset 0 0 0 1.5px var(--li-signal); }
+
+.li-tier {
+  display: inline-block;
+  margin-left: 6px;
+  color: var(--mfr-gold-ink);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.li-tier__n {
+  color: var(--mfr-ink-3);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.li-none {
+  color: var(--mfr-ink-3);
+  font-size: 12px;
+}
+
+/* Ratings */
+.li-cell--ratings {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.li-rate {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  padding: 4px 8px;
+  background: var(--mfr-warm);
+  border-radius: 7px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.li-rate__k {
+  color: var(--mfr-ink-3);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.li-rate--ai { background: none; padding: 0; }
+
+/* The comment */
+.li-note {
+  display: block;
+  color: var(--mfr-ink-2);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.li-note--ai::before {
+  content: "AI ";
+  color: var(--mfr-gold-ink);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+/* Details */
+.li-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule-2);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--mfr-ink-2);
+  cursor: pointer;
+}
+
+.li-more__chev {
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  rotate: 45deg;
+  translate: 0 -2px;
+  transition: rotate 0.15s;
+}
+
+.li-more[aria-expanded="true"] .li-more__chev {
+  rotate: -135deg;
+  translate: 0 2px;
+}
+
+/* ── States ──────────────────────────────────────────────────────── */
+
+/* In the slip: marked down its left edge, as a picked runner is on a
+   meeting's page. */
+.li-list .li-row.racecard__runner--in-slip {
+  background: color-mix(in srgb, var(--mfr-green) 7%, var(--mfr-card));
+  box-shadow: inset 3px 0 0 var(--mfr-green);
+}
+
+/* Run: still to be found, stood back. */
+.li-row--run .li-name,
+.li-row--run a.li-name { color: var(--mfr-ink-2); font-weight: 700; }
+.li-row--run .li-silk { opacity: 0.6; }
+
+/* A non-runner: here so a search finds out why it is not running. */
+.li-row--nr .li-name { color: var(--mfr-ink-3); font-weight: 600; text-decoration: line-through; }
+.li-row--nr .li-silk,
+.li-row--nr .li-cell--form { opacity: 0.45; }
+
+/* Taken to from the slip, or by a search with one answer. */
+.li-row[data-li-flash] { animation: liFlash 1.4s ease-out; }
+
+@keyframes liFlash {
+  0%, 35% { background: var(--mfr-gold-wash); }
+  100% { background: transparent; }
+}
+
+.li-empty,
+.li-nothing {
+  margin: 0;
+  padding: 36px 20px;
+  background: var(--mfr-card);
+  border: 1px solid var(--mfr-rule);
+  border-radius: 14px;
+  color: var(--mfr-ink-2);
+  font-size: 15px;
+  text-align: center;
+}
+
+.li-empty[hidden] { display: none; }
+
+.li-empty__clear {
+  padding: 0;
+  background: none;
+  border: 0;
+  color: var(--mfr-gold-ink);
+  font: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* ── Two lines a horse: from 620px of list ───────────────────────── */
+
+@container li (min-width: 620px) {
+  .li-list .li-row {
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.25fr) auto 132px;
+    grid-template-areas:
+      "horse  signal odds pick"
+      "conn   form   form pick";
+    gap: 8px 16px;
+    align-items: center;
+    contain-intrinsic-size: auto 104px;
+  }
+
+  .li-cell--conn { display: block; grid-area: conn; }
+  .li-cell--form { display: block; grid-area: form; }
+  .li-cell--pick { grid-template-columns: minmax(0, 1fr); align-self: start; }
+  .li-cell--odds { align-items: center; }
+  /* The ratings and the comment stay behind Details. */
+  .li-row[data-li-open="true"] .li-cell--ratings,
+  .li-row[data-li-open="true"] .li-cell--note { grid-column: 1 / -1; }
+}
+
+/* ── The table: from 970px of list ───────────────────────────────── */
+
+@container li (min-width: 970px) {
+  .li-head,
+  .li-list .li-row {
+    display: grid;
+    grid-template-columns: minmax(160px, 1.5fr) minmax(120px, 1.05fr) 146px minmax(130px, 1.1fr) 132px 76px 112px;
+    gap: 6px 12px;
+    align-items: center;
+  }
+
+  .li-head {
+    padding: 0 15px 8px;
+    color: var(--mfr-ink-3);
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .li-list .li-row {
+    grid-template-areas: "horse conn form signal ratings odds pick";
+    padding: 11px 14px;
+    contain-intrinsic-size: auto 68px;
+  }
+
+  .li-cell--ratings { display: flex; grid-area: ratings; }
+  .li-cell--pick { grid-template-columns: minmax(0, 1fr) auto; align-self: center; }
+
+  /* Details is the comment's alone here: a small button beside Pick. */
+  .li-more { min-height: 36px; padding: 0 9px; }
+  .li-more > span:first-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .li-row:not(:has(.li-cell--note)) .li-more { visibility: hidden; }
+
+  .li-row[data-li-open="true"] .li-cell--ratings { grid-area: ratings; }
+
+  .li-row[data-li-open="true"] .li-cell--note {
+    grid-column: 1 / -1;
+    padding: 2px 0 4px 49px;
+  }
+}
+
+/* ── Phones ──────────────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  .li-tools {
+    margin: 0 -16px 12px;
+    padding: 10px 16px 8px;
+    gap: 8px;
+  }
+
+  .li-pickbox { flex: none; }
+
+  /* Course, sort and the filters in one row that scrolls sideways. */
+  .li-tools__row--filters {
+    flex-wrap: nowrap;
+    margin: 0 -16px;
+    padding: 0 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .li-tools__row--filters::-webkit-scrollbar { display: none; }
+  .li-tools__row--filters .mfr-filter { flex: none; }
+  .li-readout { display: none; }
+}
+
+/* Under a finger: 44px to press. */
+@media (pointer: coarse) {
+  .li-more,
+  .li-day { min-height: 44px; }
+  .li-az__l { min-width: 34px; height: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .li-row[data-li-flash] { animation: none; }
+  .li-more__chev { transition: none; }
+}

@@ -192,6 +192,20 @@
     "aria-required-parent",
     "color-contrast"
    ]
+  },
+  "llama-index.html": {
+   "mobile-375": [],
+   "tablet-768": [
+    "color-contrast"
+   ],
+   "laptop-1024": [
+    "aria-prohibited-attr",
+    "color-contrast"
+   ],
+   "desktop-1440": [
+    "aria-prohibited-attr",
+    "color-contrast"
+   ]
   }
  }
 }
