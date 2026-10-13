@@ -28,6 +28,28 @@
    toast, which meeting.css sets under the strip, go under them. */
 .mf-wrap.li-wrap { --mfr-strip: var(--li-tools); }
 
+/* ── Staff only: what the signals lookup found ───────────────────── */
+
+.li-staff {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  margin: 0 -24px;
+  padding: 7px 24px;
+  background: var(--mfr-ink);
+  color: var(--mfr-white);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.li-staff strong { color: var(--mfr-gold); letter-spacing: 0.04em; }
+.li-staff b { font-weight: 800; }
+.li-staff__bad { color: #ffb4a8; font-weight: 700; }
+.li-staff__age { margin-left: auto; opacity: 0.8; }
+.li-staff a,
+.mf-wrap .li-staff a { color: var(--mfr-gold); }
+
 /* ── The masthead: the meeting page's, shorter ───────────────────── */
 
 .li-hero.mf-hero { min-height: 0; padding-top: 40px; padding-bottom: 28px; }
