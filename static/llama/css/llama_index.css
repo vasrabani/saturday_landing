@@ -156,6 +156,24 @@
   white-space: nowrap;
 }
 
+/* Clear all: there only while something narrows the list. */
+.li-reset {
+  min-height: 32px;
+  padding: 0 4px;
+  background: none;
+  border: 0;
+  color: var(--mfr-gold-ink);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.li-reset[hidden] { display: none; }
+
 /* A filter with nothing to show: still there, stood back. */
 .li-tools .mfr-filter[data-li-none] {
   opacity: 0.5;
@@ -164,7 +182,7 @@
 /* The A to Z. One row that scrolls sideways where it does not fit. */
 .li-az {
   display: flex;
-  gap: 2px;
+  gap: 4px;
   margin: 0 -4px;
   padding: 0 4px 2px;
   overflow-x: auto;
@@ -188,19 +206,34 @@
   text-decoration: none;
 }
 
+/* A letter with horses under it is a gold pill; one with none, or none
+   among what is showing, is bare and stands back. */
+a.li-az__l,
+.mf-wrap a.li-az__l {
+  background: var(--mfr-gold-wash);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mfr-gold) 55%, transparent);
+  color: var(--mfr-gold-ink);
+}
+
 .li-az__l--none,
-.li-az__l[data-li-off] { color: var(--mfr-rule-2); }
+.li-az__l[data-li-off],
+.mf-wrap a.li-az__l[data-li-off] {
+  background: none;
+  box-shadow: none;
+  color: var(--mfr-rule-2);
+}
 
 .li-az__l[data-li-off] { pointer-events: none; }
 
 .li-az__l[aria-current="true"],
 .mf-wrap a.li-az__l[aria-current="true"] {
   background: var(--mfr-ink);
+  box-shadow: none;
   color: var(--mfr-white);
 }
 
 @media (hover: hover) {
-  a.li-az__l:hover { background: var(--mfr-gold-wash); }
+  a.li-az__l:hover { background: var(--mfr-gold); color: var(--mfr-ink); }
 }
 
 /* ── The list ────────────────────────────────────────────────────── */
@@ -249,8 +282,9 @@
   color: var(--mfr-gold-ink);
 }
 
-.li-letter[hidden],
-.li-row[hidden] { display: none; }
+/* The row's own display rule is the stronger: say this as strongly. */
+.li-list .li-letter[hidden],
+.li-list .li-row[hidden] { display: none; }
 
 /* ── A horse ─────────────────────────────────────────────────────── */
 /* The card: the layout at its narrowest, and the base for the rest. */
@@ -439,6 +473,9 @@
 }
 
 .li-conn .racecard__jockey-name { font-weight: 700; }
+
+/* The strike rate keeps its width; the name gives way. */
+.li-conn > :not(.racecard__jockey-name):not(.racecard__trainer-name) { flex: none; }
 
 /* The signals: a chip a source, in the Fox Trail's colours, and the
    tier their number makes. */
@@ -725,6 +762,8 @@
   .li-tools__row--filters::-webkit-scrollbar { display: none; }
   .li-tools__row--filters .mfr-filter { flex: none; }
   .li-readout { display: none; }
+  /* Clear all comes first in the row, where it can be seen. */
+  .li-reset { order: -1; flex: none; }
 }
 
 /* Under a finger: 44px to press. */

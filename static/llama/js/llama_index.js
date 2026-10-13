@@ -3,7 +3,10 @@
  * The page is every horse running on a day, rendered by the server in
  * one list, A to Z. This file is what makes the list a tool:
  *
- *   1. Search as you type, across horse, jockey, trainer and course.
+ *   1. Search as you type. What is typed is read as the start of a
+ *      name: a horse's first, then a jockey's, trainer's or course's.
+ *      "am s" finds Am Still Here, not every horse with an "am" and
+ *      an "s" somewhere about it.
  *   2. Filters (has a signal, steamers, top AI, still to run), a course
  *      and a sort order; each filter's count follows the search.
  *   3. The A to Z: a letter goes to its horses, a letter with none
@@ -42,6 +45,7 @@
   var sortEl   = document.querySelector('[data-li-sort]');
   var readout  = document.querySelector('[data-li-readout]');
   var empty    = document.querySelector('[data-li-empty]');
+  var reset    = document.querySelector('.li-reset');
   var az       = document.querySelector('[data-li-az]');
   var chips    = Array.prototype.slice.call(document.querySelectorAll('[data-li-filter]'));
   var wrap     = document.querySelector('.li-wrap');
@@ -49,6 +53,20 @@
   var SEARCH_MS = 90;
   var TOP_AI_STARS = 4;
   var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Names as they are searched: lower case, apostrophes and other
+     marks aside ("o'brien" and "obrien" are one name). */
+  function plain(text) {
+    return String(text).toLowerCase().replace(/['’.]/g, '').replace(/[^a-z0-9|]+/g, ' ').replace(/ *\| */g, '|').trim();
+  }
+
+  /* Does `text` have `part` at the start of one of its words? */
+  function startsWord(text, part) {
+    for (var at = text.indexOf(part); at >= 0; at = text.indexOf(part, at + 1)) {
+      if (at === 0 || text.charAt(at - 1) === ' ') return true;
+    }
+    return false;
+  }
 
   /* What a row is, read once. */
   var items = rows.map(function (row, i) {
@@ -58,7 +76,7 @@
     return {
       row: row,
       at: i,
-      find: d.liFind || '',
+      fields: plain(d.liFind || '').split('|'),          // horse, jockey, trainer, course
       letter: d.liLetter || '',
       course: d.liCourse || '',
       time: d.liTime || '',
@@ -119,12 +137,33 @@
 
   /* ── Showing ───────────────────────────────────────────────── */
 
-  function words(q) {
-    return q.toLowerCase().split(/\s+/).filter(Boolean);
+  /* Which horses a search finds: a set of items, or null for all.
+     The first of these that finds any horse is the answer:
+       1. a horse whose name has what was typed at the start of a word;
+       2. a jockey, trainer or course that has;
+       3. every word typed starting a word somewhere on the row
+          ("moore york": Ryan Moore's rides at York);
+       4. a horse's name with it anywhere ("ill" in Am Still Here). */
+  function findHorses(q) {
+    var phrase = plain(q).replace(/\|/g, ' ').trim();
+    if (!phrase) return null;
+    var tokens = phrase.split(' ');
+    var tests = [
+      function (it) { return startsWord(it.fields[0] || '', phrase); },
+      function (it) { return it.fields.slice(1).some(function (f) { return startsWord(f, phrase); }); },
+      function (it) { return tokens.every(function (t) { return it.fields.some(function (f) { return startsWord(f, t); }); }); },
+      function (it) { return (it.fields[0] || '').indexOf(phrase) >= 0; },
+    ];
+    for (var i = 0; i < tests.length; i++) {
+      var found = items.filter(tests[i]);
+      if (found.length) return found;
+    }
+    return [];
   }
 
   function apply() {
-    var want = words(state.q);
+    var want = findHorses(state.q);
+    var wanted = want && new Set(want);
     var passes = FILTERS[state.f] || FILTERS.all;
     var counts = {};
     Object.keys(FILTERS).forEach(function (key) { counts[key] = 0; });
@@ -134,7 +173,7 @@
     items.forEach(function (it) {
       /* The search and the course narrow what every filter counts;
          the filter then chooses among those. */
-      var found = (!state.c || it.course === state.c) && want.every(function (w) { return it.find.indexOf(w) >= 0; });
+      var found = (!state.c || it.course === state.c) && (!wanted || wanted.has(it));
       if (found) {
         Object.keys(FILTERS).forEach(function (key) { if (FILTERS[key](it)) counts[key] += 1; });
       }
@@ -180,6 +219,7 @@
         ? items.length + ' horses'
         : shown + ' of ' + items.length + ' horses';
     }
+    if (reset) reset.hidden = !(state.q.trim() || state.c || state.f !== 'all');
     if (empty) empty.hidden = shown > 0;
     list.hidden = shown === 0;
     return shown;
@@ -413,6 +453,19 @@
     markLetter();
   });
   if ('ResizeObserver' in window && tools) new ResizeObserver(measure).observe(tools);
+
+  /* A browser puts back what a form held when a page is reloaded or
+     come back to, without saying so: read the controls again then, so
+     the list is never narrowed by a course the reader cannot see why. */
+  window.addEventListener('pageshow', function () {
+    var q = search ? search.value : state.q;
+    var c = courseEl ? courseEl.value : state.c;
+    var s = sortEl ? sortEl.value : state.s;
+    if (q === state.q && c === state.c && s === state.s) return;
+    var order = s !== state.s;
+    state.q = q; state.c = c; state.s = s;
+    refresh(order);
+  });
 
   /* ── Start ─────────────────────────────────────────────────── */
 
