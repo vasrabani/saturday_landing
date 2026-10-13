@@ -31,9 +31,9 @@ export const rows = (page) => page.locator('.li-row');
 export const shownRows = (page) => page.locator('.li-row:not([hidden])');
 export const pickable = (page) => page.locator('.li-row--to_run:not([hidden])').filter({ has: page.locator('[data-action="add-to-slip"]:not([disabled])') });
 
-/** The attributes of every row showing, in the order showing. */
+/** The attributes of every row on the screen (displayed, not merely not marked hidden), in the order showing. */
 export const shown = (page) =>
-  page.evaluate(() => [...document.querySelectorAll('.li-row')].filter((row) => !row.hidden).map((row) => ({ ...row.dataset })));
+  page.evaluate(() => [...document.querySelectorAll('.li-row')].filter((row) => getComputedStyle(row).display !== 'none').map((row) => ({ ...row.dataset })));
 
 export async function search(page, text) {
   await page.locator('[data-li-search]').fill(text);

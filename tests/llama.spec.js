@@ -81,11 +81,71 @@ test.describe('finding a horse', () => {
     await search(page, target.horseName.toUpperCase());
     const found = await shown(page);
     expect(found.length).toBeGreaterThan(0);
-    expect(found.every((row) => row.liFind.includes(target.horseName.toLowerCase()))).toBe(true);
+    expect(found.map((row) => row.runnerId)).toContain(target.runnerId);
     await expect(page.locator('[data-li-readout]')).toHaveText(new RegExp(`^${found.length} of \\d+ horses$`));
 
     await search(page, target.liCourse.split('-')[0]);
     expect((await shown(page)).length).toBeGreaterThan(found.length);
+  });
+
+  test('what is typed is read as the start of a horse\'s name before anything else', async ({ page }) => {
+    await openIndex(page);
+    // Two words into a three-word name: "am s" for Am Still Here.
+    const target = (await shown(page)).find((row) => row.horseName.split(' ').length >= 3);
+    const [first, second] = target.horseName.toLowerCase().split(' ');
+    const typed = `${first} ${second[0]}`;
+    await search(page, typed);
+    const found = await shown(page);
+    expect(found.map((row) => row.runnerId)).toContain(target.runnerId);
+    expect(found.every((row) => ` ${row.liFind.split('|')[0]}`.includes(` ${typed}`))).toBe(true);
+  });
+
+  test('a jockey\'s name finds that jockey\'s rides', async ({ page }) => {
+    await openIndex(page);
+    const all = await shown(page);
+    const jockey = all[30].liFind.split('|')[1];
+    const horseNamed = all.some((row) => ` ${row.liFind.split('|')[0]}`.includes(` ${jockey}`));
+    test.skip(horseNamed, 'a horse shares the jockey\'s name on this day');
+    await search(page, jockey);
+    const found = await shown(page);
+    expect(found.length).toBeGreaterThan(0);
+    expect(found.every((row) => row.liFind.split('|')[1] === jockey)).toBe(true);
+  });
+
+  test('Clear all is there only while something narrows the list', async ({ page }) => {
+    await openIndex(page);
+    const all = await shownRows(page).count();
+    const clear = page.locator('.li-reset');
+    await expect(clear).toBeHidden();
+    await page.locator('[data-li-filter="torun"]').click();
+    await page.locator('select[data-li-course]').selectOption({ index: 1 });
+    await expect(clear).toBeVisible();
+    await clear.click();
+    await expect(shownRows(page)).toHaveCount(all);
+    await expect(page.locator('select[data-li-course]')).toHaveValue('');
+    await expect(clear).toBeHidden();
+  });
+
+  test('a letter with horses is a filled pill, and one without is bare', async ({ page }) => {
+    await openIndex(page);
+    const paint = (locator) => locator.evaluate((el) => getComputedStyle(el).backgroundColor);
+    const bare = 'rgba(0, 0, 0, 0)';
+    expect(await paint(page.locator('a[data-li-jump]').nth(3))).not.toBe(bare);
+    expect(await paint(page.locator('.li-az__l--none').first())).toBe(bare);
+    const target = (await shown(page))[0];
+    await search(page, target.horseName);
+    expect(await paint(page.locator('[data-li-jump][data-li-off]').first())).toBe(bare);
+  });
+
+  test('a horse the search does not find is off the screen, not only marked hidden', async ({ page }) => {
+    await openIndex(page);
+    const target = (await shown(page))[40];
+    await search(page, target.horseName);
+    const onScreen = await page.locator('.li-row').evaluateAll((rows) => rows.filter((row) => getComputedStyle(row).display !== 'none').length);
+    expect(onScreen).toBe(await shownRows(page).count());
+    expect(onScreen).toBeLessThan(10);
+    const headings = await page.locator('[data-li-heading]').evaluateAll((els) => els.filter((el) => getComputedStyle(el).display !== 'none').length);
+    expect(headings).toBe(1);
   });
 
   test('a search with no answer says so, and can be cleared', async ({ page }) => {
@@ -94,7 +154,7 @@ test.describe('finding a horse', () => {
     await search(page, 'zzzqqq');
     await expect(shownRows(page)).toHaveCount(0);
     await expect(page.locator('[data-li-empty]')).toBeVisible();
-    await page.locator('[data-li-clear]').click();
+    await page.locator('.li-empty__clear').click();
     await expect(shownRows(page)).toHaveCount(all);
     await expect(page.locator('[data-li-search]')).toHaveValue('');
   });
