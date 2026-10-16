@@ -1,0 +1,3782 @@
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Races page states · Saturday Racing</title>
+<link rel="stylesheet" href="static/fonts/saturday-fonts.css">
+
+  <!-- ── Stylesheets ───────────────────────────────────────── -->
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/paper.css">
+  <link rel="stylesheet" href="static/css/chrome.css">
+  <link rel="stylesheet" href="static/voting/css/picks_budget.css">
+
+  
+<link rel="stylesheet" href="static/browse/css/browse.css">
+
+  
+
+    <style>
+      /* Page furniture only — the cases below use the real stylesheet. */
+      body.page-racecard-browse { background: var(--c-paper, #fafaf7); }
+      .states-doc { max-width: 1480px; margin: 0 auto; padding: 48px 24px 96px; font-family: var(--font-body, system-ui); color: var(--c-ink, #11151f); }
+      .states-doc > h1 { font-size: 36px; margin: 0 0 8px; }
+      .states-doc__intro { color: var(--c-ink-70, #41474f); line-height: 1.7; max-width: 70ch; }
+      .states-case { margin-top: 56px; border-top: 1px solid var(--c-rule, #e7e5dd); padding-top: 20px; }
+      .states-case__name { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+      .states-case__when { font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: var(--c-gold-ink, #9c7b12); margin: 0 0 16px; }
+      /* Paint containment keeps a case inside its own frame. */
+      .states-frame { border: 1px solid var(--c-rule, #e7e5dd); border-radius: 12px; overflow: hidden; margin-top: 16px; background: var(--c-paper, #fafaf7); position: relative; contain: layout paint; }
+      /* A window of its own: as wide as the window it stands for. */
+      .states-frame--window { max-width: 100%; box-sizing: content-box; }
+      .states-iframe { display: block; border: 0; width: 100%; }
+      /* Inline, nothing is pinned: the tab bar stands where it is put. */
+      .states-frame .meeting-nav { position: relative; top: auto; }
+      .states-frame > .meetings-paper { padding-block: 16px; }
+    </style>
+  </head>
+  <body class="page-racecard page-racecard-browse">
+    <div class="states-doc">
+      <h1>Races page states</h1>
+      <p class="states-doc__intro">
+        Every state the day's races page can render, so each one can be
+        designed rather than imagined. Generated from <code>races.html</code>,
+        <code>races-tomorrow.html</code> and <code>races-yesterday.html</code>
+        by <code>node tools/build-races-states.mjs</code>, which drives the
+        real pages: the revealed winners, Reveal all, the reveal track and the
+        marked tab are captured from them, not written here. The template's
+        branches that none of the three days caught are marked
+        <em>a stand-in</em>: their markup is the smallest change to a captured
+        page that gives the template's own class names
+        (<code>tests/support/races-branches.cjs</code>), to be checked against
+        <code>meetings_browse.html</code> in the port. A case that depends on
+        the width of the window (the phone's, the tablet's) is shown in a
+        window of its own.
+      </p>
+      <section class="states-case">
+        <p class="states-case__name">Masthead · today, racing on</p>
+        <p class="states-case__when">meetings_browse.html's hero with the day tabs and the two figures the revamp adds; the next race off, which the template shows on today's page while racing is on; Pick Six as stickers, on a day with a race to run</p>
+        <div class="states-frame">
+<div class="browse-masthead">
+<div class="container">
+
+  <header class="browse-hero">
+    <div class="browse-eyebrow">Today’s races</div>
+    <h1 class="browse-title">Friday 16 October 2026</h1>
+    <div class="browse-stats">
+      <span><strong>43</strong> races</span>
+      <span><strong>5</strong> meetings</span>
+      <span>First off <strong>13:20</strong></span>
+      <span><strong>8</strong> results in</span>
+    </div>
+    <nav class="browse-days" aria-label="Race days">
+      <a class="browse-days__day" href="races-yesterday.html">Yesterday</a>
+      <a class="browse-days__day" href="races.html" aria-current="page">Today</a>
+      <a class="browse-days__day" href="races-tomorrow.html">Tomorrow</a>
+    </nav>
+  </header>
+
+  
+
+    
+      <a href="https://www.saturday-racing.com/races/6536/" class="browse-next-off">
+        <span class="browse-next-off__pulse" aria-hidden="true"></span>
+        <span class="browse-next-off__body">
+          <span class="browse-next-off__eyebrow">Next off</span>
+          <h2 class="browse-next-off__title">
+            Uttoxeter · Thomas And Sonny Crilly Plant Hire Handicap Steeple Chase (GBB Race)
+          </h2>
+        </span>
+        <span class="browse-next-off__time">
+          15:47
+          <span class="browse-next-off__countdown">
+            
+              in 3m
+            
+          </span>
+        </span>
+      </a>
+
+  <a class="browse-pick6" href="https://www.saturday-racing.com/races/meeting/uttoxeter/2026-10-16/full/">
+    <span class="browse-pick6__stamp" aria-hidden="true">
+      <svg class="browse-pick6__ring" viewBox="0 0 100 100" focusable="false">
+        <defs>
+          <path id="browse-pick6-over" d="M13.2,50 A36.8,36.8 0 0 1 86.8,50"></path>
+          <path id="browse-pick6-under" d="M5.8,50 A44.2,44.2 0 0 0 94.2,50"></path>
+        </defs>
+        <text><textPath href="#browse-pick6-over" startOffset="50%">PICK SIX</textPath></text>
+        <text><textPath href="#browse-pick6-under" startOffset="50%">CHALLENGE</textPath></text>
+        <circle cx="9.5" cy="50" r="1.7"></circle>
+        <circle cx="90.5" cy="50" r="1.7"></circle>
+      </svg>
+      6
+    </span>
+    <span class="browse-pick6__name">Pick Six</span>
+    <span class="browse-pick6__vs">vs The Fox</span>
+    <span class="browse-pick6__sub">Stack six. Beat the head tipster.</span>
+  </a>
+</div>
+</div>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting tabs · live and to come</p>
+        <p class="states-case__when">the meeting switcher: a meeting live (the state line in red, its progress along the foot) and two to come (off in so long, off at); the meeting in view marked in ink by browse_nav.js</p>
+        <div class="states-frame">
+<nav class="meeting-nav" aria-label="Meetings">
+      
+        <a href="#meeting-1" class="meeting-tab
+                  meeting-tab--live
+                  ">
+          <span class="meeting-tab__name">
+            <span class="meeting-tab__pulse" aria-hidden="true"></span>
+            Redcar
+          </span>
+          <span class="meeting-tab__state">
+            
+              ● Live · 3/9 in
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 33%"></span>
+            </span>
+          
+        </a>
+      
+        <a href="#meeting-2" class="meeting-tab
+                  meeting-tab--live
+                  " aria-current="true">
+          <span class="meeting-tab__name">
+            <span class="meeting-tab__pulse" aria-hidden="true"></span>
+            Uttoxeter
+          </span>
+          <span class="meeting-tab__state">
+            
+              ● Live · 3/7 in
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 43%"></span>
+            </span>
+          
+        </a>
+      
+        <a href="#meeting-3" class="meeting-tab
+                  meeting-tab--live
+                  ">
+          <span class="meeting-tab__name">
+            <span class="meeting-tab__pulse" aria-hidden="true"></span>
+            Haydock
+          </span>
+          <span class="meeting-tab__state">
+            
+              ● Live · 2/10 in
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 20%"></span>
+            </span>
+          
+        </a>
+      
+        <a href="#meeting-4" class="meeting-tab
+                  meeting-tab--upcoming">
+          <span class="meeting-tab__name">
+            
+            Newcastle (AW)
+          </span>
+          <span class="meeting-tab__state">
+            
+              
+                Off in 24m
+              
+              · 9 races
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 0%"></span>
+            </span>
+          
+        </a>
+      
+        <a href="#meeting-5" class="meeting-tab
+                  meeting-tab--upcoming">
+          <span class="meeting-tab__name">
+            
+            Dundalk (AW)
+          </span>
+          <span class="meeting-tab__state">
+            
+              
+                Off at 17:00
+              
+              · 8 races
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 0%"></span>
+            </span>
+          
+        </a>
+      
+    </nav>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting head · live, three results in</p>
+        <p class="states-case__when">the meeting's head while it runs: the live status line as a chip, Pick Six and Reveal all; browse_track.js's course along the foot, lit as far as the card has been run</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><div class="meeting-block__header">
+          <h2 class="meeting-block__name">Redcar</h2>
+          
+          
+<a class="pick6 pick6--compact" href="https://www.saturday-racing.com/races/meeting/redcar/2026-10-16/full/" data-pick6-emblem="" aria-label="Pick six horses across the card and duel Mr Fox">
+  <span class="pick6__stamp" aria-hidden="true">CHALLENGE</span>
+  <span class="pick6__num">6</span>
+  <span class="pick6__body">
+    <span class="pick6__lbl">Pick Six</span>
+    <span class="pick6__vs">
+      <span class="pick6__vs-word">vs</span>
+      <span class="pick6__fox-glyph" aria-hidden="true">🦊</span>
+      <span class="pick6__vs-foe">The Fox</span>
+    </span>
+    
+  </span>
+</a>
+
+
+          
+            <button type="button" class="meeting-block__reveal-all" data-action="reveal-meeting" aria-pressed="false" title="Toggle winners for every resulted race at Redcar">
+              <span class="meeting-block__reveal-all-face meeting-block__reveal-all-face--hidden">
+                <span aria-hidden="true">👁</span>
+                Reveal all
+              </span>
+              <span class="meeting-block__reveal-all-face meeting-block__reveal-all-face--revealed">
+                <span aria-hidden="true">🙈</span>
+                Hide all
+              </span>
+            </button>
+          
+          <div class="meeting-block__sub">
+            9 races · first off
+            <strong>13:20</strong>
+          </div>
+
+          
+            <div class="meeting-block__status meeting-block__status--live">
+              <span class="meeting-block__status-pulse" aria-hidden="true"></span>
+              <span class="meeting-block__status-value">Live now</span>
+              
+                <span class="meeting-block__status-sep">·</span>
+                <span class="meeting-block__status-label">Next off</span>
+                <span class="meeting-block__status-value">16:12</span>
+              
+              <span class="meeting-block__status-sep">·</span>
+              <span class="meeting-block__status-value">3/9</span>
+              <span>results in</span>
+            </div>
+          
+        <div class="rbr-track"><p class="rbr-track__count">0 of 3 revealed</p><span class="rbr-track__lane" aria-hidden="true" style="--rbr-races: 9; --rbr-run: 0.3333333333333333; --rbr-at: 0;"><span class="rbr-track__horse"></span><span class="rbr-track__post"></span></span></div></div></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting head · first off to come</p>
+        <p class="states-case__when">the status line before the meeting's first race; no result yet, so no Reveal all and no course</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><div class="meeting-block__header">
+          <h2 class="meeting-block__name">Newcastle (AW)</h2>
+          
+          
+<a class="pick6 pick6--compact" href="https://www.saturday-racing.com/races/meeting/newcastle-aw/2026-10-16/full/" data-pick6-emblem="" aria-label="Pick six horses across the card and duel Mr Fox">
+  <span class="pick6__stamp" aria-hidden="true">CHALLENGE</span>
+  <span class="pick6__num">6</span>
+  <span class="pick6__body">
+    <span class="pick6__lbl">Pick Six</span>
+    <span class="pick6__vs">
+      <span class="pick6__vs-word">vs</span>
+      <span class="pick6__fox-glyph" aria-hidden="true">🦊</span>
+      <span class="pick6__vs-foe">The Fox</span>
+    </span>
+    
+  </span>
+</a>
+
+
+          
+          <div class="meeting-block__sub">
+            9 races · first off
+            <strong>16:08</strong>
+          </div>
+
+          
+            <div class="meeting-block__status meeting-block__status--upcoming">
+              <span aria-hidden="true">⏱</span>
+              <span class="meeting-block__status-label">First off</span>
+              <span class="meeting-block__status-value">
+                in 24m
+              </span>
+              <span class="meeting-block__status-sep">·</span>
+              <span>9 races to come</span>
+            </div>
+          
+        </div></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Race · a result in, the winner hidden</p>
+        <p class="states-case__when">a race with its result: Reveal winner (the spoiler script's button) and the cubs' chip; "Result" is kept for a screen reader</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><a href="https://www.saturday-racing.com/races/6523/" class="race-row race-row--has-result">
+            <div class="race-row__time">
+              13:20
+              <small>Class 4</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div I) (GBB Race)</span>
+                
+                <span class="result-tag">✓ Result</span>
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">7f219y</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£5,400</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">10</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+                <button type="button" class="race-row__spoiler" data-spoiler="" data-action="reveal-result" data-race-id="6523" aria-pressed="false" aria-label="Reveal winner of Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div I) (GBB Race) — starting price 2/9F — ridden by Cieren Fallon">
+                  <span class="race-row__spoiler-face race-row__spoiler-face--hidden">
+                    <span aria-hidden="true">👁</span>
+                    Reveal winner
+                  </span>
+                  <span class="race-row__spoiler-face race-row__spoiler-face--revealed">
+                    
+                      <span class="race-row__spoiler-silk" aria-hidden="true" style="--silk-a: #1a3a6b; --silk-b: #ffffff;"></span>
+                    
+                    <span class="race-row__spoiler-name">Extragalactic (IRE)</span>
+                    
+                      <span class="race-row__spoiler-sp">2/9F<small> SP</small></span>
+                    
+                    
+                      <span class="race-row__spoiler-connections" role="tooltip">
+                        
+                          <span class="race-row__spoiler-conn-row">
+                            <span class="race-row__spoiler-conn-label">Jockey</span>
+                            <span>Cieren Fallon</span>
+                          </span>
+                        
+                        
+                          <span class="race-row__spoiler-conn-row">
+                            <span class="race-row__spoiler-conn-label">Trainer</span>
+                            <span>William Haggas</span>
+                          </span>
+                        
+                      </span>
+                    
+                  </span>
+                </button>
+              
+              
+                
+                  <span class="race-row__crowd-chip" title="1 cub picked here">
+                    <span class="race-row__crowd-chip-icon" aria-hidden="true">🐾</span>
+                    <span class="race-row__crowd-chip-eyebrow">
+                      cubs
+                    </span>
+                    <span class="race-row__crowd-chip-count">1</span>
+                  </span>
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Race · the winner revealed</p>
+        <p class="states-case__when">the button pressed (aria-pressed): the winner's silks, name and price, the jockey and the trainer under them</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><a href="https://www.saturday-racing.com/races/6523/" class="race-row race-row--has-result">
+            <div class="race-row__time">
+              13:20
+              <small>Class 4</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div I) (GBB Race)</span>
+                
+                <span class="result-tag">✓ Result</span>
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">7f219y</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£5,400</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">10</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+                <button type="button" class="race-row__spoiler" data-spoiler="" data-action="reveal-result" data-race-id="6523" aria-pressed="true" aria-label="Reveal winner of Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div I) (GBB Race) — starting price 2/9F — ridden by Cieren Fallon">
+                  <span class="race-row__spoiler-face race-row__spoiler-face--hidden">
+                    <span aria-hidden="true">👁</span>
+                    Reveal winner
+                  </span>
+                  <span class="race-row__spoiler-face race-row__spoiler-face--revealed">
+                    
+                      <span class="race-row__spoiler-silk" aria-hidden="true" style="--silk-a: #1a3a6b; --silk-b: #ffffff;"></span>
+                    
+                    <span class="race-row__spoiler-name">Extragalactic (IRE)</span>
+                    
+                      <span class="race-row__spoiler-sp">2/9F<small> SP</small></span>
+                    
+                    
+                      <span class="race-row__spoiler-connections" role="tooltip">
+                        
+                          <span class="race-row__spoiler-conn-row">
+                            <span class="race-row__spoiler-conn-label">Jockey</span>
+                            <span>Cieren Fallon</span>
+                          </span>
+                        
+                        
+                          <span class="race-row__spoiler-conn-row">
+                            <span class="race-row__spoiler-conn-label">Trainer</span>
+                            <span>William Haggas</span>
+                          </span>
+                        
+                      </span>
+                    
+                  </span>
+                </button>
+              
+              
+                
+                  <span class="race-row__crowd-chip" title="1 cub picked here">
+                    <span class="race-row__crowd-chip-icon" aria-hidden="true">🐾</span>
+                    <span class="race-row__crowd-chip-eyebrow">
+                      cubs
+                    </span>
+                    <span class="race-row__crowd-chip-count">1</span>
+                  </span>
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Race · before the off, the AI's pick and the cubs</p>
+        <p class="states-case__when">a race still to run: the AI's pick with its price and confidence, and how many cubs picked in it</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><a href="https://www.saturday-racing.com/races/6527/" class="race-row">
+            <div class="race-row__time">
+              15:02
+              <small>Class 6</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Market Cross Jewellers Nursery Handicap Stakes</span>
+                
+                
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">5f</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£4,004</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">9</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+                
+<span class="ai-pick-chip" title="Saturday Racing AI · Click race for full reasoning">
+  <span class="ai-pick-chip__icon" aria-hidden="true">⚡</span>
+  <span class="ai-pick-chip__eyebrow">AI</span>
+  <span class="ai-pick-chip__name">Classyfied</span>
+  
+    <span class="ai-pick-chip__odds" title="Current bookmaker price">9/2</span>
+  
+  
+    <span class="ai-pick-chip__conf">Speculative</span>
+  
+</span>
+
+
+              
+              
+                
+                  <span class="race-row__crowd-chip" title="1 cub picked here">
+                    <span class="race-row__crowd-chip-icon" aria-hidden="true">🐾</span>
+                    <span class="race-row__crowd-chip-eyebrow">
+                      cubs
+                    </span>
+                    <span class="race-row__crowd-chip-count">1</span>
+                  </span>
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Race · the AI's pick, no price yet</p>
+        <p class="states-case__when">the AI chip without its odds</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><a href="https://www.saturday-racing.com/races/6525/" class="race-row">
+            <div class="race-row__time">
+              13:55
+              <small>Class 4</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div I) (GBB Race)</span>
+                
+                
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">0m7f219y</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£5,400</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">28</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+                
+<span class="ai-pick-chip" title="Saturday Racing AI · Click race for full reasoning">
+  <span class="ai-pick-chip__icon" aria-hidden="true">⚡</span>
+  <span class="ai-pick-chip__eyebrow">AI</span>
+  <span class="ai-pick-chip__name">Alberich</span>
+  
+  
+    <span class="ai-pick-chip__conf">Medium</span>
+  
+</span>
+
+
+              
+              
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting head · every result so far revealed</p>
+        <p class="states-case__when">Reveal all pressed at a meeting part run: it reads Hide all, and the horse stops as far up the course as the results go (three races of nine)</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><div class="meeting-block__header">
+          <h2 class="meeting-block__name">Redcar</h2>
+          
+          
+<a class="pick6 pick6--compact" href="https://www.saturday-racing.com/races/meeting/redcar/2026-10-16/full/" data-pick6-emblem="" aria-label="Pick six horses across the card and duel Mr Fox">
+  <span class="pick6__stamp" aria-hidden="true">CHALLENGE</span>
+  <span class="pick6__num">6</span>
+  <span class="pick6__body">
+    <span class="pick6__lbl">Pick Six</span>
+    <span class="pick6__vs">
+      <span class="pick6__vs-word">vs</span>
+      <span class="pick6__fox-glyph" aria-hidden="true">🦊</span>
+      <span class="pick6__vs-foe">The Fox</span>
+    </span>
+    
+  </span>
+</a>
+
+
+          
+            <button type="button" class="meeting-block__reveal-all" data-action="reveal-meeting" aria-pressed="true" title="Toggle winners for every resulted race at Redcar">
+              <span class="meeting-block__reveal-all-face meeting-block__reveal-all-face--hidden">
+                <span aria-hidden="true">👁</span>
+                Reveal all
+              </span>
+              <span class="meeting-block__reveal-all-face meeting-block__reveal-all-face--revealed">
+                <span aria-hidden="true">🙈</span>
+                Hide all
+              </span>
+            </button>
+          
+          <div class="meeting-block__sub">
+            9 races · first off
+            <strong>13:20</strong>
+          </div>
+
+          
+            <div class="meeting-block__status meeting-block__status--live">
+              <span class="meeting-block__status-pulse" aria-hidden="true"></span>
+              <span class="meeting-block__status-value">Live now</span>
+              
+                <span class="meeting-block__status-sep">·</span>
+                <span class="meeting-block__status-label">Next off</span>
+                <span class="meeting-block__status-value">16:12</span>
+              
+              <span class="meeting-block__status-sep">·</span>
+              <span class="meeting-block__status-value">3/9</span>
+              <span>results in</span>
+            </div>
+          
+        <div class="rbr-track"><p class="rbr-track__count">All 3 revealed</p><span class="rbr-track__lane" aria-hidden="true" style="--rbr-races: 9; --rbr-run: 0.3333333333333333; --rbr-at: 0.3333333333333333;"><span class="rbr-track__horse"></span><span class="rbr-track__post"></span></span></div></div></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Masthead · a finished day</p>
+        <p class="states-case__when">yesterday's page: no next race off, and no Pick Six (nothing is left to pick)</p>
+        <div class="states-frame">
+<div class="browse-masthead">
+<div class="container">
+
+  <header class="browse-hero">
+    <div class="browse-eyebrow">Yesterday’s races</div>
+    <h1 class="browse-title">Thursday 15 October 2026</h1>
+    <div class="browse-stats">
+      <span><strong>40</strong> races</span>
+      <span><strong>5</strong> meetings</span>
+      <span>First off <strong>12:55</strong></span>
+      <span><strong>40</strong> results in</span>
+    </div>
+    <nav class="browse-days" aria-label="Race days">
+      <a class="browse-days__day" href="races-yesterday.html" aria-current="page">Yesterday</a>
+      <a class="browse-days__day" href="races.html">Today</a>
+      <a class="browse-days__day" href="races-tomorrow.html">Tomorrow</a>
+    </nav>
+  </header>
+</div>
+</div>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting tabs · every result in</p>
+        <p class="states-case__when">every meeting finished: the state lines in green, the progress full</p>
+        <div class="states-frame">
+<nav class="meeting-nav" aria-label="Meetings">
+      
+        <a href="#meeting-1" class="meeting-tab
+                  meeting-tab--finished
+                  " aria-current="true">
+          <span class="meeting-tab__name">
+            
+            Perth
+          </span>
+          <span class="meeting-tab__state">
+            
+              ✓ All in · 8 races
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 100%"></span>
+            </span>
+          
+        </a>
+      
+        <a href="#meeting-2" class="meeting-tab
+                  meeting-tab--finished
+                  ">
+          <span class="meeting-tab__name">
+            
+            Curragh
+          </span>
+          <span class="meeting-tab__state">
+            
+              ✓ All in · 8 races
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 100%"></span>
+            </span>
+          
+        </a>
+      
+        <a href="#meeting-3" class="meeting-tab
+                  meeting-tab--finished
+                  ">
+          <span class="meeting-tab__name">
+            
+            Brighton
+          </span>
+          <span class="meeting-tab__state">
+            
+              ✓ All in · 8 races
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 100%"></span>
+            </span>
+          
+        </a>
+      
+        <a href="#meeting-4" class="meeting-tab
+                  meeting-tab--finished
+                  ">
+          <span class="meeting-tab__name">
+            
+            Fontwell
+          </span>
+          <span class="meeting-tab__state">
+            
+              ✓ All in · 7 races
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 100%"></span>
+            </span>
+          
+        </a>
+      
+        <a href="#meeting-5" class="meeting-tab
+                  meeting-tab--finished
+                  ">
+          <span class="meeting-tab__name">
+            
+            Southwell (AW)
+          </span>
+          <span class="meeting-tab__state">
+            
+              ✓ All in · 9 races
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 100%"></span>
+            </span>
+          
+        </a>
+      
+    </nav>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting head · every result in</p>
+        <p class="states-case__when">the finished status line; the course lit end to end, the horse at the start</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><div class="meeting-block__header">
+          <h2 class="meeting-block__name">Perth</h2>
+          
+          
+<a class="pick6 pick6--compact" href="https://www.saturday-racing.com/races/meeting/perth/2026-10-15/full/" data-pick6-emblem="" aria-label="Pick six horses across the card and duel Mr Fox">
+  <span class="pick6__stamp" aria-hidden="true">CHALLENGE</span>
+  <span class="pick6__num">6</span>
+  <span class="pick6__body">
+    <span class="pick6__lbl">Pick Six</span>
+    <span class="pick6__vs">
+      <span class="pick6__vs-word">vs</span>
+      <span class="pick6__fox-glyph" aria-hidden="true">🦊</span>
+      <span class="pick6__vs-foe">The Fox</span>
+    </span>
+    
+  </span>
+</a>
+
+
+          
+            <button type="button" class="meeting-block__reveal-all" data-action="reveal-meeting" aria-pressed="false" title="Toggle winners for every resulted race at Perth">
+              <span class="meeting-block__reveal-all-face meeting-block__reveal-all-face--hidden">
+                <span aria-hidden="true">👁</span>
+                Reveal all
+              </span>
+              <span class="meeting-block__reveal-all-face meeting-block__reveal-all-face--revealed">
+                <span aria-hidden="true">🙈</span>
+                Hide all
+              </span>
+            </button>
+          
+          <div class="meeting-block__sub">
+            8 races · first off
+            <strong>12:55</strong>
+          </div>
+
+          
+            <div class="meeting-block__status meeting-block__status--finished">
+              <span aria-hidden="true">✓</span>
+              <span class="meeting-block__status-value">All in</span>
+              <span class="meeting-block__status-sep">·</span>
+              <span>8 results confirmed</span>
+              
+            </div>
+          
+        <div class="rbr-track"><p class="rbr-track__count">0 of 8 revealed</p><span class="rbr-track__lane" aria-hidden="true" style="--rbr-races: 8; --rbr-run: 1; --rbr-at: 0;"><span class="rbr-track__horse"></span><span class="rbr-track__post"></span></span></div></div></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting head · three of eight revealed</p>
+        <p class="states-case__when">three winners shown, one at a time: the count says so and the horse is three races up the course</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><div class="meeting-block__header">
+          <h2 class="meeting-block__name">Perth</h2>
+          
+          
+<a class="pick6 pick6--compact" href="https://www.saturday-racing.com/races/meeting/perth/2026-10-15/full/" data-pick6-emblem="" aria-label="Pick six horses across the card and duel Mr Fox">
+  <span class="pick6__stamp" aria-hidden="true">CHALLENGE</span>
+  <span class="pick6__num">6</span>
+  <span class="pick6__body">
+    <span class="pick6__lbl">Pick Six</span>
+    <span class="pick6__vs">
+      <span class="pick6__vs-word">vs</span>
+      <span class="pick6__fox-glyph" aria-hidden="true">🦊</span>
+      <span class="pick6__vs-foe">The Fox</span>
+    </span>
+    
+  </span>
+</a>
+
+
+          
+            <button type="button" class="meeting-block__reveal-all" data-action="reveal-meeting" aria-pressed="false" title="Toggle winners for every resulted race at Perth">
+              <span class="meeting-block__reveal-all-face meeting-block__reveal-all-face--hidden">
+                <span aria-hidden="true">👁</span>
+                Reveal all
+              </span>
+              <span class="meeting-block__reveal-all-face meeting-block__reveal-all-face--revealed">
+                <span aria-hidden="true">🙈</span>
+                Hide all
+              </span>
+            </button>
+          
+          <div class="meeting-block__sub">
+            8 races · first off
+            <strong>12:55</strong>
+          </div>
+
+          
+            <div class="meeting-block__status meeting-block__status--finished">
+              <span aria-hidden="true">✓</span>
+              <span class="meeting-block__status-value">All in</span>
+              <span class="meeting-block__status-sep">·</span>
+              <span>8 results confirmed</span>
+              
+            </div>
+          
+        <div class="rbr-track"><p class="rbr-track__count">3 of 8 revealed</p><span class="rbr-track__lane" aria-hidden="true" style="--rbr-races: 8; --rbr-run: 1; --rbr-at: 0.375;"><span class="rbr-track__horse"></span><span class="rbr-track__post"></span></span></div></div></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting head · every winner revealed</p>
+        <p class="states-case__when">Reveal all pressed: Hide all, "All 8 revealed" in green, the horse at the post</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><div class="meeting-block__header">
+          <h2 class="meeting-block__name">Perth</h2>
+          
+          
+<a class="pick6 pick6--compact" href="https://www.saturday-racing.com/races/meeting/perth/2026-10-15/full/" data-pick6-emblem="" aria-label="Pick six horses across the card and duel Mr Fox">
+  <span class="pick6__stamp" aria-hidden="true">CHALLENGE</span>
+  <span class="pick6__num">6</span>
+  <span class="pick6__body">
+    <span class="pick6__lbl">Pick Six</span>
+    <span class="pick6__vs">
+      <span class="pick6__vs-word">vs</span>
+      <span class="pick6__fox-glyph" aria-hidden="true">🦊</span>
+      <span class="pick6__vs-foe">The Fox</span>
+    </span>
+    
+  </span>
+</a>
+
+
+          
+            <button type="button" class="meeting-block__reveal-all" data-action="reveal-meeting" aria-pressed="true" title="Toggle winners for every resulted race at Perth">
+              <span class="meeting-block__reveal-all-face meeting-block__reveal-all-face--hidden">
+                <span aria-hidden="true">👁</span>
+                Reveal all
+              </span>
+              <span class="meeting-block__reveal-all-face meeting-block__reveal-all-face--revealed">
+                <span aria-hidden="true">🙈</span>
+                Hide all
+              </span>
+            </button>
+          
+          <div class="meeting-block__sub">
+            8 races · first off
+            <strong>12:55</strong>
+          </div>
+
+          
+            <div class="meeting-block__status meeting-block__status--finished">
+              <span aria-hidden="true">✓</span>
+              <span class="meeting-block__status-value">All in</span>
+              <span class="meeting-block__status-sep">·</span>
+              <span>8 results confirmed</span>
+              
+            </div>
+          
+        <div class="rbr-track" data-rbr-done=""><p class="rbr-track__count">All 8 revealed</p><span class="rbr-track__lane" aria-hidden="true" style="--rbr-races: 8; --rbr-run: 1; --rbr-at: 1;"><span class="rbr-track__horse"></span><span class="rbr-track__post"></span></span></div></div></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Masthead · the day before</p>
+        <p class="states-case__when">tomorrow's page: no results figure, and Pick Six going to the first meeting</p>
+        <div class="states-frame">
+<div class="browse-masthead">
+<div class="container">
+
+  <header class="browse-hero">
+    <div class="browse-eyebrow">Tomorrow’s races</div>
+    <h1 class="browse-title">Saturday 17 October 2026</h1>
+    <div class="browse-stats">
+      <span><strong>60</strong> races</span>
+      <span><strong>8</strong> meetings</span>
+      <span>First off <strong>12:55</strong></span>
+    </div>
+    <nav class="browse-days" aria-label="Race days">
+      <a class="browse-days__day" href="races-yesterday.html">Yesterday</a>
+      <a class="browse-days__day" href="races.html">Today</a>
+      <a class="browse-days__day" href="races-tomorrow.html" aria-current="page">Tomorrow</a>
+    </nav>
+  </header>
+
+  <a class="browse-pick6" href="https://www.saturday-racing.com/races/meeting/ascot/2026-10-17/full/">
+    <span class="browse-pick6__stamp" aria-hidden="true">
+      <svg class="browse-pick6__ring" viewBox="0 0 100 100" focusable="false">
+        <defs>
+          <path id="browse-pick6-over" d="M13.2,50 A36.8,36.8 0 0 1 86.8,50"></path>
+          <path id="browse-pick6-under" d="M5.8,50 A44.2,44.2 0 0 0 94.2,50"></path>
+        </defs>
+        <text><textPath href="#browse-pick6-over" startOffset="50%">PICK SIX</textPath></text>
+        <text><textPath href="#browse-pick6-under" startOffset="50%">CHALLENGE</textPath></text>
+        <circle cx="9.5" cy="50" r="1.7"></circle>
+        <circle cx="90.5" cy="50" r="1.7"></circle>
+      </svg>
+      6
+    </span>
+    <span class="browse-pick6__name">Pick Six</span>
+    <span class="browse-pick6__vs">vs The Fox</span>
+    <span class="browse-pick6__sub">Stack six. Beat the head tipster.</span>
+  </a>
+</div>
+</div>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting head · before racing</p>
+        <p class="states-case__when">the day before: no status line, no Reveal all, no course</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><div class="meeting-block__header">
+          <h2 class="meeting-block__name">Ascot</h2>
+          
+          
+<a class="pick6 pick6--compact" href="https://www.saturday-racing.com/races/meeting/ascot/2026-10-17/full/" data-pick6-emblem="" aria-label="Pick six horses across the card and duel Mr Fox">
+  <span class="pick6__stamp" aria-hidden="true">CHALLENGE</span>
+  <span class="pick6__num">6</span>
+  <span class="pick6__body">
+    <span class="pick6__lbl">Pick Six</span>
+    <span class="pick6__vs">
+      <span class="pick6__vs-word">vs</span>
+      <span class="pick6__fox-glyph" aria-hidden="true">🦊</span>
+      <span class="pick6__vs-foe">The Fox</span>
+    </span>
+    
+  </span>
+</a>
+
+
+          
+          <div class="meeting-block__sub">
+            7 races · first off
+            <strong>12:55</strong>
+          </div>
+
+          
+        </div></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Race · before racing</p>
+        <p class="states-case__when">nothing to press yet but the Racecard link</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><a href="https://www.saturday-racing.com/races/6547/" class="race-row">
+            <div class="race-row__time">
+              12:55
+              <small>Class 2</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Qatar Racing British Champions Day Two-Year-Old Conditions Stakes (GBB Race)</span>
+                
+                
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">6f</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£128,850</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">11</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+              
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Masthead · the big race</p>
+        <p class="states-case__when">A stand-in: no capture had this branch (tests/support/races-branches.cjs). Race.is_featured: the big-race banner as a pill under the figures, with an arrow</p>
+        <div class="states-frame">
+<div class="browse-masthead">
+<div class="container">
+
+  <header class="browse-hero">
+    <div class="browse-eyebrow">Tomorrow’s races</div>
+    <h1 class="browse-title">Saturday 17 October 2026</h1>
+    <div class="browse-stats">
+      <span><strong>60</strong> races</span>
+      <span><strong>8</strong> meetings</span>
+      <span>First off <strong>12:55</strong></span>
+    </div>
+    <nav class="browse-days" aria-label="Race days">
+      <a class="browse-days__day" href="races-yesterday.html">Yesterday</a>
+      <a class="browse-days__day" href="races.html">Today</a>
+      <a class="browse-days__day" href="races-tomorrow.html" aria-current="page">Tomorrow</a>
+    </nav>
+  </header>
+  <a href="https://www.saturday-racing.com/races/6552/" class="browse-featured-banner">
+    <span class="browse-featured-banner__star" aria-hidden="true">★</span>
+    <span class="browse-featured-banner__text">
+      <span class="browse-featured-banner__label">Big race</span>
+      <span class="browse-featured-banner__title">Qatar Racing Champion Stakes (Group 1)</span>
+      <span class="browse-featured-banner__meta">Ascot · 16:00 · £737,230</span>
+    </span>
+  </a>
+
+  <a class="browse-pick6" href="https://www.saturday-racing.com/races/meeting/ascot/2026-10-17/full/">
+    <span class="browse-pick6__stamp" aria-hidden="true">
+      <svg class="browse-pick6__ring" viewBox="0 0 100 100" focusable="false">
+        <defs>
+          <path id="browse-pick6-over" d="M13.2,50 A36.8,36.8 0 0 1 86.8,50"></path>
+          <path id="browse-pick6-under" d="M5.8,50 A44.2,44.2 0 0 0 94.2,50"></path>
+        </defs>
+        <text><textPath href="#browse-pick6-over" startOffset="50%">PICK SIX</textPath></text>
+        <text><textPath href="#browse-pick6-under" startOffset="50%">CHALLENGE</textPath></text>
+        <circle cx="9.5" cy="50" r="1.7"></circle>
+        <circle cx="90.5" cy="50" r="1.7"></circle>
+      </svg>
+      6
+    </span>
+    <span class="browse-pick6__name">Pick Six</span>
+    <span class="browse-pick6__vs">vs The Fox</span>
+    <span class="browse-pick6__sub">Stack six. Beat the head tipster.</span>
+  </a>
+</div>
+</div>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting · the big race's</p>
+        <p class="states-case__when">A stand-in: no capture had this branch (tests/support/races-branches.cjs). m.is_featured: the meeting trimmed in gold under its flag; the big race on the gold wash, tagged</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block meeting-block--featured" id="meeting-1" data-meeting-block="">
+        <div class="meeting-block__featured-flag">Big race meeting</div>
+        
+        <div class="meeting-block__header">
+          <h2 class="meeting-block__name">Ascot</h2>
+          
+          
+<a class="pick6 pick6--compact" href="https://www.saturday-racing.com/races/meeting/ascot/2026-10-17/full/" data-pick6-emblem="" aria-label="Pick six horses across the card and duel Mr Fox">
+  <span class="pick6__stamp" aria-hidden="true">CHALLENGE</span>
+  <span class="pick6__num">6</span>
+  <span class="pick6__body">
+    <span class="pick6__lbl">Pick Six</span>
+    <span class="pick6__vs">
+      <span class="pick6__vs-word">vs</span>
+      <span class="pick6__fox-glyph" aria-hidden="true">🦊</span>
+      <span class="pick6__vs-foe">The Fox</span>
+    </span>
+    
+  </span>
+</a>
+
+
+          
+          <div class="meeting-block__sub">
+            7 races · first off
+            <strong>12:55</strong>
+          </div>
+
+          
+        </div>
+
+        
+          <a href="https://www.saturday-racing.com/races/6547/" class="race-row">
+            <div class="race-row__time">
+              12:55
+              <small>Class 2</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Qatar Racing British Champions Day Two-Year-Old Conditions Stakes (GBB Race)</span>
+                
+                
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">6f</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£128,850</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">11</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+              
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a>
+        
+          <a href="https://www.saturday-racing.com/races/6548/" class="race-row">
+            <div class="race-row__time">
+              13:30
+              <small>Class 1</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Qatar Racing British Champions Long Distance Cup (Group 1)</span>
+                
+                
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">1m7f209y</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£283,550</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">10</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+              
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a>
+        
+          <a href="https://www.saturday-racing.com/races/6549/" class="race-row">
+            <div class="race-row__time">
+              14:05
+              <small>Class 1</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Qatar Racing British Champions Sprint Stakes (Group 1)</span>
+                
+                
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">0m6f0y</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£283,550</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">16</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+              
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a>
+        
+          <a href="https://www.saturday-racing.com/races/6550/" class="race-row">
+            <div class="race-row__time">
+              14:40
+              <small>Class 1</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Qatar Racing British Champions Fillies &amp; Mares Stakes (Group 1)</span>
+                
+                
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">1m3f211y</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£283,550</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">13</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+              
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a>
+        
+          <a href="https://www.saturday-racing.com/races/6551/" class="race-row">
+            <div class="race-row__time">
+              15:20
+              <small>Class 1</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Queen Elizabeth II Stakes (Sponsored By Qatar Racing) (Group 1)</span>
+                
+                
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">1m0f0y</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£623,810</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">11</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+              
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a>
+        
+          <a href="https://www.saturday-racing.com/races/6552/" class="race-row race-row--featured">
+            <div class="race-row__time">
+              16:00
+              <small>Class 1</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Qatar Racing Champion Stakes (Group 1)</span>
+                <span class="featured-tag">Big race</span>
+                
+                
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">1m1f212y</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£737,230</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">6</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+              
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a>
+        
+          <a href="https://www.saturday-racing.com/races/6553/" class="race-row">
+            <div class="race-row__time">
+              16:35
+              <small>Class 2</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Balmoral Handicap Stakes (sponsored By Qatar Racing)</span>
+                
+                
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">1m0f0y</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£103,080</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">23</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+              
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a>
+        
+      </article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting tabs · a meeting abandoned</p>
+        <p class="states-case__when">A stand-in: no capture had this branch (tests/support/races-branches.cjs). meeting-tab--abandoned: the course struck through, the state line saying so</p>
+        <div class="states-frame">
+<nav class="meeting-nav" aria-label="Meetings">
+      
+        <a href="#meeting-1" class="meeting-tab
+                  meeting-tab--live
+                  ">
+          <span class="meeting-tab__name">
+            <span class="meeting-tab__pulse" aria-hidden="true"></span>
+            Redcar
+          </span>
+          <span class="meeting-tab__state">
+            
+              ● Live · 3/9 in
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 33%"></span>
+            </span>
+          
+        </a>
+      
+        <a href="#meeting-2" class="meeting-tab
+                  meeting-tab--live
+                  ">
+          <span class="meeting-tab__name">
+            <span class="meeting-tab__pulse" aria-hidden="true"></span>
+            Uttoxeter
+          </span>
+          <span class="meeting-tab__state">
+            
+              ● Live · 3/7 in
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 43%"></span>
+            </span>
+          
+        </a>
+      
+        <a href="#meeting-3" class="meeting-tab
+                  meeting-tab--live
+                  ">
+          <span class="meeting-tab__name">
+            <span class="meeting-tab__pulse" aria-hidden="true"></span>
+            Haydock
+          </span>
+          <span class="meeting-tab__state">
+            
+              ● Live · 2/10 in
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 20%"></span>
+            </span>
+          
+        </a>
+      
+        <a href="#meeting-4" class="meeting-tab
+                  meeting-tab--upcoming">
+          <span class="meeting-tab__name">
+            
+            Newcastle (AW)
+          </span>
+          <span class="meeting-tab__state">
+            
+              
+                Off in 24m
+              
+              · 9 races
+            
+          </span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 0%"></span>
+            </span>
+          
+        </a>
+      
+        <a href="#meeting-5" class="meeting-tab
+                  meeting-tab--abandoned" aria-current="true">
+          <span class="meeting-tab__name">
+            
+            Dundalk (AW)
+          </span>
+          <span class="meeting-tab__state">Abandoned</span>
+          
+          
+            <span class="meeting-tab__meter" aria-hidden="true">
+              <span class="meeting-tab__meter-fill" style="width: 0%"></span>
+            </span>
+          
+        </a>
+      
+    </nav>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting head · abandoned</p>
+        <p class="states-case__when">A stand-in: no capture had this branch (tests/support/races-branches.cjs). meeting-block__status--abandoned</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><div class="meeting-block__header">
+          <h2 class="meeting-block__name">Dundalk (AW)</h2>
+          
+          
+<a class="pick6 pick6--compact" href="https://www.saturday-racing.com/races/meeting/dundalk-aw/2026-10-16/full/" data-pick6-emblem="" aria-label="Pick six horses across the card and duel Mr Fox">
+  <span class="pick6__stamp" aria-hidden="true">CHALLENGE</span>
+  <span class="pick6__num">6</span>
+  <span class="pick6__body">
+    <span class="pick6__lbl">Pick Six</span>
+    <span class="pick6__vs">
+      <span class="pick6__vs-word">vs</span>
+      <span class="pick6__fox-glyph" aria-hidden="true">🦊</span>
+      <span class="pick6__vs-foe">The Fox</span>
+    </span>
+    
+  </span>
+</a>
+
+
+          
+          <div class="meeting-block__sub">
+            8 races · first off
+            <strong>17:00</strong>
+          </div>
+
+          
+            <div class="meeting-block__status meeting-block__status--abandoned">
+              <span class="meeting-block__status-value">Abandoned</span>
+              <span class="meeting-block__status-sep">·</span>
+              <span>Racing called off</span>
+            </div>
+          
+        </div></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Race · abandoned</p>
+        <p class="states-case__when">A stand-in: no capture had this branch (tests/support/races-branches.cjs). race-row--abandoned and abandoned-tag: still there to read, struck through, quiet</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><a href="https://www.saturday-racing.com/races/6539/" class="race-row race-row--abandoned">
+            <div class="race-row__time">
+              17:00
+              
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Irishinjuredjockeys.com Apprentice Optional Claiming Race</span>
+                <span class="abandoned-tag">Abandoned</span>
+                
+                
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">1m2f150y</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">€6,000</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">15</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+                
+<span class="ai-pick-chip" title="Saturday Racing AI · Click race for full reasoning">
+  <span class="ai-pick-chip__icon" aria-hidden="true">⚡</span>
+  <span class="ai-pick-chip__eyebrow">AI</span>
+  <span class="ai-pick-chip__name">Daonethatgotaway</span>
+  
+    <span class="ai-pick-chip__odds" title="Current bookmaker price">11/2</span>
+  
+  
+    <span class="ai-pick-chip__conf">Speculative</span>
+  
+</span>
+
+
+              
+              
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Race · your pick</p>
+        <p class="states-case__when">A stand-in: no capture had this branch (tests/support/races-branches.cjs). race-row__pick-chip, for a member signed in who has picked in the race</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><a href="https://www.saturday-racing.com/races/6536/" class="race-row">
+            <div class="race-row__time">
+              15:47
+              <small>Class 4</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Thomas And Sonny Crilly Plant Hire Handicap Steeple Chase (GBB Race)</span>
+                
+                
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">1m7f214y</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£4,700</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">5</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+                
+<span class="ai-pick-chip" title="Saturday Racing AI · Click race for full reasoning">
+  <span class="ai-pick-chip__icon" aria-hidden="true">⚡</span>
+  <span class="ai-pick-chip__eyebrow">AI</span>
+  <span class="ai-pick-chip__name">Rula Bula</span>
+  
+    <span class="ai-pick-chip__odds" title="Current bookmaker price">6/4</span>
+  
+  
+    <span class="ai-pick-chip__conf">Medium</span>
+  
+</span>
+
+
+              
+              
+                
+              
+              <span class="race-row__pick-chip" title="Your pick in this race">
+                <span class="race-row__pick-chip-icon" aria-hidden="true">✓</span>
+                <span class="race-row__pick-chip-eyebrow">Your pick</span>
+                <span class="race-row__pick-chip-name">Rula Bula</span>
+                <span class="race-row__pick-chip-odds">6/4</span>
+              </span>
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Race · the Fox's cubs</p>
+        <p class="states-case__when">A stand-in: no capture had this branch (tests/support/races-branches.cjs). race-row__crowd-chip--fox: a cub the Fox promoted has picked in the race</p>
+        <div class="states-frame">
+<section class="meetings-paper"><div class="container"><article class="meeting-block" data-meeting-block><a href="https://www.saturday-racing.com/races/6527/" class="race-row">
+            <div class="race-row__time">
+              15:02
+              <small>Class 6</small>
+            </div>
+            <div class="race-row__main">
+              <h3 class="race-row__name">
+                <span style="overflow:hidden;text-overflow:ellipsis;">Market Cross Jewellers Nursery Handicap Stakes</span>
+                
+                
+              </h3>
+              <div class="race-row__meta">
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Dist</span>
+                    <span class="race-row__meta-value">5f</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell">
+                    <span class="race-row__meta-label">Going</span>
+                    <span class="race-row__meta-value">Good</span>
+                  </span>
+                
+                
+                  <span class="race-row__meta-cell race-row__meta-cell--prize">
+                    <span class="race-row__meta-label">Prize</span>
+                    <span class="race-row__meta-value">£4,004</span>
+                  </span>
+                
+                <span class="race-row__meta-cell">
+                  <span class="race-row__meta-label">Field</span>
+                  <span class="race-row__meta-value">9</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class="race-row__right">
+              
+              
+              
+              
+                
+<span class="ai-pick-chip" title="Saturday Racing AI · Click race for full reasoning">
+  <span class="ai-pick-chip__icon" aria-hidden="true">⚡</span>
+  <span class="ai-pick-chip__eyebrow">AI</span>
+  <span class="ai-pick-chip__name">Classyfied</span>
+  
+    <span class="ai-pick-chip__odds" title="Current bookmaker price">9/2</span>
+  
+  
+    <span class="ai-pick-chip__conf">Speculative</span>
+  
+</span>
+
+
+              
+              
+                
+                  <span class="race-row__crowd-chip race-row__crowd-chip--fox" title="1 cub picked here">
+                    <span class="race-row__crowd-chip-icon" aria-hidden="true">🐾</span>
+                    <span class="race-row__crowd-chip-eyebrow">
+                      cubs
+                    </span>
+                    <span class="race-row__crowd-chip-count">1</span>
+                  </span>
+                
+              
+              <span class="race-row__cta">Racecard →</span>
+            </div>
+          </a></article></div></section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Masthead · no racing</p>
+        <p class="states-case__when">A stand-in: no capture had this branch (tests/support/races-branches.cjs). browse-empty: the template's message in the masthead; no tabs, meetings or notes</p>
+        <div class="states-frame">
+<div class="browse-masthead">
+<div class="container">
+
+  <header class="browse-hero">
+    <div class="browse-eyebrow">Today’s races</div>
+    <h1 class="browse-title">Friday 16 October 2026</h1>
+    <div class="browse-stats">
+      <span><strong>0</strong> races</span>
+      <span><strong>0</strong> meetings</span>
+    </div>
+    <nav class="browse-days" aria-label="Race days">
+      <a class="browse-days__day" href="races-yesterday.html">Yesterday</a>
+      <a class="browse-days__day" href="races.html" aria-current="page">Today</a>
+      <a class="browse-days__day" href="races-tomorrow.html">Tomorrow</a>
+    </nav>
+  </header>
+  <div class="browse-empty">
+    <div class="browse-empty__icon" aria-hidden="true">🏇</div>
+    <h2 class="browse-empty__title">No racing today</h2>
+    <p>There are no meetings on the card today. Tomorrow’s racecards are up.</p>
+  </div>
+</div>
+</div>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Notes</p>
+        <p class="states-case__when">three notes after the meetings (the revamp's): the spoilers, Pick Six, free to play</p>
+        <div class="states-frame">
+<section class="browse-notes" aria-label="About this page">
+  <div class="container">
+    <div class="browse-notes__note browse-notes__note--reveal">
+      <h2 class="browse-notes__title">Results, your call</h2>
+      <p>Every winner stays hidden until you ask for it. Reveal one race, reveal a whole meeting, or keep the card spoiler-free while you catch up on the replays.</p>
+    </div>
+    <div class="browse-notes__note browse-notes__note--pick6">
+      <h2 class="browse-notes__title">Pick Six, beat the Fox</h2>
+      <p>Pick six horses from across the day’s racing and take on Mr Fox, our resident tipster. Pride on the line, nothing else.</p>
+    </div>
+    <div class="browse-notes__note browse-notes__note--free">
+      <h2 class="browse-notes__title">Free to play</h2>
+      <p>Saturday Racing takes no bets and handles no money. The racecards, the results and the game are free.</p>
+    </div>
+  </div>
+</section>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting · tablet</p>
+        <p class="states-case__when">a sheet 640 to 860px wide: the time keeps its column, what there is to press goes under the race</p>
+        <div class="states-frame states-frame--window" style="width: 768px">
+<iframe class="states-iframe" title="Meeting · tablet" height="1463" loading="lazy" srcdoc="<!doctype html>
+<html lang=&quot;en-GB&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<link rel=&quot;stylesheet&quot; href=&quot;static/fonts/saturday-fonts.css&quot;>
+
+  <!-- ── Stylesheets ───────────────────────────────────────── -->
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/base.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/paper.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/chrome.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/voting/css/picks_budget.css&quot;>
+
+  
+<link rel=&quot;stylesheet&quot; href=&quot;static/browse/css/browse.css&quot;>
+
+  
+
+<style>
+  /* The page's own ground; nothing pinned. */
+  body { margin: 0; background: var(--c-paper, #fafaf7); }
+  .meeting-nav { position: relative; top: auto; }
+</style>
+</head>
+<body class=&quot;page-racecard page-racecard-browse&quot;><section class=&quot;meetings-paper&quot;><div class=&quot;container&quot;><article class=&quot;meeting-block&quot; id=&quot;meeting-1&quot; data-meeting-block=&quot;&quot;>
+        
+        <div class=&quot;meeting-block__header&quot;>
+          <h2 class=&quot;meeting-block__name&quot;>Redcar</h2>
+          
+          
+<a class=&quot;pick6 pick6--compact&quot; href=&quot;https://www.saturday-racing.com/races/meeting/redcar/2026-10-16/full/&quot; data-pick6-emblem=&quot;&quot; aria-label=&quot;Pick six horses across the card and duel Mr Fox&quot;>
+  <span class=&quot;pick6__stamp&quot; aria-hidden=&quot;true&quot;>CHALLENGE</span>
+  <span class=&quot;pick6__num&quot;>6</span>
+  <span class=&quot;pick6__body&quot;>
+    <span class=&quot;pick6__lbl&quot;>Pick Six</span>
+    <span class=&quot;pick6__vs&quot;>
+      <span class=&quot;pick6__vs-word&quot;>vs</span>
+      <span class=&quot;pick6__fox-glyph&quot; aria-hidden=&quot;true&quot;>🦊</span>
+      <span class=&quot;pick6__vs-foe&quot;>The Fox</span>
+    </span>
+    
+  </span>
+</a>
+
+
+          
+            <button type=&quot;button&quot; class=&quot;meeting-block__reveal-all&quot; data-action=&quot;reveal-meeting&quot; aria-pressed=&quot;false&quot; title=&quot;Toggle winners for every resulted race at Redcar&quot;>
+              <span class=&quot;meeting-block__reveal-all-face meeting-block__reveal-all-face--hidden&quot;>
+                <span aria-hidden=&quot;true&quot;>👁</span>
+                Reveal all
+              </span>
+              <span class=&quot;meeting-block__reveal-all-face meeting-block__reveal-all-face--revealed&quot;>
+                <span aria-hidden=&quot;true&quot;>🙈</span>
+                Hide all
+              </span>
+            </button>
+          
+          <div class=&quot;meeting-block__sub&quot;>
+            9 races · first off
+            <strong>13:20</strong>
+          </div>
+
+          
+            <div class=&quot;meeting-block__status meeting-block__status--live&quot;>
+              <span class=&quot;meeting-block__status-pulse&quot; aria-hidden=&quot;true&quot;></span>
+              <span class=&quot;meeting-block__status-value&quot;>Live now</span>
+              
+                <span class=&quot;meeting-block__status-sep&quot;>·</span>
+                <span class=&quot;meeting-block__status-label&quot;>Next off</span>
+                <span class=&quot;meeting-block__status-value&quot;>16:12</span>
+              
+              <span class=&quot;meeting-block__status-sep&quot;>·</span>
+              <span class=&quot;meeting-block__status-value&quot;>3/9</span>
+              <span>results in</span>
+            </div>
+          
+        <div class=&quot;rbr-track&quot;><p class=&quot;rbr-track__count&quot;>0 of 3 revealed</p><span class=&quot;rbr-track__lane&quot; aria-hidden=&quot;true&quot; style=&quot;--rbr-races: 9; --rbr-run: 0.3333333333333333; --rbr-at: 0;&quot;><span class=&quot;rbr-track__horse&quot;></span><span class=&quot;rbr-track__post&quot;></span></span></div></div>
+
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6523/&quot; class=&quot;race-row race-row--has-result&quot;>
+            <div class=&quot;race-row__time&quot;>
+              13:20
+              <small>Class 4</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div I) (GBB Race)</span>
+                
+                <span class=&quot;result-tag&quot;>✓ Result</span>
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>7f219y</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£5,400</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>10</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                <button type=&quot;button&quot; class=&quot;race-row__spoiler&quot; data-spoiler=&quot;&quot; data-action=&quot;reveal-result&quot; data-race-id=&quot;6523&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Reveal winner of Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div I) (GBB Race) — starting price 2/9F — ridden by Cieren Fallon&quot;>
+                  <span class=&quot;race-row__spoiler-face race-row__spoiler-face--hidden&quot;>
+                    <span aria-hidden=&quot;true&quot;>👁</span>
+                    Reveal winner
+                  </span>
+                  <span class=&quot;race-row__spoiler-face race-row__spoiler-face--revealed&quot;>
+                    
+                      <span class=&quot;race-row__spoiler-silk&quot; aria-hidden=&quot;true&quot; style=&quot;--silk-a: #1a3a6b; --silk-b: #ffffff;&quot;></span>
+                    
+                    <span class=&quot;race-row__spoiler-name&quot;>Extragalactic (IRE)</span>
+                    
+                      <span class=&quot;race-row__spoiler-sp&quot;>2/9F<small> SP</small></span>
+                    
+                    
+                      <span class=&quot;race-row__spoiler-connections&quot; role=&quot;tooltip&quot;>
+                        
+                          <span class=&quot;race-row__spoiler-conn-row&quot;>
+                            <span class=&quot;race-row__spoiler-conn-label&quot;>Jockey</span>
+                            <span>Cieren Fallon</span>
+                          </span>
+                        
+                        
+                          <span class=&quot;race-row__spoiler-conn-row&quot;>
+                            <span class=&quot;race-row__spoiler-conn-label&quot;>Trainer</span>
+                            <span>William Haggas</span>
+                          </span>
+                        
+                      </span>
+                    
+                  </span>
+                </button>
+              
+              
+                
+                  <span class=&quot;race-row__crowd-chip&quot; title=&quot;1 cub picked here&quot;>
+                    <span class=&quot;race-row__crowd-chip-icon&quot; aria-hidden=&quot;true&quot;>🐾</span>
+                    <span class=&quot;race-row__crowd-chip-eyebrow&quot;>
+                      cubs
+                    </span>
+                    <span class=&quot;race-row__crowd-chip-count&quot;>1</span>
+                  </span>
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6524/&quot; class=&quot;race-row race-row--has-result&quot;>
+            <div class=&quot;race-row__time&quot;>
+              13:52
+              <small>Class 4</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div II) (GBB Race)</span>
+                
+                <span class=&quot;result-tag&quot;>✓ Result</span>
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>7f219y</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£5,400</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>10</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                <button type=&quot;button&quot; class=&quot;race-row__spoiler&quot; data-spoiler=&quot;&quot; data-action=&quot;reveal-result&quot; data-race-id=&quot;6524&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Reveal winner of Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div II) (GBB Race) — starting price 11/2 — ridden by Kevin Stott&quot;>
+                  <span class=&quot;race-row__spoiler-face race-row__spoiler-face--hidden&quot;>
+                    <span aria-hidden=&quot;true&quot;>👁</span>
+                    Reveal winner
+                  </span>
+                  <span class=&quot;race-row__spoiler-face race-row__spoiler-face--revealed&quot;>
+                    
+                      <span class=&quot;race-row__spoiler-silk&quot; aria-hidden=&quot;true&quot; style=&quot;--silk-a: #1a3a6b; --silk-b: #ffffff;&quot;></span>
+                    
+                    <span class=&quot;race-row__spoiler-name&quot;>Unicorn Milkshake (GB)</span>
+                    
+                      <span class=&quot;race-row__spoiler-sp&quot;>11/2<small> SP</small></span>
+                    
+                    
+                      <span class=&quot;race-row__spoiler-connections&quot; role=&quot;tooltip&quot;>
+                        
+                          <span class=&quot;race-row__spoiler-conn-row&quot;>
+                            <span class=&quot;race-row__spoiler-conn-label&quot;>Jockey</span>
+                            <span>Kevin Stott</span>
+                          </span>
+                        
+                        
+                          <span class=&quot;race-row__spoiler-conn-row&quot;>
+                            <span class=&quot;race-row__spoiler-conn-label&quot;>Trainer</span>
+                            <span>Brian Ellison</span>
+                          </span>
+                        
+                      </span>
+                    
+                  </span>
+                </button>
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6525/&quot; class=&quot;race-row&quot;>
+            <div class=&quot;race-row__time&quot;>
+              13:55
+              <small>Class 4</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div I) (GBB Race)</span>
+                
+                
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>0m7f219y</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£5,400</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>28</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                
+<span class=&quot;ai-pick-chip&quot; title=&quot;Saturday Racing AI · Click race for full reasoning&quot;>
+  <span class=&quot;ai-pick-chip__icon&quot; aria-hidden=&quot;true&quot;>⚡</span>
+  <span class=&quot;ai-pick-chip__eyebrow&quot;>AI</span>
+  <span class=&quot;ai-pick-chip__name&quot;>Alberich</span>
+  
+  
+    <span class=&quot;ai-pick-chip__conf&quot;>Medium</span>
+  
+</span>
+
+
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6526/&quot; class=&quot;race-row race-row--has-result&quot;>
+            <div class=&quot;race-row__time&quot;>
+              14:27
+              <small>Class 3</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Watch Live On Racing TV EBF Fillies' Novice Stakes (GBB Race)</span>
+                
+                <span class=&quot;result-tag&quot;>✓ Result</span>
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>7f</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£6,480</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>7</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                <button type=&quot;button&quot; class=&quot;race-row__spoiler&quot; data-spoiler=&quot;&quot; data-action=&quot;reveal-result&quot; data-race-id=&quot;6526&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Reveal winner of Watch Live On Racing TV EBF Fillies' Novice Stakes (GBB Race) — starting price 6/4F — ridden by David Probert&quot;>
+                  <span class=&quot;race-row__spoiler-face race-row__spoiler-face--hidden&quot;>
+                    <span aria-hidden=&quot;true&quot;>👁</span>
+                    Reveal winner
+                  </span>
+                  <span class=&quot;race-row__spoiler-face race-row__spoiler-face--revealed&quot;>
+                    
+                      <span class=&quot;race-row__spoiler-silk&quot; aria-hidden=&quot;true&quot; style=&quot;--silk-a: #1a3a6b; --silk-b: #ffffff;&quot;></span>
+                    
+                    <span class=&quot;race-row__spoiler-name&quot;>Trapped Goddess (GER)</span>
+                    
+                      <span class=&quot;race-row__spoiler-sp&quot;>6/4F<small> SP</small></span>
+                    
+                    
+                      <span class=&quot;race-row__spoiler-connections&quot; role=&quot;tooltip&quot;>
+                        
+                          <span class=&quot;race-row__spoiler-conn-row&quot;>
+                            <span class=&quot;race-row__spoiler-conn-label&quot;>Jockey</span>
+                            <span>David Probert</span>
+                          </span>
+                        
+                        
+                          <span class=&quot;race-row__spoiler-conn-row&quot;>
+                            <span class=&quot;race-row__spoiler-conn-label&quot;>Trainer</span>
+                            <span>Hugo Palmer</span>
+                          </span>
+                        
+                      </span>
+                    
+                  </span>
+                </button>
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6527/&quot; class=&quot;race-row&quot;>
+            <div class=&quot;race-row__time&quot;>
+              15:02
+              <small>Class 6</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Market Cross Jewellers Nursery Handicap Stakes</span>
+                
+                
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>5f</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£4,004</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>9</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                
+<span class=&quot;ai-pick-chip&quot; title=&quot;Saturday Racing AI · Click race for full reasoning&quot;>
+  <span class=&quot;ai-pick-chip__icon&quot; aria-hidden=&quot;true&quot;>⚡</span>
+  <span class=&quot;ai-pick-chip__eyebrow&quot;>AI</span>
+  <span class=&quot;ai-pick-chip__name&quot;>Classyfied</span>
+  
+    <span class=&quot;ai-pick-chip__odds&quot; title=&quot;Current bookmaker price&quot;>9/2</span>
+  
+  
+    <span class=&quot;ai-pick-chip__conf&quot;>Speculative</span>
+  
+</span>
+
+
+              
+              
+                
+                  <span class=&quot;race-row__crowd-chip&quot; title=&quot;1 cub picked here&quot;>
+                    <span class=&quot;race-row__crowd-chip-icon&quot; aria-hidden=&quot;true&quot;>🐾</span>
+                    <span class=&quot;race-row__crowd-chip-eyebrow&quot;>
+                      cubs
+                    </span>
+                    <span class=&quot;race-row__crowd-chip-count&quot;>1</span>
+                  </span>
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6528/&quot; class=&quot;race-row&quot;>
+            <div class=&quot;race-row__time&quot;>
+              15:37
+              <small>Class 5</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Sam Hall Memorial Handicap Stakes</span>
+                
+                
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>5f</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£3,926</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>10</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                
+<span class=&quot;ai-pick-chip&quot; title=&quot;Saturday Racing AI · Click race for full reasoning&quot;>
+  <span class=&quot;ai-pick-chip__icon&quot; aria-hidden=&quot;true&quot;>⚡</span>
+  <span class=&quot;ai-pick-chip__eyebrow&quot;>AI</span>
+  <span class=&quot;ai-pick-chip__name&quot;>Castan</span>
+  
+    <span class=&quot;ai-pick-chip__odds&quot; title=&quot;Current bookmaker price&quot;>5/1</span>
+  
+  
+    <span class=&quot;ai-pick-chip__conf&quot;>Speculative</span>
+  
+</span>
+
+
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6529/&quot; class=&quot;race-row&quot;>
+            <div class=&quot;race-row__time&quot;>
+              16:12
+              <small>Class 5</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Every Race Live On Racing TV Handicap Stakes</span>
+                
+                
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>5f217y</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£3,926</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>13</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                
+<span class=&quot;ai-pick-chip&quot; title=&quot;Saturday Racing AI · Click race for full reasoning&quot;>
+  <span class=&quot;ai-pick-chip__icon&quot; aria-hidden=&quot;true&quot;>⚡</span>
+  <span class=&quot;ai-pick-chip__eyebrow&quot;>AI</span>
+  <span class=&quot;ai-pick-chip__name&quot;>Ingleby Archie</span>
+  
+    <span class=&quot;ai-pick-chip__odds&quot; title=&quot;Current bookmaker price&quot;>2/1</span>
+  
+  
+    <span class=&quot;ai-pick-chip__conf&quot;>Speculative</span>
+  
+</span>
+
+
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6530/&quot; class=&quot;race-row&quot;>
+            <div class=&quot;race-row__time&quot;>
+              16:48
+              <small>Class 6</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>racingtv.com Handicap Stakes</span>
+                
+                
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>7f</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£3,140</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>19</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                
+<span class=&quot;ai-pick-chip&quot; title=&quot;Saturday Racing AI · Click race for full reasoning&quot;>
+  <span class=&quot;ai-pick-chip__icon&quot; aria-hidden=&quot;true&quot;>⚡</span>
+  <span class=&quot;ai-pick-chip__eyebrow&quot;>AI</span>
+  <span class=&quot;ai-pick-chip__name&quot;>Kiss Me My Love</span>
+  
+    <span class=&quot;ai-pick-chip__odds&quot; title=&quot;Current bookmaker price&quot;>4/1</span>
+  
+  
+    <span class=&quot;ai-pick-chip__conf&quot;>Speculative</span>
+  
+</span>
+
+
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6531/&quot; class=&quot;race-row&quot;>
+            <div class=&quot;race-row__time&quot;>
+              17:23
+              <small>Class 6</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Watch Racing Replays At racingtv.com Amateur Jockeys' Handicap Stakes</span>
+                
+                
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>1m2f1y</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£2,980</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>14</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                
+<span class=&quot;ai-pick-chip&quot; title=&quot;Saturday Racing AI · Click race for full reasoning&quot;>
+  <span class=&quot;ai-pick-chip__icon&quot; aria-hidden=&quot;true&quot;>⚡</span>
+  <span class=&quot;ai-pick-chip__eyebrow&quot;>AI</span>
+  <span class=&quot;ai-pick-chip__name&quot;>Jam Lass</span>
+  
+    <span class=&quot;ai-pick-chip__odds&quot; title=&quot;Current bookmaker price&quot;>13/2</span>
+  
+  
+    <span class=&quot;ai-pick-chip__conf&quot;>Speculative</span>
+  
+</span>
+
+
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+      </article></div></section></body>
+</html>"></iframe>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Masthead · phone</p>
+        <p class="states-case__when">under 768px: the same column, the next race off on two lines, the stickers a size down</p>
+        <div class="states-frame states-frame--window" style="width: 390px">
+<iframe class="states-iframe" title="Masthead · phone" height="618" loading="lazy" srcdoc="<!doctype html>
+<html lang=&quot;en-GB&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<link rel=&quot;stylesheet&quot; href=&quot;static/fonts/saturday-fonts.css&quot;>
+
+  <!-- ── Stylesheets ───────────────────────────────────────── -->
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/base.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/paper.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/chrome.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/voting/css/picks_budget.css&quot;>
+
+  
+<link rel=&quot;stylesheet&quot; href=&quot;static/browse/css/browse.css&quot;>
+
+  
+
+<style>
+  /* The page's own ground; nothing pinned. */
+  body { margin: 0; background: var(--c-paper, #fafaf7); }
+  .meeting-nav { position: relative; top: auto; }
+</style>
+</head>
+<body class=&quot;page-racecard page-racecard-browse&quot;><div class=&quot;browse-masthead&quot;>
+<div class=&quot;container&quot;>
+
+  <header class=&quot;browse-hero&quot;>
+    <div class=&quot;browse-eyebrow&quot;>Today’s races</div>
+    <h1 class=&quot;browse-title&quot;>Friday 16 October 2026</h1>
+    <div class=&quot;browse-stats&quot;>
+      <span><strong>43</strong> races</span>
+      <span><strong>5</strong> meetings</span>
+      <span>First off <strong>13:20</strong></span>
+      <span><strong>8</strong> results in</span>
+    </div>
+    <nav class=&quot;browse-days&quot; aria-label=&quot;Race days&quot;>
+      <a class=&quot;browse-days__day&quot; href=&quot;races-yesterday.html&quot;>Yesterday</a>
+      <a class=&quot;browse-days__day&quot; href=&quot;races.html&quot; aria-current=&quot;page&quot;>Today</a>
+      <a class=&quot;browse-days__day&quot; href=&quot;races-tomorrow.html&quot;>Tomorrow</a>
+    </nav>
+  </header>
+
+  
+
+    
+      <a href=&quot;https://www.saturday-racing.com/races/6536/&quot; class=&quot;browse-next-off&quot;>
+        <span class=&quot;browse-next-off__pulse&quot; aria-hidden=&quot;true&quot;></span>
+        <span class=&quot;browse-next-off__body&quot;>
+          <span class=&quot;browse-next-off__eyebrow&quot;>Next off</span>
+          <h2 class=&quot;browse-next-off__title&quot;>
+            Uttoxeter · Thomas And Sonny Crilly Plant Hire Handicap Steeple Chase (GBB Race)
+          </h2>
+        </span>
+        <span class=&quot;browse-next-off__time&quot;>
+          15:47
+          <span class=&quot;browse-next-off__countdown&quot;>
+            
+              in 3m
+            
+          </span>
+        </span>
+      </a>
+
+  <a class=&quot;browse-pick6&quot; href=&quot;https://www.saturday-racing.com/races/meeting/uttoxeter/2026-10-16/full/&quot;>
+    <span class=&quot;browse-pick6__stamp&quot; aria-hidden=&quot;true&quot;>
+      <svg class=&quot;browse-pick6__ring&quot; viewBox=&quot;0 0 100 100&quot; focusable=&quot;false&quot;>
+        <defs>
+          <path id=&quot;browse-pick6-over&quot; d=&quot;M13.2,50 A36.8,36.8 0 0 1 86.8,50&quot;></path>
+          <path id=&quot;browse-pick6-under&quot; d=&quot;M5.8,50 A44.2,44.2 0 0 0 94.2,50&quot;></path>
+        </defs>
+        <text><textPath href=&quot;#browse-pick6-over&quot; startOffset=&quot;50%&quot;>PICK SIX</textPath></text>
+        <text><textPath href=&quot;#browse-pick6-under&quot; startOffset=&quot;50%&quot;>CHALLENGE</textPath></text>
+        <circle cx=&quot;9.5&quot; cy=&quot;50&quot; r=&quot;1.7&quot;></circle>
+        <circle cx=&quot;90.5&quot; cy=&quot;50&quot; r=&quot;1.7&quot;></circle>
+      </svg>
+      6
+    </span>
+    <span class=&quot;browse-pick6__name&quot;>Pick Six</span>
+    <span class=&quot;browse-pick6__vs&quot;>vs The Fox</span>
+    <span class=&quot;browse-pick6__sub&quot;>Stack six. Beat the head tipster.</span>
+  </a>
+</div>
+</div></body>
+</html>"></iframe>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting · phone</p>
+        <p class="states-case__when">a sheet under 640px wide: the head one column, its buttons on a line; each race the time and class, the name, the figures, then a line of what there is to press, Racecard at its end</p>
+        <div class="states-frame states-frame--window" style="width: 390px">
+<iframe class="states-iframe" title="Meeting · phone" height="2113" loading="lazy" srcdoc="<!doctype html>
+<html lang=&quot;en-GB&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<link rel=&quot;stylesheet&quot; href=&quot;static/fonts/saturday-fonts.css&quot;>
+
+  <!-- ── Stylesheets ───────────────────────────────────────── -->
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/base.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/paper.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/chrome.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/voting/css/picks_budget.css&quot;>
+
+  
+<link rel=&quot;stylesheet&quot; href=&quot;static/browse/css/browse.css&quot;>
+
+  
+
+<style>
+  /* The page's own ground; nothing pinned. */
+  body { margin: 0; background: var(--c-paper, #fafaf7); }
+  .meeting-nav { position: relative; top: auto; }
+</style>
+</head>
+<body class=&quot;page-racecard page-racecard-browse&quot;><section class=&quot;meetings-paper&quot;><div class=&quot;container&quot;><article class=&quot;meeting-block&quot; id=&quot;meeting-1&quot; data-meeting-block=&quot;&quot;>
+        
+        <div class=&quot;meeting-block__header&quot;>
+          <h2 class=&quot;meeting-block__name&quot;>Redcar</h2>
+          
+          
+<a class=&quot;pick6 pick6--compact&quot; href=&quot;https://www.saturday-racing.com/races/meeting/redcar/2026-10-16/full/&quot; data-pick6-emblem=&quot;&quot; aria-label=&quot;Pick six horses across the card and duel Mr Fox&quot;>
+  <span class=&quot;pick6__stamp&quot; aria-hidden=&quot;true&quot;>CHALLENGE</span>
+  <span class=&quot;pick6__num&quot;>6</span>
+  <span class=&quot;pick6__body&quot;>
+    <span class=&quot;pick6__lbl&quot;>Pick Six</span>
+    <span class=&quot;pick6__vs&quot;>
+      <span class=&quot;pick6__vs-word&quot;>vs</span>
+      <span class=&quot;pick6__fox-glyph&quot; aria-hidden=&quot;true&quot;>🦊</span>
+      <span class=&quot;pick6__vs-foe&quot;>The Fox</span>
+    </span>
+    
+  </span>
+</a>
+
+
+          
+            <button type=&quot;button&quot; class=&quot;meeting-block__reveal-all&quot; data-action=&quot;reveal-meeting&quot; aria-pressed=&quot;false&quot; title=&quot;Toggle winners for every resulted race at Redcar&quot;>
+              <span class=&quot;meeting-block__reveal-all-face meeting-block__reveal-all-face--hidden&quot;>
+                <span aria-hidden=&quot;true&quot;>👁</span>
+                Reveal all
+              </span>
+              <span class=&quot;meeting-block__reveal-all-face meeting-block__reveal-all-face--revealed&quot;>
+                <span aria-hidden=&quot;true&quot;>🙈</span>
+                Hide all
+              </span>
+            </button>
+          
+          <div class=&quot;meeting-block__sub&quot;>
+            9 races · first off
+            <strong>13:20</strong>
+          </div>
+
+          
+            <div class=&quot;meeting-block__status meeting-block__status--live&quot;>
+              <span class=&quot;meeting-block__status-pulse&quot; aria-hidden=&quot;true&quot;></span>
+              <span class=&quot;meeting-block__status-value&quot;>Live now</span>
+              
+                <span class=&quot;meeting-block__status-sep&quot;>·</span>
+                <span class=&quot;meeting-block__status-label&quot;>Next off</span>
+                <span class=&quot;meeting-block__status-value&quot;>16:12</span>
+              
+              <span class=&quot;meeting-block__status-sep&quot;>·</span>
+              <span class=&quot;meeting-block__status-value&quot;>3/9</span>
+              <span>results in</span>
+            </div>
+          
+        <div class=&quot;rbr-track&quot;><p class=&quot;rbr-track__count&quot;>0 of 3 revealed</p><span class=&quot;rbr-track__lane&quot; aria-hidden=&quot;true&quot; style=&quot;--rbr-races: 9; --rbr-run: 0.3333333333333333; --rbr-at: 0;&quot;><span class=&quot;rbr-track__horse&quot;></span><span class=&quot;rbr-track__post&quot;></span></span></div></div>
+
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6523/&quot; class=&quot;race-row race-row--has-result&quot;>
+            <div class=&quot;race-row__time&quot;>
+              13:20
+              <small>Class 4</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div I) (GBB Race)</span>
+                
+                <span class=&quot;result-tag&quot;>✓ Result</span>
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>7f219y</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£5,400</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>10</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                <button type=&quot;button&quot; class=&quot;race-row__spoiler&quot; data-spoiler=&quot;&quot; data-action=&quot;reveal-result&quot; data-race-id=&quot;6523&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Reveal winner of Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div I) (GBB Race) — starting price 2/9F — ridden by Cieren Fallon&quot;>
+                  <span class=&quot;race-row__spoiler-face race-row__spoiler-face--hidden&quot;>
+                    <span aria-hidden=&quot;true&quot;>👁</span>
+                    Reveal winner
+                  </span>
+                  <span class=&quot;race-row__spoiler-face race-row__spoiler-face--revealed&quot;>
+                    
+                      <span class=&quot;race-row__spoiler-silk&quot; aria-hidden=&quot;true&quot; style=&quot;--silk-a: #1a3a6b; --silk-b: #ffffff;&quot;></span>
+                    
+                    <span class=&quot;race-row__spoiler-name&quot;>Extragalactic (IRE)</span>
+                    
+                      <span class=&quot;race-row__spoiler-sp&quot;>2/9F<small> SP</small></span>
+                    
+                    
+                      <span class=&quot;race-row__spoiler-connections&quot; role=&quot;tooltip&quot;>
+                        
+                          <span class=&quot;race-row__spoiler-conn-row&quot;>
+                            <span class=&quot;race-row__spoiler-conn-label&quot;>Jockey</span>
+                            <span>Cieren Fallon</span>
+                          </span>
+                        
+                        
+                          <span class=&quot;race-row__spoiler-conn-row&quot;>
+                            <span class=&quot;race-row__spoiler-conn-label&quot;>Trainer</span>
+                            <span>William Haggas</span>
+                          </span>
+                        
+                      </span>
+                    
+                  </span>
+                </button>
+              
+              
+                
+                  <span class=&quot;race-row__crowd-chip&quot; title=&quot;1 cub picked here&quot;>
+                    <span class=&quot;race-row__crowd-chip-icon&quot; aria-hidden=&quot;true&quot;>🐾</span>
+                    <span class=&quot;race-row__crowd-chip-eyebrow&quot;>
+                      cubs
+                    </span>
+                    <span class=&quot;race-row__crowd-chip-count&quot;>1</span>
+                  </span>
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6524/&quot; class=&quot;race-row race-row--has-result&quot;>
+            <div class=&quot;race-row__time&quot;>
+              13:52
+              <small>Class 4</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div II) (GBB Race)</span>
+                
+                <span class=&quot;result-tag&quot;>✓ Result</span>
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>7f219y</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£5,400</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>10</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                <button type=&quot;button&quot; class=&quot;race-row__spoiler&quot; data-spoiler=&quot;&quot; data-action=&quot;reveal-result&quot; data-race-id=&quot;6524&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Reveal winner of Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div II) (GBB Race) — starting price 11/2 — ridden by Kevin Stott&quot;>
+                  <span class=&quot;race-row__spoiler-face race-row__spoiler-face--hidden&quot;>
+                    <span aria-hidden=&quot;true&quot;>👁</span>
+                    Reveal winner
+                  </span>
+                  <span class=&quot;race-row__spoiler-face race-row__spoiler-face--revealed&quot;>
+                    
+                      <span class=&quot;race-row__spoiler-silk&quot; aria-hidden=&quot;true&quot; style=&quot;--silk-a: #1a3a6b; --silk-b: #ffffff;&quot;></span>
+                    
+                    <span class=&quot;race-row__spoiler-name&quot;>Unicorn Milkshake (GB)</span>
+                    
+                      <span class=&quot;race-row__spoiler-sp&quot;>11/2<small> SP</small></span>
+                    
+                    
+                      <span class=&quot;race-row__spoiler-connections&quot; role=&quot;tooltip&quot;>
+                        
+                          <span class=&quot;race-row__spoiler-conn-row&quot;>
+                            <span class=&quot;race-row__spoiler-conn-label&quot;>Jockey</span>
+                            <span>Kevin Stott</span>
+                          </span>
+                        
+                        
+                          <span class=&quot;race-row__spoiler-conn-row&quot;>
+                            <span class=&quot;race-row__spoiler-conn-label&quot;>Trainer</span>
+                            <span>Brian Ellison</span>
+                          </span>
+                        
+                      </span>
+                    
+                  </span>
+                </button>
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6525/&quot; class=&quot;race-row&quot;>
+            <div class=&quot;race-row__time&quot;>
+              13:55
+              <small>Class 4</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Join Racing TV Now British EBF Restricted Novice Stakes (For Horses In Bands C And D) (Div I) (GBB Race)</span>
+                
+                
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>0m7f219y</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£5,400</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>28</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                
+<span class=&quot;ai-pick-chip&quot; title=&quot;Saturday Racing AI · Click race for full reasoning&quot;>
+  <span class=&quot;ai-pick-chip__icon&quot; aria-hidden=&quot;true&quot;>⚡</span>
+  <span class=&quot;ai-pick-chip__eyebrow&quot;>AI</span>
+  <span class=&quot;ai-pick-chip__name&quot;>Alberich</span>
+  
+  
+    <span class=&quot;ai-pick-chip__conf&quot;>Medium</span>
+  
+</span>
+
+
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6526/&quot; class=&quot;race-row race-row--has-result&quot;>
+            <div class=&quot;race-row__time&quot;>
+              14:27
+              <small>Class 3</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Watch Live On Racing TV EBF Fillies' Novice Stakes (GBB Race)</span>
+                
+                <span class=&quot;result-tag&quot;>✓ Result</span>
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>7f</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£6,480</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>7</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                <button type=&quot;button&quot; class=&quot;race-row__spoiler&quot; data-spoiler=&quot;&quot; data-action=&quot;reveal-result&quot; data-race-id=&quot;6526&quot; aria-pressed=&quot;false&quot; aria-label=&quot;Reveal winner of Watch Live On Racing TV EBF Fillies' Novice Stakes (GBB Race) — starting price 6/4F — ridden by David Probert&quot;>
+                  <span class=&quot;race-row__spoiler-face race-row__spoiler-face--hidden&quot;>
+                    <span aria-hidden=&quot;true&quot;>👁</span>
+                    Reveal winner
+                  </span>
+                  <span class=&quot;race-row__spoiler-face race-row__spoiler-face--revealed&quot;>
+                    
+                      <span class=&quot;race-row__spoiler-silk&quot; aria-hidden=&quot;true&quot; style=&quot;--silk-a: #1a3a6b; --silk-b: #ffffff;&quot;></span>
+                    
+                    <span class=&quot;race-row__spoiler-name&quot;>Trapped Goddess (GER)</span>
+                    
+                      <span class=&quot;race-row__spoiler-sp&quot;>6/4F<small> SP</small></span>
+                    
+                    
+                      <span class=&quot;race-row__spoiler-connections&quot; role=&quot;tooltip&quot;>
+                        
+                          <span class=&quot;race-row__spoiler-conn-row&quot;>
+                            <span class=&quot;race-row__spoiler-conn-label&quot;>Jockey</span>
+                            <span>David Probert</span>
+                          </span>
+                        
+                        
+                          <span class=&quot;race-row__spoiler-conn-row&quot;>
+                            <span class=&quot;race-row__spoiler-conn-label&quot;>Trainer</span>
+                            <span>Hugo Palmer</span>
+                          </span>
+                        
+                      </span>
+                    
+                  </span>
+                </button>
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6527/&quot; class=&quot;race-row&quot;>
+            <div class=&quot;race-row__time&quot;>
+              15:02
+              <small>Class 6</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Market Cross Jewellers Nursery Handicap Stakes</span>
+                
+                
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>5f</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£4,004</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>9</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                
+<span class=&quot;ai-pick-chip&quot; title=&quot;Saturday Racing AI · Click race for full reasoning&quot;>
+  <span class=&quot;ai-pick-chip__icon&quot; aria-hidden=&quot;true&quot;>⚡</span>
+  <span class=&quot;ai-pick-chip__eyebrow&quot;>AI</span>
+  <span class=&quot;ai-pick-chip__name&quot;>Classyfied</span>
+  
+    <span class=&quot;ai-pick-chip__odds&quot; title=&quot;Current bookmaker price&quot;>9/2</span>
+  
+  
+    <span class=&quot;ai-pick-chip__conf&quot;>Speculative</span>
+  
+</span>
+
+
+              
+              
+                
+                  <span class=&quot;race-row__crowd-chip&quot; title=&quot;1 cub picked here&quot;>
+                    <span class=&quot;race-row__crowd-chip-icon&quot; aria-hidden=&quot;true&quot;>🐾</span>
+                    <span class=&quot;race-row__crowd-chip-eyebrow&quot;>
+                      cubs
+                    </span>
+                    <span class=&quot;race-row__crowd-chip-count&quot;>1</span>
+                  </span>
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6528/&quot; class=&quot;race-row&quot;>
+            <div class=&quot;race-row__time&quot;>
+              15:37
+              <small>Class 5</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Sam Hall Memorial Handicap Stakes</span>
+                
+                
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>5f</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£3,926</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>10</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                
+<span class=&quot;ai-pick-chip&quot; title=&quot;Saturday Racing AI · Click race for full reasoning&quot;>
+  <span class=&quot;ai-pick-chip__icon&quot; aria-hidden=&quot;true&quot;>⚡</span>
+  <span class=&quot;ai-pick-chip__eyebrow&quot;>AI</span>
+  <span class=&quot;ai-pick-chip__name&quot;>Castan</span>
+  
+    <span class=&quot;ai-pick-chip__odds&quot; title=&quot;Current bookmaker price&quot;>5/1</span>
+  
+  
+    <span class=&quot;ai-pick-chip__conf&quot;>Speculative</span>
+  
+</span>
+
+
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6529/&quot; class=&quot;race-row&quot;>
+            <div class=&quot;race-row__time&quot;>
+              16:12
+              <small>Class 5</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Every Race Live On Racing TV Handicap Stakes</span>
+                
+                
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>5f217y</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£3,926</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>13</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                
+<span class=&quot;ai-pick-chip&quot; title=&quot;Saturday Racing AI · Click race for full reasoning&quot;>
+  <span class=&quot;ai-pick-chip__icon&quot; aria-hidden=&quot;true&quot;>⚡</span>
+  <span class=&quot;ai-pick-chip__eyebrow&quot;>AI</span>
+  <span class=&quot;ai-pick-chip__name&quot;>Ingleby Archie</span>
+  
+    <span class=&quot;ai-pick-chip__odds&quot; title=&quot;Current bookmaker price&quot;>2/1</span>
+  
+  
+    <span class=&quot;ai-pick-chip__conf&quot;>Speculative</span>
+  
+</span>
+
+
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6530/&quot; class=&quot;race-row&quot;>
+            <div class=&quot;race-row__time&quot;>
+              16:48
+              <small>Class 6</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>racingtv.com Handicap Stakes</span>
+                
+                
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>7f</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£3,140</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>19</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                
+<span class=&quot;ai-pick-chip&quot; title=&quot;Saturday Racing AI · Click race for full reasoning&quot;>
+  <span class=&quot;ai-pick-chip__icon&quot; aria-hidden=&quot;true&quot;>⚡</span>
+  <span class=&quot;ai-pick-chip__eyebrow&quot;>AI</span>
+  <span class=&quot;ai-pick-chip__name&quot;>Kiss Me My Love</span>
+  
+    <span class=&quot;ai-pick-chip__odds&quot; title=&quot;Current bookmaker price&quot;>4/1</span>
+  
+  
+    <span class=&quot;ai-pick-chip__conf&quot;>Speculative</span>
+  
+</span>
+
+
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+          <a href=&quot;https://www.saturday-racing.com/races/6531/&quot; class=&quot;race-row&quot;>
+            <div class=&quot;race-row__time&quot;>
+              17:23
+              <small>Class 6</small>
+            </div>
+            <div class=&quot;race-row__main&quot;>
+              <h3 class=&quot;race-row__name&quot;>
+                <span style=&quot;overflow:hidden;text-overflow:ellipsis;&quot;>Watch Racing Replays At racingtv.com Amateur Jockeys' Handicap Stakes</span>
+                
+                
+              </h3>
+              <div class=&quot;race-row__meta&quot;>
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Dist</span>
+                    <span class=&quot;race-row__meta-value&quot;>1m2f1y</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Going</span>
+                    <span class=&quot;race-row__meta-value&quot;>Good</span>
+                  </span>
+                
+                
+                  <span class=&quot;race-row__meta-cell race-row__meta-cell--prize&quot;>
+                    <span class=&quot;race-row__meta-label&quot;>Prize</span>
+                    <span class=&quot;race-row__meta-value&quot;>£2,980</span>
+                  </span>
+                
+                <span class=&quot;race-row__meta-cell&quot;>
+                  <span class=&quot;race-row__meta-label&quot;>Field</span>
+                  <span class=&quot;race-row__meta-value&quot;>14</span>
+                </span>
+                
+              </div>
+            </div>
+            <div class=&quot;race-row__right&quot;>
+              
+              
+              
+              
+                
+<span class=&quot;ai-pick-chip&quot; title=&quot;Saturday Racing AI · Click race for full reasoning&quot;>
+  <span class=&quot;ai-pick-chip__icon&quot; aria-hidden=&quot;true&quot;>⚡</span>
+  <span class=&quot;ai-pick-chip__eyebrow&quot;>AI</span>
+  <span class=&quot;ai-pick-chip__name&quot;>Jam Lass</span>
+  
+    <span class=&quot;ai-pick-chip__odds&quot; title=&quot;Current bookmaker price&quot;>13/2</span>
+  
+  
+    <span class=&quot;ai-pick-chip__conf&quot;>Speculative</span>
+  
+</span>
+
+
+              
+              
+                
+              
+              <span class=&quot;race-row__cta&quot;>Racecard →</span>
+            </div>
+          </a>
+        
+      </article></div></section></body>
+</html>"></iframe>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Notes · phone</p>
+        <p class="states-case__when">the three notes one above another</p>
+        <div class="states-frame states-frame--window" style="width: 390px">
+<iframe class="states-iframe" title="Notes · phone" height="352" loading="lazy" srcdoc="<!doctype html>
+<html lang=&quot;en-GB&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<link rel=&quot;stylesheet&quot; href=&quot;static/fonts/saturday-fonts.css&quot;>
+
+  <!-- ── Stylesheets ───────────────────────────────────────── -->
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/base.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/paper.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/chrome.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/voting/css/picks_budget.css&quot;>
+
+  
+<link rel=&quot;stylesheet&quot; href=&quot;static/browse/css/browse.css&quot;>
+
+  
+
+<style>
+  /* The page's own ground; nothing pinned. */
+  body { margin: 0; background: var(--c-paper, #fafaf7); }
+  .meeting-nav { position: relative; top: auto; }
+</style>
+</head>
+<body class=&quot;page-racecard page-racecard-browse&quot;><section class=&quot;browse-notes&quot; aria-label=&quot;About this page&quot;>
+  <div class=&quot;container&quot;>
+    <div class=&quot;browse-notes__note browse-notes__note--reveal&quot;>
+      <h2 class=&quot;browse-notes__title&quot;>Results, your call</h2>
+      <p>Every winner stays hidden until you ask for it. Reveal one race, reveal a whole meeting, or keep the card spoiler-free while you catch up on the replays.</p>
+    </div>
+    <div class=&quot;browse-notes__note browse-notes__note--pick6&quot;>
+      <h2 class=&quot;browse-notes__title&quot;>Pick Six, beat the Fox</h2>
+      <p>Pick six horses from across the day’s racing and take on Mr Fox, our resident tipster. Pride on the line, nothing else.</p>
+    </div>
+    <div class=&quot;browse-notes__note browse-notes__note--free&quot;>
+      <h2 class=&quot;browse-notes__title&quot;>Free to play</h2>
+      <p>Saturday Racing takes no bets and handles no money. The racecards, the results and the game are free.</p>
+    </div>
+  </div>
+</section></body>
+</html>"></iframe>
+        </div>
+      </section>
+      <section class="states-case">
+        <p class="states-case__name">Meeting tabs · phone, the busiest day</p>
+        <p class="states-case__when">eight meetings: the tabs scroll sideways inside the bar (never the page), the marked one kept in sight</p>
+        <div class="states-frame states-frame--window" style="width: 390px">
+<iframe class="states-iframe" title="Meeting tabs · phone, the busiest day" height="73" loading="lazy" srcdoc="<!doctype html>
+<html lang=&quot;en-GB&quot;>
+<head>
+<meta charset=&quot;UTF-8&quot;>
+<meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;>
+<link rel=&quot;stylesheet&quot; href=&quot;static/fonts/saturday-fonts.css&quot;>
+
+  <!-- ── Stylesheets ───────────────────────────────────────── -->
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/base.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/paper.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/css/chrome.css&quot;>
+  <link rel=&quot;stylesheet&quot; href=&quot;static/voting/css/picks_budget.css&quot;>
+
+  
+<link rel=&quot;stylesheet&quot; href=&quot;static/browse/css/browse.css&quot;>
+
+  
+
+<style>
+  /* The page's own ground; nothing pinned. */
+  body { margin: 0; background: var(--c-paper, #fafaf7); }
+  .meeting-nav { position: relative; top: auto; }
+</style>
+</head>
+<body class=&quot;page-racecard page-racecard-browse&quot;><nav class=&quot;meeting-nav&quot; aria-label=&quot;Meetings&quot;>
+      
+        <a href=&quot;#meeting-1&quot; class=&quot;meeting-tab
+                  meeting-tab--upcoming&quot;>
+          <span class=&quot;meeting-tab__name&quot;>
+            
+            Ascot
+          </span>
+          <span class=&quot;meeting-tab__state&quot;>
+            
+              12:55–16:35 · 7
+            
+          </span>
+          
+          
+            <span class=&quot;meeting-tab__meter&quot; aria-hidden=&quot;true&quot;>
+              <span class=&quot;meeting-tab__meter-fill&quot; style=&quot;width: 0%&quot;></span>
+            </span>
+          
+        </a>
+      
+        <a href=&quot;#meeting-2&quot; class=&quot;meeting-tab
+                  meeting-tab--upcoming&quot;>
+          <span class=&quot;meeting-tab__name&quot;>
+            
+            Catterick
+          </span>
+          <span class=&quot;meeting-tab__state&quot;>
+            
+              13:00–17:15 · 8
+            
+          </span>
+          
+          
+            <span class=&quot;meeting-tab__meter&quot; aria-hidden=&quot;true&quot;>
+              <span class=&quot;meeting-tab__meter-fill&quot; style=&quot;width: 0%&quot;></span>
+            </span>
+          
+        </a>
+      
+        <a href=&quot;#meeting-3&quot; class=&quot;meeting-tab
+                  meeting-tab--upcoming&quot; aria-current=&quot;true&quot;>
+          <span class=&quot;meeting-tab__name&quot;>
+            
+            Newton Abbot
+          </span>
+          <span class=&quot;meeting-tab__state&quot;>
+            
+              13:05–16:43 · 7
+            
+          </span>
+          
+          
+            <span class=&quot;meeting-tab__meter&quot; aria-hidden=&quot;true&quot;>
+              <span class=&quot;meeting-tab__meter-fill&quot; style=&quot;width: 0%&quot;></span>
+            </span>
+          
+        </a>
+      
+        <a href=&quot;#meeting-4&quot; class=&quot;meeting-tab
+                  meeting-tab--upcoming&quot;>
+          <span class=&quot;meeting-tab__name&quot;>
+            
+            Limerick
+          </span>
+          <span class=&quot;meeting-tab__state&quot;>
+            
+              13:10–17:10 · 8
+            
+          </span>
+          
+          
+            <span class=&quot;meeting-tab__meter&quot; aria-hidden=&quot;true&quot;>
+              <span class=&quot;meeting-tab__meter-fill&quot; style=&quot;width: 0%&quot;></span>
+            </span>
+          
+        </a>
+      
+        <a href=&quot;#meeting-5&quot; class=&quot;meeting-tab
+                  meeting-tab--upcoming&quot;>
+          <span class=&quot;meeting-tab__name&quot;>
+            
+            Market Rasen
+          </span>
+          <span class=&quot;meeting-tab__state&quot;>
+            
+              13:15–17:05 · 7
+            
+          </span>
+          
+          
+            <span class=&quot;meeting-tab__meter&quot; aria-hidden=&quot;true&quot;>
+              <span class=&quot;meeting-tab__meter-fill&quot; style=&quot;width: 0%&quot;></span>
+            </span>
+          
+        </a>
+      
+        <a href=&quot;#meeting-6&quot; class=&quot;meeting-tab
+                  meeting-tab--upcoming&quot;>
+          <span class=&quot;meeting-tab__name&quot;>
+            
+            Stratford
+          </span>
+          <span class=&quot;meeting-tab__state&quot;>
+            
+              13:39–17:25 · 7
+            
+          </span>
+          
+          
+            <span class=&quot;meeting-tab__meter&quot; aria-hidden=&quot;true&quot;>
+              <span class=&quot;meeting-tab__meter-fill&quot; style=&quot;width: 0%&quot;></span>
+            </span>
+          
+        </a>
+      
+        <a href=&quot;#meeting-7&quot; class=&quot;meeting-tab
+                  meeting-tab--upcoming&quot;>
+          <span class=&quot;meeting-tab__name&quot;>
+            
+            Leopardstown
+          </span>
+          <span class=&quot;meeting-tab__state&quot;>
+            
+              13:57–17:20 · 7
+            
+          </span>
+          
+          
+            <span class=&quot;meeting-tab__meter&quot; aria-hidden=&quot;true&quot;>
+              <span class=&quot;meeting-tab__meter-fill&quot; style=&quot;width: 0%&quot;></span>
+            </span>
+          
+        </a>
+      
+        <a href=&quot;#meeting-8&quot; class=&quot;meeting-tab
+                  meeting-tab--upcoming&quot;>
+          <span class=&quot;meeting-tab__name&quot;>
+            
+            Southwell (AW)
+          </span>
+          <span class=&quot;meeting-tab__state&quot;>
+            
+              16:23–20:30 · 9
+            
+          </span>
+          
+          
+            <span class=&quot;meeting-tab__meter&quot; aria-hidden=&quot;true&quot;>
+              <span class=&quot;meeting-tab__meter-fill&quot; style=&quot;width: 0%&quot;></span>
+            </span>
+          
+        </a>
+      
+    </nav></body>
+</html>"></iframe>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
