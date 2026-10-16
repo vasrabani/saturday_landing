@@ -222,7 +222,9 @@ test.describe('meeting tabs', () => {
       await scrollToMeeting(page, n);
       await expect(page.locator('.meeting-nav [aria-current="true"]')).toHaveCount(1);
       await expect(tabOf(page, n)).toHaveAttribute('aria-current', 'true');
-      expect(await tabOf(page, n).evaluate((a) => getComputedStyle(a).backgroundColor)).toBe(INK);
+      // The tab fades to its ink (a 0.14s transition), so its colour is
+      // read until it has settled, not at the instant it is marked.
+      await expect.poll(() => tabOf(page, n).evaluate((a) => getComputedStyle(a).backgroundColor)).toBe(INK);
     }
   });
 
