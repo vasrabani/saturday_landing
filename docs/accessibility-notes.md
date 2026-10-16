@@ -119,3 +119,38 @@ What the revamp did for the keyboard and the screen reader:
 - The AI stars are one `role="img"` with the rating in words; the age
   and weight under a runner's name on a phone are `aria-hidden`, because
   the row's own cells carry them for a screen reader.
+
+## The day's races
+
+`npm test` runs axe on `races.html`, `races-tomorrow.html` and
+`races-yesterday.html` at the four widths. One rule fires, and it is
+the shared navigation's: `color-contrast` on `.site-nav__wordmark-sub`
+from 768px, the finding every other page carries. It is on the known
+list for each page and width in `tools/quality-baseline.json`.
+
+Nothing the revamp adds fires a rule, and the words it sets over the
+masthead's picture were measured against the pixels behind them, at the
+four widths: every one is 4.5 to 1 or better (the date, large type, 5.6
+to 1 at worst). Where the picture is brightest they have help: the day
+tabs sit on smoked glass, the figures and the date carry a dark halo,
+and on a phone, where the words cross the horse, the picture is a shade
+darker.
+
+What the revamp did for the keyboard and the screen reader:
+
+- A meeting tab takes the keyboard to the meeting's name, not just the
+  page, so the next Tab carries on from the meeting rather than from the
+  tab bar a screen away.
+- The meeting in view is `aria-current="true"` on its tab.
+- The reveal track's count is text; the course under it is
+  `aria-hidden`.
+- "✓ Result" is hidden from sight but kept for a screen reader.
+- Everything pressable is at least 44px tall: the day tabs, the meeting
+  tabs, the winner's button, Pick Six and Reveal all.
+
+Two things on the template side, neither from the revamp:
+
+| What | Where | The fix in the template |
+| --- | --- | --- |
+| The winner's button names the winner before it is pressed | each `.race-row__spoiler`: its `aria-label` is "Reveal winner of … — starting price … — ridden by …", so a screen reader reads the result the page is hiding | label it with the race alone ("Reveal winner of …"), and give the revealed face the job of saying the winner: drop the `aria-label` and put the race's name, visually hidden, in the hidden face, so the button's name is whichever face shows |
+| A button inside a link | each race's line is an `<a>` with the winner's button inside it | axe does not report it, but it is not valid HTML and a screen reader can read the two as one. Making the race's name the link (an `<a>` inside the `<h3>`) and the line a plain block, with the whole line still clickable through the link's `::after`, would separate them |

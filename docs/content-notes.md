@@ -107,3 +107,30 @@ revamp's words rather than the template's:
   "1m4f0y") are rewordings in `meeting_racecard.js` and
   `meeting_masthead.js`; the template's own text is what they start
   from, so a change there comes through.
+
+## The day's races
+
+The three pages are captures of the live page, so every race, prize,
+price and count is the site's own, not sample data. The revamp's own
+words, all in the template additions (`tools/build-races.mjs` writes
+each):
+
+- The eyebrow names the day's races ("Today’s races", "Tomorrow’s
+  races", "Yesterday’s races") where the template says the day alone; the
+  page's `<title>` already says "Today's Races".
+- "First off 13:20" and "8 results in" in the masthead's figures (the
+  latter left out on a day with none).
+- Pick Six's stickers: "Pick Six", "vs The Fox", "Stack six. Beat the
+  head tipster.", and "Pick Six" and "Challenge" round the stamp — the
+  meeting page's stickers, word for word.
+- The three notes. The prototype's second note said "across any card";
+  here it says "from across the day’s racing", because the Pick Six is
+  one slip for the whole day, made across the day's meetings.
+- The reveal track's count: "3 of 8 revealed", "All 8 revealed".
+
+The stand-ins for the branches no capture had (`tests/support/races-branches.cjs`)
+carry words of their own that the template may not use: "Big race" on
+the big race's banner and tag, "Big race meeting" on its meeting's flag,
+"Abandoned" and "Racing called off" on an abandoned meeting, "Your pick"
+on a member's pick, and "No racing today" with its line on the empty
+day. The template's own words replace them in the port.

@@ -58,3 +58,17 @@ Nothing here is a photograph or the output of an image model.
   9 and 10 October 2026 (the largest is 132 KB; the service does not
   optimise them). They are the live page's images, copied so the sandbox
   works offline; the template keeps loading them from the service.
+
+## The day's races (`static/browse/img/`)
+
+- `masthead.webp` is the homepage's Steam of the Day picture,
+  `mi-steam-bg` above (AI-generated, OpenAI C2PA), enlarged to twice its
+  size (2688 x 2144, 293 KB) with Real-ESRGAN (`x4plus`) so it stays
+  sharp across a wide screen. That is a machine upscale of the same
+  picture: nothing was added to it.
+- `horse.svg` is the course horse (`course-horse.webp` above) traced as
+  one path, in the brand gold: the reveal track's horse and the footer's.
+- `icons/*.svg` are 11 line icons, under 1 KB each: the eye, arrow,
+  check and stars the meeting page has, the paw from the footer
+  (`static/public/img/footer/icon-paw.svg`) redrawn as a mask, and the
+  rest from the Feather set.

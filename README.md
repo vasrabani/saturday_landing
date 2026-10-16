@@ -8,11 +8,13 @@ Self-contained snapshots of the live site, so you can work on it without Django,
 | `trail.html` | [the Fox Trail](https://www.saturday-racing.com/trail/) — the day's tips on one board, live |
 | `meeting.html` | [the meeting page](https://www.saturday-racing.com/races/meeting/newmarket/2026-10-09/full/) — every race at a meeting, every runner, and the Pick Six slip; Newmarket with the results in |
 | `meeting-upcoming.html` | the same page the evening before: Newmarket's next card, no numbers yet, most runners at SP, an AI verdict under each race |
+| `races.html` | [the day's races](https://www.saturday-racing.com/races/) — every meeting of the day and every race, the winners hidden until asked for; Friday 16 October mid-card, racing on |
+| `races-tomorrow.html`, `races-yesterday.html` | the same page for the next day (Champions Day: 60 races at eight meetings, the busiest captured) and the day before (every result in) |
 | `fox-*.html` | [Fox Signals](https://www.saturday-racing.com/fox-signals/board/) — the Fox's pick in every race and the market behind it: ten pages (the Board, Race Trace, Alerts, the Stable, Settings), as a visitor and as a member, on one recorded day |
 
 Everything is baked into those files + the assets under `static/` — the same HTML, CSS, JS, images and fonts production ships. No template engine involved.
 
-The trail is a **live** page: races settle while it is open. The sandbox replays a recorded day so that works here too, which is why it needs the Node server below rather than any static one. If you are working on the trail, start with **`docs/trail-brief.md`**; on the meeting page, with **`docs/meeting-brief.md`**; on Fox Signals, with **`docs/fox-signals-brief.md`**.
+The trail is a **live** page: races settle while it is open. The sandbox replays a recorded day so that works here too, which is why it needs the Node server below rather than any static one. If you are working on the trail, start with **`docs/trail-brief.md`**; on the meeting page, with **`docs/meeting-brief.md`**; on the day's races, with **`docs/races-brief.md`**; on Fox Signals, with **`docs/fox-signals-brief.md`**.
 
 ---
 
@@ -23,7 +25,7 @@ npm install
 npm run serve
 ```
 
-Then open <http://localhost:8080/> for the home page, <http://localhost:8080/trail.html> for the trail, and <http://localhost:8080/meeting.html> (or `meeting-upcoming.html`) for the meeting page.
+Then open <http://localhost:8080/> for the home page, <http://localhost:8080/trail.html> for the trail, <http://localhost:8080/meeting.html> (or `meeting-upcoming.html`) for the meeting page, and <http://localhost:8080/races.html> (or `races-tomorrow.html`, `races-yesterday.html`) for the day's races.
 
 You must serve through a local web server: opening the files with `file://` breaks the fonts and some images. Use `npm run serve` rather than any other static server — it also answers `/trail/live/`, which is what makes the trail's board move.
 
@@ -38,9 +40,11 @@ saturday_landing/
 ├── trail.html             the Fox Trail snapshot (a fixture day: every cell variant)
 ├── meeting.html           the meeting page snapshot, with the results in
 ├── meeting-upcoming.html  the meeting page the evening before
+├── races.html             the day's races, today mid-card (and races-tomorrow, races-yesterday)
 ├── states.html            every state the landing page can render
 ├── trail-states.html      every state the trail can render
 ├── meeting-states.html    every state the meeting page can render
+├── races-states.html      every state the day's races page can render
 ├── fox-*.html             Fox Signals: ten pages built from the Django site
 ├── docs/                  the briefs, the integration map, the decisions
 ├── fixtures/              the recorded day the trail's live feed replays
@@ -54,6 +58,7 @@ saturday_landing/
 │   ├── public/            landing-page-specific CSS/JS/images
 │   ├── grid/              the Fox Trail's own CSS + JS + images
 │   ├── meeting/           the meeting page revamp's CSS + JS + images
+│   ├── browse/            the day's races revamp's CSS + JS + images
 │   ├── fox_signals/       Fox Signals' CSS + JS (the Django site's, byte for byte)
 │   ├── races/             race picker + Pick 6 emblem CSS, and the meeting page's four production scripts
 │   ├── letters/           LLaMa portrait
@@ -83,11 +88,16 @@ The contract is **navbar, footer, and home page only**. In the bundle those tran
 | Meeting page **structure**   | `meeting.html` / `meeting-upcoming.html` (the `<div class="mf-wrap">` block) |
 | Meeting page **styling**     | `static/meeting/css/meeting.css`                                       |
 | Meeting page **JS**          | `static/meeting/js/meeting_racecard.js`, `meeting_masthead.js`, `meeting_slip.js` |
+| Day's races **structure**    | `races.html` / `races-tomorrow.html` / `races-yesterday.html` (the `<main>` block), through `tools/build-races.mjs` |
+| Day's races **styling**      | `static/browse/css/browse.css`                                         |
+| Day's races **JS**           | `static/browse/js/browse_nav.js`, `browse_track.js`                    |
 | Fox Signals **styling**      | `static/fox_signals/css/fox_signals_v2.css` (and `fox_signals_shell.css`; read the brief first) |
 | Fox Signals **JS**           | `static/fox_signals/js/*.js`                                           |
 | Fonts / type scale           | `static/fonts/saturday-fonts.css` + `static/css/base.css`              |
 
 **`static/grid/js/*.js`** — the trail's five scripts (`trail_live`, `trail_flip`, `trail_filter`, `trail_drawer`, `trail_nav`) are production code and come back unchanged. They key off attributes and classes in the markup; `docs/trail-brief.md` lists every one of them. Restyle freely, but keep the hooks. The revamp's own three (`trail_cards`, `trail_track`, `trail_course`) sit beside them; `docs/integration-map.md` says what they need.
+
+**The day's races' spoiler script** — inline at the foot of `races*.html`, as it is in the template — is production code and comes back unchanged; `docs/races-brief.md` lists every hook it keys off. The pages' markup is the template's, plus the six changes `tools/build-races.mjs` makes (and `docs/integration-map.md` lists): build the pages with it rather than editing them by hand.
 
 **Anything under `static/races/`, `static/letters/`, `static/news/`, `static/voting/`** — treat as read-only. Those are shared across the whole site and appear on the landing page for legitimate reasons (e.g. the `race_picker` CSS themes a widget the hero uses). Changing them affects other pages you can't see in this sandbox. The meeting page's four scripts (`static/races/js/racecard.js`, `racecard_collapse.js`, `bet_slip.js`, `meeting_full.js`) are production code and come back unchanged; `docs/meeting-brief.md` lists every hook they key off.
 
@@ -119,6 +129,8 @@ Keep commits scoped ("Navbar mobile drawer refresh", "Footer newsletter block re
 
 `meeting-states.html` does the same for the meeting page: 20 states from both days and a phone — the slip empty, with three picks, full, over six and as the phone's sheet, a seventh race refused, a race filtered, the comments folded away, the winner revealed, the card before the off. Rebuild it with `node tools/build-meeting-states.mjs`.
 
+`races-states.html` does the same for the day's races: 31 states from the three days, a tablet and a phone — each meeting state (live, to come, every result in, the day before), a winner hidden and revealed, Reveal all, the reveal track part-way and at the post, the AI's pick with and without a price, and the template's branches no capture caught (the big race, an abandoned meeting and race, a member's pick, the Fox's cubs, a day without racing) as marked stand-ins. Rebuild it with `node tools/build-races-states.mjs`; the pages themselves with `node tools/build-races.mjs`.
+
 **The trail's live day.** `tools/serve.mjs` answers `/trail/live/` from `fixtures/trail-live-timeline.json`, a recorded day of 15 frames built from the app's own figures, one frame per poll. The page polls every 4 seconds here (`data-live-poll-ms`), against 45 in production. `?sim=reset` restarts the day, `?sim=last` jumps to the finished board, `?sim=7` to any frame, and every response carries an `X-Trail-Frame` header.
 
 The `docs/` folder carries the decisions and the handover:
@@ -127,6 +139,7 @@ The `docs/` folder carries the decisions and the handover:
 | --- | --- |
 | `trail-brief.md` | **The Fox Trail revamp: scope, the states, the live day, and the hooks the page must keep** |
 | `meeting-brief.md` | **The meeting page revamp: what it did, the states, the six-pick limit, and the hooks the page must keep** |
+| `races-brief.md` | **The day's races revamp: what it did, the real days and every state, the fix to Reveal winner, and the hooks the page must keep** |
 | `fox-signals-brief.md` | **Fox Signals: the ten pages, what is real and what is a stand-in, what you may change, the hooks, and how it goes back** |
 | `integration-map.md` | How this becomes Django templates: section by section, with the context each one needs |
 | `content-notes.md` | Which numbers are sample data, and the content decisions still open |
@@ -151,7 +164,7 @@ npx playwright install chromium
 | Command | What it proves |
 | --- | --- |
 | `npm run check` | No debug code or localhost calls, every CSS `url()` resolves, images within 300 KB, no unused images, no new `!important`s, hardcoded token colours, off-scale breakpoints or unloaded fonts. |
-| `npm test` | Every feature works at 375, 768, 1024 and 1440px: nav dropdowns and mobile drawer, countdowns, day hub filters and course switcher, tabs, Saturday Draw, tilt and reduced motion, the trail's board, filters, drawer and flip, the meeting page's sorting, filters, slip, six-pick limit, sheet and reveal, no horizontal scroll, no new accessibility violations. |
+| `npm test` | Every feature works at 375, 768, 1024 and 1440px: nav dropdowns and mobile drawer, countdowns, day hub filters and course switcher, tabs, Saturday Draw, tilt and reduced motion, the trail's board, filters, drawer and flip, the meeting page's sorting, filters, slip, six-pick limit, sheet and reveal, the day's races' tabs, reveals and track, no horizontal scroll, no new accessibility violations. |
 | `npm run baseline` then `npm run test:visual` | **Advisory.** Screenshots each section at all four widths and compares them with the design reference commit (`tools/visual-baseline-ref`). |
 
 `npm run verify` runs all of them in order. The first two must pass; the third is for review.
@@ -167,7 +180,7 @@ npx playwright install chromium
 
 **Intentional visual changes** fail `test:visual` by design. Say so in the PR description, attach the diff images from `test-results/`, and once the PR is approved move `tools/visual-baseline-ref` to the merged commit.
 
-**A new page has no reference yet.** The meeting page's visual tests skip themselves while `tools/visual-baseline-ref` names a commit without `meeting.html`, and say so; they start comparing once the reference moves to a commit that has it.
+**A new page has no reference yet.** The meeting page's and the day's races' visual tests skip themselves while `tools/visual-baseline-ref` names a commit without `meeting.html` (or `races.html`), and say so; they start comparing once the reference moves to a commit that has it.
 
 ---
 

@@ -1,7 +1,7 @@
 # Integration map
 
 Where each part of this snapshot lives in the Django site, and how a change
-made here gets there. Four pages live here now.
+made here gets there. Five pages live here now.
 
 - **The home page** (`index.html`). Ported and live since 2026-09-18, so
   this repo is its design workspace: a change made here is ported into
@@ -11,6 +11,10 @@ made here gets there. Four pages live here now.
 - **The meeting page** (`meeting.html`, `meeting-upcoming.html`). Snapshots
   of Newmarket taken 2026-10-09 and 2026-10-10 for the revamp — see
   `meeting-brief.md`. Nothing has been ported back yet.
+- **The day's races** (`races.html`, `races-tomorrow.html`,
+  `races-yesterday.html`). Snapshots of `/races/`, `/races/tomorrow/` and
+  `/races/yesterday/` taken 2026-10-16 for the revamp — see
+  `races-brief.md`. Nothing has been ported back yet.
 
 Repositories:
 
@@ -30,6 +34,10 @@ Repositories:
     `meeting_full.css`, `pick6_emblem.css`, `ai_pick_chip.css`,
     `chamber_verdict.css`; `js/racecard.js`, `racecard_collapse.js`,
     `bet_slip.js`, `meeting_full.js`) and `voting/static/voting/`.
+  - The day's races: the `races` app — `races/templates/races/racecard/meetings_browse.html`
+    (its own `<style>` block and the spoiler script inline), the view
+    behind `/races/`, `/races/tomorrow/` and `/races/yesterday/`, and
+    `races/css/main.css`, `pick6_emblem.css`, `ai_pick_chip.css`.
 
 ## In sync with production as of
 
@@ -587,3 +595,100 @@ query on `.li-main`): a table from 970px, two lines a horse from 620px,
 a card below. `llama_index.css` loads after `meeting.css` and sets
 `--mfr-strip` to the height of its pinned tools, which is how the docked
 slip and the toast stand clear of them.
+
+## The day's races, part by part
+
+| In the sandbox | Template there | Notes |
+| --- | --- | --- |
+| `races*.html` shell, masthead | `meetings_browse.html`, `.browse-hero` | the day, the date, the race and meeting counts; the revamp adds the first off, the results in and the day tabs (below) |
+| The big race | `.browse-featured-banner` | when a race is featured (`Race.is_featured`); restyled only |
+| The next off | `.browse-next-off` | today, while a race is to come; restyled only |
+| Pick Six | new: `.browse-pick6` | the full card of the meeting that runs next |
+| Meeting tabs | `.meeting-nav`, a `.meeting-tab` a meeting | moved out of the hero's container; their state line and meter as they were; `browse_nav.js` marks the one in view |
+| A meeting | `article.meeting-block` | its head (`__header`: the name, the compact `pick6`, Reveal all, `__sub`, `__status`), the big race's flag, the races; `browse_track.js` adds the track |
+| A race | `a.race-row` | the time, the name and its tags, the four figures, and the right-hand column: the winner's button, the AI chip, a member's pick, the cubs, Racecard |
+| Notes | new: `.browse-notes` | fixed copy |
+| No racing | `.browse-empty` | restyled only |
+
+**The sandbox's days are captures.** `tools/build-races.mjs` builds the
+three pages from captures of the live site taken on 16 October 2026 —
+today at 15:43 BST with racing on, tomorrow (Champions Day) and
+yesterday — as the meeting pages were built: the live page's markup and
+navigation, its static files from the folder, every other link to the
+live site, and the day tabs to the sandbox's own copy of each day. The
+tool makes the six template changes below on the capture, so its output
+is what the changed template renders. The branches none of the three
+caught are stand-ins in `tests/support/races-branches.cjs`
+(`races-brief.md`, "Every state is designed").
+
+## The day's races: what to port
+
+One stylesheet, two scripts and an image folder are new; the spoiler
+script is untouched; the template gains five pieces of markup and loses
+one attribute.
+
+**Files.** Each goes to the same path under `races/static/races/browse/`,
+as the meeting page's went under `races/static/races/meeting/`. Every
+`url()` in `browse.css` points inside the folder (`../img/…`).
+
+| File | What it is |
+| --- | --- |
+| `css/browse.css` | The whole page, in place of `main.css`, `pick6_emblem.css`, `ai_pick_chip.css` and the template's `<style>` block on this page. No `!important`; media queries only at 768 and 1024px; a meeting's head and races are laid out by container queries on the meeting (640 and 860px) |
+| `js/browse_nav.js` | New. The meeting in view marked; a tab lands its meeting below the pinned bars and takes the keyboard there |
+| `js/browse_track.js` | New. The reveal track in each meeting's head |
+| `img/masthead.webp` | The homepage's Steam of the Day picture, sharpened to twice its size (2688 x 2144, 293 KB) |
+| `img/horse.svg` | The course horse as one path: the track's horse and the footer's |
+| `img/icons/*.svg` (11) | Line icons, used as CSS masks, under 1 KB each |
+
+The two scripts load with `defer` after the spoiler script, in the order
+above. Browser support is the site's own: container queries and `:is()`
+are older than the `color-mix()` that `chrome.css` relies on.
+
+**Markup. STRUCTURAL — needs moving into the Django template.** All in
+`meetings_browse.html`; `tools/build-races.mjs` makes each one, a
+function apiece, so the markup can be copied from there.
+
+| Change | What | Context it needs |
+| --- | --- | --- |
+| 1. The day | The eyebrow reads "Today’s races" (Tomorrow’s, Yesterday’s). After `.browse-stats`, `<nav class="browse-days" aria-label="Race days">` with three `a.browse-days__day` — Yesterday, Today, Tomorrow, to `/races/yesterday/`, `/races/`, `/races/tomorrow/` — the page's own with `aria-current="page"` | which of the three days the view renders |
+| 2. Two figures | In `.browse-stats`, after the meetings: `<span>First off <strong>13:20</strong></span>`, and when any result is in, `<span><strong>8</strong> results in</span>` | the day's earliest race; how many races have a result (the view counts both for each meeting already) |
+| 3. Pick Six | After the next-off banner, `<a class="browse-pick6">`: the stamp (an inline SVG with the two words on text paths), `__name`, `__vs` and `__sub` (`pickSix()` has the markup). Only while the day has a race to run: today before the last race is off, and tomorrow | the full card of the meeting of the next race off, or of the first meeting on a day not yet started |
+| 4. The band | The container holding the hero, the two banners and the stickers is wrapped in `<div class="browse-masthead">`; `<nav class="meeting-nav">` moves out of it to sit between the band and `.meetings-paper` (as its last child its `position: sticky` had nowhere to stick) | — |
+| 5. Notes | After `.meetings-paper`, `<section class="browse-notes" aria-label="About this page">`: three `.browse-notes__note` (`--reveal`, `--pick6`, `--free`), each an `h2.browse-notes__title` and a paragraph. Not on a day without racing | fixed copy (`content-notes.md`) |
+| 6. A fix | The winner's button (`.race-row__spoiler`) loses `onclick="event.preventDefault();event.stopPropagation();"`, which stops the press before the spoiler script hears it: Reveal winner does nothing on the live page today. The script already stops the press from following the race's link | — |
+| `<head>` | The three page-level stylesheet links become one, `races/browse/css/browse.css`; the `<style>` block comes out. `base`, `paper`, `chrome` and `picks_budget` stay | — |
+| Before `</body>` | Two `<script defer>` after the spoiler script: `browse_nav.js`, `browse_track.js` | — |
+
+Everything else is restyled only: the hero's own markup, the two
+banners, the tabs, the meetings and their heads, the races and their
+chips, the empty day.
+
+**What the scripts need.** `races-brief.md` ("The contract") lists every
+hook. Lose one and that script quietly does nothing; the spoiler script
+keeps working without either.
+
+**They set, and only the stylesheet reads:** `aria-current="true"` on a
+tab, `--rbr-nav` on `<body>`, `.rbr-track` and its parts, `--rbr-races`,
+`--rbr-run` and `--rbr-at` on its lane, and `data-rbr-done`.
+
+**Hidden, not removed.** Still in the markup; the stylesheet hides them
+because the page says the same thing another way: `.result-tag` (kept
+for a screen reader), `.meeting-tab__pulse`, the compact emblem's
+`.pick6__stamp`, `.pick6__num` and `.pick6__fox-glyph`, and the emoji in
+the status lines, the reveal faces and the chips, which are line icons
+here. Taking them out of the template is optional.
+
+**One thing in `site.js`, again.** It scrolls every in-page `#` link to
+76px from the top of the window, which here is under the meeting tabs.
+`browse_nav.js` steps round it for the tabs, as the trail and the meeting
+page do for theirs.
+
+**One thing in the chrome.** On this page the footer opens with the
+horse between two hairlines (`.page-racecard-browse .sf__shell::before`
+in `browse.css`). Drop the rule and the footer is as it is elsewhere.
+
+Still to settle in the port, against the real template: the stand-ins —
+the big race's banner, meeting and line, an abandoned meeting and race,
+a member's pick, the Fox's cubs, the day without racing. Their markup
+here has the template's class names, not necessarily its nesting or its
+words.
