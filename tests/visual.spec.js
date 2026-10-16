@@ -16,6 +16,7 @@ import { readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 import { FIXED_CHROME, NON_DETERMINISTIC_ART, SECTIONS, openLanding } from './support/landing.js';
 import { MEETING_SECTIONS, openMeeting, showsSlipSheet } from './support/meeting.js';
+import { RACES_SECTIONS, openRaces } from './support/races.js';
 import { TRAIL_NON_DETERMINISTIC, TRAIL_SECTIONS, openTrail } from './support/trail.js';
 import { showsDesktopNav, showsDrawerNav } from './support/viewports.js';
 
@@ -208,6 +209,43 @@ for (const section of MEETING_SECTIONS) {
       await expect(page.locator(section.selector)).toHaveScreenshot(`${section.name}.png`);
       return;
     }
+    const height = await page.locator(section.selector).first()
+      .evaluate((el) => Math.round(el.getBoundingClientRect().height));
+    const windowHeight = page.viewportSize().height;
+    const tiles = Math.min(Math.ceil(height / windowHeight), MAX_TILES);
+
+    for (let tile = 0; tile < tiles; tile += 1) {
+      await page.evaluate(
+        ([selector, offset]) => {
+          const el = document.querySelector(selector);
+          const target = Math.round(el.getBoundingClientRect().top + window.scrollY) + offset;
+          window.scrollTo(0, target);
+        },
+        [section.selector, tile * windowHeight],
+      );
+      await page.waitForTimeout(PAINT_SETTLE_MS);
+      const name = tiles === 1 ? `${section.name}.png` : `${section.name}-${tile + 1}.png`;
+      await expect(page).toHaveScreenshot(name);
+    }
+  });
+}
+
+// ── The day's races ───────────────────────────────────────────────────
+// Same treatment again, on today's page. The meeting tabs stay pinned
+// under the navigation as the page scrolls, so they are hidden from the
+// other sections' tiles the way the fixed chrome is, and captured on
+// their own. Like the meeting page's, these run once
+// tools/visual-baseline-ref names a commit that has races.html.
+const REFERENCE_HAS_RACES = referenceHas('races.html');
+
+for (const section of RACES_SECTIONS) {
+  test(`races section: ${section.name}`, async ({ page }) => {
+    test.skip(!REFERENCE_HAS_RACES, `no reference: ${BASELINE_REF} (tools/visual-baseline-ref) predates races.html`);
+    await openRaces(page);
+    await settle(page);
+    const tabsArePinned = section.selector !== '.meeting-nav';
+    await page.addStyleTag({ content: [SECTION_STYLE, tabsArePinned ? hide(['.meeting-nav']) : ''].join('\n') });
+
     const height = await page.locator(section.selector).first()
       .evaluate((el) => Math.round(el.getBoundingClientRect().height));
     const windowHeight = page.viewportSize().height;

@@ -211,6 +211,42 @@
     "aria-prohibited-attr",
     "color-contrast"
    ]
+  },
+  "races.html": {
+   "mobile-375": [],
+   "tablet-768": [
+    "color-contrast"
+   ],
+   "laptop-1024": [
+    "color-contrast"
+   ],
+   "desktop-1440": [
+    "color-contrast"
+   ]
+  },
+  "races-tomorrow.html": {
+   "mobile-375": [],
+   "tablet-768": [
+    "color-contrast"
+   ],
+   "laptop-1024": [
+    "color-contrast"
+   ],
+   "desktop-1440": [
+    "color-contrast"
+   ]
+  },
+  "races-yesterday.html": {
+   "mobile-375": [],
+   "tablet-768": [
+    "color-contrast"
+   ],
+   "laptop-1024": [
+    "color-contrast"
+   ],
+   "desktop-1440": [
+    "color-contrast"
+   ]
   }
  }
 }

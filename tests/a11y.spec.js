@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { openLanding } from './support/landing.js';
 import { openIndex } from './support/llama.js';
 import { openMeeting } from './support/meeting.js';
+import { openRaces } from './support/races.js';
 import { openTrail } from './support/trail.js';
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
@@ -28,6 +29,9 @@ const PAGES = [
   { file: 'meeting.html', open: (page) => openMeeting(page) },
   { file: 'meeting-upcoming.html', open: (page) => openMeeting(page, { day: 'upcoming' }) },
   { file: 'llama-index.html', open: (page) => openIndex(page) },
+  { file: 'races.html', open: (page) => openRaces(page) },
+  { file: 'races-tomorrow.html', open: (page) => openRaces(page, { day: 'tomorrow' }) },
+  { file: 'races-yesterday.html', open: (page) => openRaces(page, { day: 'yesterday' }) },
 ];
 
 // Ratchet: a rule not on the known list fails the run, and a known rule
