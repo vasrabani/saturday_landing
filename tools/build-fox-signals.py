@@ -70,6 +70,7 @@ FIXTURE = os.path.join(BOX, 'fixtures', 'fox-signals-day.json')
 ASSETS = [
     'css/fox_signals_shell.css', 'css/fox_signals_v2.css',
     'js/board_star.js', 'js/signup_nudge.js', 'js/fox_v2_turn.js', 'js/race_trace_chart.js',
+    'js/board_filters.js',
 ]
 # Every script meeting.html's shell loads but site.js is the meeting
 # page's own: a Fox Signals page loads its own instead.

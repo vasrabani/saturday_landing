@@ -69,8 +69,6 @@
    "static/css/chrome.css -> max-width:720px": 2,
    "static/css/chrome.css -> max-width:900px": 5,
    "static/fox_signals/css/fox_signals_shell.css -> max-width:720px": 11,
-   "static/fox_signals/css/fox_signals_v2.css -> max-width:1079px": 1,
-   "static/fox_signals/css/fox_signals_v2.css -> max-width:719px": 1,
    "static/public/css/ai_chamber.css -> max-width:560px": 1,
    "static/public/css/ai_chamber.css -> max-width:900px": 2,
    "static/public/css/battle-section.css -> max-width:480px": 1,

@@ -154,3 +154,32 @@ Two things on the template side, neither from the revamp:
 | --- | --- | --- |
 | The winner's button names the winner before it is pressed | each `.race-row__spoiler`: its `aria-label` is "Reveal winner of … — starting price … — ridden by …", so a screen reader reads the result the page is hiding | label it with the race alone ("Reveal winner of …"), and give the revealed face the job of saying the winner: drop the `aria-label` and put the race's name, visually hidden, in the hidden face, so the button's name is whichever face shows |
 | A button inside a link | each race's line is an `<a>` with the winner's button inside it | axe does not report it, but it is not valid HTML and a screen reader can read the two as one. Making the race's name the link (an `<a>` inside the `<h3>`) and the line a plain block, with the whole line still clickable through the link's `::after`, would separate them |
+
+## Fox Signals
+
+The ten rooms were checked with axe at 375px and 1440px against
+`origin/main`'s stylesheet and scripts (22 October). Nothing the redesign
+adds fires a rule, and it clears 45 of main's 48 findings at 375px and 51
+of its 64 at 1440px: 28 on Alerts (faint words on the terminal's chips and
+links), 12 and 16 on the replay (gold, silver and bronze written as text,
+and the words of missed signals faded), and the race pages' and the
+runner's. What is left: the shared navigation's known contrast (below),
+and on Alerts the one template-side item in the table.
+
+- The chart is a named group, and each flag on it is a button with a
+  name (its signals), reached with Tab and pressed with Enter or Space.
+- The runner at a line's end, the facts above the chart and the Board's
+  filters are buttons and links with names; the "More filters" sheet
+  closes with Escape and gives the focus back to its button.
+- A signal's kind is drawn as a mark, and its word kept for a screen
+  reader inside the mark.
+- Everything pressable on a touch screen is at least 44px tall.
+
+Left on the template side, not from the redesign:
+
+| What | Where | The fix in the template |
+| --- | --- | --- |
+| `aria-pressed` on links | Alerts' window choices (`a.fx-alerts__pill`) | a link cannot be pressed: `aria-current="true"` on the chosen window, or make the three choices buttons in a form |
+
+The shared navigation's `color-contrast` (`.site-nav__wordmark-sub`,
+4.06:1 from 768px) is the known one above, on every page.
