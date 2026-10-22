@@ -26,6 +26,22 @@ export async function openFox(page, file, { waitUntil = 'domcontentloaded' } = {
   return { offsite, problems };
 }
 
+/**
+ * Anything on the page past either edge of the screen. The page clips
+ * sideways overflow (html and body), so its scroll width cannot show it:
+ * every element is measured, bar the rows that scroll sideways on
+ * purpose (the room pills, the meeting tabs) and what is hidden.
+ */
+export const pastTheEdges = (page) => page.evaluate(() => {
+  const width = document.documentElement.clientWidth;
+  return [...document.querySelectorAll('.fxv-wrap *')].filter((el) => {
+    if (el.closest('.fxv-nav__rooms, .fxv-tools__row--scroll, .fx-visually-hidden, [hidden], details:not([open]) > :not(summary)')) return false;
+    const box = el.getBoundingClientRect();
+    return box.width > 0 && box.height > 0 && getComputedStyle(el).visibility !== 'hidden' &&
+      (box.right > width + 1 || box.left < -1);
+  }).map((el) => String(el.className.baseVal ?? el.className).split(' ')[0]).slice(0, 5);
+});
+
 /** The Board's rows a reader can see (the finished ones are folded away). */
 export const shownRows = (page) => page.locator('.fxv-row:visible');
 

@@ -21,14 +21,19 @@
   // Scripts that find their page by events on the document, so they
   // can arrive after it. Any other script a page asks for means that
   // page is loaded the old way.
-  var LATE_OK = /\/(board_star|signup_nudge|fox_v2_turn)\.js$/;
+  var LATE_OK = /\/(board_star|board_filters|signup_nudge|fox_v2_turn)\.js$/;
   var FRESH_MS = 30000;
 
   if (!window.fetch || !window.history || !window.DOMParser) return;
   if (!document.querySelector(WRAP)) return;
 
-  // The sort menu asks before it navigates by itself (board_v2.html).
-  window.fxvTurn = true;
+  // The sort menu asks before it navigates by itself (board_v2.html),
+  // and the Board's filters hand it a choice wider than the page holds.
+  window.fxvTurn = function (href) {
+    var address = addressOf(href);
+    if (address) turnTo(address, true);
+    else window.location.assign(href);
+  };
 
   var pages = {};   // address → { at, text: Promise<string> }
 
@@ -61,19 +66,24 @@
   }
 
   /* Bring what the next page asks for in its head: scripts that can
-     start late, and the star's endpoint. False if it asks for a script
-     that cannot. */
+     start late, and the star's endpoint. False if either page runs a
+     script that cannot (the race page's chart, which draws on its own
+     page and keeps a clock and a poll): that page is reached, and left,
+     the old way. */
   function bringHead(doc) {
     var have = {};
-    Array.prototype.forEach.call(document.querySelectorAll('script[src]'), function (s) {
-      have[scriptPath(s)] = true;
-    });
+    var running = document.querySelectorAll('script[src*="/fox_signals/"]');
+    for (var r = 0; r < running.length; r++) {
+      var mine = scriptPath(running[r]);
+      if (!LATE_OK.test(mine)) return false;
+      have[mine] = true;
+    }
     var wanted = doc.querySelectorAll('script[src*="/fox_signals/"]');
     var missing = [];
     for (var i = 0; i < wanted.length; i++) {
       var path = scriptPath(wanted[i]);
-      if (have[path]) continue;
       if (!LATE_OK.test(path)) return false;
+      if (have[path]) continue;
       missing.push(wanted[i].getAttribute('src'));
     }
     missing.forEach(function (src) {
@@ -109,7 +119,21 @@
       var newHero = wrap.querySelector('.fxv-hero');
       window.scrollTo(0, newHero ? newHero.offsetHeight : 0);
     }
+    showRoom();
     return true;
+  }
+
+  // The pill of the room the reader is in is brought into the strip's
+  // view: on a phone the pills scroll sideways, and the current one
+  // can start under the strip's fade.
+  function showRoom() {
+    var rooms = document.querySelector('.fxv-nav__rooms');
+    var on = rooms && rooms.querySelector('[aria-current="page"]');
+    if (!on || rooms.scrollWidth <= rooms.clientWidth) return;
+    var left = on.getBoundingClientRect().left - rooms.getBoundingClientRect().left;
+    var seen = rooms.clientWidth - 60;              // short of the fade
+    if (left + on.offsetWidth > seen) rooms.scrollLeft += left + on.offsetWidth - seen;
+    else if (left < 0) rooms.scrollLeft += left;
   }
 
   var turning = 0;
@@ -177,4 +201,6 @@
   window.addEventListener('popstate', function () {
     turnTo(window.location.pathname + window.location.search, false);
   });
+
+  showRoom();
 })();
