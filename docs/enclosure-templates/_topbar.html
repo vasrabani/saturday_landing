@@ -1,0 +1,32 @@
+{% load enclosure_silks %}
+<header class="enc-top" role="banner">
+  <div class="enc-top__title">
+    <div class="enc-top__event">{{ event.name }}</div>
+    <div class="enc-top__meta">{{ event.meeting_course }} · {{ event.meeting_date|date:"j M" }}</div>
+  </div>
+  <div class="enc-top__actions">
+    <a class="enc-icon-btn" aria-label="Notifications" href="#notifications">
+      <span aria-hidden="true">&#128276;</span>
+    </a>
+    <button type="button"
+            class="enc-top__silks-slot{% if active_tab == 'me' %} is-active{% endif %}"
+            data-role="avatar-open" data-tab="me"
+            aria-controls="enc-avatar-sheet" aria-expanded="false"
+            aria-label="{% if guest and guest.pk %}Open your profile menu{% else %}Sign in or view profile{% endif %}"
+            data-guest-id="{{ guest.pk|default:'' }}">
+      {% if guest and guest.pk %}
+        {% silks_for_guest guest 36 %}
+      {% else %}
+        <svg viewBox="0 0 40 40" width="36" height="36" role="presentation"
+             class="enc-top__silks-anon">
+          <circle cx="20" cy="20" r="18" fill="var(--enc-ground,#EFE8D6)"/>
+          <circle cx="20" cy="20" r="18" fill="none"
+                  stroke="var(--enc-ink-mute,#8A8479)" stroke-width="1.25"/>
+          <text x="20" y="26" text-anchor="middle"
+                font-family="Georgia, serif" font-size="17"
+                font-weight="600" fill="var(--enc-ink-mute,#8A8479)">?</text>
+        </svg>
+      {% endif %}
+    </button>
+  </div>
+</header>

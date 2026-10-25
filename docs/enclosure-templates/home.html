@@ -1,0 +1,39 @@
+{% extends "enclosure/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'enclosure/css/home.css' %}?v=2">
+{% endblock %}
+
+{% block content %}
+<div class="enc-home"
+     data-live-endpoint="{% url 'enclosure:home_live' event.slug %}"
+     data-post-meeting="{% if home.hq.stage == 'post_meeting' %}1{% else %}0{% endif %}">
+  <div class="enc-scroll">
+
+    <div class="enc-home__pulse" aria-live="polite">
+      {% if home.hq.stage == 'post_meeting' %}
+        <span class="enc-home__pulse-chip enc-home__pulse-chip--closed">Meeting done</span>
+      {% else %}
+        <span class="enc-home__pulse-chip enc-home__pulse-chip--live">
+          <span class="enc-home__pulse-dot" aria-hidden="true"></span>
+          Live
+        </span>
+        <button type="button" class="enc-home__pulse-pause"
+                data-role="poll-meta" hidden>
+          Paused — tap to resume
+        </button>
+      {% endif %}
+    </div>
+
+    <div data-role="home-content">
+      {% include "enclosure/_home_content.html" %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'enclosure/js/home_live.js' %}?v=1" defer></script>
+{% endblock %}

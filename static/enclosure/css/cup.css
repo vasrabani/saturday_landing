@@ -1,0 +1,632 @@
+/*
+ * The Enclosure — Cup tab (E8).
+ *
+ * Two vertical panels above the fold on a 320×568 phone:
+ *
+ *  1. Hero card — the guest's own credits, rank, delta, awards.
+ *     Big number-first so the answer to "how am I doing?" reads
+ *     at a glance without focusing on any label.
+ *  2. Mini leaderboard — top five plus the guest's own row when
+ *     they sit below the fold. Five rows deep so the standings
+ *     never scroll into an invisible tail.
+ *
+ * Progress strip between them for meeting-wide context; empty
+ * states carry deliberate copy rather than blanks so the guest
+ * always knows what state the day is in.
+ */
+
+/* ── Live pulse (E9) ─────────────────────────────────────────── */
+.enc-cup__pulse {
+  display: flex;
+  align-items: center;
+  gap: var(--enc-s-2);
+  flex-wrap: wrap;
+  margin-bottom: calc(-1 * var(--enc-s-2));
+}
+
+.enc-cup__pulse-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--enc-r-pill);
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.enc-cup__pulse-chip--live {
+  background: var(--enc-sage-tint);
+  color: var(--enc-sage-deep);
+}
+.enc-cup__pulse-chip--closed {
+  background: var(--enc-cream-deep);
+  color: var(--enc-ink-soft);
+}
+
+.enc-cup__pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--enc-sage-deep);
+  animation: enc-cup-pulse 1.6s ease-in-out infinite;
+}
+@keyframes enc-cup-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(0.75); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .enc-cup__pulse-dot { animation: none; }
+}
+
+.enc-cup__pulse-pause {
+  padding: 4px 10px;
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-cream-deep);
+  color: var(--enc-ink-soft);
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 0;
+}
+
+/* ── Hero card ────────────────────────────────────────────────── */
+.enc-cup-hero {
+  background: var(--enc-paper);
+  border-radius: var(--enc-r-xl);
+  padding: var(--enc-s-5);
+  box-shadow: var(--enc-shadow-md);
+  border: 1px solid var(--enc-cream-deep);
+}
+
+.enc-cup-hero__balance {
+  display: flex;
+  align-items: baseline;
+  gap: var(--enc-s-2);
+  margin-top: var(--enc-s-2);
+}
+
+.enc-cup-hero__amount {
+  font-family: var(--enc-serif);
+  font-size: 56px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--enc-sage-deep);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.enc-cup-hero__unit {
+  font-family: var(--enc-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--enc-ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.enc-cup-hero__rank {
+  font-family: var(--enc-serif);
+  font-size: 18px;
+  color: var(--enc-ink-soft);
+  margin: var(--enc-s-2) 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--enc-s-2);
+}
+
+.enc-cup-hero__rank-pos {
+  font-size: 24px;
+  color: var(--enc-ink);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.enc-cup-hero__rank-pos sup {
+  font-size: 13px;
+  vertical-align: super;
+  margin-left: 1px;
+  color: var(--enc-ink-mute);
+  font-weight: 500;
+}
+
+.enc-cup-hero__rank-total {
+  font-size: 13px;
+  color: var(--enc-ink-mute);
+  letter-spacing: 0.02em;
+}
+
+.enc-cup-hero__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--enc-s-3);
+  margin: var(--enc-s-4) 0 0;
+  padding: var(--enc-s-3) 0 0;
+  border-top: 1px solid var(--enc-cream-deep);
+}
+
+.enc-cup-hero__cell {
+  min-width: 0;
+}
+.enc-cup-hero__cell dt {
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--enc-ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 var(--enc-s-1);
+}
+.enc-cup-hero__cell dd {
+  font-family: var(--enc-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.enc-cup-hero__delta--up {
+  color: var(--enc-sage-deep);
+}
+.enc-cup-hero__delta--down {
+  color: var(--enc-claret);
+}
+
+.enc-cup-hero__awards {
+  list-style: none;
+  padding: 0;
+  margin: var(--enc-s-4) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--enc-s-2);
+}
+
+.enc-cup-award {
+  padding: 5px 12px;
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-gold-tint);
+  color: var(--enc-gold-deep);
+  font-family: var(--enc-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.enc-cup-award--wooden_spoon {
+  background: var(--enc-cream-deep);
+  color: var(--enc-ink-soft);
+}
+
+.enc-cup-hero--preview {
+  background: var(--enc-cream);
+  border: 1px dashed var(--enc-cream-deep);
+  box-shadow: none;
+}
+.enc-cup-hero__lede {
+  font-family: var(--enc-serif);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--enc-ink-soft);
+  margin: var(--enc-s-2) 0 0;
+}
+
+/* ── Progress strip ──────────────────────────────────────────── */
+.enc-cup-progress {
+  padding: var(--enc-s-3) var(--enc-s-4);
+  background: var(--enc-cream);
+  border-radius: var(--enc-r-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--enc-s-2);
+}
+
+.enc-cup-progress__label {
+  font-family: var(--enc-sans);
+  font-size: 12px;
+  color: var(--enc-ink-soft);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+.enc-cup-progress__label strong {
+  color: var(--enc-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.enc-cup-progress__track {
+  height: 4px;
+  background: var(--enc-cream-deep);
+  border-radius: var(--enc-r-pill);
+  overflow: hidden;
+}
+.enc-cup-progress__fill {
+  height: 100%;
+  background: var(--enc-sage-deep);
+  border-radius: inherit;
+  transition: width 320ms ease-out;
+}
+
+/* ── Board ───────────────────────────────────────────────────── */
+.enc-cup-board {
+  background: var(--enc-paper);
+  border-radius: var(--enc-r-xl);
+  padding: var(--enc-s-4) var(--enc-s-4) var(--enc-s-3);
+  box-shadow: var(--enc-shadow-sm);
+  border: 1px solid var(--enc-cream-deep);
+}
+
+.enc-cup-board__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0 0 var(--enc-s-3);
+}
+.enc-cup-board__title {
+  font-family: var(--enc-serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.enc-cup-board__link {
+  font-family: var(--enc-sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--enc-sage-deep);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+}
+.enc-cup-board__link:hover { text-decoration: underline; }
+
+.enc-cup-board__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.enc-cup-board__empty {
+  font-family: var(--enc-serif);
+  font-size: 14px;
+  color: var(--enc-ink-mute);
+  font-style: italic;
+  margin: 0;
+  padding: var(--enc-s-3) 0;
+  text-align: center;
+}
+
+.enc-cup-row {
+  display: grid;
+  grid-template-columns: 28px 1fr auto auto;
+  gap: var(--enc-s-3);
+  align-items: baseline;
+  padding: 10px 0;
+  border-top: 1px solid var(--enc-cream-deep);
+}
+.enc-cup-row:first-child { border-top: 0; }
+
+.enc-cup-row__pos {
+  font-family: var(--enc-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--enc-ink-mute);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.enc-cup-row--rank-1 .enc-cup-row__pos { color: var(--enc-gold-deep); font-size: 18px; }
+.enc-cup-row--rank-2 .enc-cup-row__pos { color: #7B7A75; font-size: 17px; }
+.enc-cup-row--rank-3 .enc-cup-row__pos { color: #A97544; font-size: 17px; }
+
+.enc-cup-row__name {
+  font-family: var(--enc-sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--enc-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.enc-cup-row__you {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  background: var(--enc-sage-tint);
+  color: var(--enc-sage-deep);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--enc-r-pill);
+  vertical-align: baseline;
+}
+
+.enc-cup-row__balance {
+  font-family: var(--enc-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.enc-cup-row__delta {
+  font-family: var(--enc-sans);
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  min-width: 44px;
+  text-align: right;
+}
+.enc-cup-row__delta--up   { color: var(--enc-sage-deep); }
+.enc-cup-row__delta--down { color: var(--enc-claret); }
+
+.enc-cup-row--viewer {
+  background: var(--enc-sage-tint);
+  margin: 0 calc(-1 * var(--enc-s-4));
+  padding-left: var(--enc-s-4);
+  padding-right: var(--enc-s-4);
+  border-top-color: transparent;
+}
+.enc-cup-row--viewer + .enc-cup-row { border-top-color: transparent; }
+
+.enc-cup-row--gap {
+  display: block;
+  padding: 4px 0;
+  text-align: center;
+  border-top: 0;
+}
+.enc-cup-row__dots {
+  font-family: var(--enc-serif);
+  color: var(--enc-ink-mute);
+  letter-spacing: 6px;
+  font-size: 14px;
+}
+
+/* ── Your picks strip (E17) ───────────────────────────────────
+ *
+ * One row per placed EventPick, sorted by off-time. Silks on
+ * the left, race + horse in the body, odds/stake/state chip
+ * on the right. Whole row taps through to enclosure card_detail.
+ */
+.enc-cup-picks {
+  background: var(--enc-paper);
+  border-radius: var(--enc-r-xl);
+  padding: var(--enc-s-3) var(--enc-s-3) var(--enc-s-4);
+  border: 1px solid var(--enc-cream-deep);
+  box-shadow: var(--enc-shadow-sm);
+}
+.enc-cup-picks__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 4px 6px var(--enc-s-2);
+}
+.enc-cup-picks__title {
+  font-family: var(--enc-serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  margin: 0;
+  letter-spacing: -0.005em;
+}
+.enc-cup-picks__count {
+  font-family: var(--enc-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--enc-ink-mute);
+  padding: 3px 8px;
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-cream);
+  font-variant-numeric: tabular-nums;
+}
+.enc-cup-picks__empty {
+  font-family: var(--enc-serif);
+  font-size: 14px;
+  color: var(--enc-ink-mute);
+  margin: var(--enc-s-3) 0 0;
+  text-align: center;
+  line-height: 1.4;
+}
+.enc-cup-picks__empty a {
+  color: var(--enc-mode-accent);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.enc-cup-picks__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.enc-cup-pick {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--enc-r-md);
+  background: var(--enc-paper);
+  border: 1px solid var(--enc-cream-deep);
+  border-left: 3px solid transparent;
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 120ms ease-out, background 120ms ease-out;
+}
+.enc-cup-pick:hover { border-color: var(--enc-ink-mute); }
+.enc-cup-pick:active { transform: scale(0.995); }
+
+.enc-cup-pick--open    { border-left-color: var(--enc-mode-accent); }
+.enc-cup-pick--locked  { border-left-color: #7A4B00; }
+.enc-cup-pick--won     { border-left-color: #2E7D32; background: #F1F7EE; }
+.enc-cup-pick--lost    { border-left-color: #B04A3A; }
+
+.enc-cup-pick__silk {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--enc-cream);
+  border: 1px solid var(--enc-cream-deep);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.enc-cup-pick__silk img,
+.enc-cup-pick__silk svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.enc-cup-pick__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.enc-cup-pick__meta {
+  font-family: var(--enc-sans);
+  font-size: 11px;
+  color: var(--enc-ink-mute);
+  letter-spacing: 0.03em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.enc-cup-pick__race {
+  color: var(--enc-ink-soft);
+}
+.enc-cup-pick__horse {
+  font-family: var(--enc-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  letter-spacing: -0.005em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.enc-cup-pick__num {
+  color: var(--enc-ink-mute);
+  font-family: var(--enc-sans);
+  font-weight: 700;
+  margin-right: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.enc-cup-pick__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  text-align: right;
+}
+.enc-cup-pick__odds {
+  font-family: var(--enc-sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--enc-ink);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.enc-cup-pick__odds--dim { color: var(--enc-ink-mute); font-weight: 600; }
+.enc-cup-pick__stake {
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--enc-ink-mute);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.enc-cup-pick__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: var(--enc-r-pill);
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.enc-cup-pick__chip--open    { background: var(--enc-mode-accent-tint); color: var(--enc-mode-accent); }
+.enc-cup-pick__chip--locked  { background: #F1E7DA; color: #7A4B00; }
+.enc-cup-pick__chip--won     { background: #DDECD6; color: #2E7D32; }
+.enc-cup-pick__chip--lost    { background: #F4DDD6; color: #B04A3A; }
+
+/*  Finish position chip next to the horse name — tells the guest
+ *  where their pick actually finished, independent of the pick's
+ *  won/lost outcome. Gold for 1st, silver 2nd, bronze 3rd, muted
+ *  for 4th+, warning tint for DNF codes ("Fell", "PU", "UR"). */
+.enc-cup-pick__fin {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  margin-left: 6px;
+  border-radius: var(--enc-r-pill);
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+  vertical-align: middle;
+}
+.enc-cup-pick__fin--pos-1    { background: #F1E4C9; color: #8E6C3A; }
+.enc-cup-pick__fin--pos-2    { background: #E8E8E8; color: #4A4A4A; }
+.enc-cup-pick__fin--pos-3    { background: #F1DDCB; color: #7A4B00; }
+.enc-cup-pick__fin--pos-rest { background: var(--enc-ground); color: var(--enc-ink-mute); }
+.enc-cup-pick__fin--pos-dnf  { background: #EFE0DA; color: #8A5040; }
+.enc-cup-pick__net {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/*  Standings row — clickable variant.
+ *  Named guests get wrapped in <a class="enc-cup-row__link"> so the
+ *  whole row taps through to their profile. Anonymous (no IDENTITY
+ *  consent) rows stay static.  */
+.enc-cup-row__link {
+  display: contents;
+  color: inherit;
+  text-decoration: none;
+}
+.enc-cup-row--tappable { transition: background 120ms ease; }
+.enc-cup-row--tappable:hover,
+.enc-cup-row--tappable:focus-within {
+  background: var(--enc-hover, rgba(60, 45, 25, 0.05));
+  border-radius: 8px;
+}
+.enc-cup-row--tappable .enc-cup-row__name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.enc-cup-row--tappable .enc-cup-row__name::after {
+  content: '\203A';
+  color: var(--enc-ink-mute);
+  font-size: 15px;
+  line-height: 1;
+  opacity: 0.6;
+}

@@ -1,0 +1,40 @@
+{% extends "enclosure/base.html" %}
+{% load static %}
+
+{% block title %}The Feed · {{ event.name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'enclosure/css/feed.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+<div class="enc-scroll enc-feed"
+     data-live-endpoint="{% url 'enclosure:feed_live' event.slug %}"
+     data-filter="{{ filter_key }}">
+
+  <nav class="enc-feed__chips" aria-label="Filter feed">
+    {% for chip in chips %}
+      <a class="enc-feed__chip{% if chip.active %} is-active{% endif %}"
+         href="?filter={{ chip.key }}"
+         aria-current="{% if chip.active %}true{% else %}false{% endif %}"
+         data-filter="{{ chip.key }}">
+        <span class="enc-feed__chip-label">{{ chip.label }}</span>
+        <span class="enc-feed__chip-count">{{ chip.count }}</span>
+      </a>
+    {% endfor %}
+  </nav>
+
+  <div class="enc-feed__meta" data-role="poll-meta" hidden>
+    <span class="enc-feed__pause-chip">Paused &middot; tap to resume</span>
+  </div>
+
+  <div id="enc-feed-stream" data-role="stream">
+    {% include "enclosure/_feed_stream.html" with entries=entries only %}
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'enclosure/js/feed_live.js' %}?v=1" defer></script>
+{% endblock %}

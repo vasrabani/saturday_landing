@@ -1,0 +1,83 @@
+<section class="enc-cd-pick" aria-label="Your pick">
+
+  {% if card.head.is_settled %}
+    <p class="enc-cd-pick__eyebrow">Result in</p>
+    {% if card.pick.is_placed %}
+      <p class="enc-cd-pick__title">
+        Your pick: #{{ card.pick.runner_number }} {{ card.pick.horse_name }}
+        <span class="enc-cd-pick__at">@ {{ card.pick.odds|default:"SP" }}</span>
+      </p>
+      <p class="enc-cd-pick__foot">Staked {{ card.pick.stake }} credit{{ card.pick.stake|pluralize }}. See the Cup tab for standings.</p>
+    {% else %}
+      <p class="enc-cd-pick__title enc-cd-pick__title--muted">No pick made on this race.</p>
+    {% endif %}
+
+  {% elif card.head.is_locked %}
+    <p class="enc-cd-pick__eyebrow">Locked in</p>
+    {% if card.pick.is_placed %}
+      <p class="enc-cd-pick__title">
+        #{{ card.pick.runner_number }} {{ card.pick.horse_name }}
+        <span class="enc-cd-pick__at">@ {{ card.pick.odds|default:"SP" }}</span>
+      </p>
+      <p class="enc-cd-pick__foot">{{ card.pick.stake }} credit{{ card.pick.stake|pluralize }} committed. Result lands after the race.</p>
+    {% else %}
+      <p class="enc-cd-pick__title enc-cd-pick__title--muted">Race off — no pick made. Zero from this leg.</p>
+    {% endif %}
+
+  {% elif not card.can_post %}
+    <p class="enc-cd-pick__eyebrow">Preview</p>
+    <p class="enc-cd-pick__title enc-cd-pick__title--muted">You need an invited guest account to post picks.</p>
+
+  {% else %}
+    <form class="enc-cd-pick__form" method="post"
+          action="{% url 'enclosure:card_pick_create' card.event.slug card.race.pk %}"
+          data-role="pick-form">
+      {% csrf_token %}
+      <input type="hidden" name="horse_name" value="{{ card.pick.horse_name }}" data-role="horse-input">
+
+      {% if card.pick.is_placed %}
+        <p class="enc-cd-pick__eyebrow">Your pick</p>
+        <p class="enc-cd-pick__title">
+          #{{ card.pick.runner_number }} {{ card.pick.horse_name }}
+          {% if card.pick.odds %}
+            <span class="enc-cd-pick__at">@ {{ card.pick.odds }}</span>
+          {% endif %}
+        </p>
+      {% else %}
+        <p class="enc-cd-pick__eyebrow">Your pick</p>
+        <p class="enc-cd-pick__title enc-cd-pick__title--muted"
+           data-role="empty-title">Tap a horse below to pick.</p>
+      {% endif %}
+
+      <fieldset class="enc-cd-pick__stake" data-role="stake"
+                {% if not card.pick.is_placed %}disabled{% endif %}
+                aria-label="Stake in credits">
+        <legend class="enc-cd-pick__stake-label">
+          Stake
+          <span class="enc-cd-pick__balance">
+            Balance {{ card.balance.available }}
+          </span>
+        </legend>
+        <div class="enc-cd-pick__chips" role="radiogroup">
+          {% for n in card.stake_choices %}
+            <label class="enc-cd-pick__chip">
+              <input type="radio" name="stake_credits" value="{{ n }}"
+                     {% if n == card.pick.stake or n == 1 and not card.pick.is_placed %}checked{% endif %}>
+              <span>{{ n }}</span>
+            </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+
+      <div class="enc-cd-pick__row">
+        <p class="enc-cd-pick__status" data-role="status" aria-live="polite"></p>
+        <button type="submit"
+                class="enc-cd-pick__submit"
+                data-role="submit"
+                {% if not card.pick.is_placed %}disabled{% endif %}>
+          {% if card.pick.is_placed %}Update pick{% else %}Confirm pick{% endif %}
+        </button>
+      </div>
+    </form>
+  {% endif %}
+</section>

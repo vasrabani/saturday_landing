@@ -18,7 +18,7 @@ const BASELINE_FILE = join(ROOT, 'tools', 'quality-baseline.json');
 // Folders this repo owns. static/races, letters, news and voting are
 // shared with other pages of the live site and treated as read-only, so
 // only reference checks look at them.
-const OWNED_DIRS = ['static/css', 'static/js', 'static/public', 'static/fonts', 'static/grid', 'static/meeting', 'static/llama', 'static/fox_signals', 'static/browse'];
+const OWNED_DIRS = ['static/css', 'static/js', 'static/public', 'static/fonts', 'static/grid', 'static/meeting', 'static/llama', 'static/fox_signals', 'static/browse', 'static/enclosure'];
 const LANDING_IMAGE_DIR = 'static/public/img';
 // The pages the contractor works on. Every rule that reads "the page"
 // reads all of them, so a problem introduced on the trail or a meeting
@@ -30,6 +30,11 @@ const ENTRY_PAGES = [
   // Fox Signals (tools/build-fox-signals.py).
   'fox-board.html', 'fox-board-member.html', 'fox-race-trace.html', 'fox-race.html', 'fox-race-visitor.html',
   'fox-race-replay.html', 'fox-runner.html', 'fox-alerts.html', 'fox-stable.html', 'fox-settings.html',
+  // The Enclosure (tools/build-enclosure.py): every page of every scenario.
+  ...readdirSync(join(ROOT, 'enclosure'), { recursive: true })
+    .map((path) => join('enclosure', path).split(sep).join('/'))
+    .filter((path) => path.endsWith('.html'))
+    .sort(),
 ];
 
 const IMAGE_BUDGET_BYTES = 300 * 1024;
@@ -114,7 +119,11 @@ const RULES = {
           [...read(page).matchAll(/\s(?:src|href|srcset|poster)="([^"]+)"/g)]
             .flatMap((match) => match[1].split(',').map((candidate) => candidate.trim().split(/\s+/)[0]))
             .filter((reference) => reference && !isExternal(reference) && !reference.startsWith('data:'))
-            .filter((reference) => !exists(localPath(reference).replace(/^\//, '')))
+            // A relative reference is read from the page's own folder,
+            // as the browser reads it; a rooted one from the sandbox root.
+            .filter((reference) => !exists(reference.startsWith('/')
+              ? localPath(reference).slice(1)
+              : posix.join(posix.dirname(page), localPath(reference))))
             .map((reference) => `${page} -> ${reference}`),
         ),
       ),

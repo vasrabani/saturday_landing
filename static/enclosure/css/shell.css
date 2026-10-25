@@ -1,0 +1,250 @@
+/*
+ * The Enclosure — shell CSS.
+ *
+ * The three chrome pieces every screen shares: top bar, main scroll
+ * region, bottom nav. Tab content lands in per-tab files (home.css,
+ * card.css, feed.css, cup.css) shipping in later PRs.
+ */
+
+/* Reset */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font: 15px/1.5 var(--enc-sans); color: var(--enc-ink); background: var(--enc-cream); }
+h1, h2, h3, h4 { font-family: var(--enc-serif); letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: var(--enc-mode-accent); text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+img { max-width: 100%; display: block; }
+
+/* Skip link — hidden until keyboard focus */
+.enc-skip {
+  position: absolute; top: -100px; left: 12px;
+  background: var(--enc-ink); color: var(--enc-paper);
+  padding: 10px 14px; border-radius: var(--enc-r-md);
+  font-size: 14px; font-weight: 600;
+  z-index: 100;
+}
+.enc-skip:focus { top: 12px; }
+
+.enc-visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* Shell frame — full viewport, safe-area-aware bottom padding */
+.enc-body {
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--enc-cream);
+  overscroll-behavior-y: none;
+}
+
+.enc-shell {
+  max-width: var(--enc-max-w);
+  min-height: 100svh;
+  margin: 0 auto;
+  background: var(--enc-paper);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: var(--enc-shadow-md);
+}
+
+/* TOP BAR */
+.enc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--enc-s-3);
+  padding: var(--enc-s-3) var(--enc-s-4);
+  min-height: var(--enc-top-h);
+  padding-top: calc(var(--enc-s-3) + env(safe-area-inset-top, 0px));
+  background: var(--enc-paper);
+  border-bottom: 1px solid var(--enc-cream-deep);
+  position: sticky;
+  top: 0; z-index: 10;
+}
+
+.enc-top__title { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.enc-top__event {
+  font-family: var(--enc-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.enc-top__meta {
+  font-size: 11px;
+  color: var(--enc-ink-mute);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.enc-top__actions { display: flex; align-items: center; gap: var(--enc-s-2); flex: none; }
+
+.enc-icon-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--enc-mode-accent-tint);
+  display: grid; place-items: center;
+  color: var(--enc-mode-accent);
+  font-size: 15px;
+  transition: transform 100ms ease-out;
+}
+.enc-icon-btn:active { transform: scale(0.94); }
+
+.enc-top__silks-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px; height: 36px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 50%;
+  transition: transform 100ms ease-out, box-shadow 120ms ease-out;
+}
+.enc-top__silks-slot:active { transform: scale(0.94); }
+.enc-top__silks-slot.is-active {
+  box-shadow: 0 0 0 2px var(--enc-mode-accent);
+}
+
+/* The .enc-silks class ships on every SVG the silks service renders.
+   Adds the drop shadow that lifts silks off the paper ground, and
+   normalises sizing when used inside a fixed-width slot (top bar,
+   podium plinths, feed row, standings list). Sizing itself lives on
+   the SVG width/height attributes — the CSS never overrides them so
+   the aspect ratio stays 1:1 without needing box-sizing gymnastics. */
+.enc-silks {
+  display: block;
+  border-radius: 50%;
+  box-shadow: var(--enc-shadow-sm);
+  flex: none;
+}
+
+/* MAIN */
+.enc-main {
+  flex: 1;
+  min-height: 0;
+  padding-bottom: var(--enc-nav-safe);
+}
+
+.enc-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: var(--enc-s-4);
+  padding: var(--enc-s-4);
+}
+
+/* PLACEHOLDER (E1 only — later slices replace .enc-scroll contents) */
+.enc-placeholder {
+  padding: var(--enc-s-7) var(--enc-s-4);
+  text-align: center;
+  border: 1px dashed var(--enc-cream-deep);
+  border-radius: var(--enc-r-xl);
+  background: var(--enc-paper);
+  display: flex; flex-direction: column; gap: var(--enc-s-3); align-items: center;
+}
+.enc-eyebrow {
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--enc-mode-accent); font-weight: 600;
+}
+.enc-placeholder__title {
+  font-size: 26px; line-height: 1.15; font-weight: 600;
+  color: var(--enc-ink); max-width: 20ch;
+}
+.enc-placeholder__lede {
+  font-family: var(--enc-serif);
+  font-size: 15px;
+  color: var(--enc-ink-soft);
+  max-width: 30ch;
+  line-height: 1.55;
+}
+.enc-placeholder__meta {
+  font-size: 12px;
+  color: var(--enc-ink-mute);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: var(--enc-s-2);
+}
+
+/* BOTTOM NAV — floating pill above safe-area */
+.enc-nav {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + var(--enc-s-2));
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - var(--enc-s-4) * 2);
+  max-width: calc(var(--enc-max-w) - var(--enc-s-4) * 2);
+  height: var(--enc-nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 var(--enc-s-3);
+  background: var(--enc-paper);
+  border-radius: var(--enc-r-xl);
+  box-shadow: var(--enc-shadow-md);
+  z-index: 20;
+}
+
+.enc-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 8px;
+  color: var(--enc-ink-mute);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: color 120ms ease-out;
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: center;
+}
+.enc-nav__glyph {
+  width: 26px; height: 26px;
+  display: grid; place-items: center;
+  font-size: 16px;
+  border-radius: var(--enc-r-sm);
+  transition: background-color 120ms ease-out, color 120ms ease-out;
+}
+.enc-nav__item.is-active { color: var(--enc-mode-accent); }
+.enc-nav__item.is-active .enc-nav__glyph {
+  background: var(--enc-mode-accent-tint);
+  color: var(--enc-mode-accent);
+}
+
+/* Raised FAB — the camera / post button */
+.enc-nav__item--fab {
+  transform: translateY(-14px);
+  position: relative;
+}
+.enc-nav__item--fab .enc-nav__glyph {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: var(--enc-gold);
+  color: var(--enc-paper);
+  font-size: 22px;
+  box-shadow: 0 8px 20px rgba(184, 147, 90, 0.35),
+              inset 0 -2px 0 rgba(0, 0, 0, 0.10);
+  border: 3px solid var(--enc-paper);
+}
+
+/* Larger nav labels for tablets — the pill grows, labels stay */
+@media (min-width: 480px) {
+  .enc-nav__item { font-size: 11px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .enc-icon-btn,
+  .enc-nav__item,
+  .enc-nav__glyph {
+    transition: none;
+  }
+  .enc-icon-btn:active { transform: none; }
+}

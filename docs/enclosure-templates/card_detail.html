@@ -1,0 +1,43 @@
+{% extends "enclosure/base.html" %}
+{% load static %}
+
+{% block title %}{{ card.head.title }} · {{ event.name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'enclosure/css/card_detail.css' %}?v=5">
+{% endblock %}
+
+{% block content %}
+<div class="enc-card-detail"
+     data-live-endpoint="{% url 'enclosure:card_detail_live' event.slug card.race.pk %}"
+     data-pick-endpoint="{% url 'enclosure:card_pick_create' event.slug card.race.pk %}"
+     data-can-post="{% if card.can_post %}1{% else %}0{% endif %}"
+     data-stop-flag="{% if card.head.is_locked or card.head.is_settled %}1{% else %}0{% endif %}">
+
+  <div class="enc-scroll">
+
+    <div data-role="head">
+      {% include "enclosure/_card_race_head.html" %}
+    </div>
+
+    <div data-role="pick">
+      {% include "enclosure/_card_pick_bar.html" %}
+    </div>
+
+    <div data-role="field">
+      {% include "enclosure/_card_field.html" %}
+    </div>
+
+    <div data-role="letter">
+      {% if card.letter %}
+        {% include "enclosure/_card_letter_panel.html" %}
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'enclosure/js/card_detail.js' %}?v=3" defer></script>
+{% endblock %}

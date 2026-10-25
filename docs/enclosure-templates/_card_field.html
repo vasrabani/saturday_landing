@@ -1,0 +1,22 @@
+<section class="enc-cd-field" aria-label="Runners">
+  <header class="enc-cd-field__head">
+    <h2 class="enc-cd-field__title">Field</h2>
+    <p class="enc-cd-field__meta">
+      {{ card.head.runner_count }} runner{{ card.head.runner_count|pluralize }}
+    </p>
+  </header>
+
+  {% if card.runners %}
+    <ul class="enc-cd-runners">
+      {% for r in card.runners %}
+        <li>
+          {% include "enclosure/_card_runner_tile.html" with r=r card=card %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="enc-cd-field__empty">
+      Runners aren't declared yet — check back closer to the off.
+    </p>
+  {% endif %}
+</section>

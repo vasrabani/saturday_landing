@@ -1,0 +1,89 @@
+/*
+ * The Enclosure — design tokens.
+ *
+ * Inherits from the Race Book editorial system: sage as the trust
+ * accent, cream as the ground, gold reserved for host / Steward's
+ * Room. All later Enclosure CSS files consume these tokens; never
+ * hard-code a colour or a size below.
+ *
+ * Committed to a single visual world (day-time, warm, editorial) —
+ * no dark-theme swap. That's a deliberate design choice, not an
+ * omission.
+ */
+:root {
+  /* Sage — the primary/trust accent */
+  --enc-sage:       #7A8F76;
+  --enc-sage-deep:  #506B4D;
+  --enc-sage-tint:  #E7ECDE;
+  --enc-sage-glow:  #B8CFA8;
+
+  /* Cream — the ground */
+  --enc-cream:      #F4EFE2;
+  --enc-cream-deep: #E8E1CE;
+  --enc-paper:      #FBF7EC;
+
+  /* Ink — type */
+  --enc-ink:        #2A2724;
+  --enc-ink-soft:   #58524A;
+  --enc-ink-mute:   #8A8479;
+
+  /* Gold — host mode only. Never on a guest surface. */
+  --enc-gold:       #B8935A;
+  --enc-gold-deep:  #8E6C3A;
+  --enc-gold-tint:  #F1E4C9;
+
+  /* Claret — settled/lost state */
+  --enc-claret:     #6E2B37;
+  --enc-claret-tint: rgba(110, 43, 55, 0.10);
+
+  /* Shadow scale */
+  --enc-shadow-sm:  0 1px 2px rgba(42, 39, 36, 0.08);
+  --enc-shadow-md:  0 8px 24px rgba(42, 39, 36, 0.10);
+  --enc-shadow-lg:  0 24px 56px rgba(42, 39, 36, 0.16);
+
+  /* Type stacks */
+  --enc-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua",
+               Palatino, Georgia, serif;
+  --enc-sans:  -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI",
+               Roboto, sans-serif;
+  --enc-mono:  "SF Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  /* Radii + spacing scale */
+  --enc-r-sm:  10px;
+  --enc-r-md:  14px;
+  --enc-r-lg:  18px;
+  --enc-r-xl:  24px;
+  --enc-r-pill: 999px;
+
+  --enc-s-1:  4px;
+  --enc-s-2:  8px;
+  --enc-s-3:  12px;
+  --enc-s-4:  16px;
+  --enc-s-5:  20px;
+  --enc-s-6:  24px;
+  --enc-s-7:  32px;
+
+  /* Layout constants */
+  --enc-top-h:    56px;
+  --enc-nav-h:    64px;
+  --enc-nav-safe: calc(var(--enc-nav-h) + env(safe-area-inset-bottom, 0px));
+  --enc-max-w:    640px; /* soft cap so tablets don't stretch the phone UI */
+}
+
+/*
+ * Host mode swaps the primary accent from sage to gold on chrome
+ * elements that opt in via the tokens below. Component CSS should
+ * always reference --enc-mode-accent* rather than sage or gold
+ * directly when the element should tint by mode.
+ */
+:root[data-mode="guest"] {
+  --enc-mode-accent:      var(--enc-sage-deep);
+  --enc-mode-accent-tint: var(--enc-sage-tint);
+  --enc-mode-accent-glow: var(--enc-sage-glow);
+}
+
+:root[data-mode="steward"] {
+  --enc-mode-accent:      var(--enc-gold-deep);
+  --enc-mode-accent-tint: var(--enc-gold-tint);
+  --enc-mode-accent-glow: var(--enc-gold);
+}

@@ -1,0 +1,35 @@
+<nav class="enc-nav" role="navigation" aria-label="Primary">
+  {% if is_host %}
+    <a class="enc-nav__item {% if active_tab == 'steward' %}is-active{% endif %}" href="{% url 'enclosure:steward' event.slug %}" data-tab="steward">
+      <span class="enc-nav__glyph" aria-hidden="true">S</span>
+      <span class="enc-nav__label">Steward</span>
+    </a>
+  {% else %}
+    <a class="enc-nav__item {% if active_tab == 'home' %}is-active{% endif %}" href="{% url 'enclosure:home' event.slug %}" data-tab="home">
+      <span class="enc-nav__glyph" aria-hidden="true">&#8962;</span>
+      <span class="enc-nav__label">Home</span>
+    </a>
+  {% endif %}
+
+  <a class="enc-nav__item {% if active_tab == 'card' %}is-active{% endif %}" href="{% url 'enclosure:card' event.slug %}" data-tab="card">
+    <span class="enc-nav__glyph" aria-hidden="true">&#127183;</span>
+    <span class="enc-nav__label">Card</span>
+  </a>
+
+  <button type="button" class="enc-nav__item enc-nav__item--fab enc-nav__item--button"
+          data-role="note-open" aria-controls="enc-note-sheet"
+          aria-label="Post to the day">
+    <span class="enc-nav__glyph" aria-hidden="true">&#128247;</span>
+    <span class="enc-nav__label enc-visually-hidden">Post</span>
+  </button>
+
+  <a class="enc-nav__item {% if active_tab == 'feed' %}is-active{% endif %}" href="{% url 'enclosure:feed' event.slug %}" data-tab="feed">
+    <span class="enc-nav__glyph" aria-hidden="true">&#128172;</span>
+    <span class="enc-nav__label">Feed</span>
+  </a>
+
+  <a class="enc-nav__item {% if active_tab == 'cup' %}is-active{% endif %}" href="{% url 'enclosure:cup' event.slug %}" data-tab="cup">
+    <span class="enc-nav__glyph" aria-hidden="true">&#127942;</span>
+    <span class="enc-nav__label">Cup</span>
+  </a>
+</nav>

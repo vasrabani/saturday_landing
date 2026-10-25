@@ -1,0 +1,37 @@
+<li class="enc-me-pick enc-me-pick--state-{{ row.state }}">
+  {% if row.pick_url %}
+    <a class="enc-me-pick__link" href="{{ row.pick_url }}">
+      <span class="enc-me-pick__time">{{ row.time_display }}</span>
+      <div class="enc-me-pick__body">
+        <p class="enc-me-pick__horse">{{ row.horse_name }}</p>
+        <p class="enc-me-pick__meta">
+          {% if row.course %}{{ row.course }} &middot; {% endif %}
+          {{ row.stake }} cr{% if row.odds %} @ {{ row.odds }}{% endif %}
+        </p>
+      </div>
+      <span class="enc-me-pick__chip enc-me-pick__chip--{{ row.state }}">
+        <span class="enc-me-pick__chip-label">{{ row.chip_label }}</span>
+        {% if row.chip_detail %}
+          <span class="enc-me-pick__chip-detail">{{ row.chip_detail }}</span>
+        {% endif %}
+      </span>
+    </a>
+  {% else %}
+    <div class="enc-me-pick__row">
+      <span class="enc-me-pick__time">{{ row.time_display }}</span>
+      <div class="enc-me-pick__body">
+        <p class="enc-me-pick__horse">{{ row.horse_name }}</p>
+        <p class="enc-me-pick__meta">
+          {% if row.course %}{{ row.course }} &middot; {% endif %}
+          {{ row.stake }} cr{% if row.odds %} @ {{ row.odds }}{% endif %}
+        </p>
+      </div>
+      <span class="enc-me-pick__chip enc-me-pick__chip--{{ row.state }}">
+        <span class="enc-me-pick__chip-label">{{ row.chip_label }}</span>
+        {% if row.chip_detail %}
+          <span class="enc-me-pick__chip-detail">{{ row.chip_detail }}</span>
+        {% endif %}
+      </span>
+    </div>
+  {% endif %}
+</li>

@@ -1,0 +1,229 @@
+/*
+ * The Enclosure — identity sheet (from the top-bar avatar).
+ * Bottom-anchored, same silhouette as the About sheet so guests
+ * recognise the "sheet from the avatar" interaction.
+ *
+ * Two variants share this file: signed-in Cub (silks + shortcuts +
+ * sign-out) and anonymous / showcase viewer (sign-in CTA + hint).
+ */
+
+.enc-avatar-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 10px 18px 24px;
+  padding-bottom: max(24px, env(safe-area-inset-bottom, 0px));
+  background: var(--enc-paper, #F7F1E2);
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  box-shadow: 0 -12px 32px rgba(31, 22, 8, 0.16);
+  animation: enc-avatar-sheet-rise 220ms ease-out;
+}
+
+@keyframes enc-avatar-sheet-rise {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.enc-avatar-sheet__handle {
+  width: 44px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--enc-ink-mute, #8A8479);
+  opacity: 0.35;
+  margin: 0 auto 12px;
+}
+
+.enc-avatar-sheet__head {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--enc-hairline, rgba(60, 45, 25, 0.08));
+}
+
+.enc-avatar-sheet__silks {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--enc-ground, #EFE8D6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 0 1px rgba(60, 45, 25, 0.1);
+}
+.enc-avatar-sheet__silks svg { display: block; width: 100%; height: 100%; }
+
+.enc-avatar-sheet__ident { min-width: 0; }
+.enc-avatar-sheet__name {
+  margin: 0;
+  font-family: var(--enc-font-serif, Georgia, serif);
+  font-size: 17px;
+  line-height: 1.2;
+  color: var(--enc-ink, #2F2A22);
+  text-wrap: balance;
+}
+.enc-avatar-sheet__meta {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: var(--enc-ink-mute, #6E6252);
+}
+
+.enc-avatar-sheet__close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--enc-ink-mute, #8A8479);
+  padding: 4px 8px;
+  cursor: pointer;
+}
+.enc-avatar-sheet__close:hover,
+.enc-avatar-sheet__close:focus-visible { color: var(--enc-ink, #2F2A22); }
+
+/* ── Signed-in variant — action list ──────────────────────── */
+
+.enc-avatar-sheet__actions {
+  list-style: none;
+  margin: 12px 0 14px;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.enc-avatar-sheet__row {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 8px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--enc-ink, #2F2A22);
+  transition: background 120ms ease;
+}
+.enc-avatar-sheet__row:hover,
+.enc-avatar-sheet__row:focus-visible {
+  background: var(--enc-hover, rgba(60, 45, 25, 0.05));
+  outline: none;
+}
+.enc-avatar-sheet__row-icon {
+  font-size: 18px;
+  color: var(--enc-sage-deep, #506B4D);
+  text-align: center;
+}
+.enc-avatar-sheet__row-label {
+  display: block;
+  min-width: 0;
+}
+.enc-avatar-sheet__row-label strong {
+  display: block;
+  font-family: var(--enc-font-serif, Georgia, serif);
+  font-size: 15px;
+  font-weight: 600;
+}
+.enc-avatar-sheet__row-label em {
+  display: block;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--enc-ink-mute, #6E6252);
+  margin-top: 1px;
+}
+.enc-avatar-sheet__row-arrow {
+  font-size: 18px;
+  color: var(--enc-ink-mute, #8A8479);
+  line-height: 1;
+}
+
+.enc-avatar-sheet__signout-form { margin: 0 0 12px; }
+.enc-avatar-sheet__signout {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(140, 40, 40, 0.35);
+  background: var(--enc-paper, #F7F1E2);
+  color: #8C2828;
+  font-family: var(--enc-font-serif, Georgia, serif);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+.enc-avatar-sheet__signout:hover,
+.enc-avatar-sheet__signout:focus-visible {
+  background: rgba(140, 40, 40, 0.06);
+  border-color: rgba(140, 40, 40, 0.55);
+}
+
+/* ── Anonymous variant — CTA + hint ───────────────────────── */
+
+.enc-avatar-sheet__body { margin: 14px 0 12px; }
+.enc-avatar-sheet__cta {
+  display: block;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--enc-sage-deep, #506B4D);
+  color: var(--enc-paper, #F7F1E2);
+  text-decoration: none;
+  text-align: center;
+  font-family: var(--enc-font-serif, Georgia, serif);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: filter 120ms ease;
+}
+.enc-avatar-sheet__cta:hover,
+.enc-avatar-sheet__cta:focus-visible { filter: brightness(1.06); }
+
+.enc-avatar-sheet__hint {
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--enc-ink-mute, #6E6252);
+}
+
+.enc-avatar-sheet__note {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--enc-ground, #EFE8D6);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--enc-ink, #2F2A22);
+}
+.enc-avatar-sheet__note strong { color: var(--enc-sage-deep, #506B4D); }
+
+/* ── Return-to-parent row ─────────────────────────────────── */
+
+.enc-avatar-sheet__return {
+  display: block;
+  padding-top: 10px;
+  margin-top: 4px;
+  border-top: 1px solid var(--enc-hairline, rgba(60, 45, 25, 0.08));
+  font-size: 12px;
+  color: var(--enc-ink-mute, #6E6252);
+  text-align: center;
+  text-decoration: none;
+}
+.enc-avatar-sheet__return:hover,
+.enc-avatar-sheet__return:focus-visible { color: var(--enc-ink, #2F2A22); }
+
+/* ── Topbar avatar as a button — reset the browser default ── */
+
+button.enc-top__silks-slot {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+button.enc-top__silks-slot:focus-visible {
+  outline: 2px solid var(--enc-sage-deep, #506B4D);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+.enc-top__silks-anon { display: block; }

@@ -1,0 +1,15 @@
+<section class="enc-cup-progress" aria-label="Meeting progress">
+  {% if cup.all_settled %}
+    <p class="enc-cup-progress__label">All races settled</p>
+  {% elif cup.races_total %}
+    <p class="enc-cup-progress__label">
+      <strong>{{ cup.races_settled }}</strong> of {{ cup.races_total }} races settled
+    </p>
+    <div class="enc-cup-progress__track" role="presentation">
+      <div class="enc-cup-progress__fill"
+           style="width: {% widthratio cup.races_settled cup.races_total 100 %}%"></div>
+    </div>
+  {% else %}
+    <p class="enc-cup-progress__label">Racecard lands on the morning</p>
+  {% endif %}
+</section>

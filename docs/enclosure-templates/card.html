@@ -1,0 +1,73 @@
+{% extends "enclosure/base.html" %}
+{% load static %}
+
+{% block title %}Racecard · {{ event.name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'enclosure/css/card.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+<div class="enc-scroll">
+
+  {% if rows %}
+    <ol class="enc-card-list" aria-label="Races today">
+      {% for row in rows %}
+        {% if row.pick_url %}
+        <li>
+          <a class="enc-race-row enc-race-row--state-{{ row.state }}{% if row.is_next %} enc-race-row--next{% endif %}"
+             href="{{ row.pick_url }}">
+            <div class="enc-race-row__time">{{ row.time_display }}</div>
+            <div class="enc-race-row__body">
+              <div class="enc-race-row__title">{{ row.title }}</div>
+              {% if row.subtitle %}
+                <div class="enc-race-row__sub">{{ row.subtitle }}</div>
+              {% endif %}
+            </div>
+            <div class="enc-race-row__chip enc-chip enc-chip--{{ row.state }}">
+              <span class="enc-chip__label">{{ row.chip_label }}</span>
+              {% if row.chip_detail %}
+                <span class="enc-chip__detail">{{ row.chip_detail }}</span>
+              {% endif %}
+            </div>
+          </a>
+        </li>
+        {% else %}
+        <li>
+          <div class="enc-race-row enc-race-row--state-{{ row.state }}{% if row.is_next %} enc-race-row--next{% endif %} enc-race-row--static">
+            <div class="enc-race-row__time">{{ row.time_display }}</div>
+            <div class="enc-race-row__body">
+              <div class="enc-race-row__title">{{ row.title }}</div>
+              {% if row.subtitle %}
+                <div class="enc-race-row__sub">{{ row.subtitle }}</div>
+              {% endif %}
+              {% if row.pick_horse %}
+                <div class="enc-race-row__pick-line">
+                  {{ row.pick_horse }}
+                </div>
+              {% endif %}
+            </div>
+            <div class="enc-race-row__chip enc-chip enc-chip--{{ row.state }}">
+              <span class="enc-chip__label">{{ row.chip_label }}</span>
+              {% if row.chip_detail %}
+                <span class="enc-chip__detail">{{ row.chip_detail }}</span>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+        {% endif %}
+      {% endfor %}
+    </ol>
+  {% else %}
+    <section class="enc-placeholder">
+      <p class="enc-eyebrow">Racecard</p>
+      <p class="enc-placeholder__title">Nothing here yet</p>
+      <p class="enc-placeholder__lede">
+        The card lands automatically the morning of the event. Check back
+        on {{ event.meeting_date|date:"l j F" }}.
+      </p>
+    </section>
+  {% endif %}
+
+</div>
+{% endblock %}

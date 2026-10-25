@@ -1,0 +1,33 @@
+{% load static %}
+<aside class="enc-install" id="enc-install-nudge"
+       role="region" aria-label="Add to home screen" hidden
+       data-storage-key="enc-install-dismissed"
+       data-cooldown-days="14">
+  <div class="enc-install__mark" aria-hidden="true">
+    <img src="{% static 'enclosure/icons/icon-192.png' %}"
+         alt="" width="44" height="44">
+  </div>
+  <div class="enc-install__body">
+    <p class="enc-install__title" data-role="title">
+      Add The Enclosure to your home screen
+    </p>
+    <p class="enc-install__meta" data-role="meta">
+      One tap opens the day — no app store, no login again.
+    </p>
+    <p class="enc-install__ios" data-role="ios" hidden>
+      Tap
+      <span class="enc-install__glyph" aria-hidden="true">&#x2B06;</span>
+      then <strong>Add to Home Screen</strong>.
+    </p>
+  </div>
+  <div class="enc-install__actions">
+    <button type="button" class="enc-install__cta"
+            data-role="install" hidden>
+      Install
+    </button>
+    <button type="button" class="enc-install__dismiss"
+            data-role="dismiss" aria-label="Dismiss">
+      &times;
+    </button>
+  </div>
+</aside>

@@ -1,0 +1,109 @@
+/*
+ * The Enclosure — in-app sign-in page.
+ * Sage/cream palette, centred column on the mobile viewport, matches
+ * the corporate accept-flow rhythm. Same shell — topbar and bottom
+ * nav render around it so signed-out visitors don't feel they've
+ * been dumped into a different app.
+ */
+
+.enc-signin {
+  max-width: 420px;
+  margin: 20px auto;
+  padding: 22px 20px 28px;
+  background: var(--enc-paper, #F7F1E2);
+  border: 1px solid var(--enc-hairline, rgba(60, 45, 25, 0.08));
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(31, 22, 8, 0.04);
+}
+
+.enc-signin__head { margin-bottom: 16px; }
+.enc-signin__kicker {
+  margin: 0 0 4px;
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--enc-ink-mute, #6E6252);
+}
+.enc-signin__title {
+  margin: 0 0 6px;
+  font-family: var(--enc-font-serif, Georgia, serif);
+  font-size: 22px;
+  color: var(--enc-ink, #2F2A22);
+  text-wrap: balance;
+}
+.enc-signin__deck {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--enc-ink-mute, #6E6252);
+}
+
+.enc-signin__error {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  background: rgba(140, 40, 40, 0.08);
+  border-left: 3px solid #8C2828;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #7A2222;
+}
+
+.enc-signin__form { display: grid; gap: 12px; }
+.enc-signin__field { display: grid; gap: 4px; }
+.enc-signin__lbl {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--enc-ink-mute, #6E6252);
+}
+.enc-signin__field input {
+  padding: 12px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--enc-hairline, rgba(60, 45, 25, 0.15));
+  background: var(--enc-ground, #FBF6EA);
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--enc-ink, #2F2A22);
+  transition: border-color 120ms ease;
+}
+.enc-signin__field input:focus {
+  outline: none;
+  border-color: var(--enc-sage-deep, #506B4D);
+}
+
+.enc-signin__submit {
+  margin-top: 6px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: none;
+  background: var(--enc-sage-deep, #506B4D);
+  color: var(--enc-paper, #F7F1E2);
+  font-family: var(--enc-font-serif, Georgia, serif);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: filter 120ms ease;
+}
+.enc-signin__submit:hover,
+.enc-signin__submit:focus-visible { filter: brightness(1.06); }
+
+.enc-signin__hint {
+  margin: 14px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--enc-ink-mute, #6E6252);
+}
+
+.enc-signin__back {
+  display: block;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--enc-hairline, rgba(60, 45, 25, 0.08));
+  font-size: 12px;
+  color: var(--enc-ink-mute, #6E6252);
+  text-align: center;
+  text-decoration: none;
+}
+.enc-signin__back:hover,
+.enc-signin__back:focus-visible { color: var(--enc-ink, #2F2A22); }

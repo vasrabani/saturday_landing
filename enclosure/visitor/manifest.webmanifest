@@ -1,0 +1,31 @@
+{
+ "name": "The Enclosure — Hartwell & Penn at Bath",
+ "short_name": "Enclosure",
+ "description": "Race-day companion for Hartwell & Penn at Bath.",
+ "start_url": "index.html",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#F4EFE2",
+ "theme_color": "#506B4D",
+ "icons": [
+  {
+   "src": "../../static/enclosure/icons/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "../../static/enclosure/icons/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "../../static/enclosure/icons/icon-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

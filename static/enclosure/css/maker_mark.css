@@ -1,0 +1,295 @@
+/*
+ * The Enclosure — maker's mark strip + About Saturday Racing sheet.
+ *
+ * A slim, sage-tinted band that sits above the topbar on every page,
+ * giving Saturday Racing an editorial "publisher's plate" without
+ * competing with the corporate event brand. Tap opens the sheet with
+ * an elevator pitch + host-a-day CTA.
+ *
+ * Colour is deliberately sage in both guest AND host modes — this is
+ * Saturday Racing's identity, not the mode accent, so it never flips
+ * to gold when a Steward is viewing.
+ */
+
+/* ── MAKER MARK STRIP ─────────────────────────────────────────────── */
+
+.enc-mark {
+  display: flex;
+  align-items: center;
+  gap: var(--enc-s-2);
+  width: 100%;
+  min-height: 26px;
+  padding: 4px var(--enc-s-4);
+  padding-top: calc(4px + env(safe-area-inset-top, 0px));
+
+  /* Sage-tinted plate — same in guest + host mode. */
+  background: var(--enc-sage-tint);
+  color: var(--enc-sage-deep);
+
+  /* Sit as the very first sticky element above the topbar. */
+  position: sticky;
+  top: 0;
+  z-index: 11; /* above topbar (10) so the strip never disappears */
+
+  /* Editorial detail — a hair-line rule below to divide from topbar. */
+  border-bottom: 1px solid rgba(80, 107, 77, 0.18);
+
+  font: 500 11px/1 var(--enc-sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+  transition: background-color 120ms ease-out;
+}
+.enc-mark:hover,
+.enc-mark:focus-visible {
+  background: var(--enc-sage-glow);
+}
+.enc-mark:focus-visible {
+  outline: 2px solid var(--enc-sage-deep);
+  outline-offset: -2px;
+}
+.enc-mark:active {
+  background: var(--enc-sage-deep);
+  color: var(--enc-paper);
+}
+.enc-mark:active .enc-mark__monogram svg circle {
+  fill: var(--enc-paper);
+}
+.enc-mark:active .enc-mark__monogram svg text {
+  fill: var(--enc-sage-deep);
+}
+
+.enc-mark__monogram {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+}
+
+.enc-mark__word {
+  flex: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.enc-mark__label {
+  font-weight: 500;
+  opacity: 0.7;
+  letter-spacing: 0.08em;
+}
+
+.enc-mark__brand {
+  font-family: var(--enc-serif);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--enc-sage-deep);
+}
+
+.enc-mark__chevron {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 14px;
+  height: 14px;
+  opacity: 0.55;
+  transition: transform 120ms ease-out, opacity 120ms ease-out;
+}
+.enc-mark:hover .enc-mark__chevron,
+.enc-mark:focus-visible .enc-mark__chevron {
+  opacity: 0.9;
+  transform: translateX(2px);
+}
+
+/* Two sticky elements would both anchor at top:0 and overlap when the
+ * page scrolls. Give the topbar a sticky offset equal to the mark
+ * strip's rendered height so it stacks cleanly beneath the strip, and
+ * hand the safe-area padding responsibility to the strip alone. */
+.enc-mark + .enc-top {
+  padding-top: var(--enc-s-3);
+  top: calc(26px + env(safe-area-inset-top, 0px));
+}
+
+
+/* ── ABOUT SHEET (bottom sheet, matches _note_sheet chrome) ─────── */
+
+.enc-about {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--enc-max-w);
+  max-height: 82vh;
+  background: var(--enc-paper);
+  border-radius: var(--enc-r-xl) var(--enc-r-xl) 0 0;
+  box-shadow: var(--enc-shadow-lg);
+  z-index: 40; /* above tab pill (20) and topbar */
+  padding: var(--enc-s-3) var(--enc-s-4)
+           calc(var(--enc-s-4) + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: var(--enc-s-4);
+  animation: enc-about-in 220ms ease-out;
+}
+.enc-about[hidden] { display: none !important; }
+
+@keyframes enc-about-in {
+  from { transform: translate(-50%, 12%); opacity: 0.6; }
+  to   { transform: translate(-50%, 0);    opacity: 1;   }
+}
+
+.enc-about__handle {
+  width: 44px;
+  height: 4px;
+  margin: 0 auto 4px;
+  background: var(--enc-cream-deep);
+  border-radius: 999px;
+}
+
+.enc-about__head {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--enc-s-3);
+}
+.enc-about__stamp {
+  width: 48px; height: 48px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  box-shadow: var(--enc-shadow-sm);
+}
+.enc-about__title-block { min-width: 0; }
+.enc-about__eyebrow {
+  font: 500 10px/1 var(--enc-sans);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--enc-ink-mute);
+  margin-bottom: 3px;
+}
+.enc-about__title {
+  font-family: var(--enc-serif);
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.1;
+  color: var(--enc-ink);
+  letter-spacing: -0.01em;
+}
+.enc-about__close {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--enc-cream);
+  color: var(--enc-ink-soft);
+  font-size: 22px;
+  line-height: 1;
+  display: grid; place-items: center;
+  transition: background-color 120ms ease-out;
+}
+.enc-about__close:hover,
+.enc-about__close:focus-visible {
+  background: var(--enc-cream-deep);
+}
+
+.enc-about__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--enc-s-3);
+  overflow-y: auto;
+}
+
+.enc-about__lede {
+  font-family: var(--enc-serif);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--enc-ink-soft);
+}
+
+.enc-about__points {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--enc-s-2);
+}
+.enc-about__points li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--enc-s-2);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--enc-ink);
+}
+.enc-about__dot {
+  flex: none;
+  width: 6px; height: 6px;
+  margin-top: 8px;
+  border-radius: 50%;
+  background: var(--enc-sage-deep);
+}
+
+.enc-about__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--enc-s-2);
+  min-height: 48px;
+  padding: 0 var(--enc-s-4);
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-sage-deep);
+  color: var(--enc-paper);
+  font: 600 14px/1 var(--enc-sans);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  transition: background-color 120ms ease-out, transform 100ms ease-out;
+  margin-top: var(--enc-s-2);
+}
+.enc-about__cta:hover,
+.enc-about__cta:focus-visible {
+  background: var(--enc-sage);
+}
+.enc-about__cta:active {
+  transform: scale(0.98);
+}
+.enc-about__cta-arrow {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.enc-about__contact {
+  font-size: 12px;
+  color: var(--enc-ink-mute);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+.enc-about__contact a {
+  color: var(--enc-sage-deep);
+  text-decoration: none;
+  font-weight: 600;
+}
+.enc-about__contact a:hover,
+.enc-about__contact a:focus-visible {
+  text-decoration: underline;
+}
+
+/* Reduced motion — no slide-in for the sheet. */
+@media (prefers-reduced-motion: reduce) {
+  .enc-about { animation: none; }
+  .enc-mark__chevron { transition: none; }
+  .enc-mark:hover .enc-mark__chevron,
+  .enc-mark:focus-visible .enc-mark__chevron { transform: none; }
+}
+
+/* On very narrow phones, collapse the "A / production" flankers so
+ * the wordmark stays readable without truncation. */
+@media (max-width: 359px) {
+  .enc-mark__label { display: none; }
+}

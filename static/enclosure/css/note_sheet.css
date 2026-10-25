@@ -1,0 +1,314 @@
+/*
+ * The Enclosure — Camera FAB → note sheet (E6).
+ *
+ * Full-viewport backdrop with a bottom-anchored sheet that slides
+ * up. The sheet is a form: silks, event context, textarea, count
+ * meter, submit. Reduced-motion just fades the backdrop; the sheet
+ * appears in place.
+ */
+
+.enc-sheet {
+  position: fixed;
+  inset: 0;
+  background: rgba(42, 39, 36, 0.42);
+  z-index: 50;
+  /*
+   * Column so head + mode-tabs + active form stack vertically.
+   * `justify-content: flex-end` pins the whole stack to the bottom
+   * of the viewport (the sheet slides up from there). `align-items:
+   * center` keeps the stack horizontally centred on wide screens.
+   */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0;
+  animation: enc-sheet-fade 180ms ease-out;
+}
+/* The `hidden` attribute is a UA rule (display: none) that authored
+   display:flex above silently overrides. Reassert it as an author
+   rule so the sheet stays closed on page load until JS opens it. */
+.enc-sheet[hidden] { display: none !important; }
+
+/* iOS Safari — inert body scroll when sheet is open. */
+body.enc-sheet-open {
+  overflow: hidden;
+}
+
+.enc-sheet__handle {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 32px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--enc-cream-deep);
+  z-index: 2;
+}
+
+.enc-sheet__head,
+.enc-sheet__form {
+  background: var(--enc-paper);
+  width: 100%;
+  max-width: var(--enc-max-w);
+}
+.enc-sheet__head {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 20px 20px 8px;
+  border-top-left-radius: var(--enc-r-xl);
+  border-top-right-radius: var(--enc-r-xl);
+  animation: enc-sheet-slide 220ms cubic-bezier(0.2, 0.85, 0.35, 1);
+}
+.enc-sheet__silks { display: grid; place-items: center; }
+.enc-sheet__title {
+  font-family: var(--enc-serif);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.enc-sheet__meta {
+  font-size: 12px;
+  color: var(--enc-sage-deep);
+  font-weight: 600;
+  margin: 2px 0 0;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.enc-sheet__close {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--enc-cream-deep);
+  color: var(--enc-ink-soft);
+  font-size: 20px;
+  line-height: 0;
+  display: grid;
+  place-items: center;
+  align-self: start;
+}
+
+.enc-sheet__modes {
+  display: flex;
+  gap: 6px;
+  padding: 4px 20px 8px;
+  background: var(--enc-paper);
+}
+.enc-sheet__mode {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: var(--enc-r-md);
+  background: var(--enc-cream);
+  color: var(--enc-ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background-color 120ms ease-out, color 120ms ease-out;
+}
+.enc-sheet__mode.is-active {
+  background: var(--enc-mode-accent);
+  color: var(--enc-paper);
+}
+
+.enc-sheet__form {
+  padding: 12px 20px calc(20px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: enc-sheet-slide 220ms cubic-bezier(0.2, 0.85, 0.35, 1);
+}
+/*
+ * Author-level guard: the base rule above sets display:flex, which
+ * wins against the UA [hidden]{display:none}. JS toggles [hidden]
+ * to swap Note ↔ Photo mode — without this override both forms sit
+ * side-by-side and the wrong one accepts input.
+ */
+.enc-sheet__form[hidden] { display: none !important; }
+
+/* Photo picker */
+.enc-sheet__file-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 120px;
+  padding: 20px 16px;
+  background: var(--enc-cream);
+  border: 2px dashed var(--enc-cream-deep);
+  border-radius: var(--enc-r-md);
+  color: var(--enc-ink-soft);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 120ms ease-out, background-color 120ms ease-out;
+}
+.enc-sheet__file-drop:hover {
+  border-color: var(--enc-mode-accent);
+  background: var(--enc-paper);
+}
+.enc-sheet__file-glyph {
+  font-size: 28px;
+  line-height: 1;
+}
+.enc-sheet__file-label {
+  font-size: 13px;
+  line-height: 1.35;
+  max-width: 28ch;
+}
+.enc-sheet__caption {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--enc-cream-deep);
+  border-radius: var(--enc-r-md);
+  font: inherit;
+  font-size: 14px;
+  color: var(--enc-ink);
+  background: var(--enc-cream);
+  outline: none;
+}
+.enc-sheet__caption:focus {
+  border-color: var(--enc-sage-deep);
+  background: var(--enc-paper);
+  box-shadow: 0 0 0 3px var(--enc-sage-tint);
+}
+
+.enc-sheet__textarea {
+  width: 100%;
+  border: 1px solid var(--enc-cream-deep);
+  border-radius: var(--enc-r-md);
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--enc-ink);
+  background: var(--enc-cream);
+  resize: none;
+  min-height: 84px;
+  outline: none;
+}
+.enc-sheet__textarea:focus {
+  border-color: var(--enc-sage-deep);
+  background: var(--enc-paper);
+  box-shadow: 0 0 0 3px var(--enc-sage-tint);
+}
+
+.enc-sheet__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+.enc-sheet__count {
+  font-size: 12px;
+  color: var(--enc-ink-mute);
+  font-variant-numeric: tabular-nums;
+}
+.enc-sheet__error {
+  font-size: 12px;
+  color: var(--enc-claret);
+  flex: 1;
+  text-align: center;
+}
+
+.enc-sheet__submit {
+  padding: 10px 22px;
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-gold);
+  color: var(--enc-paper);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  min-width: 96px;
+  transition: transform 100ms ease-out, opacity 120ms ease-out;
+}
+.enc-sheet__submit:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.enc-sheet__submit:not(:disabled):active { transform: scale(0.97); }
+
+/* Photos in the feed — full-width card, tap-to-lightbox. */
+.enc-feed__photo {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--enc-r-md);
+  overflow: hidden;
+  background: var(--enc-cream-deep);
+  cursor: zoom-in;
+  aspect-ratio: 4 / 3;
+  transition: transform 120ms ease-out;
+}
+.enc-feed__photo:active { transform: scale(0.99); }
+.enc-feed__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.enc-feed__caption {
+  font-family: var(--enc-serif);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--enc-ink-soft);
+  margin-top: 6px;
+  line-height: 1.45;
+}
+
+/* Notes in the feed — replace the icon slot with silks + attach chip. */
+.enc-feed__author-silks {
+  display: grid;
+  place-items: center;
+  align-self: start;
+}
+.enc-feed__item--guest_note .enc-feed__title {
+  font-family: var(--enc-sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--enc-ink);
+  letter-spacing: 0.01em;
+}
+.enc-feed__item--guest_note .enc-feed__text {
+  font-family: var(--enc-serif);
+  font-size: 14px;
+  color: var(--enc-ink);
+  margin-top: 3px;
+  line-height: 1.5;
+}
+.enc-feed__attach {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 3px 10px;
+  background: var(--enc-sage-tint);
+  color: var(--enc-sage-deep);
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--enc-r-pill);
+}
+
+@keyframes enc-sheet-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes enc-sheet-slide {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enc-sheet,
+  .enc-sheet__head,
+  .enc-sheet__form { animation: none; }
+  .enc-sheet__submit { transition: none; }
+  .enc-sheet__submit:not(:disabled):active { transform: none; }
+}

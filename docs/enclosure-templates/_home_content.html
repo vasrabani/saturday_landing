@@ -1,0 +1,133 @@
+{% with hq=home.hq %}
+
+  {% if hq.countdown_race %}
+  <section class="enc-hero" aria-labelledby="enc-hero-title">
+    <p class="enc-hero__eyebrow">Next race</p>
+    <p class="enc-hero__live" hidden></p>
+    <h1 id="enc-hero-title" class="enc-hero__title">
+      {{ hq.countdown_race.race_time_display }}
+      {% if hq.countdown_race.race.course %}
+        · {{ hq.countdown_race.race.course }}
+      {% endif %}
+      {% if hq.countdown_race.race.race_name %}
+        · {{ hq.countdown_race.race.race_name }}
+      {% endif %}
+    </h1>
+    <div class="enc-hero__off">
+      <div class="enc-hero__count">{{ hq.countdown_label }}</div>
+      <div class="enc-hero__label">
+        <span>Off at</span>
+        <strong>{{ hq.countdown_race.race_time_display }}</strong>
+      </div>
+    </div>
+  </section>
+  {% else %}
+  <section class="enc-hero enc-hero--quiet" aria-labelledby="enc-hero-title">
+    <p class="enc-hero__eyebrow">The day</p>
+    <h1 id="enc-hero-title" class="enc-hero__title">
+      {{ event.name }}
+    </h1>
+    <p class="enc-hero__quiet">
+      {{ hq.countdown_label }}
+    </p>
+  </section>
+  {% endif %}
+
+  <section class="enc-triptych" aria-label="Race Day HQ">
+    <div class="enc-tri">
+      <div class="enc-tri__label">Next</div>
+      {% if hq.countdown_race and hq.countdown_race.ai_winner %}
+        <div class="enc-tri__value">{{ hq.countdown_race.ai_winner }}</div>
+        <div class="enc-tri__foot">LLaMa's pick</div>
+      {% elif hq.countdown_race %}
+        <div class="enc-tri__value enc-tri__value--dim">TBC</div>
+        <div class="enc-tri__foot">Pick landing</div>
+      {% else %}
+        <div class="enc-tri__value enc-tri__value--dim">—</div>
+        <div class="enc-tri__foot">All done</div>
+      {% endif %}
+    </div>
+
+    <div class="enc-tri">
+      <div class="enc-tri__label">Cup</div>
+      {% if hq.viewer %}
+        <div class="enc-tri__value">
+          {{ hq.viewer.position }}<span class="enc-tri__ord">/{{ hq.viewer.total }}</span>
+        </div>
+        <div class="enc-tri__foot">
+          {{ hq.viewer.balance }} · {% if hq.viewer.is_leader %}Leading{% else %}{{ hq.viewer.gap_to_leader }} off{% endif %}
+        </div>
+      {% else %}
+        <div class="enc-tri__value enc-tri__value--dim">—</div>
+        <div class="enc-tri__foot">No standings yet</div>
+      {% endif %}
+    </div>
+
+    <div class="enc-tri">
+      <div class="enc-tri__label">Recap</div>
+      {% if hq.just_settled %}
+        {% if hq.just_settled.viewer_pick_horse %}
+          {% if hq.just_settled.viewer_payout > 0 %}
+            <div class="enc-tri__value enc-tri__value--win">Won</div>
+            <div class="enc-tri__foot">
+              {{ hq.just_settled.viewer_pick_horse }} · +{{ hq.just_settled.viewer_payout }}
+            </div>
+          {% else %}
+            <div class="enc-tri__value enc-tri__value--lost">Lost</div>
+            <div class="enc-tri__foot">
+              {{ hq.just_settled.viewer_pick_horse }}
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="enc-tri__value enc-tri__value--dim">Skipped</div>
+          <div class="enc-tri__foot">{{ hq.just_settled.race_time_display }}</div>
+        {% endif %}
+      {% else %}
+        <div class="enc-tri__value enc-tri__value--dim">—</div>
+        <div class="enc-tri__foot">No settled races yet</div>
+      {% endif %}
+    </div>
+  </section>
+
+  {% if home.should_show_nudge %}
+  <a href="{% url 'enclosure:card' event.slug %}" class="enc-nudge"
+     data-nudge-target="{{ home.nudge_race_title }}">
+    <span class="enc-nudge__icon" aria-hidden="true">⏱</span>
+    <div class="enc-nudge__body">
+      <div class="enc-nudge__title">You haven't picked the {{ home.nudge_race_title }}</div>
+      <div class="enc-nudge__sub">{{ home.nudge_label|capfirst }}</div>
+    </div>
+    <span class="enc-nudge__go" aria-hidden="true">›</span>
+  </a>
+  {% endif %}
+
+  {% if home.feed_head %}
+  <section class="enc-feed-rail" aria-labelledby="enc-feed-rail-title">
+    <header class="enc-sec">
+      <h2 id="enc-feed-rail-title" class="enc-sec__title">The Feed</h2>
+      <a class="enc-sec__link" href="{% url 'enclosure:feed' event.slug %}">See all</a>
+    </header>
+    <ol class="enc-feed-rail__list">
+      {% for entry in home.feed_head %}
+        <li class="enc-feed-rail__item">
+          <span class="enc-feed-rail__icon" aria-hidden="true">{{ entry.icon|default:"·" }}</span>
+          <div class="enc-feed-rail__body">
+            <div class="enc-feed-rail__meta">
+              <span class="enc-feed-rail__title">{{ entry.title }}</span>
+              {% if entry.is_fresh %}
+                <span class="enc-feed-rail__fresh">Live</span>
+              {% else %}
+                <span class="enc-feed-rail__time">{{ entry.freshness_label }}</span>
+              {% endif %}
+            </div>
+            {% if entry.body %}
+              <p class="enc-feed-rail__text">{{ entry.body|truncatewords:16 }}</p>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ol>
+  </section>
+  {% endif %}
+
+{% endwith %}

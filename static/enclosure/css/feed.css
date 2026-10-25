@@ -1,0 +1,185 @@
+/*
+ * The Enclosure — Feed tab (E5).
+ *
+ * Filter chips + chronological entry list. The live-poll JS swaps
+ * the #enc-feed-stream contents wholesale; the wrapper class handles
+ * layout so the swap needs nothing more than innerHTML replacement.
+ */
+
+.enc-feed {
+  padding-top: var(--enc-s-3);
+}
+
+/* CHIPS ------------------------------------------------------- */
+.enc-feed__chips {
+  display: flex;
+  gap: var(--enc-s-2);
+  overflow-x: auto;
+  padding: 0 var(--enc-s-1) var(--enc-s-3);
+  margin: 0 calc(var(--enc-s-4) * -1) var(--enc-s-3);
+  padding-left: var(--enc-s-4);
+  padding-right: var(--enc-s-4);
+  scrollbar-width: none;
+}
+.enc-feed__chips::-webkit-scrollbar { display: none; }
+
+.enc-feed__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--enc-r-pill);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--enc-ink-soft);
+  background: var(--enc-cream-deep);
+  white-space: nowrap;
+  flex: none;
+  transition: background-color 120ms ease-out, color 120ms ease-out;
+}
+.enc-feed__chip.is-active {
+  background: var(--enc-ink);
+  color: var(--enc-paper);
+}
+.enc-feed__chip-count {
+  font-size: 10px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* PAUSE META STRIP -------------------------------------------- */
+.enc-feed__meta {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0 var(--enc-s-3);
+}
+.enc-feed__pause-chip {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--enc-r-pill);
+  font-size: 11px;
+  color: var(--enc-ink-mute);
+  background: var(--enc-cream-deep);
+  cursor: pointer;
+}
+
+/* STREAM ------------------------------------------------------ */
+.enc-feed__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.enc-feed__item {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 12px;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--enc-cream-deep);
+}
+.enc-feed__item:last-child { border-bottom: 0; }
+
+.enc-feed__icon {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--enc-sage-tint);
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  align-self: start;
+}
+/* Per-kind icon tints — the icon carries the category signal. */
+.enc-feed__item--award .enc-feed__icon      { background: var(--enc-gold-tint); }
+.enc-feed__item--cup_mover .enc-feed__icon  { background: var(--enc-gold-tint); }
+.enc-feed__item--race_settled .enc-feed__icon { background: var(--enc-claret-tint); }
+.enc-feed__item--closing .enc-feed__icon    { background: var(--enc-cream-deep); }
+
+.enc-feed__body { min-width: 0; }
+
+.enc-feed__meta-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.enc-feed__title {
+  font-family: var(--enc-serif);
+  font-weight: 600;
+  color: var(--enc-ink);
+  font-size: 13px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.enc-feed__time { color: var(--enc-ink-mute); flex: none; }
+.enc-feed__fresh {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 9px;
+  color: var(--enc-sage-deep);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  padding: 2px 6px;
+  background: var(--enc-sage-tint);
+  border-radius: var(--enc-r-pill);
+  flex: none;
+  animation: enc-feed-pulse 2.4s ease-in-out infinite;
+}
+.enc-feed__fresh::before {
+  content: "";
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--enc-sage-deep);
+}
+.enc-feed__text {
+  font-size: 13px;
+  color: var(--enc-ink-soft);
+  margin-top: 3px;
+  line-height: 1.45;
+}
+
+/* EMPTY ------------------------------------------------------- */
+.enc-feed__empty {
+  padding: var(--enc-s-7) var(--enc-s-4);
+  text-align: center;
+  border: 1px dashed var(--enc-cream-deep);
+  border-radius: var(--enc-r-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--enc-s-2);
+}
+.enc-feed__empty-title {
+  font-family: var(--enc-serif);
+  font-size: 20px;
+  color: var(--enc-ink);
+  margin: var(--enc-s-1) 0;
+}
+.enc-feed__empty-lede {
+  font-family: var(--enc-serif);
+  font-size: 14px;
+  color: var(--enc-ink-soft);
+  max-width: 32ch;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+@keyframes enc-feed-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enc-feed__fresh { animation: none; }
+  .enc-feed__chip  { transition: none; }
+}
