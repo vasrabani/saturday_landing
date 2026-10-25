@@ -139,6 +139,26 @@ test.describe('the Board', () => {
     await expect(sheet).not.toHaveAttribute('open', '');
   });
 
+  test('the going filter keeps the rows the server would: a compound going is its wetter side', async ({ page }) => {
+    const goingOf = (rows) => rows.evaluateAll((list) => [...new Set(list.map((row) =>
+      row.querySelector('.fxv-row__facts').textContent.split('·').map((part) => part.trim())
+        .filter((part) => !/class|runner/i.test(part)).join('')))].sort());
+    await openFox(page, 'fox-board.html');
+    const kept = page.locator('.fxv-row:not([hidden])');
+    await page.locator('details.fxv-more summary').click();
+    await page.locator('a[data-dim="going"][data-value="good"]').click();
+    expect(new URL(page.url()).searchParams.get('going')).toBe('good');
+    await expect(kept).toHaveCount(24);
+    expect(await goingOf(kept)).toEqual(['Good']);
+    // The same addresses opened afresh, as the server answers them.
+    await openFox(page, 'fox-board.html?going=soft');
+    await expect(kept).toHaveCount(8);
+    expect(await goingOf(kept)).toEqual(['Good to Soft']);
+    await openFox(page, 'fox-board.html?going=firm');
+    await expect(kept).toHaveCount(6);
+    expect(await goingOf(kept)).toEqual(['Good to Firm']);
+  });
+
   test('a visitor is shown the level of conviction and asked to sign up for the figure', async ({ page }) => {
     await openFox(page, 'fox-board.html');
     const row = shownRows(page).first();

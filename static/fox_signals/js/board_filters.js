@@ -112,21 +112,47 @@
     return Infinity;
   }
 
+  // The class and going bands, as the server draws them
+  // (_row_class_bucket and _row_going_bucket in fox_signals/services/
+  // board.py), so a choice made here and the same address reloaded keep
+  // the same rows. A compound going is the wetter side: "Good to Soft"
+  // is soft and "Good to Firm" is firm, never good. '' fits no band.
+  function classBand(cls) {
+    if (/group|grade|listed|class [12]/.test(cls)) return 'top';
+    if (/class [34]/.test(cls)) return 'mid';
+    if (/class [567]/.test(cls)) return 'low';
+    return '';
+  }
+
+  function goingBand(going) {
+    if (going.indexOf('heavy') !== -1) return 'heavy';
+    if (going.indexOf('soft') !== -1) return 'soft';
+    if (going.indexOf('firm') !== -1) return 'firm';
+    if (going.indexOf('good') !== -1) return 'good';
+    return '';
+  }
+
+  // The facts line is "class · going · runners", each part there only
+  // when the race has it.
   function factsOf(row) {
     if (row.fxvFacts) return row.fxvFacts;
-    var facts = text(row, '.fxv-row__facts');
-    var cls = /class (\d+)/i.exec(facts);
-    var runners = /(\d+) runners?/i.exec(facts);
-    var going = facts.replace(/class \d+/i, '').replace(/\d+ runners?/i, '').replace(/·/g, ' ').trim().toLowerCase();
+    var cls = '', going = '', runners = null;
+    text(row, '.fxv-row__facts').toLowerCase().split('·').forEach(function (part) {
+      part = part.trim();
+      var n = /^(\d+) runners?$/.exec(part);
+      if (n) runners = +n[1];
+      else if (/class|group|grade|listed/.test(part)) cls = part;
+      else if (part) going = part;
+    });
     var pct = parseFloat(text(row, '.fxv-conv__pct'));
     var time = row.querySelector('.fxv-row__time time');
     row.fxvFacts = {
       course: text(row, '.fxv-row__link'),
       level: row.classList.contains('fxv-row--high') ? 'high'
         : row.classList.contains('fxv-row--medium') ? 'medium' : 'low',
-      cls: cls ? +cls[1] : null,
-      runners: runners ? +runners[1] : null,
-      going: going,
+      cls: classBand(cls),
+      runners: runners,
+      going: goingBand(going),
       time: time ? time.getAttribute('datetime') || time.textContent.trim() : '',
       price: decimalOf(text(row, '.fxv-price')),
       pct: isNaN(pct) ? null : pct,
@@ -139,17 +165,13 @@
     if (state.conviction) {
       if (state.conviction === 'notlow' ? f.level === 'low' : f.level !== state.conviction) return false;
     }
-    if (state['class']) {
-      if (f.cls === null) return false;
-      var band = f.cls <= 2 ? 'top' : f.cls <= 4 ? 'mid' : 'low';
-      if (band !== state['class']) return false;
-    }
+    if (state['class'] && f.cls !== state['class']) return false;
     if (state.field) {
-      if (f.runners === null) return false;
+      if (!f.runners) return false;
       var size = f.runners <= 7 ? 'small' : f.runners <= 14 ? 'medium' : 'large';
       if (size !== state.field) return false;
     }
-    if (state.going && f.going.indexOf(state.going) === -1) return false;
+    if (state.going && f.going !== state.going) return false;
     return true;
   }
 
