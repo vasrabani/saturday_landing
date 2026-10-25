@@ -1,5 +1,7 @@
 # Saturday Racing — Design Sandbox
 
+> **Working on the Enclosure (the corporate race-day app)?** Start with **[ENCLOSURE.md](ENCLOSURE.md)**: how to get it running in five minutes, where to make changes, and how to hand them back.
+
 Self-contained snapshots of the live site, so you can work on it without Django, a database or any backend. The pages:
 
 | Page | What it is |
