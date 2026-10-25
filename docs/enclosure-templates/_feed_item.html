@@ -1,0 +1,51 @@
+{% load enclosure_silks %}
+<li class="enc-feed__item enc-feed__item--{{ entry.kind }}"
+    data-entry-id="{{ entry.pk }}">
+  {% if entry.kind == 'guest_note' and entry.actor_guest %}
+    <span class="enc-feed__author-silks">
+      {% silks_for_guest entry.actor_guest 34 %}
+    </span>
+  {% elif entry.kind == 'guest_photo' and entry.actor_guest %}
+    <span class="enc-feed__author-silks">
+      {% silks_for_guest entry.actor_guest 34 %}
+    </span>
+  {% else %}
+    <span class="enc-feed__icon" aria-hidden="true">{{ entry.icon|default:"·" }}</span>
+  {% endif %}
+  <div class="enc-feed__body">
+    <div class="enc-feed__meta-row">
+      <span class="enc-feed__title">{{ entry.title }}</span>
+      {% if entry.is_fresh %}
+        <span class="enc-feed__fresh">Live</span>
+      {% else %}
+        <span class="enc-feed__time">{{ entry.freshness_label }}</span>
+      {% endif %}
+    </div>
+
+    {% if entry.kind == 'guest_photo' and entry.image %}
+      <button type="button" class="enc-feed__photo"
+              data-role="photo-lightbox"
+              data-photo-src="{{ entry.image.url }}"
+              data-photo-caption="{{ entry.body|default:'' }}"
+              aria-label="View photo full size">
+        <img src="{{ entry.image.url }}" alt="{{ entry.body|default:'Guest photo' }}"
+             loading="lazy" decoding="async">
+      </button>
+      {% if entry.body %}
+        <p class="enc-feed__caption">{{ entry.body }}</p>
+      {% endif %}
+    {% elif entry.body %}
+      <p class="enc-feed__text">{{ entry.body|linebreaksbr }}</p>
+    {% endif %}
+
+    {% if entry.kind == 'guest_note' or entry.kind == 'guest_photo' %}
+      {% if entry.race %}
+        <div class="enc-feed__attach">
+          <span aria-hidden="true">🏇</span>
+          {{ entry.race.race_time|time:"H:i" }}
+          {% if entry.race.course %}· {{ entry.race.course }}{% endif %}
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</li>

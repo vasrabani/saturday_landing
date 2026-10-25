@@ -1,0 +1,49 @@
+<section class="enc-cd-letter enc-cd-letter--{{ card.letter.confidence|default:'medium' }}"
+         aria-label="LLaMa's read on this race">
+  <header class="enc-cd-letter__head">
+    <span class="enc-cd-letter__mono" aria-hidden="true">🦙</span>
+    <div class="enc-cd-letter__title-block">
+      <p class="enc-cd-letter__eyebrow">LLaMa&rsquo;s read</p>
+      <h2 class="enc-cd-letter__title">Predicted 1&mdash;2&mdash;3&mdash;4</h2>
+    </div>
+  </header>
+
+  <ol class="enc-cd-letter__slots">
+    {% for slot in card.letter.slots %}
+      <li class="enc-cd-letter__slot enc-cd-letter__slot--pos-{{ slot.position }}">
+        <span class="enc-cd-letter__medal" aria-hidden="true">
+          {% if slot.position == 1 %}🥇
+          {% elif slot.position == 2 %}🥈
+          {% elif slot.position == 3 %}🥉
+          {% else %}{{ slot.position }}{% endif %}
+        </span>
+        <div class="enc-cd-letter__slot-body">
+          <p class="enc-cd-letter__slot-eyebrow">
+            Predicted
+            {% if slot.position == 1 %}1st
+            {% elif slot.position == 2 %}2nd
+            {% elif slot.position == 3 %}3rd
+            {% else %}{{ slot.position }}th{% endif %}
+            {% if slot.odds_seen %}
+              &middot; <span class="enc-cd-letter__price">{{ slot.odds_seen }}</span>
+            {% endif %}
+          </p>
+          <p class="enc-cd-letter__horse">{{ slot.horse_name }}</p>
+          {% if slot.reasoning %}
+            <p class="enc-cd-letter__slot-note">{{ slot.reasoning }}</p>
+          {% endif %}
+        </div>
+      </li>
+    {% endfor %}
+  </ol>
+
+  {% if card.letter.verdict %}
+    <p class="enc-cd-letter__verdict">{{ card.letter.verdict }}</p>
+  {% endif %}
+
+  {% if card.letter.full_url %}
+    <a class="enc-cd-letter__more" href="{{ card.letter.full_url }}">
+      Read the full letter &rarr;
+    </a>
+  {% endif %}
+</section>

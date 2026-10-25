@@ -1,0 +1,16 @@
+{% if entries %}
+  <ol class="enc-feed__list">
+    {% for entry in entries %}
+      {% include "enclosure/_feed_item.html" with entry=entry %}
+    {% endfor %}
+  </ol>
+{% else %}
+  <div class="enc-feed__empty">
+    <p class="enc-eyebrow">The Feed</p>
+    <p class="enc-feed__empty-title">Nothing here yet</p>
+    <p class="enc-feed__empty-lede">
+      Race settlements, cup movements and host briefings all land
+      here as the day unfolds.
+    </p>
+  </div>
+{% endif %}

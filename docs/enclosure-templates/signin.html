@@ -1,0 +1,57 @@
+{% extends "enclosure/base.html" %}
+{% load static %}
+
+{% block title %}Sign in &middot; {{ event.name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'enclosure/css/signin.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+<div class="enc-scroll">
+  <section class="enc-signin">
+    <header class="enc-signin__head">
+      <p class="enc-signin__kicker">The Enclosure</p>
+      <h1 class="enc-signin__title">Sign in to your Cub</h1>
+      <p class="enc-signin__deck">
+        Enter your email and password to unlock your seat at
+        <strong>{{ event.name }}</strong>.
+      </p>
+    </header>
+
+    {% if error %}
+      <p class="enc-signin__error" role="alert">{{ error }}</p>
+    {% endif %}
+
+    <form method="post" class="enc-signin__form" novalidate>
+      {% csrf_token %}
+      <label class="enc-signin__field">
+        <span class="enc-signin__lbl">Email</span>
+        <input type="email" name="email" autocomplete="email"
+               inputmode="email" required autofocus
+               value="{{ email }}">
+      </label>
+      <label class="enc-signin__field">
+        <span class="enc-signin__lbl">Password</span>
+        <input type="password" name="password"
+               autocomplete="current-password" required>
+      </label>
+
+      <button type="submit" class="enc-signin__submit">
+        Sign in
+      </button>
+    </form>
+
+    <p class="enc-signin__hint">
+      Haven&rsquo;t got a Cub yet? Open the accept link in your
+      invitation email &mdash; it&rsquo;ll create one and drop
+      you straight back here.
+    </p>
+
+    <a class="enc-signin__back"
+       href="{% url 'enclosure:home' event.slug %}">
+      &larr; Back to the Enclosure
+    </a>
+  </section>
+</div>
+{% endblock %}

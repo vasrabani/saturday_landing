@@ -1,0 +1,53 @@
+{% extends "enclosure/base.html" %}
+{% load static %}
+
+{% block title %}Corporate Cup · {{ event.name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'enclosure/css/cup.css' %}?v=4">
+{% endblock %}
+
+{% block content %}
+<div class="enc-cup"
+     data-live-endpoint="{% url 'enclosure:cup_live' event.slug %}"
+     data-all-settled="{% if cup.all_settled %}1{% else %}0{% endif %}">
+  <div class="enc-scroll">
+
+    <div class="enc-cup__pulse" aria-live="polite">
+      {% if cup.all_settled %}
+        <span class="enc-cup__pulse-chip enc-cup__pulse-chip--closed">Cup settled</span>
+      {% else %}
+        <span class="enc-cup__pulse-chip enc-cup__pulse-chip--live">
+          <span class="enc-cup__pulse-dot" aria-hidden="true"></span>
+          Live
+        </span>
+        <button type="button" class="enc-cup__pulse-pause"
+                data-role="poll-meta" hidden>
+          Paused — tap to resume
+        </button>
+      {% endif %}
+    </div>
+
+    <div data-role="cup-hero">
+      {% include "enclosure/_cup_hero.html" %}
+    </div>
+
+    <div data-role="cup-progress">
+      {% include "enclosure/_cup_progress.html" %}
+    </div>
+
+    <div data-role="cup-picks">
+      {% include "enclosure/_cup_picks.html" %}
+    </div>
+
+    <div data-role="cup-board">
+      {% include "enclosure/_cup_board.html" %}
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'enclosure/js/cup_live.js' %}?v=2" defer></script>
+{% endblock %}

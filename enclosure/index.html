@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>The Enclosure · sandbox pages</title>
+  <link rel="stylesheet" href="../static/enclosure/css/tokens.css">
+  <style>
+    /* This index is the sandbox's own, not one of the app's pages: it
+       lists them. It is not copied back to the Django site. */
+    body { margin: 0; background: var(--enc-cream); color: var(--enc-ink); font-family: var(--enc-sans); line-height: 1.5; }
+    main { max-width: 960px; margin: 0 auto; padding: 32px 16px 64px; }
+    h1, h2 { font-family: var(--enc-serif); font-weight: 600; margin: 0 0 8px; }
+    h1 { font-size: 30px; }
+    h2 { font-size: 21px; margin-top: 32px; }
+    p { max-width: 68ch; color: var(--enc-ink-soft); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 16px; }
+    .scenario { background: var(--enc-paper); border: 1px solid var(--enc-cream-deep); border-radius: var(--enc-r-lg); padding: 16px 18px; }
+    .scenario h2 { margin-top: 0; font-size: 19px; }
+    .scenario .when { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--enc-sage-deep); }
+    .scenario p { font-size: 14px; margin: 6px 0 10px; }
+    ul { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+    a { color: var(--enc-sage-deep); }
+    ul a { display: inline-block; padding: 3px 10px; border-radius: var(--enc-r-pill); background: var(--enc-sage-tint); text-decoration: none; font-size: 13px; }
+    ul a:hover, ul a:focus-visible { background: var(--enc-sage-glow); }
+    code { font-family: var(--enc-mono); font-size: 0.9em; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>The Enclosure</h1>
+  <p>
+    The phone app a corporate client's guests use on their race day: the card, their picks in the
+    Corporate Cup, the feed of results, notes and photos, and the host's Steward's Room. These pages are
+    built from the Django site by <code>tools/build-enclosure.py</code>: a real card (Bath, Tuesday 29 September 2026)
+    and a made-up room, Hartwell &amp; Penn's eleven guests. Start with <code>docs/enclosure-brief.md</code>.
+  </p>
+  <p>
+    It is a phone app: look at it at phone width (375px) first. In Chrome, DevTools' device toolbar
+    (Ctrl+Shift+M) does it.
+  </p>
+
+  <div class="grid">
+    <section class="scenario">
+      <div class="when">12:40 · as Priya, a guest</div>
+      <h2>Morning</h2>
+      <p>Before the first race. Picks are in, nothing has run, every race is open.</p>
+      <ul>
+        <li><a href="morning/index.html">Home</a></li>
+        <li><a href="morning/card.html">Card</a></li>
+        <li><a href="morning/race-1.html">A race</a></li>
+        <li><a href="morning/feed.html">Feed</a></li>
+        <li><a href="morning/cup.html">Cup</a></li>
+        <li><a href="morning/me.html">Me</a></li>
+      </ul>
+    </section>
+    <section class="scenario">
+      <div class="when">16:20 · as Priya, a guest</div>
+      <h2>Race day</h2>
+      <p>Mid-card. Five races settled, the 16:35 next off. The richest scenario: start here.</p>
+      <ul>
+        <li><a href="race-day/index.html">Home</a></li>
+        <li><a href="race-day/card.html">Card</a></li>
+        <li><a href="race-day/race-1.html">Settled race</a></li>
+        <li><a href="race-day/race-8.html">Open race (pick it)</a></li>
+        <li><a href="race-day/feed.html">Feed</a></li>
+        <li><a href="race-day/feed-photos.html">Photos</a></li>
+        <li><a href="race-day/cup.html">Cup</a></li>
+        <li><a href="race-day/me.html">Me</a></li>
+        <li><a href="race-day/guest-4.html">Another guest</a></li>
+      </ul>
+    </section>
+    <section class="scenario">
+      <div class="when">19:05 · as Priya, a guest</div>
+      <h2>Day done</h2>
+      <p>After the last race. Everything settled, the awards given, the host has closed the day.</p>
+      <ul>
+        <li><a href="day-done/index.html">Home</a></li>
+        <li><a href="day-done/card.html">Card</a></li>
+        <li><a href="day-done/feed.html">Feed</a></li>
+        <li><a href="day-done/cup.html">Cup</a></li>
+        <li><a href="day-done/me.html">Me</a></li>
+      </ul>
+    </section>
+    <section class="scenario">
+      <div class="when">16:20 · as Ruth, the host</div>
+      <h2>Steward's Room</h2>
+      <p>The host's view: the Steward tab in place of Home, the room's numbers, and briefings to post.</p>
+      <ul>
+        <li><a href="steward/steward.html">Steward's Room</a></li>
+        <li><a href="steward/card.html">Card</a></li>
+        <li><a href="steward/feed.html">Feed</a></li>
+        <li><a href="steward/cup.html">Cup</a></li>
+      </ul>
+    </section>
+    <section class="scenario">
+      <div class="when">19:05 · no invitation</div>
+      <h2>Visitor</h2>
+      <p>A public showcase day seen without signing in, as the live JDL Consultants page is. And the sign-in page.</p>
+      <ul>
+        <li><a href="visitor/index.html">Home</a></li>
+        <li><a href="visitor/cup.html">Cup</a></li>
+        <li><a href="visitor/me.html">Me</a></li>
+        <li><a href="visitor/signin.html">Sign in</a></li>
+      </ul>
+    </section>
+  </div>
+
+  <h2>Every scenario has every page</h2>
+  <p>
+    <code>index.html</code> (Home), <code>card.html</code>, <code>race-1.html</code> to <code>race-9.html</code>,
+    <code>feed.html</code> with <code>feed-racing.html</code>, <code>feed-comments.html</code> and <code>feed-photos.html</code>,
+    <code>cup.html</code>, <code>me.html</code>, and <code>guest-N.html</code> for each named guest. The app's own links
+    move between them, so you can use it as a guest would.
+  </p>
+</main>
+</body>
+</html>

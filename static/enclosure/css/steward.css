@@ -1,0 +1,239 @@
+/*
+ * The Enclosure — Steward's Room (E11).
+ *
+ * Host-only mission control. The gold accent is already flipped in
+ * by data-mode="steward" on the root (tokens.css); this file uses
+ * --enc-mode-accent* everywhere so the rail reads gold, not sage,
+ * without a single hard-coded colour.
+ *
+ * Four surfaces: header, Room (RSVP roll-up), Activity (picks +
+ * posts + races settled), Deep controls (link-out cards).
+ */
+
+/* ── Hero ─────────────────────────────────────────────────────── */
+.enc-steward-hero {
+  background: var(--enc-paper);
+  border-radius: var(--enc-r-xl);
+  padding: var(--enc-s-5);
+  border: 1px solid var(--enc-cream-deep);
+  box-shadow: var(--enc-shadow-md);
+  border-left: 4px solid var(--enc-mode-accent);
+}
+.enc-steward-hero .enc-eyebrow {
+  color: var(--enc-mode-accent);
+}
+.enc-steward-hero__title {
+  font-family: var(--enc-serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  margin: 6px 0 0;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.enc-steward-hero__meta {
+  font-family: var(--enc-sans);
+  font-size: 12px;
+  color: var(--enc-ink-mute);
+  margin: 4px 0 0;
+  letter-spacing: 0.02em;
+}
+
+/* ── Section card ────────────────────────────────────────────── */
+.enc-steward-section {
+  background: var(--enc-paper);
+  border-radius: var(--enc-r-xl);
+  padding: var(--enc-s-4);
+  border: 1px solid var(--enc-cream-deep);
+  box-shadow: var(--enc-shadow-sm);
+}
+.enc-steward-section__title {
+  font-family: var(--enc-serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  margin: 0 0 var(--enc-s-3);
+  letter-spacing: -0.005em;
+}
+
+/* ── Stat tile grid ──────────────────────────────────────────── */
+.enc-steward-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--enc-s-3);
+  margin: 0;
+}
+@media (min-width: 480px) {
+  .enc-steward-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+.enc-steward-tile {
+  padding: var(--enc-s-3);
+  border-radius: var(--enc-r-md);
+  background: var(--enc-cream);
+  border: 1px solid var(--enc-cream-deep);
+  min-width: 0;
+}
+.enc-steward-tile dt {
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--enc-ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 var(--enc-s-1);
+}
+.enc-steward-tile dd {
+  font-family: var(--enc-serif);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.enc-steward-tile__num {
+  color: var(--enc-mode-accent);
+}
+.enc-steward-tile__of {
+  font-size: 14px;
+  color: var(--enc-ink-mute);
+  margin-left: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Briefing writer (E13) ────────────────────────────────────── */
+.enc-steward-section--briefing {
+  border-top: 4px solid var(--enc-mode-accent);
+}
+.enc-steward-briefing__lede {
+  font-family: var(--enc-serif);
+  font-size: 14px;
+  color: var(--enc-ink-soft);
+  line-height: 1.5;
+  margin: 0 0 var(--enc-s-3);
+}
+
+.enc-steward-briefing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--enc-s-2);
+}
+.enc-steward-briefing__label {
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--enc-ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: var(--enc-s-1) 0 0;
+}
+.enc-steward-briefing__label:first-of-type { margin-top: 0; }
+
+.enc-steward-briefing__headline,
+.enc-steward-briefing__body {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid var(--enc-cream-deep);
+  border-radius: var(--enc-r-md);
+  font: inherit;
+  font-size: 14px;
+  color: var(--enc-ink);
+  background: var(--enc-cream);
+  outline: none;
+}
+.enc-steward-briefing__body { resize: none; min-height: 60px; }
+.enc-steward-briefing__headline:focus,
+.enc-steward-briefing__body:focus {
+  border-color: var(--enc-mode-accent);
+  background: var(--enc-paper);
+  box-shadow: 0 0 0 3px var(--enc-mode-accent-tint);
+}
+
+.enc-steward-briefing__row {
+  display: flex;
+  align-items: center;
+  gap: var(--enc-s-3);
+  justify-content: space-between;
+  margin-top: var(--enc-s-2);
+}
+.enc-steward-briefing__status {
+  font-family: var(--enc-sans);
+  font-size: 12px;
+  color: var(--enc-ink-soft);
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.enc-steward-briefing__status.is-error {
+  color: var(--enc-claret);
+}
+.enc-steward-briefing__submit {
+  padding: 10px 20px;
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-mode-accent);
+  color: var(--enc-paper);
+  font-family: var(--enc-sans);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  border: 0;
+  cursor: pointer;
+  transition: opacity 120ms ease-out, transform 100ms ease-out;
+}
+.enc-steward-briefing__submit:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+.enc-steward-briefing__submit:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+/* ── Deep controls ───────────────────────────────────────────── */
+.enc-steward-actions__lede {
+  font-family: var(--enc-serif);
+  font-size: 14px;
+  color: var(--enc-ink-soft);
+  line-height: 1.5;
+  margin: 0 0 var(--enc-s-3);
+}
+
+.enc-steward-actions {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--enc-s-2);
+}
+.enc-steward-action {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px;
+  border-radius: var(--enc-r-md);
+  background: var(--enc-cream);
+  border: 1px solid var(--enc-cream-deep);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 100ms ease-out, border-color 120ms ease-out;
+}
+.enc-steward-action:active { transform: scale(0.99); }
+.enc-steward-action:hover  { border-color: var(--enc-mode-accent); }
+
+.enc-steward-action__label {
+  font-family: var(--enc-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  letter-spacing: -0.005em;
+}
+.enc-steward-action__meta {
+  font-family: var(--enc-sans);
+  font-size: 11px;
+  color: var(--enc-ink-mute);
+  letter-spacing: 0.02em;
+}

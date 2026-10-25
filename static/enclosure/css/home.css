@@ -1,0 +1,358 @@
+/*
+ * The Enclosure — Home tab (E3).
+ *
+ * Four blocks stacked vertically:
+ *   .enc-hero        countdown headline (dark sage gradient)
+ *   .enc-triptych    Next / Cup / Recap cards
+ *   .enc-nudge       gold call-to-action (only when should_show_nudge)
+ *   .enc-feed-rail   the last 3 timeline entries
+ *
+ * All layout is single-column, gap-driven; the Home tab is the E3
+ * proving ground for the vertical rhythm the rest of the app will
+ * inherit.
+ */
+
+/* ── Live pulse (E12) ─────────────────────────────────────── */
+.enc-home__pulse {
+  display: flex;
+  align-items: center;
+  gap: var(--enc-s-2);
+  flex-wrap: wrap;
+  margin-bottom: calc(-1 * var(--enc-s-2));
+}
+
+.enc-home__pulse-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--enc-r-pill);
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.enc-home__pulse-chip--live {
+  background: var(--enc-sage-tint);
+  color: var(--enc-sage-deep);
+}
+.enc-home__pulse-chip--closed {
+  background: var(--enc-cream-deep);
+  color: var(--enc-ink-soft);
+}
+
+.enc-home__pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--enc-sage-deep);
+  animation: enc-home-pulse 1.6s ease-in-out infinite;
+}
+@keyframes enc-home-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(0.75); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .enc-home__pulse-dot { animation: none; }
+}
+
+.enc-home__pulse-pause {
+  padding: 4px 10px;
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-cream-deep);
+  color: var(--enc-ink-soft);
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 0;
+}
+
+/* ── HERO ────────────────────────────────────────────────── */
+.enc-hero {
+  background: linear-gradient(160deg, #4d5f4a 0%, #3a4a37 60%, #2f3d2c 100%);
+  color: var(--enc-paper);
+  border-radius: var(--enc-r-lg);
+  padding: 18px 18px 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--enc-shadow-md);
+}
+.enc-hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(600px 260px at 90% -40%, rgba(184, 147, 90, 0.30), transparent 60%),
+    radial-gradient(300px 200px at 0% 100%, rgba(184, 207, 168, 0.14), transparent 60%);
+  pointer-events: none;
+}
+.enc-hero--quiet {
+  background: linear-gradient(160deg, #6b7c69 0%, #4d5f4a 100%);
+}
+.enc-hero__eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--enc-sage-glow);
+  font-weight: 600;
+  position: relative;
+}
+.enc-hero__title {
+  font-family: var(--enc-serif);
+  font-size: 20px;
+  margin-top: 6px;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: var(--enc-paper);
+  position: relative;
+}
+.enc-hero__off {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-top: 16px;
+  position: relative;
+}
+.enc-hero__count {
+  font-family: var(--enc-serif);
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--enc-paper);
+}
+.enc-hero__label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.72);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  text-align: right;
+}
+.enc-hero__label strong {
+  display: block;
+  color: var(--enc-paper);
+  font-size: 13px;
+  font-family: var(--enc-serif);
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  margin-top: 2px;
+}
+.enc-hero__quiet {
+  font-family: var(--enc-serif);
+  color: rgba(255, 255, 255, 0.86);
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.4;
+  max-width: 30ch;
+  position: relative;
+}
+
+/* ── TRIPTYCH ─────────────────────────────────────────────── */
+.enc-triptych {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+.enc-tri {
+  background: var(--enc-paper);
+  border: 1px solid var(--enc-cream-deep);
+  border-radius: var(--enc-r-md);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.enc-tri__label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--enc-mode-accent);
+  font-weight: 600;
+}
+.enc-tri__value {
+  font-family: var(--enc-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.enc-tri__value--dim  { color: var(--enc-ink-mute); font-weight: 500; }
+.enc-tri__value--win  { color: var(--enc-sage-deep); }
+.enc-tri__value--lost { color: var(--enc-claret); }
+.enc-tri__ord {
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--enc-ink-mute);
+  letter-spacing: 0;
+  margin-left: 1px;
+}
+.enc-tri__foot {
+  font-size: 10px;
+  color: var(--enc-ink-mute);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── NUDGE (gold CTA) ─────────────────────────────────────── */
+.enc-nudge {
+  display: flex;
+  align-items: center;
+  gap: var(--enc-s-3);
+  padding: 12px 14px;
+  background: var(--enc-gold-tint);
+  border-radius: var(--enc-r-md);
+  border: 1px solid rgba(184, 147, 90, 0.30);
+  color: inherit;
+  box-shadow: var(--enc-shadow-sm);
+  transition: transform 100ms ease-out;
+}
+.enc-nudge:active { transform: scale(0.985); }
+
+.enc-nudge__icon {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--enc-gold);
+  color: var(--enc-paper);
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  flex: none;
+}
+.enc-nudge__body { flex: 1; min-width: 0; }
+.enc-nudge__title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--enc-gold-deep);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.enc-nudge__sub {
+  font-size: 11px;
+  color: var(--enc-ink-soft);
+  margin-top: 2px;
+}
+.enc-nudge__go {
+  font-size: 20px;
+  color: var(--enc-gold-deep);
+  flex: none;
+}
+
+/* ── SECTION HEADER (shared across tabs) ──────────────────── */
+.enc-sec {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 4px 2px;
+}
+.enc-sec__title {
+  font-family: var(--enc-serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  margin: 0;
+}
+.enc-sec__link {
+  font-size: 11px;
+  color: var(--enc-mode-accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* ── FEED RAIL ────────────────────────────────────────────── */
+.enc-feed-rail__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.enc-feed-rail__item {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 12px;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--enc-cream-deep);
+}
+.enc-feed-rail__item:last-child { border-bottom: 0; }
+.enc-feed-rail__icon {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--enc-sage-tint);
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+}
+.enc-feed-rail__body { min-width: 0; }
+.enc-feed-rail__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+.enc-feed-rail__title {
+  font-family: var(--enc-serif);
+  font-weight: 600;
+  color: var(--enc-ink);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1;
+}
+.enc-feed-rail__time { color: var(--enc-ink-mute); flex: none; }
+.enc-feed-rail__fresh {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 9px;
+  color: var(--enc-sage-deep);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  padding: 2px 6px;
+  background: var(--enc-sage-tint);
+  border-radius: var(--enc-r-pill);
+  flex: none;
+  animation: enc-fresh-pulse 2.4s ease-in-out infinite;
+}
+.enc-feed-rail__fresh::before {
+  content: "";
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--enc-sage-deep);
+}
+.enc-feed-rail__text {
+  font-size: 13px;
+  color: var(--enc-ink-soft);
+  margin-top: 3px;
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+@keyframes enc-fresh-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.55; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enc-feed-rail__fresh { animation: none; }
+  .enc-nudge { transition: none; }
+  .enc-nudge:active { transform: none; }
+}

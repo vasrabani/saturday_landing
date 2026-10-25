@@ -1,0 +1,62 @@
+<section class="enc-cd-head" aria-label="Race header">
+  <div class="enc-cd-head__top">
+    <a class="enc-cd-back" href="{% url 'enclosure:card' card.event.slug %}"
+       aria-label="Back to card">
+      <span aria-hidden="true">&lsaquo;</span>
+      <span>Card</span>
+    </a>
+    <nav class="enc-cd-racenav" aria-label="Race navigation">
+      {% if card.head.prev_url %}
+        <a class="enc-cd-racenav__chev" href="{{ card.head.prev_url }}"
+           data-role="race-prev"
+           aria-label="Previous race">&lsaquo;</a>
+      {% else %}
+        <span class="enc-cd-racenav__chev enc-cd-racenav__chev--disabled"
+              aria-hidden="true">&lsaquo;</span>
+      {% endif %}
+      <span class="enc-cd-racenav__label">
+        Race {{ card.head.number }}<span class="enc-cd-racenav__of">/{{ card.head.total }}</span>
+      </span>
+      {% if card.head.next_url %}
+        <a class="enc-cd-racenav__chev" href="{{ card.head.next_url }}"
+           data-role="race-next"
+           aria-label="Next race">&rsaquo;</a>
+      {% else %}
+        <span class="enc-cd-racenav__chev enc-cd-racenav__chev--disabled"
+              aria-hidden="true">&rsaquo;</span>
+      {% endif %}
+    </nav>
+  </div>
+
+  <h1 class="enc-cd-head__title">{{ card.head.title }}</h1>
+
+  <p class="enc-cd-head__meta">
+    {% if card.head.course %}{{ card.head.course }} &middot; {% endif %}
+    {% if card.head.time_display %}{{ card.head.time_display }}{% endif %}
+    {% if card.head.distance %} &middot; {{ card.head.distance }}{% endif %}
+    {% if card.head.going %} &middot; {{ card.head.going }}{% endif %}
+    {% if card.head.race_class %} &middot; {{ card.head.race_class }}{% endif %}
+  </p>
+
+  <div class="enc-cd-head__strip">
+    {% if card.head.is_settled %}
+      <span class="enc-cd-chip enc-cd-chip--settled">Settled</span>
+    {% elif card.head.is_locked %}
+      <span class="enc-cd-chip enc-cd-chip--locked">Off — picks closed</span>
+    {% else %}
+      <span class="enc-cd-chip enc-cd-chip--open">{{ card.head.countdown }}</span>
+    {% endif %}
+
+    {% if card.head.prize %}
+      <span class="enc-cd-chip enc-cd-chip--prize">
+        <span class="enc-cd-chip__label">Prize</span>
+        <span class="enc-cd-chip__value">{{ card.head.prize }}</span>
+      </span>
+    {% endif %}
+
+    <span class="enc-cd-chip enc-cd-chip--field">
+      <span class="enc-cd-chip__label">Field</span>
+      <span class="enc-cd-chip__value">{{ card.head.runner_count }}</span>
+    </span>
+  </div>
+</section>

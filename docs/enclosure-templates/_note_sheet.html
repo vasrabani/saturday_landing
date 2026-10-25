@@ -1,0 +1,89 @@
+{% load enclosure_silks %}
+<aside class="enc-sheet" id="enc-note-sheet"
+       role="dialog" aria-modal="true" aria-labelledby="enc-note-sheet-title"
+       hidden
+       data-note-endpoint="{% url 'enclosure:feed_note_create' event.slug %}"
+       data-photo-endpoint="{% url 'enclosure:feed_photo_create' event.slug %}"
+       data-filter="{{ filter_key|default:'all' }}"
+       {% if home_ctx and home_ctx.hq.countdown_race %}data-race-id="{{ home_ctx.hq.countdown_race.race.pk }}" data-race-title="{{ home_ctx.hq.countdown_race.race_time_display }} {{ home_ctx.hq.countdown_race.race.course }}"{% endif %}>
+  <div class="enc-sheet__handle" aria-hidden="true"></div>
+
+  <header class="enc-sheet__head">
+    <div class="enc-sheet__silks">
+      {% silks_for_guest guest 36 %}
+    </div>
+    <div>
+      <h2 id="enc-note-sheet-title" class="enc-sheet__title">Post to the day</h2>
+      <p class="enc-sheet__meta" data-role="attach-line">
+        {% if home_ctx and home_ctx.hq.countdown_race %}
+          🏇 Auto-attach to {{ home_ctx.hq.countdown_race.race_time_display }} {{ home_ctx.hq.countdown_race.race.course }}
+        {% else %}
+          Posting to the day
+        {% endif %}
+      </p>
+    </div>
+    <button type="button" class="enc-sheet__close"
+            data-role="close" aria-label="Close">
+      &times;
+    </button>
+  </header>
+
+  <div class="enc-sheet__modes" role="tablist" aria-label="Post type">
+    <button type="button" role="tab" aria-selected="true"
+            class="enc-sheet__mode is-active"
+            data-role="mode" data-mode="note">
+      <span aria-hidden="true">✎</span> Note
+    </button>
+    <button type="button" role="tab" aria-selected="false"
+            class="enc-sheet__mode"
+            data-role="mode" data-mode="photo">
+      <span aria-hidden="true">📷</span> Photo
+    </button>
+  </div>
+
+  {# NOTE MODE #}
+  <form class="enc-sheet__form" data-role="form" data-mode-form="note" novalidate>
+    {% csrf_token %}
+    <label class="enc-visually-hidden" for="enc-note-text">Your note</label>
+    <textarea id="enc-note-text" name="text"
+              class="enc-sheet__textarea"
+              placeholder="Say something the group will remember."
+              maxlength="500" rows="3" required
+              data-role="text"></textarea>
+    <div class="enc-sheet__row">
+      <div class="enc-sheet__count" data-role="count">0 / 500</div>
+      <div class="enc-sheet__error" data-role="error" hidden></div>
+      <button type="submit" class="enc-sheet__submit" data-role="submit">
+        Post
+      </button>
+    </div>
+  </form>
+
+  {# PHOTO MODE #}
+  <form class="enc-sheet__form" data-role="photo-form" data-mode-form="photo"
+        enctype="multipart/form-data" hidden novalidate>
+    {% csrf_token %}
+    <label class="enc-sheet__file-drop" for="enc-photo-file"
+           data-role="photo-drop">
+      <input type="file" id="enc-photo-file" name="image"
+             accept="image/*" capture="environment" required
+             class="enc-visually-hidden" data-role="photo-file">
+      <span class="enc-sheet__file-glyph" aria-hidden="true">📷</span>
+      <span class="enc-sheet__file-label" data-role="photo-label">
+        Tap to take a photo or choose from library
+      </span>
+    </label>
+    <label class="enc-visually-hidden" for="enc-photo-caption">Caption</label>
+    <input type="text" id="enc-photo-caption" name="caption"
+           class="enc-sheet__caption"
+           placeholder="Add a caption (optional)"
+           maxlength="200" data-role="photo-caption">
+    <div class="enc-sheet__row">
+      <div class="enc-sheet__count" data-role="photo-count">Ready when you are</div>
+      <div class="enc-sheet__error" data-role="photo-error" hidden></div>
+      <button type="submit" class="enc-sheet__submit" data-role="photo-submit">
+        Post
+      </button>
+    </div>
+  </form>
+</aside>

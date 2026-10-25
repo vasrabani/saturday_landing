@@ -1,0 +1,74 @@
+<section class="enc-cup-picks" aria-label="Your picks">
+  <header class="enc-cup-picks__head">
+    <h2 class="enc-cup-picks__title">Your picks</h2>
+    {% if cup.viewer_picks %}
+      <span class="enc-cup-picks__count">
+        {{ cup.viewer_picks|length }}
+      </span>
+    {% endif %}
+  </header>
+
+  {% if cup.viewer_picks %}
+    <ul class="enc-cup-picks__list">
+      {% for p in cup.viewer_picks %}
+        <li>
+          <a class="enc-cup-pick enc-cup-pick--{{ p.state }}"
+             href="{{ p.pick_url }}">
+
+            <span class="enc-cup-pick__silk" aria-hidden="true">
+              {% if p.silk_url %}
+                <img src="{{ p.silk_url }}" alt="" width="36" height="36" loading="lazy">
+              {% else %}
+                <svg viewBox="0 0 40 40" width="36" height="36"
+                     role="img" aria-label="Silks for {{ p.horse_name }}">
+                  <rect width="40" height="40" fill="{{ p.silk_color }}"/>
+                  <rect y="20" width="40" height="20" fill="{{ p.silk_second }}"/>
+                </svg>
+              {% endif %}
+            </span>
+
+            <span class="enc-cup-pick__body">
+              <span class="enc-cup-pick__meta">
+                {% if p.time_display %}{{ p.time_display }} &middot; {% endif %}
+                <span class="enc-cup-pick__race">{{ p.race_title }}</span>
+              </span>
+              <span class="enc-cup-pick__horse">
+                {% if p.runner_number %}<span class="enc-cup-pick__num">#{{ p.runner_number }}</span>{% endif %}
+                {{ p.horse_name }}
+                {% if p.finish_label %}
+                  <span class="enc-cup-pick__fin enc-cup-pick__fin--pos-{% if p.finish_position == 1 %}1{% elif p.finish_position == 2 %}2{% elif p.finish_position == 3 %}3{% elif p.finish_position %}rest{% else %}dnf{% endif %}">
+                    {{ p.finish_label }}
+                  </span>
+                {% endif %}
+              </span>
+            </span>
+
+            <span class="enc-cup-pick__right">
+              {% if p.odds %}
+                <span class="enc-cup-pick__odds">{{ p.odds }}</span>
+              {% else %}
+                <span class="enc-cup-pick__odds enc-cup-pick__odds--dim">SP</span>
+              {% endif %}
+              <span class="enc-cup-pick__stake">
+                {{ p.stake }}&nbsp;cr
+              </span>
+              <span class="enc-cup-pick__chip enc-cup-pick__chip--{{ p.state }}">
+                {{ p.state_label }}{% if p.state == 'won' %}
+                  <span class="enc-cup-pick__net">+{{ p.payout_delta }}</span>
+                {% elif p.state == 'lost' %}
+                  <span class="enc-cup-pick__net">&minus;{{ p.stake }}</span>
+                {% endif %}
+              </span>
+            </span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="enc-cup-picks__empty">
+      No picks yet &mdash; open the
+      <a href="{% url 'enclosure:card' cup.event_slug %}">Card</a>
+      to place your first.
+    </p>
+  {% endif %}
+</section>

@@ -1,0 +1,56 @@
+<section class="enc-cup-board" aria-label="Corporate Cup leaderboard">
+  <header class="enc-cup-board__head">
+    <h2 class="enc-cup-board__title">Standings</h2>
+    <a class="enc-cup-board__link" href="{{ cup.leaderboard_url }}">Full board &rsaquo;</a>
+  </header>
+
+  {% if cup.top_rows or cup.viewer_row %}
+    <ol class="enc-cup-board__list">
+      {% for row in cup.top_rows %}
+        <li class="enc-cup-row enc-cup-row--rank-{{ row.position }}{% if row.is_viewer %} enc-cup-row--viewer{% endif %}{% if row.profile_url %} enc-cup-row--tappable{% endif %}">
+          {% if row.profile_url %}
+            <a class="enc-cup-row__link" href="{{ row.profile_url }}"
+               aria-label="Open {{ row.display_name }}'s picks">
+          {% endif %}
+            <span class="enc-cup-row__pos">{{ row.position }}</span>
+            <span class="enc-cup-row__name">
+              {{ row.display_name }}
+              {% if row.is_viewer %}<span class="enc-cup-row__you">You</span>{% endif %}
+            </span>
+            <span class="enc-cup-row__balance">{{ row.balance }}</span>
+            <span class="enc-cup-row__delta enc-cup-row__delta--{% if row.delta >= 0 %}up{% else %}down{% endif %}">
+              {% if row.delta >= 0 %}+{% endif %}{{ row.delta }}
+            </span>
+          {% if row.profile_url %}</a>{% endif %}
+        </li>
+      {% endfor %}
+
+      {% if cup.viewer_row.is_gap_before %}
+        <li class="enc-cup-row enc-cup-row--gap" aria-hidden="true">
+          <span class="enc-cup-row__dots">&middot;&middot;&middot;</span>
+        </li>
+        <li class="enc-cup-row enc-cup-row--viewer{% if cup.viewer_row.profile_url %} enc-cup-row--tappable{% endif %}">
+          {% if cup.viewer_row.profile_url %}
+            <a class="enc-cup-row__link" href="{{ cup.viewer_row.profile_url }}"
+               aria-label="Open your picks">
+          {% endif %}
+            <span class="enc-cup-row__pos">{{ cup.viewer_row.position }}</span>
+            <span class="enc-cup-row__name">
+              {{ cup.viewer_row.display_name }}
+              <span class="enc-cup-row__you">You</span>
+            </span>
+            <span class="enc-cup-row__balance">{{ cup.viewer_row.balance }}</span>
+            <span class="enc-cup-row__delta enc-cup-row__delta--{% if cup.viewer_row.delta >= 0 %}up{% else %}down{% endif %}">
+              {% if cup.viewer_row.delta >= 0 %}+{% endif %}{{ cup.viewer_row.delta }}
+            </span>
+          {% if cup.viewer_row.profile_url %}</a>{% endif %}
+        </li>
+      {% endif %}
+    </ol>
+  {% else %}
+    <p class="enc-cup-board__empty">
+      No standings yet &mdash; guests appear on the board when they
+      make their first pick.
+    </p>
+  {% endif %}
+</section>

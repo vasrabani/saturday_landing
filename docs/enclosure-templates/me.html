@@ -1,0 +1,121 @@
+{% extends "enclosure/base.html" %}
+{% load static %}
+
+{% block title %}You · {{ event.name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'enclosure/css/me.css' %}?v=1">
+{% endblock %}
+
+{% block content %}
+<div class="enc-scroll">
+
+  <section class="enc-me-hero" aria-label="Your profile">
+    <div class="enc-me-hero__avatar" aria-hidden="true">{{ me.initials }}</div>
+    <div class="enc-me-hero__ident">
+      <h1 class="enc-me-hero__name">{{ me.display_name }}</h1>
+      {% if me.email %}
+        <p class="enc-me-hero__email">{{ me.email }}</p>
+      {% endif %}
+    </div>
+
+    {% if me.is_synthetic %}
+      <p class="enc-me-hero__preview">
+        Preview mode — guests see their picks, notes, photos and
+        awards here on race day.
+      </p>
+    {% else %}
+      <dl class="enc-me-hero__grid">
+        <div class="enc-me-hero__cell">
+          <dt>Available</dt>
+          <dd>{{ me.balance.available }}</dd>
+        </div>
+        <div class="enc-me-hero__cell">
+          <dt>Picks</dt>
+          <dd>{{ me.balance.pick_count }}</dd>
+        </div>
+        <div class="enc-me-hero__cell">
+          <dt>Posts</dt>
+          <dd>{{ me.posts_note_count|add:me.posts_photo_count }}</dd>
+        </div>
+      </dl>
+
+      {% if me.awards %}
+        <ul class="enc-me-hero__awards" aria-label="Awards you have won">
+          {% for a in me.awards %}
+            <li class="enc-me-award enc-me-award--{{ a.kind }}">{{ a.label }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endif %}
+  </section>
+
+  {% if me.picks_open or me.picks_settled %}
+    <section class="enc-me-section" aria-label="Your picks">
+      <h2 class="enc-me-section__title">Your picks</h2>
+
+      {% if me.picks_open %}
+        <p class="enc-me-eyebrow">Open</p>
+        <ul class="enc-me-picks">
+          {% for row in me.picks_open %}
+            {% include "enclosure/_me_pick_row.html" %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if me.picks_settled %}
+        <p class="enc-me-eyebrow">Settled</p>
+        <ul class="enc-me-picks">
+          {% for row in me.picks_settled %}
+            {% include "enclosure/_me_pick_row.html" %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </section>
+  {% elif not me.is_synthetic %}
+    <section class="enc-me-section enc-me-section--empty">
+      <p class="enc-me-empty__title">No picks yet</p>
+      <p class="enc-me-empty__lede">
+        Tap a race on the <a href="{% url 'enclosure:card' event.slug %}">Card</a>
+        to make your first pick.
+      </p>
+    </section>
+  {% endif %}
+
+  {% if me.posts %}
+    <section class="enc-me-section" aria-label="Your posts">
+      <h2 class="enc-me-section__title">Your posts</h2>
+      <p class="enc-me-eyebrow">
+        {{ me.posts_note_count }} note{{ me.posts_note_count|pluralize }}
+        &middot;
+        {{ me.posts_photo_count }} photo{{ me.posts_photo_count|pluralize }}
+      </p>
+      <ul class="enc-me-posts">
+        {% for p in me.posts %}
+          <li class="enc-me-post enc-me-post--{{ p.kind }}">
+            <span class="enc-me-post__icon" aria-hidden="true">{{ p.icon }}</span>
+            <div class="enc-me-post__body">
+              {% if p.image_url %}
+                <img class="enc-me-post__thumb" src="{{ p.image_url }}" alt="Photo you posted" loading="lazy">
+              {% endif %}
+              {% if p.body %}
+                <p class="enc-me-post__text">{{ p.body }}</p>
+              {% endif %}
+              <p class="enc-me-post__meta">{{ p.time_display }}</p>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+  {% elif not me.is_synthetic %}
+    <section class="enc-me-section enc-me-section--empty">
+      <p class="enc-me-empty__title">Nothing posted yet</p>
+      <p class="enc-me-empty__lede">
+        Tap the camera on any tab to share a note or a photo with
+        the room.
+      </p>
+    </section>
+  {% endif %}
+
+</div>
+{% endblock %}

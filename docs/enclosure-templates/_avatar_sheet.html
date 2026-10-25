@@ -1,0 +1,153 @@
+{% load static enclosure_silks %}
+<aside class="enc-avatar-sheet" id="enc-avatar-sheet"
+       role="dialog" aria-modal="true"
+       aria-labelledby="enc-avatar-sheet-title"
+       hidden>
+  <div class="enc-avatar-sheet__handle" aria-hidden="true"></div>
+
+  {% if guest and guest.pk %}
+    {# ── Signed-in Cub — identity + shortcuts + sign out ─── #}
+    <header class="enc-avatar-sheet__head">
+      <span class="enc-avatar-sheet__silks" aria-hidden="true">
+        {% silks_for_guest guest 48 %}
+      </span>
+      <div class="enc-avatar-sheet__ident">
+        <h2 id="enc-avatar-sheet-title" class="enc-avatar-sheet__name">
+          {{ guest.display_name|default:guest.email }}
+        </h2>
+        <p class="enc-avatar-sheet__meta">
+          Signed in as a Cub
+        </p>
+      </div>
+      <button type="button" class="enc-avatar-sheet__close"
+              data-role="close" aria-label="Close">&times;</button>
+    </header>
+
+    <ul class="enc-avatar-sheet__actions">
+      <li>
+        <a class="enc-avatar-sheet__row" href="{% url 'enclosure:me' event.slug %}">
+          <span class="enc-avatar-sheet__row-icon" aria-hidden="true">◐</span>
+          <span class="enc-avatar-sheet__row-label">
+            <strong>Your reading room</strong>
+            <em>Your picks, notes, awards</em>
+          </span>
+          <span class="enc-avatar-sheet__row-arrow" aria-hidden="true">&rsaquo;</span>
+        </a>
+      </li>
+      <li>
+        <a class="enc-avatar-sheet__row"
+           href="{% url 'enclosure:guest_profile' event.slug guest.pk %}">
+          <span class="enc-avatar-sheet__row-icon" aria-hidden="true">☆</span>
+          <span class="enc-avatar-sheet__row-label">
+            <strong>Your seat</strong>
+            <em>Rank, balance, every pick</em>
+          </span>
+          <span class="enc-avatar-sheet__row-arrow" aria-hidden="true">&rsaquo;</span>
+        </a>
+      </li>
+    </ul>
+
+    <form method="post" action="{% url 'enclosure:signout' event.slug %}"
+          class="enc-avatar-sheet__signout-form">
+      {% csrf_token %}
+      <button type="submit" class="enc-avatar-sheet__signout">
+        Sign out of the Enclosure
+      </button>
+    </form>
+
+    <a class="enc-avatar-sheet__return"
+       href="https://www.saturday-racing.com/">
+      &larr; Back to Saturday Racing
+    </a>
+
+  {% elif user.is_authenticated %}
+    <header class="enc-avatar-sheet__head">
+      <span class="enc-avatar-sheet__silks enc-avatar-sheet__silks--anon" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="48" height="48" role="presentation">
+          <circle cx="24" cy="24" r="22" fill="var(--enc-ground,#EFE8D6)"/>
+          <circle cx="24" cy="24" r="22" fill="none"
+                  stroke="var(--enc-ink-mute,#8A8479)" stroke-width="1.25"/>
+          <text x="24" y="31" text-anchor="middle"
+                font-family="Georgia, serif"
+                font-size="18" font-weight="600"
+                fill="var(--enc-ink-mute,#8A8479)">!</text>
+        </svg>
+      </span>
+      <div class="enc-avatar-sheet__ident">
+        <h2 id="enc-avatar-sheet-title" class="enc-avatar-sheet__name">
+          Signed in, but not on the guest list
+        </h2>
+        <p class="enc-avatar-sheet__meta">
+          {{ user.email|default:user.get_username }}
+        </p>
+      </div>
+      <button type="button" class="enc-avatar-sheet__close"
+              data-role="close" aria-label="Close">&times;</button>
+    </header>
+
+    <div class="enc-avatar-sheet__body">
+      <p class="enc-avatar-sheet__note">
+        This account doesn&rsquo;t hold an invitation for
+        <strong>{{ event.name }}</strong>. If your invite went to a
+        different email, sign out and sign back in with that address.
+      </p>
+    </div>
+
+    <form method="post" action="{% url 'enclosure:signout' event.slug %}"
+          class="enc-avatar-sheet__signout-form">
+      {% csrf_token %}
+      <button type="submit" class="enc-avatar-sheet__signout">
+        Sign out
+      </button>
+    </form>
+
+    <a class="enc-avatar-sheet__return"
+       href="https://www.saturday-racing.com/">
+      &larr; Back to Saturday Racing
+    </a>
+
+  {% else %}
+    {# ── Truly anonymous — showcase viewer / not signed in ─── #}
+    <header class="enc-avatar-sheet__head">
+      <span class="enc-avatar-sheet__silks enc-avatar-sheet__silks--anon" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="48" height="48" role="presentation">
+          <circle cx="24" cy="24" r="22" fill="var(--enc-ground,#EFE8D6)"/>
+          <circle cx="24" cy="24" r="22" fill="none"
+                  stroke="var(--enc-ink-mute,#8A8479)" stroke-width="1"/>
+          <text x="24" y="31" text-anchor="middle"
+                font-family="Georgia, serif"
+                font-size="20" font-weight="600"
+                fill="var(--enc-ink-mute,#8A8479)">?</text>
+        </svg>
+      </span>
+      <div class="enc-avatar-sheet__ident">
+        <h2 id="enc-avatar-sheet-title" class="enc-avatar-sheet__name">
+          You&rsquo;re viewing as a guest
+        </h2>
+        <p class="enc-avatar-sheet__meta">
+          Sign in to see and edit your own picks.
+        </p>
+      </div>
+      <button type="button" class="enc-avatar-sheet__close"
+              data-role="close" aria-label="Close">&times;</button>
+    </header>
+
+    <div class="enc-avatar-sheet__body">
+      <a class="enc-avatar-sheet__cta"
+         href="{% url 'enclosure:signin' event.slug %}">
+        Sign in to your Cub
+      </a>
+
+      <p class="enc-avatar-sheet__hint">
+        Have an invitation email? Open the accept link inside it
+        to create your Cub &mdash; that&rsquo;s the only place
+        new accounts start.
+      </p>
+    </div>
+
+    <a class="enc-avatar-sheet__return"
+       href="https://www.saturday-racing.com/">
+      &larr; Back to Saturday Racing
+    </a>
+  {% endif %}
+</aside>

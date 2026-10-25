@@ -1,0 +1,63 @@
+<button type="button"
+        class="enc-runner{% if r.is_picked %} enc-runner--picked{% endif %}{% if r.is_nr %} enc-runner--nr{% endif %}{% if r.finish_position == 1 %} enc-runner--won{% elif r.finish_position == 2 %} enc-runner--second{% elif r.finish_position == 3 %} enc-runner--third{% elif r.finish_position %} enc-runner--placed{% endif %}"
+        data-role="runner"
+        data-horse-name="{{ r.horse_name }}"
+        data-runner-number="{{ r.number }}"
+        {% if r.is_nr or not card.can_post or card.head.is_locked or card.head.is_settled %}disabled{% endif %}
+        aria-pressed="{% if r.is_picked %}true{% else %}false{% endif %}">
+
+  <span class="enc-runner__silk" aria-hidden="true">
+    {% if r.silk_url %}
+      <img src="{{ r.silk_url }}" alt="" width="40" height="40" loading="lazy">
+    {% else %}
+      <svg viewBox="0 0 40 40" width="40" height="40" role="img" aria-label="Silks for {{ r.horse_name }}">
+        <rect width="40" height="40" fill="{{ r.silk_color }}"/>
+        <rect y="20" width="40" height="20" fill="{{ r.silk_second }}"/>
+      </svg>
+    {% endif %}
+  </span>
+
+  <span class="enc-runner__num">{{ r.number }}</span>
+
+  <span class="enc-runner__body">
+    <span class="enc-runner__name">
+      {{ r.horse_name }}
+      {% if r.is_favourite %}<span class="enc-runner__fav" aria-label="Favourite">&#9733;</span>{% endif %}
+      {% if r.headgear %}<span class="enc-runner__gear" title="Headgear">{{ r.headgear }}</span>{% endif %}
+    </span>
+    <span class="enc-runner__people">
+      {% if r.jockey %}{{ r.jockey }}{% endif %}{% if r.jockey and r.trainer %} &middot; {% endif %}{% if r.trainer %}{{ r.trainer }}{% endif %}
+    </span>
+    <span class="enc-runner__stats">
+      {% if r.form %}Form {{ r.form }}{% endif %}
+      {% if r.form and r.or_rating %} &middot; {% endif %}
+      {% if r.or_rating %}OR {{ r.or_rating }}{% endif %}
+      {% if r.sr_rating %}{% if r.or_rating or r.form %} &middot; {% endif %}SR {{ r.sr_rating }}{% endif %}
+    </span>
+  </span>
+
+  <span class="enc-runner__odds">
+    {% if r.is_nr %}
+      <span class="enc-runner__nr-chip">NR</span>
+    {% else %}
+      {% if r.finish_position %}
+        <span class="enc-runner__fin-chip enc-runner__fin-chip--{% if r.finish_position == 1 %}gold{% elif r.finish_position == 2 %}silver{% elif r.finish_position == 3 %}bronze{% else %}rest{% endif %}">
+          {{ r.finish_label }}
+        </span>
+      {% elif r.finish_status %}
+        <span class="enc-runner__fin-chip enc-runner__fin-chip--dnf">
+          {{ r.finish_status }}
+        </span>
+      {% endif %}
+      {% if r.odds %}
+        <span class="enc-runner__price">{{ r.odds }}</span>
+      {% elif not r.finish_position and not r.finish_status %}
+        <span class="enc-runner__price enc-runner__price--dim">SP</span>
+      {% endif %}
+    {% endif %}
+  </span>
+
+  <span class="enc-runner__mark" aria-hidden="true">
+    <span class="enc-runner__dot"></span>
+  </span>
+</button>

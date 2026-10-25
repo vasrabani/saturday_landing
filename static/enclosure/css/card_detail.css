@@ -1,0 +1,735 @@
+/*
+ * The Enclosure — Card detail (E16).
+ *
+ * Guest-facing race card + pick surface, native to the PWA. Three
+ * zones stack vertically inside the app scroll area:
+ *   1. Race head — title, time, distance/going/class + chips
+ *   2. Pick bar  — the guest's current pick + stake selector
+ *   3. Field     — one enc-runner tile per horse
+ *
+ * All colour comes from --enc-* tokens so guest / steward accent
+ * flips are honoured without duplicating rules.
+ */
+
+/* ── Race head ────────────────────────────────────────────────── */
+.enc-cd-head {
+  background: var(--enc-paper);
+  border-radius: var(--enc-r-xl);
+  padding: var(--enc-s-4);
+  border: 1px solid var(--enc-cream-deep);
+  box-shadow: var(--enc-shadow-sm);
+}
+.enc-cd-head__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--enc-s-2);
+}
+.enc-cd-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--enc-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--enc-ink-soft);
+  text-decoration: none;
+  padding: 6px 10px 6px 6px;
+  border-radius: var(--enc-r-pill);
+  transition: background 120ms ease-out, color 120ms ease-out;
+}
+.enc-cd-back:hover  { background: var(--enc-cream); color: var(--enc-ink); }
+.enc-cd-back:active { transform: scale(0.98); }
+.enc-cd-back span[aria-hidden] { font-size: 18px; line-height: 1; }
+
+/*  Race navigation — chevron flanks around the RACE n/N counter.
+ *  Replaces the old .enc-cd-head__count static span. Whole nav is
+ *  one flex row; chevrons are the same tap target height as the
+ *  Card back button so the header row reads as one connected strip.
+ */
+.enc-cd-racenav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--enc-hairline, rgba(60, 45, 25, 0.10));
+  border-radius: 999px;
+  padding: 2px 4px;
+  background: var(--enc-paper, #FBF7EC);
+}
+.enc-cd-racenav__label {
+  font-family: var(--enc-sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--enc-ink-mute);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  padding: 0 6px;
+  white-space: nowrap;
+}
+.enc-cd-racenav__of {
+  color: var(--enc-ink-mute);
+  opacity: 0.7;
+}
+.enc-cd-racenav__chev {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  font-family: var(--enc-serif, Georgia, serif);
+  font-size: 20px;
+  line-height: 1;
+  color: var(--enc-sage-deep, #506B4D);
+  background: transparent;
+  text-decoration: none;
+  transition: background 120ms ease, transform 100ms ease;
+}
+.enc-cd-racenav__chev:hover,
+.enc-cd-racenav__chev:focus-visible {
+  background: var(--enc-sage-tint, #E7ECDE);
+  outline: none;
+}
+.enc-cd-racenav__chev:active { transform: scale(0.94); }
+.enc-cd-racenav__chev--disabled {
+  color: var(--enc-ink-mute, #8A8479);
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
+.enc-cd-head__title {
+  font-family: var(--enc-serif);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  margin: 0;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.enc-cd-head__meta {
+  font-family: var(--enc-sans);
+  font-size: 12px;
+  color: var(--enc-ink-mute);
+  margin: 6px 0 0;
+  letter-spacing: 0.01em;
+}
+
+.enc-cd-head__strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: var(--enc-s-3);
+}
+
+.enc-cd-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: var(--enc-r-pill);
+  font-family: var(--enc-sans);
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--enc-cream);
+  color: var(--enc-ink-soft);
+  border: 1px solid transparent;
+}
+.enc-cd-chip__label {
+  color: var(--enc-ink-mute);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 10px;
+}
+.enc-cd-chip__value {
+  color: var(--enc-ink);
+  font-variant-numeric: tabular-nums;
+}
+.enc-cd-chip--open {
+  background: var(--enc-mode-accent-tint);
+  color: var(--enc-mode-accent);
+  border-color: var(--enc-mode-accent);
+}
+.enc-cd-chip--locked  { background: #F1E7DA; color: #7A4B00; border-color: #E5C89A; }
+.enc-cd-chip--settled { background: #E7E1F0; color: #4A3585; border-color: #C4B7DB; }
+
+/* ── Pick bar ─────────────────────────────────────────────────── */
+.enc-cd-pick {
+  background: var(--enc-paper);
+  border-radius: var(--enc-r-xl);
+  padding: var(--enc-s-4);
+  border: 1px solid var(--enc-cream-deep);
+  box-shadow: var(--enc-shadow-sm);
+  border-left: 4px solid var(--enc-mode-accent);
+}
+.enc-cd-pick__eyebrow {
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--enc-ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 4px;
+}
+.enc-cd-pick__title {
+  font-family: var(--enc-serif);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  margin: 0;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+}
+.enc-cd-pick__title--muted { color: var(--enc-ink-mute); font-weight: 500; }
+.enc-cd-pick__at {
+  font-family: var(--enc-sans);
+  font-size: 13px;
+  color: var(--enc-mode-accent);
+  font-weight: 700;
+  margin-left: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.enc-cd-pick__foot {
+  font-family: var(--enc-sans);
+  font-size: 12px;
+  color: var(--enc-ink-mute);
+  margin: 4px 0 0;
+}
+
+.enc-cd-pick__form { display: flex; flex-direction: column; gap: var(--enc-s-3); }
+
+.enc-cd-pick__stake {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.enc-cd-pick__stake[disabled] { opacity: 0.5; }
+.enc-cd-pick__stake-label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--enc-ink-mute);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0;
+}
+.enc-cd-pick__balance {
+  color: var(--enc-ink-soft);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.enc-cd-pick__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.enc-cd-pick__chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-cream);
+  border: 1px solid var(--enc-cream-deep);
+  cursor: pointer;
+  font-family: var(--enc-sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--enc-ink);
+  font-variant-numeric: tabular-nums;
+  transition: background 120ms ease-out, border-color 120ms ease-out, color 120ms ease-out;
+}
+.enc-cd-pick__chip input { position: absolute; opacity: 0; pointer-events: none; }
+.enc-cd-pick__chip:has(input:checked) {
+  background: var(--enc-mode-accent);
+  color: var(--enc-paper);
+  border-color: var(--enc-mode-accent);
+}
+
+.enc-cd-pick__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--enc-s-3);
+}
+.enc-cd-pick__status {
+  font-family: var(--enc-sans);
+  font-size: 12px;
+  color: var(--enc-ink-soft);
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.enc-cd-pick__status.is-error { color: var(--enc-claret); }
+.enc-cd-pick__submit {
+  padding: 10px 22px;
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-mode-accent);
+  color: var(--enc-paper);
+  font-family: var(--enc-sans);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  border: 0;
+  cursor: pointer;
+  transition: opacity 120ms ease-out, transform 100ms ease-out;
+}
+.enc-cd-pick__submit:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.enc-cd-pick__submit:not(:disabled):active { transform: scale(0.97); }
+
+/* ── Field / runner tile ──────────────────────────────────────── */
+.enc-cd-field {
+  background: var(--enc-paper);
+  border-radius: var(--enc-r-xl);
+  padding: var(--enc-s-3) var(--enc-s-3) var(--enc-s-4);
+  border: 1px solid var(--enc-cream-deep);
+  box-shadow: var(--enc-shadow-sm);
+}
+.enc-cd-field__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 4px 6px var(--enc-s-2);
+}
+.enc-cd-field__title {
+  font-family: var(--enc-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  margin: 0;
+  letter-spacing: -0.005em;
+}
+.enc-cd-field__meta {
+  font-family: var(--enc-sans);
+  font-size: 11px;
+  color: var(--enc-ink-mute);
+  margin: 0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.enc-cd-field__empty {
+  font-family: var(--enc-serif);
+  font-size: 14px;
+  color: var(--enc-ink-mute);
+  margin: var(--enc-s-3) 0;
+  text-align: center;
+}
+
+.enc-cd-runners {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Runner tile — a button so the whole thing is a keyboard-focusable
+ * tap target. Grid: silk / num / body / odds / mark dot. */
+.enc-runner {
+  display: grid;
+  grid-template-columns: 44px 24px 1fr auto 20px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--enc-paper);
+  border: 1px solid var(--enc-cream-deep);
+  border-left: 3px solid transparent;
+  border-radius: var(--enc-r-md);
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  min-height: 60px;
+  width: 100%;
+  transition:
+    border-color 120ms ease-out,
+    background 120ms ease-out,
+    transform 100ms ease-out;
+}
+.enc-runner:hover { border-color: var(--enc-ink-mute); }
+.enc-runner:active { transform: scale(0.995); }
+.enc-runner:disabled { cursor: default; }
+.enc-runner:disabled:hover { border-color: var(--enc-cream-deep); }
+
+.enc-runner--picked {
+  border-left-color: var(--enc-mode-accent);
+  background: var(--enc-mode-accent-tint);
+  border-color: var(--enc-mode-accent);
+}
+.enc-runner--nr {
+  opacity: 0.55;
+}
+.enc-runner--nr .enc-runner__name,
+.enc-runner--nr .enc-runner__num {
+  text-decoration: line-through;
+}
+
+.enc-runner__silk {
+  display: grid;
+  place-items: center;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--enc-cream);
+  border: 1px solid var(--enc-cream-deep);
+}
+.enc-runner__silk img,
+.enc-runner__silk svg {
+  width: 100%; height: 100%; display: block;
+  object-fit: cover;
+}
+
+.enc-runner__num {
+  font-family: var(--enc-sans);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--enc-ink);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.enc-runner__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.enc-runner__name {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--enc-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  letter-spacing: -0.005em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.enc-runner__fav {
+  color: var(--enc-mode-accent);
+  font-size: 12px;
+  line-height: 1;
+}
+.enc-runner__gear {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: var(--enc-cream);
+  color: var(--enc-ink-soft);
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.enc-runner__people {
+  font-family: var(--enc-sans);
+  font-size: 11px;
+  color: var(--enc-ink-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.enc-runner__stats {
+  font-family: var(--enc-sans);
+  font-size: 10px;
+  color: var(--enc-ink-mute);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.enc-runner__odds {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  font-family: var(--enc-sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--enc-ink);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  min-width: 52px;
+}
+.enc-runner__odds-dim { color: var(--enc-ink-mute); font-weight: 600; }
+
+/* Price line — stacked under the finish chip on settled races,
+ * on its own when the race is still open. Slightly smaller when
+ * a finish chip sits above it so the chip stays the dominant
+ * signal for guests scanning results. */
+.enc-runner__price {
+  font-family: var(--enc-sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--enc-ink);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+.enc-runner__price--dim { color: var(--enc-ink-mute); font-weight: 600; }
+.enc-runner__fin-chip + .enc-runner__price {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--enc-ink-soft);
+  letter-spacing: 0.02em;
+}
+.enc-runner__nr-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--enc-r-pill);
+  background: #F1E7DA;
+  color: #7A4B00;
+  font-family: var(--enc-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.enc-runner__mark {
+  display: grid;
+  place-items: center;
+  width: 20px; height: 20px;
+}
+.enc-runner__dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--enc-cream-deep);
+  background: var(--enc-paper);
+  transition: border-color 120ms ease-out, background 120ms ease-out;
+}
+.enc-runner--picked .enc-runner__dot {
+  border-color: var(--enc-mode-accent);
+  background: var(--enc-mode-accent);
+  box-shadow: inset 0 0 0 3px var(--enc-paper);
+}
+
+/* ── Just-updated flash (poll swap) ───────────────────────────── */
+@keyframes enc-runner-flash {
+  from { background: var(--enc-mode-accent-tint); }
+  to   { background: var(--enc-paper); }
+}
+.enc-runner.is-updated {
+  animation: enc-runner-flash 900ms ease-out;
+}
+
+/* ── Finish badges (race settled) ─────────────────────────────
+ *
+ * Once the syncer has result_winner + per-runner finish_position,
+ * the odds column swaps to a finishing chip. Podium places get
+ * the medal palette; 4th+ picks up a neutral sage tint; DNFs get
+ * the muted "PU / Fell / UR" label. Winner row also picks up a
+ * gold border-left accent for at-a-glance scannability.
+ */
+.enc-runner__fin-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  min-width: 32px;
+  border-radius: var(--enc-r-pill);
+  font-family: var(--enc-sans);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.enc-runner__fin-chip--gold    { background: #FCE9A6; color: #7A5B00; }
+.enc-runner__fin-chip--silver  { background: #E2E4E8; color: #4A4E56; }
+.enc-runner__fin-chip--bronze  { background: #F0DBC1; color: #6E4118; }
+.enc-runner__fin-chip--rest    { background: var(--enc-cream); color: var(--enc-ink-soft); }
+.enc-runner__fin-chip--dnf {
+  background: #ECE4DA;
+  color: var(--enc-ink-mute);
+  font-weight: 700;
+}
+
+.enc-runner--won    { border-left-color: #C9A227; }
+.enc-runner--second { border-left-color: #9A9EA6; }
+.enc-runner--third  { border-left-color: #A97147; }
+.enc-runner--placed { border-left-color: var(--enc-cream-deep); }
+
+/* Winner row deserves a very subtle gold-tinted ground so it
+ * reads first even on a long field. */
+.enc-runner--won {
+  background: #FBF3D8;
+}
+.enc-runner--won .enc-runner__name {
+  color: #4A3300;
+}
+
+/* Hide the pick-radio dot once the race has settled — it's
+ * meaningless on a page with real outcomes. */
+.enc-runner--won .enc-runner__dot,
+.enc-runner--second .enc-runner__dot,
+.enc-runner--third .enc-runner__dot,
+.enc-runner--placed .enc-runner__dot {
+  display: none;
+}
+
+/*  LLaMa's read — surfaces the RaceLetter's predicted 1-2-3-4 + verdict
+ *  on the card detail page when a published Letter exists for the race.
+ *  Sits between the pick bar and the field; visually cousins with the
+ *  public /letters/ page's finish cards but compressed for mobile.
+ */
+.enc-cd-letter {
+  margin: 12px;
+  padding: 14px 14px 12px;
+  background: var(--enc-paper);
+  border: 1px solid var(--enc-sage-tint);
+  border-left: 3px solid var(--enc-sage);
+  border-radius: 12px;
+  display: grid;
+  gap: 12px;
+}
+.enc-cd-letter--high        { border-left-color: var(--enc-sage-deep); }
+.enc-cd-letter--medium      { border-left-color: var(--enc-sage); }
+.enc-cd-letter--speculative { border-left-color: var(--enc-ink-mute); }
+
+.enc-cd-letter__head {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+.enc-cd-letter__mono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  line-height: 1;
+}
+.enc-cd-letter__eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--enc-sage-deep);
+}
+.enc-cd-letter__title {
+  margin: 2px 0 0;
+  font-family: var(--enc-serif, Georgia, serif);
+  font-size: 17px;
+  line-height: 1.2;
+  color: var(--enc-ink);
+  text-wrap: balance;
+}
+
+.enc-cd-letter__slots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.enc-cd-letter__slot {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 8px 10px;
+  background: var(--enc-sage-tint);
+  border-radius: 8px;
+}
+.enc-cd-letter__slot--pos-1 {
+  background: linear-gradient(0deg, var(--enc-gold-tint), var(--enc-sage-tint) 120%);
+  box-shadow: inset 3px 0 0 var(--enc-gold);
+}
+.enc-cd-letter__slot--pos-2 { box-shadow: inset 3px 0 0 #B7B7B7; }
+.enc-cd-letter__slot--pos-3 { box-shadow: inset 3px 0 0 var(--enc-gold-deep); }
+
+.enc-cd-letter__medal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  font-size: 18px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--enc-ink-soft);
+}
+.enc-cd-letter__slot--pos-4 .enc-cd-letter__medal {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.enc-cd-letter__slot-body { min-width: 0; }
+.enc-cd-letter__slot-eyebrow {
+  margin: 0 0 2px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--enc-ink-mute);
+}
+.enc-cd-letter__price {
+  color: var(--enc-ink-soft);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+.enc-cd-letter__horse {
+  margin: 0 0 3px;
+  font-family: var(--enc-serif, Georgia, serif);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--enc-ink);
+}
+.enc-cd-letter__slot-note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--enc-ink-soft);
+}
+
+.enc-cd-letter__verdict {
+  margin: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--enc-sage-tint);
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--enc-ink-soft);
+  font-style: italic;
+}
+
+.enc-cd-letter__more {
+  justify-self: start;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--enc-sage-deep);
+  text-decoration: none;
+  padding: 6px 0;
+}
+.enc-cd-letter__more:hover,
+.enc-cd-letter__more:focus-visible {
+  text-decoration: underline;
+}

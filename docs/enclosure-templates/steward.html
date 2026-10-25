@@ -1,0 +1,147 @@
+{% extends "enclosure/base.html" %}
+{% load static %}
+
+{% block title %}Steward's Room · {{ event.name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'enclosure/css/steward.css' %}?v=2">
+{% endblock %}
+
+{% block content %}
+<div class="enc-scroll">
+
+  <section class="enc-steward-hero" aria-label="Steward's Room">
+    <p class="enc-eyebrow">Steward's Room</p>
+    <h1 class="enc-steward-hero__title">{{ steward.event_name }}</h1>
+    {% if steward.course %}
+      <p class="enc-steward-hero__meta">
+        {{ steward.course }} &middot; {{ event.meeting_date|date:"l j F" }}
+      </p>
+    {% endif %}
+  </section>
+
+  <section class="enc-steward-section" aria-label="Room">
+    <h2 class="enc-steward-section__title">Room</h2>
+    <dl class="enc-steward-grid">
+      <div class="enc-steward-tile">
+        <dt>Active guests</dt>
+        <dd>{{ steward.activity.active_guests }}</dd>
+      </div>
+      <div class="enc-steward-tile">
+        <dt>Accepted</dt>
+        <dd>{{ steward.guests.accepted }}</dd>
+      </div>
+      <div class="enc-steward-tile">
+        <dt>Invited</dt>
+        <dd>{{ steward.guests.invited }}</dd>
+      </div>
+      <div class="enc-steward-tile">
+        <dt>Total seats</dt>
+        <dd>{{ steward.guests.total }}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="enc-steward-section" aria-label="Activity">
+    <h2 class="enc-steward-section__title">Activity</h2>
+    <dl class="enc-steward-grid">
+      <div class="enc-steward-tile">
+        <dt>Picks</dt>
+        <dd>{{ steward.activity.picks_total }}</dd>
+      </div>
+      <div class="enc-steward-tile">
+        <dt>Notes</dt>
+        <dd>{{ steward.activity.notes_total }}</dd>
+      </div>
+      <div class="enc-steward-tile">
+        <dt>Photos</dt>
+        <dd>{{ steward.activity.photos_total }}</dd>
+      </div>
+      <div class="enc-steward-tile">
+        <dt>Briefings</dt>
+        <dd data-role="briefings-total">{{ steward.activity.briefings_total }}</dd>
+      </div>
+      <div class="enc-steward-tile">
+        <dt>Races settled</dt>
+        <dd>
+          <span class="enc-steward-tile__num">{{ steward.activity.races_settled }}</span>
+          <span class="enc-steward-tile__of">/ {{ steward.activity.races_total }}</span>
+        </dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="enc-steward-section enc-steward-section--briefing"
+           aria-label="Post an announcement">
+    <h2 class="enc-steward-section__title">Post to the room</h2>
+    <p class="enc-steward-briefing__lede">
+      Land a message on every guest's Feed — "toast at 3", "coach
+      at gate 2", "photo call by the paddock".
+    </p>
+    <form class="enc-steward-briefing"
+          data-endpoint="{% url 'enclosure:steward_briefing_create' event.slug %}">
+      <label class="enc-steward-briefing__label" for="enc-steward-briefing-headline">
+        Headline
+      </label>
+      <input type="text" id="enc-steward-briefing-headline"
+             name="headline" maxlength="120" required
+             class="enc-steward-briefing__headline"
+             placeholder="Toast in the box at 3pm">
+
+      <label class="enc-steward-briefing__label" for="enc-steward-briefing-body">
+        Detail (optional)
+      </label>
+      <textarea id="enc-steward-briefing-body" name="body"
+                maxlength="500" rows="2"
+                class="enc-steward-briefing__body"
+                placeholder="Line up at the far end of the marquee."></textarea>
+
+      <div class="enc-steward-briefing__row">
+        <p class="enc-steward-briefing__status" data-role="status" aria-live="polite"></p>
+        <button type="submit" class="enc-steward-briefing__submit">
+          Post briefing
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="enc-steward-section enc-steward-section--actions" aria-label="Deep controls">
+    <h2 class="enc-steward-section__title">Deep controls</h2>
+    <p class="enc-steward-actions__lede">
+      Briefings land from the room. Settlement, moderation and the
+      Race Book still live in the corporate admin.
+    </p>
+    <ul class="enc-steward-actions">
+      <li>
+        <a class="enc-steward-action" href="{{ steward.manage_url }}">
+          <span class="enc-steward-action__label">Manage event</span>
+          <span class="enc-steward-action__meta">Invite &middot; publish &middot; send</span>
+        </a>
+      </li>
+      <li>
+        <a class="enc-steward-action" href="{{ steward.leaderboard_url }}">
+          <span class="enc-steward-action__label">Full leaderboard</span>
+          <span class="enc-steward-action__meta">Standings &middot; balances &middot; awards</span>
+        </a>
+      </li>
+      <li>
+        <a class="enc-steward-action" href="{{ steward.settle_url }}">
+          <span class="enc-steward-action__label">Settle picks</span>
+          <span class="enc-steward-action__meta">Grade races when results are in</span>
+        </a>
+      </li>
+      <li>
+        <a class="enc-steward-action" href="{{ steward.book_url }}">
+          <span class="enc-steward-action__label">Race Book</span>
+          <span class="enc-steward-action__meta">Chapters &middot; timeline &middot; review</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'enclosure/js/steward_briefing.js' %}?v=1" defer></script>
+{% endblock %}

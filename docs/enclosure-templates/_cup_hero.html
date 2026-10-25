@@ -1,0 +1,58 @@
+{% if cup.balance %}
+  <section class="enc-cup-hero" aria-label="Your standing">
+    <p class="enc-eyebrow">Your Corporate Cup</p>
+
+    <div class="enc-cup-hero__balance">
+      <span class="enc-cup-hero__amount">{{ cup.balance.available }}</span>
+      <span class="enc-cup-hero__unit">credits left</span>
+    </div>
+
+    {% if cup.viewer_row %}
+      <p class="enc-cup-hero__rank">
+        <span class="enc-cup-hero__rank-pos">
+          {{ cup.viewer_row.position }}<sup>{% if cup.viewer_row.position == 1 %}st{% elif cup.viewer_row.position == 2 %}nd{% elif cup.viewer_row.position == 3 %}rd{% else %}th{% endif %}</sup>
+        </span>
+        <span class="enc-cup-hero__rank-total">of {{ cup.full_leaderboard_count }}</span>
+      </p>
+    {% endif %}
+
+    <dl class="enc-cup-hero__grid">
+      <div class="enc-cup-hero__cell">
+        <dt>Committed</dt>
+        <dd>{{ cup.balance.committed }}</dd>
+      </div>
+      <div class="enc-cup-hero__cell">
+        <dt>Picks made</dt>
+        <dd>{{ cup.balance.pick_count }}</dd>
+      </div>
+      <div class="enc-cup-hero__cell">
+        <dt>{% if cup.viewer_row and cup.viewer_row.delta >= 0 %}Ahead{% else %}Behind{% endif %}</dt>
+        <dd class="enc-cup-hero__delta enc-cup-hero__delta--{% if cup.viewer_row and cup.viewer_row.delta >= 0 %}up{% else %}down{% endif %}">
+          {% if cup.viewer_row %}
+            {% if cup.viewer_row.delta >= 0 %}+{% endif %}{{ cup.viewer_row.delta }}
+          {% else %}
+            0
+          {% endif %}
+        </dd>
+      </div>
+    </dl>
+
+    {% if cup.viewer_awards %}
+      <ul class="enc-cup-hero__awards" aria-label="Awards you have won">
+        {% for award in cup.viewer_awards %}
+          <li class="enc-cup-award enc-cup-award--{{ award.kind }}">
+            <span class="enc-cup-award__label">{{ award.label }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </section>
+{% else %}
+  <section class="enc-cup-hero enc-cup-hero--preview">
+    <p class="enc-eyebrow">Preview mode</p>
+    <p class="enc-cup-hero__lede">
+      You're viewing this event as a Steward. Guests see their own
+      balance and rank here on race day.
+    </p>
+  </section>
+{% endif %}

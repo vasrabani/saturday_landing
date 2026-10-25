@@ -1,0 +1,130 @@
+/*
+ * The Enclosure — Install nudge (E15).
+ *
+ * Add-to-home-screen prompt for guests who reach the shell in a
+ * mobile browser rather than the installed PWA. Sits above the
+ * bottom nav, dismissible, self-hiding once installed.
+ *
+ * JS toggles [hidden] so the [hidden] guard here matters — the
+ * base rule sets display:flex.
+ */
+.enc-install {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* Above the bottomnav — nav is ~64px tall + safe area. */
+  bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  width: min(560px, calc(100% - 24px));
+  z-index: 40;
+
+  display: flex;
+  align-items: center;
+  gap: var(--enc-s-3);
+  padding: 12px 14px;
+  border-radius: var(--enc-r-lg);
+  background: var(--enc-paper);
+  border: 1px solid var(--enc-cream-deep);
+  box-shadow: 0 12px 32px rgba(30, 26, 22, 0.14),
+              0 2px 8px rgba(30, 26, 22, 0.06);
+
+  /* Slide-up entrance. */
+  animation: enc-install-in 320ms ease-out both;
+}
+.enc-install[hidden] { display: none !important; }
+
+@keyframes enc-install-in {
+  from { transform: translate(-50%, 40px); opacity: 0; }
+  to   { transform: translate(-50%, 0);    opacity: 1; }
+}
+
+.enc-install__mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(30, 26, 22, 0.10);
+}
+.enc-install__mark img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.enc-install__body {
+  flex: 1;
+  min-width: 0;
+}
+.enc-install__title {
+  font-family: var(--enc-serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  margin: 0;
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+}
+.enc-install__meta {
+  font-family: var(--enc-sans);
+  font-size: 12px;
+  color: var(--enc-ink-mute);
+  margin: 2px 0 0;
+  line-height: 1.35;
+}
+.enc-install__ios {
+  font-family: var(--enc-sans);
+  font-size: 12px;
+  color: var(--enc-ink-soft);
+  margin: 4px 0 0;
+  line-height: 1.35;
+}
+.enc-install__ios strong {
+  color: var(--enc-ink);
+  font-weight: 600;
+}
+.enc-install__ios[hidden] { display: none !important; }
+.enc-install__glyph {
+  display: inline-block;
+  transform: translateY(1px);
+}
+
+.enc-install__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.enc-install__cta {
+  padding: 8px 14px;
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-mode-accent);
+  color: var(--enc-paper);
+  font-family: var(--enc-sans);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  border: 0;
+  cursor: pointer;
+  transition: transform 100ms ease-out, opacity 120ms ease-out;
+}
+.enc-install__cta[hidden] { display: none !important; }
+.enc-install__cta:active { transform: scale(0.97); }
+
+.enc-install__dismiss {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--enc-cream);
+  color: var(--enc-ink-mute);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 120ms ease-out, color 120ms ease-out;
+}
+.enc-install__dismiss:hover {
+  background: var(--enc-cream-deep);
+  color: var(--enc-ink);
+}
