@@ -1,24 +1,27 @@
 /*
  * The Enclosure — Feed tab (E5).
  *
- * Filter chips + chronological entry list. The live-poll JS swaps
- * the #enc-feed-stream contents wholesale; the wrapper class handles
- * layout so the swap needs nothing more than innerHTML replacement.
+ * The day, race by race. On the midnight band: the title, the filter
+ * chips and, where the list shows results, the day's winners (every race
+ * in card order, each a jump to its result). Below, on paper, the stream
+ * as a timeline: every entry hangs on a rail by its time. A result's mark
+ * is the winner's silks; it names the race, prints the winner and the
+ * starting price and opens the race. A guest's note speaks in a bubble
+ * beside their silks.
+ *
+ * The live-poll JS swaps the #enc-feed-stream contents wholesale (and the
+ * winners, when the answer carries them); the classes handle layout, so a
+ * swap needs nothing more than innerHTML replacement.
  */
 
-.enc-feed {
-  padding-top: var(--enc-s-3);
-}
-
-/* CHIPS ------------------------------------------------------- */
+/* CHIPS — on the band: gold-outlined, the chosen one gold ────────── */
 .enc-feed__chips {
   display: flex;
   gap: var(--enc-s-2);
   overflow-x: auto;
-  padding: 0 var(--enc-s-1) var(--enc-s-3);
-  margin: 0 calc(var(--enc-s-4) * -1) var(--enc-s-3);
-  padding-left: var(--enc-s-4);
-  padding-right: var(--enc-s-4);
+  /* Room for the focus ring, which the scroller would otherwise clip */
+  margin: 6px calc(var(--enc-s-4) * -1) 0;
+  padding: 4px var(--enc-s-4);
   scrollbar-width: none;
 }
 .enc-feed__chips::-webkit-scrollbar { display: none; }
@@ -27,19 +30,22 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  min-height: 40px;
+  padding: 0 14px;
   border-radius: var(--enc-r-pill);
   font-size: 12px;
   font-weight: 600;
-  color: var(--enc-ink-soft);
-  background: var(--enc-cream-deep);
+  color: var(--enc-on-night-soft);
+  background: color-mix(in srgb, var(--enc-on-night) 6%, transparent);
+  box-shadow: inset 0 0 0 1px var(--enc-night-line);
   white-space: nowrap;
   flex: none;
-  transition: background-color 120ms ease-out, color 120ms ease-out;
+  transition: background-color 150ms ease-out, color 150ms ease-out;
 }
 .enc-feed__chip.is-active {
-  background: var(--enc-ink);
-  color: var(--enc-paper);
+  background: var(--enc-gold);
+  color: var(--enc-night);
+  box-shadow: none;
 }
 .enc-feed__chip-count {
   font-size: 10px;
@@ -47,12 +53,13 @@
   opacity: 0.8;
 }
 
-/* PAUSE META STRIP -------------------------------------------- */
+/* PAUSE — shown only while the poll is paused ───────────────────── */
 .enc-feed__meta {
   display: flex;
   justify-content: center;
-  padding: 4px 0 var(--enc-s-3);
 }
+/* feed_live.js sets [hidden] while it polls: a display rule must not beat it */
+.enc-feed__meta[hidden] { display: none; }
 .enc-feed__pause-chip {
   display: inline-flex;
   gap: 6px;
@@ -60,118 +67,408 @@
   padding: 4px 12px;
   border-radius: var(--enc-r-pill);
   font-size: 11px;
-  color: var(--enc-ink-mute);
-  background: var(--enc-cream-deep);
+  letter-spacing: 0.08em;
+  color: var(--enc-on-night-soft);
+  background: color-mix(in srgb, var(--enc-on-night) 6%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--enc-on-night) 14%, transparent);
   cursor: pointer;
 }
 
-/* STREAM ------------------------------------------------------ */
-.enc-feed__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.enc-feed__item {
+/* THE DAY'S WINNERS — every race in card order, on one rail ────── */
+.enc-day {
   display: grid;
-  grid-template-columns: 34px 1fr;
   gap: 12px;
-  padding: 12px 4px;
-  border-bottom: 1px solid var(--enc-cream-deep);
+  margin-top: 20px;
+  padding: 14px 14px 12px;
+  border: var(--enc-hair) solid var(--enc-night-line);
+  border-radius: var(--enc-r-lg);
+  background: var(--enc-night-raised);
 }
-.enc-feed__item:last-child { border-bottom: 0; }
-
-.enc-feed__icon {
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  background: var(--enc-sage-tint);
-  display: grid;
-  place-items: center;
-  font-size: 16px;
-  align-self: start;
-}
-/* Per-kind icon tints — the icon carries the category signal. */
-.enc-feed__item--award .enc-feed__icon      { background: var(--enc-gold-tint); }
-.enc-feed__item--cup_mover .enc-feed__icon  { background: var(--enc-gold-tint); }
-.enc-feed__item--race_settled .enc-feed__icon { background: var(--enc-claret-tint); }
-.enc-feed__item--closing .enc-feed__icon    { background: var(--enc-cream-deep); }
-
-.enc-feed__body { min-width: 0; }
-
-.enc-feed__meta-row {
+.enc-day__head {
   display: flex;
   align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.enc-day__title {
+  font: 700 19px/1.5 var(--enc-display);
+  letter-spacing: 0;
+  color: var(--enc-on-night);
+}
+.enc-day__count {
+  font-size: 12.5px;
+  color: var(--enc-on-night-soft);
+}
+.enc-day__list {
+  --enc-day-silk: clamp(28px, 8vw, 30px);
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* The rail, from the first race's silks to the last's */
+.enc-day__list > li { position: relative; }
+.enc-day__list > li::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--enc-day-silk) / 2 - 1px);
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: color-mix(in srgb, var(--enc-on-night) 14%, transparent);
+}
+.enc-day__list > li:first-child::before { left: 50%; }
+.enc-day__list > li:last-child::before { right: 50%; }
+
+.enc-day__race {
+  position: relative;
+  display: grid;
+  justify-items: center;
   gap: 6px;
+  padding-bottom: 2px;
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.enc-day__silk {
+  display: grid;
+  place-items: center;
+  width: var(--enc-day-silk);
+  height: var(--enc-day-silk);
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--enc-paper);
+  box-shadow: inset 0 0 0 1px var(--enc-rule-strong);
   font-size: 11px;
+  font-weight: 700;
+  transition: transform 160ms ease-out;
+}
+.enc-day__silk img {
+  width: calc(var(--enc-day-silk) - 4px);
+  height: calc(var(--enc-day-silk) - 4px);
+}
+/* Still to run: its number in an empty slot */
+.enc-day__race:not(.is-run) .enc-day__silk {
+  background: var(--enc-night-high);
+  color: var(--enc-on-night-soft);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--enc-on-night) 14%, transparent);
+}
+/* A guest picked the winner: a gold ring */
+.enc-day__race.is-win .enc-day__silk {
+  box-shadow: inset 0 0 0 1px var(--enc-rule-strong), 0 0 0 2px var(--enc-gold);
+}
+.enc-day__time {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--enc-on-night-soft);
+}
+.enc-day__race.is-win .enc-day__time { color: var(--enc-gold); }
+.enc-day__race:active .enc-day__silk { transform: scale(0.94); }
+.enc-day__race:focus-visible { outline: none; }
+.enc-day__race:focus-visible .enc-day__silk {
+  outline: 2px solid var(--enc-focus);
+  outline-offset: 3px;
 }
 
-.enc-feed__title {
-  font-family: var(--enc-serif);
+/* STREAM — a timeline: every entry on the rail by its time ────────── */
+.enc-feed__list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 6px 14px;
+  list-style: none;
+  background: var(--enc-paper);
+  border: var(--enc-hair) solid var(--enc-rule-strong);
+  border-radius: var(--enc-r-lg);
+  box-shadow: var(--enc-shadow-sm);
+}
+.enc-feed__item { position: relative; }
+/* The rail: one line through every mark, from the first to the last */
+.enc-feed__item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 75px;   /* the time column, the gap, half the mark, less half the line */
+  width: 2px;
+  background: var(--enc-rule);
+}
+.enc-feed__item:first-child::before { top: 32px; }
+.enc-feed__item:last-child::before { bottom: auto; height: 32px; }
+.enc-feed__item:only-child::before { display: none; }
+
+.enc-feed__row {
+  display: grid;
+  grid-template-columns: 44px 40px minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: start;
+  padding: 12px 0;
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+a.enc-feed__row:active {
+  background: var(--enc-chip);
+  box-shadow: 0 0 0 8px var(--enc-chip);
+}
+.enc-feed__row:focus-visible {
+  outline: 2px solid var(--enc-focus);
+  outline-offset: 6px;
+}
+
+/* When: a result's race and its time, as on the card; a post's age */
+.enc-feed__when {
+  display: grid;
+  justify-items: start;
+  gap: 2px;
+  padding-top: 2px;
+}
+.enc-feed__n {
+  font-size: 10px;
   font-weight: 600;
-  color: var(--enc-ink);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--enc-gold-ink);
+}
+.enc-feed__time {
   font-size: 13px;
-  line-height: 1.2;
+  font-weight: 600;
   letter-spacing: -0.01em;
-  flex: 1;
-  min-width: 0;
+  color: var(--enc-ink-soft);
+}
+.enc-feed__n + .enc-feed__time {
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--enc-ink);
+}
+.enc-feed__when .enc-feed__fresh { margin-top: 4px; }
+
+/* The mark on the rail: the winner's silks, a guest's own, or an icon */
+.enc-feed__mark {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
   overflow: hidden;
+  border-radius: 50%;
+  background: var(--enc-paper);
+  box-shadow: inset 0 0 0 1px var(--enc-rule-strong), 0 0 0 4px var(--enc-paper);
+}
+.enc-feed__mark img { width: 34px; height: 34px; }
+.enc-feed__mark .enc-silks { width: 100%; height: 100%; }
+.enc-feed__mark--icon {
+  background: var(--enc-chip);
+  box-shadow: 0 0 0 4px var(--enc-paper);
+  color: var(--enc-ink-soft);
+}
+.enc-feed__item--award .enc-feed__mark--icon,
+.enc-feed__item--cup_mover .enc-feed__mark--icon {
+  background: var(--enc-gold-wash);
+  color: var(--enc-gold-ink);
+}
+
+.enc-feed__body {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* A result: the race, the winner and the price, then the guests */
+.enc-feed__race {
+  min-height: 15px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1.25;
+  color: var(--enc-ink-mute);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.enc-feed__time { color: var(--enc-ink-mute); flex: none; }
+.enc-feed__main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.enc-feed__horse {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--enc-ink);
+}
+.enc-feed__sp {
+  display: inline-flex;
+  flex: none;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 18px;
+  line-height: 1.2;
+  color: var(--enc-ink);
+}
+.enc-feed__sp small {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--enc-ink-mute);
+}
+.enc-feed__guests {
+  font-size: 12.5px;
+  color: var(--enc-ink-mute);
+}
+.enc-feed__win {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--enc-gold-ink);
+}
+.enc-feed__win-tag {
+  padding: 1px 7px;
+  border-radius: 5px;
+  background: var(--enc-gold);
+  color: var(--enc-night);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+/* A guest picked the winner: the row lit in gold, the colour of "yours" */
+.enc-feed__item--win .enc-feed__row {
+  background: var(--enc-win);
+  box-shadow: 0 0 0 8px var(--enc-win);
+}
+.enc-feed__item--win .enc-feed__mark {
+  box-shadow: inset 0 0 0 1px var(--enc-rule-strong), 0 0 0 2px var(--enc-gold), 0 0 0 5px var(--enc-win);
+}
+/* Arriving from the day's winners: a brief gold wash */
+.enc-feed__item.is-flash .enc-feed__row { animation: enc-feed-flash 1.6s ease-out; }
+
+/* Posts, awards, Cup moves and the host's briefings: a title, then words */
+.enc-feed__title {
+  min-height: 20px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--enc-ink);
+}
 .enc-feed__fresh {
   display: inline-flex;
-  gap: 4px;
-  align-items: center;
-  font-size: 9px;
-  color: var(--enc-sage-deep);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  padding: 2px 6px;
-  background: var(--enc-sage-tint);
-  border-radius: var(--enc-r-pill);
   flex: none;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: var(--enc-r-pill);
+  background: color-mix(in srgb, var(--enc-up) 10%, transparent);
+  color: var(--enc-up);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   animation: enc-feed-pulse 2.4s ease-in-out infinite;
 }
 .enc-feed__fresh::before {
   content: "";
-  width: 5px; height: 5px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  background: var(--enc-sage-deep);
+  background: var(--enc-up);
 }
 .enc-feed__text {
-  font-size: 13px;
-  color: var(--enc-ink-soft);
-  margin-top: 3px;
+  margin-top: 2px;
+  font-size: 13.5px;
   line-height: 1.45;
+  color: var(--enc-ink-soft);
+}
+/* A guest's words, in a bubble that leans on their silks */
+.enc-feed__item--guest_note .enc-feed__text {
+  margin-top: 6px;
+  padding: 10px 12px;
+  border-radius: 4px 14px 14px 14px;
+  background: var(--enc-chip);
+  color: var(--enc-ink);
+  font-size: 15px;
 }
 
-/* EMPTY ------------------------------------------------------- */
+/* A guest's photo: tap for the full picture (lightbox.js) */
+.enc-feed__photo {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--enc-r-lg);
+  overflow: hidden;
+  background: var(--enc-chip);
+  cursor: zoom-in;
+  aspect-ratio: 4 / 3;
+  transition: transform 120ms ease-out;
+}
+.enc-feed__photo:active { transform: scale(0.99); }
+.enc-feed__photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.enc-feed__caption {
+  margin-top: 6px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--enc-ink-soft);
+}
+/* The race a post is about */
+.enc-feed__attach {
+  display: inline-flex;
+  justify-self: start;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 3px 10px;
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-chip);
+  box-shadow: inset 0 0 0 1px var(--enc-rule);
+  color: var(--enc-ink-soft);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* EMPTY ─────────────────────────────────────────────────────────── */
 .enc-feed__empty {
-  padding: var(--enc-s-7) var(--enc-s-4);
-  text-align: center;
-  border: 1px dashed var(--enc-cream-deep);
-  border-radius: var(--enc-r-xl);
   display: flex;
   flex-direction: column;
   gap: var(--enc-s-2);
+  padding: var(--enc-s-7) var(--enc-s-4);
+  text-align: center;
+  background: var(--enc-paper);
+  border: 1px dashed var(--enc-rule-strong);
+  border-radius: 14px;
 }
 .enc-feed__empty-title {
-  font-family: var(--enc-serif);
-  font-size: 20px;
-  color: var(--enc-ink);
   margin: var(--enc-s-1) 0;
+  font: 700 22px/1.2 var(--enc-display);
+  color: var(--enc-ink);
 }
 .enc-feed__empty-lede {
-  font-family: var(--enc-serif);
-  font-size: 14px;
-  color: var(--enc-ink-soft);
   max-width: 32ch;
   margin: 0 auto;
+  font-size: 14px;
   line-height: 1.5;
+  color: var(--enc-ink-soft);
+}
+
+@keyframes enc-feed-flash {
+  0%, 35% {
+    background: var(--enc-gold-wash);
+    box-shadow: 0 0 0 8px var(--enc-gold-wash);
+  }
 }
 
 @keyframes enc-feed-pulse {
@@ -180,6 +477,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .enc-feed__fresh { animation: none; }
-  .enc-feed__chip  { transition: none; }
+  .enc-feed__fresh,
+  .enc-feed__item.is-flash .enc-feed__row { animation: none; }
+  .enc-feed__chip,
+  .enc-day__silk,
+  .enc-feed__photo { transition: none; }
+  .enc-day__race:active .enc-day__silk,
+  .enc-feed__photo:active { transform: none; }
 }

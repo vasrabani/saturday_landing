@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-  <meta name="theme-color" content="#506B4D">
+  <meta name="theme-color" content="#0B0B0F">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Enclosure">
@@ -19,6 +19,7 @@
         href="../../static/enclosure/icons/icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512"
         href="../../static/enclosure/icons/icon-512.png">
+  <link rel="stylesheet" href="../../static/fonts/saturday-fonts.css">
   <link rel="stylesheet" href="../../static/enclosure/css/tokens.css">
   <link rel="stylesheet" href="../../static/enclosure/css/shell.css">
   <link rel="stylesheet" href="../../static/enclosure/css/maker_mark.css">
@@ -73,7 +74,7 @@
   </div>
   <div class="enc-top__actions">
     <a class="enc-icon-btn" aria-label="Notifications" href="#notifications">
-      <span aria-hidden="true">&#128276;</span>
+      <span aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M6 16v-5a6 6 0 1 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg></span>
     </a>
     <button type="button"
             class="enc-top__silks-slot"
@@ -95,44 +96,66 @@
      data-live-endpoint="feed-racing.live.json"
      data-filter="racing">
 
-  <nav class="enc-feed__chips" aria-label="Filter feed">
-    
-      <a class="enc-feed__chip"
-         href="feed.html"
-         aria-current="false"
-         data-filter="all">
-        <span class="enc-feed__chip-label">All</span>
-        <span class="enc-feed__chip-count">26</span>
-      </a>
-    
-      <a class="enc-feed__chip is-active"
-         href="feed-racing.html"
-         aria-current="true"
-         data-filter="racing">
-        <span class="enc-feed__chip-label">Racing</span>
-        <span class="enc-feed__chip-count">15</span>
-      </a>
-    
-      <a class="enc-feed__chip"
-         href="feed-comments.html"
-         aria-current="false"
-         data-filter="comments">
-        <span class="enc-feed__chip-label">Comments</span>
-        <span class="enc-feed__chip-count">8</span>
-      </a>
-    
-      <a class="enc-feed__chip"
-         href="feed-photos.html"
-         aria-current="false"
-         data-filter="photos">
-        <span class="enc-feed__chip-label">Photos</span>
-        <span class="enc-feed__chip-count">3</span>
-      </a>
-    
-  </nav>
+  <div class="enc-band">
+    <h1 class="enc-page-title">The Feed</h1>
 
-  <div class="enc-feed__meta" data-role="poll-meta" hidden>
-    <span class="enc-feed__pause-chip">Paused &middot; tap to resume</span>
+    <nav class="enc-feed__chips" aria-label="Filter feed">
+    
+        <a class="enc-feed__chip"
+           href="feed.html"
+           aria-current="false"
+           data-filter="all">
+          <span class="enc-feed__chip-label">All</span>
+          <span class="enc-feed__chip-count">26</span>
+        </a>
+    
+        <a class="enc-feed__chip is-active"
+           href="feed-racing.html"
+           aria-current="true"
+           data-filter="racing">
+          <span class="enc-feed__chip-label">Racing</span>
+          <span class="enc-feed__chip-count">15</span>
+        </a>
+    
+        <a class="enc-feed__chip"
+           href="feed-comments.html"
+           aria-current="false"
+           data-filter="comments">
+          <span class="enc-feed__chip-label">Comments</span>
+          <span class="enc-feed__chip-count">8</span>
+        </a>
+    
+        <a class="enc-feed__chip"
+           href="feed-photos.html"
+           aria-current="false"
+           data-filter="photos">
+          <span class="enc-feed__chip-label">Photos</span>
+          <span class="enc-feed__chip-count">3</span>
+        </a>
+    
+    </nav>
+
+    <div class="enc-feed__meta" data-role="poll-meta" hidden>
+      <span class="enc-feed__pause-chip">Paused &middot; tap to resume</span>
+    </div>
+
+    <section class="enc-day" data-role="winners" aria-labelledby="enc-day-title">
+      <header class="enc-day__head">
+        <h2 class="enc-day__title" id="enc-day-title">The day’s winners</h2>
+        <span class="enc-day__count">5 of 9 run</span>
+      </header>
+      <ol class="enc-day__list">
+        <li><a class="enc-day__race is-run is-win" href="race-1.html" data-race="1" aria-label="Race 1, 14:02: Oman won at 7/2J, a guest winner"><span class="enc-day__silk"><img src="https://silks.theracingapi.com/silk?body=epaulettes:red,royalblue&amp;sleeves=armlet:royalblue,red&amp;cap=solid:white" alt="" width="26" height="26"></span><span class="enc-day__time">14:02</span></a></li>
+        <li><a class="enc-day__race is-run is-win" href="race-2.html" data-race="2" aria-label="Race 2, 14:32: Hebridean Nomad won at 6/1, a guest winner"><span class="enc-day__silk"><img src="https://silks.theracingapi.com/silk?body=hoops:yellow,red&amp;sleeves=solid:darkblue&amp;cap=solid:darkblue" alt="" width="26" height="26"></span><span class="enc-day__time">14:32</span></a></li>
+        <li><a class="enc-day__race is-run is-win" href="race-3.html" data-race="3" aria-label="Race 3, 15:02: Chilly Breeze won at 17/2, a guest winner"><span class="enc-day__silk"><img src="https://silks.theracingapi.com/silk?body=hoop:purple,pink&amp;sleeves=armlet:purple,pink&amp;cap=hoops:pink,purple" alt="" width="26" height="26"></span><span class="enc-day__time">15:02</span></a></li>
+        <li><a class="enc-day__race is-run is-win" href="race-4.html" data-race="4" aria-label="Race 4, 15:32: Divide And Conquer won at 1/4F, a guest winner"><span class="enc-day__silk"><img src="https://silks.theracingapi.com/silk?body=solid:red&amp;sleeves=stripes:red,white&amp;cap=stripes:red,white" alt="" width="26" height="26"></span><span class="enc-day__time">15:32</span></a></li>
+        <li><a class="enc-day__race is-run is-win" href="race-5.html" data-race="5" aria-label="Race 5, 16:02: Forager won at 18/1, a guest winner"><span class="enc-day__silk"><img src="https://silks.theracingapi.com/silk?body=hoops:yellow,royalblue&amp;sleeves=diabolo:yellow,royalblue&amp;cap=solid:yellow" alt="" width="26" height="26"></span><span class="enc-day__time">16:02</span></a></li>
+        <li><a class="enc-day__race" href="race-6.html" data-race="6" aria-label="Race 6, 16:35: the next race"><span class="enc-day__silk">6</span><span class="enc-day__time">16:35</span></a></li>
+        <li><a class="enc-day__race" href="race-7.html" data-race="7" aria-label="Race 7, 17:07: still to run"><span class="enc-day__silk">7</span><span class="enc-day__time">17:07</span></a></li>
+        <li><a class="enc-day__race" href="race-8.html" data-race="8" aria-label="Race 8, 17:37: still to run"><span class="enc-day__silk">8</span><span class="enc-day__time">17:37</span></a></li>
+        <li><a class="enc-day__race" href="race-9.html" data-race="9" aria-label="Race 9, 18:07: still to run"><span class="enc-day__silk">9</span><span class="enc-day__time">18:07</span></a></li>
+      </ol>
+    </section>
   </div>
 
   <div id="enc-feed-stream" data-role="stream">
@@ -142,22 +165,13 @@
       
 <li class="enc-feed__item enc-feed__item--award"
     data-entry-id="23">
-  
-    <span class="enc-feed__icon" aria-hidden="true">🥄</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
+  <div class="enc-feed__row">
+    <span class="enc-feed__when"><span class="enc-feed__time">10 min ago</span></span>
+    <span class="enc-feed__mark enc-feed__mark--icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3.5c2 0 3.5 1.8 3.5 4.3S14 12 12 12s-3.5-1.7-3.5-4.2S10 3.5 12 3.5z"/><path d="M12 12v8.5"/></svg></span>
+    <div class="enc-feed__body">
       <span class="enc-feed__title">Wooden Spoon awarded · Olivia Marsh</span>
-      
-        <span class="enc-feed__time">10 min ago</span>
-      
-    </div>
-
-    
       <p class="enc-feed__text">Closing balance 770 cr</p>
-    
-
-    
+    </div>
   </div>
 </li>
 
@@ -165,91 +179,58 @@
       
 <li class="enc-feed__item enc-feed__item--award"
     data-entry-id="24">
-  
-    <span class="enc-feed__icon" aria-hidden="true">💰</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
+  <div class="enc-feed__row">
+    <span class="enc-feed__when"><span class="enc-feed__time">10 min ago</span></span>
+    <span class="enc-feed__mark enc-feed__mark--icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5v1.5A3 3 0 0 0 8 10.5M16 6h3v1.5a3 3 0 0 1-3 3M12 13v4M8.5 20h7M9.5 17h5"/></svg></span>
+    <div class="enc-feed__body">
       <span class="enc-feed__title">Value Hunter · Sam Whitlock</span>
-      
-        <span class="enc-feed__time">10 min ago</span>
-      
-    </div>
-
-    
       <p class="enc-feed__text">Forager at 16/1 · 30 cr</p>
-    
-
-    
+    </div>
   </div>
 </li>
 
     
       
-<li class="enc-feed__item enc-feed__item--race_settled"
-    data-entry-id="22">
-  
-    <span class="enc-feed__icon" aria-hidden="true">🏇</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
-      <span class="enc-feed__title">16:02 Bath · Forager (GB)</span>
-      
-        <span class="enc-feed__time">18 min ago</span>
-      
-    </div>
-
-    
-      <p class="enc-feed__text">🥇 Sam Whitlock +480 on Forager</p>
-    
-
-    
-  </div>
+<li class="enc-feed__item enc-feed__item--race_settled enc-feed__item--win"
+    id="enc-feed-race-5" data-entry-id="22">
+  <a class="enc-feed__row" href="race-5.html">
+    <span class="enc-feed__when"><span class="enc-feed__n">Race 5</span><span class="enc-feed__time">16:02</span></span>
+    <span class="enc-feed__mark"><img src="https://silks.theracingapi.com/silk?body=hoops:yellow,royalblue&amp;sleeves=diabolo:yellow,royalblue&amp;cap=solid:yellow" alt="" width="34" height="34" loading="lazy"></span>
+    <span class="enc-feed__body">
+      <span class="enc-feed__race">Sw Hire Handicap Stakes</span>
+      <span class="enc-feed__main"><span class="enc-feed__horse">Forager (GB)</span><span class="enc-feed__sp"><span class="enc-odds"><span class="enc-odds__n">18</span><span class="enc-odds__slash">/</span><span class="enc-odds__d">1</span></span><small>SP</small></span></span>
+      <span class="enc-feed__win"><span class="enc-feed__win-tag">Guest win</span>Sam Whitlock +480</span>
+    </span>
+  </a>
 </li>
 
     
       
-<li class="enc-feed__item enc-feed__item--race_settled"
-    data-entry-id="19">
-  
-    <span class="enc-feed__icon" aria-hidden="true">🏇</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
-      <span class="enc-feed__title">15:32 Bath · Divide And Conquer (IRE)</span>
-      
-        <span class="enc-feed__time">48 min ago</span>
-      
-    </div>
-
-    
-      <p class="enc-feed__text">🥇 Priya Shah +29 on Divide And Conquer<br>   2 guests landed the race.</p>
-    
-
-    
-  </div>
+<li class="enc-feed__item enc-feed__item--race_settled enc-feed__item--win"
+    id="enc-feed-race-4" data-entry-id="19">
+  <a class="enc-feed__row" href="race-4.html">
+    <span class="enc-feed__when"><span class="enc-feed__n">Race 4</span><span class="enc-feed__time">15:32</span></span>
+    <span class="enc-feed__mark"><img src="https://silks.theracingapi.com/silk?body=solid:red&amp;sleeves=stripes:red,white&amp;cap=stripes:red,white" alt="" width="34" height="34" loading="lazy"></span>
+    <span class="enc-feed__body">
+      <span class="enc-feed__race">British EBF Future Stayers&#x27; Novice Stakes (Sire And Dam Restricted Race) (Plus 10 Race) (GBB/GBBPlus Race)</span>
+      <span class="enc-feed__main"><span class="enc-feed__horse">Divide And Conquer (IRE)</span><span class="enc-feed__sp"><span class="enc-odds"><span class="enc-odds__n">1</span><span class="enc-odds__slash">/</span><span class="enc-odds__d">4</span><span class="enc-odds__mark">F</span></span><small>SP</small></span></span>
+      <span class="enc-feed__win"><span class="enc-feed__win-tag">Guest win</span>Priya Shah +29</span>
+      <span class="enc-feed__guests">2 guests landed the race.</span>
+    </span>
+  </a>
 </li>
 
     
       
 <li class="enc-feed__item enc-feed__item--award"
     data-entry-id="17">
-  
-    <span class="enc-feed__icon" aria-hidden="true">🏆</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
+  <div class="enc-feed__row">
+    <span class="enc-feed__when"><span class="enc-feed__time">1 hr ago</span></span>
+    <span class="enc-feed__mark enc-feed__mark--icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5v1.5A3 3 0 0 0 8 10.5M16 6h3v1.5a3 3 0 0 1-3 3M12 13v4M8.5 20h7M9.5 17h5"/></svg></span>
+    <div class="enc-feed__body">
       <span class="enc-feed__title">Corporate Champion crowned · Marcus Lindqvist</span>
-      
-        <span class="enc-feed__time">1 hr ago</span>
-      
-    </div>
-
-    
       <p class="enc-feed__text">Closing balance 1565 cr</p>
-    
-
-    
+    </div>
   </div>
 </li>
 
@@ -257,114 +238,71 @@
       
 <li class="enc-feed__item enc-feed__item--award"
     data-entry-id="18">
-  
-    <span class="enc-feed__icon" aria-hidden="true">💰</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
+  <div class="enc-feed__row">
+    <span class="enc-feed__when"><span class="enc-feed__time">1 hr ago</span></span>
+    <span class="enc-feed__mark enc-feed__mark--icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5v1.5A3 3 0 0 0 8 10.5M16 6h3v1.5a3 3 0 0 1-3 3M12 13v4M8.5 20h7M9.5 17h5"/></svg></span>
+    <div class="enc-feed__body">
       <span class="enc-feed__title">Value Hunter · Marcus Lindqvist</span>
-      
-        <span class="enc-feed__time">1 hr ago</span>
-      
-    </div>
-
-    
       <p class="enc-feed__text">Chilly Breeze at 7/1 · 50 cr</p>
-    
-
-    
+    </div>
   </div>
 </li>
 
     
       
-<li class="enc-feed__item enc-feed__item--race_settled"
-    data-entry-id="15">
-  
-    <span class="enc-feed__icon" aria-hidden="true">🏇</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
-      <span class="enc-feed__title">15:02 Bath · Chilly Breeze (GB)</span>
-      
-        <span class="enc-feed__time">1 hr ago</span>
-      
-    </div>
-
-    
-      <p class="enc-feed__text">🥇 Marcus Lindqvist +350 on Chilly Breeze</p>
-    
-
-    
-  </div>
+<li class="enc-feed__item enc-feed__item--race_settled enc-feed__item--win"
+    id="enc-feed-race-3" data-entry-id="15">
+  <a class="enc-feed__row" href="race-3.html">
+    <span class="enc-feed__when"><span class="enc-feed__n">Race 3</span><span class="enc-feed__time">15:02</span></span>
+    <span class="enc-feed__mark"><img src="https://silks.theracingapi.com/silk?body=hoop:purple,pink&amp;sleeves=armlet:purple,pink&amp;cap=hoops:pink,purple" alt="" width="34" height="34" loading="lazy"></span>
+    <span class="enc-feed__body">
+      <span class="enc-feed__race">Ael Solutions Handicap Stakes</span>
+      <span class="enc-feed__main"><span class="enc-feed__horse">Chilly Breeze (GB)</span><span class="enc-feed__sp"><span class="enc-odds"><span class="enc-odds__n">17</span><span class="enc-odds__slash">/</span><span class="enc-odds__d">2</span></span><small>SP</small></span></span>
+      <span class="enc-feed__win"><span class="enc-feed__win-tag">Guest win</span>Marcus Lindqvist +350</span>
+    </span>
+  </a>
 </li>
 
     
       
 <li class="enc-feed__item enc-feed__item--cup_mover"
     data-entry-id="16">
-  
-    <span class="enc-feed__icon" aria-hidden="true">📈</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
+  <div class="enc-feed__row">
+    <span class="enc-feed__when"><span class="enc-feed__time">1 hr ago</span></span>
+    <span class="enc-feed__mark enc-feed__mark--icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 16.5l5-5 3.5 3.5L20 7.5"/><path d="M14.5 7.5H20V13"/></svg></span>
+    <div class="enc-feed__body">
       <span class="enc-feed__title">Marcus Lindqvist takes the Cup lead</span>
-      
-        <span class="enc-feed__time">1 hr ago</span>
-      
-    </div>
-
-    
       <p class="enc-feed__text">1565 cr (+565)<br>Overtakes Tom Ellery</p>
-    
-
-    
+    </div>
   </div>
 </li>
 
     
       
-<li class="enc-feed__item enc-feed__item--race_settled"
-    data-entry-id="12">
-  
-    <span class="enc-feed__icon" aria-hidden="true">🏇</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
-      <span class="enc-feed__title">14:32 Bath · Hebridean Nomad (GB)</span>
-      
-        <span class="enc-feed__time">1 hr ago</span>
-      
-    </div>
-
-    
-      <p class="enc-feed__text">🥇 Grace Okafor +130 on Hebridean Nomad</p>
-    
-
-    
-  </div>
+<li class="enc-feed__item enc-feed__item--race_settled enc-feed__item--win"
+    id="enc-feed-race-2" data-entry-id="12">
+  <a class="enc-feed__row" href="race-2.html">
+    <span class="enc-feed__when"><span class="enc-feed__n">Race 2</span><span class="enc-feed__time">14:32</span></span>
+    <span class="enc-feed__mark"><img src="https://silks.theracingapi.com/silk?body=hoops:yellow,red&amp;sleeves=solid:darkblue&amp;cap=solid:darkblue" alt="" width="34" height="34" loading="lazy"></span>
+    <span class="enc-feed__body">
+      <span class="enc-feed__race">Mj Church Handicap Stakes</span>
+      <span class="enc-feed__main"><span class="enc-feed__horse">Hebridean Nomad (GB)</span><span class="enc-feed__sp"><span class="enc-odds"><span class="enc-odds__n">6</span><span class="enc-odds__slash">/</span><span class="enc-odds__d">1</span></span><small>SP</small></span></span>
+      <span class="enc-feed__win"><span class="enc-feed__win-tag">Guest win</span>Grace Okafor +130</span>
+    </span>
+  </a>
 </li>
 
     
       
 <li class="enc-feed__item enc-feed__item--award"
     data-entry-id="7">
-  
-    <span class="enc-feed__icon" aria-hidden="true">🏆</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
+  <div class="enc-feed__row">
+    <span class="enc-feed__when"><span class="enc-feed__time">2 hr ago</span></span>
+    <span class="enc-feed__mark enc-feed__mark--icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5v1.5A3 3 0 0 0 8 10.5M16 6h3v1.5a3 3 0 0 1-3 3M12 13v4M8.5 20h7M9.5 17h5"/></svg></span>
+    <div class="enc-feed__body">
       <span class="enc-feed__title">Corporate Champion crowned · Tom Ellery</span>
-      
-        <span class="enc-feed__time">2 hr ago</span>
-      
-    </div>
-
-    
       <p class="enc-feed__text">Closing balance 1440 cr</p>
-    
-
-    
+    </div>
   </div>
 </li>
 
@@ -372,22 +310,13 @@
       
 <li class="enc-feed__item enc-feed__item--award"
     data-entry-id="8">
-  
-    <span class="enc-feed__icon" aria-hidden="true">🥄</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
+  <div class="enc-feed__row">
+    <span class="enc-feed__when"><span class="enc-feed__time">2 hr ago</span></span>
+    <span class="enc-feed__mark enc-feed__mark--icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3.5c2 0 3.5 1.8 3.5 4.3S14 12 12 12s-3.5-1.7-3.5-4.2S10 3.5 12 3.5z"/><path d="M12 12v8.5"/></svg></span>
+    <div class="enc-feed__body">
       <span class="enc-feed__title">Wooden Spoon awarded · Sam Whitlock</span>
-      
-        <span class="enc-feed__time">2 hr ago</span>
-      
-    </div>
-
-    
       <p class="enc-feed__text">Closing balance 740 cr</p>
-    
-
-    
+    </div>
   </div>
 </li>
 
@@ -395,22 +324,13 @@
       
 <li class="enc-feed__item enc-feed__item--award"
     data-entry-id="9">
-  
-    <span class="enc-feed__icon" aria-hidden="true">🥇</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
+  <div class="enc-feed__row">
+    <span class="enc-feed__when"><span class="enc-feed__time">2 hr ago</span></span>
+    <span class="enc-feed__mark enc-feed__mark--icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5v1.5A3 3 0 0 0 8 10.5M16 6h3v1.5a3 3 0 0 1-3 3M12 13v4M8.5 20h7M9.5 17h5"/></svg></span>
+    <div class="enc-feed__body">
       <span class="enc-feed__title">Nap of the Day · Tom Ellery</span>
-      
-        <span class="enc-feed__time">2 hr ago</span>
-      
-    </div>
-
-    
       <p class="enc-feed__text">Oman at 13/2 · 80 cr</p>
-    
-
-    
+    </div>
   </div>
 </li>
 
@@ -418,68 +338,43 @@
       
 <li class="enc-feed__item enc-feed__item--award"
     data-entry-id="10">
-  
-    <span class="enc-feed__icon" aria-hidden="true">💰</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
+  <div class="enc-feed__row">
+    <span class="enc-feed__when"><span class="enc-feed__time">2 hr ago</span></span>
+    <span class="enc-feed__mark enc-feed__mark--icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5v1.5A3 3 0 0 0 8 10.5M16 6h3v1.5a3 3 0 0 1-3 3M12 13v4M8.5 20h7M9.5 17h5"/></svg></span>
+    <div class="enc-feed__body">
       <span class="enc-feed__title">Value Hunter · Priya Shah</span>
-      
-        <span class="enc-feed__time">2 hr ago</span>
-      
-    </div>
-
-    
       <p class="enc-feed__text">Oman at 13/2 · 50 cr</p>
-    
-
-    
+    </div>
   </div>
 </li>
 
     
       
-<li class="enc-feed__item enc-feed__item--race_settled"
-    data-entry-id="5">
-  
-    <span class="enc-feed__icon" aria-hidden="true">🏇</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
-      <span class="enc-feed__title">14:02 Bath · Oman (IRE)</span>
-      
-        <span class="enc-feed__time">2 hr ago</span>
-      
-    </div>
-
-    
-      <p class="enc-feed__text">🥇 Tom Ellery +520 on Oman<br>   4 guests landed the race.</p>
-    
-
-    
-  </div>
+<li class="enc-feed__item enc-feed__item--race_settled enc-feed__item--win"
+    id="enc-feed-race-1" data-entry-id="5">
+  <a class="enc-feed__row" href="race-1.html">
+    <span class="enc-feed__when"><span class="enc-feed__n">Race 1</span><span class="enc-feed__time">14:02</span></span>
+    <span class="enc-feed__mark"><img src="https://silks.theracingapi.com/silk?body=epaulettes:red,royalblue&amp;sleeves=armlet:royalblue,red&amp;cap=solid:white" alt="" width="34" height="34" loading="lazy"></span>
+    <span class="enc-feed__body">
+      <span class="enc-feed__race">Jdl Consultants Ltd Apprentice Handicap Stakes</span>
+      <span class="enc-feed__main"><span class="enc-feed__horse">Oman (IRE)</span><span class="enc-feed__sp"><span class="enc-odds"><span class="enc-odds__n">7</span><span class="enc-odds__slash">/</span><span class="enc-odds__d">2</span><span class="enc-odds__mark">J</span></span><small>SP</small></span></span>
+      <span class="enc-feed__win"><span class="enc-feed__win-tag">Guest win</span>Tom Ellery +520</span>
+      <span class="enc-feed__guests">4 guests landed the race.</span>
+    </span>
+  </a>
 </li>
 
     
       
 <li class="enc-feed__item enc-feed__item--cup_mover"
     data-entry-id="6">
-  
-    <span class="enc-feed__icon" aria-hidden="true">📈</span>
-  
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
+  <div class="enc-feed__row">
+    <span class="enc-feed__when"><span class="enc-feed__time">2 hr ago</span></span>
+    <span class="enc-feed__mark enc-feed__mark--icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 16.5l5-5 3.5 3.5L20 7.5"/><path d="M14.5 7.5H20V13"/></svg></span>
+    <div class="enc-feed__body">
       <span class="enc-feed__title">Tom Ellery takes the Cup lead</span>
-      
-        <span class="enc-feed__time">2 hr ago</span>
-      
-    </div>
-
-    
       <p class="enc-feed__text">1440 cr (+440)<br>Overtakes Olivia Marsh</p>
-    
-
-    
+    </div>
   </div>
 </li>
 
@@ -496,30 +391,30 @@
     <nav class="enc-nav" role="navigation" aria-label="Primary">
   
     <a class="enc-nav__item " href="index.html" data-tab="home">
-      <span class="enc-nav__glyph" aria-hidden="true">&#8962;</span>
+      <span class="enc-nav__glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 10.5 12 4l8 6.5"/><path d="M6 9v10.5h12V9"/><path d="M10 19.5v-5h4v5"/></svg></span>
       <span class="enc-nav__label">Home</span>
     </a>
   
 
   <a class="enc-nav__item " href="card.html" data-tab="card">
-    <span class="enc-nav__glyph" aria-hidden="true">&#127183;</span>
+    <span class="enc-nav__glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="3.5" width="14" height="17" rx="2"/><path d="M8.5 8h7M8.5 11.5h7M8.5 15h4.5"/></svg></span>
     <span class="enc-nav__label">Card</span>
   </a>
 
   <button type="button" class="enc-nav__item enc-nav__item--fab enc-nav__item--button"
           data-role="note-open" aria-controls="enc-note-sheet"
           aria-label="Post to the day">
-    <span class="enc-nav__glyph" aria-hidden="true">&#128247;</span>
+    <span class="enc-nav__glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false" class="enc-nav__icon-post"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.8" r="3.4"/></svg><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false" class="enc-nav__icon-close"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></span>
     <span class="enc-nav__label enc-visually-hidden">Post</span>
   </button>
 
   <a class="enc-nav__item is-active" href="feed.html" data-tab="feed">
-    <span class="enc-nav__glyph" aria-hidden="true">&#128172;</span>
+    <span class="enc-nav__glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 5.5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-8l-4 3.5v-3.5H5a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z"/></svg></span>
     <span class="enc-nav__label">Feed</span>
   </a>
 
   <a class="enc-nav__item " href="cup.html" data-tab="cup">
-    <span class="enc-nav__glyph" aria-hidden="true">&#127942;</span>
+    <span class="enc-nav__glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5v1.5A3 3 0 0 0 8 10.5M16 6h3v1.5a3 3 0 0 1-3 3M12 13v4M8.5 20h7M9.5 17h5"/></svg></span>
     <span class="enc-nav__label">Cup</span>
   </a>
 </nav>
@@ -528,90 +423,101 @@
     
       
 <aside class="enc-sheet" id="enc-note-sheet"
-       role="dialog" aria-modal="true" aria-labelledby="enc-note-sheet-title"
+       role="dialog" aria-labelledby="enc-note-sheet-title"
        hidden
        data-note-endpoint="note.json"
        data-photo-endpoint="photo.json"
        data-filter="racing"
        >
-  <div class="enc-sheet__handle" aria-hidden="true"></div>
-
-  <header class="enc-sheet__head">
-    <div class="enc-sheet__silks">
-      <svg class="enc-silks" viewBox="0 0 40 40" width="36" height="36" role="img" aria-label="Priya Shah"><defs><clipPath id="enc-silks-f020318a"><circle cx="20" cy="20" r="20"/></clipPath></defs><g clip-path="url(#enc-silks-f020318a)"><rect width="40" height="40" fill="#556B7F"/><rect y="20" width="40" height="20" fill="#F4EFE2"/></g><circle cx="20" cy="20" r="19.5" fill="none" stroke="rgba(42,39,36,0.10)" stroke-width="1"/></svg>
-    </div>
-    <div>
-      <h2 id="enc-note-sheet-title" class="enc-sheet__title">Post to the day</h2>
-      <p class="enc-sheet__meta" data-role="attach-line">
+  <div class="enc-sheet__dialog">
+    <header class="enc-sheet__head">
+      <div>
+        <h2 id="enc-note-sheet-title" class="enc-sheet__title" tabindex="-1">Post to the day</h2>
+        <p class="enc-sheet__meta" data-role="attach-line">
         
-          Posting to the day
+            Posting to the day
         
-      </p>
-    </div>
-    <button type="button" class="enc-sheet__close"
-            data-role="close" aria-label="Close">
-      &times;
-    </button>
-  </header>
+        </p>
+      </div>
+      <button type="button" class="enc-sheet__close"
+              data-role="close" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>
+      </button>
+    </header>
 
-  <div class="enc-sheet__modes" role="tablist" aria-label="Post type">
-    <button type="button" role="tab" aria-selected="true"
-            class="enc-sheet__mode is-active"
-            data-role="mode" data-mode="note">
-      <span aria-hidden="true">✎</span> Note
-    </button>
-    <button type="button" role="tab" aria-selected="false"
-            class="enc-sheet__mode"
-            data-role="mode" data-mode="photo">
-      <span aria-hidden="true">📷</span> Photo
-    </button>
+    <div class="enc-sheet__modes" role="tablist" aria-label="Post type">
+      <button type="button" role="tab" aria-selected="true" tabindex="0"
+              aria-controls="enc-sheet-note" aria-labelledby="enc-sheet-label-note"
+              aria-describedby="enc-sheet-hint-note"
+              class="enc-sheet__mode is-active"
+              data-role="mode" data-mode="note">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true" class="enc-sheet__mode-glyph"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>
+        <span class="enc-sheet__mode-check" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+        <span class="enc-sheet__mode-label" id="enc-sheet-label-note">Note</span>
+        <span class="enc-sheet__mode-hint" id="enc-sheet-hint-note">Say a few words</span>
+      </button>
+      <button type="button" role="tab" aria-selected="false" tabindex="-1"
+              aria-controls="enc-sheet-photo" aria-labelledby="enc-sheet-label-photo"
+              aria-describedby="enc-sheet-hint-photo"
+              class="enc-sheet__mode"
+              data-role="mode" data-mode="photo">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true" class="enc-sheet__mode-glyph"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.8" r="3.4"/></svg>
+        <span class="enc-sheet__mode-check" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+        <span class="enc-sheet__mode-label" id="enc-sheet-label-photo">Photo</span>
+        <span class="enc-sheet__mode-hint" id="enc-sheet-hint-photo">Share a moment</span>
+      </button>
+    </div>
+
+  
+    <form class="enc-sheet__form" id="enc-sheet-note" role="tabpanel"
+          aria-labelledby="enc-sheet-label-note"
+          data-role="form" data-mode-form="note" novalidate>
+      <input type="hidden" name="csrfmiddlewaretoken" value="sandbox">
+      <label class="enc-visually-hidden" for="enc-note-text">Your note</label>
+      <textarea id="enc-note-text" name="text"
+                class="enc-sheet__textarea"
+                placeholder="Say something the group will remember."
+                maxlength="500" rows="3" required
+                data-role="text"></textarea>
+      <div class="enc-sheet__row">
+        <div class="enc-sheet__count" data-role="count">0 / 500</div>
+        <div class="enc-sheet__error" data-role="error" hidden></div>
+        <button type="submit" class="enc-sheet__submit" data-role="submit">
+          Post
+        </button>
+      </div>
+    </form>
+
+  
+    <form class="enc-sheet__form" id="enc-sheet-photo" role="tabpanel"
+          aria-labelledby="enc-sheet-label-photo"
+          data-role="photo-form" data-mode-form="photo"
+          enctype="multipart/form-data" hidden novalidate>
+      <input type="hidden" name="csrfmiddlewaretoken" value="sandbox">
+      <label class="enc-sheet__file-drop" for="enc-photo-file"
+             data-role="photo-drop">
+        <input type="file" id="enc-photo-file" name="image"
+               accept="image/*" capture="environment" required
+               class="enc-visually-hidden" data-role="photo-file">
+        <span class="enc-sheet__file-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.8" r="3.4"/></svg></span>
+        <span class="enc-sheet__file-label" data-role="photo-label">
+          Tap to take a photo or choose from library
+        </span>
+      </label>
+      <label class="enc-visually-hidden" for="enc-photo-caption">Caption</label>
+      <input type="text" id="enc-photo-caption" name="caption"
+             class="enc-sheet__caption"
+             placeholder="Add a caption (optional)"
+             maxlength="200" data-role="photo-caption">
+      <div class="enc-sheet__row">
+        <div class="enc-sheet__count" data-role="photo-count">Ready when you are</div>
+        <div class="enc-sheet__error" data-role="photo-error" hidden></div>
+        <button type="submit" class="enc-sheet__submit" data-role="photo-submit">
+          Post
+        </button>
+      </div>
+    </form>
   </div>
-
-  
-  <form class="enc-sheet__form" data-role="form" data-mode-form="note" novalidate>
-    <input type="hidden" name="csrfmiddlewaretoken" value="sandbox">
-    <label class="enc-visually-hidden" for="enc-note-text">Your note</label>
-    <textarea id="enc-note-text" name="text"
-              class="enc-sheet__textarea"
-              placeholder="Say something the group will remember."
-              maxlength="500" rows="3" required
-              data-role="text"></textarea>
-    <div class="enc-sheet__row">
-      <div class="enc-sheet__count" data-role="count">0 / 500</div>
-      <div class="enc-sheet__error" data-role="error" hidden></div>
-      <button type="submit" class="enc-sheet__submit" data-role="submit">
-        Post
-      </button>
-    </div>
-  </form>
-
-  
-  <form class="enc-sheet__form" data-role="photo-form" data-mode-form="photo"
-        enctype="multipart/form-data" hidden novalidate>
-    <input type="hidden" name="csrfmiddlewaretoken" value="sandbox">
-    <label class="enc-sheet__file-drop" for="enc-photo-file"
-           data-role="photo-drop">
-      <input type="file" id="enc-photo-file" name="image"
-             accept="image/*" capture="environment" required
-             class="enc-visually-hidden" data-role="photo-file">
-      <span class="enc-sheet__file-glyph" aria-hidden="true">📷</span>
-      <span class="enc-sheet__file-label" data-role="photo-label">
-        Tap to take a photo or choose from library
-      </span>
-    </label>
-    <label class="enc-visually-hidden" for="enc-photo-caption">Caption</label>
-    <input type="text" id="enc-photo-caption" name="caption"
-           class="enc-sheet__caption"
-           placeholder="Add a caption (optional)"
-           maxlength="200" data-role="photo-caption">
-    <div class="enc-sheet__row">
-      <div class="enc-sheet__count" data-role="photo-count">Ready when you are</div>
-      <div class="enc-sheet__error" data-role="photo-error" hidden></div>
-      <button type="submit" class="enc-sheet__submit" data-role="photo-submit">
-        Post
-      </button>
-    </div>
-  </form>
 </aside>
 
     

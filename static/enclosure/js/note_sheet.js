@@ -8,6 +8,15 @@
  * Both endpoints return the same {ok, entry_id, feed_html, filter,
  * entry_count} shape, so the success path is shared.
  *
+ * The sheet is a pop-up beside a live tab bar, so it is not modal: the
+ * page behind it goes inert while it is open, the tab bar does not, and
+ * the camera button becomes its close button. It opens on its title; the
+ * keyboard comes up when the guest taps the box. A note in progress is
+ * kept on the phone until it is posted. Note | Photo are tabs (arrow
+ * keys move between them). On a phone the open keyboard shrinks only
+ * the visual viewport, so its height is passed to the CSS (--enc-kb and
+ * .enc-kb-open on <html>) to keep the card and its Post button above it.
+ *
  * Lightbox lives in this file too — one tap-target = the photo card
  * in the Feed. Opens the full-size image + optional caption.
  */
@@ -54,6 +63,15 @@
 
     var closeBtn = sheet.querySelector('[data-role="close"]');
     var modeButtons = sheet.querySelectorAll('[data-role="mode"]');
+    var title = document.getElementById('enc-note-sheet-title');
+
+    // What the pop-up covers; the tab bar stays live beside it.
+    var behind = document.querySelectorAll('.enc-mark, .enc-top, .enc-main');
+    var openerLabel = opener.getAttribute('aria-label');
+
+    // One draft per day, kept on the phone: the endpoint names the day.
+    var draftKey = 'enc-note-draft:' +
+      new URL(sheet.getAttribute('data-note-endpoint'), window.location.href).pathname;
 
     var currentMode = 'note';
 
@@ -63,26 +81,44 @@
         var active = btn.getAttribute('data-mode') === mode;
         btn.classList.toggle('is-active', active);
         btn.setAttribute('aria-selected', active ? 'true' : 'false');
+        btn.tabIndex = active ? 0 : -1;
       });
       if (noteForm)  noteForm.hidden  = (mode !== 'note');
       if (photoForm) photoForm.hidden = (mode !== 'photo');
     }
 
+    function setOpen(isOpen) {
+      sheet.hidden = !isOpen;
+      document.body.classList.toggle('enc-sheet-open', isOpen);
+      behind.forEach(function (el) { el.inert = isOpen; });
+      opener.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      if (openerLabel) opener.setAttribute('aria-label', isOpen ? 'Close the post' : openerLabel);
+    }
+
     function open() {
-      sheet.hidden = false;
-      document.body.classList.add('enc-sheet-open');
+      setOpen(true);
       setMode('note');
       window.setTimeout(function () {
-        if (textarea) textarea.focus();
+        if (title) title.focus({ preventScroll: true });
       }, 60);
     }
 
     function close() {
-      sheet.hidden = true;
-      document.body.classList.remove('enc-sheet-open');
+      setOpen(false);
       if (noteError)  { noteError.hidden = true; noteError.textContent = ''; }
       if (photoError) { photoError.hidden = true; photoError.textContent = ''; }
       opener.focus();
+    }
+
+    function readDraft() {
+      try { return window.localStorage.getItem(draftKey) || ''; } catch (e) { return ''; }
+    }
+
+    function saveDraft(text) {
+      try {
+        if (text) window.localStorage.setItem(draftKey, text);
+        else window.localStorage.removeItem(draftKey);
+      } catch (e) { /* storage off (private browsing): the note just isn't kept */ }
     }
 
     function updateNoteCount() {
@@ -126,6 +162,7 @@
         .then(function (res) {
           if (res.status >= 200 && res.status < 300 && res.body.ok) {
             textarea.value = '';
+            saveDraft('');
             updateNoteCount();
             applySwap(res.body);
             close();
@@ -192,7 +229,12 @@
         .then(function () { photoSubmit.disabled = false; });
     }
 
-    opener.addEventListener('click', function (e) { e.preventDefault(); open(); });
+    // The camera button opens the pop-up and, while it is open, closes it.
+    opener.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (sheet.hidden) open();
+      else close();
+    });
     closeBtn.addEventListener('click', close);
     sheet.addEventListener('click', function (e) {
       if (e.target === sheet) close();
@@ -200,12 +242,27 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && !sheet.hidden) close();
     });
-    modeButtons.forEach(function (btn) {
+    modeButtons.forEach(function (btn, i) {
       btn.addEventListener('click', function () {
         setMode(btn.getAttribute('data-mode'));
       });
+      // Tabs: the arrow keys (and Home/End) choose and focus the next one.
+      btn.addEventListener('keydown', function (e) {
+        var last = modeButtons.length - 1;
+        var to = { ArrowLeft: i ? i - 1 : last, ArrowRight: i === last ? 0 : i + 1, Home: 0, End: last }[e.key];
+        if (to === undefined) return;
+        e.preventDefault();
+        setMode(modeButtons[to].getAttribute('data-mode'));
+        modeButtons[to].focus();
+      });
     });
-    if (textarea) textarea.addEventListener('input', updateNoteCount);
+    if (textarea) {
+      if (!textarea.value) textarea.value = readDraft();
+      textarea.addEventListener('input', function () {
+        updateNoteCount();
+        saveDraft(textarea.value);
+      });
+    }
     if (noteForm) noteForm.addEventListener('submit', submitNote);
     if (photoForm) photoForm.addEventListener('submit', submitPhoto);
     if (photoFile) {
@@ -217,6 +274,21 @@
       });
     }
     updateNoteCount();
+    opener.setAttribute('aria-expanded', 'false');
+
+    // Keep the card above a phone's keyboard.
+    if (window.visualViewport) {
+      var viewport = window.visualViewport;
+      var root = document.documentElement;
+      var lift = function () {
+        var keyboard = Math.max(0, Math.round(window.innerHeight - viewport.height - viewport.offsetTop));
+        root.style.setProperty('--enc-kb', keyboard + 'px');
+        root.classList.toggle('enc-kb-open', keyboard > 80);
+      };
+      viewport.addEventListener('resize', lift);
+      viewport.addEventListener('scroll', lift);
+      lift();
+    }
   }
 
   function initLightbox() {
