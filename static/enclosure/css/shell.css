@@ -1,20 +1,27 @@
 /*
  * The Enclosure — shell CSS.
  *
- * The three chrome pieces every screen shares: top bar, main scroll
- * region, bottom nav. Tab content lands in per-tab files (home.css,
- * card.css, feed.css, cup.css) shipping in later PRs.
+ * The chrome every screen shares: the masthead, the midnight band at the
+ * top of a tab, the main scroll region and the bottom bar. Tab content
+ * lands in per-tab files (home.css, card.css, feed.css, cup.css).
  */
 
 /* Reset */
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
-body { font: 15px/1.5 var(--enc-sans); color: var(--enc-ink); background: var(--enc-cream); }
-h1, h2, h3, h4 { font-family: var(--enc-serif); letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+body {
+  font: 15px/1.5 var(--enc-sans);
+  color: var(--enc-ink);
+  background: var(--enc-page);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { font-family: var(--enc-sans); letter-spacing: -0.015em; margin: 0; text-wrap: balance; }
 p { margin: 0; }
 a { color: var(--enc-mode-accent); text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 img { max-width: 100%; display: block; }
+::selection { background: color-mix(in srgb, var(--enc-gold) 35%, transparent); }
+:focus-visible { outline: 2px solid var(--enc-focus); outline-offset: 2px; }
 
 /* Skip link — hidden until keyboard focus */
 .enc-skip {
@@ -35,7 +42,7 @@ img { max-width: 100%; display: block; }
 .enc-body {
   min-height: 100vh;
   min-height: 100svh;
-  background: var(--enc-cream);
+  background: var(--enc-outside);
   overscroll-behavior-y: none;
 }
 
@@ -43,15 +50,17 @@ img { max-width: 100%; display: block; }
   max-width: var(--enc-max-w);
   min-height: 100svh;
   margin: 0 auto;
-  background: var(--enc-paper);
+  background: var(--enc-page);
   display: flex;
   flex-direction: column;
   position: relative;
-  box-shadow: var(--enc-shadow-md);
+  box-shadow: 0 0 0 1px var(--enc-rule), var(--enc-shadow-md);
 }
 
-/* TOP BAR */
+/* TOP BAR — midnight, with the site's gold underline: brightest in the
+   middle, a soft glow rising from it */
 .enc-top {
+  --enc-focus: var(--enc-gold);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -59,27 +68,34 @@ img { max-width: 100%; display: block; }
   padding: var(--enc-s-3) var(--enc-s-4);
   min-height: var(--enc-top-h);
   padding-top: calc(var(--enc-s-3) + env(safe-area-inset-top, 0px));
-  background: var(--enc-paper);
-  border-bottom: 1px solid var(--enc-cream-deep);
+  background:
+    linear-gradient(90deg,
+      transparent,
+      color-mix(in srgb, var(--enc-gold) 85%, transparent) 20%,
+      var(--enc-gold-hi) 50%,
+      color-mix(in srgb, var(--enc-gold) 85%, transparent) 80%,
+      transparent) bottom / 100% 1px no-repeat,
+    radial-gradient(50% 100% at 50% 100%, color-mix(in srgb, var(--enc-gold) 20%, transparent), transparent) bottom / 100% 22px no-repeat,
+    var(--enc-night);
   position: sticky;
   top: 0; z-index: 10;
 }
 
 .enc-top__title { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .enc-top__event {
-  font-family: var(--enc-serif);
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--enc-ink);
-  letter-spacing: -0.01em;
+  font-family: var(--enc-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--enc-on-night);
+  letter-spacing: 0.005em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .enc-top__meta {
   font-size: 11px;
-  color: var(--enc-ink-mute);
-  letter-spacing: 0.06em;
+  color: var(--enc-on-night-soft);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -88,12 +104,14 @@ img { max-width: 100%; display: block; }
 .enc-icon-btn {
   width: 36px; height: 36px;
   border-radius: 50%;
-  background: var(--enc-mode-accent-tint);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--enc-on-night) 22%, transparent);
   display: grid; place-items: center;
-  color: var(--enc-mode-accent);
+  color: var(--enc-on-night);
   font-size: 15px;
   transition: transform 100ms ease-out;
 }
+.enc-icon-btn svg { width: 18px; height: 18px; }
 .enc-icon-btn:active { transform: scale(0.94); }
 
 .enc-top__silks-slot {
@@ -108,8 +126,12 @@ img { max-width: 100%; display: block; }
 }
 .enc-top__silks-slot:active { transform: scale(0.94); }
 .enc-top__silks-slot.is-active {
-  box-shadow: 0 0 0 2px var(--enc-mode-accent);
+  box-shadow: 0 0 0 2px var(--enc-gold);
 }
+/* A visitor's placeholder silks, drawn for midnight */
+.enc-top__silks-anon circle:first-of-type { fill: var(--enc-night-raised); }
+.enc-top__silks-anon circle:last-of-type { stroke: color-mix(in srgb, var(--enc-on-night) 28%, transparent); }
+.enc-top__silks-anon text { fill: var(--enc-on-night-soft); font-family: var(--enc-sans); }
 
 /* The .enc-silks class ships on every SVG the silks service renders.
    Adds the drop shadow that lifts silks off the paper ground, and
@@ -123,6 +145,10 @@ img { max-width: 100%; display: block; }
   box-shadow: var(--enc-shadow-sm);
   flex: none;
 }
+/* The guests' silks are drawn from the earlier sage-and-cream palette;
+   here its sage is midnight and its cream is gold. */
+.enc-silks [fill="#506B4D" i] { fill: var(--enc-night-high); }
+.enc-silks [fill="#F4EFE2" i] { fill: var(--enc-gold); }
 
 /* MAIN */
 .enc-main {
@@ -138,11 +164,68 @@ img { max-width: 100%; display: block; }
   padding: var(--enc-s-4);
 }
 
+/* THE BAND — midnight across the top of a tab, from the masthead down to
+   its headline block, as on Saturday Racing's race pages. The data sits
+   on paper below. The first child of .enc-scroll; it bleeds to the edges
+   of the frame. Its edge falls halfway between its last block and the
+   paper's first. */
+.enc-band {
+  --enc-focus: var(--enc-gold);
+  display: flex;
+  flex-direction: column;
+  gap: var(--enc-s-4);
+  margin: calc(var(--enc-s-4) * -1) calc(var(--enc-s-4) * -1) 0;
+  padding: var(--enc-s-4) var(--enc-s-4) 26px;
+  background: var(--enc-night);
+  color: var(--enc-on-night);
+}
+.enc-band + * { margin-top: 10px; }
+/* A band that carries on one drawn above it (Home: under the Live pill). */
+.enc-band--joined {
+  margin-top: 0;
+  padding-top: 0;
+}
+.enc-page-title {
+  padding: 4px 2px 0;
+  font: 700 30px/1.15 var(--enc-display);
+  letter-spacing: 0;
+  color: var(--enc-on-night);
+}
+
+/* ODDS — a price set as racing prints it: heavy figures, a lighter slash,
+   the favourite mark small ("7/2J"). The server marks a price up as
+     <span class="enc-odds"><span class="enc-odds__n">7</span><span
+     class="enc-odds__slash">/</span><span class="enc-odds__d">2</span><span
+     class="enc-odds__mark">J</span></span>
+   In a column of prices, .enc-odds--col fixes the boxes either side of the
+   slash so the column lines up on it (DM Sans has no tabular figures). */
+.enc-odds {
+  display: inline-flex;
+  align-items: baseline;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+}
+.enc-odds__slash { margin: 0 0.06em; font-weight: 500; }
+.enc-odds__mark {
+  margin-left: 0.18em;
+  font-size: 0.6em;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+.enc-odds--col {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-template-columns: 3ch auto 2ch;
+}
+.enc-odds--col .enc-odds__n { justify-self: end; }
+.enc-odds--col .enc-odds__d { justify-self: start; }
+
 /* PLACEHOLDER (E1 only — later slices replace .enc-scroll contents) */
 .enc-placeholder {
   padding: var(--enc-s-7) var(--enc-s-4);
   text-align: center;
-  border: 1px dashed var(--enc-cream-deep);
+  border: 1px dashed var(--enc-rule-strong);
   border-radius: var(--enc-r-xl);
   background: var(--enc-paper);
   display: flex; flex-direction: column; gap: var(--enc-s-3); align-items: center;
@@ -156,7 +239,6 @@ img { max-width: 100%; display: block; }
   color: var(--enc-ink); max-width: 20ch;
 }
 .enc-placeholder__lede {
-  font-family: var(--enc-serif);
   font-size: 15px;
   color: var(--enc-ink-soft);
   max-width: 30ch;
@@ -170,8 +252,10 @@ img { max-width: 100%; display: block; }
   margin-top: var(--enc-s-2);
 }
 
-/* BOTTOM NAV — floating pill above safe-area */
+/* BOTTOM NAV — a midnight pill floating above the safe area, a faint gold
+   rim, line icons; the open tab's icon in gold */
 .enc-nav {
+  --enc-focus: var(--enc-gold);
   position: fixed;
   bottom: calc(env(safe-area-inset-bottom, 0px) + var(--enc-s-2));
   left: 50%;
@@ -183,9 +267,10 @@ img { max-width: 100%; display: block; }
   align-items: center;
   justify-content: space-around;
   padding: 0 var(--enc-s-3);
-  background: var(--enc-paper);
+  background: var(--enc-night);
+  border: 1px solid color-mix(in srgb, var(--enc-gold) 20%, transparent);
   border-radius: var(--enc-r-xl);
-  box-shadow: var(--enc-shadow-md);
+  box-shadow: var(--enc-shadow-bar);
   z-index: 20;
 }
 
@@ -195,12 +280,12 @@ img { max-width: 100%; display: block; }
   align-items: center;
   gap: 2px;
   padding: 6px 8px;
-  color: var(--enc-ink-mute);
+  color: var(--enc-on-night-soft);
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  transition: color 120ms ease-out;
+  transition: color 150ms ease-out;
   min-width: 44px;
   min-height: 44px;
   justify-content: center;
@@ -208,17 +293,19 @@ img { max-width: 100%; display: block; }
 .enc-nav__glyph {
   width: 26px; height: 26px;
   display: grid; place-items: center;
-  font-size: 16px;
   border-radius: var(--enc-r-sm);
-  transition: background-color 120ms ease-out, color 120ms ease-out;
+  transition: transform 160ms ease-out, background-color 160ms ease-out, color 160ms ease-out;
 }
-.enc-nav__item.is-active { color: var(--enc-mode-accent); }
+.enc-nav__glyph svg { width: 20px; height: 20px; }
+.enc-nav__item.is-active { color: var(--enc-on-night); font-weight: 700; }
 .enc-nav__item.is-active .enc-nav__glyph {
-  background: var(--enc-mode-accent-tint);
-  color: var(--enc-mode-accent);
+  background: color-mix(in srgb, var(--enc-gold) 14%, transparent);
+  color: var(--enc-gold);
 }
+.enc-nav__item:active .enc-nav__glyph { transform: scale(0.97); }
 
-/* Raised FAB — the camera / post button */
+/* Raised FAB — the post button, in the site's gold. It carries both icons;
+   note_sheet.css shows the close while the post card is open. */
 .enc-nav__item--fab {
   transform: translateY(-14px);
   position: relative;
@@ -226,13 +313,13 @@ img { max-width: 100%; display: block; }
 .enc-nav__item--fab .enc-nav__glyph {
   width: 52px; height: 52px;
   border-radius: 50%;
-  background: var(--enc-gold);
-  color: var(--enc-paper);
-  font-size: 22px;
-  box-shadow: 0 8px 20px rgba(184, 147, 90, 0.35),
-              inset 0 -2px 0 rgba(0, 0, 0, 0.10);
-  border: 3px solid var(--enc-paper);
+  background: linear-gradient(180deg, var(--enc-gold-hi), var(--enc-gold) 55%, var(--enc-gold-lo));
+  color: var(--enc-night);
+  box-shadow: var(--enc-shadow-fab);
+  border: 3px solid var(--enc-night);
 }
+.enc-nav__item--fab .enc-nav__glyph svg { width: 22px; height: 22px; }
+.enc-nav__icon-close { display: none; }
 
 /* Larger nav labels for tablets — the pill grows, labels stay */
 @media (min-width: 480px) {
@@ -246,5 +333,6 @@ img { max-width: 100%; display: block; }
   .enc-nav__glyph {
     transition: none;
   }
-  .enc-icon-btn:active { transform: none; }
+  .enc-icon-btn:active,
+  .enc-nav__item:active .enc-nav__glyph { transform: none; }
 }

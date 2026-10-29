@@ -1,58 +1,105 @@
 /*
  * The Enclosure — design tokens.
  *
- * Inherits from the Race Book editorial system: sage as the trust
- * accent, cream as the ground, gold reserved for host / Steward's
- * Room. All later Enclosure CSS files consume these tokens; never
- * hard-code a colour or a size below.
+ * Saturday Racing's own palette, as its race pages use it: midnight
+ * across the top of every page, Saturday gold for the brand and for what
+ * is the guest's own, the racecard's paper and ink for the data, and its
+ * navy for buttons and the chosen filter. Every value below is taken from
+ * saturday-racing.com (static/css/base.css, paper.css and its pages).
+ * Type is the site's own: Playfair Display for titles, DM Sans for the
+ * rest (static/fonts/saturday-fonts.css).
  *
- * Committed to a single visual world (day-time, warm, editorial) —
- * no dark-theme swap. That's a deliberate design choice, not an
- * omission.
+ * All Enclosure CSS consumes these tokens; never hard-code a colour or a
+ * size below. One look, by design: midnight frames the top of each page
+ * and the data sits on paper. There is no dark-mode swap.
  */
 :root {
-  /* Sage — the primary/trust accent */
-  --enc-sage:       #7A8F76;
-  --enc-sage-deep:  #506B4D;
-  --enc-sage-tint:  #E7ECDE;
-  --enc-sage-glow:  #B8CFA8;
+  /* Midnight — the frame and the cards that sit on it (--c-midnight) */
+  --enc-night:        #0B0B0F;
+  --enc-night-deep:   #070709;
+  --enc-night-raised: #15151C;
+  --enc-night-high:   #1E1E29;                    /* an empty slot on a raised card */
+  --enc-night-line:   rgba(212, 175, 55, 0.32);   /* a gold hairline on midnight */
+  --enc-night-rule:   rgba(244, 242, 236, 0.12);
+  --enc-on-night:     #F4F2EC;
+  --enc-on-night-soft: rgba(244, 242, 236, 0.66); /* 7.8:1 on midnight */
 
-  /* Cream — the ground */
-  --enc-cream:      #F4EFE2;
-  --enc-cream-deep: #E8E1CE;
-  --enc-paper:      #FBF7EC;
+  /* Saturday gold — the brand, and what is the guest's own (--c-gold) */
+  --enc-gold:       #D4AF37;
+  --enc-gold-hi:    #F2E092;   /* the light end of the site's gold band */
+  --enc-gold-lo:    #A8862A;
+  --enc-gold-ink:   #7C6114;   /* gold text on paper: 5.3:1 (the site's #9C7B12 is 4.0:1) */
+  --enc-gold-wash:  #FAF1D7;   /* --c-gold-wash */
+  --enc-win:        #FBF5E2;   /* the winner's row, a guest's winning pick */
 
-  /* Ink — type */
-  --enc-ink:        #2A2724;
-  --enc-ink-soft:   #58524A;
-  --enc-ink-mute:   #8A8479;
+  /* Paper and ink — the racecard pages */
+  --enc-outside:    #E9E6DE;   /* around the frame on a wide screen */
+  --enc-page:       #F6F4EF;
+  --enc-paper:      #FFFFFF;   /* cards */
+  --enc-chip:       #EFECE4;
+  --enc-rule:       #E7E5DD;   /* --c-rule */
+  --enc-rule-strong: #D6D2C5;  /* --c-rule-strong */
+  --enc-ink:        #11151F;   /* --c-ink */
+  --enc-ink-soft:   #41474F;   /* --c-ink-70 */
+  --enc-ink-mute:   #62676F;   /* 4.8:1 on the chip colour */
+  --enc-field:      #85817A;   /* input borders, 3:1 */
 
-  /* Gold — host mode only. Never on a guest surface. */
-  --enc-gold:       #B8935A;
-  --enc-gold-deep:  #8E6C3A;
-  --enc-gold-tint:  #F1E4C9;
+  /* Navy — buttons, the chosen filter (the racecard pages' active pill) */
+  --enc-navy:       #0F2D4F;
+  --enc-on-navy:    #FFFFFF;
 
-  /* Claret — settled/lost state */
-  --enc-claret:     #6E2B37;
-  --enc-claret-tint: rgba(110, 43, 55, 0.10);
+  /* Signals: never colour alone */
+  --enc-up:         #1A7D4A;   /* live, points gained (--c-green) */
+  --enc-down:       #C0392B;   /* points lost, alerts; the SR roundel (--c-red) */
+  --enc-down-wash:  rgba(192, 57, 43, 0.09);   /* behind a loss */
+  --enc-up-night:   #2DBD7A;   /* the same on midnight */
+  --enc-down-night: #E05C4C;
 
-  /* Shadow scale */
-  --enc-shadow-sm:  0 1px 2px rgba(42, 39, 36, 0.08);
-  --enc-shadow-md:  0 8px 24px rgba(42, 39, 36, 0.10);
-  --enc-shadow-lg:  0 24px 56px rgba(42, 39, 36, 0.16);
+  /* Places: gold, silver and bronze, each a metal from light to dark */
+  --enc-medal-gold-1:   #F2E092;
+  --enc-medal-gold-2:   #D4AF37;
+  --enc-medal-gold-edge: #A8862A;
+  --enc-medal-silver-1: #F0F2F5;
+  --enc-medal-silver-2: #BCC3CC;
+  --enc-medal-silver-edge: #9AA2AD;
+  --enc-medal-bronze-1: #E9C6A2;
+  --enc-medal-bronze-2: #B67D4E;
+  --enc-medal-bronze-edge: #95633A;
+  --enc-medal-silver-wash: #F7F8FA;   /* the 2nd and 3rd rows; the winner's is --enc-win */
+  --enc-medal-bronze-wash: #FCF6F0;
+  --enc-medal-shine: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 1px 2px rgba(14, 21, 39, 0.12);
+
+  /* Shadow scale: layered, tinted toward the paper */
+  --enc-shadow-sm:  0 0 0 0.5px rgba(74, 59, 28, 0.05), 0 1px 2px rgba(74, 59, 28, 0.06),
+                    0 4px 10px -2px rgba(74, 59, 28, 0.05), 0 18px 32px -18px rgba(74, 59, 28, 0.16);
+  --enc-shadow-md:  0 14px 34px -14px rgba(11, 11, 15, 0.38);
+  --enc-shadow-lg:  0 28px 64px -18px rgba(6, 10, 20, 0.6);
+  --enc-shadow-bar: 0 14px 30px -12px rgba(5, 8, 16, 0.6);
+  --enc-shadow-fab: 0 6px 16px -6px rgba(0, 0, 0, 0.45);
+  --enc-shadow-dialog: 0 0 0 0.5px rgba(74, 59, 28, 0.08), var(--enc-shadow-lg);
+  --enc-shadow-lift: 0 12px 24px -14px rgba(14, 21, 39, 0.6);   /* a chosen card */
+
+  /* Overlays */
+  --enc-scrim:       rgba(6, 10, 20, 0.55);   /* behind a pop-up */
+  --enc-scrim-photo: rgba(6, 10, 20, 0.94);   /* behind a photo, full size */
+  --enc-hover:       color-mix(in srgb, var(--enc-ink) 4%, transparent);   /* a row under the pointer */
+
+  /* A card's border and its dividers: half a pixel on a dense screen */
+  --enc-hair: 1px;
+
+  /* The keyboard focus ring: ink on paper, gold on midnight (shell.css) */
+  --enc-focus: var(--enc-ink);
 
   /* Type stacks */
-  --enc-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua",
-               Palatino, Georgia, serif;
-  --enc-sans:  -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI",
-               Roboto, sans-serif;
-  --enc-mono:  "SF Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --enc-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --enc-sans:    "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --enc-mono:    "SF Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
 
   /* Radii + spacing scale */
   --enc-r-sm:  10px;
-  --enc-r-md:  14px;
-  --enc-r-lg:  18px;
-  --enc-r-xl:  24px;
+  --enc-r-md:  10px;
+  --enc-r-lg:  12px;
+  --enc-r-xl:  12px;
   --enc-r-pill: 999px;
 
   --enc-s-1:  4px;
@@ -68,22 +115,46 @@
   --enc-nav-h:    64px;
   --enc-nav-safe: calc(var(--enc-nav-h) + env(safe-area-inset-bottom, 0px));
   --enc-max-w:    640px; /* soft cap so tablets don't stretch the phone UI */
+
+  /*
+   * Earlier names, kept because markup (the SR monogram fills with
+   * var(--enc-sage-deep) inline) and the stylesheets this redesign only
+   * recolours (me, steward, avatar_sheet, install_nudge) still use them.
+   * They point at the palette above; new CSS uses the names above.
+   */
+  --enc-sage:       var(--enc-ink-soft);
+  --enc-sage-deep:  var(--enc-navy);
+  --enc-sage-tint:  var(--enc-gold-wash);
+  --enc-sage-glow:  var(--enc-gold-hi);
+  --enc-cream:      var(--enc-chip);
+  --enc-cream-deep: var(--enc-rule);
+  --enc-gold-deep:  var(--enc-gold-ink);
+  --enc-gold-tint:  var(--enc-gold-wash);
+  --enc-claret:     var(--enc-down);
+  --enc-claret-tint: var(--enc-down-wash);
+  --enc-ground:     var(--enc-chip);
+  --enc-hairline:   var(--enc-rule);
+  --enc-serif:      var(--enc-sans);      /* the old serif slot: body text is DM Sans now */
+  --enc-font-serif: var(--enc-display);   /* the avatar sheet's names */
+}
+
+@media (min-resolution: 2dppx) {
+  :root { --enc-hair: 0.5px; }
 }
 
 /*
- * Host mode swaps the primary accent from sage to gold on chrome
- * elements that opt in via the tokens below. Component CSS should
- * always reference --enc-mode-accent* rather than sage or gold
- * directly when the element should tint by mode.
+ * The host's screens keep their own accent: gold where a guest's are navy.
+ * Component CSS references --enc-mode-accent* when an element should tint
+ * by mode.
  */
 :root[data-mode="guest"] {
-  --enc-mode-accent:      var(--enc-sage-deep);
-  --enc-mode-accent-tint: var(--enc-sage-tint);
-  --enc-mode-accent-glow: var(--enc-sage-glow);
+  --enc-mode-accent:      var(--enc-navy);
+  --enc-mode-accent-tint: var(--enc-gold-wash);
+  --enc-mode-accent-glow: var(--enc-gold);
 }
 
 :root[data-mode="steward"] {
-  --enc-mode-accent:      var(--enc-gold-deep);
-  --enc-mode-accent-tint: var(--enc-gold-tint);
+  --enc-mode-accent:      var(--enc-gold-ink);
+  --enc-mode-accent-tint: var(--enc-gold-wash);
   --enc-mode-accent-glow: var(--enc-gold);
 }
