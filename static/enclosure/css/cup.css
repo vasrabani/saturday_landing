@@ -1,86 +1,83 @@
 /*
  * The Enclosure — Cup tab (E8).
  *
- * Two vertical panels above the fold on a 320×568 phone:
+ * On the midnight band: the title and the Live / Cup settled pill. On
+ * paper below, number-first so "how am I doing?" reads at a glance:
  *
  *  1. Hero card — the guest's own credits, rank, delta, awards.
- *     Big number-first so the answer to "how am I doing?" reads
- *     at a glance without focusing on any label.
- *  2. Mini leaderboard — top five plus the guest's own row when
- *     they sit below the fold. Five rows deep so the standings
- *     never scroll into an invisible tail.
+ *  2. Progress strip — how much of the meeting is settled.
+ *  3. Your picks — one row per pick, the price aligned on its slash.
+ *  4. Standings — the top five, plus the guest's own row when they sit
+ *     below them.
  *
- * Progress strip between them for meeting-wide context; empty
- * states carry deliberate copy rather than blanks so the guest
+ * Empty states carry deliberate copy rather than blanks, so the guest
  * always knows what state the day is in.
  */
 
-/* ── Live pulse (E9) ─────────────────────────────────────────── */
+/* The band holds the title and the pill; its edge sits halfway to the hero */
+.enc-cup .enc-band { padding-bottom: 23px; }
+.enc-cup .enc-band + * { margin-top: 7px; }
+
+/* ── Live pulse (E9) — on the band ──────────────────────────────── */
 .enc-cup__pulse {
   display: flex;
   align-items: center;
   gap: var(--enc-s-2);
   flex-wrap: wrap;
-  margin-bottom: calc(-1 * var(--enc-s-2));
 }
 
-.enc-cup__pulse-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.enc-cup__pulse-chip,
+.enc-cup__pulse-pause {
   padding: 4px 10px;
   border-radius: var(--enc-r-pill);
-  font-family: var(--enc-sans);
+  background: color-mix(in srgb, var(--enc-on-night) 6%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--enc-on-night) 14%, transparent);
+  color: var(--enc-on-night-soft);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.enc-cup__pulse-chip--live {
-  background: var(--enc-sage-tint);
-  color: var(--enc-sage-deep);
+.enc-cup__pulse-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
-.enc-cup__pulse-chip--closed {
-  background: var(--enc-cream-deep);
-  color: var(--enc-ink-soft);
+.enc-cup__pulse-chip--live { color: var(--enc-up-night); }
+.enc-cup__pulse-chip--closed::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--enc-on-night-soft);
 }
-
 .enc-cup__pulse-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--enc-sage-deep);
+  background: var(--enc-up-night);
   animation: enc-cup-pulse 1.6s ease-in-out infinite;
 }
 @keyframes enc-cup-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50%      { opacity: 0.35; transform: scale(0.75); }
 }
-@media (prefers-reduced-motion: reduce) {
-  .enc-cup__pulse-dot { animation: none; }
-}
 
-.enc-cup__pulse-pause {
-  padding: 4px 10px;
-  border-radius: var(--enc-r-pill);
-  background: var(--enc-cream-deep);
-  color: var(--enc-ink-soft);
-  font-family: var(--enc-sans);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  cursor: pointer;
-  border: 0;
-}
-
-/* ── Hero card ────────────────────────────────────────────────── */
-.enc-cup-hero {
+/* ── Hero card ──────────────────────────────────────────────────── */
+.enc-cup-hero,
+.enc-cup-progress,
+.enc-cup-board,
+.enc-cup-picks {
   background: var(--enc-paper);
-  border-radius: var(--enc-r-xl);
-  padding: var(--enc-s-5);
-  box-shadow: var(--enc-shadow-md);
-  border: 1px solid var(--enc-cream-deep);
+  border: var(--enc-hair) solid var(--enc-rule-strong);
+  border-radius: var(--enc-r-lg);
+  box-shadow: var(--enc-shadow-sm);
+}
+.enc-cup-hero { padding: var(--enc-s-5); }
+.enc-cup-hero .enc-eyebrow {
+  color: var(--enc-ink-mute);
+  letter-spacing: 0.14em;
 }
 
 .enc-cup-hero__balance {
@@ -89,55 +86,47 @@
   gap: var(--enc-s-2);
   margin-top: var(--enc-s-2);
 }
-
 .enc-cup-hero__amount {
-  font-family: var(--enc-serif);
   font-size: 56px;
-  font-weight: 600;
+  font-weight: 650;
   line-height: 1;
-  color: var(--enc-sage-deep);
   letter-spacing: -0.02em;
+  color: var(--enc-ink);
   font-variant-numeric: tabular-nums;
 }
-
 .enc-cup-hero__unit {
-  font-family: var(--enc-sans);
   font-size: 13px;
   font-weight: 600;
-  color: var(--enc-ink-mute);
-  text-transform: uppercase;
   letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--enc-ink-mute);
 }
 
 .enc-cup-hero__rank {
-  font-family: var(--enc-serif);
-  font-size: 18px;
-  color: var(--enc-ink-soft);
-  margin: var(--enc-s-2) 0 0;
   display: flex;
   align-items: baseline;
   gap: var(--enc-s-2);
+  margin: var(--enc-s-2) 0 0;
+  font-size: 18px;
+  color: var(--enc-ink-soft);
 }
-
 .enc-cup-hero__rank-pos {
   font-size: 24px;
-  color: var(--enc-ink);
   font-weight: 600;
+  color: var(--enc-ink);
   font-variant-numeric: tabular-nums;
 }
-
 .enc-cup-hero__rank-pos sup {
-  font-size: 13px;
-  vertical-align: super;
   margin-left: 1px;
-  color: var(--enc-ink-mute);
+  font-size: 13px;
   font-weight: 500;
+  vertical-align: super;
+  color: var(--enc-ink-mute);
 }
-
 .enc-cup-hero__rank-total {
   font-size: 13px;
-  color: var(--enc-ink-mute);
   letter-spacing: 0.02em;
+  color: var(--enc-ink-mute);
 }
 
 .enc-cup-hero__grid {
@@ -146,120 +135,91 @@
   gap: var(--enc-s-3);
   margin: var(--enc-s-4) 0 0;
   padding: var(--enc-s-3) 0 0;
-  border-top: 1px solid var(--enc-cream-deep);
+  border-top: 1px solid var(--enc-rule);
 }
-
-.enc-cup-hero__cell {
-  min-width: 0;
-}
+.enc-cup-hero__cell { min-width: 0; }
 .enc-cup-hero__cell dt {
-  font-family: var(--enc-sans);
+  margin: 0 0 var(--enc-s-1);
   font-size: 10px;
   font-weight: 600;
-  color: var(--enc-ink-mute);
-  text-transform: uppercase;
   letter-spacing: 0.08em;
-  margin: 0 0 var(--enc-s-1);
+  text-transform: uppercase;
+  color: var(--enc-ink-mute);
 }
 .enc-cup-hero__cell dd {
-  font-family: var(--enc-serif);
+  margin: 0;
   font-size: 22px;
   font-weight: 600;
-  color: var(--enc-ink);
-  margin: 0;
-  font-variant-numeric: tabular-nums;
   line-height: 1.1;
+  color: var(--enc-ink);
+  font-variant-numeric: tabular-nums;
 }
-
-.enc-cup-hero__delta--up {
-  color: var(--enc-sage-deep);
-}
-.enc-cup-hero__delta--down {
-  color: var(--enc-claret);
-}
+.enc-cup-hero__delta--up { color: var(--enc-up); }
+.enc-cup-hero__delta--down { color: var(--enc-down); }
 
 .enc-cup-hero__awards {
-  list-style: none;
-  padding: 0;
-  margin: var(--enc-s-4) 0 0;
   display: flex;
   flex-wrap: wrap;
   gap: var(--enc-s-2);
+  margin: var(--enc-s-4) 0 0;
+  padding: 0;
+  list-style: none;
 }
-
 .enc-cup-award {
   padding: 5px 12px;
   border-radius: var(--enc-r-pill);
-  background: var(--enc-gold-tint);
-  color: var(--enc-gold-deep);
-  font-family: var(--enc-sans);
+  background: var(--enc-gold-wash);
+  color: var(--enc-gold-ink);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 .enc-cup-award--wooden_spoon {
-  background: var(--enc-cream-deep);
+  background: var(--enc-chip);
   color: var(--enc-ink-soft);
 }
 
-.enc-cup-hero--preview {
-  background: var(--enc-cream);
-  border: 1px dashed var(--enc-cream-deep);
-  box-shadow: none;
-}
+/* A viewer who is not a guest (a steward, a visitor) sees a note instead */
 .enc-cup-hero__lede {
-  font-family: var(--enc-serif);
+  margin: var(--enc-s-2) 0 0;
   font-size: 15px;
   line-height: 1.45;
   color: var(--enc-ink-soft);
-  margin: var(--enc-s-2) 0 0;
 }
 
-/* ── Progress strip ──────────────────────────────────────────── */
+/* ── Progress strip ─────────────────────────────────────────────── */
 .enc-cup-progress {
-  padding: var(--enc-s-3) var(--enc-s-4);
-  background: var(--enc-cream);
-  border-radius: var(--enc-r-md);
   display: flex;
   flex-direction: column;
   gap: var(--enc-s-2);
+  padding: var(--enc-s-3) var(--enc-s-4);
 }
-
 .enc-cup-progress__label {
-  font-family: var(--enc-sans);
-  font-size: 12px;
-  color: var(--enc-ink-soft);
   margin: 0;
+  font-size: 12px;
   letter-spacing: 0.02em;
+  color: var(--enc-ink-soft);
 }
 .enc-cup-progress__label strong {
   color: var(--enc-ink);
   font-variant-numeric: tabular-nums;
 }
-
 .enc-cup-progress__track {
   height: 4px;
-  background: var(--enc-cream-deep);
-  border-radius: var(--enc-r-pill);
   overflow: hidden;
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-rule);
 }
 .enc-cup-progress__fill {
   height: 100%;
-  background: var(--enc-sage-deep);
   border-radius: inherit;
+  background: var(--enc-ink);
   transition: width 320ms ease-out;
 }
 
-/* ── Board ───────────────────────────────────────────────────── */
-.enc-cup-board {
-  background: var(--enc-paper);
-  border-radius: var(--enc-r-xl);
-  padding: var(--enc-s-4) var(--enc-s-4) var(--enc-s-3);
-  box-shadow: var(--enc-shadow-sm);
-  border: 1px solid var(--enc-cream-deep);
-}
-
+/* ── Standings ──────────────────────────────────────────────────── */
+.enc-cup-board { padding: var(--enc-s-4) var(--enc-s-4) var(--enc-s-3); }
 .enc-cup-board__head {
   display: flex;
   align-items: baseline;
@@ -267,38 +227,29 @@
   margin: 0 0 var(--enc-s-3);
 }
 .enc-cup-board__title {
-  font-family: var(--enc-serif);
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 650;
   color: var(--enc-ink);
-  margin: 0;
-  letter-spacing: -0.01em;
 }
 .enc-cup-board__link {
-  font-family: var(--enc-sans);
   font-size: 12px;
   font-weight: 700;
-  color: var(--enc-sage-deep);
-  text-decoration: none;
   letter-spacing: 0.03em;
+  color: var(--enc-ink-soft);
 }
-.enc-cup-board__link:hover { text-decoration: underline; }
-
 .enc-cup-board__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
-
 .enc-cup-board__empty {
-  font-family: var(--enc-serif);
-  font-size: 14px;
-  color: var(--enc-ink-mute);
-  font-style: italic;
   margin: 0;
   padding: var(--enc-s-3) 0;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--enc-ink-mute);
   text-align: center;
 }
 
@@ -306,73 +257,68 @@
   display: grid;
   grid-template-columns: 28px 1fr auto auto;
   gap: var(--enc-s-3);
-  align-items: baseline;
+  align-items: center;
   padding: 10px 0;
-  border-top: 1px solid var(--enc-cream-deep);
+  border-top: 1px solid var(--enc-rule);
 }
 .enc-cup-row:first-child { border-top: 0; }
 
 .enc-cup-row__pos {
-  font-family: var(--enc-serif);
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: var(--enc-ink-mute);
-  font-variant-numeric: tabular-nums;
   text-align: center;
+  font-variant-numeric: tabular-nums;
 }
-.enc-cup-row--rank-1 .enc-cup-row__pos { color: var(--enc-gold-deep); font-size: 18px; }
-.enc-cup-row--rank-2 .enc-cup-row__pos { color: #7B7A75; font-size: 17px; }
-.enc-cup-row--rank-3 .enc-cup-row__pos { color: #A97544; font-size: 17px; }
+.enc-cup-row--rank-1 .enc-cup-row__pos { color: var(--enc-ink); }
+.enc-cup-row--rank-2 .enc-cup-row__pos,
+.enc-cup-row--rank-3 .enc-cup-row__pos { color: var(--enc-ink-soft); }
 
 .enc-cup-row__name {
-  font-family: var(--enc-sans);
-  font-size: 14px;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 15px;
   font-weight: 500;
   color: var(--enc-ink);
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  min-width: 0;
 }
-
 .enc-cup-row__you {
   display: inline-block;
   margin-left: 6px;
   padding: 1px 6px;
-  background: var(--enc-sage-tint);
-  color: var(--enc-sage-deep);
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-gold);
+  color: var(--enc-night);
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  border-radius: var(--enc-r-pill);
   vertical-align: baseline;
 }
-
 .enc-cup-row__balance {
-  font-family: var(--enc-serif);
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
   color: var(--enc-ink);
   font-variant-numeric: tabular-nums;
 }
-
 .enc-cup-row__delta {
-  font-family: var(--enc-sans);
+  min-width: 44px;
   font-size: 12px;
   font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  min-width: 44px;
   text-align: right;
+  font-variant-numeric: tabular-nums;
 }
-.enc-cup-row__delta--up   { color: var(--enc-sage-deep); }
-.enc-cup-row__delta--down { color: var(--enc-claret); }
+.enc-cup-row__delta--up   { color: var(--enc-up); }
+.enc-cup-row__delta--down { color: var(--enc-down); }
 
+/* The guest's own row, lit edge to edge */
 .enc-cup-row--viewer {
-  background: var(--enc-sage-tint);
-  margin: 0 calc(-1 * var(--enc-s-4));
+  margin: 0 calc(var(--enc-s-4) * -1);
   padding-left: var(--enc-s-4);
   padding-right: var(--enc-s-4);
+  background: var(--enc-gold-wash);
   border-top-color: transparent;
 }
 .enc-cup-row--viewer + .enc-cup-row { border-top-color: transparent; }
@@ -380,62 +326,82 @@
 .enc-cup-row--gap {
   display: block;
   padding: 4px 0;
-  text-align: center;
   border-top: 0;
+  text-align: center;
 }
 .enc-cup-row__dots {
-  font-family: var(--enc-serif);
-  color: var(--enc-ink-mute);
-  letter-spacing: 6px;
   font-size: 14px;
+  letter-spacing: 6px;
+  color: var(--enc-ink-mute);
 }
 
-/* ── Your picks strip (E17) ───────────────────────────────────
- *
- * One row per placed EventPick, sorted by off-time. Silks on
- * the left, race + horse in the body, odds/stake/state chip
- * on the right. Whole row taps through to enclosure card_detail.
- */
-.enc-cup-picks {
-  background: var(--enc-paper);
-  border-radius: var(--enc-r-xl);
-  padding: var(--enc-s-3) var(--enc-s-3) var(--enc-s-4);
-  border: 1px solid var(--enc-cream-deep);
-  box-shadow: var(--enc-shadow-sm);
+/* A named guest's row opens their picks: the whole row is the link */
+.enc-cup-row__link {
+  display: contents;
+  color: inherit;
 }
+.enc-cup-row--tappable {
+  border-radius: 8px;
+  transition: background-color 120ms ease-out;
+}
+.enc-cup-row--tappable:active { background: var(--enc-chip); }
+/* The link has no box of its own (display: contents), so the row shows its focus */
+.enc-cup-row--tappable:has(:focus-visible) {
+  outline: 2px solid var(--enc-focus);
+  outline-offset: 2px;
+}
+.enc-cup-row--tappable .enc-cup-row__name {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.enc-cup-row--tappable .enc-cup-row__name::after {
+  content: "\203A";
+  font-size: 15px;
+  line-height: 1;
+  color: var(--enc-ink-mute);
+  opacity: 0.6;
+}
+
+/* ── Your picks (E17) ───────────────────────────────────────────────
+ *
+ * One row per pick, in off-time order: silks, the race and the horse,
+ * then the price, the stake and the outcome. The whole row opens the
+ * race.
+ */
+.enc-cup-picks { padding: 12px 0 4px; }
 .enc-cup-picks__head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: 4px 6px var(--enc-s-2);
+  padding: 2px 16px 10px;
+  border-bottom: 1px solid var(--enc-rule);
 }
 .enc-cup-picks__title {
-  font-family: var(--enc-serif);
-  font-size: 17px;
-  font-weight: 600;
+  font-family: var(--enc-display);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0;
   color: var(--enc-ink);
-  margin: 0;
-  letter-spacing: -0.005em;
 }
 .enc-cup-picks__count {
-  font-family: var(--enc-sans);
+  padding: 3px 8px;
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-chip);
+  color: var(--enc-ink-soft);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--enc-ink-mute);
-  padding: 3px 8px;
-  border-radius: var(--enc-r-pill);
-  background: var(--enc-cream);
   font-variant-numeric: tabular-nums;
 }
 .enc-cup-picks__empty {
-  font-family: var(--enc-serif);
-  font-size: 14px;
-  color: var(--enc-ink-mute);
   margin: var(--enc-s-3) 0 0;
-  text-align: center;
+  padding: 0 16px 10px;
+  font-size: 14px;
   line-height: 1.4;
+  color: var(--enc-ink-mute);
+  text-align: center;
 }
 .enc-cup-picks__empty a {
   color: var(--enc-mode-accent);
@@ -444,52 +410,59 @@
 }
 
 .enc-cup-picks__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* Dividers start at the text, as a printed card's do */
+.enc-cup-picks__list > li + li .enc-cup-pick::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 68px;
+  border-top: var(--enc-hair) solid var(--enc-rule-strong);
 }
 
 .enc-cup-pick {
+  position: relative;
   display: grid;
   grid-template-columns: 40px 1fr auto;
   align-items: center;
   gap: 12px;
-  padding: 10px 12px;
-  border-radius: var(--enc-r-md);
-  background: var(--enc-paper);
-  border: 1px solid var(--enc-cream-deep);
-  border-left: 3px solid transparent;
+  padding: 12px 16px;
   color: inherit;
-  text-decoration: none;
-  transition: border-color 120ms ease-out, background 120ms ease-out;
+  transition: background-color 150ms ease-out;
 }
-.enc-cup-pick:hover { border-color: var(--enc-ink-mute); }
-.enc-cup-pick:active { transform: scale(0.995); }
-
-.enc-cup-pick--open    { border-left-color: var(--enc-mode-accent); }
-.enc-cup-pick--locked  { border-left-color: #7A4B00; }
-.enc-cup-pick--won     { border-left-color: #2E7D32; background: #F1F7EE; }
-.enc-cup-pick--lost    { border-left-color: #B04A3A; }
+.enc-cup-pick:active { background: var(--enc-chip); }
+/* The outcome on the row's edge: gold for a winner (and a pick to come),
+   red for a loser */
+.enc-cup-pick--won {
+  background: var(--enc-win);
+  box-shadow: inset 3px 0 0 var(--enc-gold);
+}
+.enc-cup-pick--open,
+.enc-cup-pick--locked { box-shadow: inset 3px 0 0 var(--enc-gold); }
+.enc-cup-pick--lost { box-shadow: inset 3px 0 0 color-mix(in srgb, var(--enc-down) 70%, transparent); }
 
 .enc-cup-pick__silk {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--enc-cream);
-  border: 1px solid var(--enc-cream-deep);
   display: grid;
   place-items: center;
   flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--enc-chip);
+  box-shadow: inset 0 0 0 1px var(--enc-rule);
 }
 .enc-cup-pick__silk img,
 .enc-cup-pick__silk svg {
+  display: block;
   width: 100%;
   height: 100%;
-  display: block;
   object-fit: cover;
 }
 
@@ -500,35 +473,46 @@
   min-width: 0;
 }
 .enc-cup-pick__meta {
-  font-family: var(--enc-sans);
-  font-size: 11px;
-  color: var(--enc-ink-mute);
-  letter-spacing: 0.03em;
   overflow: hidden;
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  color: var(--enc-ink-mute);
   text-overflow: ellipsis;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
-.enc-cup-pick__race {
-  color: var(--enc-ink-soft);
-}
+.enc-cup-pick__race { color: var(--enc-ink-soft); }
 .enc-cup-pick__horse {
-  font-family: var(--enc-serif);
   font-size: 15px;
   font-weight: 600;
-  color: var(--enc-ink);
+  line-height: 1.25;
   letter-spacing: -0.005em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: var(--enc-ink);
 }
 .enc-cup-pick__num {
-  color: var(--enc-ink-mute);
-  font-family: var(--enc-sans);
-  font-weight: 700;
   margin-right: 4px;
+  font-weight: 700;
+  color: var(--enc-ink-mute);
   font-variant-numeric: tabular-nums;
 }
+/* Where the horse finished, by weight: the winner's in full ink */
+.enc-cup-pick__fin {
+  margin-left: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+  vertical-align: middle;
+}
+.enc-cup-pick__fin--pos-1 {
+  color: var(--enc-ink);
+  font-weight: 800;
+}
+.enc-cup-pick__fin--pos-2,
+.enc-cup-pick__fin--pos-3 { color: var(--enc-ink-soft); }
+.enc-cup-pick__fin--pos-rest,
+.enc-cup-pick__fin--pos-dnf { color: var(--enc-ink-mute); }
 
 .enc-cup-pick__right {
   display: flex;
@@ -538,21 +522,21 @@
   text-align: right;
 }
 .enc-cup-pick__odds {
-  font-family: var(--enc-sans);
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 700;
-  color: var(--enc-ink);
-  font-variant-numeric: tabular-nums;
   line-height: 1;
+  color: var(--enc-ink);
 }
-.enc-cup-pick__odds--dim { color: var(--enc-ink-mute); font-weight: 600; }
+.enc-cup-pick__odds--dim {
+  font-weight: 600;
+  color: var(--enc-ink-mute);
+}
 .enc-cup-pick__stake {
-  font-family: var(--enc-sans);
   font-size: 10px;
   font-weight: 700;
-  color: var(--enc-ink-mute);
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: var(--enc-ink-mute);
   font-variant-numeric: tabular-nums;
 }
 
@@ -561,72 +545,40 @@
   align-items: center;
   gap: 4px;
   padding: 3px 8px;
-  border-radius: var(--enc-r-pill);
-  font-family: var(--enc-sans);
+  border-radius: 6px;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   line-height: 1;
 }
-.enc-cup-pick__chip--open    { background: var(--enc-mode-accent-tint); color: var(--enc-mode-accent); }
-.enc-cup-pick__chip--locked  { background: #F1E7DA; color: #7A4B00; }
-.enc-cup-pick__chip--won     { background: #DDECD6; color: #2E7D32; }
-.enc-cup-pick__chip--lost    { background: #F4DDD6; color: #B04A3A; }
-
-/*  Finish position chip next to the horse name — tells the guest
- *  where their pick actually finished, independent of the pick's
- *  won/lost outcome. Gold for 1st, silver 2nd, bronze 3rd, muted
- *  for 4th+, warning tint for DNF codes ("Fell", "PU", "UR"). */
-.enc-cup-pick__fin {
-  display: inline-flex;
-  align-items: center;
-  padding: 1px 6px;
-  margin-left: 6px;
-  border-radius: var(--enc-r-pill);
-  font-family: var(--enc-sans);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  line-height: 1.4;
-  font-variant-numeric: tabular-nums;
-  vertical-align: middle;
+.enc-cup-pick__chip--open,
+.enc-cup-pick__chip--locked {
+  background: var(--enc-gold-wash);
+  color: var(--enc-gold-ink);
 }
-.enc-cup-pick__fin--pos-1    { background: #F1E4C9; color: #8E6C3A; }
-.enc-cup-pick__fin--pos-2    { background: #E8E8E8; color: #4A4A4A; }
-.enc-cup-pick__fin--pos-3    { background: #F1DDCB; color: #7A4B00; }
-.enc-cup-pick__fin--pos-rest { background: var(--enc-ground); color: var(--enc-ink-mute); }
-.enc-cup-pick__fin--pos-dnf  { background: #EFE0DA; color: #8A5040; }
+.enc-cup-pick__chip--won {
+  background: var(--enc-gold);
+  color: var(--enc-night);
+}
+.enc-cup-pick__chip--lost {
+  background: color-mix(in srgb, var(--enc-down) 10%, transparent);
+  color: var(--enc-down);
+}
 .enc-cup-pick__net {
-  font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
 }
 
-/*  Standings row — clickable variant.
- *  Named guests get wrapped in <a class="enc-cup-row__link"> so the
- *  whole row taps through to their profile. Anonymous (no IDENTITY
- *  consent) rows stay static.  */
-.enc-cup-row__link {
-  display: contents;
-  color: inherit;
-  text-decoration: none;
+@media (hover: hover) {
+  .enc-cup-board__link:hover { text-decoration: underline; }
+  .enc-cup-row--tappable:hover { background: var(--enc-hover); }
+  .enc-cup-pick:hover { background: var(--enc-chip); }
 }
-.enc-cup-row--tappable { transition: background 120ms ease; }
-.enc-cup-row--tappable:hover,
-.enc-cup-row--tappable:focus-within {
-  background: var(--enc-hover, rgba(60, 45, 25, 0.05));
-  border-radius: 8px;
-}
-.enc-cup-row--tappable .enc-cup-row__name {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.enc-cup-row--tappable .enc-cup-row__name::after {
-  content: '\203A';
-  color: var(--enc-ink-mute);
-  font-size: 15px;
-  line-height: 1;
-  opacity: 0.6;
+
+@media (prefers-reduced-motion: reduce) {
+  .enc-cup__pulse-dot { animation: none; }
+  .enc-cup-progress__fill,
+  .enc-cup-row--tappable,
+  .enc-cup-pick { transition: none; }
 }

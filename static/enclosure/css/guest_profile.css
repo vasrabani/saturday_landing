@@ -1,29 +1,27 @@
 /*  Guest profile page — /enclosure/<slug>/guest/<id>/
- *  Hero: silks + name + rank + balance + delta + awards.
+ *  Hero: silks + name + rank + balance + delta + awards, a card on the
+ *  midnight band (like the day's card on Home and a race's winner).
  *  Body reuses the .enc-cup-picks list already styled by cup.css so
  *  the pick rows on the profile page match the "Your picks" strip
  *  exactly. No new pick-row CSS lives here.
  */
 
 .enc-gp-hero {
-  background: var(--enc-surface, #F5F0E4);
-  border: 1px solid var(--enc-hairline, rgba(60, 45, 25, 0.08));
-  border-radius: 14px;
-  padding: 18px 16px 20px;
-  margin: 12px;
   display: grid;
   gap: 16px;
+  margin: 0;
+  padding: 18px 16px 20px;
+  background: var(--enc-night-raised);
+  border: var(--enc-hair) solid var(--enc-night-line);
+  border-radius: var(--enc-r-lg);
 }
 
 .enc-gp-hero__back {
   align-self: start;
-  font-size: 13px;
-  color: var(--enc-ink-muted, #6E6252);
-  text-decoration: none;
   padding: 4px 0;
+  font-size: 13px;
+  color: var(--enc-on-night-soft);
 }
-.enc-gp-hero__back:hover,
-.enc-gp-hero__back:focus-visible { color: var(--enc-ink, #2F2A22); }
 
 .enc-gp-hero__ident {
   display: grid;
@@ -33,15 +31,15 @@
 }
 
 .enc-gp-hero__silks {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--enc-ground, #EFE8D6);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: inset 0 0 0 1px rgba(60, 45, 25, 0.08);
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--enc-chip);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--enc-on-night) 20%, transparent);
 }
 .enc-gp-hero__silks svg { display: block; width: 100%; height: 100%; }
 
@@ -50,14 +48,16 @@
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--enc-ink-muted, #6E6252);
+  color: var(--enc-gold);
 }
 .enc-gp-hero__name {
   margin: 0;
-  font-family: var(--enc-font-serif, Georgia, serif);
+  font-family: var(--enc-display);
   font-size: 22px;
+  font-weight: 700;
   line-height: 1.15;
-  color: var(--enc-ink, #2F2A22);
+  letter-spacing: 0;
+  color: var(--enc-on-night);
   text-wrap: balance;
 }
 
@@ -67,41 +67,45 @@
   gap: 10px;
   margin: 0;
   padding: 12px 4px 4px;
-  border-top: 1px solid var(--enc-hairline, rgba(60, 45, 25, 0.08));
+  border-top: 1px solid var(--enc-night-rule);
 }
 .enc-gp-hero__cell { margin: 0; text-align: center; }
 .enc-gp-hero__cell dt {
+  margin: 0 0 4px;
   font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--enc-ink-muted, #6E6252);
-  margin: 0 0 4px;
+  color: var(--enc-on-night-soft);
 }
 .enc-gp-hero__cell dd {
   margin: 0;
-  font-family: var(--enc-font-serif, Georgia, serif);
+  font-family: var(--enc-display);
   font-size: 20px;
+  font-weight: 650;
+  color: var(--enc-on-night);
   font-variant-numeric: tabular-nums;
-  color: var(--enc-ink, #2F2A22);
 }
-.enc-gp-hero__delta--up   { color: #2E7D32; }
-.enc-gp-hero__delta--down { color: #B23A48; }
+.enc-gp-hero__delta--up   { color: var(--enc-up-night); }
+.enc-gp-hero__delta--down { color: var(--enc-down-night); }
 
 .enc-gp-hero__awards {
-  list-style: none;
-  margin: 0;
-  padding: 8px 0 0;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  border-top: 1px solid var(--enc-hairline, rgba(60, 45, 25, 0.08));
+  margin: 0;
+  padding: 8px 0 0;
+  list-style: none;
+  border-top: 1px solid var(--enc-night-rule);
 }
 .enc-gp-award {
-  font-size: 11px;
   padding: 3px 8px;
-  border-radius: 999px;
-  background: var(--enc-ground, #EFE8D6);
-  color: var(--enc-ink, #2F2A22);
+  border-radius: var(--enc-r-pill);
+  background: var(--enc-chip);
+  color: var(--enc-ink);
+  font-size: 11px;
   letter-spacing: 0.03em;
 }
 
+@media (hover: hover) {
+  .enc-gp-hero__back:hover { color: var(--enc-on-night); }
+}
