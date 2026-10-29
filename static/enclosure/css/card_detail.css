@@ -1,23 +1,21 @@
 /*
  * The Enclosure — Card detail (E16).
  *
- * Guest-facing race card + pick surface, native to the PWA. Three
- * zones stack vertically inside the app scroll area:
- *   1. Race head — title, time, distance/going/class + chips
+ * Guest-facing race card + pick surface, native to the PWA. Zones stack
+ * vertically inside the app scroll area:
+ *   1. Race head — on the midnight band: title in gold, time,
+ *      distance/going/class + chips, and once run the winner
  *   2. Pick bar  — the guest's current pick + stake selector
- *   3. Field     — one enc-runner tile per horse
+ *   3. Field     — one enc-runner row per horse, ruled like a card
+ *   4. Racing terms, then LLaMa's read
  *
  * All colour comes from --enc-* tokens so guest / steward accent
  * flips are honoured without duplicating rules.
  */
 
-/* ── Race head ────────────────────────────────────────────────── */
+/* ── Race head (on the band) ──────────────────────────────────── */
 .enc-cd-head {
-  background: var(--enc-paper);
-  border-radius: var(--enc-r-xl);
-  padding: var(--enc-s-4);
-  border: 1px solid var(--enc-cream-deep);
-  box-shadow: var(--enc-shadow-sm);
+  padding: 15px 3px 17px;
 }
 .enc-cd-head__top {
   display: flex;
@@ -29,90 +27,83 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--enc-sans);
+  min-height: 40px;
   font-size: 13px;
   font-weight: 600;
-  color: var(--enc-ink-soft);
+  color: var(--enc-on-night-soft);
   text-decoration: none;
   padding: 6px 10px 6px 6px;
   border-radius: var(--enc-r-pill);
-  transition: background 120ms ease-out, color 120ms ease-out;
+  transition: background-color 120ms ease-out, color 120ms ease-out;
 }
-.enc-cd-back:hover  { background: var(--enc-cream); color: var(--enc-ink); }
+.enc-cd-back:hover  { background: color-mix(in srgb, var(--enc-on-night) 8%, transparent); color: var(--enc-on-night); }
 .enc-cd-back:active { transform: scale(0.98); }
 .enc-cd-back span[aria-hidden] { font-size: 18px; line-height: 1; }
 
 /*  Race navigation — chevron flanks around the RACE n/N counter.
- *  Replaces the old .enc-cd-head__count static span. Whole nav is
- *  one flex row; chevrons are the same tap target height as the
- *  Card back button so the header row reads as one connected strip.
+ *  Whole nav is one flex row; chevrons are the same tap target
+ *  height as the Card back button so the header row reads as one
+ *  connected strip.
  */
 .enc-cd-racenav {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  border: 1px solid var(--enc-hairline, rgba(60, 45, 25, 0.10));
+  border: 1px solid var(--enc-night-line);
   border-radius: 999px;
   padding: 2px 4px;
-  background: var(--enc-paper, #FBF7EC);
+  background: color-mix(in srgb, var(--enc-on-night) 6%, transparent);
 }
 .enc-cd-racenav__label {
-  font-family: var(--enc-sans);
   font-size: 12px;
   font-weight: 700;
-  color: var(--enc-ink-mute);
-  letter-spacing: 0.08em;
+  color: var(--enc-on-night-soft);
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  font-variant-numeric: tabular-nums;
   padding: 0 6px;
   white-space: nowrap;
 }
-.enc-cd-racenav__of {
-  color: var(--enc-ink-mute);
-  opacity: 0.7;
-}
+.enc-cd-racenav__of { opacity: 0.7; }
 .enc-cd-racenav__chev {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
-  font-family: var(--enc-serif, Georgia, serif);
   font-size: 20px;
   line-height: 1;
-  color: var(--enc-sage-deep, #506B4D);
+  color: var(--enc-on-night);
   background: transparent;
   text-decoration: none;
-  transition: background 120ms ease, transform 100ms ease;
+  transition: background-color 120ms ease, transform 100ms ease;
 }
 .enc-cd-racenav__chev:hover,
 .enc-cd-racenav__chev:focus-visible {
-  background: var(--enc-sage-tint, #E7ECDE);
+  background: color-mix(in srgb, var(--enc-on-night) 10%, transparent);
   outline: none;
 }
 .enc-cd-racenav__chev:active { transform: scale(0.94); }
 .enc-cd-racenav__chev--disabled {
-  color: var(--enc-ink-mute, #8A8479);
   opacity: 0.35;
   cursor: default;
   pointer-events: none;
 }
 
+/* The race's title in gold, as the site sets its race titles on midnight */
 .enc-cd-head__title {
-  font-family: var(--enc-serif);
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--enc-ink);
+  font-family: var(--enc-display);
+  font-size: 23px;
+  font-weight: 700;
+  color: var(--enc-gold);
   margin: 0;
   line-height: 1.2;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   text-wrap: balance;
 }
 .enc-cd-head__meta {
-  font-family: var(--enc-sans);
-  font-size: 12px;
-  color: var(--enc-ink-mute);
+  font-size: 13px;
+  color: var(--enc-on-night-soft);
   margin: 6px 0 0;
   letter-spacing: 0.01em;
 }
@@ -129,44 +120,91 @@
   align-items: baseline;
   gap: 6px;
   padding: 5px 10px;
-  border-radius: var(--enc-r-pill);
-  font-family: var(--enc-sans);
+  border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
-  background: var(--enc-cream);
-  color: var(--enc-ink-soft);
+  background: color-mix(in srgb, var(--enc-on-night) 8%, transparent);
+  color: var(--enc-on-night);
   border: 1px solid transparent;
 }
 .enc-cd-chip__label {
-  color: var(--enc-ink-mute);
+  color: var(--enc-on-night-soft);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-size: 10px;
 }
-.enc-cd-chip__value {
-  color: var(--enc-ink);
-  font-variant-numeric: tabular-nums;
-}
+.enc-cd-chip__value { color: var(--enc-on-night); }
+/* Open: the countdown, in the site's green on midnight */
 .enc-cd-chip--open {
-  background: var(--enc-mode-accent-tint);
-  color: var(--enc-mode-accent);
-  border-color: var(--enc-mode-accent);
+  color: var(--enc-up-night);
+  border-color: color-mix(in srgb, var(--enc-up-night) 45%, transparent);
 }
-.enc-cd-chip--locked  { background: #F1E7DA; color: #7A4B00; border-color: #E5C89A; }
-.enc-cd-chip--settled { background: #E7E1F0; color: #4A3585; border-color: #C4B7DB; }
+
+/* ── The winner, once the race is run: the one big figure, its SP ── */
+.enc-result {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  margin-top: var(--enc-s-4);
+  padding: 16px 18px;
+  border-radius: var(--enc-r-lg);
+  background: var(--enc-night-raised);
+  box-shadow: inset 0 0 0 1px var(--enc-night-line);
+  color: var(--enc-on-night);
+}
+.enc-result__silk {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--enc-page);
+}
+.enc-result__silk img { width: 52px; height: 52px; }
+.enc-result__body { display: grid; gap: 2px; min-width: 0; }
+.enc-result__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--enc-gold);
+}
+.enc-result__horse {
+  font-family: var(--enc-display);
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--enc-on-night);
+}
+.enc-result__meta {
+  font-size: 12.5px;
+  color: var(--enc-on-night-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.enc-result__sp { display: grid; justify-items: end; gap: 2px; }
+.enc-result__fig { font-size: 32px; line-height: 1; }
+.enc-result__fig .enc-odds { font-weight: 800; }
+.enc-result__sp small {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--enc-on-night-soft);
+}
 
 /* ── Pick bar ─────────────────────────────────────────────────── */
 .enc-cd-pick {
   background: var(--enc-paper);
-  border-radius: var(--enc-r-xl);
+  border-radius: var(--enc-r-lg);
   padding: var(--enc-s-4);
-  border: 1px solid var(--enc-cream-deep);
+  border: 1px solid var(--enc-rule);
+  border-left: 3px solid var(--enc-gold);
   box-shadow: var(--enc-shadow-sm);
-  border-left: 4px solid var(--enc-mode-accent);
 }
 .enc-cd-pick__eyebrow {
-  font-family: var(--enc-sans);
   font-size: 10px;
   font-weight: 700;
   color: var(--enc-ink-mute);
@@ -175,7 +213,6 @@
   margin: 0 0 4px;
 }
 .enc-cd-pick__title {
-  font-family: var(--enc-serif);
   font-size: 16px;
   font-weight: 600;
   color: var(--enc-ink);
@@ -185,15 +222,12 @@
 }
 .enc-cd-pick__title--muted { color: var(--enc-ink-mute); font-weight: 500; }
 .enc-cd-pick__at {
-  font-family: var(--enc-sans);
   font-size: 13px;
   color: var(--enc-mode-accent);
   font-weight: 700;
   margin-left: 6px;
-  font-variant-numeric: tabular-nums;
 }
 .enc-cd-pick__foot {
-  font-family: var(--enc-sans);
   font-size: 12px;
   color: var(--enc-ink-mute);
   margin: 4px 0 0;
@@ -210,11 +244,11 @@
   gap: 6px;
 }
 .enc-cd-pick__stake[disabled] { opacity: 0.5; }
+/* A legend will not lay out as a flex row, so the balance floats right
+   ("STAKE … BALANCE 780", not "STAKEBALANCE 780") */
 .enc-cd-pick__stake-label {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  font-family: var(--enc-sans);
+  display: block;
+  width: 100%;
   font-size: 10px;
   font-weight: 700;
   color: var(--enc-ink-mute);
@@ -223,10 +257,10 @@
   padding: 0;
 }
 .enc-cd-pick__balance {
+  float: right;
   color: var(--enc-ink-soft);
   font-weight: 600;
   letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
 }
 
 .enc-cd-pick__chips {
@@ -243,21 +277,19 @@
   height: 36px;
   padding: 0 10px;
   border-radius: var(--enc-r-pill);
-  background: var(--enc-cream);
-  border: 1px solid var(--enc-cream-deep);
+  background: var(--enc-chip);
+  border: 1px solid var(--enc-rule);
   cursor: pointer;
-  font-family: var(--enc-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--enc-ink);
-  font-variant-numeric: tabular-nums;
-  transition: background 120ms ease-out, border-color 120ms ease-out, color 120ms ease-out;
+  transition: background-color 120ms ease-out, border-color 120ms ease-out, color 120ms ease-out;
 }
 .enc-cd-pick__chip input { position: absolute; opacity: 0; pointer-events: none; }
 .enc-cd-pick__chip:has(input:checked) {
-  background: var(--enc-mode-accent);
-  color: var(--enc-paper);
-  border-color: var(--enc-mode-accent);
+  background: var(--enc-navy);
+  color: var(--enc-on-navy);
+  border-color: var(--enc-navy);
 }
 
 .enc-cd-pick__row {
@@ -267,7 +299,6 @@
   gap: var(--enc-s-3);
 }
 .enc-cd-pick__status {
-  font-family: var(--enc-sans);
   font-size: 12px;
   color: var(--enc-ink-soft);
   margin: 0;
@@ -277,13 +308,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.enc-cd-pick__status.is-error { color: var(--enc-claret); }
+.enc-cd-pick__status.is-error { color: var(--enc-down); }
 .enc-cd-pick__submit {
   padding: 10px 22px;
   border-radius: var(--enc-r-pill);
-  background: var(--enc-mode-accent);
-  color: var(--enc-paper);
-  font-family: var(--enc-sans);
+  background: var(--enc-navy);
+  color: var(--enc-on-navy);
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 0.02em;
@@ -297,30 +327,30 @@
 }
 .enc-cd-pick__submit:not(:disabled):active { transform: scale(0.97); }
 
-/* ── Field / runner tile ──────────────────────────────────────── */
+/* ── Field / runner rows ──────────────────────────────────────── */
 .enc-cd-field {
   background: var(--enc-paper);
-  border-radius: var(--enc-r-xl);
-  padding: var(--enc-s-3) var(--enc-s-3) var(--enc-s-4);
-  border: 1px solid var(--enc-cream-deep);
+  border-radius: var(--enc-r-lg);
+  padding: var(--enc-s-3) 0 var(--enc-s-1);
+  border: var(--enc-hair) solid var(--enc-rule-strong);
   box-shadow: var(--enc-shadow-sm);
 }
 .enc-cd-field__head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: 4px 6px var(--enc-s-2);
+  padding: 2px 16px 10px;
+  border-bottom: 1px solid var(--enc-rule);
 }
 .enc-cd-field__title {
-  font-family: var(--enc-serif);
-  font-size: 15px;
-  font-weight: 600;
+  font-family: var(--enc-display);
+  font-size: 19px;
+  font-weight: 700;
   color: var(--enc-ink);
   margin: 0;
-  letter-spacing: -0.005em;
+  letter-spacing: 0;
 }
 .enc-cd-field__meta {
-  font-family: var(--enc-sans);
   font-size: 11px;
   color: var(--enc-ink-mute);
   margin: 0;
@@ -328,7 +358,6 @@
   text-transform: uppercase;
 }
 .enc-cd-field__empty {
-  font-family: var(--enc-serif);
   font-size: 14px;
   color: var(--enc-ink-mute);
   margin: var(--enc-s-3) 0;
@@ -341,41 +370,44 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 
-/* Runner tile — a button so the whole thing is a keyboard-focusable
- * tap target. Grid: silk / num / body / odds / mark dot. */
+/* Runner row — a button so the whole thing is a keyboard-focusable
+ * tap target. Grid: silk / saddle cloth / body / odds / pick dot.
+ * Dividers start at the name, as on a printed card. */
 .enc-runner {
+  position: relative;
   display: grid;
-  grid-template-columns: 44px 24px 1fr auto 20px;
+  grid-template-columns: 44px 24px minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  background: var(--enc-paper);
-  border: 1px solid var(--enc-cream-deep);
-  border-left: 3px solid transparent;
-  border-radius: var(--enc-r-md);
+  gap: 12px;
+  padding: 12px 16px;
+  background: transparent;
+  border: 0;
   color: inherit;
   cursor: pointer;
   text-align: left;
   font: inherit;
   min-height: 60px;
   width: 100%;
-  transition:
-    border-color 120ms ease-out,
-    background 120ms ease-out,
-    transform 100ms ease-out;
+  transition: background-color 150ms ease-out;
 }
-.enc-runner:hover { border-color: var(--enc-ink-mute); }
-.enc-runner:active { transform: scale(0.995); }
+.enc-cd-runners > li + li .enc-runner::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 72px;
+  border-top: var(--enc-hair) solid var(--enc-rule-strong);
+}
+@media (hover: hover) {
+  .enc-runner:not(:disabled):hover { background: var(--enc-chip); }
+}
 .enc-runner:disabled { cursor: default; }
-.enc-runner:disabled:hover { border-color: var(--enc-cream-deep); }
 
 .enc-runner--picked {
-  border-left-color: var(--enc-mode-accent);
-  background: var(--enc-mode-accent-tint);
-  border-color: var(--enc-mode-accent);
+  background: var(--enc-gold-wash);
+  box-shadow: inset 3px 0 0 var(--enc-gold);
 }
 .enc-runner--nr {
   opacity: 0.55;
@@ -388,11 +420,11 @@
 .enc-runner__silk {
   display: grid;
   place-items: center;
-  width: 40px; height: 40px;
+  width: 44px; height: 44px;
   border-radius: 50%;
   overflow: hidden;
-  background: var(--enc-cream);
-  border: 1px solid var(--enc-cream-deep);
+  background: var(--enc-chip);
+  box-shadow: inset 0 0 0 1px var(--enc-rule);
 }
 .enc-runner__silk img,
 .enc-runner__silk svg {
@@ -400,13 +432,17 @@
   object-fit: cover;
 }
 
+/* The saddle cloth: a dark plate, white figure */
 .enc-runner__num {
-  font-family: var(--enc-sans);
-  font-size: 18px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  background: var(--enc-ink);
+  color: var(--enc-paper);
+  font-size: 12.5px;
   font-weight: 700;
-  color: var(--enc-ink);
-  text-align: center;
-  font-variant-numeric: tabular-nums;
 }
 
 .enc-runner__body {
@@ -415,21 +451,20 @@
   gap: 1px;
   min-width: 0;
 }
+/* A name wraps rather than being cut short */
 .enc-runner__name {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 4px;
-  font-family: var(--enc-serif);
   font-size: 15px;
   font-weight: 600;
+  line-height: 1.25;
   color: var(--enc-ink);
   letter-spacing: -0.005em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .enc-runner__fav {
-  color: var(--enc-mode-accent);
+  color: var(--enc-gold-ink);
   font-size: 12px;
   line-height: 1;
 }
@@ -437,80 +472,58 @@
   display: inline-block;
   padding: 1px 5px;
   border-radius: 4px;
-  background: var(--enc-cream);
+  background: var(--enc-chip);
   color: var(--enc-ink-soft);
-  font-family: var(--enc-sans);
   font-size: 10px;
   font-weight: 700;
-  text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 .enc-runner__people {
-  font-family: var(--enc-sans);
-  font-size: 11px;
+  font-size: 12px;
   color: var(--enc-ink-soft);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .enc-runner__stats {
-  font-family: var(--enc-sans);
-  font-size: 10px;
+  font-size: 11px;
   color: var(--enc-ink-mute);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+/* Odds: the medal above the price, both centred on the column */
 .enc-runner__odds {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  gap: 3px;
-  font-family: var(--enc-sans);
-  font-size: 15px;
-  font-weight: 700;
+  align-items: center;
+  gap: 4px;
   color: var(--enc-ink);
-  font-variant-numeric: tabular-nums;
-  text-align: right;
-  min-width: 52px;
 }
-.enc-runner__odds-dim { color: var(--enc-ink-mute); font-weight: 600; }
-
-/* Price line — stacked under the finish chip on settled races,
- * on its own when the race is still open. Slightly smaller when
- * a finish chip sits above it so the chip stays the dominant
- * signal for guests scanning results. */
 .enc-runner__price {
-  font-family: var(--enc-sans);
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 17px;
+  font-weight: 650;
   color: var(--enc-ink);
-  font-variant-numeric: tabular-nums;
   line-height: 1.1;
 }
 .enc-runner__price--dim { color: var(--enc-ink-mute); font-weight: 600; }
-.enc-runner__fin-chip + .enc-runner__price {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--enc-ink-soft);
-  letter-spacing: 0.02em;
-}
 .enc-runner__nr-chip {
   display: inline-block;
   padding: 2px 8px;
   border-radius: var(--enc-r-pill);
-  background: #F1E7DA;
-  color: #7A4B00;
-  font-family: var(--enc-sans);
+  background: var(--enc-down-wash);
+  color: var(--enc-down);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
 }
 
-.enc-runner__mark {
+/* The pick dot shows on the guest's pick only */
+.enc-runner__mark { display: none; }
+.enc-runner--picked .enc-runner__mark {
   display: grid;
   place-items: center;
   width: 20px; height: 20px;
@@ -518,113 +531,159 @@
 .enc-runner__dot {
   width: 14px; height: 14px;
   border-radius: 50%;
-  border: 2px solid var(--enc-cream-deep);
-  background: var(--enc-paper);
-  transition: border-color 120ms ease-out, background 120ms ease-out;
-}
-.enc-runner--picked .enc-runner__dot {
-  border-color: var(--enc-mode-accent);
+  border: 2px solid var(--enc-mode-accent);
   background: var(--enc-mode-accent);
   box-shadow: inset 0 0 0 3px var(--enc-paper);
 }
 
 /* ── Just-updated flash (poll swap) ───────────────────────────── */
 @keyframes enc-runner-flash {
-  from { background: var(--enc-mode-accent-tint); }
-  to   { background: var(--enc-paper); }
+  from { background: var(--enc-gold-wash); }
+  to   { background: transparent; }
 }
 .enc-runner.is-updated {
   animation: enc-runner-flash 900ms ease-out;
 }
 
-/* ── Finish badges (race settled) ─────────────────────────────
+/* ── Places (race settled) ─────────────────────────────────────
  *
- * Once the syncer has result_winner + per-runner finish_position,
- * the odds column swaps to a finishing chip. Podium places get
- * the medal palette; 4th+ picks up a neutral sage tint; DNFs get
- * the muted "PU / Fell / UR" label. Winner row also picks up a
- * gold border-left accent for at-a-glance scannability.
+ * Once the syncer has per-runner finish_position, the odds column
+ * carries the place above the price. 1st, 2nd and 3rd are medals:
+ * a metal fill with a light top edge, navy figures (AA on every
+ * fill), and a bar of the same metal down the row; 4th and below
+ * stay as type, and so does a DNF ("PU / Fell / UR").
  */
 .enc-runner__fin-chip {
-  display: inline-block;
-  padding: 2px 8px;
-  min-width: 32px;
-  border-radius: var(--enc-r-pill);
-  font-family: var(--enc-sans);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  line-height: 1.15;
-  text-transform: uppercase;
-  font-variant-numeric: tabular-nums;
-  text-align: center;
-}
-.enc-runner__fin-chip--gold    { background: #FCE9A6; color: #7A5B00; }
-.enc-runner__fin-chip--silver  { background: #E2E4E8; color: #4A4E56; }
-.enc-runner__fin-chip--bronze  { background: #F0DBC1; color: #6E4118; }
-.enc-runner__fin-chip--rest    { background: var(--enc-cream); color: var(--enc-ink-soft); }
-.enc-runner__fin-chip--dnf {
-  background: #ECE4DA;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   color: var(--enc-ink-mute);
-  font-weight: 700;
+}
+.enc-runner__fin-chip--gold,
+.enc-runner__fin-chip--silver,
+.enc-runner__fin-chip--bronze {
+  display: inline-grid;
+  place-items: center;
+  min-width: 40px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: var(--enc-r-pill);
+  color: var(--enc-night);
+  font-weight: 800;
+  line-height: 1;
+}
+.enc-runner__fin-chip--gold {
+  background: linear-gradient(180deg, var(--enc-medal-gold-1), var(--enc-medal-gold-2));
+  box-shadow: inset 0 0 0 1px var(--enc-medal-gold-edge), var(--enc-medal-shine);
+}
+.enc-runner__fin-chip--silver {
+  background: linear-gradient(180deg, var(--enc-medal-silver-1), var(--enc-medal-silver-2));
+  box-shadow: inset 0 0 0 1px var(--enc-medal-silver-edge), var(--enc-medal-shine);
+}
+.enc-runner__fin-chip--bronze {
+  background: linear-gradient(180deg, var(--enc-medal-bronze-1), var(--enc-medal-bronze-2));
+  box-shadow: inset 0 0 0 1px var(--enc-medal-bronze-edge), var(--enc-medal-shine);
 }
 
-.enc-runner--won    { border-left-color: #C9A227; }
-.enc-runner--second { border-left-color: #9A9EA6; }
-.enc-runner--third  { border-left-color: #A97147; }
-.enc-runner--placed { border-left-color: var(--enc-cream-deep); }
-
-/* Winner row deserves a very subtle gold-tinted ground so it
- * reads first even on a long field. */
 .enc-runner--won {
-  background: #FBF3D8;
+  background: var(--enc-win);
+  box-shadow: inset 3px 0 0 var(--enc-medal-gold-2);
 }
-.enc-runner--won .enc-runner__name {
-  color: #4A3300;
+.enc-runner--second {
+  background: var(--enc-medal-silver-wash);
+  box-shadow: inset 3px 0 0 var(--enc-medal-silver-edge);
+}
+.enc-runner--third {
+  background: var(--enc-medal-bronze-wash);
+  box-shadow: inset 3px 0 0 var(--enc-medal-bronze-2);
+}
+.enc-runner--won .enc-runner__name { font-weight: 700; }
+/* The guest's own pick still reads first */
+.enc-runner--picked.enc-runner--won,
+.enc-runner--picked.enc-runner--second,
+.enc-runner--picked.enc-runner--third {
+  background: var(--enc-gold-wash);
+  box-shadow: inset 3px 0 0 var(--enc-gold);
 }
 
-/* Hide the pick-radio dot once the race has settled — it's
- * meaningless on a page with real outcomes. */
-.enc-runner--won .enc-runner__dot,
-.enc-runner--second .enc-runner__dot,
-.enc-runner--third .enc-runner__dot,
-.enc-runner--placed .enc-runner__dot {
-  display: none;
+/* ── Racing terms — the words a newcomer meets on this page ────── */
+.enc-terms {
+  background: var(--enc-paper);
+  border: var(--enc-hair) solid var(--enc-rule-strong);
+  border-radius: var(--enc-r-lg);
+  box-shadow: var(--enc-shadow-sm);
 }
+.enc-terms > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--enc-ink);
+  cursor: pointer;
+  list-style: none;
+}
+.enc-terms > summary::-webkit-details-marker { display: none; }
+.enc-terms > summary::after {
+  content: "+";
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--enc-ink-mute);
+}
+.enc-terms[open] > summary::after { content: "\2212"; }
+.enc-terms dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 9px 14px;
+  margin: 0;
+  padding: 14px 16px 16px;
+  border-top: 1px solid var(--enc-rule);
+}
+.enc-terms dt { font-size: 13px; font-weight: 700; color: var(--enc-ink); }
+.enc-terms dd { margin: 0; font-size: 13px; line-height: 1.45; color: var(--enc-ink-soft); }
 
 /*  LLaMa's read — surfaces the RaceLetter's predicted 1-2-3-4 + verdict
  *  on the card detail page when a published Letter exists for the race.
- *  Sits between the pick bar and the field; visually cousins with the
- *  public /letters/ page's finish cards but compressed for mobile.
+ *  Visually cousins with the public /letters/ page's finish cards but
+ *  compressed for mobile.
  */
 .enc-cd-letter {
-  margin: 12px;
   padding: 14px 14px 12px;
   background: var(--enc-paper);
-  border: 1px solid var(--enc-sage-tint);
-  border-left: 3px solid var(--enc-sage);
-  border-radius: 12px;
+  border: 1px solid var(--enc-rule);
+  border-left: 3px solid var(--enc-ink-soft);
+  border-radius: var(--enc-r-lg);
+  box-shadow: var(--enc-shadow-sm);
   display: grid;
   gap: 12px;
 }
-.enc-cd-letter--high        { border-left-color: var(--enc-sage-deep); }
-.enc-cd-letter--medium      { border-left-color: var(--enc-sage); }
+.enc-cd-letter--high        { border-left-color: var(--enc-ink-soft); }
+.enc-cd-letter--medium      { border-left-color: var(--enc-rule-strong); }
 .enc-cd-letter--speculative { border-left-color: var(--enc-ink-mute); }
 
 .enc-cd-letter__head {
   display: grid;
-  grid-template-columns: 30px 1fr;
+  grid-template-columns: 36px 1fr;
   gap: 10px;
   align-items: center;
 }
+/* The site's own LLaMa, in a circle */
 .enc-cd-letter__mono {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  font-size: 20px;
-  line-height: 1;
+  display: block;
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--enc-chip);
+  box-shadow: inset 0 0 0 1px var(--enc-rule);
+}
+.enc-cd-letter__mono img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 18%;
 }
 .enc-cd-letter__eyebrow {
   margin: 0;
@@ -632,11 +691,10 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--enc-sage-deep);
+  color: var(--enc-ink-mute);
 }
 .enc-cd-letter__title {
   margin: 2px 0 0;
-  font-family: var(--enc-serif, Georgia, serif);
   font-size: 17px;
   line-height: 1.2;
   color: var(--enc-ink);
@@ -656,30 +714,28 @@
   gap: 10px;
   align-items: start;
   padding: 8px 10px;
-  background: var(--enc-sage-tint);
+  background: var(--enc-chip);
   border-radius: 8px;
 }
-.enc-cd-letter__slot--pos-1 {
-  background: linear-gradient(0deg, var(--enc-gold-tint), var(--enc-sage-tint) 120%);
-  box-shadow: inset 3px 0 0 var(--enc-gold);
-}
-.enc-cd-letter__slot--pos-2 { box-shadow: inset 3px 0 0 #B7B7B7; }
-.enc-cd-letter__slot--pos-3 { box-shadow: inset 3px 0 0 var(--enc-gold-deep); }
+.enc-cd-letter__slot--pos-1 { box-shadow: inset 3px 0 0 var(--enc-ink); }
+.enc-cd-letter__slot--pos-2,
+.enc-cd-letter__slot--pos-3 { box-shadow: inset 3px 0 0 var(--enc-rule-strong); }
 
+/* LLaMa's predicted place, as a number in a ring */
 .enc-cd-letter__medal {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 28px;
-  height: 28px;
-  font-size: 18px;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--enc-rule-strong);
+  font-size: 13px;
+  font-weight: 700;
   color: var(--enc-ink-soft);
 }
-.enc-cd-letter__slot--pos-4 .enc-cd-letter__medal {
-  font-size: 15px;
-  font-weight: 700;
+.enc-cd-letter__slot--pos-1 .enc-cd-letter__medal {
+  color: var(--enc-ink);
+  box-shadow: inset 0 0 0 1.5px var(--enc-ink);
 }
 
 .enc-cd-letter__slot-body { min-width: 0; }
@@ -693,12 +749,10 @@
 }
 .enc-cd-letter__price {
   color: var(--enc-ink-soft);
-  font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
 }
 .enc-cd-letter__horse {
   margin: 0 0 3px;
-  font-family: var(--enc-serif, Georgia, serif);
   font-size: 16px;
   font-weight: 700;
   line-height: 1.2;
@@ -714,22 +768,33 @@
 .enc-cd-letter__verdict {
   margin: 0;
   padding-top: 10px;
-  border-top: 1px solid var(--enc-sage-tint);
+  border-top: 1px solid var(--enc-rule);
   font-size: 13.5px;
   line-height: 1.5;
   color: var(--enc-ink-soft);
-  font-style: italic;
 }
 
 .enc-cd-letter__more {
   justify-self: start;
   font-size: 13px;
   font-weight: 700;
-  color: var(--enc-sage-deep);
+  color: var(--enc-ink);
   text-decoration: none;
   padding: 6px 0;
 }
 .enc-cd-letter__more:hover,
 .enc-cd-letter__more:focus-visible {
   text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enc-runner,
+  .enc-cd-back,
+  .enc-cd-racenav__chev,
+  .enc-cd-pick__chip,
+  .enc-cd-pick__submit { transition: none; }
+  .enc-runner.is-updated { animation: none; }
+  .enc-cd-back:active,
+  .enc-cd-racenav__chev:active,
+  .enc-cd-pick__submit:not(:disabled):active { transform: none; }
 }

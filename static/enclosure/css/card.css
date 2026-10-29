@@ -1,11 +1,16 @@
 /*
  * The Enclosure — Card tab (E4).
  *
- * Vertical list of race rows, one per race in the meeting. Each row
- * is a 3-column grid: time | title/subtitle | pick chip. The chip
- * derives its colour from the state class the server rendered —
- * template branches on state once, CSS branches per state.
+ * The day's races as one list, ruled like a printed card. Each row is a
+ * 3-column grid: race number and time | title, subtitle and, once run, the
+ * winner | pick chip. The chip derives its colour from the state class the
+ * server rendered — template branches on state once, CSS branches per
+ * state.
  */
+
+/* The band holds only the page's title here, so its edge sits closer */
+.enc-band:has(+ .enc-card-list) { padding-bottom: 18px; }
+.enc-band + .enc-card-list { margin-top: 2px; }
 
 .enc-card-list {
   list-style: none;
@@ -13,76 +18,132 @@
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--enc-s-2);
+  overflow: hidden;
+  background: var(--enc-paper);
+  border: var(--enc-hair) solid var(--enc-rule-strong);
+  border-radius: var(--enc-r-lg);
+  box-shadow: var(--enc-shadow-sm);
 }
 
 .enc-race-row {
+  position: relative;
   display: grid;
-  grid-template-columns: 52px 1fr auto;
+  grid-template-columns: 54px 1fr auto;
   gap: 12px;
   align-items: center;
-  padding: 12px 14px;
-  background: var(--enc-paper);
-  border: 1px solid var(--enc-cream-deep);
-  border-radius: var(--enc-r-md);
+  padding: 13px 14px;
   color: inherit;
-  min-height: 60px;
-  transition: transform 100ms ease-out, background-color 120ms ease-out;
-  box-shadow: var(--enc-shadow-sm);
+  min-height: 68px;
+  transition: background-color 150ms ease-out;
 }
-.enc-race-row:active { transform: scale(0.99); }
-.enc-race-row--static:active { transform: none; }
+/* Dividers start at the text, as a printed card's do */
+.enc-card-list > li + li .enc-race-row::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 80px;
+  border-top: var(--enc-hair) solid var(--enc-rule-strong);
+}
+.enc-race-row:active { background: var(--enc-chip); }
+.enc-race-row--static:active { background: transparent; }
 
+/* The next race off: a live edge */
 .enc-race-row--next {
-  background: var(--enc-sage-tint);
-  border-color: var(--enc-sage);
-  box-shadow: var(--enc-shadow-sm), inset 3px 0 0 var(--enc-sage-deep);
-}
-
-/* Muted look for settled + skipped rows — they're history, not action. */
-.enc-race-row--state-won,
-.enc-race-row--state-lost,
-.enc-race-row--state-skipped {
-  background: color-mix(in srgb, var(--enc-paper) 92%, var(--enc-cream) 8%);
+  background: color-mix(in srgb, var(--enc-up) 7%, transparent);
+  box-shadow: inset 3px 0 0 var(--enc-up);
 }
 
 .enc-race-row__time {
-  font-family: var(--enc-serif);
+  display: grid;
+  gap: 2px;
+  justify-items: start;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 750;
   color: var(--enc-ink);
   letter-spacing: -0.02em;
   line-height: 1;
-  text-align: center;
+}
+.enc-race-row__n {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--enc-gold-ink);
 }
 .enc-race-row__body { min-width: 0; }
 .enc-race-row__title {
-  font-family: var(--enc-serif);
-  font-size: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 15px;
   font-weight: 600;
   color: var(--enc-ink);
   letter-spacing: -0.01em;
-  line-height: 1.2;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.25;
 }
 .enc-race-row__sub {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--enc-ink-mute);
-  margin-top: 2px;
-  letter-spacing: 0.02em;
+  margin-top: 3px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .enc-race-row__pick-line {
   font-size: 11px;
-  color: var(--enc-mode-accent);
+  color: var(--enc-gold-ink);
   margin-top: 3px;
   font-weight: 600;
 }
 .enc-race-row__chip { flex: none; }
+
+/* Once run: "1st", the winner's silks, the name (wraps, never cut) and SP */
+.enc-race-row__won {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 7px;
+  font-size: 12.5px;
+  color: var(--enc-ink-soft);
+}
+.enc-race-row__won img {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: var(--enc-chip);
+  box-shadow: inset 0 0 0 1px var(--enc-rule);
+}
+.enc-race-row__horse {
+  min-width: 0;
+  font-weight: 600;
+  color: var(--enc-ink);
+  line-height: 1.3;
+}
+.enc-race-row__pos {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  min-width: 32px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: var(--enc-r-pill);
+  background: linear-gradient(180deg, var(--enc-medal-gold-1), var(--enc-medal-gold-2));
+  box-shadow: inset 0 0 0 1px var(--enc-medal-gold-edge), var(--enc-medal-shine);
+  color: var(--enc-night);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.enc-race-row__sp {
+  margin-left: auto;
+  font-size: 15px;
+  color: var(--enc-ink);
+}
 
 /* CHIP — one class per state so the template just tags the state
    and never branches on colour. */
@@ -91,18 +152,16 @@
   flex-direction: column;
   align-items: center;
   gap: 1px;
-  padding: 6px 12px;
-  border-radius: var(--enc-r-pill);
-  font-size: 10px;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 10.5px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
-  min-width: 72px;
   text-align: center;
 }
-.enc-chip__label   { }
-.enc-chip__detail  {
+.enc-chip__detail {
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -111,32 +170,31 @@
 }
 
 .enc-chip--empty {
-  background: var(--enc-cream-deep);
+  background: var(--enc-chip);
   color: var(--enc-ink-soft);
 }
 .enc-chip--picked {
-  background: var(--enc-sage-tint);
-  color: var(--enc-sage-deep);
+  background: var(--enc-navy);
+  color: var(--enc-on-navy);
 }
 .enc-chip--locked {
-  background: var(--enc-gold-tint);
-  color: var(--enc-gold-deep);
+  background: var(--enc-gold-wash);
+  color: var(--enc-gold-ink);
 }
 .enc-chip--won {
-  background: var(--enc-sage-deep);
-  color: var(--enc-paper);
+  background: var(--enc-gold);
+  color: var(--enc-night);
 }
 .enc-chip--lost {
-  background: var(--enc-claret-tint);
-  color: var(--enc-claret);
+  background: var(--enc-down-wash);
+  color: var(--enc-down);
 }
 .enc-chip--skipped {
   background: transparent;
   color: var(--enc-ink-mute);
-  border: 1px dashed var(--enc-cream-deep);
+  border: 1px solid var(--enc-rule-strong);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .enc-race-row { transition: none; }
-  .enc-race-row:active { transform: none; }
 }

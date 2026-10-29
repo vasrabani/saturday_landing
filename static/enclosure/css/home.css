@@ -1,24 +1,30 @@
 /*
  * The Enclosure — Home tab (E3).
  *
- * Four blocks stacked vertically:
- *   .enc-hero        countdown headline (dark sage gradient)
- *   .enc-triptych    Next / Cup / Recap cards
- *   .enc-nudge       gold call-to-action (only when should_show_nudge)
- *   .enc-feed-rail   the last 3 timeline entries
+ * Blocks stacked vertically:
+ *   .enc-home__pulse  the Live / Meeting done pill, at the top of the band
+ *   .enc-hero         the next race or the day, a card on the midnight band
+ *   .enc-triptych     Next / Cup / Recap, one scoreboard strip
+ *   .enc-nudge        a race the guest hasn't picked (only when shown)
+ *   .enc-feed-rail    the last 3 timeline entries
  *
- * All layout is single-column, gap-driven; the Home tab is the E3
- * proving ground for the vertical rhythm the rest of the app will
- * inherit.
+ * The pulse row is the top of the midnight band; the hero's band (inside
+ * the polled [data-role="home-content"], so the server draws it on every
+ * refresh) carries it on.
  */
 
-/* ── Live pulse (E12) ─────────────────────────────────────── */
+/* ── Live pulse (E12) — the top of the band ─────────────────── */
 .enc-home__pulse {
+  --enc-focus: var(--enc-gold);
   display: flex;
   align-items: center;
   gap: var(--enc-s-2);
   flex-wrap: wrap;
-  margin-bottom: calc(-1 * var(--enc-s-2));
+  /* Bleeds to the frame, and takes back the scroll gap below so the band
+     runs on unbroken into the hero's. */
+  margin: calc(var(--enc-s-4) * -1);
+  padding: var(--enc-s-4) var(--enc-s-4) var(--enc-s-2);
+  background: var(--enc-night);
 }
 
 .enc-home__pulse-chip {
@@ -27,26 +33,30 @@
   gap: 6px;
   padding: 4px 10px;
   border-radius: var(--enc-r-pill);
+  background: color-mix(in srgb, var(--enc-on-night) 6%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--enc-on-night) 14%, transparent);
+  color: var(--enc-on-night-soft);
   font-family: var(--enc-sans);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.enc-home__pulse-chip--live {
-  background: var(--enc-sage-tint);
-  color: var(--enc-sage-deep);
-}
-.enc-home__pulse-chip--closed {
-  background: var(--enc-cream-deep);
-  color: var(--enc-ink-soft);
+.enc-home__pulse-chip--live { color: var(--enc-up-night); }
+.enc-home__pulse-chip--closed::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--enc-on-night-soft);
 }
 
 .enc-home__pulse-dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--enc-sage-deep);
+  background: var(--enc-up-night);
   animation: enc-home-pulse 1.6s ease-in-out infinite;
 }
 @keyframes enc-home-pulse {
@@ -60,124 +70,117 @@
 .enc-home__pulse-pause {
   padding: 4px 10px;
   border-radius: var(--enc-r-pill);
-  background: var(--enc-cream-deep);
-  color: var(--enc-ink-soft);
+  background: color-mix(in srgb, var(--enc-on-night) 6%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--enc-on-night) 14%, transparent);
+  color: var(--enc-on-night-soft);
   font-family: var(--enc-sans);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
   border: 0;
 }
 
-/* ── HERO ────────────────────────────────────────────────── */
+.enc-home__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--enc-s-4);
+}
+
+/* ── HERO — a card on the band, outlined in gold ─────────────── */
 .enc-hero {
-  background: linear-gradient(160deg, #4d5f4a 0%, #3a4a37 60%, #2f3d2c 100%);
-  color: var(--enc-paper);
-  border-radius: var(--enc-r-lg);
-  padding: 18px 18px 20px;
   position: relative;
   overflow: hidden;
-  box-shadow: var(--enc-shadow-md);
-}
-.enc-hero::before {
-  content: "";
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(600px 260px at 90% -40%, rgba(184, 147, 90, 0.30), transparent 60%),
-    radial-gradient(300px 200px at 0% 100%, rgba(184, 207, 168, 0.14), transparent 60%);
-  pointer-events: none;
-}
-.enc-hero--quiet {
-  background: linear-gradient(160deg, #6b7c69 0%, #4d5f4a 100%);
+  padding: 20px 20px 22px;
+  border: 1px solid var(--enc-night-line);
+  border-radius: var(--enc-r-lg);
+  background: var(--enc-night-raised);
+  color: var(--enc-on-night);
 }
 .enc-hero__eyebrow {
   font-size: 11px;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--enc-sage-glow);
+  color: var(--enc-gold);
   font-weight: 600;
-  position: relative;
 }
 .enc-hero__title {
-  font-family: var(--enc-serif);
-  font-size: 20px;
-  margin-top: 6px;
-  letter-spacing: -0.01em;
+  margin-top: 8px;
+  font-family: var(--enc-display);
+  font-size: 27px;
+  font-weight: 700;
   line-height: 1.15;
-  color: var(--enc-paper);
-  position: relative;
+  letter-spacing: 0;
+  color: var(--enc-on-night);
 }
 .enc-hero__off {
   display: flex;
   justify-content: space-between;
   align-items: end;
   margin-top: 16px;
-  position: relative;
 }
 .enc-hero__count {
-  font-family: var(--enc-serif);
   font-size: 26px;
-  font-weight: 500;
+  font-weight: 650;
   line-height: 1;
   letter-spacing: -0.02em;
-  color: var(--enc-paper);
+  color: var(--enc-on-night);
 }
 .enc-hero__label {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--enc-on-night-soft);
   text-transform: uppercase;
   letter-spacing: 0.14em;
   text-align: right;
 }
 .enc-hero__label strong {
   display: block;
-  color: var(--enc-paper);
+  color: var(--enc-on-night);
   font-size: 13px;
-  font-family: var(--enc-serif);
-  font-weight: 400;
+  font-weight: 600;
   text-transform: none;
   letter-spacing: 0;
   margin-top: 2px;
 }
 .enc-hero__quiet {
-  font-family: var(--enc-serif);
-  color: rgba(255, 255, 255, 0.86);
-  margin-top: 12px;
+  color: var(--enc-on-night-soft);
+  margin-top: 8px;
   font-size: 15px;
   line-height: 1.4;
   max-width: 30ch;
-  position: relative;
 }
 
-/* ── TRIPTYCH ─────────────────────────────────────────────── */
+/* ── TRIPTYCH — one scoreboard strip, three columns ──────────── */
 .enc-triptych {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
+  overflow: hidden;
+  background: var(--enc-paper);
+  border: var(--enc-hair) solid var(--enc-rule-strong);
+  border-radius: var(--enc-r-lg);
+  box-shadow: var(--enc-shadow-sm);
 }
 .enc-tri {
-  background: var(--enc-paper);
-  border: 1px solid var(--enc-cream-deep);
-  border-radius: var(--enc-r-md);
-  padding: 10px;
+  padding: 12px 12px 13px;
+  border-left: 1px solid var(--enc-rule);
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
 }
+.enc-tri:first-child { border-left: 0; }
 .enc-tri__label {
-  font-size: 10px;
-  letter-spacing: 0.18em;
+  font-size: 11px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--enc-mode-accent);
+  color: var(--enc-ink-mute);
   font-weight: 600;
 }
 .enc-tri__value {
-  font-family: var(--enc-serif);
-  font-size: 16px;
-  font-weight: 600;
+  margin-top: 4px;
+  font-size: 17px;
+  font-weight: 650;
   color: var(--enc-ink);
   line-height: 1.15;
   letter-spacing: -0.01em;
@@ -186,35 +189,34 @@
   white-space: nowrap;
 }
 .enc-tri__value--dim  { color: var(--enc-ink-mute); font-weight: 500; }
-.enc-tri__value--win  { color: var(--enc-sage-deep); }
-.enc-tri__value--lost { color: var(--enc-claret); }
+.enc-tri__value--win  { color: var(--enc-gold-ink); }
+.enc-tri__value--lost { color: var(--enc-down); }
 .enc-tri__ord {
-  font-family: var(--enc-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
   color: var(--enc-ink-mute);
   letter-spacing: 0;
   margin-left: 1px;
 }
 .enc-tri__foot {
-  font-size: 10px;
+  font-size: 11.5px;
   color: var(--enc-ink-mute);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* ── NUDGE (gold CTA) ─────────────────────────────────────── */
+/* ── NUDGE — a race the guest hasn't picked ─────────────────── */
 .enc-nudge {
   display: flex;
   align-items: center;
   gap: var(--enc-s-3);
   padding: 12px 14px;
-  background: var(--enc-gold-tint);
-  border-radius: var(--enc-r-md);
-  border: 1px solid rgba(184, 147, 90, 0.30);
+  background: var(--enc-paper);
+  border: 1px solid var(--enc-rule);
+  border-radius: var(--enc-r-lg);
   color: inherit;
-  box-shadow: var(--enc-shadow-sm);
+  box-shadow: var(--enc-shadow-sm), inset 3px 0 0 var(--enc-ink);
   transition: transform 100ms ease-out;
 }
 .enc-nudge:active { transform: scale(0.985); }
@@ -222,8 +224,8 @@
 .enc-nudge__icon {
   width: 34px; height: 34px;
   border-radius: 50%;
-  background: var(--enc-gold);
-  color: var(--enc-paper);
+  background: var(--enc-navy);
+  color: var(--enc-on-navy);
   display: grid;
   place-items: center;
   font-size: 15px;
@@ -233,7 +235,7 @@
 .enc-nudge__title {
   font-size: 13px;
   font-weight: 700;
-  color: var(--enc-gold-deep);
+  color: var(--enc-ink);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -245,7 +247,7 @@
 }
 .enc-nudge__go {
   font-size: 20px;
-  color: var(--enc-gold-deep);
+  color: var(--enc-ink-soft);
   flex: none;
 }
 
@@ -254,46 +256,68 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4px 4px 2px;
+  padding: 6px 2px 2px;
 }
 .enc-sec__title {
-  font-family: var(--enc-serif);
-  font-size: 14px;
-  font-weight: 600;
+  font-family: var(--enc-display);
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0;
   color: var(--enc-ink);
   margin: 0;
 }
 .enc-sec__link {
   font-size: 11px;
-  color: var(--enc-mode-accent);
+  color: var(--enc-ink-soft);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
 }
+.enc-sec__link::after { content: " \2192"; letter-spacing: 0; }
 
-/* ── FEED RAIL ────────────────────────────────────────────── */
+/* ── FEED RAIL — one card, dividers inset to the text ─────────── */
 .enc-feed-rail__list {
   list-style: none;
-  padding: 0;
+  padding: 0 14px;
   margin: 0;
   display: flex;
   flex-direction: column;
+  background: var(--enc-paper);
+  border: var(--enc-hair) solid var(--enc-rule-strong);
+  border-radius: var(--enc-r-lg);
+  box-shadow: var(--enc-shadow-sm);
 }
 .enc-feed-rail__item {
+  position: relative;
   display: grid;
-  grid-template-columns: 34px 1fr;
+  grid-template-columns: 32px 1fr;
   gap: 12px;
-  padding: 12px 4px;
-  border-bottom: 1px solid var(--enc-cream-deep);
+  padding: 13px 0;
 }
-.enc-feed-rail__item:last-child { border-bottom: 0; }
+.enc-feed-rail__item + .enc-feed-rail__item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 44px;
+  border-top: var(--enc-hair) solid var(--enc-rule-strong);
+}
 .enc-feed-rail__icon {
-  width: 34px; height: 34px;
+  width: 32px; height: 32px;
   border-radius: 50%;
-  background: var(--enc-sage-tint);
+  overflow: hidden;
+  background: var(--enc-chip);
+  box-shadow: inset 0 0 0 1px var(--enc-rule);
+  color: var(--enc-ink-soft);
   display: grid;
   place-items: center;
-  font-size: 16px;
+}
+.enc-feed-rail__icon svg { width: 17px; height: 17px; }
+.enc-feed-rail__icon img { width: 28px; height: 28px; }   /* a winner's silks */
+.enc-feed-rail__item--award .enc-feed-rail__icon,
+.enc-feed-rail__item--cup_mover .enc-feed-rail__icon {
+  background: var(--enc-gold-wash);
+  color: var(--enc-gold-ink);
 }
 .enc-feed-rail__body { min-width: 0; }
 .enc-feed-rail__meta {
@@ -303,28 +327,27 @@
   font-size: 11px;
 }
 .enc-feed-rail__title {
-  font-family: var(--enc-serif);
   font-weight: 600;
   color: var(--enc-ink);
-  font-size: 13px;
+  font-size: 14px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   min-width: 0;
   flex: 1;
 }
-.enc-feed-rail__time { color: var(--enc-ink-mute); flex: none; }
+.enc-feed-rail__time { color: var(--enc-ink-mute); font-size: 12px; flex: none; }
 .enc-feed-rail__fresh {
   display: inline-flex;
   gap: 4px;
   align-items: center;
   font-size: 9px;
-  color: var(--enc-sage-deep);
+  color: var(--enc-up);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.14em;
   padding: 2px 6px;
-  background: var(--enc-sage-tint);
+  background: color-mix(in srgb, var(--enc-up) 10%, transparent);
   border-radius: var(--enc-r-pill);
   flex: none;
   animation: enc-fresh-pulse 2.4s ease-in-out infinite;
@@ -333,10 +356,10 @@
   content: "";
   width: 5px; height: 5px;
   border-radius: 50%;
-  background: var(--enc-sage-deep);
+  background: var(--enc-up);
 }
 .enc-feed-rail__text {
-  font-size: 13px;
+  font-size: 13.5px;
   color: var(--enc-ink-soft);
   margin-top: 3px;
   line-height: 1.4;
