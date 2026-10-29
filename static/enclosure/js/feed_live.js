@@ -13,6 +13,13 @@
  *
  * The filter param round-trips on every poll so switching filters
  * with a URL bar edit stays sticky.
+ *
+ * Where the list shows results, the band carries the day's winners
+ * ([data-role="winners"]). The poll answer brings them too, as
+ * winners_html, so a race settled since the page loaded joins the strip;
+ * an answer without the field leaves the strip as it is. A tap on a
+ * winner scrolls to its result when this list has it; otherwise the link
+ * opens the race.
  */
 (function () {
   'use strict';
@@ -31,6 +38,7 @@
     var filter = feed.getAttribute('data-filter') || 'all';
     var stream = feed.querySelector('[data-role="stream"]');
     var pauseChip = feed.querySelector('[data-role="poll-meta"]');
+    var winners = feed.querySelector('[data-role="winners"]');
     if (!stream) return;
 
     var timer = null;
@@ -45,6 +53,9 @@
         .then(function (payload) {
           if (payload && typeof payload.html === 'string') {
             stream.innerHTML = payload.html;
+          }
+          if (winners && payload && typeof payload.winners_html === 'string') {
+            winners.innerHTML = payload.winners_html;
           }
         })
         .catch(function (err) {
@@ -79,6 +90,25 @@
       pauseChip.addEventListener('click', function () {
         start();
         tick();
+      });
+    }
+
+    // The day's winners: a tap goes to the result in this list, with a
+    // brief highlight. A modified click (new tab) keeps the link.
+    if (winners) {
+      winners.addEventListener('click', function (evt) {
+        if (evt.button !== 0 || evt.metaKey || evt.ctrlKey || evt.shiftKey || evt.altKey) return;
+        var link = evt.target.closest('[data-race]');
+        var entry = link && document.getElementById('enc-feed-race-' + link.getAttribute('data-race'));
+        if (!entry) return;
+        evt.preventDefault();
+        var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        entry.scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'center' });
+        entry.classList.remove('is-flash');
+        void entry.offsetWidth;                 // restart the highlight
+        entry.classList.add('is-flash');
+        var row = entry.querySelector('.enc-feed__row');
+        if (row) row.focus({ preventScroll: true });
       });
     }
 
