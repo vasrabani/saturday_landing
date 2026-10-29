@@ -8,6 +8,8 @@
  *     instruction chunk instead.
  *   * Already installed (standalone display mode) — never shown.
  *   * Dismissed in the last 14 days — never shown.
+ *   * The first page of a visit — not shown yet: the guest is asked
+ *     once they have seen what the app is for, not on load.
  *
  * Kept small: no framework, no fetch, no persistent state on the
  * server. LocalStorage flag + a captured event is all we need.
@@ -58,9 +60,21 @@
     return ageMs < ttlMs;
   }
 
+  // Counts the pages of this visit (the browser tab's session).
+  function isFirstPageOfVisit() {
+    try {
+      var seen = parseInt(window.sessionStorage.getItem('enc-pages-seen'), 10) || 0;
+      window.sessionStorage.setItem('enc-pages-seen', String(seen + 1));
+      return seen === 0;
+    } catch (e) {
+      return false;   /* storage off: ask as before */
+    }
+  }
+
   ready(function () {
     var nudge = document.getElementById('enc-install-nudge');
     if (!nudge) return;
+    var later = isFirstPageOfVisit();
 
     var key = nudge.getAttribute('data-storage-key') || 'enc-install-dismissed';
     var cooldown = parseInt(nudge.getAttribute('data-cooldown-days') || '14', 10);
@@ -79,11 +93,13 @@
 
     var deferredPrompt = null;
 
+    // The browser's own install bar is held back on every page; ours
+    // shows from the second page of a visit.
     window.addEventListener('beforeinstallprompt', function (e) {
       e.preventDefault();
       deferredPrompt = e;
       installBtn.hidden = false;
-      nudge.hidden = false;
+      if (!later) nudge.hidden = false;
     });
 
     installBtn.addEventListener('click', function () {
@@ -109,7 +125,7 @@
      * instructions and let the user run the OS share sheet. */
     if (isIos()) {
       iosChunk.hidden = false;
-      nudge.hidden = false;
+      if (!later) nudge.hidden = false;
     }
   });
 })();

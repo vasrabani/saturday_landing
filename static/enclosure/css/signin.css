@@ -1,6 +1,6 @@
 /*
  * The Enclosure — in-app sign-in page.
- * Sage/cream palette, centred column on the mobile viewport, matches
+ * A paper card, centred column on the mobile viewport, matches
  * the corporate accept-flow rhythm. Same shell — topbar and bottom
  * nav render around it so signed-out visitors don't feel they've
  * been dumped into a different app.
@@ -10,10 +10,10 @@
   max-width: 420px;
   margin: 20px auto;
   padding: 22px 20px 28px;
-  background: var(--enc-paper, #F7F1E2);
-  border: 1px solid var(--enc-hairline, rgba(60, 45, 25, 0.08));
-  border-radius: 14px;
-  box-shadow: 0 2px 10px rgba(31, 22, 8, 0.04);
+  background: var(--enc-paper);
+  border: var(--enc-hair) solid var(--enc-rule-strong);
+  border-radius: var(--enc-r-lg);
+  box-shadow: var(--enc-shadow-sm);
 }
 
 .enc-signin__head { margin-bottom: 16px; }
@@ -26,9 +26,11 @@
 }
 .enc-signin__title {
   margin: 0 0 6px;
-  font-family: var(--enc-font-serif, Georgia, serif);
+  font-family: var(--enc-display);
   font-size: 22px;
-  color: var(--enc-ink, #2F2A22);
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--enc-ink);
   text-wrap: balance;
 }
 .enc-signin__deck {
@@ -59,16 +61,16 @@
 .enc-signin__field input {
   padding: 12px 12px;
   border-radius: 10px;
-  border: 1px solid var(--enc-hairline, rgba(60, 45, 25, 0.15));
-  background: var(--enc-ground, #FBF6EA);
+  border: 1px solid var(--enc-field);
+  background: var(--enc-paper);
   font-size: 15px;
   font-family: inherit;
-  color: var(--enc-ink, #2F2A22);
+  color: var(--enc-ink);
   transition: border-color 120ms ease;
 }
 .enc-signin__field input:focus {
   outline: none;
-  border-color: var(--enc-sage-deep, #506B4D);
+  border-color: var(--enc-ink);
 }
 
 .enc-signin__submit {
@@ -76,9 +78,9 @@
   padding: 12px 16px;
   border-radius: 10px;
   border: none;
-  background: var(--enc-sage-deep, #506B4D);
-  color: var(--enc-paper, #F7F1E2);
-  font-family: var(--enc-font-serif, Georgia, serif);
+  background: var(--enc-navy);
+  color: var(--enc-on-navy);
+  font-family: var(--enc-sans);
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.01em;

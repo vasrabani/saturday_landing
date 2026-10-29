@@ -11,7 +11,7 @@
   position: fixed;
   inset: 0;
   z-index: 60;
-  background: rgba(20, 18, 16, 0.92);
+  background: var(--enc-scrim-photo);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,7 +22,7 @@
    authored display:flex above silently overrides. Reassert it as
    an author rule so the lightbox stays closed on first paint
    until JS opens it on a photo tap. */
-.enc-lightbox[hidden] { display: none !important; }
+.enc-lightbox[hidden] { display: none; }
 
 body.enc-lightbox-open { overflow: hidden; }
 
@@ -42,8 +42,8 @@ body.enc-lightbox-open { overflow: hidden; }
   right: 12px;
   width: 40px; height: 40px;
   border-radius: 50%;
-  background: rgba(244, 239, 226, 0.15);
-  color: var(--enc-paper);
+  background: color-mix(in srgb, var(--enc-on-night) 14%, transparent);
+  color: var(--enc-on-night);
   font-size: 26px;
   line-height: 0;
   display: grid;
@@ -56,7 +56,7 @@ body.enc-lightbox-open { overflow: hidden; }
   bottom: calc(20px + env(safe-area-inset-bottom, 0px));
   font-family: var(--enc-serif);
   font-style: italic;
-  color: var(--enc-paper);
+  color: var(--enc-on-night);
   text-align: center;
   font-size: 14px;
   line-height: 1.5;

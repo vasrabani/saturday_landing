@@ -6,7 +6,8 @@
  * bottom nav, dismissible, self-hiding once installed.
  *
  * JS toggles [hidden] so the [hidden] guard here matters — the
- * base rule sets display:flex.
+ * base rule sets display:flex. install_nudge.js waits for the second
+ * page of a visit before it asks.
  */
 .enc-install {
   position: fixed;
@@ -24,14 +25,13 @@
   padding: 12px 14px;
   border-radius: var(--enc-r-lg);
   background: var(--enc-paper);
-  border: 1px solid var(--enc-cream-deep);
-  box-shadow: 0 12px 32px rgba(30, 26, 22, 0.14),
-              0 2px 8px rgba(30, 26, 22, 0.06);
+  border: 1px solid var(--enc-rule);
+  box-shadow: var(--enc-shadow-md);
 
   /* Slide-up entrance. */
   animation: enc-install-in 320ms ease-out both;
 }
-.enc-install[hidden] { display: none !important; }
+.enc-install[hidden] { display: none; }
 
 @keyframes enc-install-in {
   from { transform: translate(-50%, 40px); opacity: 0; }
@@ -83,7 +83,7 @@
   color: var(--enc-ink);
   font-weight: 600;
 }
-.enc-install__ios[hidden] { display: none !important; }
+.enc-install__ios[hidden] { display: none; }
 .enc-install__glyph {
   display: inline-block;
   transform: translateY(1px);
@@ -99,17 +99,17 @@
 .enc-install__cta {
   padding: 8px 14px;
   border-radius: var(--enc-r-pill);
-  background: var(--enc-mode-accent);
-  color: var(--enc-paper);
+  background: var(--enc-navy);
+  color: var(--enc-on-navy);
   font-family: var(--enc-sans);
   font-weight: 700;
   font-size: 13px;
   letter-spacing: 0.02em;
   border: 0;
   cursor: pointer;
-  transition: transform 100ms ease-out, opacity 120ms ease-out;
+  transition: transform 160ms ease-out, background-color 160ms ease-out;
 }
-.enc-install__cta[hidden] { display: none !important; }
+.enc-install__cta[hidden] { display: none; }
 .enc-install__cta:active { transform: scale(0.97); }
 
 .enc-install__dismiss {
@@ -127,4 +127,11 @@
 .enc-install__dismiss:hover {
   background: var(--enc-cream-deep);
   color: var(--enc-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enc-install { animation: none; }
+  .enc-install__cta,
+  .enc-install__dismiss { transition: none; }
+  .enc-install__cta:active { transform: none; }
 }

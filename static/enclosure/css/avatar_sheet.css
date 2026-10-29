@@ -148,7 +148,7 @@
   border: 1px solid rgba(140, 40, 40, 0.35);
   background: var(--enc-paper, #F7F1E2);
   color: #8C2828;
-  font-family: var(--enc-font-serif, Georgia, serif);
+  font-family: var(--enc-sans);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -167,11 +167,11 @@
   display: block;
   padding: 14px 16px;
   border-radius: 12px;
-  background: var(--enc-sage-deep, #506B4D);
-  color: var(--enc-paper, #F7F1E2);
+  background: var(--enc-navy);
+  color: var(--enc-on-navy);
   text-decoration: none;
   text-align: center;
-  font-family: var(--enc-font-serif, Georgia, serif);
+  font-family: var(--enc-sans);
   font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -222,8 +222,12 @@ button.enc-top__silks-slot {
   cursor: pointer;
 }
 button.enc-top__silks-slot:focus-visible {
-  outline: 2px solid var(--enc-sage-deep, #506B4D);
+  outline: 2px solid var(--enc-focus);
   outline-offset: 2px;
   border-radius: 50%;
 }
 .enc-top__silks-anon { display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .enc-avatar-sheet { animation: none; }
+}
