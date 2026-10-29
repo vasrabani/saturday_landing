@@ -1,314 +1,298 @@
 /*
- * The Enclosure — Camera FAB → note sheet (E6).
+ * The Enclosure — the camera button's Post pop-up (E6 + E7).
  *
- * Full-viewport backdrop with a bottom-anchored sheet that slides
- * up. The sheet is a form: silks, event context, textarea, count
- * meter, submit. Reduced-motion just fades the backdrop; the sheet
- * appears in place.
+ * One card just above the middle of the screen. The scrim dims the page;
+ * the tab bar stays in view above it, and its centre button, now a ×,
+ * closes the card. Note | Photo are two choice cards: the chosen one in
+ * midnight with a gold check, so the choice never rests on colour alone.
+ * Everything inside lines up on the card's 20px padding.
+ *
+ * With a phone's keyboard up, note_sheet.js sets .enc-kb-open and --enc-kb
+ * (the keyboard's height) on <html>: the card rides above the keyboard,
+ * the choice cards fold to one line and the boxes shorten, so Post stays
+ * in view even on a 667px-tall phone.
  */
 
 .enc-sheet {
   position: fixed;
   inset: 0;
-  background: rgba(42, 39, 36, 0.42);
   z-index: 50;
-  /*
-   * Column so head + mode-tabs + active form stack vertically.
-   * `justify-content: flex-end` pins the whole stack to the bottom
-   * of the viewport (the sheet slides up from there). `align-items:
-   * center` keeps the stack horizontally centred on wide screens.
-   */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding: 0;
-  animation: enc-sheet-fade 180ms ease-out;
-}
-/* The `hidden` attribute is a UA rule (display: none) that authored
-   display:flex above silently overrides. Reassert it as an author
-   rule so the sheet stays closed on page load until JS opens it. */
-.enc-sheet[hidden] { display: none !important; }
-
-/* iOS Safari — inert body scroll when sheet is open. */
-body.enc-sheet-open {
-  overflow: hidden;
-}
-
-.enc-sheet__handle {
-  position: absolute;
-  top: 6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 32px;
-  height: 4px;
-  border-radius: 999px;
-  background: var(--enc-cream-deep);
-  z-index: 2;
-}
-
-.enc-sheet__head,
-.enc-sheet__form {
-  background: var(--enc-paper);
-  width: 100%;
-  max-width: var(--enc-max-w);
-}
-.enc-sheet__head {
-  display: grid;
-  grid-template-columns: 44px 1fr auto;
-  gap: 12px;
-  align-items: center;
-  padding: 20px 20px 8px;
-  border-top-left-radius: var(--enc-r-xl);
-  border-top-right-radius: var(--enc-r-xl);
-  animation: enc-sheet-slide 220ms cubic-bezier(0.2, 0.85, 0.35, 1);
-}
-.enc-sheet__silks { display: grid; place-items: center; }
-.enc-sheet__title {
-  font-family: var(--enc-serif);
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--enc-ink);
-  margin: 0;
-  letter-spacing: -0.01em;
-}
-.enc-sheet__meta {
-  font-size: 12px;
-  color: var(--enc-sage-deep);
-  font-weight: 600;
-  margin: 2px 0 0;
-  letter-spacing: 0.02em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.enc-sheet__close {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: var(--enc-cream-deep);
-  color: var(--enc-ink-soft);
-  font-size: 20px;
-  line-height: 0;
-  display: grid;
-  place-items: center;
-  align-self: start;
-}
-
-.enc-sheet__modes {
-  display: flex;
-  gap: 6px;
-  padding: 4px 20px 8px;
-  background: var(--enc-paper);
-}
-.enc-sheet__mode {
-  flex: 1;
-  padding: 8px 10px;
-  border-radius: var(--enc-r-md);
-  background: var(--enc-cream);
-  color: var(--enc-ink-soft);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  transition: background-color 120ms ease-out, color 120ms ease-out;
-}
-.enc-sheet__mode.is-active {
-  background: var(--enc-mode-accent);
-  color: var(--enc-paper);
-}
-
-.enc-sheet__form {
-  padding: 12px 20px calc(20px + env(safe-area-inset-bottom, 0px));
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  animation: enc-sheet-slide 220ms cubic-bezier(0.2, 0.85, 0.35, 1);
-}
-/*
- * Author-level guard: the base rule above sets display:flex, which
- * wins against the UA [hidden]{display:none}. JS toggles [hidden]
- * to swap Note ↔ Photo mode — without this override both forms sit
- * side-by-side and the wrong one accepts input.
- */
-.enc-sheet__form[hidden] { display: none !important; }
-
-/* Photo picker */
-.enc-sheet__file-drop {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  min-height: 120px;
-  padding: 20px 16px;
-  background: var(--enc-cream);
-  border: 2px dashed var(--enc-cream-deep);
-  border-radius: var(--enc-r-md);
-  color: var(--enc-ink-soft);
-  cursor: pointer;
-  text-align: center;
-  transition: border-color 120ms ease-out, background-color 120ms ease-out;
+  padding: 16px 16px calc(var(--enc-nav-h) + 24px + env(safe-area-inset-bottom, 0px));
+  background: var(--enc-scrim);
+  animation: enc-sheet-fade 180ms ease-out;
 }
-.enc-sheet__file-drop:hover {
-  border-color: var(--enc-mode-accent);
+/* A display rule must not beat the hidden attribute */
+.enc-sheet[hidden] { display: none; }
+.enc-kb-open .enc-sheet { padding-bottom: calc(var(--enc-kb, 0px) + 16px); }
+
+/* The page stays still behind the pop-up; the tab bar stays above the
+   scrim, its centre button the pop-up's × */
+body.enc-sheet-open { overflow: hidden; }
+body.enc-sheet-open .enc-nav { z-index: 60; }
+body.enc-sheet-open .enc-nav__icon-post { display: none; }
+body.enc-sheet-open .enc-nav__icon-close { display: block; }
+
+.enc-sheet__dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(100%, 380px);
+  max-height: 100%;
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 20px;
   background: var(--enc-paper);
-}
-.enc-sheet__file-glyph {
-  font-size: 28px;
-  line-height: 1;
-}
-.enc-sheet__file-label {
-  font-size: 13px;
-  line-height: 1.35;
-  max-width: 28ch;
-}
-.enc-sheet__caption {
-  width: 100%;
-  padding: 10px 14px;
-  border: 1px solid var(--enc-cream-deep);
-  border-radius: var(--enc-r-md);
-  font: inherit;
-  font-size: 14px;
-  color: var(--enc-ink);
-  background: var(--enc-cream);
-  outline: none;
-}
-.enc-sheet__caption:focus {
-  border-color: var(--enc-sage-deep);
-  background: var(--enc-paper);
-  box-shadow: 0 0 0 3px var(--enc-sage-tint);
+  box-shadow: var(--enc-shadow-dialog);
+  animation: enc-sheet-in 200ms ease-out;
 }
 
-.enc-sheet__textarea {
-  width: 100%;
-  border: 1px solid var(--enc-cream-deep);
-  border-radius: var(--enc-r-md);
-  padding: 12px 14px;
-  font: inherit;
-  font-size: 15px;
-  line-height: 1.5;
+/* Title and subtitle on the left, a round close button on the right */
+.enc-sheet__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 12px;
+}
+.enc-sheet__title {
+  font-family: var(--enc-display);
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: 0;
   color: var(--enc-ink);
-  background: var(--enc-cream);
-  resize: none;
-  min-height: 84px;
-  outline: none;
 }
-.enc-sheet__textarea:focus {
-  border-color: var(--enc-sage-deep);
+/* Focused as the card opens, to start reading there; not a control */
+.enc-sheet__title:focus { outline: none; }
+.enc-sheet__meta {
+  margin-top: 3px;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--enc-ink-mute);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.enc-sheet__close {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin: -6px -6px 0 0;
+  border-radius: 50%;
+  background: var(--enc-chip);
+  color: var(--enc-ink-soft);
+}
+
+/* NOTE | PHOTO — two choice cards ──────────────────────────────── */
+.enc-sheet__modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.enc-sheet__mode {
+  --enc-sheet-glyph: var(--enc-ink-soft);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "glyph check"
+    "label label"
+    "hint  hint";
+  align-items: center;
+  justify-items: start;
+  padding: 14px 14px 13px;
+  border-radius: 14px;
+  background: var(--enc-chip);
+  box-shadow: inset 0 0 0 1px var(--enc-rule);
+  color: var(--enc-ink);
+  font-size: 16px;
+  font-weight: 700;
+  text-align: left;
+  transition: background-color 180ms ease-out, box-shadow 180ms ease-out, transform 160ms ease-out;
+}
+.enc-sheet__mode-glyph {
+  grid-area: glyph;
+  color: var(--enc-sheet-glyph);
+}
+.enc-sheet__mode-check {
+  grid-area: check;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.5px var(--enc-field);
+}
+.enc-sheet__mode-check svg { visibility: hidden; }
+.enc-sheet__mode-label {
+  grid-area: label;
+  margin-top: 14px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.enc-sheet__mode-hint {
+  grid-area: hint;
+  margin-top: 2px;
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--enc-ink-mute);
+}
+.enc-sheet__mode:active { transform: scale(0.98); }
+.enc-sheet__mode.is-active {
+  --enc-sheet-glyph: var(--enc-gold);
+  background: var(--enc-night);
+  color: var(--enc-on-night);
+  box-shadow: var(--enc-shadow-lift);
+}
+.enc-sheet__mode.is-active .enc-sheet__mode-hint { color: var(--enc-on-night-soft); }
+.enc-sheet__mode.is-active .enc-sheet__mode-check {
+  background: var(--enc-gold);
+  box-shadow: none;
+  color: var(--enc-night);
+}
+.enc-sheet__mode.is-active .enc-sheet__mode-check svg { visibility: visible; }
+
+/* With the keyboard up: each choice on one line */
+.enc-kb-open .enc-sheet__mode {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "glyph label check";
+  column-gap: 10px;
+  padding: 10px 12px;
+}
+.enc-kb-open .enc-sheet__mode-glyph { width: 20px; height: 20px; }
+.enc-kb-open .enc-sheet__mode-label { margin-top: 0; }
+.enc-kb-open .enc-sheet__mode-hint { display: none; }
+
+/* THE FORM — a full-width box, then the count and Post on one line ── */
+.enc-sheet__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.enc-sheet__form[hidden] { display: none; }
+
+.enc-sheet__textarea,
+.enc-sheet__caption {
+  width: 100%;
+  border: 1px solid var(--enc-field);
+  border-radius: var(--enc-r-lg);
   background: var(--enc-paper);
-  box-shadow: 0 0 0 3px var(--enc-sage-tint);
+  color: var(--enc-ink);
+  font: 400 16px/1.45 var(--enc-sans);   /* 16px: phones don't zoom in on focus */
 }
+/* As tall as the Photo panel, so nothing jumps between the two */
+.enc-sheet__textarea {
+  min-height: 198px;
+  padding: 12px 14px;
+  resize: none;
+}
+.enc-sheet__caption {
+  min-height: 46px;
+  padding: 0 14px;
+}
+.enc-sheet__textarea::placeholder,
+.enc-sheet__caption::placeholder { color: var(--enc-ink-mute); }
+.enc-sheet__textarea:focus,
+.enc-sheet__caption:focus {
+  outline: none;
+  border-color: var(--enc-ink);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--enc-ink) 8%, transparent);
+}
+.enc-kb-open .enc-sheet__textarea { min-height: 132px; }
+
+/* Photo picker */
+.enc-sheet__file-drop {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  min-height: 140px;
+  padding: 16px;
+  border: 1.5px dashed var(--enc-field);
+  border-radius: var(--enc-r-lg);
+  background: var(--enc-chip);
+  color: var(--enc-ink-soft);
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 120ms ease-out, background-color 120ms ease-out;
+}
+.enc-sheet__file-glyph { color: var(--enc-ink-mute); }
+.enc-sheet__file-label {
+  max-width: 28ch;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.enc-kb-open .enc-sheet__file-drop {
+  min-height: 0;
+  padding: 12px 16px;
+}
+.enc-kb-open .enc-sheet__file-glyph { display: none; }
 
 .enc-sheet__row {
   display: flex;
   align-items: center;
-  gap: 12px;
   justify-content: space-between;
+  gap: 12px;
 }
 .enc-sheet__count {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--enc-ink-mute);
   font-variant-numeric: tabular-nums;
 }
 .enc-sheet__error {
-  font-size: 12px;
-  color: var(--enc-claret);
   flex: 1;
+  font-size: 13px;
+  color: var(--enc-down);
   text-align: center;
 }
 
 .enc-sheet__submit {
-  padding: 10px 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 104px;
+  min-height: 44px;
+  margin-left: auto;
+  padding: 0 22px;
   border-radius: var(--enc-r-pill);
-  background: var(--enc-gold);
-  color: var(--enc-paper);
+  background: var(--enc-navy);
+  color: var(--enc-on-navy);
+  font-size: 15px;
   font-weight: 700;
-  font-size: 14px;
   letter-spacing: 0.02em;
-  min-width: 96px;
-  transition: transform 100ms ease-out, opacity 120ms ease-out;
+  transition: transform 160ms ease-out, background-color 160ms ease-out;
 }
 .enc-sheet__submit:disabled {
-  opacity: 0.55;
+  opacity: 0.45;
   cursor: default;
 }
 .enc-sheet__submit:not(:disabled):active { transform: scale(0.97); }
 
-/* Photos in the feed — full-width card, tap-to-lightbox. */
-.enc-feed__photo {
-  display: block;
-  width: 100%;
-  margin-top: 8px;
-  padding: 0;
-  border: 0;
-  border-radius: var(--enc-r-md);
-  overflow: hidden;
-  background: var(--enc-cream-deep);
-  cursor: zoom-in;
-  aspect-ratio: 4 / 3;
-  transition: transform 120ms ease-out;
-}
-.enc-feed__photo:active { transform: scale(0.99); }
-.enc-feed__photo img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.enc-feed__caption {
-  font-family: var(--enc-serif);
-  font-style: italic;
-  font-size: 13px;
-  color: var(--enc-ink-soft);
-  margin-top: 6px;
-  line-height: 1.45;
-}
-
-/* Notes in the feed — replace the icon slot with silks + attach chip. */
-.enc-feed__author-silks {
-  display: grid;
-  place-items: center;
-  align-self: start;
-}
-.enc-feed__item--guest_note .enc-feed__title {
-  font-family: var(--enc-sans);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--enc-ink);
-  letter-spacing: 0.01em;
-}
-.enc-feed__item--guest_note .enc-feed__text {
-  font-family: var(--enc-serif);
-  font-size: 14px;
-  color: var(--enc-ink);
-  margin-top: 3px;
-  line-height: 1.5;
-}
-.enc-feed__attach {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 6px;
-  padding: 3px 10px;
-  background: var(--enc-sage-tint);
-  color: var(--enc-sage-deep);
-  font-size: 11px;
-  font-weight: 600;
-  border-radius: var(--enc-r-pill);
+@media (hover: hover) {
+  .enc-sheet__close:hover { color: var(--enc-ink); }
+  .enc-sheet__mode:hover:not(.is-active) { box-shadow: inset 0 0 0 1px var(--enc-rule-strong); }
+  .enc-sheet__file-drop:hover {
+    border-color: var(--enc-mode-accent);
+    background: var(--enc-paper);
+  }
 }
 
 @keyframes enc-sheet-fade {
   from { opacity: 0; }
-  to   { opacity: 1; }
 }
-@keyframes enc-sheet-slide {
-  from { transform: translateY(20px); opacity: 0; }
-  to   { transform: translateY(0); opacity: 1; }
+@keyframes enc-sheet-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .enc-sheet,
-  .enc-sheet__head,
-  .enc-sheet__form { animation: none; }
+  .enc-sheet__dialog { animation: none; }
+  .enc-sheet__mode,
+  .enc-sheet__file-drop,
   .enc-sheet__submit { transition: none; }
+  .enc-sheet__mode:active,
   .enc-sheet__submit:not(:disabled):active { transform: none; }
 }

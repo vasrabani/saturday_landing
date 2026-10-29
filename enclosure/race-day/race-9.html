@@ -638,90 +638,101 @@
     
       
 <aside class="enc-sheet" id="enc-note-sheet"
-       role="dialog" aria-modal="true" aria-labelledby="enc-note-sheet-title"
+       role="dialog" aria-labelledby="enc-note-sheet-title"
        hidden
        data-note-endpoint="note.json"
        data-photo-endpoint="photo.json"
        data-filter="all"
        >
-  <div class="enc-sheet__handle" aria-hidden="true"></div>
-
-  <header class="enc-sheet__head">
-    <div class="enc-sheet__silks">
-      <svg class="enc-silks" viewBox="0 0 40 40" width="36" height="36" role="img" aria-label="Priya Shah"><defs><clipPath id="enc-silks-f020318a"><circle cx="20" cy="20" r="20"/></clipPath></defs><g clip-path="url(#enc-silks-f020318a)"><rect width="40" height="40" fill="#556B7F"/><rect y="20" width="40" height="20" fill="#F4EFE2"/></g><circle cx="20" cy="20" r="19.5" fill="none" stroke="rgba(42,39,36,0.10)" stroke-width="1"/></svg>
-    </div>
-    <div>
-      <h2 id="enc-note-sheet-title" class="enc-sheet__title">Post to the day</h2>
-      <p class="enc-sheet__meta" data-role="attach-line">
+  <div class="enc-sheet__dialog">
+    <header class="enc-sheet__head">
+      <div>
+        <h2 id="enc-note-sheet-title" class="enc-sheet__title" tabindex="-1">Post to the day</h2>
+        <p class="enc-sheet__meta" data-role="attach-line">
         
-          Posting to the day
+            Posting to the day
         
-      </p>
-    </div>
-    <button type="button" class="enc-sheet__close"
-            data-role="close" aria-label="Close">
-      &times;
-    </button>
-  </header>
+        </p>
+      </div>
+      <button type="button" class="enc-sheet__close"
+              data-role="close" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg>
+      </button>
+    </header>
 
-  <div class="enc-sheet__modes" role="tablist" aria-label="Post type">
-    <button type="button" role="tab" aria-selected="true"
-            class="enc-sheet__mode is-active"
-            data-role="mode" data-mode="note">
-      <span aria-hidden="true">✎</span> Note
-    </button>
-    <button type="button" role="tab" aria-selected="false"
-            class="enc-sheet__mode"
-            data-role="mode" data-mode="photo">
-      <span aria-hidden="true">📷</span> Photo
-    </button>
+    <div class="enc-sheet__modes" role="tablist" aria-label="Post type">
+      <button type="button" role="tab" aria-selected="true" tabindex="0"
+              aria-controls="enc-sheet-note" aria-labelledby="enc-sheet-label-note"
+              aria-describedby="enc-sheet-hint-note"
+              class="enc-sheet__mode is-active"
+              data-role="mode" data-mode="note">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false" class="enc-sheet__mode-glyph"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>
+        <span class="enc-sheet__mode-check" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+        <span class="enc-sheet__mode-label" id="enc-sheet-label-note">Note</span>
+        <span class="enc-sheet__mode-hint" id="enc-sheet-hint-note">Say a few words</span>
+      </button>
+      <button type="button" role="tab" aria-selected="false" tabindex="-1"
+              aria-controls="enc-sheet-photo" aria-labelledby="enc-sheet-label-photo"
+              aria-describedby="enc-sheet-hint-photo"
+              class="enc-sheet__mode"
+              data-role="mode" data-mode="photo">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false" class="enc-sheet__mode-glyph"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.8" r="3.4"/></svg>
+        <span class="enc-sheet__mode-check" aria-hidden="true"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+        <span class="enc-sheet__mode-label" id="enc-sheet-label-photo">Photo</span>
+        <span class="enc-sheet__mode-hint" id="enc-sheet-hint-photo">Share a moment</span>
+      </button>
+    </div>
+
+  
+    <form class="enc-sheet__form" id="enc-sheet-note" role="tabpanel"
+          aria-labelledby="enc-sheet-label-note"
+          data-role="form" data-mode-form="note" novalidate>
+      <input type="hidden" name="csrfmiddlewaretoken" value="sandbox">
+      <label class="enc-visually-hidden" for="enc-note-text">Your note</label>
+      <textarea id="enc-note-text" name="text"
+                class="enc-sheet__textarea"
+                placeholder="Say something the group will remember."
+                maxlength="500" rows="3" required
+                data-role="text"></textarea>
+      <div class="enc-sheet__row">
+        <div class="enc-sheet__count" data-role="count">0 / 500</div>
+        <div class="enc-sheet__error" data-role="error" hidden></div>
+        <button type="submit" class="enc-sheet__submit" data-role="submit">
+          Post
+        </button>
+      </div>
+    </form>
+
+  
+    <form class="enc-sheet__form" id="enc-sheet-photo" role="tabpanel"
+          aria-labelledby="enc-sheet-label-photo"
+          data-role="photo-form" data-mode-form="photo"
+          enctype="multipart/form-data" hidden novalidate>
+      <input type="hidden" name="csrfmiddlewaretoken" value="sandbox">
+      <label class="enc-sheet__file-drop" for="enc-photo-file"
+             data-role="photo-drop">
+        <input type="file" id="enc-photo-file" name="image"
+               accept="image/*" capture="environment" required
+               class="enc-visually-hidden" data-role="photo-file">
+        <span class="enc-sheet__file-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5z"/><circle cx="12" cy="12.8" r="3.4"/></svg></span>
+        <span class="enc-sheet__file-label" data-role="photo-label">
+          Tap to take a photo or choose from library
+        </span>
+      </label>
+      <label class="enc-visually-hidden" for="enc-photo-caption">Caption</label>
+      <input type="text" id="enc-photo-caption" name="caption"
+             class="enc-sheet__caption"
+             placeholder="Add a caption (optional)"
+             maxlength="200" data-role="photo-caption">
+      <div class="enc-sheet__row">
+        <div class="enc-sheet__count" data-role="photo-count">Ready when you are</div>
+        <div class="enc-sheet__error" data-role="photo-error" hidden></div>
+        <button type="submit" class="enc-sheet__submit" data-role="photo-submit">
+          Post
+        </button>
+      </div>
+    </form>
   </div>
-
-  
-  <form class="enc-sheet__form" data-role="form" data-mode-form="note" novalidate>
-    <input type="hidden" name="csrfmiddlewaretoken" value="sandbox">
-    <label class="enc-visually-hidden" for="enc-note-text">Your note</label>
-    <textarea id="enc-note-text" name="text"
-              class="enc-sheet__textarea"
-              placeholder="Say something the group will remember."
-              maxlength="500" rows="3" required
-              data-role="text"></textarea>
-    <div class="enc-sheet__row">
-      <div class="enc-sheet__count" data-role="count">0 / 500</div>
-      <div class="enc-sheet__error" data-role="error" hidden></div>
-      <button type="submit" class="enc-sheet__submit" data-role="submit">
-        Post
-      </button>
-    </div>
-  </form>
-
-  
-  <form class="enc-sheet__form" data-role="photo-form" data-mode-form="photo"
-        enctype="multipart/form-data" hidden novalidate>
-    <input type="hidden" name="csrfmiddlewaretoken" value="sandbox">
-    <label class="enc-sheet__file-drop" for="enc-photo-file"
-           data-role="photo-drop">
-      <input type="file" id="enc-photo-file" name="image"
-             accept="image/*" capture="environment" required
-             class="enc-visually-hidden" data-role="photo-file">
-      <span class="enc-sheet__file-glyph" aria-hidden="true">📷</span>
-      <span class="enc-sheet__file-label" data-role="photo-label">
-        Tap to take a photo or choose from library
-      </span>
-    </label>
-    <label class="enc-visually-hidden" for="enc-photo-caption">Caption</label>
-    <input type="text" id="enc-photo-caption" name="caption"
-           class="enc-sheet__caption"
-           placeholder="Add a caption (optional)"
-           maxlength="200" data-role="photo-caption">
-    <div class="enc-sheet__row">
-      <div class="enc-sheet__count" data-role="photo-count">Ready when you are</div>
-      <div class="enc-sheet__error" data-role="photo-error" hidden></div>
-      <button type="submit" class="enc-sheet__submit" data-role="photo-submit">
-        Post
-      </button>
-    </div>
-  </form>
 </aside>
 
     
