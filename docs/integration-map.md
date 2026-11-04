@@ -15,6 +15,10 @@ made here gets there. Five pages live here now.
   `races-yesterday.html`). Snapshots of `/races/`, `/races/tomorrow/` and
   `/races/yesterday/` taken 2026-10-16 for the revamp — see
   `races-brief.md`. Nothing has been ported back yet.
+- **The Fox's Wire** (`news/index.html`, five articles under
+  `news/article/2026/`, six letters under `letters/`). Captures of `/news/`
+  and the pages it leads with, taken 2026-10-31, redesigned — see
+  `news-brief.md`. Nothing has been ported back yet.
 
 Repositories:
 
@@ -692,3 +696,97 @@ the big race's banner, meeting and line, an abandoned meeting and race,
 a member's pick, the Fox's cubs, the day without racing. Their markup
 here has the template's class names, not necessarily its nesting or its
 words.
+
+## The Fox's Wire, part by part
+
+The front page (`news/index.html`) against the live index's sections, and
+the context each needs. `news-brief.md` has what each part is for.
+
+| In the sandbox | Live page | Context it needs |
+| --- | --- | --- |
+| Logo band | new: `header.wire-mast`, first in `<main>` on every news page | — (the logo is fixed) |
+| Masthead | `.pp-mast`, `.pp-tickers` | today's date; the edition's volume and number; the next race off, its time and course |
+| Top stories | new: `.wire-top` | the day's Deep Dive (the lead), and the day's LLaMa Letters (six here), each with its title, deck, time, course and the silks of the horse it names |
+| Desk pills | `.pp-shelf` | fixed copy; the desks' portraits are the nav's (`static/img/nav/`) |
+| §1 The Lead | `.pp-lead` | today's Horses to Watch: headline, deck, filing time, and its five horses with rank, race and silks |
+| §2 The Case Files | `.pp-cases` | as the live page: the four cases, each with its § number, desk and filing time |
+| §3 The Pin | new: `#pin` | the current race of the week, as `/pin/` shows it: name, course, time, picture |
+| §4 The Fold | `.pp-fold` | as the live page: the three long reads |
+| §5 The Back Issues | new: `#archive` | per desk, its last few editions before today: title, date, link |
+| §6 Market Movers | `.pp-movers` | as the live page: coming in and drifting, each with its race, old and new price and move |
+| §7 The Honest Record | `.pp-record` | as the live page: the pledge and the three figures |
+| The 10:00 Card | `.pp-card` | — (fixed copy); the form posts to a new view (below) |
+
+The article pages are the news app's article template, and the letters
+the LLaMa Letters' detail template, each rebuilt inside `<main>`: the
+story's head, its picture or silks, the body, the side boxes, and "More
+from The Fox's Wire" (four more stories of the same kind). Their content
+is the live page's, word for word.
+
+**The sandbox's pages are captures.** All twelve were built from the live
+pages on the morning of 31 October 2026, in the sandbox's own shell
+(`meeting.html`'s head, nav, drawer, tour strip and footer, with the
+nav's counts and featured race set to that morning). Links to the other
+eleven go to the sandbox's copies; every other link goes to the live
+site.
+
+## The Fox's Wire: what to port
+
+Two stylesheets, five scripts and a picture folder are new; two views
+are new; the nav gains a search button on these pages; `site.js`,
+`chrome.css` and `base.css` are untouched.
+
+**Files.** Each goes to the same path under `news/static/news/wire/`.
+Every `url()` stays inside the folder (there are none at present).
+
+| File | What it is |
+| --- | --- |
+| `css/wire.css` | The tokens, the nav and footer on these pages, the logo band and masthead, the front page, the search panel. Loaded on all three templates, in place of `news/css/paper.css` on the index. No `!important`; media queries only at 767, 1023 and 1279px |
+| `css/wire_article.css` | The article and letter bodies, after `wire.css`, in place of their present page stylesheets |
+| `js/wire_nav.js` | New. Places the site's menus under their item in the scrolling bar |
+| `js/wire_search.js` | New. The search panel, asking `/news/search/` |
+| `js/wire_rail.js` | New. The arrows on §1's rail of silks |
+| `js/wire_time.js` | New. "3 hrs ago" for the past week's filing times |
+| `js/wire_card.js` | New. Sends the 10:00 Card's form in the background |
+| `img/*.webp` (13) | The site's own art cut to 16:9 pictures and byline faces (`image-provenance.md`) |
+| `img/silks/*.svg` (20) | The named horses' silks, copied so the sandbox works offline; the templates keep loading silks from the racing data service |
+
+`wire_nav.js` and `wire_search.js` load on every news page,
+`wire_rail.js` and `wire_card.js` on the index, `wire_time.js` on all
+three; each with `defer`, after `site.js`.
+
+**Markup. STRUCTURAL — needs moving into the Django templates.**
+
+| Change | Where | What |
+| --- | --- | --- |
+| 1. The scope | `<body>` of the index, article and letter templates | add `page-wire` to the body's classes; every rule in both stylesheets hangs off it or a `wire-` class |
+| 2. The search button | `base.html`'s nav, after `.site-nav__sep`, on these pages only (a block the news templates fill) | `<button type="button" class="wire-search-toggle" data-wire-search-open aria-label="Search the Wire" aria-expanded="false" aria-controls="wire-search">` with its magnifier |
+| 3. The logo band | first in `<main>` on all three | `header.wire-mast`; on the index it also holds the masthead (`.wire-mast__head` with the stamp, `h1.wire-mast__title`, the tagline, `.wire-mast__meta`, `.wire-mast__next`) |
+| 4. The front page | the index's `<main>` | the sections above, in that order, each `section` with the id the live page used where it had one (`#lead`, `#cases`, `#fold`, `#movers`, `#record`) and `#pin`, `#archive`, `#card` |
+| 5. The Card's form | in `#card` | `action="{% url … %}" method="post" data-wire-card`, `{% csrf_token %}`, `autocomplete="email"`; after it the status line, `<p class="wire-signup__status" role="status" data-wire-card-status data-wire-offline="…">` |
+| 6. Articles and letters | their `<main>` | `article.wire-art` (head, columns, body, side boxes), then `section.wire-sec` "More from The Fox's Wire" |
+| 7. The search panel | after the footer, on all three | `div.wire-scrim[data-wire-search-close]` and `div#wire-search.wire-drawer[role=dialog]` with `data-wire-search-url="{% url … %}"` |
+| `<head>` | all three | `wire.css`, and `wire_article.css` on articles and letters, in place of the page stylesheets; `base`, `paper`, `chrome` and `picks_budget` stay |
+| Before `</body>` | all three | the scripts above |
+
+**Views. New, for the two things that talk to the server**
+(`news-brief.md`, "Connecting to the server", has the shapes):
+
+| URL | Method | Answers |
+| --- | --- | --- |
+| `/news/search/?q=` | GET | JSON: up to 12 published stories (articles and letters) matching `q`, newest first, each `title`, `desk`, `when` and `url` |
+| `/news/card/subscribe/` | POST (CSRF) | JSON `{ok, message}` or `{ok: false, error}` with 400 when asked for JSON; otherwise a redirect back to `/news/#card` |
+
+In the sandbox, `tools/serve.mjs` answers both: search from
+`fixtures/news-search.json`, the sign-up by checking the address and
+storing nothing.
+
+**One thing in the chrome.** On these pages `wire.css` restyles the
+site's nav and footer, as `browse.css` does the footer on the day's
+races (`news-brief.md`, "The nav and the footer on these pages"). Drop
+`page-wire` from a template and its nav and footer are as they are
+elsewhere.
+
+**Hidden, not removed.** Still in the nav's markup; `wire.css` hides
+them on these pages: the brand (it is in the logo band), the menu
+button, the race badge and the date.

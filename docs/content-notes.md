@@ -134,3 +134,39 @@ the big race's banner and tag, "Big race meeting" on its meeting's flag,
 "Abandoned" and "Racing called off" on an abandoned meeting, "Your pick"
 on a member's pick, and "No racing today" with its line on the empty
 day. The template's own words replace them in the port.
+
+## The Fox's Wire
+
+The twelve pages are captures of the live pages on the morning of 31
+October 2026, so every story, price, figure and time is the site's own,
+not sample data, and they agree with each other and with the nav's
+counts for that morning. The redesign's own words:
+
+- **§5 The Back Issues**, the name of the new section of older editions
+  by desk (the live page has no such section), and **More from The Fox's
+  Wire** over the four stories at the foot of an article or letter.
+- **The search panel:** "Search the Wire" (its label and the box's
+  placeholder), "No stories match that." and "Search is not answering
+  just now. Try again in a moment."
+- **The 10:00 Card:** "The Card could not be reached just now. Try again
+  in a moment." when the server cannot be reached. The thanks and the
+  refusal are the server's (`tools/serve.mjs` here): "You're on the
+  list. The next Card comes to … at 10:00 on the next race day." and
+  "That email address does not look right. Check it and try again." The
+  view's own words replace them in the port.
+- **"3 hrs ago"** in place of a filing time from the past week
+  (`wire_time.js`); older stories keep their date.
+- The stamp's label for a screen reader, "Every day, 10 AM".
+
+Decisions for you:
+
+- **The lead.** The front page leads on the day's Deep Dive (Charlie
+  Hall, Wetherby 14:55), from the news feed, not on the Horses to Watch
+  column the live page opened with: a front page leads on the day's big
+  race. The live page had dropped its Fox's Eye block that morning.
+- **The pictures** are the site's own art, chosen by desk, and the
+  silks of the horse a story names; there is no race photography.
+  Licensed photography would be the single biggest step up.
+- **The Card's sign-up** needs a view and somewhere to keep the
+  addresses (`news-brief.md`, "Connecting to the server"), and a word on
+  double opt-in.
