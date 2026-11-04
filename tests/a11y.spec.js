@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { openLanding } from './support/landing.js';
 import { openIndex } from './support/llama.js';
 import { openMeeting } from './support/meeting.js';
+import { ARTICLES, LETTERS, openNews } from './support/news.js';
 import { openRaces } from './support/races.js';
 import { openTrail } from './support/trail.js';
 
@@ -32,6 +33,11 @@ const PAGES = [
   { file: 'races.html', open: (page) => openRaces(page) },
   { file: 'races-tomorrow.html', open: (page) => openRaces(page, { day: 'tomorrow' }) },
   { file: 'races-yesterday.html', open: (page) => openRaces(page, { day: 'yesterday' }) },
+  // The Fox's Wire: the front page, the article with the most parts
+  // (tables, entries, side boxes) and a letter.
+  { file: 'news/index.html', open: (page) => openNews(page) },
+  { file: `${ARTICLES[3].slice(1)}index.html`, open: (page) => openNews(page, { path: ARTICLES[3] }) },
+  { file: `${LETTERS[2].slice(1)}index.html`, open: (page) => openNews(page, { path: LETTERS[2] }) },
 ];
 
 // Ratchet: a rule not on the known list fails the run, and a known rule
