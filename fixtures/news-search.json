@@ -1,0 +1,236 @@
+{
+  "about": "The stories /news/search/ searches in the sandbox (tools/serve.mjs): the Wire on the morning of 31 October 2026, in the order the front page lists them. In the Django site the view searches the published articles and letters; see docs/news-brief.md.",
+  "stories": [
+    {
+      "title": "Market Steamers",
+      "summary": "Each-way reads for Saturday 31 October 2026 — every flat-card steamer under 19/1, backed 40% or more. Wins fund losses, places trim them. Mr Fox's stake: 1pt each-way.",
+      "desk": "Market Movers",
+      "when": "31 Oct",
+      "url": "/news/article/2026/market-steamers-saturday-31-october-2026/"
+    },
+    {
+      "title": "Sly Man's Horses to Watch",
+      "summary": "Nothing shorter than 5/1 makes my book. I'm looking beyond the obvious — but they still have to earn their place.",
+      "desk": "Horses to Watch",
+      "when": "31 Oct",
+      "url": "/news/article/2026/sly-mans-horses-to-watch-saturday-31-october-2026/"
+    },
+    {
+      "title": "Sly Man's Top Rated",
+      "summary": "Each Top Rated lane is judged by its own historical evidence. Price filters are applied only where the ledger shows they improve selection quality.",
+      "desk": "Top Rated Today",
+      "when": "31 Oct",
+      "url": "/news/article/2026/sly-mans-top-rated-saturday-31-october-2026/"
+    },
+    {
+      "title": "Sly Man's Jockeys Taking Aim",
+      "summary": "The riders I'm watching today — the loaded books, the marquee bookings, the form jocks pinging the radar.",
+      "desk": "Jockeys Taking Aim",
+      "when": "31 Oct",
+      "url": "/news/article/2026/sly-mans-jockeys-taking-aim-saturday-31-october-2026/"
+    },
+    {
+      "title": "Market Steamers",
+      "summary": "Each-way reads for Friday 30 October 2026 — every flat-card steamer under 19/1, backed 40% or more. Wins fund losses, places trim them. Mr Fox's stake: 1pt each-way.",
+      "desk": "Market Movers",
+      "when": "30 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/market-steamers-friday-30-october-2026/"
+    },
+    {
+      "title": "Sly Man's Horses to Watch",
+      "summary": "Nothing shorter than 5/1 makes my book. I'm looking beyond the obvious — but they still have to earn their place.",
+      "desk": "Horses to Watch",
+      "when": "30 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-horses-to-watch-friday-30-october-2026/"
+    },
+    {
+      "title": "Sly Man's Top Rated",
+      "summary": "Each Top Rated lane is judged by its own historical evidence. Price filters are applied only where the ledger shows they improve selection quality.",
+      "desk": "Top Rated Today",
+      "when": "30 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-top-rated-friday-30-october-2026/"
+    },
+    {
+      "title": "Sly Man's Jockeys Taking Aim",
+      "summary": "The riders I'm watching today — the loaded books, the marquee bookings, the form jocks pinging the radar.",
+      "desk": "Jockeys Taking Aim",
+      "when": "30 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-jockeys-taking-aim-friday-30-october-2026/"
+    },
+    {
+      "title": "The Deep Dive: Bet365 Charlie Hall Steeple Chase (Grade 2) (GBB Race) — Wetherby 14:55",
+      "summary": "The Real Whacker has the fitness, the course form and the hottest training operation in the field — at a flat OR 153, he's the data's horse.",
+      "desk": "The Deep Dive",
+      "when": "30 Oct",
+      "url": "/news/article/2026/the-deep-dive-bet365-charlie-hall-steeple-chase-grade-2-gbb-race-wetherby-1455/"
+    },
+    {
+      "title": "Market Steamers",
+      "summary": "Each-way reads for Thursday 29 October 2026 — every flat-card steamer under 19/1, backed 40% or more. Wins fund losses, places trim them. Mr Fox's stake: 1pt each-way.",
+      "desk": "Market Movers",
+      "when": "29 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/market-steamers-thursday-29-october-2026/"
+    },
+    {
+      "title": "Sly Man's Horses to Watch",
+      "summary": "Nothing shorter than 5/1 makes my book. I'm looking beyond the obvious — but they still have to earn their place.",
+      "desk": "Horses to Watch",
+      "when": "29 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-horses-to-watch-thursday-29-october-2026/"
+    },
+    {
+      "title": "Sly Man's Top Rated",
+      "summary": "Each Top Rated lane is judged by its own historical evidence. Price filters are applied only where the ledger shows they improve selection quality.",
+      "desk": "Top Rated Today",
+      "when": "29 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-top-rated-thursday-29-october-2026/"
+    },
+    {
+      "title": "Sly Man's Jockeys Taking Aim",
+      "summary": "The riders I'm watching today — the loaded books, the marquee bookings, the form jocks pinging the radar.",
+      "desk": "Jockeys Taking Aim",
+      "when": "29 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-jockeys-taking-aim-thursday-29-october-2026/"
+    },
+    {
+      "title": "Market Steamers",
+      "summary": "Each-way reads for Wednesday 28 October 2026 — every flat-card steamer under 19/1, backed 40% or more. Wins fund losses, places trim them. Mr Fox's stake: 1pt each-way.",
+      "desk": "Market Movers",
+      "when": "28 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/market-steamers-wednesday-28-october-2026/"
+    },
+    {
+      "title": "Sly Man's Horses to Watch",
+      "summary": "Nothing shorter than 5/1 makes my book. I'm looking beyond the obvious — but they still have to earn their place.",
+      "desk": "Horses to Watch",
+      "when": "28 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-horses-to-watch-wednesday-28-october-2026/"
+    },
+    {
+      "title": "Sly Man's Top Rated",
+      "summary": "Each Top Rated lane is judged by its own historical evidence. Price filters are applied only where the ledger shows they improve selection quality.",
+      "desk": "Top Rated Today",
+      "when": "28 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-top-rated-wednesday-28-october-2026/"
+    },
+    {
+      "title": "Sly Man's Jockeys Taking Aim",
+      "summary": "The riders I'm watching today — the loaded books, the marquee bookings, the form jocks pinging the radar.",
+      "desk": "Jockeys Taking Aim",
+      "when": "28 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-jockeys-taking-aim-wednesday-28-october-2026/"
+    },
+    {
+      "title": "Market Steamers",
+      "summary": "Each-way reads for Tuesday 27 October 2026 — every flat-card steamer under 19/1, backed 40% or more. Wins fund losses, places trim them. Mr Fox's stake: 1pt each-way.",
+      "desk": "Market Movers",
+      "when": "27 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/market-steamers-tuesday-27-october-2026/"
+    },
+    {
+      "title": "Sly Man's Horses to Watch",
+      "summary": "Nothing shorter than 5/1 makes my book. I'm looking beyond the obvious — but they still have to earn their place.",
+      "desk": "Horses to Watch",
+      "when": "27 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-horses-to-watch-tuesday-27-october-2026/"
+    },
+    {
+      "title": "Sly Man's Top Rated",
+      "summary": "Each Top Rated lane is judged by its own historical evidence. Price filters are applied only where the ledger shows they improve selection quality.",
+      "desk": "Top Rated Today",
+      "when": "27 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-top-rated-tuesday-27-october-2026/"
+    },
+    {
+      "title": "Sly Man's Jockeys Taking Aim",
+      "summary": "The riders I'm watching today — the loaded books, the marquee bookings, the form jocks pinging the radar.",
+      "desk": "Jockeys Taking Aim",
+      "when": "27 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-jockeys-taking-aim-tuesday-27-october-2026/"
+    },
+    {
+      "title": "Market Steamers",
+      "summary": "Each-way reads for Monday 26 October 2026 — every flat-card steamer under 19/1, backed 40% or more. Wins fund losses, places trim them. Mr Fox's stake: 1pt each-way.",
+      "desk": "Market Movers",
+      "when": "26 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/market-steamers-monday-26-october-2026/"
+    },
+    {
+      "title": "Sly Man's Horses to Watch",
+      "summary": "Nothing shorter than 5/1 makes my book. I'm looking beyond the obvious — but they still have to earn their place.",
+      "desk": "Horses to Watch",
+      "when": "26 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-horses-to-watch-monday-26-october-2026/"
+    },
+    {
+      "title": "Sly Man's Top Rated",
+      "summary": "Each Top Rated lane is judged by its own historical evidence. Price filters are applied only where the ledger shows they improve selection quality.",
+      "desk": "Top Rated Today",
+      "when": "26 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-top-rated-monday-26-october-2026/"
+    },
+    {
+      "title": "Sly Man's Jockeys Taking Aim",
+      "summary": "The riders I'm watching today — the loaded books, the marquee bookings, the form jocks pinging the radar.",
+      "desk": "Jockeys Taking Aim",
+      "when": "26 Oct",
+      "url": "https://www.saturday-racing.com/news/article/2026/sly-mans-jockeys-taking-aim-monday-26-october-2026/"
+    },
+    {
+      "title": "Media Mogul Steaming In At Ascot",
+      "summary": "A market move plus class drop makes this a straightforward call in a thin novice heat",
+      "desk": "LLaMa Letters",
+      "when": "12:50 Ascot",
+      "url": "/letters/ascot-2026-10-31/1250/"
+    },
+    {
+      "title": "Glynn Brae's Steamer Demands Respect At Ascot",
+      "summary": "A market move this sharp in a five-horse novice chase is rarely noise — it's information.",
+      "desk": "LLaMa Letters",
+      "when": "13:25 Ascot",
+      "url": "/letters/ascot-2026-10-31/1325/"
+    },
+    {
+      "title": "Gore Point's Perfect Record Demands Respect at Ascot",
+      "summary": "Six runs, five wins, one second — the form line that changes everything",
+      "desk": "LLaMa Letters",
+      "when": "14:00 Ascot",
+      "url": "/letters/ascot-2026-10-31/1400/"
+    },
+    {
+      "title": "Califet En Vol Steams In, But Viroflay Lurks",
+      "summary": "The market has its say at Ascot — now let's read the form strings properly.",
+      "desk": "LLaMa Letters",
+      "when": "14:33 Ascot",
+      "url": "/letters/ascot-2026-10-31/1433/"
+    },
+    {
+      "title": "Tizzard's Yard Form Makes No Way Jay Irresistible",
+      "summary": "A 35% trainer strike rate is the sharpest number in this five-runner novice hurdle",
+      "desk": "LLaMa Letters",
+      "when": "15:10 Ascot",
+      "url": "/letters/ascot-2026-10-31/1510/"
+    },
+    {
+      "title": "Trustintimes the One to Follow at Ascot",
+      "summary": "Harry Fry's hold-up runner has the pace map working in his favour — and the market agrees",
+      "desk": "LLaMa Letters",
+      "when": "15:43 Ascot",
+      "url": "/letters/ascot-2026-10-31/1543/"
+    },
+    {
+      "title": "Race Paper: Prix de l'Arc de Triomphe (2026)",
+      "summary": "The Arc belongs to Daryz on paper — but is 83% ever the whole story?",
+      "desk": "LLaMa Papers",
+      "when": "",
+      "url": "https://www.saturday-racing.com/papers/race-paper-prix-de-larc-de-triomphe-2026/"
+    },
+    {
+      "title": "Flat Jockeys' Championship 2026",
+      "summary": "Billy Loughnane holds a 7-win advantage over Oisin Murphy at the season's midpoint, but the projected gap sits inside the 95% confidence band. This championship is not settled.",
+      "desk": "Championship Watch",
+      "when": "",
+      "url": "https://www.saturday-racing.com/compare-us/flat-jockeys-championship-2026/cinematic/"
+    }
+  ]
+}

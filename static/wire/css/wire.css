@@ -1,0 +1,1917 @@
+/* ═══════════════════════════════════════════════════════════════
+   The Fox's Wire · /news/ as a front page
+   Shared by every news page (the front page, articles, the LLaMa
+   Letters); article bodies add wire_article.css.
+
+   White pages between midnight feature bands, Playfair headlines,
+   the site's gold § section heads, and upright type only: nothing on
+   these pages is set in italic.
+
+   Scope: every rule hangs off body.page-wire or a wire- class, so
+   nothing here reaches another page. The site's own nav and footer
+   (base.html) are restyled here for these pages only; their markup
+   and scripts are the site's.
+
+   Contents:
+     TOKENS · BASE · THE SITE NAV ON THESE PAGES · SEARCH BUTTON ·
+     LOGO BAND AND MASTHEAD · SECTION HEADS · STORY CARDS ·
+     TOP STORIES · DESK PILLS · §1 THE LEAD · §2 THE CASE FILES ·
+     MIDNIGHT BANDS · §3 THE PIN · §4 THE FOLD · §5 THE BACK ISSUES ·
+     §6 MARKET MOVERS · §7 THE HONEST RECORD · THE 10:00 CARD ·
+     THE SITE FOOTER ON THESE PAGES · SEARCH PANEL · TABLET · PHONE ·
+     REDUCED MOTION
+   ═══════════════════════════════════════════════════════════════ */
+
+
+/* ── TOKENS ───────────────────────────────────────────────────── */
+
+.page-wire {
+  /* Colour: the site's own variables wherever one holds the value. */
+  --wire-ink: var(--c-midnight);                /* the one black */
+  --wire-paper: var(--c-card);                  /* white */
+  --wire-ink-2: #45464d;                        /* decks and prose */
+  --wire-meta: #545658;                         /* bylines, times, notes */
+  --wire-rule: #e6e8ea;                         /* hairlines on white */
+  --wire-gold: var(--c-gold);
+  --wire-gold-hi: #f2e092;                      /* the glow's bright centre */
+  --wire-gold-ink: #8c6e10;                     /* gold as small text on white (4.8:1) */
+  --wire-gold-num: var(--c-gold-ink);           /* § numbers and big figures: large type only (3.99:1) */
+  --wire-cream: #f1e9d6;                        /* text on midnight */
+  --wire-cream-2: rgba(241, 233, 214, 0.66);
+  --wire-cream-line: rgba(241, 233, 214, 0.14);
+  --wire-up: var(--c-green);
+  --wire-down: var(--c-red);
+  /* The live news page's masthead tints. */
+  --wire-mast-ink: #b8a889;
+  --wire-mast-soft: #857a5d;
+  --wire-mast-gold: #f5c555;
+  --wire-mast-line: rgba(245, 197, 85, 0.42);
+  /* The winning post on midnight. */
+  --wire-silver: #c8c8c8;
+  /* The Enclosure's header: a gold line, brightest in the middle, with a
+     soft glow above it. */
+  --wire-glow:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--wire-gold) 85%, transparent) 20%, var(--wire-gold-hi) 50%, color-mix(in srgb, var(--wire-gold) 85%, transparent) 80%, transparent) bottom / 100% 1px no-repeat,
+    radial-gradient(50% 100% at 50% 100%, color-mix(in srgb, var(--wire-gold) 20%, transparent), transparent) bottom / 100% 22px no-repeat;
+
+  /* Type */
+  --wire-display: var(--font-display);
+  --wire-body: var(--font-body);
+
+  /* Layout */
+  --wire-wrap: 1312px;
+  --wire-gutter: 16px;
+  --wire-gap: 16px;
+}
+
+
+/* ── BASE ─────────────────────────────────────────────────────── */
+
+.page-wire {
+  background: var(--wire-paper);
+  color: var(--wire-ink);
+  font-family: var(--wire-body);
+  font-size: 16px;
+  line-height: 1.5;
+  /* Upright only: no italic from the copy, a browser default or a
+     synthesised slant. The italic font file is never asked for. */
+  font-synthesis: none;
+}
+.page-wire,
+.page-wire * {
+  font-style: normal;
+}
+
+html:has(> body.page-wire) {
+  scroll-padding-top: calc(var(--nav-h) + 12px);
+}
+
+/* Bottom space under the last white section; a midnight band runs
+   straight into the footer instead (see THE SITE FOOTER below). */
+.page-wire .site-main {
+  padding-bottom: 48px;
+}
+.page-wire .site-main:has(> .wire-band:last-child) {
+  padding-bottom: 0;
+}
+
+:where(.page-wire) img {
+  height: auto;
+}
+:where(.page-wire) :is(button, input) {
+  font: inherit;
+  color: inherit;
+}
+:where(.page-wire) button {
+  background: none;
+  border: 0;
+}
+/* An SVG's default fill is pure black; the Wire's take their text colour. */
+:where(.wire-mast, .wire-sec, .wire-band, .wire-search-toggle, .wire-drawer) svg {
+  display: block;
+  fill: currentColor;
+}
+
+:where(.page-wire .site-main, .wire-drawer) :focus-visible {
+  outline: 2px solid var(--wire-ink);
+  outline-offset: 2px;
+}
+:where(.wire-mast, .wire-band) :focus-visible {
+  outline-color: var(--wire-gold);
+}
+
+.wire-wrap {
+  width: 100%;
+  max-width: calc(var(--wire-wrap) + var(--wire-gutter) * 2);
+  margin: 0 auto;
+  padding: 0 var(--wire-gutter);
+}
+
+.wire-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 20px;
+  background: var(--wire-ink);
+  color: var(--wire-paper);
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.wire-btn:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.wire-tag {
+  display: inline-block;
+  padding: 0 6px;
+  background: var(--wire-ink);
+  color: var(--wire-paper);
+  font-size: 11px;
+  line-height: 18px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+
+/* ── THE SITE NAV ON THESE PAGES ──────────────────────────────────
+   base.html's nav, unchanged, dressed as the Wire's bar: the
+   Enclosure's glowing midnight, cream links, and the logo moved down
+   into its own band. On narrow screens the links scroll sideways
+   instead of folding into the menu button, so the hamburger, the
+   race badge and the date (already in the masthead) stand down here.
+   Menus open under their own item; wire_nav.js places them, because
+   the scrolling row would clip them where chrome.css puts them. */
+
+.page-wire .site-nav {
+  background: var(--wire-glow), var(--wire-ink);
+  border-bottom: 0;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.page-wire .site-nav.scrolled {
+  background: var(--wire-glow), var(--wire-ink);
+  box-shadow: none;
+}
+.page-wire .site-nav__inner {
+  max-width: calc(var(--wire-wrap) + var(--wire-gutter) * 2);
+  padding: 0 var(--wire-gutter);
+  gap: 20px;
+}
+.page-wire .site-nav__brand,
+.page-wire .site-nav__date,
+.page-wire .site-nav__badge,
+.page-wire .site-nav__hamburger {
+  display: none;
+}
+
+.page-wire .site-nav__links {
+  display: flex;
+  align-self: stretch;
+  justify-content: space-between;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+/* Each item with a menu runs the bar's full height, so the pointer stays
+   on it all the way down to its menu. */
+.page-wire .site-nav__dropdown {
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+}
+.page-wire .site-nav__links::-webkit-scrollbar {
+  display: none;
+}
+.page-wire .site-nav__link {
+  padding: 7px 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--wire-cream);
+}
+.page-wire .site-nav__link:hover,
+.page-wire .site-nav__link.active,
+.page-wire .site-nav__dropdown:hover .site-nav__link {
+  color: var(--wire-gold);
+}
+.page-wire .site-nav__link.active::before {
+  background: none;
+}
+
+.page-wire .site-nav__dropdown-menu {
+  position: fixed;
+  top: var(--nav-h);
+  left: var(--wire-menu-left, 8px);
+  width: min(320px, calc(100vw - 16px));
+  max-height: calc(100dvh - var(--nav-h) - 16px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--wire-ink);
+  border-color: color-mix(in srgb, var(--wire-gold) 32%, transparent);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+  transform: translateY(-6px);
+}
+.page-wire .site-nav__dropdown.open .site-nav__dropdown-menu {
+  transform: none;
+}
+@media (hover: hover) {
+  .page-wire .site-nav__dropdown:hover .site-nav__dropdown-menu {
+    opacity: 1;
+    pointer-events: all;
+    transform: none;
+  }
+}
+/* The pointer sat over the middle of a centred menu; these open from their item's left edge. */
+.page-wire .site-nav__dropdown-menu::before,
+.page-wire .site-nav__dropdown-menu::after {
+  display: none;
+}
+
+.page-wire .site-nav__actions {
+  gap: 8px;
+}
+.page-wire .site-nav__sep {
+  margin-right: 4px;
+  background: var(--wire-cream-line);
+}
+.page-wire .site-nav__join-btn,
+.page-wire .site-nav__login-btn {
+  display: inline-flex;
+  font-family: Georgia, var(--wire-display);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--wire-cream);
+}
+.page-wire .site-nav__join-btn {
+  padding: 7px 18px;
+  font-weight: 700;
+}
+.page-wire .site-nav__login-btn {
+  padding: 7px 8px;
+}
+
+
+/* ── SEARCH BUTTON ────────────────────────────────────────────── */
+
+/* 44px to press, laid out as 36px: the margins give the room back. */
+.wire-search-toggle {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: -4px;
+  color: var(--wire-cream);
+}
+.wire-search-toggle:hover {
+  color: var(--wire-gold);
+}
+.wire-search-toggle:focus-visible {
+  outline: 2px solid var(--wire-gold);
+  outline-offset: 2px;
+}
+.wire-search-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+}
+
+
+/* ── LOGO BAND AND MASTHEAD ───────────────────────────────────── */
+
+.wire-mast {
+  background: var(--wire-glow), var(--wire-ink);
+  color: var(--wire-cream);
+}
+.wire-mast__row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 16px;
+  padding-bottom: 20px;
+  text-align: center;
+}
+
+/* The winning post and the gold serif wordmark. Everything is in em,
+   so the font size scales the whole lockup. */
+.wire-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  font-size: 30px;
+  line-height: 1;
+}
+.wire-brand .wire-logo__post {
+  fill: var(--wire-silver);
+}
+.wire-brand__word {
+  display: flex;
+  flex-direction: column;
+  gap: 0.24em;
+  font-family: var(--wire-display);
+  text-align: left;
+}
+.wire-brand__word b {
+  /* SATURDAY's trailing letter-spacing would hold the lockup left of centre. */
+  margin-right: -0.1em;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  color: var(--wire-gold);
+}
+.wire-brand__word span {
+  font-size: 0.5em;
+  letter-spacing: 0.36em;
+  color: var(--wire-cream-2);
+}
+
+/* The front page's masthead, in the live page's serif and tints. */
+.wire-mast__head {
+  position: relative;
+  width: 100%;
+}
+.wire-mast__title {
+  margin-top: 16px;
+  font-family: var(--wire-display);
+  font-size: clamp(38px, 11.4vw, 120px);
+  line-height: 0.95;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 40px color-mix(in srgb, var(--wire-mast-gold) 8%, transparent);
+}
+.wire-mast__tag {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.02em;
+  color: var(--wire-mast-ink);
+}
+.wire-mast__meta,
+.wire-mast__next {
+  width: 100%;
+  max-width: 1162px;
+}
+/* Equal sides, so the date stays on the centre line whatever sits beside it. */
+.wire-mast__meta {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: baseline;
+  gap: 4px 24px;
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid var(--wire-mast-line);
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.16em;
+  text-align: left;
+  text-transform: uppercase;
+  color: var(--wire-mast-ink);
+}
+.wire-mast__date {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--wire-mast-gold);
+}
+.wire-mast__vol {
+  text-align: right;
+  color: var(--wire-mast-soft);
+}
+.wire-mast__next {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--wire-cream-line);
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--wire-mast-ink);
+}
+.wire-mast__next b {
+  font-weight: 600;
+  color: var(--wire-cream);
+}
+.wire-mast .wire-tag {
+  padding: 3px 9px;
+  border-radius: 4px;
+  background: var(--wire-mast-gold);
+  color: var(--wire-ink);
+  font-size: 10px;
+  line-height: 14px;
+  letter-spacing: 0.14em;
+}
+
+/* The 10:00 stamp, in the masthead's top-right corner and level with the
+   logo: beside the title it pulled the title's row off the centre line. */
+.wire-stamp {
+  position: absolute;
+  top: -70px;
+  right: max(0px, calc(50% - 581px));
+  z-index: 2;
+  width: 80px;
+  height: 80px;
+  filter: drop-shadow(0 6px 20px color-mix(in srgb, var(--wire-mast-gold) 28%, transparent));
+  pointer-events: none;
+}
+.wire-stamp svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.wire-stamp text {
+  font-family: var(--wire-body);
+}
+.wire-stamp .wire-stamp__time {
+  font-family: var(--wire-display);
+}
+.wire-stamp__legend {
+  transform-origin: 60px 60px;
+  animation: wire-stamp-turn 60s linear infinite;
+}
+@keyframes wire-stamp-turn {
+  to { transform: rotate(360deg); }
+}
+
+/* The logo on white, in the search panel. */
+.wire-logo {
+  --s: 26px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  color: var(--wire-ink);
+  font-size: var(--s);
+  line-height: 1;
+  white-space: nowrap;
+}
+.wire-logo__mark {
+  flex: none;
+  width: auto;
+  height: 2.05em;
+}
+.wire-logo__word {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.2em;
+}
+.wire-logo__main {
+  margin-right: -0.12em;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+.wire-logo__sub {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  font-size: 0.4em;
+  font-weight: 700;
+  letter-spacing: 0.36em;
+}
+.wire-logo__sub span {
+  margin-right: -0.36em;
+}
+.wire-logo__sub::before,
+.wire-logo__sub::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: currentColor;
+}
+
+
+/* ── SECTION HEADS ────────────────────────────────────────────── */
+
+/* The site's own: a gold § number, a spaced name, a hairline, a note. */
+.wire-sec {
+  margin-top: 72px;
+}
+.wire-sec__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid color-mix(in srgb, var(--wire-gold-num) 45%, transparent);
+}
+.wire-sec__num {
+  flex: none;
+  font-family: var(--wire-display);
+  font-size: 26px;
+  line-height: 1;
+  font-weight: 900;
+  color: var(--wire-gold-num);
+}
+.wire-sec__title {
+  flex: none;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.wire-sec__title a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.wire-sec__title a:hover {
+  color: var(--wire-gold-ink);
+}
+.wire-sec__title svg {
+  flex: none;
+  width: 7px;
+  height: 11px;
+}
+.wire-sec__rule {
+  flex: 1;
+  min-width: 24px;
+  border-top: 1px solid var(--wire-rule);
+}
+.wire-sec__note {
+  max-width: 42%;
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+  text-align: right;
+}
+
+/* A desk's small label: its § number, a dash, its name. */
+.wire-kick {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--wire-gold-ink);
+}
+.wire-kick__num {
+  flex: none;
+  font-family: var(--wire-display);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.wire-kick__rule {
+  flex: none;
+  width: 18px;
+  border-top: 1px solid currentColor;
+  opacity: 0.6;
+}
+
+
+/* ── STORY CARDS ──────────────────────────────────────────────── */
+
+.wire-card {
+  position: relative;
+  min-width: 0;
+}
+.wire-card > a {
+  display: block;
+}
+.wire-card__pic {
+  display: block;
+  margin-bottom: 12px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--wire-paper);
+}
+.wire-card__pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wire-card__pic--silk {
+  position: relative;
+  box-shadow: inset 0 0 0 1px var(--wire-rule);
+}
+.wire-card__pic--silk img {
+  position: absolute;
+  inset: 7% 0;
+  width: 100%;
+  height: 86%;
+  object-fit: contain;
+}
+.wire-card__title {
+  font-family: var(--wire-display);
+  font-size: 21px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--wire-ink);
+}
+.wire-card > a:hover .wire-card__title {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.wire-card__deck {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--wire-ink-2);
+}
+.wire-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--wire-meta);
+}
+.wire-meta > * + * {
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1px solid var(--wire-meta);
+}
+
+.wire-card--xl .wire-card__title {
+  font-size: 44px;
+  line-height: 1.08;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.wire-card--xl .wire-card__deck {
+  margin-top: 12px;
+  font-size: 18px;
+  line-height: 27px;
+}
+
+.wire-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 500;
+}
+
+/* Stacked columns: a rule between stories, none around them. */
+.wire-stack > * + * {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--wire-rule);
+}
+
+.wire-grid {
+  display: grid;
+  gap: 24px var(--wire-gap);
+}
+.wire-grid--4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+
+/* ── TOP STORIES ──────────────────────────────────────────────── */
+
+.wire-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) minmax(0, 1fr);
+  grid-template-areas: "left lead right";
+  gap: var(--wire-gap);
+  margin-top: 16px;
+}
+.wire-top__lead { grid-area: lead; }
+.wire-top__left { grid-area: left; }
+.wire-top__right { grid-area: right; }
+
+
+/* ── DESK PILLS ───────────────────────────────────────────────── */
+
+.wire-pillars {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--wire-gap);
+  margin-top: 48px;
+}
+.wire-pillar {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 20px 12px 12px;
+  border: 1px solid var(--wire-rule);
+  border-top: 2px solid var(--wire-gold);
+  transition: border-color 0.18s ease;
+}
+.wire-pillar:hover {
+  border-color: var(--wire-gold);
+}
+.wire-pillar__pic {
+  display: block;
+  width: 56px;
+  height: 72px;
+  overflow: hidden;
+}
+.wire-pillar__pic img {
+  width: 100%;
+}
+.wire-pillar__by {
+  display: block;
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--wire-gold-ink);
+}
+.wire-pillar__title {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--wire-display);
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+.wire-pillar__note {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--wire-meta);
+}
+.wire-pillar__go {
+  font-size: 18px;
+  color: var(--wire-gold-ink);
+  transition: transform 0.18s ease;
+}
+.wire-pillar:hover .wire-pillar__go {
+  transform: translateX(3px);
+}
+
+
+/* ── §1 THE LEAD ──────────────────────────────────────────────── */
+
+.wire-opener {
+  display: block;
+  max-width: 880px;
+  margin-bottom: 28px;
+}
+.wire-opener__title {
+  font-family: var(--wire-display);
+  font-size: 36px;
+  line-height: 1.1;
+  font-weight: 800;
+}
+.wire-opener:hover .wire-opener__title {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+}
+.wire-opener__deck {
+  margin-top: 10px;
+  font-size: 18px;
+  line-height: 27px;
+  color: var(--wire-ink-2);
+}
+
+/* The day's five horses as a rail of silks; wire_rail.js steps it. */
+.wire-rail {
+  position: relative;
+}
+.wire-rail__track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - var(--wire-gap) * 4) / 5);
+  gap: var(--wire-gap);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.wire-rail__track::-webkit-scrollbar {
+  display: none;
+}
+.wire-rail__item {
+  min-width: 0;
+  scroll-snap-align: start;
+}
+.wire-rail__item a {
+  display: block;
+}
+.wire-rail__silk {
+  display: block;
+  position: relative;
+  aspect-ratio: 4 / 3;
+  box-shadow: inset 0 0 0 1px var(--wire-rule);
+}
+.wire-rail__silk img {
+  position: absolute;
+  inset: 6% 0;
+  width: 100%;
+  height: 88%;
+  object-fit: contain;
+}
+/* Small, so in the deeper gold: the figures' gold is for large type only. */
+.wire-rail__rank {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--wire-display);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 800;
+  color: var(--wire-gold-ink);
+}
+.wire-rail__name {
+  margin-top: 2px;
+  font-family: var(--wire-display);
+  font-size: 21px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+.wire-rail__item a:hover .wire-rail__name {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.wire-rail__race {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--wire-ink-2);
+}
+.wire-rail__arrow {
+  position: absolute;
+  top: calc((100% - 96px) / 2 - 20px);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  background: var(--wire-paper);
+  box-shadow: inset 0 0 0 1px var(--wire-ink);
+}
+.wire-rail__arrow:hover {
+  background: var(--wire-ink);
+  color: var(--wire-paper);
+}
+.wire-rail__arrow svg {
+  width: 8px;
+  height: 13px;
+}
+.wire-rail__arrow--prev { left: 8px; }
+.wire-rail__arrow--next { right: 8px; }
+.wire-rail__arrow[hidden] {
+  display: none;
+}
+
+
+/* ── §2 THE CASE FILES ────────────────────────────────────────── */
+
+.wire-cases {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--wire-gap);
+}
+.wire-case {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 22px 22px 18px;
+  border: 1px solid var(--wire-rule);
+  border-left: 3px solid var(--wire-gold);
+  transition: border-color 0.18s ease;
+}
+.wire-case:hover {
+  border-color: var(--wire-gold);
+}
+.wire-case__title {
+  margin-top: 14px;
+  font-family: var(--wire-display);
+  font-size: 24px;
+  line-height: 1.15;
+  font-weight: 800;
+}
+.wire-case:hover .wire-case__title {
+  color: var(--wire-gold-ink);
+}
+.wire-case__deck {
+  margin: 10px 0 20px;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--wire-ink-2);
+}
+.wire-case__foot,
+.wire-fold__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--wire-rule);
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+}
+.wire-case__go,
+.wire-fold__go {
+  flex: none;
+  font-weight: 700;
+  color: var(--wire-gold-ink);
+}
+
+
+/* ── MIDNIGHT BANDS ───────────────────────────────────────────── */
+
+.wire-band {
+  margin-top: 72px;
+  padding: 56px 0 64px;
+  background:
+    radial-gradient(60% 55% at 50% 0%, color-mix(in srgb, var(--wire-gold) 9%, transparent), transparent 70%),
+    var(--wire-glow),
+    var(--wire-ink);
+  color: var(--wire-cream);
+}
+.wire-band .wire-sec__head {
+  border-bottom-color: var(--wire-mast-line);
+}
+.wire-band .wire-sec__num {
+  color: var(--wire-gold);
+}
+.wire-band .wire-sec__title a:hover {
+  color: var(--wire-gold);
+}
+.wire-band .wire-sec__rule {
+  border-top-color: var(--wire-cream-line);
+}
+.wire-band .wire-sec__note {
+  color: var(--wire-cream-2);
+}
+
+/* The site's gold button. */
+.wire-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 26px;
+  border-radius: 999px;
+  background: var(--wire-gold);
+  color: var(--wire-ink);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 12px 30px -12px color-mix(in srgb, var(--wire-gold) 60%, transparent);
+  transition: background 0.18s ease;
+}
+.wire-pill:hover {
+  background: var(--wire-gold-hi);
+}
+
+
+/* ── §3 THE PIN ───────────────────────────────────────────────── */
+
+.wire-pin {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: 48px;
+  align-items: center;
+}
+.wire-pin__pic {
+  order: 2;
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--wire-gold) 28%, transparent);
+  border-radius: 14px;
+  box-shadow:
+    0 30px 60px -30px color-mix(in srgb, var(--wire-ink) 90%, transparent),
+    0 0 48px -12px color-mix(in srgb, var(--wire-gold) 22%, transparent);
+}
+.wire-pin__pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.wire-pin:hover .wire-pin__pic img {
+  transform: scale(1.03);
+}
+.wire-pin__body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+.wire-pin__title {
+  font-family: var(--wire-display);
+  font-size: clamp(30px, 3.4vw, 48px);
+  line-height: 1.08;
+  font-weight: 800;
+  color: var(--wire-cream);
+}
+.wire-pin__meta {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--wire-cream-2);
+}
+.wire-pin__meta strong {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--wire-gold);
+}
+.wire-pin .wire-pill {
+  margin-top: 6px;
+}
+
+
+/* ── §4 THE FOLD ──────────────────────────────────────────────── */
+
+/* Equal columns, with the rules drawn in the gaps between them. */
+.wire-fold {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 48px;
+}
+.wire-fold__item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.wire-fold__item + .wire-fold__item::before,
+.wire-archive__desk + .wire-archive__desk::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -24px;
+  width: 1px;
+  background: var(--wire-rule);
+}
+.wire-fold__pic {
+  display: block;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  margin-bottom: 18px;
+  border-top: 3px solid var(--wire-gold);
+}
+.wire-fold__pic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.wire-fold__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+.wire-fold__title {
+  margin-top: 12px;
+  font-family: var(--wire-display);
+  font-size: 28px;
+  line-height: 1.12;
+  font-weight: 800;
+}
+.wire-fold__item:hover .wire-fold__title {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.wire-fold__deck {
+  margin-top: 10px;
+  font-size: 17px;
+  line-height: 25px;
+  font-weight: 500;
+}
+.wire-fold__body {
+  margin: 10px 0 20px;
+  font-size: 15px;
+  line-height: 23px;
+  color: var(--wire-ink-2);
+}
+
+
+/* ── §5 THE BACK ISSUES ───────────────────────────────────────── */
+
+.wire-archive {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0 48px;
+}
+.wire-archive__desk {
+  position: relative;
+  min-width: 0;
+}
+.wire-archive__head {
+  margin-bottom: 6px;
+  font-family: var(--wire-display);
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 800;
+}
+.wire-archive__head a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.wire-archive__head a:hover {
+  color: var(--wire-gold-ink);
+}
+.wire-archive__head svg {
+  flex: none;
+  width: 7px;
+  height: 11px;
+  color: var(--wire-gold-ink);
+}
+.wire-archive__list a {
+  display: block;
+  padding: 10px 0;
+  border-top: 1px solid var(--wire-rule);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+}
+.wire-archive__list li:first-child a {
+  border-top: 0;
+}
+.wire-archive__list a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.wire-archive__sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--wire-meta);
+}
+
+
+/* ── §6 MARKET MOVERS ─────────────────────────────────────────── */
+
+.wire-movers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 56px;
+}
+.wire-movers__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 12px;
+  font-family: var(--wire-display);
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 800;
+}
+.wire-movers__head svg {
+  flex: none;
+  width: 12px;
+  height: 12px;
+}
+.wire-movers__col--in .wire-movers__head svg,
+.wire-movers__col--in .wire-ranks__pct {
+  color: var(--wire-up);
+}
+.wire-movers__col--out .wire-movers__head svg,
+.wire-movers__col--out .wire-ranks__pct {
+  color: var(--wire-down);
+}
+
+/* Ranked lists: the movers here, the market boxes on article pages. */
+.wire-ranks li {
+  border-top: 1px solid var(--wire-rule);
+}
+.wire-ranks a {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  min-height: 72px;
+  padding: 10px 0;
+}
+.wire-ranks__n {
+  font-family: var(--wire-display);
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 400;
+  color: var(--wire-gold-num);
+}
+.wire-ranks__name {
+  display: block;
+  font-family: var(--wire-display);
+  font-size: 19px;
+  line-height: 24px;
+  font-weight: 700;
+}
+.wire-ranks a:hover .wire-ranks__name {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+.wire-ranks__race {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--wire-meta);
+}
+.wire-ranks__move {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.wire-ranks__price {
+  display: block;
+  font-size: 15px;
+  line-height: 20px;
+}
+.wire-ranks__price s {
+  color: var(--wire-meta);
+  text-decoration-thickness: 1px;
+}
+.wire-ranks__price b {
+  font-weight: 800;
+}
+.wire-ranks__pct {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  color: var(--wire-meta);
+}
+
+
+/* ── §7 THE HONEST RECORD ─────────────────────────────────────── */
+
+/* On white like the sections around it: square cards, a gold top rule,
+   big serif figures. */
+.wire-record {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 24px 64px;
+  align-items: start;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--wire-rule);
+}
+.wire-record__quote {
+  font-family: var(--wire-display);
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 1.18;
+  font-weight: 700;
+}
+.wire-record__prose {
+  padding-top: 6px;
+  font-size: 16px;
+  line-height: 26px;
+  color: var(--wire-ink-2);
+}
+.wire-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--wire-gap);
+  margin-top: 36px;
+}
+.wire-stat {
+  padding: 24px 24px 22px;
+  border: 1px solid var(--wire-rule);
+  border-top: 2px solid var(--wire-gold);
+}
+.wire-stat--down {
+  border-top-color: var(--wire-down);
+}
+.wire-stat__lbl {
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+}
+.wire-stat__val {
+  margin-top: 12px;
+  font-family: var(--wire-display);
+  font-size: 64px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--wire-gold-num);
+}
+.wire-stat--down .wire-stat__val {
+  color: var(--wire-down);
+}
+.wire-stat__foot {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--wire-rule);
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--wire-meta);
+}
+.wire-record__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 28px;
+  margin-top: 32px;
+}
+.wire-record__links .wire-btn {
+  min-height: 46px;
+  padding: 0 26px;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.wire-record__link {
+  padding-bottom: 2px;
+  border-bottom: 1px solid var(--wire-ink);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.wire-record__link:hover {
+  color: var(--wire-gold-ink);
+  border-color: var(--wire-gold-ink);
+}
+
+
+/* ── THE 10:00 CARD ───────────────────────────────────────────── */
+
+.wire-band--card {
+  padding: 64px 0 72px;
+}
+.wire-signup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.wire-signup__kicker {
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--wire-gold);
+}
+.wire-signup__title {
+  margin-top: 14px;
+  font-family: var(--wire-display);
+  font-size: clamp(34px, 5vw, 60px);
+  line-height: 1.05;
+  font-weight: 800;
+  color: var(--wire-cream);
+}
+.wire-signup__title span {
+  color: var(--wire-gold);
+}
+.wire-signup__deck {
+  max-width: 620px;
+  margin-top: 16px;
+  font-size: 17px;
+  line-height: 27px;
+  color: var(--wire-cream-2);
+}
+.wire-signup__form {
+  display: flex;
+  gap: 10px;
+  width: min(520px, 100%);
+  margin-top: 28px;
+}
+.wire-signup__form input {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 0 20px;
+  background: color-mix(in srgb, var(--wire-cream) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--wire-gold) 45%, transparent);
+  border-radius: 999px;
+  color: var(--wire-cream);
+  font-size: 16px;
+}
+.wire-signup__form input::placeholder {
+  color: color-mix(in srgb, var(--wire-cream) 45%, transparent);
+}
+.wire-signup__form input:focus {
+  outline: 2px solid var(--wire-gold);
+  outline-offset: 2px;
+}
+.wire-signup__form .wire-pill {
+  min-height: 48px;
+}
+.wire-signup__form .wire-pill:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+.wire-signup__note {
+  max-width: 620px;
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--wire-cream-2);
+}
+/* The answer to a sign-up: thanks, or what to fix. Empty, it takes no
+   room; it stays in the page so screen readers hear what arrives in it. */
+.wire-signup__status {
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 600;
+  color: var(--wire-cream);
+}
+.wire-signup__status:empty {
+  margin-top: 0;
+}
+.wire-signup__status[data-state="error"] {
+  color: var(--wire-mast-gold);
+}
+
+
+/* ── THE SITE FOOTER ON THESE PAGES ───────────────────────────────
+   The site's footer, as on every page, lined up with the Wire's
+   columns above it. Under the 10:00 Card band it joins the band: the
+   band's gold line is the seam, with no hairline of the footer's own.
+   The winning post's S stands upright here, under the no-italics rule
+   above. */
+
+.page-wire .sf--branded .sf__shell {
+  max-width: calc(var(--wire-wrap) + var(--wire-gutter) * 2);
+  padding-right: var(--wire-gutter);
+  padding-left: var(--wire-gutter);
+}
+.page-wire .site-main:has(> .wire-band:last-child) + .sf--branded {
+  border-top: 0;
+}
+
+
+/* ── SEARCH PANEL ─────────────────────────────────────────────── */
+
+.wire-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: color-mix(in srgb, var(--wire-ink) 40%, transparent);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.18s ease, visibility 0.18s;
+}
+.wire-drawer {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 310;
+  display: flex;
+  flex-direction: column;
+  width: min(420px, 100%);
+  background: var(--wire-paper);
+  color: var(--wire-ink);
+  transform: translateX(-100%);
+  visibility: hidden;
+  transition: transform 0.2s ease, visibility 0s linear 0.2s;
+}
+.wire-search-open .wire-scrim {
+  opacity: 1;
+  visibility: visible;
+}
+/* Visible at once on opening, so the search box can take focus straight away. */
+.wire-search-open .wire-drawer {
+  transform: none;
+  visibility: visible;
+  transition: transform 0.2s ease, visibility 0s;
+}
+.wire-search-open,
+.wire-search-open body {
+  overflow: hidden;
+}
+
+.wire-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid var(--wire-rule);
+}
+.wire-drawer__head .wire-logo {
+  --s: 18px;
+}
+/* 44px to press, laid out as 40px. */
+.wire-drawer__close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: -2px -10px -2px -2px;
+}
+.wire-drawer__close svg {
+  width: 18px;
+  height: 18px;
+}
+.wire-drawer__scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+.wire-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--wire-ink);
+}
+.wire-search svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+.wire-search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: none;
+  font-size: 16px;
+}
+.wire-search input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+.wire-search:focus-within {
+  outline: 2px solid var(--wire-ink);
+  outline-offset: 2px;
+}
+.wire-search__results {
+  margin-top: 12px;
+}
+.wire-search__results a {
+  display: block;
+  padding: 10px 0;
+  border-top: 1px solid var(--wire-rule);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+}
+.wire-search__results a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.wire-search__results span {
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--wire-meta);
+}
+.wire-search__none {
+  padding: 10px 0;
+  font-size: 14px;
+  color: var(--wire-meta);
+}
+
+
+/* ── TABLET ───────────────────────────────────────────────────── */
+
+@media (max-width: 1279px) {
+  .wire-cases {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .wire-archive {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px 48px;
+  }
+  .wire-archive__desk:nth-child(3n + 1)::before {
+    display: none;
+  }
+  .wire-rail__track {
+    grid-auto-columns: calc((100% - var(--wire-gap) * 3) / 4);
+  }
+}
+
+@media (max-width: 1023px) {
+  .wire-top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas: "lead lead" "left left" "right right";
+    gap: 24px var(--wire-gap);
+  }
+  .wire-top__left,
+  .wire-top__right {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .wire-top__left {
+    gap: var(--wire-gap);
+  }
+  .wire-top__right {
+    gap: 16px var(--wire-gap);
+  }
+  .wire-top__left > * + *,
+  .wire-top__right > * + * {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+  .wire-top__right > * {
+    padding-top: 14px;
+    border-top: 1px solid var(--wire-rule);
+  }
+  .wire-pillars {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .wire-pin {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .wire-pin__pic {
+    order: 0;
+  }
+  .wire-fold {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .wire-fold__item {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    gap: 24px;
+  }
+  .wire-fold__item + .wire-fold__item {
+    margin-top: 28px;
+    padding-top: 28px;
+    border-top: 1px solid var(--wire-rule);
+  }
+  .wire-fold__item + .wire-fold__item::before {
+    display: none;
+  }
+  .wire-fold__pic {
+    margin-bottom: 0;
+  }
+  .wire-record {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .wire-movers {
+    gap: 0 28px;
+  }
+}
+
+
+/* ── PHONE ────────────────────────────────────────────────────── */
+
+@media (max-width: 767px) {
+  /* The bar keeps search and Sign in at its right; Join Free and the
+     separator give their room to the links. */
+  .page-wire .site-nav__inner {
+    gap: 8px;
+  }
+  .page-wire .site-nav__actions {
+    gap: 2px;
+  }
+  .page-wire .site-nav__sep,
+  .page-wire .site-nav__join-btn,
+  .page-wire .site-nav__auth-icon {
+    display: none;
+  }
+
+  .wire-mast__row {
+    padding-top: 12px;
+    padding-bottom: 18px;
+  }
+  .wire-brand {
+    font-size: 23px;
+  }
+  .wire-mast__title {
+    margin-top: 12px;
+  }
+  .wire-mast__tag {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  /* Too narrow for the date line's three parts side by side. */
+  .wire-mast__meta {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    margin-top: 14px;
+    padding-top: 10px;
+    font-size: 10px;
+  }
+  .wire-mast__next {
+    justify-content: center;
+    margin-top: 10px;
+    padding-top: 10px;
+  }
+  .wire-stamp {
+    top: -54px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .wire-top {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "lead" "left" "right";
+    gap: 0;
+    margin-top: 12px;
+  }
+  .wire-top__left,
+  .wire-top__right {
+    display: block;
+  }
+  .wire-top__left {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--wire-rule);
+  }
+  .wire-top__left .wire-card > a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 96px;
+    gap: 0 12px;
+  }
+  .wire-top__left .wire-card__pic {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    aspect-ratio: 1;
+    margin: 0;
+  }
+  .wire-top__left .wire-card__title,
+  .wire-top__left .wire-card__deck,
+  .wire-top__left .wire-meta {
+    grid-column: 1;
+  }
+  .wire-top__left > * + * {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--wire-rule);
+  }
+  .wire-top__right {
+    margin-top: 14px;
+    padding-top: 0;
+    border-top: 1px solid var(--wire-rule);
+  }
+  .wire-top__right > * {
+    margin-top: 0;
+    padding-top: 14px;
+    padding-bottom: 14px;
+    border-top: 0;
+  }
+  .wire-top__right > * + * {
+    border-top: 1px solid var(--wire-rule);
+  }
+  .wire-top__right > :last-child {
+    padding-bottom: 0;
+  }
+
+  .wire-card--xl .wire-card__title {
+    font-size: 30px;
+    line-height: 1.1;
+  }
+  .wire-card__title {
+    font-size: 20px;
+    line-height: 1.2;
+  }
+  .wire-card__deck {
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .wire-grid--4 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .wire-sec {
+    margin-top: 52px;
+  }
+  .wire-band {
+    margin-top: 52px;
+    padding: 40px 0 48px;
+  }
+  .wire-sec__head {
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    margin-bottom: 22px;
+  }
+  .wire-sec__num {
+    font-size: 22px;
+  }
+  .wire-sec__note {
+    order: 3;
+    width: 100%;
+    max-width: none;
+    text-align: left;
+  }
+  .wire-pillars {
+    margin-top: 32px;
+  }
+  .wire-opener__title {
+    font-size: 26px;
+    line-height: 1.15;
+  }
+  .wire-opener__deck {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .wire-rail__track {
+    grid-auto-columns: 62%;
+    margin-right: calc(var(--wire-gutter) * -1);
+    padding-right: var(--wire-gutter);
+  }
+  .wire-rail__arrow {
+    display: none;
+  }
+  .wire-cases {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .wire-case__title {
+    font-size: 22px;
+  }
+  .wire-pin__title {
+    font-size: 28px;
+  }
+  .wire-fold__item {
+    display: flex;
+  }
+  .wire-fold__pic {
+    margin-bottom: 16px;
+  }
+  .wire-fold__title {
+    font-size: 24px;
+  }
+  .wire-archive {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .wire-archive__desk::before {
+    display: none;
+  }
+  .wire-record__quote {
+    font-size: 24px;
+  }
+  .wire-stats {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .wire-stat__val {
+    font-size: 52px;
+  }
+  .wire-signup__form {
+    flex-direction: column;
+  }
+  .wire-signup__form input {
+    flex: none;
+  }
+  .wire-movers {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+}
+
+
+/* ── REDUCED MOTION ───────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .wire-stamp__legend {
+    animation: none;
+  }
+  .wire-pillar,
+  .wire-pillar__go,
+  .wire-case,
+  .wire-pill,
+  .wire-pin__pic img,
+  .wire-scrim,
+  .wire-drawer,
+  .wire-search-open .wire-drawer {
+    transition: none;
+  }
+  .wire-pin:hover .wire-pin__pic img {
+    transform: none;
+  }
+}

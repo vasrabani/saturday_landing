@@ -16,6 +16,7 @@ import { readFileSync } from 'node:fs';
 import { test, expect } from '@playwright/test';
 import { FIXED_CHROME, NON_DETERMINISTIC_ART, SECTIONS, openLanding } from './support/landing.js';
 import { MEETING_SECTIONS, openMeeting, showsSlipSheet } from './support/meeting.js';
+import { NEWS_SECTIONS, openNews } from './support/news.js';
 import { RACES_SECTIONS, openRaces } from './support/races.js';
 import { TRAIL_NON_DETERMINISTIC, TRAIL_SECTIONS, openTrail } from './support/trail.js';
 import { showsDesktopNav, showsDrawerNav } from './support/viewports.js';
@@ -245,6 +246,41 @@ for (const section of RACES_SECTIONS) {
     await settle(page);
     const tabsArePinned = section.selector !== '.meeting-nav';
     await page.addStyleTag({ content: [SECTION_STYLE, tabsArePinned ? hide(['.meeting-nav']) : ''].join('\n') });
+
+    const height = await page.locator(section.selector).first()
+      .evaluate((el) => Math.round(el.getBoundingClientRect().height));
+    const windowHeight = page.viewportSize().height;
+    const tiles = Math.min(Math.ceil(height / windowHeight), MAX_TILES);
+
+    for (let tile = 0; tile < tiles; tile += 1) {
+      await page.evaluate(
+        ([selector, offset]) => {
+          const el = document.querySelector(selector);
+          const target = Math.round(el.getBoundingClientRect().top + window.scrollY) + offset;
+          window.scrollTo(0, target);
+        },
+        [section.selector, tile * windowHeight],
+      );
+      await page.waitForTimeout(PAINT_SETTLE_MS);
+      const name = tiles === 1 ? `${section.name}.png` : `${section.name}-${tile + 1}.png`;
+      await expect(page).toHaveScreenshot(name);
+    }
+  });
+}
+
+// ── The Fox's Wire ────────────────────────────────────────────────────
+// The front page, section by section, as the day's races above. The
+// 10:00 stamp turns slowly; these screenshots are taken with reduced
+// motion, which stops it. Like the races', they run once
+// tools/visual-baseline-ref names a commit that has news/index.html.
+const REFERENCE_HAS_NEWS = referenceHas('news/index.html');
+
+for (const section of NEWS_SECTIONS) {
+  test(`news section: ${section.name}`, async ({ page }) => {
+    test.skip(!REFERENCE_HAS_NEWS, `no reference: ${BASELINE_REF} (tools/visual-baseline-ref) predates news/index.html`);
+    await openNews(page, { tour: false });
+    await settle(page);
+    await page.addStyleTag({ content: SECTION_STYLE });
 
     const height = await page.locator(section.selector).first()
       .evaluate((el) => Math.round(el.getBoundingClientRect().height));

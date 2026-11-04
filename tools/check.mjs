@@ -18,7 +18,7 @@ const BASELINE_FILE = join(ROOT, 'tools', 'quality-baseline.json');
 // Folders this repo owns. static/races, letters, news and voting are
 // shared with other pages of the live site and treated as read-only, so
 // only reference checks look at them.
-const OWNED_DIRS = ['static/css', 'static/js', 'static/public', 'static/fonts', 'static/grid', 'static/meeting', 'static/llama', 'static/fox_signals', 'static/browse', 'static/enclosure'];
+const OWNED_DIRS = ['static/css', 'static/js', 'static/public', 'static/fonts', 'static/grid', 'static/meeting', 'static/llama', 'static/fox_signals', 'static/browse', 'static/enclosure', 'static/wire'];
 const LANDING_IMAGE_DIR = 'static/public/img';
 // The pages the contractor works on. Every rule that reads "the page"
 // reads all of them, so a problem introduced on the trail or a meeting
@@ -33,6 +33,21 @@ const ENTRY_PAGES = [
   // The Enclosure (tools/build-enclosure.py): every page of every scenario.
   ...readdirSync(join(ROOT, 'enclosure'), { recursive: true })
     .map((path) => join('enclosure', path).split(sep).join('/'))
+    .filter((path) => path.endsWith('.html'))
+    .sort(),
+  // The Fox's Wire (docs/news-brief.md): the front page, the five articles
+  // it leads with and the six LLaMa Letters. The older articles under
+  // news/article/ are the landing bundle's mirror, not part of it.
+  'news/index.html',
+  ...[
+    'the-deep-dive-bet365-charlie-hall-steeple-chase-grade-2-gbb-race-wetherby-1455',
+    'sly-mans-horses-to-watch-saturday-31-october-2026',
+    'market-steamers-saturday-31-october-2026',
+    'sly-mans-top-rated-saturday-31-october-2026',
+    'sly-mans-jockeys-taking-aim-saturday-31-october-2026',
+  ].map((slug) => `news/article/2026/${slug}/index.html`),
+  ...readdirSync(join(ROOT, 'letters'), { recursive: true })
+    .map((path) => join('letters', path).split(sep).join('/'))
     .filter((path) => path.endsWith('.html'))
     .sort(),
 ];

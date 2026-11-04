@@ -155,6 +155,40 @@ Two things on the template side, neither from the revamp:
 | The winner's button names the winner before it is pressed | each `.race-row__spoiler`: its `aria-label` is "Reveal winner of … — starting price … — ridden by …", so a screen reader reads the result the page is hiding | label it with the race alone ("Reveal winner of …"), and give the revealed face the job of saying the winner: drop the `aria-label` and put the race's name, visually hidden, in the hidden face, so the button's name is whichever face shows |
 | A button inside a link | each race's line is an `<a>` with the winner's button inside it | axe does not report it, but it is not valid HTML and a screen reader can read the two as one. Making the race's name the link (an `<a>` inside the `<h3>`) and the line a plain block, with the whole line still clickable through the link's `::after`, would separate them |
 
+## The Fox's Wire
+
+`npm test` runs axe on the front page, the Top Rated article (the one
+with tables, entries and side boxes) and a letter, at the four widths,
+and none of them has a violation to list: on these pages the nav's
+wordmark, which every other page's report carries, is not in the bar.
+All twelve pages were scanned the same way while the redesign was built,
+with the same result.
+
+One colour moved for it: the rail's rank labels ("No. 1" and the rest)
+are small, so they are in the deeper gold (4.8 to 1 on white) the page
+uses for small gold text; the lighter gold of the § numbers and the big
+figures, 3.99 to 1, is for large type only.
+
+What the redesign does for the keyboard and the screen reader:
+
+- Upright type only, and every heading in order: one `h1` a page (the
+  masthead's title on the front page, the story's on the others).
+- The search panel is a modal dialog: the keyboard goes to its search
+  box, the rest of the page is `inert` while it is open, and Escape, the
+  close button or the shade behind it close it and give the keyboard back
+  to the search button, whose `aria-expanded` says which. The results
+  list is a polite live region.
+- The 10:00 Card's answer arrives on a status line (`role="status"`), so
+  a screen reader hears the thanks or the reason; the field has
+  `autocomplete="email"`.
+- The nav's menus open on a press, on Enter or Space, and on hover; Escape
+  closes them (`site.js`, as everywhere).
+- The search button and the panel's close button are 44px to press,
+  though they are drawn smaller; the rail's arrows are 40px, and only on
+  wider screens (a phone swipes the rail).
+- The stamp's turning legend stops when the reader asks for reduced
+  motion, as do the pictures' hover zoom and the panel's slide.
+
 ## Fox Signals
 
 The ten rooms were checked with axe at 375px and 1440px against

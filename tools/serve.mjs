@@ -84,6 +84,67 @@ export function startServer({ root, port = DEFAULT_PORT } = {}) {
     res.end(JSON.stringify(frames[frame]));
   }
 
+  // The Wire's search: up to 12 stories whose title, summary, desk or
+  // date contain what was typed, in the order the fixture lists them.
+  const searchPath = join(siteRoot, 'fixtures', 'news-search.json');
+  const SEARCH_LIMIT = 12;
+
+  function serveNewsSearch(url, res) {
+    let stories = [];
+    try {
+      stories = JSON.parse(readFileSync(searchPath, 'utf8')).stories;
+    } catch {
+      res.writeHead(503, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ error: 'fixtures/news-search.json is missing' }));
+      return;
+    }
+    const query = (url.searchParams.get('q') ?? '').trim();
+    const needle = query.toLowerCase();
+    const results = needle
+      ? stories
+        .filter((story) => [story.title, story.summary, story.desk, story.when].join(' ').toLowerCase().includes(needle))
+        .slice(0, SEARCH_LIMIT)
+        .map(({ title, desk, when, url: link }) => ({ title, desk, when, url: link }))
+      : [];
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    res.end(JSON.stringify({ query, results }));
+  }
+
+  // The Card's form posts the address (and the CSRF token Django checks)
+  // as a normal form. wire_card.js asks for JSON and shows the message;
+  // without JavaScript the browser follows the redirect back to the Card.
+  const SIGNUP_BODY_LIMIT = 4096;
+  const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  function serveCardSignup(req, res) {
+    if (req.method !== 'POST') {
+      res.writeHead(405, { Allow: 'POST' }).end();
+      return;
+    }
+    let body = '';
+    req.setEncoding('utf8');
+    req.on('data', (chunk) => {
+      body += chunk;
+      if (body.length > SIGNUP_BODY_LIMIT) {
+        res.writeHead(413).end();
+        req.destroy();
+      }
+    });
+    req.on('end', () => {
+      if (res.writableEnded) return;
+      const email = (new URLSearchParams(body).get('email') ?? '').trim();
+      const valid = EMAIL.test(email);
+      if (!/application\/json/.test(req.headers.accept ?? '')) {
+        res.writeHead(303, { Location: '/news/#card' }).end();
+        return;
+      }
+      res.writeHead(valid ? 200 : 400, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+      res.end(JSON.stringify(valid
+        ? { ok: true, message: `You're on the list. The next Card comes to ${email} at 10:00 on the next race day.` }
+        : { ok: false, error: 'That email address does not look right. Check it and try again.' }));
+    });
+  }
+
   const server = createServer((req, res) => {
     const url = new URL(req.url, 'http://localhost');
     const urlPath = decodeURIComponent(url.pathname);
@@ -115,6 +176,20 @@ export function startServer({ root, port = DEFAULT_PORT } = {}) {
     if (urlPath === '/fox-signals/api/stable/toggle/') {
       res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
       res.end(JSON.stringify({ ok: true }));
+      return;
+    }
+    // The Fox's Wire. The search panel on the news pages asks here as the
+    // reader types, and lists what comes back. fixtures/news-search.json
+    // holds the stories of the recorded day (31 October 2026); in the
+    // Django site the view searches the published articles and letters.
+    if (urlPath === '/news/search/') {
+      serveNewsSearch(url, res);
+      return;
+    }
+    // The 10:00 Card's sign-up. Nothing is stored: the answer says the
+    // address was taken, or why it was not, as the Django view will.
+    if (urlPath === '/news/card/subscribe/') {
+      serveCardSignup(req, res);
       return;
     }
     let filePath = normalize(join(siteRoot, urlPath));

@@ -14,10 +14,11 @@ Self-contained snapshots of the live site, so you can work on it without Django,
 | `races-tomorrow.html`, `races-yesterday.html` | the same page for the next day (Champions Day: 60 races at eight meetings, the busiest captured) and the day before (every result in) |
 | `fox-*.html` | [Fox Signals](https://www.saturday-racing.com/fox-signals/board/) — the Fox's pick in every race and the market behind it: ten pages (the Board, Race Trace, Alerts, the Stable, Settings), as a visitor and as a member, on one recorded day |
 | `enclosure/` | [the Enclosure](https://www.saturday-racing.com/enclosure/jdl-consultants-bath-day/) — the phone app a corporate client's guests use on their race day: the card and their picks, the Corporate Cup, the feed, the host's Steward's Room; one race day in five scenarios, built from the Django site |
+| `news/index.html` | [The Fox's Wire](https://www.saturday-racing.com/news/) — the day's racing news as a front page, redesigned; with the five articles it leads with (`news/article/2026/`) and the six LLaMa Letters (`letters/`), on the morning of Saturday 31 October 2026 |
 
 Everything is baked into those files + the assets under `static/` — the same HTML, CSS, JS, images and fonts production ships. No template engine involved.
 
-The trail is a **live** page: races settle while it is open. The sandbox replays a recorded day so that works here too, which is why it needs the Node server below rather than any static one. If you are working on the trail, start with **`docs/trail-brief.md`**; on the meeting page, with **`docs/meeting-brief.md`**; on the day's races, with **`docs/races-brief.md`**; on Fox Signals, with **`docs/fox-signals-brief.md`**; on the Enclosure, with **`docs/enclosure-brief.md`**.
+The trail is a **live** page: races settle while it is open. The sandbox replays a recorded day so that works here too, which is why it needs the Node server below rather than any static one. If you are working on the trail, start with **`docs/trail-brief.md`**; on the meeting page, with **`docs/meeting-brief.md`**; on the day's races, with **`docs/races-brief.md`**; on Fox Signals, with **`docs/fox-signals-brief.md`**; on the Enclosure, with **`docs/enclosure-brief.md`**; on The Fox's Wire, with **`docs/news-brief.md`**.
 
 ---
 
@@ -28,7 +29,7 @@ npm install
 npm run serve
 ```
 
-Then open <http://localhost:8080/> for the home page, <http://localhost:8080/trail.html> for the trail, <http://localhost:8080/meeting.html> (or `meeting-upcoming.html`) for the meeting page, <http://localhost:8080/races.html> (or `races-tomorrow.html`, `races-yesterday.html`) for the day's races, and <http://localhost:8080/enclosure/> for the Enclosure.
+Then open <http://localhost:8080/> for the home page, <http://localhost:8080/trail.html> for the trail, <http://localhost:8080/meeting.html> (or `meeting-upcoming.html`) for the meeting page, <http://localhost:8080/races.html> (or `races-tomorrow.html`, `races-yesterday.html`) for the day's races, <http://localhost:8080/enclosure/> for the Enclosure, and <http://localhost:8080/news/> for The Fox's Wire.
 
 You must serve through a local web server: opening the files with `file://` breaks the fonts and some images. Use `npm run serve` rather than any other static server — it also answers `/trail/live/`, which is what makes the trail's board move.
 
@@ -50,6 +51,8 @@ saturday_landing/
 ├── races-states.html      every state the day's races page can render
 ├── fox-*.html             Fox Signals: ten pages built from the Django site
 ├── enclosure/             the Enclosure: five scenarios of a race day, built from the Django site
+├── news/index.html        The Fox's Wire, with its five articles in news/article/2026/
+├── letters/               the six LLaMa Letters the Wire leads with
 ├── docs/                  the briefs, the integration map, the decisions
 ├── fixtures/              the recorded day the trail's live feed replays
 ├── partials/              states that live outside the pages themselves
@@ -65,6 +68,7 @@ saturday_landing/
 │   ├── browse/            the day's races revamp's CSS + JS + images
 │   ├── fox_signals/       Fox Signals' CSS + JS (the Django site's, byte for byte)
 │   ├── enclosure/         the Enclosure's CSS + JS + icons (the Django site's, byte for byte)
+│   ├── wire/              The Fox's Wire's CSS + JS + pictures
 │   ├── races/             race picker + Pick 6 emblem CSS, and the meeting page's four production scripts
 │   ├── letters/           LLaMa portrait
 │   ├── news/              Sly Man portrait + fox mark
@@ -100,6 +104,9 @@ The contract is **navbar, footer, and home page only**. In the bundle those tran
 | Fox Signals **JS**           | `static/fox_signals/js/*.js`                                           |
 | Enclosure **styling**        | `static/enclosure/css/*.css` (read `docs/enclosure-brief.md` first)    |
 | Enclosure **JS**             | `static/enclosure/js/*.js`                                             |
+| The Fox's Wire **structure** | `news/index.html`, the five articles and six letters (inside `<main>`; read `docs/news-brief.md` first) |
+| The Fox's Wire **styling**   | `static/wire/css/wire.css`, `wire_article.css`                         |
+| The Fox's Wire **JS**        | `static/wire/js/*.js`                                                  |
 | Fonts / type scale           | `static/fonts/saturday-fonts.css` + `static/css/base.css`              |
 
 **`static/grid/js/*.js`** — the trail's five scripts (`trail_live`, `trail_flip`, `trail_filter`, `trail_drawer`, `trail_nav`) are production code and come back unchanged. They key off attributes and classes in the markup; `docs/trail-brief.md` lists every one of them. Restyle freely, but keep the hooks. The revamp's own three (`trail_cards`, `trail_track`, `trail_course`) sit beside them; `docs/integration-map.md` says what they need.
@@ -149,6 +156,7 @@ The `docs/` folder carries the decisions and the handover:
 | `races-brief.md` | **The day's races revamp: what it did, the real days and every state, the fix to Reveal winner, and the hooks the page must keep** |
 | `fox-signals-brief.md` | **Fox Signals: the ten pages, what is real and what is a stand-in, what you may change, the hooks, and how it goes back** |
 | `enclosure-brief.md` | **The Enclosure: the five scenarios, what is real and what is a stand-in, what works offline, what you may change, the hooks, how it goes back, and what is already known to be wrong** |
+| `news-brief.md` | **The Fox's Wire: the redesign, the site's nav and footer on its pages, the search and the 10:00 Card and the server they talk to, and the hooks the pages must keep** |
 | `integration-map.md` | How this becomes Django templates: section by section, with the context each one needs |
 | `content-notes.md` | Which numbers are sample data, and the content decisions still open |
 | `accessibility-notes.md` | What was fixed, the one open contrast decision, and why some axe findings are false positives |
@@ -172,7 +180,7 @@ npx playwright install chromium
 | Command | What it proves |
 | --- | --- |
 | `npm run check` | No debug code or localhost calls, every CSS `url()` resolves, images within 300 KB, no unused images, no new `!important`s, hardcoded token colours, off-scale breakpoints or unloaded fonts. |
-| `npm test` | Every feature works at 375, 768, 1024 and 1440px: nav dropdowns and mobile drawer, countdowns, day hub filters and course switcher, tabs, Saturday Draw, tilt and reduced motion, the trail's board, filters, drawer and flip, the meeting page's sorting, filters, slip, six-pick limit, sheet and reveal, the day's races' tabs, reveals and track, no horizontal scroll, no new accessibility violations. |
+| `npm test` | Every feature works at 375, 768, 1024 and 1440px: nav dropdowns and mobile drawer, countdowns, day hub filters and course switcher, tabs, Saturday Draw, tilt and reduced motion, the trail's board, filters, drawer and flip, the meeting page's sorting, filters, slip, six-pick limit, sheet and reveal, the day's races' tabs, reveals and track, The Fox's Wire's menus, search, rail and 10:00 Card, no horizontal scroll, no new accessibility violations. |
 | `npm run baseline` then `npm run test:visual` | **Advisory.** Screenshots each section at all four widths and compares them with the design reference commit (`tools/visual-baseline-ref`). |
 
 `npm run verify` runs all of them in order. The first two must pass; the third is for review.

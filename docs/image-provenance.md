@@ -72,3 +72,33 @@ Nothing here is a photograph or the output of an image model.
   check and stars the meeting page has, the paw from the footer
   (`static/public/img/footer/icon-paw.svg`) redrawn as a mask, and the
   rest from the Feather set.
+
+## The Fox's Wire (`static/wire/img/`)
+
+Nothing new was generated or photographed. The site has no race
+photography, so the news pages' pictures are its own art, cut to the
+16:9 frame the cards use at the size they are painted, and its
+characters' portraits. Thirteen files, 461 KB in all, the largest 73 KB.
+Every source is in this repo under `static/` or `media/`.
+
+| File | Size | From |
+| --- | --- | --- |
+| `lead.webp` | 1254 x 705, 62 KB | `static/public/img/hero-fold-bg.webp` (AI-generated, OpenAI C2PA), cropped to 16:9 round the horse |
+| `steam.webp` | 960 x 540, 60 KB | `static/public/img/mi-steam-bg.webp` (AI-generated, OpenAI C2PA) |
+| `green.webp` | 960 x 540, 21 KB | `static/public/img/next-off-bg.webp` (AI-generated, OpenAI C2PA) |
+| `chamber.webp` | 960 x 540, 20 KB | `static/public/img/ai-chamber/chamber-bg.webp` (AI-generated, OpenAI C2PA) |
+| `race.webp` | 1280 x 720, 49 KB | `static/public/img/race-of-the-day-bg-bleed.webp` |
+| `jockey.webp` | 620 x 349, 23 KB | `static/public/img/picks-fox-card-bg-bleed.webp` |
+| `field.webp` | 960 x 540, 15 KB | `static/public/img/footer/footer-bg.webp`, its right-hand end |
+| `fox.webp`, `sly.webp`, `llama.webp` | 337 x 491, 329 x 471, 277 x 503 | `static/public/img/mr_fox_host-sm.webp`, `static/news/img/slyman-sm.webp` and `static/letters/img/llama-portrait-sm.webp`, trimmed to the figure |
+| `sly-face.webp`, `llama-face.webp` | 96 x 96 | the bylines' faces, from the two portraits above |
+| `duel.webp` | 960 x 540, 73 KB | `media/compare_us/entrants/billy.webp` and `osin_murphy.webp` side by side on white, for the Championship read |
+
+`img/silks/*.svg` are the 20 silks the pages show, for the horses their
+stories name, exactly as `silks.theracingapi.com` served them on 31
+October 2026 (260 KB in all, the largest 67 KB; the service does not
+optimise them). As on the meeting page, they are copied so the sandbox
+works offline; the templates keep loading them from the service.
+
+The desk pills' portraits are the nav's own (`static/img/nav/*-72.webp`),
+not copies.
