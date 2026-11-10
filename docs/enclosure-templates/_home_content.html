@@ -1,5 +1,6 @@
-{% with hq=home.hq %}
+{% load enclosure_icons %}{% with hq=home.hq %}
 
+  <div class="enc-band enc-band--joined">
   {% if hq.countdown_race %}
   <section class="enc-hero" aria-labelledby="enc-hero-title">
     <p class="enc-hero__eyebrow">Next race</p>
@@ -32,6 +33,7 @@
     </p>
   </section>
   {% endif %}
+  </div>
 
   <section class="enc-triptych" aria-label="Race Day HQ">
     <div class="enc-tri">
@@ -109,8 +111,8 @@
     </header>
     <ol class="enc-feed-rail__list">
       {% for entry in home.feed_head %}
-        <li class="enc-feed-rail__item">
-          <span class="enc-feed-rail__icon" aria-hidden="true">{{ entry.icon|default:"·" }}</span>
+        <li class="enc-feed-rail__item enc-feed-rail__item--{{ entry.kind }}">
+          <span class="enc-feed-rail__icon" aria-hidden="true">{% enc_kind_icon entry 17 %}</span>
           <div class="enc-feed-rail__body">
             <div class="enc-feed-rail__meta">
               <span class="enc-feed-rail__title">{{ entry.title }}</span>

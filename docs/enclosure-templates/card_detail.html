@@ -1,10 +1,10 @@
-{% extends "enclosure/base.html" %}
+{% extends "enclosure/v2/base.html" %}
 {% load static %}
 
 {% block title %}{{ card.head.title }} · {{ event.name }}{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'enclosure/css/card_detail.css' %}?v=5">
+<link rel="stylesheet" href="{% static 'enclosure/v2/css/card_detail.css' %}?v=5">
 {% endblock %}
 
 {% block content %}
@@ -16,21 +16,37 @@
 
   <div class="enc-scroll">
 
+    <div class="enc-band">
     <div data-role="head">
-      {% include "enclosure/_card_race_head.html" %}
+      {% include "enclosure/v2/_card_race_head.html" %}
+    </div>
     </div>
 
     <div data-role="pick">
-      {% include "enclosure/_card_pick_bar.html" %}
+      {% include "enclosure/v2/_card_pick_bar.html" %}
     </div>
 
     <div data-role="field">
-      {% include "enclosure/_card_field.html" %}
+      {% include "enclosure/v2/_card_field.html" %}
     </div>
+
+    <details class="enc-terms">
+      <summary>Racing terms</summary>
+      <dl>
+        {% if card.head.distance_words %}<dt>{{ card.head.distance }}</dt><dd>{{ card.head.distance_words }} A furlong is 220 yards.</dd>{% endif %}
+        <dt>Form</dt><dd>Finishing positions in recent runs, latest on the right. 0 is 10th or worse; a dash separates seasons.</dd>
+        <dt>OR</dt><dd>Official Rating: the handicapper’s measure of ability.</dd>
+        <dt>SR</dt><dd>Saturday Racing’s rating. Higher is stronger.</dd>
+        <dt>SP</dt><dd>Starting price: the odds when the race began. F is the favourite, J joint favourite.</dd>
+        <dt>(5)</dt><dd>After a jockey’s name: an apprentice’s weight allowance, in pounds.</dd>
+        <dt>p v h b t</dt><dd>Headgear: cheekpieces, visor, hood, blinkers, tongue strap.</dd>
+        <dt>Class</dt><dd>Class 1 is the top level in British racing; Class 7 the lowest.</dd>
+      </dl>
+    </details>
 
     <div data-role="letter">
       {% if card.letter %}
-        {% include "enclosure/_card_letter_panel.html" %}
+        {% include "enclosure/v2/_card_letter_panel.html" %}
       {% endif %}
     </div>
 
@@ -39,5 +55,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{% static 'enclosure/js/card_detail.js' %}?v=3" defer></script>
+<script src="{% static 'enclosure/v2/js/card_detail.js' %}?v=3" defer></script>
 {% endblock %}

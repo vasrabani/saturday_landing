@@ -1,7 +1,7 @@
-<section class="enc-cd-letter enc-cd-letter--{{ card.letter.confidence|default:'medium' }}"
+{% load static %}<section class="enc-cd-letter enc-cd-letter--{{ card.letter.confidence|default:'medium' }}"
          aria-label="LLaMa's read on this race">
   <header class="enc-cd-letter__head">
-    <span class="enc-cd-letter__mono" aria-hidden="true">🦙</span>
+    <span class="enc-cd-letter__mono" aria-hidden="true"><img src="{% static 'img/nav/llama-72.webp' %}" alt="" width="36" height="36"></span>
     <div class="enc-cd-letter__title-block">
       <p class="enc-cd-letter__eyebrow">LLaMa&rsquo;s read</p>
       <h2 class="enc-cd-letter__title">Predicted 1&mdash;2&mdash;3&mdash;4</h2>
@@ -12,10 +12,7 @@
     {% for slot in card.letter.slots %}
       <li class="enc-cd-letter__slot enc-cd-letter__slot--pos-{{ slot.position }}">
         <span class="enc-cd-letter__medal" aria-hidden="true">
-          {% if slot.position == 1 %}🥇
-          {% elif slot.position == 2 %}🥈
-          {% elif slot.position == 3 %}🥉
-          {% else %}{{ slot.position }}{% endif %}
+          {{ slot.position }}
         </span>
         <div class="enc-cd-letter__slot-body">
           <p class="enc-cd-letter__slot-eyebrow">

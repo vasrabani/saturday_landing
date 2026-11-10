@@ -1,14 +1,18 @@
-{% extends "enclosure/base.html" %}
-{% load static %}
+{% extends "enclosure/v2/base.html" %}
+{% load static enclosure_icons %}
 
 {% block title %}Racecard · {{ event.name }}{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'enclosure/css/card.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'enclosure/v2/css/card.css' %}?v=1">
 {% endblock %}
 
 {% block content %}
 <div class="enc-scroll">
+
+  <div class="enc-band">
+    <h1 class="enc-page-title">Racecard</h1>
+  </div>
 
   {% if rows %}
     <ol class="enc-card-list" aria-label="Races today">
@@ -17,11 +21,14 @@
         <li>
           <a class="enc-race-row enc-race-row--state-{{ row.state }}{% if row.is_next %} enc-race-row--next{% endif %}"
              href="{{ row.pick_url }}">
-            <div class="enc-race-row__time">{{ row.time_display }}</div>
+            <div class="enc-race-row__time"><span class="enc-race-row__n">Race {{ row.number }}</span>{{ row.time_display }}</div>
             <div class="enc-race-row__body">
               <div class="enc-race-row__title">{{ row.title }}</div>
               {% if row.subtitle %}
                 <div class="enc-race-row__sub">{{ row.subtitle }}</div>
+              {% endif %}
+              {% if row.winner %}
+                <div class="enc-race-row__won"><span class="enc-race-row__pos">1st</span>{% if row.winner.silk_url %}<img src="{{ row.winner.silk_url }}" alt="" width="20" height="20" loading="lazy">{% endif %}<span class="enc-race-row__horse">{{ row.winner.horse }}</span>{% if row.winner.sp %}<span class="enc-race-row__sp">{% enc_odds row.winner.sp %}</span>{% endif %}</div>
               {% endif %}
             </div>
             <div class="enc-race-row__chip enc-chip enc-chip--{{ row.state }}">
@@ -35,11 +42,14 @@
         {% else %}
         <li>
           <div class="enc-race-row enc-race-row--state-{{ row.state }}{% if row.is_next %} enc-race-row--next{% endif %} enc-race-row--static">
-            <div class="enc-race-row__time">{{ row.time_display }}</div>
+            <div class="enc-race-row__time"><span class="enc-race-row__n">Race {{ row.number }}</span>{{ row.time_display }}</div>
             <div class="enc-race-row__body">
               <div class="enc-race-row__title">{{ row.title }}</div>
               {% if row.subtitle %}
                 <div class="enc-race-row__sub">{{ row.subtitle }}</div>
+              {% endif %}
+              {% if row.winner %}
+                <div class="enc-race-row__won"><span class="enc-race-row__pos">1st</span>{% if row.winner.silk_url %}<img src="{{ row.winner.silk_url }}" alt="" width="20" height="20" loading="lazy">{% endif %}<span class="enc-race-row__horse">{{ row.winner.horse }}</span>{% if row.winner.sp %}<span class="enc-race-row__sp">{% enc_odds row.winner.sp %}</span>{% endif %}</div>
               {% endif %}
               {% if row.pick_horse %}
                 <div class="enc-race-row__pick-line">

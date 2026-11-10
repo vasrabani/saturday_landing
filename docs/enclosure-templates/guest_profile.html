@@ -1,16 +1,17 @@
-{% extends "enclosure/base.html" %}
-{% load static %}
+{% extends "enclosure/v2/base.html" %}
+{% load static enclosure_icons %}
 
 {% block title %}{{ profile.display_name }} · {{ event.name }}{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'enclosure/css/cup.css' %}?v=4">
-<link rel="stylesheet" href="{% static 'enclosure/css/guest_profile.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'enclosure/v2/css/cup.css' %}?v=4">
+<link rel="stylesheet" href="{% static 'enclosure/v2/css/guest_profile.css' %}?v=1">
 {% endblock %}
 
 {% block content %}
 <div class="enc-scroll">
 
+  <div class="enc-band">
   <section class="enc-gp-hero" aria-label="Guest profile">
     <a class="enc-gp-hero__back" href="{% url 'enclosure:cup' event.slug %}"
        aria-label="Back to Standings">&larr; Standings</a>
@@ -53,6 +54,7 @@
       </ul>
     {% endif %}
   </section>
+  </div>
 
   <section class="enc-cup-picks" aria-label="Selections">
     <header class="enc-cup-picks__head">
@@ -101,7 +103,7 @@
 
               <span class="enc-cup-pick__right">
                 {% if p.odds %}
-                  <span class="enc-cup-pick__odds">{{ p.odds }}</span>
+                  <span class="enc-cup-pick__odds">{% enc_odds p.odds col=True %}</span>
                 {% else %}
                   <span class="enc-cup-pick__odds enc-cup-pick__odds--dim">SP</span>
                 {% endif %}

@@ -1,4 +1,4 @@
-<section class="enc-cup-board" aria-label="Corporate Cup leaderboard">
+{% load enclosure_icons %}<section class="enc-cup-board" aria-label="Corporate Cup leaderboard">
   <header class="enc-cup-board__head">
     <h2 class="enc-cup-board__title">Standings</h2>
     <a class="enc-cup-board__link" href="{{ cup.leaderboard_url }}">Full board &rsaquo;</a>
@@ -17,7 +17,7 @@
               {{ row.display_name }}
               {% if row.is_viewer %}<span class="enc-cup-row__you">You</span>{% endif %}
             </span>
-            <span class="enc-cup-row__balance">{{ row.balance }}</span>
+            <span class="enc-cup-row__balance">{{ row.balance|thousands }}</span>
             <span class="enc-cup-row__delta enc-cup-row__delta--{% if row.delta >= 0 %}up{% else %}down{% endif %}">
               {% if row.delta >= 0 %}+{% endif %}{{ row.delta }}
             </span>
@@ -39,7 +39,7 @@
               {{ cup.viewer_row.display_name }}
               <span class="enc-cup-row__you">You</span>
             </span>
-            <span class="enc-cup-row__balance">{{ cup.viewer_row.balance }}</span>
+            <span class="enc-cup-row__balance">{{ cup.viewer_row.balance|thousands }}</span>
             <span class="enc-cup-row__delta enc-cup-row__delta--{% if cup.viewer_row.delta >= 0 %}up{% else %}down{% endif %}">
               {% if cup.viewer_row.delta >= 0 %}+{% endif %}{{ cup.viewer_row.delta }}
             </span>
