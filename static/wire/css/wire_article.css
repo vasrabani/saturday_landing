@@ -531,3 +531,13 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* ── TOUCH ── On a touch screen the kicker link above a headline takes a press
+   44px tall: an invisible area centred on it */
+@media (pointer: coarse) {
+  .wire-art__kicker a { position: relative; }
+  .wire-art__kicker a::before {
+    content: ""; position: absolute; top: 50%; left: 50%;
+    width: max(100%, 44px); height: max(100%, 44px); transform: translate(-50%, -50%);
+  }
+}
