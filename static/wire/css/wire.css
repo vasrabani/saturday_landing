@@ -708,6 +708,30 @@ html:has(> body.page-wire) {
 .wire-top__left { grid-area: left; }
 .wire-top__right { grid-area: right; }
 
+/* No letters today: the lead takes the whole row, its picture beside
+   its words on wide screens. */
+.wire-top.wire-top--solo {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "lead";
+}
+@media (min-width: 1024px) {
+  .wire-top--solo .wire-card--xl > a {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-template-rows: 1fr repeat(4, auto) 1fr;
+    column-gap: var(--wire-gap);
+  }
+  .wire-top--solo .wire-card--xl .wire-card__pic {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    margin-bottom: 0;
+  }
+  .wire-top--solo .wire-card--xl .wire-card__title { grid-column: 2; grid-row: 2; }
+  .wire-top--solo .wire-card--xl .wire-card__deck { grid-column: 2; grid-row: 3; }
+  .wire-top--solo .wire-card--xl .wire-facts { grid-column: 2; grid-row: 4; }
+  .wire-top--solo .wire-card--xl .wire-meta { grid-column: 2; grid-row: 5; }
+}
+
 
 /* ── DESK PILLS ───────────────────────────────────────────────── */
 
@@ -797,15 +821,47 @@ html:has(> body.page-wire) {
   line-height: 27px;
   color: var(--wire-ink-2);
 }
+/* Who filed it, and the way in: the watchlist is a column, not a feed. */
+.wire-opener__by {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  margin-top: 16px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--wire-meta);
+}
+.wire-opener__face {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px var(--wire-rule);
+}
+.wire-opener__name {
+  font-weight: 700;
+  color: var(--wire-ink);
+}
+.wire-opener__go {
+  font-weight: 700;
+  color: var(--wire-gold-ink);
+}
+.wire-opener:hover .wire-opener__go {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 
 /* The day's five horses as a rail of silks; wire_rail.js steps it. */
 .wire-rail {
   position: relative;
+  container-type: inline-size;
+  --wire-rail-cols: 5;
 }
 .wire-rail__track {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: calc((100% - var(--wire-gap) * 4) / 5);
+  grid-auto-columns: calc((100% - var(--wire-gap) * (var(--wire-rail-cols) - 1)) / var(--wire-rail-cols));
   gap: var(--wire-gap);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -833,6 +889,35 @@ html:has(> body.page-wire) {
   width: 100%;
   height: 88%;
   object-fit: contain;
+}
+.wire-rail__price {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 7px 12px 8px;
+  background: var(--wire-ink);
+  color: var(--wire-cream);
+  box-shadow: inset 0 -2px 0 var(--wire-mast-gold);
+}
+.wire-rail__price small {
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wire-mast-gold);
+}
+.wire-rail__price b {
+  margin-top: 2px;
+  font-family: var(--wire-display);
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 800;
+  font-variant-numeric: lining-nums;
+  white-space: nowrap;
 }
 /* Small, so in the deeper gold: the figures' gold is for large type only. */
 .wire-rail__rank {
@@ -862,9 +947,38 @@ html:has(> body.page-wire) {
   line-height: 18px;
   color: var(--wire-ink-2);
 }
+.wire-rail__signal {
+  margin-left: 6px;
+  padding-left: 7px;
+  border-left: 1px solid currentColor;
+  font-family: var(--wire-body);
+  font-size: 11px;
+  line-height: 20px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  vertical-align: 1px;
+}
+.wire-rail__line {
+  display: -webkit-box;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--wire-rule);
+  font-family: var(--wire-display);
+  font-size: 15px;
+  line-height: 21px;
+  font-style: italic;
+  color: var(--wire-ink-2);
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.wire-rail__item .wire-meta {
+  margin-top: 10px;
+}
 .wire-rail__arrow {
   position: absolute;
-  top: calc((100% - 96px) / 2 - 20px);
+  top: calc((100cqw - var(--wire-gap) * (var(--wire-rail-cols) - 1)) / var(--wire-rail-cols) * 0.375 - 20px);
   z-index: 2;
   display: grid;
   place-items: center;
@@ -1614,8 +1728,8 @@ html:has(> body.page-wire) {
   .wire-archive__desk:nth-child(3n + 1)::before {
     display: none;
   }
-  .wire-rail__track {
-    grid-auto-columns: calc((100% - var(--wire-gap) * 3) / 4);
+  .wire-rail {
+    --wire-rail-cols: 4;
   }
 }
 

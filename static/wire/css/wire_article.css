@@ -478,6 +478,1362 @@
 }
 
 
+/* ── TOP RATED ─────────────────────────────────────────────────
+   Sly Man's Top Rated: the Top Signal (the day's lead horse as a
+   feature, its price on a ticket, its six signal lights), Sly's take,
+   the Signal Board (every signal horse, strongest first), the rating
+   leaderboards and the money. Tones: lead green, contender gold,
+   watch ink, cooling red. */
+
+.wire-tr-hero {
+  margin-bottom: 8px;
+}
+.wire-tr-hero__kicker,
+.wire-tr-head {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+}
+.wire-tr-hero__card {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: var(--wire-gap);
+  margin-top: 10px;
+  padding: 20px;
+  box-shadow: inset 0 0 0 1px var(--wire-rule), inset 0 3px 0 var(--wire-up);
+}
+.wire-tr-hero__silk {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  box-shadow: inset 0 0 0 1px var(--wire-rule);
+}
+.wire-art__body .wire-tr-hero a,
+.wire-art__body .wire-tr-board a,
+.wire-art__body .wire-tr-lb a,
+.wire-art__body .wire-tr-list a {
+  text-decoration: none;
+}
+.wire-tr-hero__silk img {
+  position: absolute;
+  inset: 14% 6% 6%;
+  width: 88%;
+  height: 80%;
+  object-fit: contain;
+}
+.wire-tr-price {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 14px 9px;
+  background: var(--wire-ink);
+  color: var(--wire-cream);
+  box-shadow: inset 0 -2px 0 var(--wire-mast-gold);
+}
+.wire-tr-price small {
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wire-mast-gold);
+}
+.wire-tr-price b {
+  margin-top: 2px;
+  font-family: var(--wire-display);
+  font-size: 36px;
+  line-height: 1;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.wire-tr-hero__text {
+  min-width: 0;
+}
+.wire-art__body h2.wire-tr-hero__name {
+  margin-top: 8px;
+  font-family: var(--wire-display);
+  font-size: 44px;
+  line-height: 1.05;
+  font-weight: 800;
+}
+.wire-tr-hero__name a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+}
+.wire-tr-hero__facts {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--wire-ink-2);
+}
+.wire-tr-hero__facts > * + * {
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1px solid var(--wire-meta);
+}
+.wire-tr-lights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+}
+.wire-tr-light {
+  padding: 4px 9px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  color: var(--wire-meta);
+  box-shadow: inset 0 0 0 1px var(--wire-rule);
+}
+.wire-tr-light.is-on {
+  background: var(--wire-ink);
+  color: var(--wire-cream);
+  box-shadow: none;
+}
+.wire-tr-hero__count {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--wire-ink-2);
+}
+.wire-tr-hero__count b {
+  font-family: var(--wire-display);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--wire-ink);
+}
+.wire-tr-hero__sources {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--wire-meta);
+}
+.wire-tr-hero__quote {
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--wire-rule);
+  font-family: var(--wire-display);
+  font-size: 18px;
+  line-height: 26px;
+  font-style: italic;
+  color: var(--wire-ink-2);
+}
+.wire-tr-hero__quote cite {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--wire-body);
+  font-size: 12px;
+  line-height: 16px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+}
+.wire-tr-hero__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-top: 16px;
+  font-size: 14px;
+  line-height: 20px;
+}
+.wire-tr-go {
+  font-weight: 700;
+  color: var(--wire-gold-ink);
+}
+.wire-tr-go:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* A second Top pick, under the first. */
+.wire-tr-also {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  margin-top: 12px;
+  padding: 12px 16px;
+  box-shadow: inset 0 0 0 1px var(--wire-rule);
+}
+.wire-tr-also__silk {
+  display: block;
+  width: 72px;
+  height: 72px;
+}
+.wire-tr-also__silk img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.wire-tr-also__name {
+  font-family: var(--wire-display);
+  font-size: 22px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+.wire-tr-also__sub {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--wire-meta);
+}
+.wire-tr-also .wire-tr-price {
+  position: static;
+}
+.wire-tr-also .wire-tr-price b {
+  font-size: 26px;
+}
+
+/* The page's lists are bulleted prose; these are not. */
+.wire-art__body .wire-tr-lights,
+.wire-art__body .wire-tr-board,
+.wire-art__body .wire-tr-lb ol,
+.wire-art__body .wire-tr-list {
+  padding-left: 0;
+  list-style: none;
+}
+.wire-art__body .wire-tr-lights li + li,
+.wire-art__body .wire-tr-board li + li,
+.wire-art__body .wire-tr-lb li + li,
+.wire-art__body .wire-tr-list li + li {
+  margin-top: 0;
+}
+
+/* Each row is one target: its horse's link stretches over the row. */
+.wire-tr-also,
+.wire-tr-row,
+.wire-tr-lb li,
+.wire-tr-list li {
+  position: relative;
+}
+.wire-tr-also__name a::after,
+.wire-tr-row__name a::after,
+a.wire-tr-lb__name::after,
+a.wire-tr-list__name::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.wire-tr-row:has(a:hover),
+.wire-tr-lb li:has(a:hover),
+.wire-tr-list li:has(a:hover) {
+  background: color-mix(in srgb, var(--wire-gold) 7%, transparent);
+}
+
+/* Badges: a tone's dot and its word. */
+.wire-tr-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--wire-body);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--wire-ink);
+  white-space: nowrap;
+  vertical-align: 2px;
+}
+.wire-tr-badge::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--wire-meta);
+}
+.wire-tr-badge--lead::before { background: var(--wire-up); }
+.wire-tr-badge--contender::before { background: var(--wire-gold); }
+.wire-tr-badge--cooling::before { background: var(--wire-down); }
+
+/* Results. */
+.wire-tr-result {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  color: var(--wire-meta);
+  box-shadow: inset 0 0 0 1px var(--wire-rule);
+  white-space: nowrap;
+}
+/* Won: the standard gold pill with a tick, as on Sly Man's ACCA. */
+.wire-tr-result--won {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px 3px 4px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #3B2A03;
+  background: linear-gradient(180deg, #F0D57F 0%, #D4AF37 55%, #B8921D 100%);
+  box-shadow: inset 0 0 0 1px rgb(110 83 11 / 35%), 0 2px 6px -2px rgb(110 83 11 / 45%);
+}
+.wire-tr-result--won::before {
+  content: "\2713";
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  font-size: 11px;
+  line-height: 1;
+  color: #F0D57F;
+  background: #3B2A03;
+}
+/* On the Top Signal card and a Horses to Watch card it is the headline
+   result: bigger again. */
+.wire-tr-hero__foot .wire-tr-result--won,
+.wire-pick__links .wire-tr-result--won {
+  gap: 6px;
+  padding: 5px 14px 5px 6px;
+  font-size: 15px;
+  line-height: 20px;
+}
+.wire-tr-hero__foot .wire-tr-result--won::before,
+.wire-pick__links .wire-tr-result--won::before {
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+}
+.wire-tr-result--placed {
+  color: var(--wire-gold-ink);
+  box-shadow: inset 0 0 0 1px var(--wire-gold);
+}
+
+/* The take: its opening, then the rest behind "Read Sly's full take". */
+.wire-tr-take summary {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 700;
+  color: var(--wire-gold-ink);
+  cursor: pointer;
+  list-style: none;
+}
+.wire-tr-take summary::-webkit-details-marker {
+  display: none;
+}
+.wire-tr-take summary::after {
+  content: " \2193";
+}
+.wire-tr-take[open] summary::after {
+  content: " \2191";
+}
+.wire-tr-take p {
+  margin-top: 12px;
+}
+
+/* The Signal Board. */
+.wire-tr-board {
+  margin-top: 16px;
+  border-bottom: 1px solid var(--wire-rule);
+}
+.wire-tr-row {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) 96px 76px 84px;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid var(--wire-rule);
+}
+.wire-tr-row--head {
+  padding: 0 0 8px;
+  border-top: 0;
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+}
+.wire-tr-row--head span:nth-child(4),
+.wire-tr-row--head span:nth-child(5) {
+  text-align: right;
+}
+.wire-tr-row__rank {
+  font-family: var(--wire-display);
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--wire-gold-num);
+}
+.wire-tr-row__name {
+  font-family: var(--wire-display);
+  font-size: 19px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+.wire-tr-row__name a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.wire-tr-row__name .wire-tr-badge {
+  margin-left: 8px;
+}
+.wire-tr-row__sub {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--wire-meta);
+}
+.wire-tr-pips {
+  display: flex;
+  gap: 3px;
+}
+.wire-tr-pips i {
+  width: 10px;
+  height: 10px;
+  box-shadow: inset 0 0 0 1px var(--wire-silver);
+}
+.wire-tr-pips i.is-on {
+  background: var(--wire-ink);
+  box-shadow: none;
+}
+.wire-tr-row__price {
+  font-family: var(--wire-display);
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 800;
+  text-align: right;
+  white-space: nowrap;
+}
+.wire-tr-row > .wire-tr-result {
+  justify-self: end;
+}
+.wire-tr-row--lead {
+  padding-left: 12px;
+  box-shadow: inset 3px 0 0 var(--wire-up);
+}
+.wire-tr-key {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--wire-meta);
+}
+
+/* The rating leaderboards, three abreast. */
+.wire-tr-boards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--wire-gap);
+  margin-top: 16px;
+}
+.wire-tr-lb h3 {
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--wire-ink);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.wire-tr-lb li {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--wire-rule);
+}
+.wire-tr-lb__n {
+  font-family: var(--wire-display);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--wire-gold-num);
+}
+.wire-tr-lb__name {
+  display: block;
+  font-family: var(--wire-display);
+  font-size: 16px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+.wire-tr-lb__race {
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--wire-meta);
+}
+.wire-tr-lb__price {
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Short lanes (AI Chamber, Consensus) and the money. */
+.wire-tr-list {
+  margin-top: 12px;
+}
+.wire-tr-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--wire-rule);
+}
+.wire-tr-list__name {
+  display: block;
+  font-family: var(--wire-display);
+  font-size: 17px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+.wire-tr-list__race {
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--wire-meta);
+}
+.wire-tr-list__price {
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.wire-tr-list__price s {
+  font-weight: 400;
+  color: var(--wire-meta);
+}
+.wire-tr-money {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--wire-gap);
+  margin-top: 16px;
+}
+.wire-tr-money h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--wire-ink);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.wire-tr-money h3::before {
+  content: "\25B2";
+  font-size: 10px;
+  color: var(--wire-up);
+}
+.wire-tr-money__out h3::before {
+  content: "\25BC";
+  color: var(--wire-down);
+}
+.wire-tr-money .wire-tr-list {
+  margin-top: 0;
+}
+
+@media (max-width: 767px) {
+  .wire-tr-hero__card {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 16px;
+  }
+  .wire-tr-hero__silk {
+    aspect-ratio: 16 / 10;
+  }
+  .wire-tr-hero__silk img {
+    inset: 8% 0 6%;
+    width: 100%;
+    height: 86%;
+  }
+  .wire-art__body h2.wire-tr-hero__name {
+    font-size: 34px;
+  }
+  .wire-tr-also {
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 10px 12px;
+  }
+  .wire-tr-also__silk {
+    width: 56px;
+    height: 56px;
+  }
+  .wire-tr-row {
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "rank main price"
+      "rank pips result";
+    gap: 6px 12px;
+  }
+  .wire-tr-row--head {
+    display: none;
+  }
+  .wire-tr-row__rank { grid-area: rank; align-self: start; }
+  .wire-tr-row__main { grid-area: main; }
+  .wire-tr-row__price { grid-area: price; }
+  .wire-tr-pips { grid-area: pips; }
+  .wire-tr-row > .wire-tr-result { grid-area: result; }
+  .wire-tr-row__name .wire-tr-badge {
+    display: flex;
+    margin: 4px 0 0;
+  }
+  .wire-tr-boards,
+  .wire-tr-money {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+
+
+/* ── HORSES TO WATCH ───────────────────────────────────────────
+   Sly Man's Horses to Watch: "Your afternoon" (the five in order of
+   the off, the next to run marked, results as they land, the score),
+   then one card per horse (silk with its price ticket, the signal, his
+   opening line, "The case" as bars and figures, the connections, the
+   links, a result stamp once run) and his signed verdict. The price
+   ticket and badges are the Top Rated ones (.wire-tr-price,
+   .wire-tr-badge). */
+
+.wire-htw-order {
+  margin-bottom: 24px;
+}
+.wire-htw-order__head {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+}
+.wire-htw-order__list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.wire-htw-stop a {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 10px 10px 12px;
+  box-shadow: inset 0 0 0 1px var(--wire-rule);
+}
+.wire-htw-stop a:hover {
+  box-shadow: inset 0 0 0 1px var(--wire-ink);
+}
+.wire-htw-stop__when {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  color: var(--wire-meta);
+}
+.wire-htw-stop__silk {
+  display: block;
+  width: 44px;
+  height: 44px;
+  margin-top: 8px;
+}
+.wire-htw-stop__silk img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.wire-htw-stop__name {
+  margin-top: 6px;
+  font-family: var(--wire-display);
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+.wire-htw-stop__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 8px;
+  font-size: 13px;
+  line-height: 18px;
+}
+.wire-htw-stop__price {
+  font-family: var(--wire-display);
+  font-size: 18px;
+  font-weight: 800;
+}
+.wire-htw-stop--next a {
+  box-shadow: inset 0 0 0 1px var(--wire-up), inset 0 3px 0 var(--wire-up);
+}
+.wire-htw-stop--next .wire-htw-stop__when {
+  color: var(--wire-up);
+}
+.wire-htw-stop--run .wire-htw-stop__name,
+.wire-htw-stop--run .wire-htw-stop__price {
+  color: var(--wire-ink-2);
+}
+.wire-htw-order__score {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--wire-ink-2);
+}
+.wire-htw-order__score b {
+  color: var(--wire-ink);
+}
+
+/* One card per horse. */
+.wire-pick {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: var(--wire-gap);
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--wire-rule);
+  scroll-margin-top: 80px;
+}
+.wire-pick__side {
+  min-width: 0;
+}
+.wire-pick__silk {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  box-shadow: inset 0 0 0 1px var(--wire-rule);
+}
+.wire-pick__silk img {
+  position: absolute;
+  inset: 22% 8% 6%;
+  width: 84%;
+  height: 72%;
+  object-fit: contain;
+}
+.wire-pick__stamp {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  padding: 4px 10px;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+  background: var(--wire-paper);
+  box-shadow: inset 0 0 0 2px currentColor;
+  transform: rotate(-4deg);
+}
+/* Won: the standard gold pill with a tick, upright, as on Top Rated. */
+.wire-pick__stamp--won {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px 5px 6px;
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: #3B2A03;
+  background: linear-gradient(180deg, #F0D57F 0%, #D4AF37 55%, #B8921D 100%);
+  box-shadow: inset 0 0 0 1px rgb(110 83 11 / 35%), 0 2px 6px -2px rgb(110 83 11 / 45%);
+  transform: none;
+}
+.wire-pick__stamp--won::before {
+  content: "\2713";
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 1;
+  color: #F0D57F;
+  background: #3B2A03;
+}
+.wire-pick__stamp--placed {
+  color: var(--wire-gold-ink);
+}
+.wire-pick__who {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 19px;
+  color: var(--wire-ink-2);
+}
+.wire-pick__who b {
+  display: inline-block;
+  width: 18px;
+  font-weight: 700;
+  color: var(--wire-meta);
+}
+.wire-pick__main {
+  min-width: 0;
+}
+.wire-pick__kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--wire-meta);
+}
+.wire-art__body h2.wire-pick__name {
+  margin-top: 6px;
+  font-family: var(--wire-display);
+  font-size: 34px;
+  line-height: 1.1;
+  font-weight: 800;
+}
+.wire-pick__n {
+  margin-right: 8px;
+  color: var(--wire-gold-num);
+}
+.wire-art__body p.wire-pick__lead {
+  margin-top: 10px;
+  font-family: var(--wire-display);
+  font-size: 20px;
+  line-height: 29px;
+  font-style: italic;
+  color: var(--wire-ink);
+}
+.wire-art__body p.wire-pick__rest {
+  margin-top: 8px;
+  font-size: 16px;
+  line-height: 25px;
+  color: var(--wire-ink-2);
+}
+
+/* "The case": strike rates as bars, ratings as figures, facts as lines. */
+.wire-pick__case {
+  margin-top: 18px;
+}
+.wire-pick__case-head {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+}
+.wire-art__body .wire-pick__case ul {
+  margin: 6px 0 0;
+  padding-left: 0;
+  list-style: none;
+}
+.wire-art__body .wire-pick__case li + li {
+  margin-top: 0;
+}
+.wire-proof {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) 128px;
+  gap: 4px 12px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--wire-rule);
+  font-size: 14px;
+  line-height: 20px;
+}
+.wire-proof__label {
+  font-weight: 700;
+}
+.wire-proof__label small {
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--wire-meta);
+}
+.wire-proof__bar {
+  height: 8px;
+  background: var(--wire-rule);
+}
+.wire-proof__bar i {
+  display: block;
+  height: 100%;
+  background: var(--wire-up);
+}
+.wire-proof__value {
+  text-align: right;
+  white-space: nowrap;
+}
+.wire-proof__value b {
+  font-family: var(--wire-display);
+  font-size: 18px;
+  font-weight: 800;
+}
+.wire-proof__value small {
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--wire-meta);
+}
+.wire-proof--figure .wire-proof__value {
+  grid-column: 2 / -1;
+  text-align: left;
+}
+.wire-proof--figure .wire-proof__value small {
+  display: inline;
+  margin-left: 8px;
+  font-size: 14px;
+}
+.wire-proof--fact {
+  grid-template-columns: 16px minmax(0, 1fr);
+  color: var(--wire-ink-2);
+}
+.wire-proof--fact::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: var(--wire-gold);
+}
+.wire-pick__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  margin-top: 16px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+}
+.wire-art__body .wire-pick__links a {
+  display: inline-block;
+  padding: 2px 0;
+  text-decoration: none;
+  color: var(--wire-gold-ink);
+}
+.wire-art__body .wire-pick__links a:hover {
+  text-decoration: underline;
+}
+.wire-pick__links .wire-pick__verify {
+  color: var(--wire-meta);
+}
+.wire-art__body .wire-pick__links a.wire-pick__verify {
+  color: var(--wire-meta);
+}
+.wire-pick__verify::before {
+  content: "\2713\00a0";
+  color: var(--wire-up);
+}
+
+/* Badge colours for the signals. */
+.wire-tr-badge--rating::before { background: var(--wire-gold); }
+.wire-tr-badge--jockey::before { background: var(--wire-up); }
+.wire-tr-badge--yard::before { background: var(--wire-ink); }
+.wire-tr-badge--market::before { background: var(--wire-down); }
+
+/* The verdict, signed. */
+.wire-verdict__sign {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+}
+.wire-verdict__sign img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 767px) {
+  .wire-htw-order__list {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 42%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-right: calc(var(--wire-gutter) * -1);
+    padding-right: var(--wire-gutter);
+  }
+  .wire-htw-stop {
+    scroll-snap-align: start;
+  }
+  .wire-pick {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+  .wire-pick__side {
+    display: grid;
+    grid-template-columns: 128px minmax(0, 1fr);
+    align-items: end;
+    gap: 14px;
+  }
+  .wire-pick__who {
+    margin-top: 0;
+  }
+  .wire-art__body h2.wire-pick__name {
+    font-size: 30px;
+  }
+  .wire-proof {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .wire-proof__bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .wire-proof--figure .wire-proof__value {
+    grid-column: 2;
+    text-align: right;
+  }
+  .wire-proof--fact {
+    grid-template-columns: 16px minmax(0, 1fr);
+  }
+}
+
+
+/* ── MARKET STEAMERS ───────────────────────────────────────────
+   The Steam Board above the body (biggest move first, a row per
+   steamer); the cards reuse .wire-pick with the price's day as a
+   line; "Why we back steam" with the record; the drifters strip. */
+.wire-steam-board {
+  margin-bottom: 24px;
+}
+.wire-steam-board__head {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+}
+.wire-steam-board__list {
+  margin-top: 10px;
+  border-top: 2px solid var(--wire-ink);
+}
+.wire-steam-row a {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) auto 140px 64px;
+  grid-template-areas:
+    "silk when price move result"
+    "silk name price move result";
+  align-items: center;
+  gap: 0 16px;
+  padding: 10px 4px;
+  border-bottom: 1px solid var(--wire-rule);
+  color: inherit;
+  text-decoration: none;
+}
+.wire-steam-row a:hover {
+  background: var(--wire-cream);
+}
+.wire-steam-row__when {
+  grid-area: when;
+  align-self: end;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+  color: var(--wire-meta);
+}
+.wire-steam-row__silk {
+  grid-area: silk;
+  display: block;
+  width: 36px;
+  height: 36px;
+}
+.wire-steam-row__silk img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.wire-steam-row__name {
+  grid-area: name;
+  align-self: start;
+  font-family: var(--wire-display);
+  font-size: 20px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+.wire-steam-row__price {
+  grid-area: price;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+  color: var(--wire-meta);
+}
+.wire-steam-row__price s {
+  text-decoration-thickness: 1px;
+}
+.wire-steam-row__price b {
+  font-family: var(--wire-display);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--wire-ink);
+}
+.wire-steam-row__move {
+  grid-area: move;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.wire-steam-row__move b {
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 800;
+  color: var(--wire-down);
+}
+.wire-steam-row__bar {
+  flex: 1;
+  height: 6px;
+  background: var(--wire-rule);
+}
+.wire-steam-row__bar i {
+  display: block;
+  height: 100%;
+  background: var(--wire-down);
+}
+.wire-steam-row__result {
+  grid-area: result;
+  text-align: right;
+}
+.wire-steam-board__foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 20px;
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--wire-ink-2);
+}
+
+/* The card: price ladder, facts, stake. */
+.wire-steam__stake {
+  margin-top: 10px;
+  padding: 8px 10px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--wire-ink-2);
+  box-shadow: inset 0 0 0 1px var(--wire-rule);
+}
+.wire-steam__stake b {
+  display: block;
+  font-size: 10px;
+  line-height: 14px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+}
+.wire-steam__ladder {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-top: 14px;
+  padding: 12px 0;
+  border-top: 1px solid var(--wire-rule);
+  border-bottom: 1px solid var(--wire-rule);
+}
+.wire-steam__price {
+  display: flex;
+  flex-direction: column;
+}
+.wire-steam__price small,
+.wire-steam__book {
+  font-size: 10px;
+  line-height: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+}
+.wire-steam__price b {
+  font-family: var(--wire-display);
+  font-size: 24px;
+  line-height: 1.1;
+  font-weight: 800;
+  color: var(--wire-ink-2);
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+.wire-steam__price--now b {
+  font-size: 30px;
+  color: var(--wire-ink);
+  text-decoration: none;
+}
+.wire-steam__spark {
+  flex: 1 1 120px;
+  max-width: 220px;
+  height: 36px;
+  overflow: visible;
+}
+.wire-steam__spark polyline {
+  stroke: var(--wire-down);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.wire-steam__arrow {
+  font-size: 22px;
+  color: var(--wire-down);
+}
+.wire-steam__book {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  text-align: right;
+}
+.wire-steam__book b {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--wire-ink);
+}
+.wire-steam__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  margin-top: 14px;
+}
+.wire-steam__facts dt {
+  font-size: 10px;
+  line-height: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+}
+.wire-steam__facts dd {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+}
+
+/* Why we back steam. */
+.wire-steam-why {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 2px solid var(--wire-ink);
+}
+.wire-steam-why > p,
+.wire-drift > p {
+  margin-top: 16px;
+}
+.wire-drift > p {
+  margin: 6px 0 10px;
+  color: var(--wire-ink-2);
+}
+.wire-steam-why__tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 14px 0 18px;
+}
+.wire-steam-why__tiles span {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px;
+  box-shadow: inset 0 0 0 1px var(--wire-rule);
+}
+.wire-steam-why__tiles b {
+  font-family: var(--wire-display);
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 800;
+}
+.wire-steam-why__tiles small {
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--wire-meta);
+}
+.wire-steam-why__fold {
+  margin-top: 14px;
+  padding: 12px 14px;
+  font-size: 15px;
+  line-height: 24px;
+  background: var(--wire-cream);
+}
+.wire-steam-why__fold summary {
+  min-height: 24px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.wire-steam-why__fold p {
+  margin-top: 10px;
+}
+.wire-steam-why__fold a {
+  display: inline-block;
+  padding: 2px 0;
+  font-weight: 700;
+  color: var(--wire-gold-ink);
+}
+
+/* The drifters strip. */
+.wire-drift {
+  margin-top: 32px;
+  padding: 18px 18px 8px;
+  box-shadow: inset 4px 0 0 var(--wire-ink-2), inset 0 0 0 1px var(--wire-rule);
+}
+.wire-art__body .wire-drift h2 {
+  margin-top: 0;
+}
+.wire-drift__list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+  padding: 10px 0;
+  border-top: 1px solid var(--wire-rule);
+}
+.wire-drift__name {
+  flex: 1 1 180px;
+  font-weight: 700;
+}
+.wire-drift__name small {
+  margin-left: 8px;
+  font-weight: 400;
+  color: var(--wire-meta);
+}
+.wire-drift__price b {
+  font-weight: 800;
+}
+.wire-drift__move {
+  font-weight: 800;
+  color: var(--wire-ink-2);
+}
+
+@media (max-width: 767px) {
+  .wire-steam-row a {
+    grid-template-columns: 32px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "silk name price"
+      "silk when move"
+      "silk result result";
+    gap: 2px 12px;
+  }
+  .wire-steam-row__silk { grid-area: silk; width: 32px; height: 32px; }
+  .wire-steam-row__name { grid-area: name; font-size: 18px; }
+  .wire-steam-row__when { grid-area: when; }
+  .wire-steam-row__price { grid-area: price; text-align: right; }
+  .wire-steam-row__move { grid-area: move; justify-content: flex-end; }
+  .wire-steam-row__bar { display: none; }
+  .wire-steam-row__result { grid-area: result; text-align: left; }
+  .wire-steam-row__result:empty { display: none; }
+  .wire-steam-why__tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .wire-steam__book {
+    margin-left: 0;
+    text-align: left;
+  }
+}
+
+
 /* ── NARROW ───────────────────────────────────────────────────── */
 
 @media (max-width: 1023px) {
@@ -535,8 +1891,12 @@
 /* ── TOUCH ── On a touch screen the kicker link above a headline takes a press
    44px tall: an invisible area centred on it */
 @media (pointer: coarse) {
-  .wire-art__kicker a { position: relative; }
-  .wire-art__kicker a::before {
+  .wire-art__kicker a,
+  .wire-box__head a,
+  .wire-entry__links a { position: relative; }
+  .wire-art__kicker a::before,
+  .wire-box__head a::before,
+  .wire-entry__links a::before {
     content: ""; position: absolute; top: 50%; left: 50%;
     width: max(100%, 44px); height: max(100%, 44px); transform: translate(-50%, -50%);
   }
