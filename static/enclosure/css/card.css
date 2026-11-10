@@ -72,11 +72,9 @@
   color: var(--enc-gold-ink);
 }
 .enc-race-row__body { min-width: 0; }
+/* A race's name is shown whole, however long (up to 106 characters). */
 .enc-race-row__title {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  overflow-wrap: anywhere;
   font-size: 15px;
   font-weight: 600;
   color: var(--enc-ink);
