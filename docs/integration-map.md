@@ -711,9 +711,9 @@ the context each needs. `news-brief.md` has what each part is for.
 | §1 The Lead | `.pp-lead` | today's Horses to Watch: headline, deck, filing time, and its five horses with rank, race and silks |
 | §2 The Case Files | `.pp-cases` | as the live page: the four cases, each with its § number, desk and filing time |
 | §3 The Pin | new: `#pin` | the current race of the week, as `/pin/` shows it: name, course, time, picture |
-| §4 The Fold | `.pp-fold` | as the live page: the three long reads |
-| §5 The Back Issues | new: `#archive` | per desk, its last few editions before today: title, date, link |
-| §6 Market Movers | `.pp-movers` | as the live page: coming in and drifting, each with its race, old and new price and move |
+| §4 The Fold | `.pp-fold` | the live page's long reads, less two kinds: a Race Paper whose race has been run, and any story §2 already shows. Numbered §4.1 on from what is left (one, Championship Watch, on 31 October) |
+| §5 The Back Issues | new: `#archive` | per desk, its latest edition before today (one, not a list): title, date, link; the desk's head links to its full archive |
+| §6 Market Movers | `.pp-movers` | as the live page: coming in and drifting, each with its race, old and new price and move. A steamer's move prints `+NN%`, a drifter's `−NN%` (U+2212); the live page prints `+` on both |
 | §7 The Honest Record | `.pp-record` | as the live page: the pledge and the three figures |
 | The 10:00 Card | `.pp-card` | — (fixed copy); the form posts to a new view (below) |
 

@@ -262,6 +262,76 @@ test.describe('front page', () => {
   });
 });
 
+test.describe('front page: what it says', () => {
+  test('a drifter shows its move as a minus, a steamer as a plus', async ({ page }) => {
+    await openNews(page);
+    const moves = (col) => page.locator(`.wire-movers__col--${col} .wire-ranks__pct`).allTextContents();
+    for (const move of await moves('in')) expect(move).toMatch(/^\+\d+%$/);
+    const out = await moves('out');
+    expect(out.length).toBeGreaterThan(0);
+    for (const move of out) expect(move).toMatch(/^\u2212\d+%$/);
+  });
+
+  test('no story appears twice in the sections', async ({ page }) => {
+    await openNews(page);
+    const links = await page.locator('#cases a[href], #fold a[href]').evaluateAll((all) =>
+      all.map((a) => new URL(a.href).pathname));
+    const twice = links.filter((href, i) => links.indexOf(href) !== i);
+    expect(twice).toEqual([]);
+  });
+
+  test('The Fold carries no race paper filed weeks before the day', async ({ page }) => {
+    await openNews(page);
+    const filed = await page.locator('#fold .wire-fold__foot span:first-child').allTextContents();
+    for (const when of filed.map((t) => t.trim()).filter(Boolean)) expect(when).toBe('Filed 31 Oct');
+    await expect(page.locator('#fold a[href*="/papers/"]')).toHaveCount(0);
+  });
+
+  test('the Back Issues give each desk its latest piece, the desk head the rest', async ({ page }) => {
+    await openNews(page);
+    const desks = page.locator('#archive .wire-archive__desk');
+    expect(await desks.count()).toBeGreaterThan(1);
+    for (const desk of await desks.all()) {
+      await expect(desk.locator('.wire-archive__list li')).toHaveCount(1);
+      await expect(desk.locator('.wire-archive__head a[href]')).toHaveCount(1);
+    }
+  });
+
+  test('on a touch screen every link and button takes a press 44px across', async ({ page }) => {
+    test.skip(!test.info().project.use.hasTouch, 'a touch screen only');
+    test.setTimeout(120_000);
+    for (const path of [FRONT_PAGE, ARTICLES[2], LETTERS[0]]) {
+      await openNews(page, { path, tour: false });
+      // A press 21px from a control's centre, in each direction, lands on
+      // the control (its area may be larger than it is drawn) or on
+      // another control beside it; never on nothing.
+      const short = await page.evaluate(async () => {
+        const CONTROL = 'a[href], button, summary, label, input, select, textarea';
+        const found = [];
+        for (const el of document.querySelectorAll('main a[href], main button')) {
+          if (!el.checkVisibility()) continue;
+          el.scrollIntoView({ block: 'center' });
+          await new Promise(requestAnimationFrame);
+          const r = el.getBoundingClientRect();
+          if (r.top < 0 || r.left < 0 || r.bottom > innerHeight || r.right > innerWidth) continue;
+          if (r.width >= 44 && r.height >= 44) continue;
+          const x = r.left + r.width / 2;
+          const y = r.top + r.height / 2;
+          const misses = [[x, y - 21], [x, y + 21], [x - 21, y], [x + 21, y]]
+            .filter(([px, py]) => px > 0 && px < innerWidth && py > 0 && py < innerHeight)
+            .filter(([px, py]) => {
+              const hit = document.elementFromPoint(px, py);
+              return !hit || !(el.contains(hit) || hit.closest(CONTROL));
+            });
+          if (misses.length) found.push(`${el.textContent.trim().replace(/\s+/g, ' ').slice(0, 40) || el.getAttribute('aria-label')} (${Math.round(r.width)}×${Math.round(r.height)})`);
+        }
+        return found;
+      });
+      expect(short, path).toEqual([]);
+    }
+  });
+});
+
 test.describe('the rail of silks', () => {
   test('the arrows step the rail, each hiding at its end; a phone swipes it', async ({ page }) => {
     await openNews(page);

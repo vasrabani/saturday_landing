@@ -1895,6 +1895,31 @@ html:has(> body.page-wire) {
 }
 
 
+/* ── TOUCH ────────────────────────────────────────────────────────
+   On a touch screen a small link (a section's title, a desk's head,
+   "How verification works") takes a press 44px across: an invisible
+   area centred on it, so nothing moves on the page. */
+
+@media (pointer: coarse) {
+  .wire-sec__title a,
+  .wire-archive__head a,
+  .wire-record__link {
+    position: relative;
+  }
+  .wire-sec__title a::before,
+  .wire-archive__head a::before,
+  .wire-record__link::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+}
+
+
 /* ── REDUCED MOTION ───────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
