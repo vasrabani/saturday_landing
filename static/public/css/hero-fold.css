@@ -979,6 +979,50 @@
   margin: 0;
 }
 
+/* "Get latest news": a gold pill to the Fox's Wire, to the right of the
+   headline (it wraps under it on a narrow screen). */
+.hf-title-row .hf-news-pill {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #F0D57F 0%, #D4AF37 55%, #B8921D 100%);
+  box-shadow: inset 0 0 0 1px rgb(110 83 11 / 35%), 0 6px 18px -8px rgb(0 0 0 / 60%);
+  color: #1B1405;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+}
+.hf-title-row .hf-news-pill:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: inset 0 0 0 1px rgb(110 83 11 / 35%), 0 10px 22px -8px rgb(0 0 0 / 70%);
+}
+.hf-title-row .hf-news-pill:focus-visible {
+  outline: 2px solid #F0D57F;
+  outline-offset: 3px;
+}
+.hf-news-pill__arrow {
+  transition: transform 0.15s;
+}
+.hf-title-row .hf-news-pill:hover .hf-news-pill__arrow {
+  transform: translateX(3px);
+}
+@media (max-width: 720px) {
+  .hf-title-row .hf-news-pill {
+    margin-bottom: 0;
+    padding: 9px 18px;
+    font-size: 14px;
+  }
+}
+
 .hf-title__small {
   display: block;
   font-family: var(--font-display);
@@ -1663,6 +1707,33 @@
 .hf-result__verdict-item.is-wrong .hf-result__verdict-icon {
   color: #c97a5b;
 }
+
+/* The Fox's pick links to the tip's write-up, so a reader who wants
+   the reasoning after the result can get to it. */
+.hf-result__verdict-item--link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.hf-result__verdict-item--link:hover,
+.hf-result__verdict-item--link:focus-visible {
+  border-color: rgba(212, 175, 55, 0.6);
+  background: rgba(212, 175, 55, 0.08);
+}
+.hf-result__verdict-item--link:focus-visible {
+  outline: 2px solid #d4af37;
+  outline-offset: 2px;
+}
+.hf-result__verdict-item--link:hover .hf-result__verdict-pick {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.hf-result__verdict-read {
+  flex-shrink: 0;
+  color: #d4af37;
+  opacity: 0.85;
+}
+.hf-result__verdict-item--link:hover .hf-result__verdict-read { opacity: 1; }
 
 /* Abandoned race — single panel with a short note. */
 .hf-result__panel--abandoned {
