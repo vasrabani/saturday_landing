@@ -473,12 +473,10 @@
   min-width: 0;
 }
 .enc-cup-pick__meta {
-  overflow: hidden;
   font-size: 11px;
   letter-spacing: 0.03em;
   color: var(--enc-ink-mute);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
   font-variant-numeric: tabular-nums;
 }
 .enc-cup-pick__race { color: var(--enc-ink-soft); }

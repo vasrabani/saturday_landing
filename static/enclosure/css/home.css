@@ -330,9 +330,7 @@
   font-weight: 600;
   color: var(--enc-ink);
   font-size: 14px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
   min-width: 0;
   flex: 1;
 }

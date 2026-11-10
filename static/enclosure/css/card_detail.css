@@ -181,9 +181,7 @@
 .enc-result__meta {
   font-size: 12.5px;
   color: var(--enc-on-night-soft);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 .enc-result__sp { display: grid; justify-items: end; gap: 2px; }
 .enc-result__fig { font-size: 32px; line-height: 1; }
@@ -310,6 +308,7 @@
 }
 .enc-cd-pick__status.is-error { color: var(--enc-down); }
 .enc-cd-pick__submit {
+  min-height: 44px;
   padding: 10px 22px;
   border-radius: var(--enc-r-pill);
   background: var(--enc-navy);
@@ -478,22 +477,21 @@
   font-weight: 700;
   letter-spacing: 0.04em;
 }
+/* Jockey, trainer and form are what a guest picks from: they wrap
+   onto another line rather than lose their end. */
 .enc-runner__people {
   font-size: 12px;
   color: var(--enc-ink-soft);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 .enc-runner__stats {
   font-size: 11px;
   color: var(--enc-ink-mute);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
+.enc-runner__stat { white-space: nowrap; }   /* "OR 68" never splits */
 
 /* Odds: the medal above the price, both centred on the column */
 .enc-runner__odds {

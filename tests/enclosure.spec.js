@@ -45,6 +45,66 @@ test.describe('page health', () => {
   });
 });
 
+test.describe('on a phone', () => {
+  // The redesigned pages (race-day). What a guest reads to choose a horse,
+  // and any race's name, is shown whole: it wraps, it is never cut short.
+  const REDESIGNED = ['index.html', 'card.html', 'race-1.html', 'race-8.html', 'feed.html', 'cup.html', 'guest-2.html', 'me.html'];
+
+  test('no words are cut short with an ellipsis or a line limit', async ({ page }) => {
+    test.setTimeout(120_000);
+    for (const file of REDESIGNED) {
+      await openEnclosure(page, `race-day/${file}`, { waitUntil: 'load' });
+      const cut = await page.evaluate(() => [...document.querySelectorAll('.enc-shell *')]
+        .filter((el) => {
+          const style = getComputedStyle(el);
+          const ellipsis = style.textOverflow === 'ellipsis' && el.scrollWidth > el.clientWidth + 1;
+          const clamped = style.webkitLineClamp !== 'none' && el.scrollHeight > el.clientHeight + 1;
+          return el.checkVisibility() && (ellipsis || clamped);
+        })
+        .map((el) => el.textContent.trim().replace(/\s+/g, ' ').slice(0, 60)));
+      expect(cut, file).toEqual([]);
+      page.removeAllListeners('pageerror');
+      page.removeAllListeners('response');
+    }
+  });
+
+  test('on a touch screen every link and button takes a press 44px across', async ({ page }) => {
+    test.skip(!test.info().project.use.hasTouch, 'a touch screen only');
+    test.setTimeout(120_000);
+    for (const file of REDESIGNED) {
+      await openEnclosure(page, `race-day/${file}`, { waitUntil: 'load' });
+      // A press 21px from a control's centre, in each direction, lands on
+      // the control (its own area may be larger than it is drawn) or on
+      // another control beside it; never on nothing.
+      const short = await page.evaluate(async () => {
+        const CONTROL = 'a[href], button, [role="tab"], summary, label, input, select, textarea';
+        const found = [];
+        for (const el of document.querySelectorAll('.enc-shell a[href], .enc-shell button')) {
+          if (!el.checkVisibility() || el.getAttribute('aria-disabled') === 'true') continue;
+          el.scrollIntoView({ block: 'center' });
+          await new Promise(requestAnimationFrame);
+          const r = el.getBoundingClientRect();
+          if (r.top < 0 || r.left < 0 || r.bottom > innerHeight || r.right > innerWidth) continue;
+          if (r.width >= 44 && r.height >= 44) continue;
+          const x = r.left + r.width / 2;
+          const y = r.top + r.height / 2;
+          const misses = [[x, y - 21], [x, y + 21], [x - 21, y], [x + 21, y]]
+            .filter(([px, py]) => px > 0 && px < innerWidth && py > 0 && py < innerHeight)
+            .filter(([px, py]) => {
+              const hit = document.elementFromPoint(px, py);
+              return !hit || !(el.contains(hit) || hit.closest(CONTROL));
+            });
+          if (misses.length) found.push(`${el.textContent.trim().replace(/\s+/g, ' ').slice(0, 40) || el.getAttribute('aria-label')} (${Math.round(r.width)}×${Math.round(r.height)})`);
+        }
+        return found;
+      });
+      expect(short, file).toEqual([]);
+      page.removeAllListeners('pageerror');
+      page.removeAllListeners('response');
+    }
+  });
+});
+
 test.describe('the tabs', () => {
   test('the bottom nav moves between Home, Card, Feed and Cup, and marks where you are', async ({ page }) => {
     await openEnclosure(page, 'race-day/index.html');

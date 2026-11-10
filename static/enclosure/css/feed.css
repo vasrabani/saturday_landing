@@ -281,12 +281,10 @@ a.enc-feed__row:active {
 /* A result: the race, the winner and the price, then the guests */
 .enc-feed__race {
   min-height: 15px;
-  overflow: hidden;
   font-size: 12px;
   line-height: 1.25;
   color: var(--enc-ink-mute);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 .enc-feed__main {
   display: flex;

@@ -321,6 +321,47 @@ img { max-width: 100%; display: block; }
 .enc-nav__item--fab .enc-nav__glyph svg { width: 22px; height: 22px; }
 .enc-nav__icon-close { display: none; }
 
+/* On a touch screen every control takes a press of at least 44 × 44px.
+   These are drawn smaller (the bell, a link in a heading, the maker's
+   strip), so each has an invisible area of that size centred on it:
+   the design is unchanged, and a thumb finds it. */
+@media (pointer: coarse) {
+  .enc-icon-btn,
+  .enc-top__silks-slot,
+  .enc-feed__chip,
+  .enc-sec__link,
+  .enc-cup-board__link,
+  .enc-gp-hero__back,
+  .enc-cd-back,
+  .enc-cd-letter__more,
+  .enc-cd-racenav__chev {
+    position: relative;
+  }
+  /* A heading's link sits just above its card: its area goes over the
+     card's top edge, which takes no press of its own. */
+  .enc-sec__link,
+  .enc-cup-board__link { z-index: 1; }
+  .enc-icon-btn::before,
+  .enc-top__silks-slot::before,
+  .enc-mark::before,
+  .enc-feed__chip::before,
+  .enc-sec__link::before,
+  .enc-cup-board__link::before,
+  .enc-gp-hero__back::before,
+  .enc-cd-back::before,
+  .enc-cd-letter__more::before,
+  .enc-cd-racenav__chev::before,
+  .enc-day__race::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+}
+
 /* Larger nav labels for tablets — the pill grows, labels stay */
 @media (min-width: 480px) {
   .enc-nav__item { font-size: 11px; }
