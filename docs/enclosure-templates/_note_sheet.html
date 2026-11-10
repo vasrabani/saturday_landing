@@ -1,19 +1,15 @@
-{% load enclosure_silks %}
+{% load enclosure_icons %}
 <aside class="enc-sheet" id="enc-note-sheet"
-       role="dialog" aria-modal="true" aria-labelledby="enc-note-sheet-title"
+       role="dialog" aria-labelledby="enc-note-sheet-title"
        hidden
        data-note-endpoint="{% url 'enclosure:feed_note_create' event.slug %}"
        data-photo-endpoint="{% url 'enclosure:feed_photo_create' event.slug %}"
        data-filter="{{ filter_key|default:'all' }}"
        {% if home_ctx and home_ctx.hq.countdown_race %}data-race-id="{{ home_ctx.hq.countdown_race.race.pk }}" data-race-title="{{ home_ctx.hq.countdown_race.race_time_display }} {{ home_ctx.hq.countdown_race.race.course }}"{% endif %}>
-  <div class="enc-sheet__handle" aria-hidden="true"></div>
-
+  <div class="enc-sheet__dialog">
   <header class="enc-sheet__head">
-    <div class="enc-sheet__silks">
-      {% silks_for_guest guest 36 %}
-    </div>
     <div>
-      <h2 id="enc-note-sheet-title" class="enc-sheet__title">Post to the day</h2>
+      <h2 id="enc-note-sheet-title" class="enc-sheet__title" tabindex="-1">Post to the day</h2>
       <p class="enc-sheet__meta" data-role="attach-line">
         {% if home_ctx and home_ctx.hq.countdown_race %}
           🏇 Auto-attach to {{ home_ctx.hq.countdown_race.race_time_display }} {{ home_ctx.hq.countdown_race.race.course }}
@@ -24,25 +20,37 @@
     </div>
     <button type="button" class="enc-sheet__close"
             data-role="close" aria-label="Close">
-      &times;
+      {% enc_icon 'close' 16 stroke='2' hidden=True %}
     </button>
   </header>
 
   <div class="enc-sheet__modes" role="tablist" aria-label="Post type">
-    <button type="button" role="tab" aria-selected="true"
+    <button type="button" role="tab" aria-selected="true" tabindex="0"
+            aria-controls="enc-sheet-note" aria-labelledby="enc-sheet-label-note"
+            aria-describedby="enc-sheet-hint-note"
             class="enc-sheet__mode is-active"
             data-role="mode" data-mode="note">
-      <span aria-hidden="true">✎</span> Note
+      {% enc_icon 'pencil' 24 hidden=True css='enc-sheet__mode-glyph' %}
+      <span class="enc-sheet__mode-check" aria-hidden="true">{% enc_icon 'check' 12 stroke='3' %}</span>
+      <span class="enc-sheet__mode-label" id="enc-sheet-label-note">Note</span>
+      <span class="enc-sheet__mode-hint" id="enc-sheet-hint-note">Say a few words</span>
     </button>
-    <button type="button" role="tab" aria-selected="false"
+    <button type="button" role="tab" aria-selected="false" tabindex="-1"
+            aria-controls="enc-sheet-photo" aria-labelledby="enc-sheet-label-photo"
+            aria-describedby="enc-sheet-hint-photo"
             class="enc-sheet__mode"
             data-role="mode" data-mode="photo">
-      <span aria-hidden="true">📷</span> Photo
+      {% enc_icon 'camera' 24 hidden=True css='enc-sheet__mode-glyph' %}
+      <span class="enc-sheet__mode-check" aria-hidden="true">{% enc_icon 'check' 12 stroke='3' %}</span>
+      <span class="enc-sheet__mode-label" id="enc-sheet-label-photo">Photo</span>
+      <span class="enc-sheet__mode-hint" id="enc-sheet-hint-photo">Share a moment</span>
     </button>
   </div>
 
   {# NOTE MODE #}
-  <form class="enc-sheet__form" data-role="form" data-mode-form="note" novalidate>
+  <form class="enc-sheet__form" id="enc-sheet-note" role="tabpanel"
+        aria-labelledby="enc-sheet-label-note"
+        data-role="form" data-mode-form="note" novalidate>
     {% csrf_token %}
     <label class="enc-visually-hidden" for="enc-note-text">Your note</label>
     <textarea id="enc-note-text" name="text"
@@ -60,7 +68,9 @@
   </form>
 
   {# PHOTO MODE #}
-  <form class="enc-sheet__form" data-role="photo-form" data-mode-form="photo"
+  <form class="enc-sheet__form" id="enc-sheet-photo" role="tabpanel"
+        aria-labelledby="enc-sheet-label-photo"
+        data-role="photo-form" data-mode-form="photo"
         enctype="multipart/form-data" hidden novalidate>
     {% csrf_token %}
     <label class="enc-sheet__file-drop" for="enc-photo-file"
@@ -68,7 +78,7 @@
       <input type="file" id="enc-photo-file" name="image"
              accept="image/*" capture="environment" required
              class="enc-visually-hidden" data-role="photo-file">
-      <span class="enc-sheet__file-glyph" aria-hidden="true">📷</span>
+      <span class="enc-sheet__file-glyph" aria-hidden="true">{% enc_icon 'camera' 28 %}</span>
       <span class="enc-sheet__file-label" data-role="photo-label">
         Tap to take a photo or choose from library
       </span>
@@ -86,4 +96,5 @@
       </button>
     </div>
   </form>
+  </div>
 </aside>

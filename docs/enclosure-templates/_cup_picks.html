@@ -1,4 +1,4 @@
-<section class="enc-cup-picks" aria-label="Your picks">
+{% load enclosure_icons %}<section class="enc-cup-picks" aria-label="Your picks">
   <header class="enc-cup-picks__head">
     <h2 class="enc-cup-picks__title">Your picks</h2>
     {% if cup.viewer_picks %}
@@ -45,7 +45,7 @@
 
             <span class="enc-cup-pick__right">
               {% if p.odds %}
-                <span class="enc-cup-pick__odds">{{ p.odds }}</span>
+                <span class="enc-cup-pick__odds">{% enc_odds p.odds col=True %}</span>
               {% else %}
                 <span class="enc-cup-pick__odds enc-cup-pick__odds--dim">SP</span>
               {% endif %}

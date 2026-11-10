@@ -1,27 +1,27 @@
-{% load enclosure_silks %}
+{% load enclosure_silks enclosure_icons %}{% if entry.result %}{% with res=entry.result %}
+<li class="enc-feed__item enc-feed__item--{{ entry.kind }}{% if res.top_guest %} enc-feed__item--win{% endif %}"
+    {% if res.number %}id="enc-feed-race-{{ res.number }}" {% endif %}data-entry-id="{{ entry.pk }}">
+  <a class="enc-feed__row" href="{{ res.url }}">
+    <span class="enc-feed__when">{% if res.number %}<span class="enc-feed__n">Race {{ res.number }}</span>{% endif %}<span class="enc-feed__time">{{ res.time }}</span></span>
+    <span class="enc-feed__mark">{% if res.silk_url %}<img src="{{ res.silk_url }}" alt="" width="34" height="34" loading="lazy">{% endif %}</span>
+    <span class="enc-feed__body">
+      <span class="enc-feed__race">{{ res.race_name }}</span>
+      {% if res.voided %}<span class="enc-feed__main"><span class="enc-feed__horse">Void</span></span>
+      <span class="enc-feed__guests">All stakes returned</span>
+      {% else %}<span class="enc-feed__main"><span class="enc-feed__horse">{{ res.horse }}</span>{% if res.sp %}<span class="enc-feed__sp">{% enc_odds res.sp %}<small>SP</small></span>{% endif %}</span>
+      {% if res.top_guest %}<span class="enc-feed__win"><span class="enc-feed__win-tag">Guest win</span>{{ res.top_guest }} +{{ res.top_points }}</span>{% if res.winners > 1 %}
+      <span class="enc-feed__guests">{{ res.winners }} guests landed the race.</span>{% endif %}{% else %}<span class="enc-feed__guests">No guest on the winner</span>{% endif %}{% endif %}
+    </span>
+  </a>
+</li>
+{% endwith %}{% else %}
 <li class="enc-feed__item enc-feed__item--{{ entry.kind }}"
     data-entry-id="{{ entry.pk }}">
-  {% if entry.kind == 'guest_note' and entry.actor_guest %}
-    <span class="enc-feed__author-silks">
-      {% silks_for_guest entry.actor_guest 34 %}
-    </span>
-  {% elif entry.kind == 'guest_photo' and entry.actor_guest %}
-    <span class="enc-feed__author-silks">
-      {% silks_for_guest entry.actor_guest 34 %}
-    </span>
-  {% else %}
-    <span class="enc-feed__icon" aria-hidden="true">{{ entry.icon|default:"·" }}</span>
-  {% endif %}
-  <div class="enc-feed__body">
-    <div class="enc-feed__meta-row">
+  <div class="enc-feed__row">
+    <span class="enc-feed__when">{% if entry.is_fresh %}<span class="enc-feed__fresh">Live</span>{% else %}<span class="enc-feed__time">{{ entry.freshness_label }}</span>{% endif %}</span>
+    {% if entry.actor_guest and entry.kind == 'guest_note' or entry.actor_guest and entry.kind == 'guest_photo' %}<span class="enc-feed__mark">{% silks_for_guest entry.actor_guest 34 %}</span>{% else %}<span class="enc-feed__mark enc-feed__mark--icon" aria-hidden="true">{% enc_kind_icon entry 17 %}</span>{% endif %}
+    <div class="enc-feed__body">
       <span class="enc-feed__title">{{ entry.title }}</span>
-      {% if entry.is_fresh %}
-        <span class="enc-feed__fresh">Live</span>
-      {% else %}
-        <span class="enc-feed__time">{{ entry.freshness_label }}</span>
-      {% endif %}
-    </div>
-
     {% if entry.kind == 'guest_photo' and entry.image %}
       <button type="button" class="enc-feed__photo"
               data-role="photo-lightbox"
@@ -47,5 +47,7 @@
         </div>
       {% endif %}
     {% endif %}
+    </div>
   </div>
 </li>
+{% endif %}

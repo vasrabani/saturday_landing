@@ -1,4 +1,4 @@
-<section class="enc-cd-head" aria-label="Race header">
+{% load enclosure_icons %}<section class="enc-cd-head" aria-label="Race header">
   <div class="enc-cd-head__top">
     <a class="enc-cd-back" href="{% url 'enclosure:card' card.event.slug %}"
        aria-label="Back to card">
@@ -60,3 +60,14 @@
     </span>
   </div>
 </section>
+{% if card.head.winner %}
+<section class="enc-result" aria-label="Result">
+  <span class="enc-result__silk">{% if card.head.winner.silk_url %}<img src="{{ card.head.winner.silk_url }}" alt="" width="52" height="52">{% endif %}</span>
+  <span class="enc-result__body">
+    <span class="enc-result__label">Winner</span>
+    <span class="enc-result__horse">{{ card.head.winner.horse }}</span>
+    {% if card.head.winner.jockey or card.head.winner.trainer %}<span class="enc-result__meta">{{ card.head.winner.jockey }}{% if card.head.winner.jockey and card.head.winner.trainer %} &middot; {% endif %}{{ card.head.winner.trainer }}</span>{% endif %}
+  </span>
+  {% if card.head.winner.sp %}<span class="enc-result__sp"><span class="enc-result__fig">{% enc_odds card.head.winner.sp %}</span><small>SP</small></span>{% endif %}
+</section>
+{% endif %}

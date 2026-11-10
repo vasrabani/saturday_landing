@@ -1,8 +1,8 @@
-{% extends "enclosure/base.html" %}
+{% extends "enclosure/v2/base.html" %}
 {% load static %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'enclosure/css/home.css' %}?v=2">
+<link rel="stylesheet" href="{% static 'enclosure/v2/css/home.css' %}?v=2">
 {% endblock %}
 
 {% block content %}
@@ -26,8 +26,8 @@
       {% endif %}
     </div>
 
-    <div data-role="home-content">
-      {% include "enclosure/_home_content.html" %}
+    <div class="enc-home__content" data-role="home-content">
+      {% include "enclosure/v2/_home_content.html" %}
     </div>
 
   </div>
@@ -35,5 +35,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{% static 'enclosure/js/home_live.js' %}?v=1" defer></script>
+<script src="{% static 'enclosure/v2/js/home_live.js' %}?v=1" defer></script>
 {% endblock %}

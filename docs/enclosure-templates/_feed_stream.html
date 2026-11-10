@@ -1,7 +1,7 @@
 {% if entries %}
   <ol class="enc-feed__list">
     {% for entry in entries %}
-      {% include "enclosure/_feed_item.html" with entry=entry %}
+      {% include "enclosure/v2/_feed_item.html" with entry=entry %}
     {% endfor %}
   </ol>
 {% else %}

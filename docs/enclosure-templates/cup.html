@@ -1,10 +1,10 @@
-{% extends "enclosure/base.html" %}
+{% extends "enclosure/v2/base.html" %}
 {% load static %}
 
 {% block title %}Corporate Cup · {{ event.name }}{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'enclosure/css/cup.css' %}?v=4">
+<link rel="stylesheet" href="{% static 'enclosure/v2/css/cup.css' %}?v=4">
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,9 @@
      data-all-settled="{% if cup.all_settled %}1{% else %}0{% endif %}">
   <div class="enc-scroll">
 
-    <div class="enc-cup__pulse" aria-live="polite">
+    <div class="enc-band">
+      <h1 class="enc-page-title">Corporate Cup</h1>
+      <div class="enc-cup__pulse" aria-live="polite">
       {% if cup.all_settled %}
         <span class="enc-cup__pulse-chip enc-cup__pulse-chip--closed">Cup settled</span>
       {% else %}
@@ -26,22 +28,23 @@
           Paused — tap to resume
         </button>
       {% endif %}
+      </div>
     </div>
 
     <div data-role="cup-hero">
-      {% include "enclosure/_cup_hero.html" %}
+      {% include "enclosure/v2/_cup_hero.html" %}
     </div>
 
     <div data-role="cup-progress">
-      {% include "enclosure/_cup_progress.html" %}
+      {% include "enclosure/v2/_cup_progress.html" %}
     </div>
 
     <div data-role="cup-picks">
-      {% include "enclosure/_cup_picks.html" %}
+      {% include "enclosure/v2/_cup_picks.html" %}
     </div>
 
     <div data-role="cup-board">
-      {% include "enclosure/_cup_board.html" %}
+      {% include "enclosure/v2/_cup_board.html" %}
     </div>
 
   </div>
@@ -49,5 +52,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{% static 'enclosure/js/cup_live.js' %}?v=2" defer></script>
+<script src="{% static 'enclosure/v2/js/cup_live.js' %}?v=2" defer></script>
 {% endblock %}

@@ -1,10 +1,10 @@
-{% extends "enclosure/base.html" %}
+{% extends "enclosure/v2/base.html" %}
 {% load static %}
 
 {% block title %}The Feed · {{ event.name }}{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'enclosure/css/feed.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'enclosure/v2/css/feed.css' %}?v=1">
 {% endblock %}
 
 {% block content %}
@@ -12,7 +12,10 @@
      data-live-endpoint="{% url 'enclosure:feed_live' event.slug %}"
      data-filter="{{ filter_key }}">
 
-  <nav class="enc-feed__chips" aria-label="Filter feed">
+  <div class="enc-band">
+    <h1 class="enc-page-title">The Feed</h1>
+
+    <nav class="enc-feed__chips" aria-label="Filter feed">
     {% for chip in chips %}
       <a class="enc-feed__chip{% if chip.active %} is-active{% endif %}"
          href="?filter={{ chip.key }}"
@@ -28,13 +31,20 @@
     <span class="enc-feed__pause-chip">Paused &middot; tap to resume</span>
   </div>
 
+    {% if winners %}
+    <section class="enc-day" data-role="winners" aria-labelledby="enc-day-title">
+      {% include "enclosure/v2/_feed_winners.html" %}
+    </section>
+    {% endif %}
+  </div>
+
   <div id="enc-feed-stream" data-role="stream">
-    {% include "enclosure/_feed_stream.html" with entries=entries only %}
+    {% include "enclosure/v2/_feed_stream.html" with entries=entries only %}
   </div>
 
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{% static 'enclosure/js/feed_live.js' %}?v=1" defer></script>
+<script src="{% static 'enclosure/v2/js/feed_live.js' %}?v=1" defer></script>
 {% endblock %}

@@ -1,0 +1,8 @@
+      <header class="enc-day__head">
+        <h2 class="enc-day__title" id="enc-day-title">The day’s winners</h2>
+        <span class="enc-day__count">{{ winners.run_count }} of {{ winners.total }} run</span>
+      </header>
+      <ol class="enc-day__list">
+        {% for r in winners.races %}<li><a class="enc-day__race{% if r.is_run %} is-run{% endif %}{% if r.is_win %} is-win{% endif %}" href="{{ r.url }}" data-race="{{ r.number }}" aria-label="{{ r.label }}"><span class="enc-day__silk">{% if r.silk_url %}<img src="{{ r.silk_url }}" alt="" width="26" height="26">{% else %}{{ r.number }}{% endif %}</span><span class="enc-day__time">{{ r.time }}</span></a></li>
+        {% endfor %}
+      </ol>

@@ -1,4 +1,4 @@
-<button type="button"
+{% load enclosure_icons %}<button type="button"
         class="enc-runner{% if r.is_picked %} enc-runner--picked{% endif %}{% if r.is_nr %} enc-runner--nr{% endif %}{% if r.finish_position == 1 %} enc-runner--won{% elif r.finish_position == 2 %} enc-runner--second{% elif r.finish_position == 3 %} enc-runner--third{% elif r.finish_position %} enc-runner--placed{% endif %}"
         data-role="runner"
         data-horse-name="{{ r.horse_name }}"
@@ -28,12 +28,7 @@
     <span class="enc-runner__people">
       {% if r.jockey %}{{ r.jockey }}{% endif %}{% if r.jockey and r.trainer %} &middot; {% endif %}{% if r.trainer %}{{ r.trainer }}{% endif %}
     </span>
-    <span class="enc-runner__stats">
-      {% if r.form %}Form {{ r.form }}{% endif %}
-      {% if r.form and r.or_rating %} &middot; {% endif %}
-      {% if r.or_rating %}OR {{ r.or_rating }}{% endif %}
-      {% if r.sr_rating %}{% if r.or_rating or r.form %} &middot; {% endif %}SR {{ r.sr_rating }}{% endif %}
-    </span>
+    <span class="enc-runner__stats">{% if r.form %}<span class="enc-runner__stat">Form {{ r.form }}</span>{% endif %}{% if r.form and r.or_rating %} &middot; {% endif %}{% if r.or_rating %}<span class="enc-runner__stat">OR {{ r.or_rating }}</span>{% endif %}{% if r.sr_rating %}{% if r.or_rating or r.form %} &middot; {% endif %}<span class="enc-runner__stat">SR {{ r.sr_rating }}</span>{% endif %}</span>
   </span>
 
   <span class="enc-runner__odds">
@@ -50,7 +45,7 @@
         </span>
       {% endif %}
       {% if r.odds %}
-        <span class="enc-runner__price">{{ r.odds }}</span>
+        <span class="enc-runner__price">{% enc_odds r.odds col=True %}</span>
       {% elif not r.finish_position and not r.finish_status %}
         <span class="enc-runner__price enc-runner__price--dim">SP</span>
       {% endif %}

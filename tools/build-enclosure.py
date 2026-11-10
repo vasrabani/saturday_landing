@@ -11,7 +11,7 @@ templates change there, or to refresh the copies:
 
     <django-venv>/python tools/build-enclosure.py \\
         --django C:/path/to/saturday --settings saturday.settings_dev \\
-        [--pythonpath DIR] [--no-assets]
+        [--pythonpath DIR] [--design v2] [--no-assets]
 
 It needs the Django project and any database with its migrations run,
 so it runs with the project's own Python, not node. Point it at a
@@ -40,8 +40,16 @@ The scenarios, one folder each under enclosure/:
 The Django templates are copied to docs/enclosure-templates/ to be
 read (they show the states no scenario reaches); nothing uses them.
 
+Which design. The Django site keeps the redesign (v2: its templates in
+enclosure/v2/, its assets in static/enclosure/v2/) beside the app as it
+was (v1), and ENCLOSURE_DESIGN picks one. This builds v2, the design
+guests get, unless --design v1 asks for the old one; either way the
+pages here use ../../static/enclosure/, so the folder is the same.
+
 What is rewritten on the way in:
-  - /static/enclosure/... becomes ../../static/enclosure/..., ?v= dropped;
+  - /static/enclosure/... (and /static/enclosure/v2/...) becomes
+    ../../static/enclosure/..., ?v= dropped; the site's fonts and images
+    the pages use (/static/fonts/, /static/img/) become ../../static/...;
   - links between the Enclosure's pages become links between these
     files (the Card's race N is race-N.html, the Feed's filters are
     feed-racing.html and so on); every other link into the site becomes
@@ -147,6 +155,8 @@ def parse_args():
     parser.add_argument('--django', required=True, help='the Django project directory (where manage.py is)')
     parser.add_argument('--settings', required=True, help='its settings module, e.g. saturday.settings_dev')
     parser.add_argument('--pythonpath', action='append', default=[], help='a directory to add to sys.path (for a settings module kept outside the project)')
+    parser.add_argument('--design', choices=('v1', 'v2'), default='v2',
+                        help="the Enclosure design to build (the site's ENCLOSURE_DESIGN); v2 by default")
     parser.add_argument('--no-assets', action='store_true', help='do not copy the stylesheets, scripts and icons across')
     return parser.parse_args()
 
@@ -339,7 +349,8 @@ def stage(day_data, day, clock, state, visibility):
                         race.runners.filter(number=runner['number']).update(
                             finish_position=runner['finish_position'], finish_status=Runner.FINISH_STATUS_COMPLETED)
                 race.result_winner = recorded['result']['winner']
-                race.save(update_fields=['result_winner'])
+                race.result_winner_sp = recorded['result'].get('sp') or ''
+                race.save(update_fields=['result_winner', 'result_winner_sp'])
                 settle_event(event)
             elif kind == 'note':
                 guest, number, text = payload
@@ -417,7 +428,9 @@ class Rewriter:
 
     def __call__(self, markup, page=None):
         # Static assets: the sandbox's copies, no cache-busting query.
-        markup = re.sub(r'/static/enclosure/([\w./-]+?)(?:\?v=\d+)?(?=["\'\s)])', r'../../static/enclosure/\1', markup)
+        # (the Enclosure's own, and the site's fonts and images it shares).
+        markup = markup.replace('/static/enclosure/v2/', '/static/enclosure/')
+        markup = re.sub(r'/static/((?:enclosure|fonts|img)/[\w./-]+?)(?:\?v=\d+)?(?=["\'\s)])', r'../../static/\1', markup)
         # A feed page polls for its own filter.
         if page and page.startswith('feed'):
             markup = markup.replace(f'"{self.base}feed/live.json"', f'"{page}.live.json"')
@@ -583,9 +596,10 @@ def main():
     # The recorded day: "Bath · 29 Sep" in the year it was recorded.
     day = datetime.date(2026, 9, 29)
 
+    design_dir = ['enclosure', 'v2'] if args.design == 'v2' else ['enclosure']
     if not args.no_assets:
         for folder in ASSET_DIRS:
-            source = os.path.join(args.django, 'enclosure', 'static', 'enclosure', folder)
+            source = os.path.join(args.django, 'enclosure', 'static', *design_dir, folder)
             target = os.path.join(BOX, 'static', 'enclosure', folder)
             shutil.rmtree(target, ignore_errors=True)
             shutil.copytree(source, target)
@@ -593,10 +607,10 @@ def main():
         # reaches. Not used by any page here, and not copied back.
         target = os.path.join(BOX, 'docs', 'enclosure-templates')
         shutil.rmtree(target, ignore_errors=True)
-        shutil.copytree(os.path.join(args.django, 'enclosure', 'templates', 'enclosure'), target)
+        shutil.copytree(os.path.join(args.django, 'enclosure', 'templates', *design_dir), target)
 
     shutil.rmtree(os.path.join(OUT, 'media'), ignore_errors=True)
-    with override_settings(ALLOWED_HOSTS=['testserver']):
+    with override_settings(ALLOWED_HOSTS=['testserver'], ENCLOSURE_DESIGN=args.design):
         for scenario in SCENARIOS:
             build_scenario(*scenario, day_data, day)
 

@@ -1,10 +1,10 @@
-{% extends "enclosure/base.html" %}
+{% extends "enclosure/v2/base.html" %}
 {% load static %}
 
 {% block title %}You · {{ event.name }}{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'enclosure/css/me.css' %}?v=1">
+<link rel="stylesheet" href="{% static 'enclosure/v2/css/me.css' %}?v=1">
 {% endblock %}
 
 {% block content %}
@@ -58,7 +58,7 @@
         <p class="enc-me-eyebrow">Open</p>
         <ul class="enc-me-picks">
           {% for row in me.picks_open %}
-            {% include "enclosure/_me_pick_row.html" %}
+            {% include "enclosure/v2/_me_pick_row.html" %}
           {% endfor %}
         </ul>
       {% endif %}
@@ -67,7 +67,7 @@
         <p class="enc-me-eyebrow">Settled</p>
         <ul class="enc-me-picks">
           {% for row in me.picks_settled %}
-            {% include "enclosure/_me_pick_row.html" %}
+            {% include "enclosure/v2/_me_pick_row.html" %}
           {% endfor %}
         </ul>
       {% endif %}

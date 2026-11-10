@@ -1,4 +1,4 @@
-{% load enclosure_silks %}
+{% load enclosure_silks enclosure_icons %}
 <header class="enc-top" role="banner">
   <div class="enc-top__title">
     <div class="enc-top__event">{{ event.name }}</div>
@@ -6,7 +6,7 @@
   </div>
   <div class="enc-top__actions">
     <a class="enc-icon-btn" aria-label="Notifications" href="#notifications">
-      <span aria-hidden="true">&#128276;</span>
+      <span aria-hidden="true">{% enc_icon 'bell' 18 %}</span>
     </a>
     <button type="button"
             class="enc-top__silks-slot{% if active_tab == 'me' %} is-active{% endif %}"

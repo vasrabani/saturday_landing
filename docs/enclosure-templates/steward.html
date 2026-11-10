@@ -1,10 +1,10 @@
-{% extends "enclosure/base.html" %}
+{% extends "enclosure/v2/base.html" %}
 {% load static %}
 
 {% block title %}Steward's Room · {{ event.name }}{% endblock %}
 
 {% block extra_head %}
-<link rel="stylesheet" href="{% static 'enclosure/css/steward.css' %}?v=2">
+<link rel="stylesheet" href="{% static 'enclosure/v2/css/steward.css' %}?v=2">
 {% endblock %}
 
 {% block content %}
@@ -143,5 +143,5 @@
 {% endblock %}
 
 {% block extra_scripts %}
-<script src="{% static 'enclosure/js/steward_briefing.js' %}?v=1" defer></script>
+<script src="{% static 'enclosure/v2/js/steward_briefing.js' %}?v=1" defer></script>
 {% endblock %}
