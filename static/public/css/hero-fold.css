@@ -340,13 +340,117 @@
   white-space: nowrap;
 }
 
+/* ── PITCH · the race ──────────────────────────────────── */
+
+/* The featured race under the pitch: its time and course (the link to its
+   card), and the time to the off. The clock shows once landing.js is
+   ticking it (.hf-race--ticking), so there is never a row of dashes; days
+   only while there are any; "At the post" once the advertised off has
+   passed, until the result replaces the hero. */
+.hf-race {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  margin: 2.600cqw 0 0 43.700cqw;
+  font-family: var(--hf-font-cond);
+  font-size: 3.600cqw;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  text-shadow: 0 1px 0.5em rgb(0 0 0 / 0.9);
+}
+
+.hf-race__card {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.300cqw;
+  font-weight: 700;
+  text-decoration: none;
+  color: inherit;
+}
+
+.hf-race__card:hover .hf-race__course,
+.hf-race__card:focus-visible .hf-race__course {
+  text-decoration: underline;
+  text-underline-offset: 0.180em;
+}
+
+.hf-race__dot {
+  width: 1.600cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--hf-red);
+  box-shadow: 0 0 1.200cqw var(--hf-red);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hf-race__dot {
+    animation: hf-race-pulse 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes hf-race-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.hf-race__time {
+  color: var(--hf-gold);
+}
+
+.hf-race__name,
+.hf-race__clock,
+.hf-race__days,
+.hf-race__post,
+.hf-race--off .hf-race__to-off {
+  display: none;
+}
+
+.hf-race--ticking .hf-race__clock {
+  display: inline;
+  margin-left: 1.600cqw;
+  padding-left: 1.600cqw;
+  border-left: 1px solid rgb(255 255 255 / 0.3);
+  font-weight: 500;
+  color: var(--hf-soft);
+}
+
+.hf-race__digits {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+
+.hf-race--days .hf-race__days,
+.hf-race--off .hf-race__post {
+  display: inline;
+}
+
+/* A day or more out, the seconds are noise (and the phone's line has no
+   room for them). */
+.hf-race--days .hf-race__secs {
+  display: none;
+}
+
+.hf-race__days {
+  text-transform: none;
+}
+
+.hf-race__post {
+  font-weight: 700;
+  color: var(--hf-gold);
+}
+
 /* ── PITCH · the Fox against the Cubs ──────────────────── */
 
 .hf-duel {
   display: grid;
   grid-template-columns: 38.730cqw 12.550cqw 40.650cqw;
   align-items: center;
-  margin: 23.478cqw 0 0 4.100cqw;
+  margin: 17.278cqw 0 0 4.100cqw;
+  padding-bottom: 5.600cqw;
 }
 
 /* A card's ground leans the way the capitals do; what is on it stays
@@ -488,6 +592,37 @@
   font-weight: 900;
   line-height: 1;
   color: #fff;
+}
+
+/* Each side's horse, under its card (inside the link, so it is read with
+   it): the Fox's with its price, the Cubs' with their vote, or what is
+   still to come. */
+.hf-duel__pick {
+  position: absolute;
+  top: calc(100% + 1.800cqw);
+  left: 3%;
+  right: 3%;
+  overflow: hidden;
+  font-family: var(--hf-font-cond);
+  font-size: 3.700cqw;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--hf-gold);
+}
+
+.hf-duel__price {
+  margin-left: 0.250em;
+  font-weight: 500;
+  color: #fff;
+}
+
+.hf-duel__pick--open {
+  font-weight: 500;
+  color: var(--hf-soft);
 }
 
 /* ── PITCH · call to action ────────────────────────────── */
@@ -708,7 +843,7 @@
   .hero-fold {
     --hf-soft: #d9dbdc;
     --hf-fit-all: calc(var(--hf-room) * 1755 / 896);
-    --hf-fit-cta: calc(var(--hf-room) * 1755 / 703);
+    --hf-fit-cta: calc(var(--hf-room) * 1755 / 726);
     --hf-pick-fill: linear-gradient(
       180deg,
       #f6d46a 0%,
@@ -792,6 +927,7 @@
   .hf-title__top,
   .hf-title__big,
   .hf-subtitle,
+  .hf-race,
   .hf-duel,
   .hf-ctas {
     position: relative;
@@ -921,10 +1057,42 @@
     display: inline;
   }
 
+  .hf-race {
+    --hf-off: -0.650cqw;
+    margin: 0.600cqw 0 0;
+    font-size: 1.300cqw;
+  }
+
+  .hf-race__card {
+    gap: 0.550cqw;
+  }
+
+  .hf-race__dot {
+    width: 0.600cqw;
+    box-shadow: 0 0 0.500cqw var(--hf-red);
+  }
+
+  .hf-race__name {
+    display: inline;
+    max-width: 18cqw;
+    overflow: hidden;
+    margin-left: 0.200cqw;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    text-transform: none;
+    color: var(--hf-soft);
+  }
+
+  .hf-race--ticking .hf-race__clock {
+    margin-left: 0.700cqw;
+    padding-left: 0.700cqw;
+  }
+
   .hf-duel {
     --hf-off: 0.946cqw;
     grid-template-columns: 19.088cqw 5.128cqw 20.684cqw;
-    margin: 2.033cqw 0 0;
+    margin: 0.800cqw 0 0;
+    padding-bottom: 1.750cqw;
   }
 
   .hf-duel__card {
@@ -976,6 +1144,11 @@
     font-size: 1.339cqw;
   }
 
+  .hf-duel__pick {
+    top: calc(100% + 0.450cqw);
+    font-size: 1.300cqw;
+  }
+
   .hf-duel__vs {
     left: -0.110cqw;
     position: relative;
@@ -996,7 +1169,7 @@
 
   .hf-ctas {
     --hf-off: 0.490cqw;
-    margin-top: 2.108cqw;
+    margin-top: 1.000cqw;
   }
 
   .hf-ctas .hf-ctas__pick {
@@ -1037,7 +1210,7 @@
     grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 0;
     height: 6.268cqw;
-    margin: 3.419cqw 2.564cqw 0 4.103cqw;
+    margin: 2.400cqw 2.564cqw 0 4.103cqw;
     border: max(1px, 0.100cqw) solid var(--hf-rule);
     border-top-color: #edd781;
     border-radius: 1.120cqw;

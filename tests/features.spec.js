@@ -124,8 +124,10 @@ test.describe('navigation', () => {
 // the hero after the redesign dropped them, and which were tested here so
 // that they could not go missing quietly a second time: the race detail
 // (Runners, Prize fund), the routes into The Pin and Pick 6, and the Big
-// Race / Bet of the Day switch. They leave out the hero's countdown too.
-// All four are out of the hero on purpose, not quietly.
+// Race / Bet of the Day switch. They leave out the hero's countdown too;
+// that came back (November 2026, at the client's request) in the race
+// line over the duel, with each side's pick under its card. The other
+// three are out of the hero on purpose, not quietly.
 test.describe('the hero, as drawn', () => {
   test('sets the Fox against the Cubs', async ({ page }) => {
     await openLanding(page);
@@ -135,6 +137,27 @@ test.describe('the hero, as drawn', () => {
     await expect(cards.nth(0)).toHaveAttribute('href', /tipsters\/mr-fox\//);
     await expect(cards.nth(1)).toContainText('The Cubs');
     await expect(cards.nth(1)).toHaveAttribute('href', /\/cubs\//);
+  });
+
+  test('names the featured race and counts down to its off', async ({ page }) => {
+    await openLanding(page);
+    const race = page.locator('#big-race-day .hf-race');
+    await expect(race.locator('.hf-race__card')).toHaveAttribute('href', /races\/4438\/$/);
+    await expect(race).toContainText('15:45');
+    await expect(race).toContainText('Musselburgh');
+    await expect(race.locator('.hf-race__to-off')).toHaveText(/^Off in \d\d:\d\d:\d\d$/i, { useInnerText: true });
+    // A day later in every time zone: past the off, before a result.
+    await page.clock.setFixedTime(new Date('2026-08-26T12:00:00Z'));
+    await expect(race.locator('.hf-race__post')).toBeVisible();
+    await expect(race.locator('.hf-race__to-off')).toBeHidden();
+  });
+
+  test("shows each side's pick under its card", async ({ page }) => {
+    await openLanding(page);
+    const picks = page.locator('#big-race-day .hf-duel__card .hf-duel__pick');
+    await expect(picks).toHaveCount(2);
+    await expect(picks.nth(0)).toHaveText('Dark Cloud Rising 7/2');
+    await expect(picks.nth(1)).toHaveText('Voting open');
   });
 
   test('has one button, into the featured race', async ({ page }) => {

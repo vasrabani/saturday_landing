@@ -69,6 +69,21 @@ const chamberWith = (variant) =>
   + chamberPanel.slice(0, splitStart) + partial(variant).trim() + chamberPanel.slice(splitEnd)
   + '</div></div></section>';
 
+// The hero before the off. The page runs no script, so the clock is shown
+// as landing.js leaves it on a given tick; the id goes, as it repeats.
+const hero = extract(`<div${LF}        class="hero-fold"`, 'div').replace(' id="big-race-day"', '');
+const heroAt = (classes, clock, markup = hero) => markup
+  .replace('<p class="hf-race" data-race-iso="2026-08-25T15:45:00">', `<p class="hf-race hf-race--ticking${classes}">`)
+  .replace('<span class="hf-cd-hours">--</span>:<span class="hf-cd-mins">--</span><span class="hf-race__secs">:<span class="hf-cd-secs">--</span></span>',
+    clock.replace(/:(\d\d)$/, '<span class="hf-race__secs">:$1</span>'));
+/** Swap one side's pick (the span under its card) for other markup. */
+const withPick = (side, pick) => {
+  const card = hero.indexOf(`hf-duel__card--${side}`);
+  const start = hero.indexOf('<span class="hf-duel__pick', card);
+  const end = hero.indexOf('</a>', start);
+  return hero.slice(0, start) + pick + LF + '                ' + hero.slice(end);
+};
+
 const challenges = extract('<section data-defer-bg class="chal-section chal-section--duel section"', 'section');
 // The filled state replaces everything from the arena to the end of the
 // standings block.
@@ -109,6 +124,29 @@ const STATES = [
         '<span class="battle-card__pick-horse battle-card__pick-horse--pending">Pick pending</span>')
       .replace('<span class="battle-card__pick-odds">7/2</span>', '')
       .replace(/<strong data-count-up>\d+<\/strong> wins this season/g, '&mdash; wins this season'),
+  },
+  {
+    name: 'Hero · the Fox has picked, the Cubs are voting',
+    when: 'hero_fold.html: hero.fox_pick, no hero.cub_tip.selection (as on the captured morning); landing.js ticks the clock',
+    markup: heroAt('', '02:14:05'),
+  },
+  {
+    name: 'Hero · before the picks',
+    when: '{% if not hero.fox_pick %}: the Fox publishes at 10:00',
+    markup: heroAt('', '07:44:05', withPick('fox',
+      '<span class="hf-duel__pick hf-duel__pick--open"><span class="hf-duel__horse">Picks at 10:00</span></span>')),
+  },
+  {
+    name: 'Hero · the Cubs have a pick, days to go',
+    when: 'hero.cub_tip.selection with its vote count; .hf-race--days while the off is a day or more away',
+    markup: heroAt(' hf-race--days', '04:12:09', withPick('cubs',
+      '<span class="hf-duel__pick"><span class="hf-duel__horse">Vegasmile</span> <span class="hf-duel__price">38 votes</span></span>'))
+      .replace('<span class="hf-cd-days">--</span>', '<span class="hf-cd-days">2</span>'),
+  },
+  {
+    name: 'Hero · at the post',
+    when: 'landing.js sets .hf-race--off once the advertised off has passed, until hero.result replaces the hero',
+    markup: heroAt(' hf-race--off', '00:00:00'),
   },
   {
     name: 'Hero · the race has been run',
