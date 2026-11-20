@@ -52,6 +52,8 @@
   --hf-soft: #e9ecee;
   --hf-metal: linear-gradient(180deg, #f4dc81 0%, #f2c963 30%, #e7b54b 62%, #d79f37 100%);
   --hf-sign: linear-gradient(180deg, #fbce58, #f1bc48);
+  /* The drawing's narrow lettering: a condensed face, not a squeezed one. */
+  --hf-font-cond: 'Barlow Condensed', var(--font-body);
   /* Pick your horse's gold, lit from the top: the phone drawing's; the
      banner's is redefined below. */
   --hf-pick-fill: linear-gradient(
@@ -270,7 +272,7 @@
 /* ── PITCH · headline and standfirst ───────────────────── */
 
 /* Beside Mr Fox on a phone, in the drawing's leaning sans, each line
-   narrowed to the drawing's width. The pitch's own: the result state's
+   sized to the drawing's width. The pitch's own: the result state's
    headline is an .hf-title too (see hero-result.css). */
 .hf-pitch .hf-title {
   margin: 5.440cqw 0 0 43.220cqw;
@@ -288,22 +290,19 @@
 .hf-title__gold {
   display: block;
   width: max-content;
-  transform-origin: 0 50%;
 }
 
 .hf-title__top {
   margin-left: 1.630cqw;
-  font-size: 10.030cqw;
-  transform: scaleX(0.900);
+  font-size: 9.027cqw;
 }
 
 .hf-title__big {
   margin-top: -1.230cqw;
-  font-size: 10.800cqw;
-  transform: scaleX(0.927);
+  font-size: 10.012cqw;
 }
 
-/* Inside the narrowed line already: only its own size and colour. DM
+/* Inside the line: only its own size and colour. DM
    Sans has no italic, so the browser leans the upright letters, and
    their tops lean out past the word's own box on the right. The gold is
    that box's background showing through the letters (background-clip:
@@ -328,7 +327,8 @@
 
 .hf-subtitle {
   margin: -0.670cqw 0 0 43.700cqw;
-  font-size: 3.500cqw;
+  font-family: var(--hf-font-cond);
+  font-size: 3.850cqw;
   font-weight: 500;
   line-height: 1.350;
   color: #fff;
@@ -338,12 +338,6 @@
   display: block;
   width: max-content;
   white-space: nowrap;
-  transform: scaleX(0.864);
-  transform-origin: 0 50%;
-}
-
-.hf-subtitle span + span {
-  transform: scaleX(0.886);
 }
 
 /* ── PITCH · the Fox against the Cubs ──────────────────── */
@@ -370,8 +364,6 @@
   --hf-ico-x: 5.900cqw;
   --hf-ico-w: 8.600cqw;
   --hf-id-x: 25.800cqw;
-  --hf-name-x: 0.662;
-  --hf-role-x: 0.875;
   --hf-role-off: -0.200cqw;
 }
 
@@ -379,8 +371,6 @@
   --hf-ico-x: 3.860cqw;
   --hf-ico-w: 9.720cqw;
   --hf-id-x: 26.200cqw;
-  --hf-name-x: 0.659;
-  --hf-role-x: 0.875;
   --hf-role-off: 0.540cqw;
 }
 
@@ -459,19 +449,19 @@
 }
 
 .hf-duel__name {
-  font-size: 5.400cqw;
+  font-family: var(--hf-font-cond);
+  font-size: 5.100cqw;
   font-style: italic;
-  font-weight: 1000;
-  transform: scaleX(var(--hf-name-x));
+  font-weight: 900;
 }
 
 .hf-duel__role {
   position: relative;
   left: var(--hf-role-off);
   font-size: max(9px, 3.090cqw);
+  font-family: var(--hf-font-cond);
   font-weight: 500;
   color: var(--hf-soft);
-  transform: scaleX(var(--hf-role-x));
 }
 
 .hf-duel__vs {
@@ -492,12 +482,12 @@
 .hf-duel__vs-text {
   position: relative;
   left: -0.400cqw;
+  font-family: var(--hf-font-cond);
   font-size: 5.010cqw;
   font-style: italic;
   font-weight: 900;
   line-height: 1;
   color: #fff;
-  transform: scaleX(0.700);
 }
 
 /* ── PITCH · call to action ────────────────────────────── */
@@ -557,13 +547,12 @@
 }
 
 .hf-ctas__label {
-  font-size: 5.590cqw;
+  font-size: 5.417cqw;
   font-style: italic;
   font-weight: 900;
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;
-  transform: scaleX(0.969);
 }
 
 .hf-ctas__arrow {
@@ -649,34 +638,24 @@
 .hf-explore__link--news {
   --hf-sign-mark: url("../img/icons/hero-news.svg");
   --hf-sign-w: 92%;
-  --hf-name-x: 0.740;
-  --hf-note-x: 0.820;
 }
 
 .hf-explore__link--racing {
   --hf-sign-mark: url("../img/icons/hero-calendar.svg");
   --hf-sign-w: 86%;
-  --hf-name-x: 0.718;
-  --hf-note-x: 0.800;
 }
 
 .hf-explore__link--ai {
   --hf-sign-mark: url("../img/icons/hero-brain.svg");
-  --hf-name-x: 0.759;
-  --hf-note-x: 0.833;
 }
 
 .hf-explore__link--cubs {
   --hf-sign-mark: url("../img/icons/hero-trophy.svg");
-  --hf-name-x: 0.748;
-  --hf-note-x: 0.830;
 }
 
 .hf-explore__link--record {
   --hf-sign-mark: url("../img/icons/hero-shield.svg");
   --hf-sign-w: 90%;
-  --hf-name-x: 0.767;
-  --hf-note-x: 0.849;
 }
 
 .hf-explore__go {
@@ -702,21 +681,19 @@
 .hf-explore__name,
 .hf-explore__note {
   width: max-content;
+  font-family: var(--hf-font-cond);
   line-height: 1;
   white-space: nowrap;
-  transform-origin: 0 50%;
 }
 
 .hf-explore__name {
   font-size: 4.730cqw;
   font-weight: 700;
-  transform: scaleX(var(--hf-name-x));
 }
 
 .hf-explore__note {
   font-size: max(10px, 3.620cqw);
   color: var(--hf-soft);
-  transform: scaleX(var(--hf-note-x));
 }
 
 /* ── THE BANNER — 1024px+ ──────────────────────────────── */
@@ -845,9 +822,8 @@
   .hf-brand__name {
     margin-top: 0.290cqw;
     padding: 0 6.040cqw;
-    font-size: 1.987cqw;
+    font-size: 2.057cqw;
     letter-spacing: 0.075em;
-    transform: scaleX(1.035);
   }
 
   .hf-brand__name::before,
@@ -935,16 +911,14 @@
   .hf-subtitle {
     --hf-off: -0.650cqw;
     margin: 0.756cqw 0 0;
-    font-size: 1.540cqw;
+    font-family: var(--font-body);
+    font-size: 1.429cqw;
     line-height: 1.3;
     white-space: nowrap;
-    transform: scaleX(0.928);
   }
 
-  .hf-subtitle span,
-  .hf-subtitle span + span {
+  .hf-subtitle span {
     display: inline;
-    transform: none;
   }
 
   .hf-duel {
@@ -961,8 +935,6 @@
     --hf-ico-x: 2.877cqw;
     --hf-ico-w: 3.960cqw;
     --hf-id-x: 12.336cqw;
-    --hf-name-x: 0.669;
-    --hf-role-x: 0.906;
     --hf-role-off: 0.142cqw;
   }
 
@@ -970,8 +942,6 @@
     --hf-ico-x: 2.051cqw;
     --hf-ico-w: 4.587cqw;
     --hf-id-x: 12.678cqw;
-    --hf-name-x: 0.681;
-    --hf-role-x: 0.906;
     --hf-role-off: 0.641cqw;
   }
 
@@ -999,7 +969,7 @@
   }
 
   .hf-duel__name {
-    font-size: 2.579cqw;
+    font-size: 2.500cqw;
   }
 
   .hf-duel__role {
@@ -1022,7 +992,6 @@
     position: relative;
     left: -0.120cqw;
     font-size: 2.240cqw;
-    transform: scaleX(0.737);
   }
 
   .hf-ctas {
@@ -1047,7 +1016,6 @@
 
   .hf-ctas__label {
     font-size: 2.339cqw;
-    transform: none;
   }
 
   .hf-ctas__arrow {
@@ -1131,8 +1099,6 @@
     --hf-sign-box: 3.400cqw;
     --hf-sign-ratio: 124 / 112;
     --hf-gap: 1.900cqw;
-    --hf-name-x: 0.780;
-    --hf-note-x: 0.800;
   }
 
   .hf-explore__link--racing {
@@ -1141,8 +1107,6 @@
     --hf-sign-box: 3.305cqw;
     --hf-sign-ratio: 116 / 113;
     --hf-gap: 1.937cqw;
-    --hf-name-x: 0.780;
-    --hf-note-x: 0.800;
   }
 
   .hf-explore__link--ai {
@@ -1150,8 +1114,6 @@
     --hf-sign-box: 3.675cqw;
     --hf-sign-ratio: 129 / 119;
     --hf-gap: 1.766cqw;
-    --hf-name-x: 0.780;
-    --hf-note-x: 0.800;
   }
 
   .hf-explore__link--cubs {
@@ -1159,8 +1121,6 @@
     --hf-sign-box: 3.447cqw;
     --hf-sign-ratio: 121 / 114;
     --hf-gap: 2.051cqw;
-    --hf-name-x: 0.780;
-    --hf-note-x: 0.800;
   }
 
   .hf-explore__link--record {
@@ -1169,8 +1129,6 @@
     --hf-sign-box: 3.048cqw;
     --hf-sign-ratio: 107 / 126;
     --hf-gap: 2.108cqw;
-    --hf-name-x: 0.780;
-    --hf-note-x: 0.800;
   }
 
   .hf-explore__ico {
@@ -1192,12 +1150,11 @@
   }
 
   .hf-explore__name {
-    font-size: 1.655cqw;
+    font-size: 1.740cqw;
   }
 
   .hf-explore__note {
     font-size: 1.267cqw;
-    transform: scaleX(calc(var(--hf-note-x) * 0.940));
   }
 }
 
