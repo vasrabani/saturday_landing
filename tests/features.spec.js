@@ -145,6 +145,16 @@ test.describe('the hero, as drawn', () => {
     await expect(button).toHaveAttribute('href', /races\/feature\//);
   });
 
+  // Not in the drawings: added at the client's request (November 2026).
+  test('links to the latest news', async ({ page }) => {
+    await openLanding(page);
+    const news = page.locator('#big-race-day .hf-news');
+    await expect(news).toHaveCount(1);
+    await expect(news).toBeVisible();
+    await expect(news).toContainText('Get latest news');
+    await expect(news).toHaveAttribute('href', /news\/index\.html$/);
+  });
+
   test('offers four ways in', async ({ page }) => {
     await openLanding(page);
     const ways = page.locator('#big-race-day .hf-explore__link');
