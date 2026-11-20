@@ -52,6 +52,20 @@
   --hf-soft: #e9ecee;
   --hf-metal: linear-gradient(180deg, #f4dc81 0%, #f2c963 30%, #e7b54b 62%, #d79f37 100%);
   --hf-sign: linear-gradient(180deg, #fbce58, #f1bc48);
+  /* Pick your horse's gold, lit from the top: the phone drawing's; the
+     banner's is redefined below. */
+  --hf-pick-fill: linear-gradient(
+    180deg,
+    #ffd858 0%,
+    #fecf4d 18%,
+    #f8c034 32%,
+    #eeae20 46%,
+    #de9b0c 60%,
+    #d38e03 74%,
+    #d38d01 86%,
+    #da9300 93%,
+    #f0b819 100%
+  );
   /* What stands above the hero besides the nav and the tour banner: the
      day's strip (today-strip.css), 89px tall from 1024px. */
   --hf-above: 89px;
@@ -505,18 +519,7 @@
   overflow: hidden;
   border: 0;
   border-radius: 99cqw;
-  background: linear-gradient(
-    180deg,
-    #ffd858 0%,
-    #fecf4d 18%,
-    #f8c034 32%,
-    #eeae20 46%,
-    #de9b0c 60%,
-    #d38e03 74%,
-    #d38d01 86%,
-    #da9300 93%,
-    #f0b819 100%
-  );
+  background: var(--hf-pick-fill);
   box-shadow:
     inset 0 0.270cqw 0.200cqw color-mix(in srgb, #fff 45%, transparent),
     0 0.900cqw 2.800cqw -0.600cqw color-mix(in srgb, var(--hf-glow) 85%, transparent),
@@ -526,18 +529,7 @@
 
 .hf-ctas .hf-ctas__pick:hover,
 .hf-ctas .hf-ctas__pick:focus-visible {
-  background: linear-gradient(
-    180deg,
-    #ffd858 0%,
-    #fecf4d 18%,
-    #f8c034 32%,
-    #eeae20 46%,
-    #de9b0c 60%,
-    #d38e03 74%,
-    #d38d01 86%,
-    #da9300 93%,
-    #f0b819 100%
-  );
+  background: var(--hf-pick-fill);
   filter: brightness(1.070);
   transform: none;
 }
@@ -740,6 +732,19 @@
     --hf-soft: #d9dbdc;
     --hf-fit-all: calc(var(--hf-room) * 1755 / 896);
     --hf-fit-cta: calc(var(--hf-room) * 1755 / 703);
+    --hf-pick-fill: linear-gradient(
+      180deg,
+      #f6d46a 0%,
+      #fdd55c 7%,
+      #facc4e 22%,
+      #f6c038 36%,
+      #e8ac23 50%,
+      #d79814 64%,
+      #ca8a09 78%,
+      #c88809 86%,
+      #d2910a 94%,
+      #ca9b2f 100%
+    );
     min-height: 0;
   }
 
@@ -1030,40 +1035,10 @@
     width: 31.510cqw;
     height: 5.014cqw;
     padding-left: 4.270cqw;
-    background: linear-gradient(
-      180deg,
-      #f6d46a 0%,
-      #fdd55c 7%,
-      #facc4e 22%,
-      #f6c038 36%,
-      #e8ac23 50%,
-      #d79814 64%,
-      #ca8a09 78%,
-      #c88809 86%,
-      #d2910a 94%,
-      #ca9b2f 100%
-    );
     box-shadow:
       inset 0 0.110cqw 0.080cqw color-mix(in srgb, #fff 45%, transparent),
       0 0.400cqw 1.200cqw -0.250cqw color-mix(in srgb, var(--hf-glow) 85%, transparent),
       0 0.600cqw 1.300cqw color-mix(in srgb, #000 55%, transparent);
-  }
-
-  .hf-ctas .hf-ctas__pick:hover,
-  .hf-ctas .hf-ctas__pick:focus-visible {
-    background: linear-gradient(
-      180deg,
-      #f6d46a 0%,
-      #fdd55c 7%,
-      #facc4e 22%,
-      #f6c038 36%,
-      #e8ac23 50%,
-      #d79814 64%,
-      #ca8a09 78%,
-      #c88809 86%,
-      #d2910a 94%,
-      #ca9b2f 100%
-    );
   }
 
   .hf-ctas__pick::after {
