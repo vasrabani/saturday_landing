@@ -118,31 +118,46 @@ test.describe('navigation', () => {
   });
 });
 
-// These four were on the live page, dropped by the redesign, and rebuilt
-// in PR 9. Tested so they cannot go missing quietly a second time.
+// The hero is built to the "Can you beat the Fox?" drawings (November
+// 2026): Mr Fox, the headline, the Fox against the Cubs, one button and
+// four ways in. The drawings leave out three things PR 9 had rebuilt in
+// the hero after the redesign dropped them, and which were tested here so
+// that they could not go missing quietly a second time: the race detail
+// (Runners, Prize fund), the routes into The Pin and Pick 6, and the Big
+// Race / Bet of the Day switch. They leave out the hero's countdown too.
+// All four are out of the hero on purpose, not quietly.
+test.describe('the hero, as drawn', () => {
+  test('sets the Fox against the Cubs', async ({ page }) => {
+    await openLanding(page);
+    const cards = page.locator('#big-race-day .hf-duel__card');
+    await expect(cards).toHaveCount(2);
+    await expect(cards.nth(0)).toContainText('The Fox');
+    await expect(cards.nth(0)).toHaveAttribute('href', /tipsters\/mr-fox\//);
+    await expect(cards.nth(1)).toContainText('The Cubs');
+    await expect(cards.nth(1)).toHaveAttribute('href', /\/cubs\//);
+  });
+
+  test('has one button, into the featured race', async ({ page }) => {
+    await openLanding(page);
+    const button = page.locator('#big-race-day .hf-ctas__pick');
+    await expect(button).toHaveCount(1);
+    await expect(button).toContainText('Pick your horse');
+    await expect(button).toHaveAttribute('href', /races\/feature\//);
+  });
+
+  test('offers four ways in', async ({ page }) => {
+    await openLanding(page);
+    const ways = page.locator('#big-race-day .hf-explore__link');
+    await expect(ways).toHaveCount(4);
+    for (const [index, path] of [/\/races\/$/, /\/ai\/tools\/$/, /\/cubs\/$/, /\/news\/honest-record\/$/].entries()) {
+      await expect(ways.nth(index)).toHaveAttribute('href', path);
+    }
+  });
+});
+
+// This one was on the live page, dropped by the redesign, and rebuilt in
+// PR 9. Tested so it cannot go missing quietly a second time.
 test.describe('features the redesign had dropped', () => {
-  test('the hero carries the race detail', async ({ page }) => {
-    await openLanding(page);
-    const facts = page.locator('.hf-facts__item');
-    await expect(facts).toHaveCount(6);
-    await expect(page.locator('.hf-facts')).toContainText('Runners');
-    await expect(page.locator('.hf-facts')).toContainText('Prize fund');
-  });
-
-  test('the hero routes into The Pin and Pick 6', async ({ page }) => {
-    await openLanding(page);
-    await expect(page.locator('.hf-facts__item--link a')).toHaveAttribute('href', /pinsticker/);
-    await expect(page.locator('.hf-facts__item--pick6 a')).toHaveAttribute('href', /pick6/);
-  });
-
-  test('the hero offers both races', async ({ page }) => {
-    await openLanding(page);
-    const options = page.locator('.hf-switch__opt');
-    await expect(options).toHaveCount(2);
-    await expect(options.first()).toHaveAttribute('aria-current', 'true');
-    await expect(options.nth(1)).toHaveAttribute('href', /hero=bet_of_day/);
-  });
-
   test('the AI Lab shows what the simulation found', async ({ page }) => {
     await openLanding(page);
     const terminal = page.locator('.al-terminal');
@@ -171,9 +186,10 @@ test.describe('nav matches production', () => {
   }
 });
 
+// The hero as drawn has no countdown of its own (see "the hero, as
+// drawn"); landing.js still runs any .hf-countdown[data-race-iso].
 test.describe('countdowns', () => {
   for (const [name, selector] of [
-    ['hero', '.hf-countdown[data-race-iso]'],
     ['day hub next off', '.day-hub-countdown[data-race-iso]'],
   ]) {
     test(`${name} countdown ticks`, async ({ page }) => {

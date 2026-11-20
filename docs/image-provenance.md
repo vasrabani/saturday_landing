@@ -35,6 +35,38 @@ rests on the generator terms rather than a stock licence.
 | `course-horse.png` | 160x106 | 10 KB | No tag |
 | `how-it-works/icon-trophy-card.png` | 21x21 | 1 KB | No tag |
 
+## The landing hero (`static/public/img/hero-*.webp`, `icons/hero-*.svg`)
+
+The hero was rebuilt in November 2026 to two drawings supplied for it
+("Can you beat the Fox?": a desktop banner, 1755x896, and a phone
+screen, 1024x1536). Its pictures are those drawings' own pixels, cut out
+of them, with the drawings' lettering and controls painted out (the page
+sets those itself). The files as received carry no C2PA manifest or other
+provenance tag, so whether the drawings came from an image model is for
+whoever supplied them to confirm before this list is relied on for
+disclosure; they are listed apart for that reason.
+
+| Image | Size | Cut from |
+| --- | --- | --- |
+| `hero-fox-banner.webp` | 1360x1792, 146 KB | The banner drawing: the evening sky, the gold frame and Mr Fox |
+| `hero-race-dusk.webp` | 986x1792, 48 KB | The banner drawing: the racing on its right |
+| `hero-stage-phone.webp` | 1482x1360, 107 KB | The phone drawing: Mr Fox and the racing behind the headline |
+| `hero-sky-west.webp` | 1304x1792, 25 KB | The banner drawing's sky, carried on past its left edge: its own clouds, sunset and field, turned over at the edge and drawn out (no pixel from anywhere else). Seen where a window is wider than the banner |
+| `hero-sky-east.webp` | 1304x1792, 46 KB | The same past its right edge: its sky and the stand turned over at the edge; where the runners were, the drawing's own crowd colours, the rail and the turf, so no horse is shown twice |
+| `icons/hero-*.svg` (7) | 2 to 9 KB each | Traced from the banner drawing as paths: the racing horse, the fox's head, the cubs and the four signs. Six are one-colour masks; `hero-fox.svg` keeps the drawing's three colours |
+
+Each is twice the drawing's size (enlarged, not redrawn), so it holds up
+on a 2x screen at the drawing's own scale. Mr Fox here is the drawings'
+own rendering of him, not `mr_fox_host.webp`, which the page still uses
+elsewhere.
+
+The old hero's own images went with it, since nothing else on the page
+used them: `hero-fold-bg.webp`, `fox-card-bg.webp`,
+`picks-fox-card-bg-bleed.webp`, `picks-cubs-card-bg-bleed.webp`,
+`fox-title-underline.webp` and `icons/runners.svg`. The copies made from
+them for other pages (the meeting masthead, the Wire's `lead.webp` and
+`jockey.webp`) are untouched.
+
 ## The Fox Trail (`static/grid/img/`)
 
 Nothing here is a photograph or the output of an image model.
