@@ -120,7 +120,7 @@ test.describe('navigation', () => {
 
 // The hero is built to the "Can you beat the Fox?" drawings (November
 // 2026): Mr Fox, the headline, the Fox against the Cubs, one button and
-// four ways in. The drawings leave out three things PR 9 had rebuilt in
+// four ways in (five, with the Wire). The drawings leave out three things PR 9 had rebuilt in
 // the hero after the redesign dropped them, and which were tested here so
 // that they could not go missing quietly a second time: the race detail
 // (Runners, Prize fund), the routes into The Pin and Pick 6, and the Big
@@ -145,21 +145,14 @@ test.describe('the hero, as drawn', () => {
     await expect(button).toHaveAttribute('href', /races\/feature\//);
   });
 
-  // Not in the drawings: added at the client's request (November 2026).
-  test('links to the latest news', async ({ page }) => {
-    await openLanding(page);
-    const news = page.locator('#big-race-day .hf-news');
-    await expect(news).toHaveCount(1);
-    await expect(news).toBeVisible();
-    await expect(news).toContainText('Get latest news');
-    await expect(news).toHaveAttribute('href', /news\/index\.html$/);
-  });
-
-  test('offers four ways in', async ({ page }) => {
+  // The drawings have four; the Wire leads them, at the client's request
+  // (November 2026), as the hero's way to the news.
+  test('offers five ways in, the Wire first', async ({ page }) => {
     await openLanding(page);
     const ways = page.locator('#big-race-day .hf-explore__link');
-    await expect(ways).toHaveCount(4);
-    for (const [index, path] of [/\/races\/$/, /\/ai\/tools\/$/, /\/cubs\/$/, /\/news\/honest-record\/$/].entries()) {
+    await expect(ways).toHaveCount(5);
+    await expect(ways.nth(0)).toContainText('The Fox’s Wire');
+    for (const [index, path] of [/\/news\/$/, /\/races\/$/, /\/ai\/tools\/$/, /\/cubs\/$/, /\/news\/honest-record\/$/].entries()) {
       await expect(ways.nth(index)).toHaveAttribute('href', path);
     }
   });
