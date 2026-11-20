@@ -43,7 +43,6 @@
    "static/public/css/battle-section.css": 36,
    "static/public/css/day_hub.css": 5,
    "static/public/css/defer-bg.css": 1,
-   "static/public/css/hero-result.css": 1,
    "static/public/css/how_it_works.css": 2,
    "static/public/css/landing-anim.css": 16,
    "static/public/css/landing.css": 4,
@@ -85,9 +84,6 @@
    "static/public/css/day_hub.css -> max-width:880px": 1,
    "static/public/css/day_hub.css -> max-width:900px": 1,
    "static/public/css/editorial-shelf.css -> max-width:700px": 1,
-   "static/public/css/hero-result.css -> max-width:640px": 1,
-   "static/public/css/hero-result.css -> max-width:719px": 1,
-   "static/public/css/hero-result.css -> max-width:720px": 2,
    "static/public/css/hero_tabs.css -> max-width:640px": 1,
    "static/public/css/how_it_works.css -> max-width:560px": 1,
    "static/public/css/how_it_works.css -> max-width:700px": 1,
@@ -114,7 +110,6 @@
    "static/public/experiences/pick-hero/css/pick-hero.css -> max-width:600px": 1
   },
   "font-not-loaded": {
-   "static/public/css/hero-result.css -> Inter": 6
   }
  },
  "axe": {

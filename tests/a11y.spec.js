@@ -26,6 +26,10 @@ async function openWholeTrail(page) {
 // violation introduced on one must not be excused by another's.
 const PAGES = [
   { file: 'index.html', open: (page) => openLanding(page) },
+  // The hero's later states, on the landing's own known list (the rest
+  // of the page is the same page).
+  { file: 'index.html#hero-pick-made', baseline: 'index.html', open: (page) => openLanding(page, { hash: 'hero-pick-made' }) },
+  { file: 'index.html#hero-race-result', baseline: 'index.html', open: (page) => openLanding(page, { hash: 'hero-race-result' }) },
   { file: 'trail.html', open: openWholeTrail },
   { file: 'meeting.html', open: (page) => openMeeting(page) },
   { file: 'meeting-upcoming.html', open: (page) => openMeeting(page, { day: 'upcoming' }) },
@@ -42,13 +46,13 @@ const PAGES = [
 
 // Ratchet: a rule not on the known list fails the run, and a known rule
 // that no longer fires must come off the list, so the list only shrinks.
-for (const { file, open } of PAGES) {
+for (const { file, open, baseline = file } of PAGES) {
   test(`${file} has no new WCAG 2.1 AA violations`, async ({ page }, testInfo) => {
     await open(page);
     const { violations } = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
     const found = [...new Set(violations.map((violation) => violation.id))].sort();
     const viewport = testInfo.project.name.replace(/^features-/, '');
-    const known = (knownViolations[file] ?? {})[viewport] ?? [];
+    const known = (knownViolations[baseline] ?? {})[viewport] ?? [];
 
     await testInfo.attach('axe-violations.json', {
       body: JSON.stringify(

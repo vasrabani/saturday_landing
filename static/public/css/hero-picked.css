@@ -1,0 +1,1452 @@
+/* ═══════════════════════════════════════════════════════════
+   HERO · pick made and race result (after hero-fold.css)
+
+   The hero once the member has picked (.hero-fold__section--picked)
+   and once the race is run (--resulted, with hf-tone-hit / -miss /
+   -void). Rebuilt from the prototype's "pick made" drawing; the race
+   line under the headline is .hf-head__race here, as .hf-race is the
+   pre-pick hero's race line.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── PICK MADE ─────────────────────────────────────────── */
+
+/* The member has picked: the "pick made" drawing. On a phone a hundred
+   cqw is 942px of that drawing, which sets everything smaller against
+   the screen than the first drawing does. */
+
+.hero-fold__section--picked {
+  --hf-blue: #2f9bff;
+  --hf-blue-line: #c4e7ff;
+  --hf-green: #17a44b;
+}
+
+/* Mr Fox smaller, top left, the racing across behind the words. */
+.hero-fold__section--picked .hf-stage::before {
+  top: 4.671cqw;
+  aspect-ratio: 942 / 480;
+  background-image: url("../img/hero-stage-locked.webp");
+}
+
+/* The lockup is the first drawing's, at this drawing's size. */
+.hero-fold__section--picked .hf-brand {
+  left: 1cqw;
+  margin: 1.490cqw 0 -2.930cqw;
+  transform: scale(0.764);
+  transform-origin: 50% 0;
+}
+
+/* ── Pick made · the words, centred in what Mr Fox leaves ── */
+
+.hf-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 3.900cqw 0 0 19.500cqw;
+  text-align: center;
+}
+
+.hf-kicker {
+  margin: 0;
+  padding-left: 0.280em;
+  font-size: 2.870cqw;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.280em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--hf-gold);
+}
+
+.hf-pitch .hf-title--one {
+  margin: 0.600cqw 0 0;
+  font-size: 9.100cqw;
+  transform: scaleX(0.889);
+  transform-origin: 50% 50%;
+}
+
+.hf-head__race {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  color: #fff;
+}
+
+.hf-head__race-name {
+  max-width: 47cqw;
+  font-size: 3.180cqw;
+  font-weight: 500;
+  line-height: 1.133;
+}
+
+.hf-head__meta {
+  margin-top: 1.870cqw;
+  font-size: max(11px, 2.500cqw);
+  line-height: 1;
+  white-space: nowrap;
+  transform: scaleX(0.800);
+}
+
+.hf-head__dot {
+  margin: 0 1.050em;
+  color: var(--hf-gold);
+}
+
+/* ── Pick made · the Fox's pick against the member's ── */
+
+.hf-picks {
+  position: relative;
+  display: grid;
+  grid-template-columns: 45.329cqw 43.312cqw;
+  column-gap: 5.732cqw;
+  margin: 16.560cqw 0 0 2.866cqw;
+}
+
+/* A card: who, over which horse at what price. */
+.hf-pick {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 18.900cqw;
+  border: max(1.5px, 0.320cqw) solid var(--hf-line);
+  border-radius: 2.500cqw;
+  background: linear-gradient(180deg, #1f1407 0 54.500%, #3a2006 54.500% 100%);
+  box-shadow:
+    0 0 0.500cqw 0 color-mix(in srgb, var(--hf-gold) 90%, transparent),
+    0 0 2.400cqw 0.200cqw color-mix(in srgb, var(--hf-glow) 65%, transparent),
+    inset 0 0 0.500cqw 0 color-mix(in srgb, var(--hf-gold) 60%, transparent),
+    inset 0 0 2.200cqw -0.500cqw color-mix(in srgb, var(--hf-glow) 45%, transparent);
+  text-decoration: none;
+  color: #fff;
+  transition: box-shadow 0.25s;
+}
+
+.hf-pick--fox {
+  --hf-ico-pad: 6.900cqw;
+  --hf-ico-w: 7.110cqw;
+  --hf-id-gap: 2.550cqw;
+  --hf-name-size: 3.790cqw;
+  --hf-name-x: 0.790;
+  --hf-role-size: 2.580cqw;
+  --hf-role-x: 0.900;
+  --hf-role-off: 0.420cqw;
+  --hf-horse-x: 0.858;
+  --hf-horse-off: 0cqw;
+  --hf-odds-w: 9.980cqw;
+  --hf-foot-pad: 0 3.300cqw 0 3.930cqw;
+}
+
+.hf-pick--you {
+  --hf-ico-pad: 3.710cqw;
+  --hf-ico-w: 8.170cqw;
+  --hf-id-gap: 2.550cqw;
+  --hf-name-size: 3.030cqw;
+  --hf-name-x: 0.720;
+  --hf-role-size: 2.730cqw;
+  --hf-role-x: 0.903;
+  --hf-role-off: 0cqw;
+  --hf-horse-x: 0.740;
+  --hf-horse-off: -0.600cqw;
+  --hf-odds-w: 9.130cqw;
+  --hf-foot-pad: 0 2.020cqw 0 3.290cqw;
+  border-color: var(--hf-blue-line);
+  background: linear-gradient(180deg, #012543 0 54.500%, #012c4c 54.500% 100%);
+  box-shadow:
+    0 0 0.500cqw 0 color-mix(in srgb, var(--hf-blue) 95%, transparent),
+    0 0 2.600cqw 0.300cqw color-mix(in srgb, var(--hf-blue) 70%, transparent),
+    inset 0 0 0.500cqw 0 color-mix(in srgb, var(--hf-blue) 70%, transparent),
+    inset 0 0 2.200cqw -0.500cqw color-mix(in srgb, var(--hf-blue) 50%, transparent);
+}
+
+.hf-pick:hover,
+.hf-pick:focus-visible {
+  box-shadow:
+    0 0 0.700cqw 0 color-mix(in srgb, var(--hf-gold) 95%, transparent),
+    0 0 3.400cqw 0.500cqw color-mix(in srgb, var(--hf-glow) 80%, transparent),
+    inset 0 0 0.600cqw 0 color-mix(in srgb, var(--hf-gold) 70%, transparent),
+    inset 0 0 2.600cqw -0.400cqw color-mix(in srgb, var(--hf-glow) 55%, transparent);
+}
+
+.hf-pick--you:hover,
+.hf-pick--you:focus-visible {
+  box-shadow:
+    0 0 0.700cqw 0 var(--hf-blue),
+    0 0 3.400cqw 0.500cqw color-mix(in srgb, var(--hf-blue) 85%, transparent),
+    inset 0 0 0.600cqw 0 color-mix(in srgb, var(--hf-blue) 80%, transparent),
+    inset 0 0 2.600cqw -0.400cqw color-mix(in srgb, var(--hf-blue) 60%, transparent);
+}
+
+.hf-pick:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.hf-pick__head {
+  position: relative;
+  flex: 0 0 54.500%;
+  display: flex;
+  align-items: center;
+  padding: 1cqw 0 0 var(--hf-ico-pad);
+}
+
+.hf-pick .hf-duel__ico {
+  position: static;
+  flex: 0 0 auto;
+  width: var(--hf-ico-w);
+  transform: none;
+}
+
+.hf-pick--you .hf-duel__ico--cubs {
+  background: linear-gradient(180deg, #4db4ff, #1e86f2);
+}
+
+.hf-pick__id {
+  display: flex;
+  flex-direction: column;
+  gap: 0.560cqw;
+  margin-left: var(--hf-id-gap);
+}
+
+.hf-pick__name,
+.hf-pick__role {
+  width: max-content;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transform-origin: 0 50%;
+}
+
+.hf-pick__name {
+  font-size: var(--hf-name-size);
+  font-style: italic;
+  font-weight: 1000;
+  transform: scaleX(var(--hf-name-x));
+}
+
+.hf-pick__role {
+  position: relative;
+  left: var(--hf-role-off);
+  font-size: max(9px, var(--hf-role-size));
+  color: var(--hf-soft);
+  transform: scaleX(var(--hf-role-x));
+}
+
+/* The lock's own mark, on the member's card. */
+.hf-pick__tick {
+  position: absolute;
+  top: 2.440cqw;
+  right: 2.760cqw;
+  display: grid;
+  place-items: center;
+  width: 4.990cqw;
+  height: 4.990cqw;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 35%, #3ecb6f, var(--hf-green) 70%);
+  box-shadow: 0 0 1cqw color-mix(in srgb, var(--hf-green) 60%, transparent);
+}
+
+.hf-pick__tick svg {
+  width: 62%;
+  height: 62%;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hf-pick__foot {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.200cqw;
+  min-width: 0;
+  padding: var(--hf-foot-pad);
+}
+
+/* The horse's name is narrowed like the drawing's: set in a box a quarter
+   wider than its room and narrowed back into it, so a name too long for
+   the card is cut with an ellipsis where the card ends. */
+.hf-pick__horse {
+  position: relative;
+  top: var(--hf-horse-off);
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: 4.080cqw;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hf-pick__horse span {
+  display: block;
+  overflow: hidden;
+  width: calc(100% / var(--hf-horse-x));
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transform: scaleX(var(--hf-horse-x));
+  transform-origin: 0 50%;
+}
+
+/* A name too long for the card at the drawing's size (the template puts
+   this on one of fourteen letters or more). */
+.hf-pick__horse--long {
+  font-size: 3.200cqw;
+}
+
+.hf-pick__horse--pending {
+  font-weight: 500;
+  color: var(--hf-soft);
+}
+
+.hf-pick__odds {
+  position: relative;
+  top: -0.820cqw;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  min-width: var(--hf-odds-w);
+  height: 4.250cqw;
+  padding: 0 1.800cqw;
+  border: max(1px, 0.200cqw) solid var(--hf-gold);
+  border-radius: 99cqw;
+  background: color-mix(in srgb, #000 30%, transparent);
+  font-size: 3.300cqw;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--hf-gold-lit);
+}
+
+.hf-pick--you .hf-pick__odds {
+  border-color: color-mix(in srgb, var(--hf-blue) 80%, #fff);
+  background: color-mix(in srgb, var(--hf-blue) 22%, transparent);
+}
+
+/* Between the two cards, over the edge of each. */
+.hf-picks .hf-duel__vs {
+  position: absolute;
+  top: 9.290cqw;
+  left: 47.350cqw;
+  z-index: 1;
+  width: 8.490cqw;
+  height: 8.490cqw;
+  margin: 0;
+  transform: translate(-50%, -50%);
+}
+
+/* The drawing's wider VS: the body face narrowed, not the hero's
+   condensed one. */
+.hf-picks .hf-duel__vs-text {
+  left: -0.250cqw;
+  font-family: var(--font-body);
+  font-size: 4.700cqw;
+  transform: scaleX(0.800);
+}
+
+.hf-locked {
+  grid-column: 2;
+  justify-self: start;
+  display: flex;
+  align-items: center;
+  width: max(26.860cqw, 112px);
+  height: max(5.410cqw, 22px);
+  margin: 0.320cqw 0 0 7.220cqw;
+  padding: 0 0 0 2.300cqw;
+  border: max(1px, 0.200cqw) solid #78cd8c;
+  border-radius: 99cqw;
+  background: linear-gradient(180deg, #02772b, #006d1c);
+  box-shadow: 0 0 1.200cqw color-mix(in srgb, var(--hf-green) 55%, transparent);
+  font-size: max(10px, 2.600cqw);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  color: #fff;
+}
+
+.hf-locked__ico {
+  flex: 0 0 auto;
+  width: 3.200cqw;
+  height: 3.200cqw;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4.500;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hf-locked__text {
+  margin-left: 0.950cqw;
+  transform: scaleX(0.840);
+  transform-origin: 0 50%;
+}
+
+/* ── Pick made · the countdown ── */
+
+.hero-fold__section--picked .hf-countdown {
+  display: flex;
+  align-items: center;
+  height: 13.690cqw;
+  margin: 2cqw 3.290cqw 0 3.820cqw;
+  border: 1px solid color-mix(in srgb, #fff 16%, transparent);
+  border-radius: 2.300cqw;
+  background: #091117;
+}
+
+.hero-fold__section--picked .hf-countdown__label {
+  display: flex;
+  align-items: center;
+  gap: 2.020cqw;
+  margin: 0 0 0 3.300cqw;
+  font-size: max(11px, 3.030cqw);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.020em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+}
+
+.hf-countdown__ico {
+  flex: 0 0 auto;
+  width: 4.200cqw;
+  height: 4.200cqw;
+  fill: none;
+  stroke: var(--hf-gold);
+  stroke-width: 4.800;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hf-countdown__text {
+  transform: scaleX(0.850);
+  transform-origin: 0 50%;
+}
+
+.hero-fold__section--picked .hf-countdown__clock {
+  display: flex;
+  gap: 2.340cqw;
+  margin: 0 1.500cqw 0 auto;
+}
+
+.hf-countdown__unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.700cqw;
+  width: 13.750cqw;
+  height: 10.620cqw;
+  padding-top: 0.100cqw;
+  border: 1px solid color-mix(in srgb, #fff 26%, transparent);
+  border-radius: 1.600cqw;
+  background: #050b0f;
+}
+
+.hf-countdown__num {
+  font-size: 4.850cqw;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.720;
+  color: #f6c443;
+  transform: scaleX(0.900);
+}
+
+.hf-countdown__name {
+  font-size: max(9px, 2.430cqw);
+  line-height: 0.720;
+  letter-spacing: 0.020em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+/* ── Pick made · the race in four facts ── */
+
+/* The whole row is narrowed, as the drawing's lettering is, and each sign
+   widened back to its own shape (--hf-x). */
+.hero-fold__section--picked .hf-facts {
+  --hf-x: 0.800;
+  position: relative;
+  left: 0.400cqw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10.600cqw;
+  margin: 2.450cqw -12% 0;
+  padding: 0;
+  list-style: none;
+  font-size: max(10px, 2.550cqw);
+  line-height: 1;
+  color: #fff;
+  transform: scaleX(var(--hf-x));
+}
+
+.hero-fold__section--picked .hf-facts__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 3.050cqw;
+  white-space: nowrap;
+}
+
+.hero-fold__section--picked .hf-facts__item + .hf-facts__item::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -5.300cqw;
+  width: 1px;
+  height: 3.200cqw;
+  background: color-mix(in srgb, #fff 16%, transparent);
+  transform: translateY(-50%);
+}
+
+.hf-facts__ico {
+  flex: 0 0 auto;
+  width: 3.400cqw;
+  background: var(--hf-sign);
+  transform: scaleX(calc(1 / var(--hf-x)));
+}
+
+.hf-facts__ico--course {
+  aspect-ratio: 167 / 99;
+  -webkit-mask: url("../img/icons/hero-horse.svg") center / 100% 100% no-repeat;
+  mask: url("../img/icons/hero-horse.svg") center / 100% 100% no-repeat;
+}
+
+.hf-facts__ico--type {
+  aspect-ratio: 121 / 114;
+  width: 3.100cqw;
+  -webkit-mask: url("../img/icons/hero-trophy.svg") center / 100% 100% no-repeat;
+  mask: url("../img/icons/hero-trophy.svg") center / 100% 100% no-repeat;
+}
+
+.hf-facts__ico--trip {
+  width: 3.700cqw;
+  height: 3.700cqw;
+  background: none;
+  fill: none;
+  stroke: var(--hf-gold);
+  stroke-width: 4.500;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hf-facts__ico--field {
+  aspect-ratio: 161 / 117;
+  width: 3.500cqw;
+  -webkit-mask: url("../img/icons/hero-cubs.svg") center / 100% 100% no-repeat;
+  mask: url("../img/icons/hero-cubs.svg") center / 100% 100% no-repeat;
+}
+
+/* ── Pick made · the two ways on ── */
+
+.hf-actions {
+  display: grid;
+  gap: 1.910cqw;
+  margin: 3.980cqw 5.100cqw 0 5.200cqw;
+}
+
+.hf-action {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 7.860cqw;
+  padding: 0 4.650cqw 0 6.050cqw;
+  border: max(1px, 0.210cqw) solid color-mix(in srgb, #fff 72%, transparent);
+  border-radius: 3.600cqw;
+  background: #0c1418;
+  text-decoration: none;
+  color: #fff;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.hf-action--card {
+  height: 8.070cqw;
+  border-width: max(1.5px, 0.280cqw);
+  border-color: var(--hf-gold);
+  background: #11130f;
+  box-shadow:
+    0 0 1.400cqw 0 color-mix(in srgb, var(--hf-glow) 45%, transparent),
+    inset 0 0 1.200cqw -0.300cqw color-mix(in srgb, var(--hf-glow) 35%, transparent);
+}
+
+/* The light on the first way's top rule. */
+.hf-action--card::after {
+  content: "";
+  position: absolute;
+  top: -0.280cqw;
+  left: 18%;
+  width: 54%;
+  height: max(2px, 0.280cqw);
+  background: linear-gradient(90deg, transparent, var(--hf-line) 50%, transparent);
+  box-shadow: 0 0 1.600cqw 0.150cqw color-mix(in srgb, var(--hf-glow) 75%, transparent);
+  pointer-events: none;
+}
+
+.hf-action:hover,
+.hf-action:focus-visible {
+  border-color: var(--hf-line);
+  box-shadow: 0 0 2cqw 0 color-mix(in srgb, var(--hf-glow) 60%, transparent);
+}
+
+.hf-action:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.hf-action__ico,
+.hf-action__go {
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hf-action__ico {
+  width: 4.300cqw;
+  height: 4.300cqw;
+  margin-left: -0.290cqw;
+  stroke-width: 4.200;
+}
+
+.hf-action--card .hf-action__ico,
+.hf-action__go {
+  stroke: var(--hf-gold);
+}
+
+.hf-action__go {
+  width: 3.300cqw;
+  height: 3.300cqw;
+  margin-left: auto;
+  stroke-width: 5;
+}
+
+.hf-action__label {
+  margin-left: 4.270cqw;
+  font-size: max(13px, 3.340cqw);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  transform: scaleX(0.835);
+  transform-origin: 0 50%;
+}
+
+.hf-action__note {
+  margin-left: 0.300em;
+  font-size: 0.870em;
+  font-weight: 400;
+  color: var(--hf-soft);
+}
+
+/* ── Pick made · the leaderboard ── */
+
+.hf-board {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  height: 13.800cqw;
+  margin: 5.730cqw 2.335cqw 3.400cqw 2.548cqw;
+  padding: 0 2.340cqw 0 3.400cqw;
+  border: max(1px, 0.210cqw) solid #d8b871;
+  border-radius: 2.300cqw;
+  background: #0a0d0f url("../img/hero-board-dusk.webp") center / 100% 100% no-repeat;
+  text-decoration: none;
+  color: #fff;
+  transition: box-shadow 0.2s;
+}
+
+.hf-board:hover,
+.hf-board:focus-visible {
+  box-shadow: 0 0 2cqw 0 color-mix(in srgb, var(--hf-glow) 55%, transparent);
+}
+
+.hf-board:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* The light along the card's foot. */
+.hf-board::after {
+  content: "";
+  position: absolute;
+  bottom: -0.210cqw;
+  left: 26%;
+  width: 44%;
+  height: max(2px, 0.300cqw);
+  background: linear-gradient(90deg, transparent, #ffd98a 50%, transparent);
+  box-shadow: 0 0 1.800cqw 0.250cqw color-mix(in srgb, var(--hf-glow) 85%, transparent);
+  pointer-events: none;
+}
+
+.hf-board__ico {
+  flex: 0 0 auto;
+  width: 7.600cqw;
+  aspect-ratio: 161 / 117;
+  background: linear-gradient(180deg, #f8c64a, #eba91f);
+  -webkit-mask: url("../img/icons/hero-cubs.svg") center / 100% 100% no-repeat;
+  mask: url("../img/icons/hero-cubs.svg") center / 100% 100% no-repeat;
+}
+
+.hf-board__text {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.500cqw;
+  min-width: 0;
+  margin-left: 2.600cqw;
+}
+
+.hf-board__title,
+.hf-board__note {
+  width: max-content;
+  line-height: 1;
+  white-space: nowrap;
+  transform-origin: 0 50%;
+}
+
+.hf-board__title {
+  font-size: 4.100cqw;
+  font-style: italic;
+  font-weight: 1000;
+  text-transform: uppercase;
+  transform: scaleX(0.744);
+}
+
+.hf-board__note {
+  font-size: max(11px, 2.870cqw);
+  transform: scaleX(0.871);
+}
+
+.hf-board__go {
+  position: relative;
+  top: -0.400cqw;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 29.510cqw;
+  height: 6.260cqw;
+  padding: 0 2.700cqw 0 2.900cqw;
+  border: max(1px, 0.210cqw) solid var(--hf-gold);
+  border-radius: 99cqw;
+  background: color-mix(in srgb, #06090a 92%, transparent);
+  box-shadow: 0 0 1cqw 0 color-mix(in srgb, var(--hf-glow) 35%, transparent);
+}
+
+/* Narrowed like the drawing's lettering; the margin takes back the room
+   the narrowing leaves empty, so the arrow stands where the words end. */
+.hf-board__go-label {
+  margin-right: -8.300cqw;
+  font-size: max(11px, 2.880cqw);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  transform: scaleX(0.660);
+  transform-origin: 0 50%;
+}
+
+.hf-board__arrow {
+  flex: 0 0 auto;
+  width: 2.900cqw;
+  height: 2.900cqw;
+  fill: none;
+  stroke: var(--hf-gold);
+  stroke-width: 4.500;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── RESULT ────────────────────────────────────────────── */
+
+/* The race has been run. No drawing shows it, so it is the pick-made
+   composition with the result in it: each side's pick marked right or
+   wrong, the winner behind a reveal, and the way to the record. */
+
+.hf-sr {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.hero-fold__section--resulted .hf-kicker {
+  padding-left: 0.140em;
+  font-size: 2.600cqw;
+  letter-spacing: 0.140em;
+}
+
+.hf-kicker__dot {
+  margin: 0 0.300em;
+}
+
+.hf-tone-miss .hf-kicker {
+  color: #ff8f84;
+}
+
+.hf-tone-void .hf-kicker {
+  color: var(--hf-soft);
+}
+
+/* A longer headline than the drawing's, so a smaller one. */
+.hero-fold__section--resulted .hf-title--one {
+  margin: 1.850cqw 0 1.250cqw;
+  font-size: 6.600cqw;
+}
+
+.hf-pick--cubs {
+  --hf-ico-pad: 3.710cqw;
+  --hf-ico-w: 8.170cqw;
+  --hf-id-gap: 2.550cqw;
+  --hf-name-size: 3.790cqw;
+  --hf-name-x: 0.790;
+  --hf-role-size: 2.300cqw;
+  --hf-role-x: 0.740;
+  --hf-role-off: 0cqw;
+  --hf-horse-x: 0.800;
+  --hf-horse-off: 0cqw;
+  --hf-odds-w: 9.130cqw;
+  --hf-foot-pad: 0 2.020cqw 0 3.290cqw;
+}
+
+/* A card's mark: right, or wrong. */
+.hf-pick.is-wrong .hf-pick__tick {
+  background: radial-gradient(circle at 50% 35%, #f2665c, #c8281f 70%);
+  box-shadow: 0 0 1cqw color-mix(in srgb, var(--hf-red) 55%, transparent);
+}
+
+.hf-pick.is-wrong {
+  border-color: color-mix(in srgb, var(--hf-line) 55%, #5b5b5b);
+  box-shadow:
+    0 0 0.400cqw 0 color-mix(in srgb, var(--hf-gold) 45%, transparent),
+    0 0 1.800cqw 0 color-mix(in srgb, var(--hf-glow) 28%, transparent);
+}
+
+/* ── Result · the winner, behind its reveal ── */
+
+.hf-winner {
+  margin: 3.200cqw 3.290cqw 0 3.820cqw;
+}
+
+.hf-winner__bar {
+  display: flex;
+  align-items: center;
+  height: 13.690cqw;
+  border: 1px solid color-mix(in srgb, #fff 16%, transparent);
+  border-radius: 2.300cqw;
+  background: #091117;
+}
+
+.hf-winner__label {
+  display: flex;
+  align-items: center;
+  gap: 2.020cqw;
+  margin: 0 0 0 3.300cqw;
+  font-size: max(11px, 3.030cqw);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.020em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+}
+
+.hf-winner__ico {
+  flex: 0 0 auto;
+  width: 4.100cqw;
+  aspect-ratio: 121 / 114;
+  background: var(--hf-sign);
+  -webkit-mask: url("../img/icons/hero-trophy.svg") center / 100% 100% no-repeat;
+  mask: url("../img/icons/hero-trophy.svg") center / 100% 100% no-repeat;
+}
+
+.hf-winner__text {
+  transform: scaleX(0.850);
+  transform-origin: 0 50%;
+}
+
+/* aria-pressed="true" means revealed, as on the racecard's spoilers. */
+.hf-winner__reveal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 60cqw;
+  height: 9.400cqw;
+  margin: 0 1.900cqw 0 auto;
+  padding: 0;
+  border: max(1px, 0.210cqw) solid var(--hf-gold);
+  border-radius: 99cqw;
+  background: #0b0d0e;
+  box-shadow: inset 0 0 1.200cqw -0.300cqw color-mix(in srgb, var(--hf-glow) 40%, transparent);
+  font: inherit;
+  color: #fff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: box-shadow 0.2s;
+}
+
+.hf-winner__reveal:hover,
+.hf-winner__reveal:focus-visible {
+  box-shadow:
+    0 0 1.600cqw 0 color-mix(in srgb, var(--hf-glow) 55%, transparent),
+    inset 0 0 1.200cqw -0.300cqw color-mix(in srgb, var(--hf-glow) 40%, transparent);
+}
+
+.hf-winner__reveal:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.hf-winner__cover {
+  font-size: max(11px, 2.700cqw);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.140em;
+  text-transform: uppercase;
+  color: var(--hf-gold-lit);
+  transition: opacity 0.25s;
+}
+
+.hf-winner__payload {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2cqw;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.hf-winner__reveal[aria-pressed="true"] .hf-winner__cover {
+  opacity: 0;
+}
+
+.hf-winner__reveal[aria-pressed="true"] .hf-winner__payload {
+  opacity: 1;
+}
+
+.hf-winner__horse {
+  font-size: 3.900cqw;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.hf-winner__sp {
+  display: grid;
+  place-items: center;
+  height: 4.100cqw;
+  padding: 0 1.600cqw;
+  border: max(1px, 0.200cqw) solid var(--hf-gold);
+  border-radius: 99cqw;
+  font-size: max(10px, 2.700cqw);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--hf-gold-lit);
+}
+
+.hf-winner__by {
+  margin: 2.300cqw 0 0;
+  font-size: max(11px, 2.550cqw);
+  line-height: 1;
+  text-align: center;
+  color: var(--hf-soft);
+}
+
+.hf-board--record .hf-board__ico {
+  width: 5.600cqw;
+  aspect-ratio: 107 / 126;
+  -webkit-mask-image: url("../img/icons/hero-shield.svg");
+  mask-image: url("../img/icons/hero-shield.svg");
+}
+
+.hf-board--record .hf-board__text {
+  margin-left: 3.600cqw;
+}
+
+/* ── Pick made · the banner (1024px+) ── */
+
+/* No drawing shows the pick made on a wide window, so this is the banner
+   with the pick-made drawing's parts set in its middle column: the same
+   Mr Fox in his frame, the same racing, the leaderboard where the four
+   ways in stand. */
+@media (min-width: 1024px) {
+  .hero-fold__section--picked .hf-stage::before {
+    top: 0;
+    aspect-ratio: 680 / 896;
+    background-image: image-set(url("../img/hero-fox-banner-1x.webp") 1x, url("../img/hero-fox-banner.webp") 2x);
+  }
+
+  .hero-fold__section--picked .hf-brand {
+    left: var(--hf-off, 0);
+    margin: 1.567cqw 0 0;
+    transform: none;
+  }
+
+  .hf-head {
+    margin: 0.900cqw 0 0;
+  }
+
+  .hf-kicker {
+    font-size: max(10.5px, 0.970cqw);
+  }
+
+  /* The banner's own headline face, on one line. */
+  .hf-pitch .hf-title--one {
+    margin: 0.550cqw 0 0;
+    font-size: 4.500cqw;
+    letter-spacing: -0.020em;
+    word-spacing: 0.060em;
+    transform: skewX(-11deg) scaleX(0.820);
+  }
+
+  @supports (-webkit-background-clip: text) or (background-clip: text) {
+    .hf-pitch .hf-title--one {
+      background: linear-gradient(180deg, #fff 58%, #e9e6e0 92%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  }
+
+  .hf-head__race {
+    margin: 0.350cqw 0 0;
+  }
+
+  .hf-head__race-name {
+    max-width: 44cqw;
+    font-size: 1.480cqw;
+    line-height: 1.200;
+  }
+
+  .hf-head__meta {
+    margin-top: 0.600cqw;
+    font-size: max(11px, 1.140cqw);
+  }
+
+  .hf-picks {
+    grid-template-columns: 20.850cqw 20.850cqw;
+    column-gap: 2.735cqw;
+    margin: 1.100cqw 0 0;
+  }
+
+  .hf-pick {
+    height: 7.070cqw;
+    border-width: max(1.5px, 0.142cqw);
+    border-radius: 1.030cqw;
+    box-shadow:
+      0 0 0.200cqw 0 color-mix(in srgb, var(--hf-gold) 90%, transparent),
+      0 0 0.950cqw 0.060cqw color-mix(in srgb, var(--hf-glow) 65%, transparent),
+      inset 0 0 0.200cqw 0 color-mix(in srgb, var(--hf-gold) 60%, transparent),
+      inset 0 0 0.900cqw -0.200cqw color-mix(in srgb, var(--hf-glow) 45%, transparent);
+  }
+
+  .hf-pick--fox {
+    --hf-ico-pad: 2.620cqw;
+    --hf-ico-w: 2.850cqw;
+    --hf-id-gap: 1.140cqw;
+    --hf-name-size: 1.600cqw;
+    --hf-role-size: 1.080cqw;
+    --hf-role-off: 0.170cqw;
+    --hf-odds-w: 4cqw;
+    --hf-foot-pad: 0 1.400cqw 0 1.700cqw;
+  }
+
+  .hf-pick--you {
+    --hf-ico-pad: 1.480cqw;
+    --hf-ico-w: 3.190cqw;
+    --hf-id-gap: 1.140cqw;
+    --hf-name-size: 1.280cqw;
+    --hf-role-size: 1.150cqw;
+    --hf-horse-off: 0cqw;
+    --hf-odds-w: 4cqw;
+    --hf-foot-pad: 0 1.400cqw 0 1.700cqw;
+    box-shadow:
+      0 0 0.200cqw 0 color-mix(in srgb, var(--hf-blue) 95%, transparent),
+      0 0 1cqw 0.100cqw color-mix(in srgb, var(--hf-blue) 70%, transparent),
+      inset 0 0 0.200cqw 0 color-mix(in srgb, var(--hf-blue) 70%, transparent),
+      inset 0 0 0.900cqw -0.200cqw color-mix(in srgb, var(--hf-blue) 50%, transparent);
+  }
+
+  .hf-pick:hover,
+  .hf-pick:focus-visible {
+    box-shadow:
+      0 0 0.300cqw 0 color-mix(in srgb, var(--hf-gold) 95%, transparent),
+      0 0 1.400cqw 0.200cqw color-mix(in srgb, var(--hf-glow) 80%, transparent),
+      inset 0 0 0.250cqw 0 color-mix(in srgb, var(--hf-gold) 70%, transparent),
+      inset 0 0 1.100cqw -0.150cqw color-mix(in srgb, var(--hf-glow) 55%, transparent);
+  }
+
+  .hf-pick--you:hover,
+  .hf-pick--you:focus-visible {
+    box-shadow:
+      0 0 0.300cqw 0 var(--hf-blue),
+      0 0 1.400cqw 0.200cqw color-mix(in srgb, var(--hf-blue) 85%, transparent),
+      inset 0 0 0.250cqw 0 color-mix(in srgb, var(--hf-blue) 80%, transparent),
+      inset 0 0 1.100cqw -0.150cqw color-mix(in srgb, var(--hf-blue) 60%, transparent);
+  }
+
+  .hf-pick__head {
+    padding-top: 0.350cqw;
+  }
+
+  .hf-pick__id {
+    gap: 0.280cqw;
+  }
+
+  .hf-pick__tick {
+    top: 0.900cqw;
+    right: 1.050cqw;
+    width: 1.940cqw;
+    height: 1.940cqw;
+    box-shadow: 0 0 0.400cqw color-mix(in srgb, var(--hf-green) 60%, transparent);
+  }
+
+  .hf-pick__foot {
+    gap: 0.600cqw;
+  }
+
+  .hf-pick__horse {
+    font-size: 1.650cqw;
+  }
+
+  .hf-pick__horse--long {
+    font-size: 1.400cqw;
+  }
+
+  .hf-pick__odds {
+    top: -0.200cqw;
+    height: 1.710cqw;
+    padding: 0 0.700cqw;
+    border-width: max(1px, 0.085cqw);
+    font-size: 1.340cqw;
+  }
+
+  .hf-picks .hf-duel__vs {
+    top: 3.535cqw;
+    left: 22.220cqw;
+    width: 3.300cqw;
+    height: 3.300cqw;
+  }
+
+  .hf-picks .hf-duel__vs-text {
+    left: -0.100cqw;
+    font-size: 1.850cqw;
+    transform: scaleX(0.737);
+  }
+
+  .hf-locked {
+    width: max(10.830cqw, 112px);
+    height: max(2.050cqw, 21px);
+    margin: 0.170cqw 0 0 2.850cqw;
+    padding-left: 0.850cqw;
+    border-width: max(1px, 0.085cqw);
+    box-shadow: 0 0 0.500cqw color-mix(in srgb, var(--hf-green) 55%, transparent);
+    font-size: max(10px, 1.050cqw);
+  }
+
+  .hf-locked__ico {
+    width: 1.250cqw;
+    height: 1.250cqw;
+  }
+
+  .hf-locked__text {
+    margin-left: 0.400cqw;
+  }
+
+  .hero-fold__section--picked .hf-countdown {
+    width: 44.435cqw;
+    height: 5.130cqw;
+    margin: 0.680cqw 0 0;
+    border-radius: 0.900cqw;
+  }
+
+  .hero-fold__section--picked .hf-countdown__label {
+    gap: 0.800cqw;
+    margin-left: 1.600cqw;
+    font-size: max(11px, 1.200cqw);
+  }
+
+  .hf-countdown__ico {
+    width: 1.650cqw;
+    height: 1.650cqw;
+  }
+
+  .hero-fold__section--picked .hf-countdown__clock {
+    gap: 0.910cqw;
+    margin-right: 0.700cqw;
+  }
+
+  .hf-countdown__unit {
+    gap: 0.650cqw;
+    width: 5.470cqw;
+    height: 3.990cqw;
+    padding-top: 0.050cqw;
+    border-radius: 0.650cqw;
+  }
+
+  .hf-countdown__num {
+    font-size: 1.940cqw;
+  }
+
+  .hf-countdown__name {
+    font-size: max(9px, 0.910cqw);
+  }
+
+  .hero-fold__section--picked .hf-facts {
+    left: 0;
+    gap: 4.200cqw;
+    margin: 0.800cqw -12% 0;
+    font-size: max(10px, 0.970cqw);
+  }
+
+  .hero-fold__section--picked .hf-facts__item {
+    gap: 1.100cqw;
+  }
+
+  .hero-fold__section--picked .hf-facts__item + .hf-facts__item::before {
+    left: -2.100cqw;
+    height: 1.300cqw;
+  }
+
+  .hf-facts__ico {
+    width: 1.400cqw;
+  }
+
+  .hf-facts__ico--type {
+    width: 1.250cqw;
+  }
+
+  .hf-facts__ico--trip {
+    width: 1.500cqw;
+    height: 1.500cqw;
+  }
+
+  .hf-facts__ico--field {
+    width: 1.450cqw;
+  }
+
+  /* The two ways on, side by side. */
+  .hf-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.910cqw;
+    width: 44.435cqw;
+    margin: 0.850cqw 0 0;
+  }
+
+  .hf-action,
+  .hf-action--card {
+    height: 3.080cqw;
+    padding: 0 1.400cqw 0 1.600cqw;
+    border-width: max(1px, 0.100cqw);
+    border-radius: 1.540cqw;
+  }
+
+  .hf-action--card {
+    box-shadow:
+      0 0 0.600cqw 0 color-mix(in srgb, var(--hf-glow) 45%, transparent),
+      inset 0 0 0.500cqw -0.150cqw color-mix(in srgb, var(--hf-glow) 35%, transparent);
+  }
+
+  .hf-action--card::after {
+    top: -0.100cqw;
+    height: max(1px, 0.100cqw);
+    box-shadow: 0 0 0.650cqw 0.060cqw color-mix(in srgb, var(--hf-glow) 75%, transparent);
+  }
+
+  .hf-action__ico {
+    width: 1.600cqw;
+    height: 1.600cqw;
+    margin-left: 0;
+  }
+
+  .hf-action__go {
+    width: 1.300cqw;
+    height: 1.300cqw;
+  }
+
+  .hf-action__label {
+    margin-left: 1.100cqw;
+    font-size: max(11.5px, 1.200cqw);
+  }
+
+  /* The leaderboard, where the banner has its four ways in: held to the
+     banner's foot, whatever stands in the column above. */
+  .hf-board {
+    position: absolute;
+    top: 42.507cqw;
+    right: 2.564cqw;
+    left: 4.103cqw;
+    height: 6.268cqw;
+    margin: 0;
+    padding: 0 1.700cqw 0 2.400cqw;
+    border-width: max(1px, 0.100cqw);
+    border-radius: 1.120cqw;
+    background:
+      linear-gradient(90deg, #0a0d0f 21%, transparent 42%, transparent 60%, #0a0d0f 81%),
+      #0a0d0f url("../img/hero-board-dusk.webp") 52% 50% / 62% 100% no-repeat;
+  }
+
+  .hf-board::after {
+    bottom: -0.100cqw;
+    height: max(1px, 0.115cqw);
+    box-shadow: 0 0 0.800cqw 0.100cqw color-mix(in srgb, var(--hf-glow) 85%, transparent);
+  }
+
+  .hf-board__ico {
+    width: 3.800cqw;
+  }
+
+  .hf-board__text {
+    gap: 0.620cqw;
+    margin-left: 1.700cqw;
+  }
+
+  .hf-board__title {
+    font-size: 1.900cqw;
+  }
+
+  .hf-board__note {
+    font-size: 1.270cqw;
+  }
+
+  .hf-board__go {
+    top: 0;
+    width: 15cqw;
+    height: 2.900cqw;
+    padding: 0 1.300cqw 0 1.500cqw;
+    border-width: max(1px, 0.100cqw);
+  }
+
+  .hf-board__go-label {
+    margin-right: -3.700cqw;
+    font-size: 1.340cqw;
+  }
+
+  .hf-board__arrow {
+    width: 1.350cqw;
+    height: 1.350cqw;
+  }
+
+  /* ── Result ── */
+
+  .hero-fold__section--resulted .hf-kicker {
+    font-size: max(10.5px, 0.970cqw);
+    letter-spacing: 0.220em;
+    padding-left: 0.220em;
+  }
+
+  .hero-fold__section--resulted .hf-title--one {
+    margin: 0.550cqw 0 0;
+    font-size: 4.300cqw;
+  }
+
+  .hero-fold__section--resulted .hf-head__race {
+    margin-top: 0.500cqw;
+  }
+
+  .hero-fold__section--resulted .hf-picks {
+    margin-top: 2.200cqw;
+  }
+
+  .hf-pick--cubs {
+    --hf-ico-pad: 1.480cqw;
+    --hf-ico-w: 3.190cqw;
+    --hf-id-gap: 1.140cqw;
+    --hf-name-size: 1.600cqw;
+    --hf-role-size: 0.980cqw;
+    --hf-odds-w: 4cqw;
+    --hf-foot-pad: 0 1.400cqw 0 1.700cqw;
+  }
+
+  .hf-pick.is-wrong .hf-pick__tick {
+    box-shadow: 0 0 0.400cqw color-mix(in srgb, var(--hf-red) 55%, transparent);
+  }
+
+  .hf-pick.is-wrong {
+    box-shadow:
+      0 0 0.160cqw 0 color-mix(in srgb, var(--hf-gold) 45%, transparent),
+      0 0 0.700cqw 0 color-mix(in srgb, var(--hf-glow) 28%, transparent);
+  }
+
+  .hf-winner {
+    width: 44.435cqw;
+    margin: 1.600cqw 0 0;
+  }
+
+  .hf-winner__bar {
+    height: 5.130cqw;
+    border-radius: 0.900cqw;
+  }
+
+  .hf-winner__label {
+    gap: 0.800cqw;
+    margin-left: 1.600cqw;
+    font-size: max(11px, 1.200cqw);
+  }
+
+  .hf-winner__ico {
+    width: 1.700cqw;
+  }
+
+  .hf-winner__reveal {
+    width: 28cqw;
+    height: 3.500cqw;
+    margin-right: 0.800cqw;
+    border-width: max(1px, 0.100cqw);
+    box-shadow: inset 0 0 0.500cqw -0.150cqw color-mix(in srgb, var(--hf-glow) 40%, transparent);
+  }
+
+  .hf-winner__reveal:hover,
+  .hf-winner__reveal:focus-visible {
+    box-shadow:
+      0 0 0.700cqw 0 color-mix(in srgb, var(--hf-glow) 55%, transparent),
+      inset 0 0 0.500cqw -0.150cqw color-mix(in srgb, var(--hf-glow) 40%, transparent);
+  }
+
+  .hf-winner__cover {
+    font-size: max(10px, 1.050cqw);
+  }
+
+  .hf-winner__payload {
+    gap: 0.900cqw;
+  }
+
+  .hf-winner__horse {
+    font-size: 1.650cqw;
+  }
+
+  .hf-winner__sp {
+    height: 1.710cqw;
+    padding: 0 0.700cqw;
+    border-width: max(1px, 0.085cqw);
+    font-size: 1.150cqw;
+  }
+
+  .hf-winner__by {
+    margin-top: 0.850cqw;
+    font-size: max(10.5px, 0.970cqw);
+  }
+
+  /* One way on, in the middle. */
+  .hero-fold__section--resulted .hf-actions {
+    grid-template-columns: minmax(0, 21.760cqw);
+    justify-content: center;
+  }
+
+  .hf-board--record .hf-board__ico {
+    width: 3.100cqw;
+  }
+
+  .hf-board--record .hf-board__text {
+    margin-left: 2.050cqw;
+  }
+}

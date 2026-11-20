@@ -71,7 +71,23 @@ const chamberWith = (variant) =>
 
 // The hero before the off. The page runs no script, so the clock is shown
 // as landing.js leaves it on a given tick; the id goes, as it repeats.
-const hero = extract(`<div${LF}        class="hero-fold"`, 'div').replace(' id="big-race-day"', '');
+// index.html keeps the hero's later states in <template>s after it (for
+// its #hero-pick-made / #hero-race-result preview); they are left out
+// here and shown as states of their own.
+const heroFold = extract(`<div${LF}        class="hero-fold"`, 'div');
+const laterStart = heroFold.indexOf("<!-- The hero's later states");
+const laterEnd = heroFold.lastIndexOf('</template>') + '</template>'.length;
+const hero = (heroFold.slice(0, laterStart).trimEnd() + LF + '      ' + heroFold.slice(laterEnd).trimStart())
+  .replace(' id="big-race-day"', '');
+/** A later state: its template's section in place of the hero's own. */
+const heroLater = (id) => {
+  const template = extract(`<template id="${id}">`, 'template');
+  const section = template.slice(template.indexOf('<section'), template.lastIndexOf('</section>') + '</section>'.length)
+    .replace(' id="big-race-day"', '');
+  const start = hero.indexOf('<section class="hero-fold__section"');
+  const end = hero.indexOf('</section>', start) + '</section>'.length;
+  return hero.slice(0, start) + section + hero.slice(end);
+};
 const heroAt = (classes, clock, markup = hero) => markup
   .replace('<p class="hf-race" data-race-iso="2026-08-25T15:45:00">', `<p class="hf-race hf-race--ticking${classes}">`)
   .replace('<span class="hf-cd-hours">--</span>:<span class="hf-cd-mins">--</span><span class="hf-race__secs">:<span class="hf-cd-secs">--</span></span>',
@@ -149,9 +165,19 @@ const STATES = [
     markup: heroAt(' hf-race--off', '00:00:00'),
   },
   {
+    name: 'Hero · your pick is in',
+    when: 'the member has a pick in the featured race: theirs against the Fox&rsquo;s, locked; landing.js ticks the clock',
+    markup: heroLater('hero-pick-made'),
+  },
+  {
     name: 'Hero · the race has been run',
-    when: 'hero_fold.html: {% if hero.result %} — the state every Saturday evening',
-    markup: partial('hero-resulted'),
+    when: '{% if hero.result %}: each side marked right or wrong, the winner behind its reveal (hf-tone-hit / -miss / -void)',
+    markup: heroLater('hero-race-result'),
+  },
+  {
+    name: 'Hero · the race has been run, winner revealed',
+    when: 'after a tap on the reveal (landing.js; remembered with the racecard&rsquo;s reveals)',
+    markup: heroLater('hero-race-result').replace('aria-pressed="false"', 'aria-pressed="true"'),
   },
   {
     name: 'AI Chamber · unanimous',
