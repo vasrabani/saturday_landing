@@ -2,7 +2,7 @@
    Today's Racing strip — landing page, above the hero fold.
 
    Two variants share one <aside>:
-     .today-strip__mobile   — single tappable row, hidden on tablet+
+     .today-strip__mobile   — compact Race of the Day card, hidden on tablet+
      .today-strip__desktop  — full 3-col layout, hidden on mobile
 
    The breakpoint at 700px keeps the desktop strip from collapsing
@@ -28,30 +28,35 @@
 }
 
 /* ── Mobile variant: layout Race of the Day card ≤700px ─────────── */
+/* Compact, so the hero comes up higher on a phone: the date as a small
+   column on the left, then the label and the time on one line and the
+   race's name on the next (cut short with an ellipsis, as the desktop
+   strip cuts its feature line). Where the label and the time do not fit
+   on one line (the narrowest phones) the time goes under the label. */
 .today-strip__mobile {
   display: none; /* enabled at ≤700px */
   flex-direction: column;
   align-items: stretch;
-  gap: 12px;
+  gap: 8px;
   /* Vertical only — .container supplies --page-gutter sides */
-  padding-top: 14px;
-  padding-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 8px;
   text-decoration: none;
   color: inherit;
 }
 
 .today-strip__m-card {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 14px 16px;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
   align-items: center;
-  padding: 14px 16px;
+  padding: 8px 12px 8px 10px;
   text-decoration: none;
   color: inherit;
-  border-radius: 16px;
+  border-radius: 12px;
   border: 1px solid rgba(212, 175, 55, 0.38);
   background: rgba(8, 12, 20, 0.55);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
 }
 .today-strip__m-card:active,
 .today-strip__m-card:focus-visible {
@@ -63,11 +68,13 @@
 .today-strip__m-date {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  min-width: 64px;
+  align-items: center;
+  min-width: 38px;
+  padding-right: 10px;
+  border-right: 1px solid rgba(212, 175, 55, 0.22);
 }
 .today-strip__m-kicker {
-  font-size: 11px;
+  font-size: 9px;
   font-weight: 800;
   letter-spacing: 0.16em;
   color: rgba(245, 242, 234, 0.88);
@@ -75,28 +82,31 @@
 }
 .today-strip__m-day {
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 52px;
+  font-size: 26px;
   font-weight: 700;
-  line-height: 0.92;
+  line-height: 0.95;
   color: #fff;
   letter-spacing: -0.02em;
 }
 
 .today-strip__m-race {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
   min-width: 0;
 }
 .today-strip__m-label {
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 800;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
   color: var(--c-gold);
 }
 .today-strip__m-when {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
+  white-space: nowrap;
   color: rgba(245, 242, 234, 0.92);
 }
 .today-strip__m-when strong {
@@ -105,10 +115,15 @@
   font-variant-numeric: tabular-nums;
 }
 .today-strip__m-title {
+  flex: 1 0 100%;
+  min-width: 0;
+  overflow: hidden;
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 1.3;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   color: rgba(245, 242, 234, 0.92);
 }
 
@@ -128,9 +143,14 @@
   filter: brightness(0) saturate(100%) invert(72%) sepia(54%) saturate(450%)
     hue-rotate(64deg) brightness(1.05);
 }
+/* Underlined, not told apart by colour alone: the two shades are too
+   close to read as a link (WCAG 1.4.1; axe link-in-text-block). */
 .today-strip__m-next a {
   color: rgba(245, 242, 234, 0.92);
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: rgba(212, 175, 55, 0.55);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
 .today-strip__m-next a:hover {
   color: var(--c-gold);
