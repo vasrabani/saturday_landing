@@ -131,7 +131,8 @@
     <link rel="stylesheet" href="static/css/chrome.css" />
     <link rel="stylesheet" href="static/voting/css/picks_budget.css" />
 
-    <link rel="preload" as="image" href="static/public/img/hero-fold-bg.webp" fetchpriority="high" />
+    <link rel="preload" as="image" href="static/public/img/hero-fox-banner.webp" media="(min-width: 1024px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="static/public/img/hero-stage-phone.webp" media="(max-width: 1023px)" fetchpriority="high" />
     <script>document.documentElement.classList.add('bg-defer');</script>
     <link rel="stylesheet" href="static/public/css/defer-bg.css" />
     <link rel="stylesheet" href="static/public/css/hero-fold.css" />
@@ -2846,450 +2847,135 @@
         <div class="hero-fold__aurora" aria-hidden="true"></div>
 
         <section class="hero-fold__section" id="big-race-day">
-          <div class="hero-fold__bg"></div>
-          <div class="hero-fold__vignette"></div>
+          <svg class="hf-icons" aria-hidden="true" focusable="false">
+            <symbol id="hf-arrow" viewBox="0 0 48 48">
+              <path d="M5 24h37M28 10l14 14-14 14" />
+            </symbol>
+            <symbol id="hf-chevron" viewBox="0 0 48 48">
+              <path d="m17 8 16 16-16 16" />
+            </symbol>
+          </svg>
 
           <div class="hero-fold__layout">
-            <div class="hero-fold__col hero-fold__col--countdown">
-              <div
-                class="hf-countdown hf-countdown--stage"
-                data-race-iso="2026-08-25T15:45:00"
-              >
-                <div class="hf-countdown__stage">
-                  <figure class="hf-countdown__portrait" aria-hidden="true">
-                    <picture>
-                      <source
-                        type="image/webp"
-                        srcset="
-                          static/public/img/mr_fox_host-sm.webp 340w,
-                          static/public/img/mr_fox_host.webp    720w
-                        "
-                        sizes="(max-width: 900px) 170px, 260px"
-                      />
-                      <source
-                        type="image/png"
-                        srcset="
-                          static/public/img/mr_fox_host-sm.webp 340w,
-                          static/public/img/mr_fox_host.webp    720w
-                        "
-                        sizes="(max-width: 900px) 170px, 260px"
-                      />
-                      <img
-                        src="static/public/img/mr_fox_host.webp"
-                        alt=""
-                        width="720"
-                        height="1080"
-                        loading="eager"
-                        fetchpriority="high"
-                      />
-                    </picture>
-                  </figure>
-                  <span class="hf-countdown__badge">
-                    <span class="hf-countdown__badge-top">
-                      <span class="hf-countdown__badge-name">MR FOX</span>
-                      <span class="hf-countdown__badge-dot" aria-hidden="true"
-                        >•</span
-                      >
-                    </span>
-                    <svg
-                      class="hf-countdown__badge-rule"
-                      width="16"
-                      height="1"
-                      viewBox="0 0 16 1"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M0.5 0.5H15"
-                        stroke="url(#hfBadgeRuleGrad)"
-                        stroke-linecap="round"
-                      />
-                      <defs>
-                        <linearGradient
-                          id="hfBadgeRuleGrad"
-                          x1="0.5"
-                          y1="1"
-                          x2="15"
-                          y2="1"
-                          gradientUnits="userSpaceOnUse"
-                        >
-                          <stop stop-color="#FAF7F0" />
-                          <stop
-                            offset="1"
-                            stop-color="#94928E"
-                            stop-opacity="0"
-                          />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                    <span class="hf-countdown__badge-role">TIPSTER</span>
-                  </span>
-                  <div class="hf-countdown__panel">
-                    <a
-                      href="https://www.saturday-racing.com/races/feature/"
-                      class="hf-countdown__race-name"
-                    >
-                      Portobello Cup Handicap Stakes (GBBPlus Race)
-                    </a>
-                    <span class="hf-countdown__label">Race Countdown</span>
-                    <div class="hf-countdown__digits">
-                      <div class="hf-cd-unit">
-                        <span class="hf-cd-num hf-cd-days">--</span>
-                        <span class="hf-cd-lbl">DAYS</span>
-                      </div>
-                      <div class="hf-cd-unit">
-                        <span class="hf-cd-num hf-cd-hours">--</span>
-                        <span class="hf-cd-lbl">HRS</span>
-                      </div>
-                      <div class="hf-cd-unit">
-                        <span class="hf-cd-num hf-cd-mins">--</span>
-                        <span class="hf-cd-lbl">MIN</span>
-                      </div>
-                      <div class="hf-cd-unit">
-                        <span class="hf-cd-num hf-cd-secs">--</span>
-                        <span class="hf-cd-lbl">SEC</span>
-                      </div>
-                    </div>
-                    <span class="hf-countdown__sub"
-                      >Until the off · Musselburgh 15:45</span
-                    >
-                  </div>
-                </div>
-              </div>
-              <a
-                href="https://www.saturday-racing.com/news/"
-                class="hf-countdown__news"
-                aria-label="Latest news on the Fox's Wire"
-              >
-                  <span class="hf-countdown__news-flag" aria-hidden="true">
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M2.66992 14.6601V2.66308C2.66992 2.45329 2.76875 2.25575 2.93667 2.12988C3.62927 1.61072 4.47167 1.33008 5.33742 1.33008C7.33805 1.33008 8.6718 2.66308 10.2276 2.66308C11.1168 2.66308 11.7986 2.48534 12.2729 2.12988C12.475 1.97841 12.7454 1.95404 12.9713 2.06694C13.1972 2.17984 13.3399 2.41063 13.3399 2.66308V9.32808C13.3399 9.53786 13.2411 9.73541 13.0732 9.86128C12.3806 10.3804 11.5382 10.6611 10.6724 10.6611C8.6718 10.6611 7.33805 9.32808 5.33742 9.32808C4.35319 9.3281 3.4035 9.69068 2.66992 10.3465" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </span>
-                <span class="hf-countdown__news-kicker">Latest News</span>
-                <span class="hf-countdown__news-sep" aria-hidden="true"
-                  >|</span
-                >
-                <span class="hf-countdown__news-title"
-                  >Portobello Cup Handicap Stakes…</span
-                >
-                <span class="hf-countdown__news-arrow" aria-hidden="true"
-                  >→</span
-                >
-              </a>
-            </div>
+            <div class="hero-fold__bg"></div>
 
-            <div class="hero-fold__col hero-fold__col--title">
-              <div class="hf-emblem-row">
-                <div class="hf-emblem-row__copy">
-                  <div class="hf-race-reveal__eyebrow hf-race-reveal__eyebrow--pill">
-                    <span class="hf-race-reveal__eyebrow-rule" aria-hidden="true"></span>
-                    <span class="hf-race-reveal__eyebrow-row">
-                      <span class="hf-race-reveal__eyebrow-ico" aria-hidden="true"></span>
-                      <span>THIS SATURDAY</span>
-                    </span>
-                  </div>
-                  <div class="hf-race-reveal__name">
-                    Portobello Cup Handicap Stakes (GBBPlus Race)
-                  </div>
-                </div>
-                <a
-                  class="pick6 pick6--compact"
-                  href="https://www.saturday-racing.com/races/pick6/"
-                  data-pick6-emblem
-                  aria-label="Pick six horses across the card and duel Mr Fox"
-                >
-                  <span class="pick6__stamp" aria-hidden="true">CHALLENGE</span>
-                  <span class="pick6__num">6</span>
-                  <span class="pick6__body">
-                    <span class="pick6__lbl">Pick Six</span>
-                    <span class="pick6__vs">
-                      <span class="pick6__vs-word">vs</span>
-                      <span class="pick6__fox-glyph" aria-hidden="true">🦊</span>
-                      <span class="pick6__vs-foe">The Fox</span>
-                    </span>
-                  </span>
-                </a>
-              </div>
+            <div class="hf-stage" aria-hidden="true"></div>
 
-              <div class="hf-race-reveal">
-                <div class="hf-race-reveal__meta">
-                  <span class="hf-meta-pill hf-meta-pill--flat">FLAT</span>
-                  <span>Musselburgh</span>
-                  <span class="hf-race-reveal__sep">·</span>
-                  <a
-                    href="https://www.saturday-racing.com/races/feature/"
-                    class="hf-race-reveal__time"
-                    >15:45</a
-                  >
-                  <span class="hf-race-reveal__sep">·</span>
-                  <span
-                    class="hf-race-reveal__status hf-race-reveal__status--today"
-                    >Race day</span
-                  >
-                  <span class="hf-race-reveal__sep">·</span>
-                  <span class="hf-meta-runners">
-                    <img
-                      class="hf-meta-ico"
-                      src="static/public/img/icons/runners.svg"
-                      alt=""
-                      width="14"
-                      height="14"
-                      aria-hidden="true"
-                    />
-                    11 runners
-                  </span>
-                  <span class="hf-race-reveal__sep">·</span>
-                  <span>£10,468</span>
-                </div>
-              </div>
-
-              <div class="hf-title-row">
-                <h1 class="hf-title hf-title--oneline">
-                  <span class="hf-title__lead">Can you beat</span>
-                  <span class="hf-title__fox">
-                    THE FOX?
-                    <img
-                      class="hf-title__fox-underline"
-                      src="static/public/img/fox-title-underline.webp"
-                      alt=""
-                      width="278"
-                      height="20"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </h1>
-                <a href="news/index.html" class="hf-news-pill"
-                  >Get latest news<span class="hf-news-pill__arrow" aria-hidden="true"
-                    >&rarr;</span
-                  ></a
-                >
-              </div>
-
-              <p class="hf-subtitle">
-                Pick one horse for this race. Take on Mr Fox, three AI engines,
-                and the Cubs — the result settles it.
+            <div class="hf-pitch">
+              <p class="hf-brand">
+                <span class="hf-brand__crest" aria-hidden="true">
+                  <span class="hf-brand__mark"></span>
+                </span>
+                <span class="hf-brand__name">Saturday Racing</span>
               </p>
 
-              <div class="picks-duel picks-duel--split" data-picks-duel>
-                <div class="picks-duel__inner">
-                  <article
-                    class="picks-duel__card picks-duel__card--fox"
-                    data-picks-half-href="https://www.saturday-racing.com/tipsters/mr-fox/"
-                    role="link"
-                    tabindex="0"
-                    aria-label="Fox pick"
-                  >
-                    <div class="picks-duel__card-top">
-                      <span class="picks-duel__who">
-                        <span
-                          class="picks-duel__dot picks-duel__dot--live"
-                        ></span>
-                        FOX PICKS
-                      </span>
-                      <span class="picks-duel__live-label">LIVE</span>
-                    </div>
-                    <h2 class="picks-duel__horse-name">Dark Cloud Rising</h2>
-                    <div class="picks-duel__card-actions">
-                      <span class="picks-duel__odds">7/2</span>
-                      <a
-                        href="https://www.saturday-racing.com/tipsters/mr-fox/"
-                        class="picks-duel__view-fox"
-                        >View Fox</a
-                      >
-                      <a
-                        href="https://www.saturday-racing.com/tipsters/mr-fox/"
-                        class="picks-duel__why"
-                      >
-                        <svg
-                          class="picks-duel__why-ico"
-                          width="14"
-                          height="14"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M3 2.5h7.5A1.5 1.5 0 0 1 12 4v9.5H4.5A1.5 1.5 0 0 1 3 12V2.5Z"
-                            stroke="currentColor"
-                            stroke-width="1.2"
-                          />
-                          <path
-                            d="M5.5 5h5M5.5 7.5h5M5.5 10h3"
-                            stroke="currentColor"
-                            stroke-width="1.2"
-                            stroke-linecap="round"
-                          />
-                        </svg>
-                        READ WHY
-                        <span aria-hidden="true">→</span>
-                      </a>
-                    </div>
-                  </article>
-
-                  <div class="picks-duel__divider" aria-hidden="true">
-                    <span class="picks-duel__vs-badge"
-                      ><span class="picks-duel__vs-text">VS</span></span
-                    >
-                  </div>
-
-                  <article
-                    class="picks-duel__card picks-duel__card--cubs"
-                    data-picks-half-href="https://www.saturday-racing.com/cubs/"
-                    role="link"
-                    tabindex="0"
-                    aria-label="Cubs pick"
-                  >
-                    <div class="picks-duel__card-top">
-                      <span class="picks-duel__who picks-duel__who--cubs">
-                        <span
-                          class="picks-duel__dot picks-duel__dot--open"
-                        ></span>
-                        CUBS PICK
-                      </span>
-                      <span
-                        class="picks-duel__live-label picks-duel__live-label--cubs"
-                        >OPEN</span
-                      >
-                    </div>
-                    <h2 class="picks-duel__horse-name">Voting Open</h2>
-                    <div class="picks-duel__card-actions">
-                      <span class="picks-duel__chip picks-duel__chip--cubs">
-                        <svg
-                          width="12"
-                          height="12"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          aria-hidden="true"
-                        >
-                          <circle
-                            cx="8"
-                            cy="5.5"
-                            r="2.5"
-                            stroke="currentColor"
-                            stroke-width="1.2"
-                          />
-                          <path
-                            d="M3.5 13.5c.8-2.2 2.4-3.3 4.5-3.3s3.7 1.1 4.5 3.3"
-                            stroke="currentColor"
-                            stroke-width="1.2"
-                            stroke-linecap="round"
-                          />
-                        </svg>
-                        Be first
-                      </span>
-                      <a
-                        href="https://www.saturday-racing.com/pick/"
-                        class="picks-duel__sub picks-duel__sub--cta"
-                        >Join the Pack <span aria-hidden="true">→</span></a
-                      >
-                    </div>
-                    <a
-                      class="picks-duel__racecard"
-                      href="https://www.saturday-racing.com/races/feature/"
-                      >RACECARD <span aria-hidden="true">→</span></a
-                    >
-                  </article>
-                </div>
-              </div>
-
-              <div class="hf-switch" role="group" aria-label="Which race the hero shows">
-                <a
-                  class="hf-switch__opt is-active"
-                  href="https://www.saturday-racing.com/?hero=big_race"
-                  aria-current="true"
-                  >Big Race</a
+              <h1 class="hf-title">
+                <span class="hf-title__top">Can you</span>
+                <span class="hf-title__big"
+                  >beat the <span class="hf-title__gold">Fox?</span></span
                 >
+              </h1>
+
+              <p class="hf-subtitle">
+                <span>One featured race. One prediction.</span>
+                <span>Your chance to beat the AI.</span>
+              </p>
+
+              <div class="hf-duel">
                 <a
-                  class="hf-switch__opt"
-                  href="https://www.saturday-racing.com/?hero=bet_of_day"
-                  >Bet of the Day</a
+                  class="hf-duel__card hf-duel__card--fox"
+                  href="https://www.saturday-racing.com/tipsters/mr-fox/"
                 >
+                  <span class="hf-duel__ico hf-duel__ico--fox" aria-hidden="true"></span>
+                  <span class="hf-duel__id">
+                    <span class="hf-duel__name">The Fox</span>
+                    <span class="hf-duel__role">AI selection</span>
+                  </span>
+                </a>
+
+                <span class="hf-duel__vs" aria-hidden="true"
+                  ><span class="hf-duel__vs-text">VS</span></span
+                >
+
+                <a
+                  class="hf-duel__card hf-duel__card--cubs"
+                  href="https://www.saturday-racing.com/cubs/"
+                >
+                  <span class="hf-duel__ico hf-duel__ico--cubs" aria-hidden="true"></span>
+                  <span class="hf-duel__id">
+                    <span class="hf-duel__name">The Cubs</span>
+                    <span class="hf-duel__role">Community selection</span>
+                  </span>
+                </a>
               </div>
 
               <div class="hf-ctas">
                 <a
                   href="https://www.saturday-racing.com/races/feature/"
-                  class="btn btn-primary btn--lg"
-                  >Join Free<span class="cta-dash-tail"> — Pick Your Horse</span> →</a
+                  class="btn btn-primary btn--lg hf-ctas__pick"
                 >
-                <a
-                  href="https://www.saturday-racing.com/demo/"
-                  class="btn btn-ghost hf-ctas__tour"
-                >
-                  <span class="hf-ctas__tour-inner">
-                    <svg
-                      class="hf-ctas__tour-icon"
-                      width="12"
-                      height="13"
-                      viewBox="0 0 12 13"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M1 2.20248C0.999876 1.77196 1.22312 1.37424 1.58527 1.15979C1.94742 0.945337 2.39318 0.946897 2.7539 1.16388L9.74911 5.36998C10.1084 5.58487 10.3296 5.98051 10.33 6.40867C10.3304 6.83683 10.1098 7.23287 9.75086 7.44839L2.7539 11.6557C2.39318 11.8727 1.94742 11.8742 1.58527 11.6598C1.22312 11.4453 0.999876 11.0476 1 10.6171V2.20248Z"
-                        stroke="currentColor"
-                        stroke-opacity="0.9"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                    Take the 60-second tour
-                  </span>
+                  <span class="hf-ctas__label">Pick your horse</span>
+                  <svg class="hf-ctas__arrow" viewBox="0 0 48 48" aria-hidden="true">
+                    <use href="#hf-arrow" />
+                  </svg>
                 </a>
               </div>
-
-              <ul class="hf-facts" aria-label="Race detail">
-                <li class="hf-facts__item">
-                  <span class="hf-facts__num">11</span>
-                  <span class="hf-facts__lbl">Runners</span>
-                </li>
-                <li class="hf-facts__item">
-                  <span class="hf-facts__num">&pound;10,468</span>
-                  <span class="hf-facts__lbl">Prize fund</span>
-                </li>
-                <li class="hf-facts__item">
-                  <span class="hf-facts__num">Vegasmile</span>
-                  <span class="hf-facts__lbl">Favourite &middot; 10/11</span>
-                </li>
-                <li class="hf-facts__item">
-                  <span class="hf-facts__num">1/5</span>
-                  <span class="hf-facts__lbl">Each-way, 3 places</span>
-                </li>
-                <li class="hf-facts__item hf-facts__item--link">
-                  <a class="hf-facts__link" href="https://www.saturday-racing.com/pinsticker/">
-                    <span class="hf-facts__num">The Pin</span>
-                    <span class="hf-facts__lbl">Stick it on one &rarr;</span>
-                  </a>
-                </li>
-                <li class="hf-facts__item hf-facts__item--pick6">
-                  <a class="hf-facts__link" href="https://www.saturday-racing.com/races/pick6/">
-                    <span class="hf-facts__num">Pick 6</span>
-                    <span class="hf-facts__lbl">Six races, one shot &rarr;</span>
-                  </a>
-                </li>
-              </ul>
-
-              <a
-                href="https://www.saturday-racing.com/gamble-aware/"
-                class="hf-gamble-aware hf-gamble-aware--after-cta"
-              >
-                <svg
-                  class="hf-gamble-aware__shield"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  aria-hidden="true"
-                >
-                  <use href="#nav-shield-check" />
-                </svg>
-                <span>Play responsibly · BeGambleAware.org</span>
-              </a>
             </div>
+
+            <nav class="hf-explore" aria-label="Explore Saturday Racing">
+              <a
+                class="hf-explore__link hf-explore__link--racing"
+                href="https://www.saturday-racing.com/races/"
+              >
+                <span class="hf-explore__ico" aria-hidden="true"></span>
+                <span class="hf-explore__text">
+                  <span class="hf-explore__name">Today&rsquo;s Racing</span>
+                  <span class="hf-explore__note">Racecards, odds &amp; results</span>
+                </span>
+                <svg class="hf-explore__go" viewBox="0 0 48 48" aria-hidden="true">
+                  <use href="#hf-chevron" />
+                </svg>
+              </a>
+              <a
+                class="hf-explore__link hf-explore__link--ai"
+                href="https://www.saturday-racing.com/ai/tools/"
+              >
+                <span class="hf-explore__ico" aria-hidden="true"></span>
+                <span class="hf-explore__text">
+                  <span class="hf-explore__name">AI Intelligence</span>
+                  <span class="hf-explore__note">Analysis, models &amp; insights</span>
+                </span>
+                <svg class="hf-explore__go" viewBox="0 0 48 48" aria-hidden="true">
+                  <use href="#hf-chevron" />
+                </svg>
+              </a>
+              <a
+                class="hf-explore__link hf-explore__link--cubs"
+                href="https://www.saturday-racing.com/cubs/"
+              >
+                <span class="hf-explore__ico" aria-hidden="true"></span>
+                <span class="hf-explore__text">
+                  <span class="hf-explore__name">Cubs Community</span>
+                  <span class="hf-explore__note">Challenges &amp; leaderboards</span>
+                </span>
+                <svg class="hf-explore__go" viewBox="0 0 48 48" aria-hidden="true">
+                  <use href="#hf-chevron" />
+                </svg>
+              </a>
+              <a
+                class="hf-explore__link hf-explore__link--record"
+                href="https://www.saturday-racing.com/news/honest-record/"
+              >
+                <span class="hf-explore__ico" aria-hidden="true"></span>
+                <span class="hf-explore__text">
+                  <span class="hf-explore__name">The Honest Record</span>
+                  <span class="hf-explore__note">Every pick. Every result.</span>
+                </span>
+                <svg class="hf-explore__go" viewBox="0 0 48 48" aria-hidden="true">
+                  <use href="#hf-chevron" />
+                </svg>
+              </a>
+            </nav>
           </div>
         </section>
 

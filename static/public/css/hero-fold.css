@@ -1,15 +1,61 @@
 /*
  * hero-fold.css
- * Self-contained styles for the landing page hero section.
+ * The landing page hero: "Can you beat the Fox?"
  * Partial: public/templates/public/components/hero_fold.html
  *
- * Layout strategy:
- *   Mobile  : single column, countdown hidden, title shown
- *   768px+  : two columns — countdown LEFT, title RIGHT
- *   No CSS `order` tricks. Countdown is DOM-first so it's
- *   naturally column 1 without any reordering.
+ * The hero is drawn to a picture, and is built the way a picture scales:
+ * as one composition. .hero-fold__layout is a size container, and every
+ * length inside it is in cqw (a hundredth of its width), so the whole of
+ * it grows and shrinks together and keeps its proportions.
+ *
+ * Two compositions, each from one side of the window to the other:
+ *   Up to 1023px  the phone's. A hundred cqw is the window's width (741px
+ *                 in the phone drawing). Mr Fox stands beside the headline
+ *                 with the racing behind it; the duel, the button and the
+ *                 four ways in run down the page under them.
+ *   1024px up     the banner's, 1755 by 896 in the drawing, laid out
+ *                 exactly as the drawing is. Mr Fox in his gold frame on
+ *                 the left, the racing on the right, the four ways in
+ *                 across the foot. It is drawn at the size that keeps its
+ *                 button on the first screen; in a window wider than that,
+ *                 the drawing's sky carries on past its two sides
+ *                 (hero-sky-west, hero-sky-east) to the window's edges.
+ *
+ * Pictures. Mr Fox, his frame, the skies and the racing are the drawings'
+ * own, cut out of them (hero-fox-banner, hero-race-dusk, hero-stage-phone
+ * .webp), so each sits at a place and size given in the drawing's own
+ * measure. The sky past the banner's sides is the banner's own too,
+ * carried on from its two edges. The small marks (the lockup's horse, the
+ * fox's head, the cubs, the four signs) are traced from the banner and
+ * used as masks (img/icons/hero-*.svg).
+ *
+ * Type. The banner's headline is Playfair Display, the site's display
+ * face, upright and slanted here (its own italic has swash capitals). The
+ * drawings' labels are a condensed sans; the site's sans, DM Sans, has no
+ * condensed cut, so a label is set at the drawing's height and narrowed
+ * to the drawing's width (--hf-x).
  * ─────────────────────────────────────────────────────────
  */
+
+/* ── TOKENS ────────────────────────────────────────────── */
+
+.hero-fold {
+  /* The drawings' own colours. Their gold is warmer than the site's. */
+  --hf-gold-lit: #fbd66c;
+  --hf-gold: #f2b833;
+  --hf-line: #ffe9a8;
+  --hf-rule: #9c804e;
+  --hf-glow: #f09a1c;
+  --hf-red: #e2271c;
+  --hf-ink: #04080b;
+  --hf-panel: #0a0a06;
+  --hf-soft: #e9ecee;
+  --hf-metal: linear-gradient(180deg, #f4dc81 0%, #f2c963 30%, #e7b54b 62%, #d79f37 100%);
+  --hf-sign: linear-gradient(180deg, #fbce58, #f1bc48);
+  /* What stands above the hero besides the nav and the tour banner: the
+     day's strip (today-strip.css), 89px tall from 1024px. */
+  --hf-above: 89px;
+}
 
 /* ── SHELL ─────────────────────────────────────────────── */
 
@@ -17,1375 +63,1153 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  /* Fill the visible viewport on load so The Battle section never
-     peeks above the fold. `dvh` tracks mobile browser chrome
-     (iOS Safari URL bar, Android address bar) — falls back to `vh`.
-     Subtracts the masthead, the live-updates ticker (fixed at
-     viewport bottom on every breakpoint), AND the cover-flag band
-     (~60px) so the dark hero section is exactly the visible
-     viewport minus those chrome rows. */
-  min-height: calc(
-    100vh - var(--nav-h) - 40px - 60px - env(safe-area-inset-bottom)
+  /* The first screen's height less what is above the hero (the masthead,
+     the tour banner when it shows, the day's strip) and the live-updates
+     ticker fixed at the foot of the window. `dvh` tracks mobile browser
+     chrome (iOS Safari URL bar, Android address bar) — falls back to
+     `vh`. */
+  --hf-room: calc(
+    100vh - var(--nav-h) - var(--banner-h) - var(--hf-above) - 40px -
+      env(safe-area-inset-bottom)
   );
-  min-height: calc(
-    100dvh - var(--nav-h) - 40px - 60px - env(safe-area-inset-bottom)
-  );
+  min-height: var(--hf-room);
 }
 
-/* Flex column + center so content distributes vertically — tall
-   viewports don't leave a dead band between CTAs and the ticker. */
+@supports (height: 100dvh) {
+  .hero-fold {
+    --hf-room: calc(
+      100dvh - var(--nav-h) - var(--banner-h) - var(--hf-above) - 40px -
+        env(safe-area-inset-bottom)
+    );
+  }
+}
+
+/* The composition stands at the top of whatever the window gives the
+   hero, and runs from one side of it to the other. */
 .hero-fold__section {
   position: relative;
   overflow: hidden;
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  background: linear-gradient(180deg, var(--hf-ink), #02090b);
 }
 
-/* ── Latest-news pill ─────────────────────────────────────────
-   Classy gold-on-navy chip in the top-right of the hero. Solid
-   gold (not gradient — gradients flash on streaming render and
-   look less editorial); deep navy text; subtle dark-gold border
-   for definition against the dark hero background.
-
-   Hidden under 720px — mobile drawer already has a News tab.
-   Above 720px, sits in the negative-space corner where the X
-   was marked in the user's mockup. */
-.hf-latest-news-pill {
+.hf-icons {
   position: absolute;
-  top: 20px;
-  right: 24px;
-  z-index: 5;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 7px 14px 7px 11px;
-  background: #e8c558;
-  border: 1px solid #8a6a14;
-  border-radius: 999px;
-  color: #0b2147;
-  text-decoration: none;
-  font-family: "DM Sans", "Inter", sans-serif;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  line-height: 1;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    0 2px 8px rgba(0, 0, 0, 0.25);
-  transition:
-    transform 180ms ease,
-    background 180ms ease,
-    box-shadow 180ms ease;
+  width: 0;
+  height: 0;
 }
-.hf-latest-news-pill:hover,
-.hf-latest-news-pill:focus-visible {
-  transform: translateY(-1px);
-  background: #f2d76e;
-  color: #0b2147;
-  text-decoration: none;
-  outline: none;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
-    0 4px 12px rgba(0, 0, 0, 0.3);
-}
-.hf-latest-news-pill__icon {
-  font-size: 13px;
-  line-height: 1;
-  filter: saturate(1.1);
-}
-.hf-latest-news-pill__text {
+
+.hero-fold__layout {
   position: relative;
-  top: 0.5px;
-}
-@media (max-width: 720px) {
-  /* Mobile — tighter sizing + smaller offset so the pill sits
-     cleanly in the top-right corner without crowding the
-     stacked hero (Fox portrait / countdown / race title). */
-  .hf-latest-news-pill {
-    top: 12px;
-    right: 12px;
-    padding: 5px 11px 5px 9px;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    gap: 5px;
-  }
-  .hf-latest-news-pill__icon {
-    font-size: 11px;
-  }
+  z-index: 1;
+  flex: 0 0 auto;
+  align-self: center;
+  width: 100%;
+  container-type: inline-size;
 }
 
 .hero-fold__bg {
   position: absolute;
   inset: 0;
-  /* Layer order top-to-bottom:
-       1. Optional course photo (--course-photo). When no rule sets
-          it, the var resolves to `none` and only the gradients +
-          midnight render.
-       2. Gold left-glow + wine right-glow (atmospheric).
-       3. Midnight base.
-     Photo sits at the BOTTOM of the stack so the gradients darken
-     it (combined with __vignette below for safe text contrast). */
-  background:
-    radial-gradient(
-      ellipse 70% 60% at 15% 50%,
-      rgba(212, 175, 55, 0.09),
-      transparent 55%
-    ),
-    radial-gradient(
-      ellipse 55% 50% at 85% 40%,
-      rgba(120, 30, 20, 0.22),
-      transparent 55%
-    ),
-    linear-gradient(180deg, rgba(11, 11, 15, 0.62), rgba(11, 11, 15, 0.78)),
-    var(--course-photo, none), var(--c-midnight);
-  background-size:
-    auto,
-    auto,
-    /* gradients */ auto,
-    /* darkening overlay */ cover,
-    /* course photo */ auto; /* midnight base */
-  background-position: center, center, center, center, center;
-  background-repeat: no-repeat;
   z-index: 0;
+  pointer-events: none;
 }
 
-/* ── COURSE BACKDROPS ─────────────────────────────────────
-   Per-course photo overrides. Add one rule per course you ship
-   a photo for. The hero falls back to the gradient when no rule
-   matches. See public/static/public/img/courses/README.md for
-   the file-naming + image-spec convention.
+/* ── STAGE · the picture ───────────────────────────────── */
 
-   The worked example to copy is step 2 of that README. Keep examples
-   containing url() there, not in a .css file: the production static
-   build resolves url() with a regex over the raw file and does not skip
-   comments, so a commented example pointing at a file that was never
-   shipped breaks collectstatic outright.
-   ───────────────────────────────────────────────────────── */
-
-/* Landing hero — cinematic race photo behind the fold */
-.hero-fold .hero-fold__bg {
-  --course-photo: url("../img/hero-fold-bg.webp");
-  background-position:
-    center,
-    center,
-    center,
-    center 40%,
-    center;
-}
-
-.hero-fold__vignette {
+.hf-stage {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    transparent 60%,
-    rgba(11, 11, 15, 0.85) 100%
-  );
   z-index: 1;
   pointer-events: none;
 }
 
-/* ── LAYOUT ────────────────────────────────────────────── */
+/* The phone's picture: Mr Fox on the left, the racing on the right, from
+   under the lockup down behind the duel. A background, not an <img>: it
+   is the stage's scenery, and the page head preloads it. */
+.hf-stage::before {
+  content: "";
+  position: absolute;
+  top: 11.336cqw;
+  left: 0;
+  width: 100cqw;
+  aspect-ratio: 741 / 680;
+  background: url("../img/hero-stage-phone.webp") center / 100% 100% no-repeat;
+}
 
-.hero-fold__layout {
+/* ── PITCH ─────────────────────────────────────────────── */
+
+.hf-pitch {
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
-  /* Same gutter as .container / upper sections; equal vertical inset. */
-  padding: var(--space-5) var(--page-gutter);
-  gap: var(--space-5);
-  max-width: var(--max-w);
-  margin: 0 auto;
-  width: 100%;
-  box-sizing: border-box;
 }
 
-/* ── COLUMNS ───────────────────────────────────────────── */
+/* ── PITCH · the lockup ────────────────────────────────── */
 
-/* Countdown column hidden on mobile — shown at 768px */
-.hero-fold__col--countdown {
-  display: none;
-}
-
-.hero-fold__col--title {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
-}
-
-/* Left: THIS SATURDAY + race title. Right: Pick 6 (top-aligned). */
-.hf-emblem-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: var(--space-4);
-}
-
-.hf-emblem-row__copy {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-3);
-  min-width: 0;
-  flex: 1 1 auto;
-}
-
-.hf-emblem-row .hf-race-reveal__eyebrow--pill {
-  margin-bottom: 0;
-  flex: 0 0 auto;
-}
-
-.hf-emblem-row .hf-race-reveal__name {
-  margin: 0;
-}
-
-.hf-emblem-row .pick6 {
-  flex: 0 0 auto;
-}
-
-/* Tablet / small laptop: the title column is too narrow to share a row
-   with the badge (at 820px it sat on THIS SATURDAY; at 1024px it squeezed
-   the race name to five lines). Give the badge its own row above, as on
-   mobile, until the column is wide enough. */
-@media (min-width: 768px) and (max-width: 1279px) {
-  .hf-emblem-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-5);
-    /* clear the CHALLENGE stamp that hangs above the badge */
-    margin-top: var(--space-3);
-  }
-
-  .hf-emblem-row .pick6 {
-    order: -1;
-  }
-}
-
-/* ── DESKTOP LAYOUT — 768px+ ───────────────────────────── */
-
-@media (min-width: 768px) {
-  .hero-fold__layout {
-    flex-direction: row;
-    align-items: stretch; /* balance left fox + right stack heights */
-    gap: var(--space-7);
-    padding: var(--space-6) var(--page-gutter);
-    /* Shared: fox→Latest News == picks→CTAs */
-    --hf-bottom-gap: 12px;
-  }
-
-  /* Countdown: layout fox card ~442px — keep news bar aligned */
-  .hero-fold__col--countdown {
-    display: flex;
-    flex-direction: column;
-    gap: var(--hf-bottom-gap);
-    flex: 0 0 442px;
-    width: 442px;
-  }
-
-  /* Title: fills remaining space; ends on CTAs (gamble out of flow) */
-  .hero-fold__col--title {
-    position: relative;
-    flex: 1 1 0%;
-    min-width: 0;
-    gap: var(--space-4);
-  }
-
-  /* Fox card grows with the taller right column */
-  .hero-fold__col--countdown .hf-countdown--stage {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-  .hero-fold__col--countdown .hf-countdown--stage .hf-countdown__stage {
-    aspect-ratio: auto;
-    flex: 1 1 auto;
-    min-height: 480px;
-  }
-
-  /* Picks absorb leftover height so CTAs sit on Latest News row */
-  .hero-fold__col--title .picks-duel--split {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-  .hero-fold__col--title .picks-duel--split .picks-duel__inner {
-    flex: 1 1 auto;
-    min-height: 0;
-    height: 100%;
-    align-items: stretch;
-  }
-  .hero-fold__col--title .picks-duel--split .picks-duel__card {
-    height: 100%;
-    min-height: 176px;
-  }
-
-  /*
-   * Parent gap is --space-4 (16px). Force picks→CTAs to --hf-bottom-gap (12px)
-   * so it matches fox→Latest News. Gamble disclaimer is positioned out of flow
-   * so it no longer lifts CTAs above the news bar (~19px offset in logs).
-   */
-  .hero-fold__col--title > .hf-ctas {
-    margin-top: calc(var(--hf-bottom-gap) - var(--space-4));
-    margin-bottom: 0;
-  }
-
-  .hero-fold__col--title > .hf-gamble-aware--after-cta {
-    position: absolute;
-    left: 0;
-    top: 100%;
-    margin-top: 8px;
-    z-index: 2;
-  }
-
-  /* Tighten space above “Can you beat THE FOX?” */
-  .hero-fold__col--title > .hf-title-row {
-    margin-top: -8px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .hero-fold__col--countdown {
-    flex: 0 0 442px;
-    width: 442px;
-  }
-
-  .hero-fold__layout {
-    padding: var(--space-7) var(--page-gutter);
-    gap: var(--space-8, 64px);
-  }
-}
-
-/* ── COUNTDOWN CARD — depth, breathe, race-day / urgent states ── */
-
-@keyframes hfCountdownBreathe {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 1px rgba(212, 175, 55, 0.06),
-      0 12px 40px rgba(0, 0, 0, 0.35),
-      0 0 28px rgba(212, 175, 55, 0.08);
-    border-color: rgba(212, 175, 55, 0.32);
-  }
-  50% {
-    box-shadow:
-      0 0 0 1px rgba(212, 175, 55, 0.12),
-      0 16px 48px rgba(0, 0, 0, 0.42),
-      0 0 42px rgba(212, 175, 55, 0.16);
-    border-color: rgba(212, 175, 55, 0.48);
-  }
-}
-
-@keyframes hfCountdownBreatheUrgent {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 1px rgba(255, 200, 120, 0.12),
-      0 14px 44px rgba(0, 0, 0, 0.4),
-      0 0 36px rgba(255, 190, 90, 0.14);
-    border-color: rgba(255, 200, 130, 0.45);
-  }
-  50% {
-    box-shadow:
-      0 0 0 1px rgba(255, 220, 150, 0.2),
-      0 18px 52px rgba(0, 0, 0, 0.48),
-      0 0 52px rgba(255, 200, 100, 0.22);
-    border-color: rgba(255, 210, 140, 0.6);
-  }
-}
-
-@keyframes hfTrophyFloat {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
-}
-
-@keyframes hfCdColonPulse {
-  0%,
-  100% {
-    opacity: 1;
-    color: rgba(212, 175, 55, 0.55);
-  }
-  50% {
-    opacity: 0.35;
-    color: rgba(212, 175, 55, 0.2);
-  }
-}
-
-@keyframes hfCdDigitFlip {
-  0% {
-    transform: scale(1);
-  }
-  40% {
-    transform: scale(0.88);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.hf-countdown {
+/* The racing horse between two gold hairlines; the name between two red
+   rules; and a red light under it. */
+.hf-brand {
   position: relative;
-  isolation: isolate;
-  background: var(--c-navy-card);
-  border: 1px solid rgba(212, 175, 55, 0.32);
-  border-radius: var(--r-lg);
-  padding: var(--space-6) var(--space-5) var(--space-5);
+  left: 0.200cqw;
+  align-self: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  gap: 0;
-  transform-style: preserve-3d;
-  transition: transform 0.14s ease-out;
-  animation: hfCountdownBreathe 6.5s ease-in-out infinite;
+  margin: 1.890cqw 0 0;
 }
 
-.hf-countdown::before {
+.hf-brand__crest {
+  position: relative;
+  left: 0.940cqw;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.950cqw;
+}
+
+.hf-brand__crest::before,
+.hf-brand__crest::after {
+  content: "";
+  width: 16.200cqw;
+  height: max(1px, 0.200cqw);
+  margin-bottom: 1.080cqw;
+  background: linear-gradient(90deg, transparent, #cda854 62%, #e3c46c);
+}
+
+.hf-brand__crest::after {
+  transform: scaleX(-1);
+}
+
+.hf-brand__mark {
+  display: block;
+  width: 9.717cqw;
+  aspect-ratio: 167 / 99;
+  background: var(--hf-metal);
+  -webkit-mask: url("../img/icons/hero-horse.svg") center / 100% 100% no-repeat;
+  mask: url("../img/icons/hero-horse.svg") center / 100% 100% no-repeat;
+}
+
+.hf-brand__name {
+  position: relative;
+  margin-top: 0.760cqw;
+  padding: 0 13.200cqw 0 13.600cqw;
+  font-size: 4.274cqw;
+  font-style: italic;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.059em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+}
+
+/* A red rule either side, thick by the name and running out to a point. */
+.hf-brand__name::before,
+.hf-brand__name::after {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    ellipse 90% 70% at 50% 0%,
-    rgba(212, 175, 55, 0.07),
-    transparent 58%
-  );
-  pointer-events: none;
-  z-index: 0;
+  top: calc(50% - 0.200cqw);
+  left: 0;
+  width: 10.400cqw;
+  height: max(2px, 0.540cqw);
+  background: linear-gradient(90deg, transparent, var(--hf-red) 36%);
+  -webkit-clip-path: polygon(0 50%, 100% 0, 100% 100%);
+  clip-path: polygon(0 50%, 100% 0, 100% 100%);
 }
 
-.hf-countdown > * {
-  position: relative;
-  z-index: 1;
+.hf-brand__name::before {
+  left: -0.270cqw;
+  width: 10.900cqw;
 }
 
-.hf-countdown--urgent {
-  animation: hfCountdownBreatheUrgent 3.2s ease-in-out infinite;
+.hf-brand__name::after {
+  right: -0.680cqw;
+  left: auto;
+  width: 10.900cqw;
+  transform: scaleX(-1);
 }
 
-.hf-countdown--race-day {
-  animation: none;
-  border-color: rgba(255, 235, 180, 0.55);
-  box-shadow:
-    0 0 0 1px rgba(255, 220, 150, 0.15),
-    0 18px 56px rgba(0, 0, 0, 0.45),
-    0 0 48px rgba(255, 210, 120, 0.2);
+.hf-brand::after {
+  content: "";
+  width: 58cqw;
+  height: max(1px, 0.270cqw);
+  margin-top: 1.300cqw;
+  border-radius: 1cqw;
+  background:
+    radial-gradient(ellipse 4% 160% at 50% 50%, #ffe2b8, transparent 100%),
+    linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--hf-red) 55%, transparent) 20%,
+      var(--hf-red) 36%,
+      #ffb16b 50%,
+      var(--hf-red) 64%,
+      color-mix(in srgb, var(--hf-red) 55%, transparent) 80%,
+      transparent
+    );
+  box-shadow: 0 0 0.900cqw 0 color-mix(in srgb, var(--hf-red) 45%, transparent);
 }
 
-.hf-countdown--race-day .hf-countdown__label {
-  color: rgba(255, 220, 170, 0.75);
-  letter-spacing: 0.26em;
-}
+/* ── PITCH · headline and standfirst ───────────────────── */
 
-/* Mr Fox host portrait — replaces the old gold trophy SVG. Anchors
-   the countdown card as Mr Fox's column: he greets the visitor and
-   personally fronts the upcoming race. Subtle float keeps him alive
-   without being distracting. */
-.hf-countdown__portrait {
-  margin: 0 auto var(--space-3);
-  width: 260px;
-  max-width: 78%;
-  animation: hfTrophyFloat 6s ease-in-out infinite;
-}
-.hf-countdown__portrait img {
-  display: block;
-  width: 100%;
-  height: auto;
-  /* Alpha-traced silhouette shadow (works if the PNG has a
-     transparent background — see optimisation pipeline). */
-  filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.55))
-    drop-shadow(0 -2px 22px rgba(212, 175, 55, 0.1));
-}
-@media (max-width: 900px) {
-  .hf-countdown__portrait {
-    width: 170px;
-  }
-}
-
-.hf-countdown__race-name {
-  font-family: var(--font-display);
-  font-size: 17px;
-  font-weight: 700;
-  color: var(--c-gold);
-  text-decoration: none;
-  letter-spacing: 0.02em;
-  margin-bottom: var(--space-2);
-  display: block;
-  transition: opacity 0.2s;
-}
-.hf-countdown__race-name:hover {
-  opacity: 0.8;
-}
-
-.hf-countdown__label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  color: var(--c-text-35);
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: var(--space-4);
-}
-
-/* Digits row */
-.hf-countdown__digits {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
-  margin-bottom: var(--space-3);
-}
-
-.hf-cd-unit {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 4px 7px 6px;
-  border-radius: 8px;
-  background: linear-gradient(
-    165deg,
-    rgba(255, 255, 255, 0.05) 0%,
-    rgba(255, 255, 255, 0.015) 100%
-  );
-  border: 1px solid rgba(212, 175, 55, 0.35);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 3px 10px rgba(0, 0, 0, 0.2);
-}
-
-/* Countdown digits sit BEHIND Mr Fox's stage now — dialled
-   back from 36px to 24px so the portrait, not the timer, is
-   the lead element of the card. Still scannable; no longer
-   shouts. */
-.hf-cd-num {
-  display: block;
-  font-family: var(--font-display);
-  font-size: 24px;
+/* Beside Mr Fox on a phone, in the drawing's leaning sans, each line
+   narrowed to the drawing's width. The pitch's own: the result state's
+   headline is an .hf-title too (see THE RACE HAS BEEN RUN). */
+.hf-pitch .hf-title {
+  margin: 5.440cqw 0 0 43.220cqw;
+  font-family: var(--font-body);
+  font-style: italic;
   font-weight: 900;
   line-height: 1;
-  min-width: 32px;
-  text-align: center;
-  color: var(--c-gold);
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
-  transform-origin: center center;
-  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+}
+
+.hf-title__top,
+.hf-title__big,
+.hf-title__gold {
+  display: block;
+  width: max-content;
+  transform-origin: 0 50%;
+}
+
+.hf-title__top {
+  margin-left: 1.630cqw;
+  font-size: 10.030cqw;
+  transform: scaleX(0.900);
+}
+
+.hf-title__big {
+  margin-top: -1.230cqw;
+  font-size: 10.800cqw;
+  transform: scaleX(0.927);
+}
+
+/* Inside the narrowed line already: only its own size and colour. DM
+   Sans has no italic, so the browser leans the upright letters, and
+   their tops lean out past the word's own box on the right. The gold is
+   that box's background showing through the letters (background-clip:
+   text) and stops at the box's edge, so without room there the question
+   mark's hook is cut off: the padding takes the box out under the lean,
+   and the margin gives the line its width back. */
+.hf-title__gold {
+  margin: -0.126em -0.300em 0 -0.060em;
+  padding-right: 0.300em;
+  font-size: 1.535em;
+  color: var(--hf-gold);
 }
 
 @supports (-webkit-background-clip: text) or (background-clip: text) {
-  .hf-cd-num {
-    background: linear-gradient(185deg, #fff8e0 0%, #e8c96a 42%, #a67c1c 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    text-shadow: none;
-  }
-
-  .hf-countdown--race-day .hf-cd-num {
-    background: linear-gradient(185deg, #ffffff 0%, #ffe9a8 40%, var(--c-gold) 100%);
+  .hf-title__gold {
+    background: linear-gradient(180deg, #f8dd80 14%, #f7cf69 40%, #f2c04a 60%, #e6ac30 82%, #dca028 96%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 }
-
-.hf-cd-num--flip {
-  animation: hfCdDigitFlip 0.32s cubic-bezier(0.34, 1.2, 0.64, 1);
-}
-
-.hf-cd-lbl {
-  display: block;
-  font-size: 9px;
-  color: rgba(245, 240, 230, 0.42);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-top: 4px;
-}
-
-.hf-cd-sep {
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 700;
-  margin-top: 4px;
-  align-self: flex-start;
-  animation: hfCdColonPulse 1s ease-in-out infinite;
-}
-
-.hf-countdown__sub {
-  font-size: 10px;
-  color: var(--c-text-35);
-  margin-bottom: var(--space-4);
-  display: block;
-}
-
-.hf-countdown__cta {
-  width: 100%;
-  justify-content: center;
-  min-height: 44px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hf-countdown,
-  .hf-countdown--urgent {
-    animation: none;
-  }
-
-  .hf-countdown__portrait {
-    animation: none;
-  }
-
-  .hf-cd-sep {
-    animation: none;
-    color: rgba(212, 175, 55, 0.4);
-  }
-
-  .hf-cd-num--flip {
-    animation: none;
-  }
-
-  .hf-countdown {
-    transition: none;
-  }
-}
-
-/* ── STAT GRID ─────────────────────────────────────────── */
-
-.hf-stat-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.hf-stat-box {
-  background: var(--c-navy-raised);
-  border: 1px solid var(--c-border-md);
-  border-radius: var(--r-md);
-  padding: var(--space-4);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 0.2s;
-}
-.hf-stat-box--link:hover {
-  border-color: rgba(212, 175, 55, 0.4);
-}
-
-.hf-stat-num {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--c-text-100);
-  line-height: 1;
-}
-
-.hf-stat-lbl {
-  font-size: 10px;
-  color: var(--c-text-35);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-weight: 600;
-}
-
-/* ── FAV CARD ──────────────────────────────────────────── */
-
-.hf-fav-card {
-  background: rgba(192, 57, 43, 0.08);
-  border: 1px solid rgba(192, 57, 43, 0.22);
-  border-radius: var(--r-md);
-  padding: var(--space-5);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.hf-fav-card__label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--c-red);
-  opacity: 0.8;
-}
-
-.hf-fav-card__horse {
-  font-family: var(--font-display);
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--c-text-100);
-  margin-top: 4px;
-}
-
-.hf-fav-card__horse-link {
-  color: inherit;
-  text-decoration: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  transition: border-color 0.2s;
-}
-.hf-fav-card__horse-link:hover {
-  border-color: var(--c-text-55);
-}
-
-.hf-fav-card__odds {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--c-red);
-}
-
-.hf-fav-card__note {
-  font-size: 11px;
-  color: var(--c-text-35);
-}
-
-/* ── PIN EMBLEM ────────────────────────────────────────────
-   Gold-on-dark deep-link to the cinematic Pinsticker preview
-   for THIS hero's race. Self-hides via the {% if hero.featured_pin %}
-   gate in hero_fold.html so we never render an empty box. */
-.hf-pin-emblem {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 14px;
-  margin: 12px 0 0;
-  padding: 12px 14px;
-  text-decoration: none;
-  color: var(--c-text-95, #f5f2e9);
-  background:
-    radial-gradient(
-      ellipse 80% 80% at 0% 50%,
-      rgba(212, 175, 55, 0.16) 0%,
-      transparent 65%
-    ),
-    linear-gradient(
-      135deg,
-      rgba(212, 175, 55, 0.06) 0%,
-      rgba(26, 34, 51, 0.3) 100%
-    );
-  border: 1px solid rgba(212, 175, 55, 0.45);
-  border-radius: var(--r-md, 10px);
-  transition:
-    transform 0.22s ease,
-    border-color 0.22s ease,
-    box-shadow 0.22s ease;
-  position: relative;
-  overflow: hidden;
-}
-.hf-pin-emblem:hover,
-.hf-pin-emblem:focus-visible {
-  transform: translateY(-1px);
-  border-color: var(--c-gold);
-  box-shadow: 0 10px 24px -12px rgba(212, 175, 55, 0.45);
-  outline: none;
-}
-.hf-pin-emblem__icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  flex-shrink: 0;
-  filter: drop-shadow(0 2px 6px rgba(212, 175, 55, 0.3));
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.hf-pin-emblem:hover .hf-pin-emblem__icon {
-  transform: rotate(-12deg) scale(1.08);
-}
-.hf-pin-emblem__icon svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-.hf-pin-emblem__body {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.hf-pin-emblem__eyebrow {
-  font-size: 9.5px;
-  font-weight: 800;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--c-gold);
-}
-.hf-pin-emblem__title {
-  font-family: "Playfair Display", Georgia, serif;
-  font-size: 15px;
-  font-weight: 800;
-  line-height: 1.15;
-  color: var(--c-text-95, #f5f2e9);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.hf-pin-emblem__arrow {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--c-gold);
-  line-height: 1;
-  transition: transform 0.22s ease;
-}
-.hf-pin-emblem:hover .hf-pin-emblem__arrow {
-  transform: translateX(3px);
-}
-
-/* ── GAMBLE AWARE ──────────────────────────────────────── */
-
-.hf-gamble-aware {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: var(--c-text-35);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.hf-gamble-aware:hover {
-  color: var(--c-text-55);
-}
-
-/* Mobile shows mobile version, desktop shows desktop version */
-.hf-gamble-aware--desktop {
-  display: none;
-}
-.hf-gamble-aware--mobile {
-  display: flex;
-}
-
-.hf-gamble-aware--after-cta {
-  display: inline-flex;
-  /* Parent .hero-fold__col--title uses gap: var(--space-4)=16px; cancel it so net = 5px */
-  margin-top: calc(5px - var(--space-4));
-  gap: 8px;
-}
-.hf-gamble-aware__shield {
-  flex-shrink: 0;
-  width: 14px;
-  height: 14px;
-  color: rgba(242, 236, 223, 0.55);
-}
-
-@media (min-width: 768px) {
-  .hf-gamble-aware--desktop {
-    display: flex;
-  }
-  .hf-gamble-aware--mobile {
-    display: none;
-  }
-}
-
-/* ── RACE REVEAL ───────────────────────────────────────── */
-
-.hf-race-reveal__eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--c-text-35);
-  margin-bottom: var(--space-3);
-}
-
-.hf-race-reveal__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--c-gold);
-  flex-shrink: 0;
-  animation: blink 1.4s ease-in-out infinite;
-}
-
-.hf-race-reveal__name {
-  font-family: var(--font-display);
-  font-size: clamp(22px, 5vw, 42px);
-  font-weight: 900;
-  color: var(--c-gold);
-  letter-spacing: -0.01em;
-  line-height: 1.05;
-  margin-bottom: var(--space-3);
-}
-
-.hf-race-reveal__meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--c-text-55);
-  margin-bottom: var(--space-4);
-}
-
-.hf-race-reveal__sep {
-  color: var(--c-text-35);
-}
-
-.hf-race-reveal__time {
-  color: var(--c-text-55);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.hf-race-reveal__time:hover {
-  color: var(--c-gold);
-}
-
-.hf-race-reveal__status {
-  font-weight: 600;
-  color: var(--c-text-75);
-}
-.hf-race-reveal__status--today {
-  color: #e07c4b;
-}
-
-/* ── TITLE ─────────────────────────────────────────────── */
-
-/* Flex row holding the marquee headline + the Pick 6 duel emblem.
-   On desktop the emblem floats to the right of the headline; on
-   mobile it stacks beneath so the title stays the visual anchor. */
-.hf-title-row {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
-}
-.hf-title-row .pick6 {
-  flex: 0 0 auto;
-  margin-bottom: 8px;
-}
-@media (max-width: 720px) {
-  .hf-title-row {
-    gap: 16px;
-  }
-  .hf-title-row .pick6 {
-    margin-bottom: 0;
-    align-self: flex-start;
-  }
-}
-
-.hf-title {
-  line-height: 0.95;
-  margin: 0;
-}
-
-/* "Get latest news": a gold pill to the Fox's Wire, to the right of the
-   headline (it wraps under it on a narrow screen). */
-.hf-title-row .hf-news-pill {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 6px;
-  padding: 11px 22px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #F0D57F 0%, #D4AF37 55%, #B8921D 100%);
-  box-shadow: inset 0 0 0 1px rgb(110 83 11 / 35%), 0 6px 18px -8px rgb(0 0 0 / 60%);
-  color: #1B1405;
-  font-size: 15px;
-  line-height: 20px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
-}
-.hf-title-row .hf-news-pill:hover {
-  filter: brightness(1.06);
-  transform: translateY(-1px);
-  box-shadow: inset 0 0 0 1px rgb(110 83 11 / 35%), 0 10px 22px -8px rgb(0 0 0 / 70%);
-}
-.hf-title-row .hf-news-pill:focus-visible {
-  outline: 2px solid #F0D57F;
-  outline-offset: 3px;
-}
-.hf-news-pill__arrow {
-  transition: transform 0.15s;
-}
-.hf-title-row .hf-news-pill:hover .hf-news-pill__arrow {
-  transform: translateX(3px);
-}
-@media (max-width: 720px) {
-  .hf-title-row .hf-news-pill {
-    margin-bottom: 0;
-    padding: 9px 18px;
-    font-size: 14px;
-  }
-}
-
-.hf-title__small {
-  display: block;
-  font-family: var(--font-display);
-  font-size: clamp(22px, 5vw, 42px);
-  font-weight: 700;
-  font-style: italic;
-  color: var(--c-text-75);
-  letter-spacing: -0.01em;
-}
-
-.hf-title__main {
-  display: block;
-  font-family: var(--font-display);
-  font-size: clamp(48px, 11vw, 96px);
-  font-weight: 900;
-  color: var(--c-gold);
-  letter-spacing: -0.03em;
-  line-height: 0.9;
-}
-
-/* ── SUBTITLE ──────────────────────────────────────────── */
 
 .hf-subtitle {
-  font-family: var(
-    --font-editorial,
-    "Iowan Old Style",
-    Charter,
-    Georgia,
-    serif
-  );
-  font-size: 17.5px;
-  line-height: 1.65;
-  color: var(--c-text-55);
-  max-width: 560px;
+  margin: -0.670cqw 0 0 43.700cqw;
+  font-size: 3.500cqw;
+  font-weight: 500;
+  line-height: 1.350;
+  color: #fff;
 }
 
-/* ── CTAs ──────────────────────────────────────────────── */
+.hf-subtitle span {
+  display: block;
+  width: max-content;
+  white-space: nowrap;
+  transform: scaleX(0.864);
+  transform-origin: 0 50%;
+}
+
+.hf-subtitle span + span {
+  transform: scaleX(0.886);
+}
+
+/* ── PITCH · the Fox against the Cubs ──────────────────── */
+
+.hf-duel {
+  display: grid;
+  grid-template-columns: 38.730cqw 12.550cqw 40.650cqw;
+  align-items: center;
+  margin: 23.478cqw 0 0 4.100cqw;
+}
+
+/* A card's ground leans the way the capitals do; what is on it stays
+   upright, each piece at the drawing's own place (--hf-ico-x, --hf-id-x). */
+.hf-duel__card {
+  position: relative;
+  isolation: isolate;
+  display: block;
+  height: 14.710cqw;
+  text-decoration: none;
+  color: #fff;
+}
+
+.hf-duel__card--fox {
+  --hf-ico-x: 5.900cqw;
+  --hf-ico-w: 8.600cqw;
+  --hf-id-x: 25.800cqw;
+  --hf-name-x: 0.662;
+  --hf-role-x: 0.875;
+  --hf-role-off: -0.200cqw;
+}
+
+.hf-duel__card--cubs {
+  --hf-ico-x: 3.860cqw;
+  --hf-ico-w: 9.720cqw;
+  --hf-id-x: 26.200cqw;
+  --hf-name-x: 0.659;
+  --hf-role-x: 0.675;
+  --hf-role-off: 0.540cqw;
+}
+
+/* The ground: a lit gold rule round a dark panel that takes the rule's
+   light at its top and foot. */
+.hf-duel__card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border: max(1.5px, 0.500cqw) solid var(--hf-line);
+  border-radius: 2.700cqw;
+  background: linear-gradient(180deg, #3d260a 0%, #0c0b07 30%, var(--hf-panel) 68%, #2a1c09 100%);
+  box-shadow:
+    0 0 0.600cqw 0 color-mix(in srgb, var(--hf-gold) 90%, transparent),
+    0 0 2.600cqw 0.300cqw color-mix(in srgb, var(--hf-glow) 70%, transparent),
+    inset 0 0 0.500cqw 0 color-mix(in srgb, var(--hf-gold) 70%, transparent),
+    inset 0 0 2.200cqw -0.300cqw color-mix(in srgb, var(--hf-glow) 45%, transparent);
+  transform: skewX(-12.500deg);
+  transition: box-shadow 0.25s;
+}
+
+.hf-duel__card:hover::before,
+.hf-duel__card:focus-visible::before {
+  box-shadow:
+    0 0 0.700cqw 0 color-mix(in srgb, var(--hf-gold) 95%, transparent),
+    0 0 3.600cqw 0.500cqw color-mix(in srgb, var(--hf-glow) 75%, transparent),
+    inset 0 0 0.600cqw 0 color-mix(in srgb, var(--hf-gold) 80%, transparent),
+    inset 0 0 2.800cqw -0.200cqw color-mix(in srgb, var(--hf-glow) 60%, transparent);
+}
+
+.hf-duel__card:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+.hf-duel__ico {
+  position: absolute;
+  top: 50%;
+  left: var(--hf-ico-x);
+  width: var(--hf-ico-w);
+  transform: translateY(-52%);
+}
+
+.hf-duel__ico--fox {
+  aspect-ratio: 139 / 145;
+  background: url("../img/icons/hero-fox.svg") center / 100% 100% no-repeat;
+}
+
+.hf-duel__ico--cubs {
+  aspect-ratio: 161 / 117;
+  background: linear-gradient(180deg, #f8c64a, #eba91f);
+  -webkit-mask: url("../img/icons/hero-cubs.svg") center / 100% 100% no-repeat;
+  mask: url("../img/icons/hero-cubs.svg") center / 100% 100% no-repeat;
+}
+
+/* Name over role, one centred on the other, the pair centred on a line
+   the drawing gives. */
+.hf-duel__id {
+  position: absolute;
+  top: 50%;
+  left: var(--hf-id-x);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.400cqw;
+  transform: translate(-50%, -50%);
+}
+
+.hf-duel__name,
+.hf-duel__role {
+  width: max-content;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hf-duel__name {
+  font-size: 5.400cqw;
+  font-style: italic;
+  font-weight: 1000;
+  transform: scaleX(var(--hf-name-x));
+}
+
+.hf-duel__role {
+  position: relative;
+  left: var(--hf-role-off);
+  font-size: max(9px, 3.090cqw);
+  font-weight: 500;
+  color: var(--hf-soft);
+  transform: scaleX(var(--hf-role-x));
+}
+
+.hf-duel__vs {
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  width: 8.435cqw;
+  height: 8.435cqw;
+  margin-top: 0.370cqw;
+  border: max(2px, 0.560cqw) solid var(--hf-red);
+  border-radius: 50%;
+  background: #130507;
+  box-shadow:
+    0 0 1.800cqw color-mix(in srgb, var(--hf-red) 70%, transparent),
+    inset 0 0 0.900cqw color-mix(in srgb, var(--hf-red) 45%, transparent);
+}
+
+.hf-duel__vs-text {
+  position: relative;
+  left: -0.400cqw;
+  font-size: 5.010cqw;
+  font-style: italic;
+  font-weight: 900;
+  line-height: 1;
+  color: #fff;
+  transform: scaleX(0.700);
+}
+
+/* ── PITCH · call to action ────────────────────────────── */
 
 .hf-ctas {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
-
-/* pill CTAs (override base .btn --r-sm)
-   Equal size for Join Free + tour (same padding / type / height / width). */
-.hf-ctas .btn,
-.hf-ctas .btn-primary,
-.hf-ctas .btn-ghost,
-.hf-ctas .hf-ctas__tour {
-  border-radius: 999px;
-  box-sizing: border-box;
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.2;
-  padding: 15px 28px;
-  min-height: 50px;
   justify-content: center;
-  flex: 1 1 0;
-  width: 100%;
-  min-width: 0;
+  margin-top: 3.580cqw;
 }
 
-@media (min-width: 600px) {
-  .hf-ctas {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-}
-
-/* ── DEMO LINK (tertiary CTA under the primary pair) ───────
-   Sits below .hf-ctas as a subtle but discoverable affordance —
-   gold-tinted text link with a play glyph and a sliding arrow.
-   Hover lifts the colour + nudges the arrow right. */
-.hf-demo-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  align-self: flex-start;
-  margin-top: 14px;
-  padding: 6px 12px 6px 10px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--c-gold);
-  background: rgba(212, 175, 55, 0.06);
-  border: 1px solid rgba(212, 175, 55, 0.22);
-  border-radius: 999px;
-  text-decoration: none;
-  transition:
-    background 0.16s,
-    border-color 0.16s,
-    color 0.16s;
-}
-.hf-demo-link:hover {
-  background: rgba(212, 175, 55, 0.14);
-  border-color: var(--c-gold);
-  color: var(--c-gold-lt);
-}
-.hf-demo-link:focus-visible {
-  outline: 2px solid var(--c-gold);
-  outline-offset: 3px;
-}
-.hf-demo-link__icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: var(--c-gold);
-  color: #14161f;
-  font-size: 9px;
-  line-height: 1;
-  padding-left: 2px; /* nudge the ▶ glyph to look optically centred */
-}
-.hf-demo-link__arrow {
-  font-size: 13px;
-  color: inherit;
-  transition: transform 0.18s;
-}
-.hf-demo-link:hover .hf-demo-link__arrow {
-  transform: translateX(3px);
-}
-
-/* ── TOUR BUTTON — outline idle; gold liquid rise on hover ── */
-.hf-ctas__tour {
-  --liquid: var(--c-gold);
-  --border-col: var(--c-gold);
+/* Over base.css's .btn: the drawing's gold pill, lit along its foot. */
+.hf-ctas .hf-ctas__pick {
   position: relative;
+  justify-content: flex-start;
+  gap: 2.480cqw;
+  width: 77.463cqw;
+  height: 12.146cqw;
+  padding: 0 0 0 10.155cqw;
   overflow: hidden;
-  isolation: isolate;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: transparent;
-  border: 1px solid var(--border-col);
-  color: #f2ecdf;
-  transition:
-    color 0.4s,
-    border-color 0.4s;
-}
-.hf-ctas__tour-inner {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.hf-ctas__tour::before {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: -25%;
-  width: 150%;
-  height: 200%;
-  background: var(--liquid);
-  border-radius: 45% 55% 0 0 / 25% 25% 0 0;
-  transform: translateY(100%);
-  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 0;
-  pointer-events: none;
-}
-.hf-ctas__tour:hover::before,
-.hf-ctas__tour:focus-visible::before {
-  transform: translateY(5%);
-  animation: sat-btn-liquid-wave 2.5s ease-in-out infinite 0.65s;
-}
-.hf-ctas__tour:hover,
-.hf-ctas__tour:focus-visible {
-  background: transparent;
-  border-color: var(--c-gold);
-  color: #06070d;
-  transform: none;
-  box-shadow: none;
-}
-.hf-ctas__tour-icon {
-  font-size: 15px;
-  line-height: 1;
-  flex-shrink: 0;
-  color: inherit;
-}
-@media (prefers-reduced-motion: reduce) {
-  .hf-ctas__tour::before {
-    transition: none;
-  }
-  .hf-ctas__tour:hover::before,
-  .hf-ctas__tour:focus-visible::before {
-    animation: none;
-    transform: translateY(0);
-  }
-}
-
-/* Quieter ghost — used for "View Full Racecard" so the tour and
-   the racecard browse aren't competing for the same eye-weight. */
-.btn-ghost--quiet {
-  opacity: 0.78;
-}
-.btn-ghost--quiet:hover {
-  opacity: 1;
-}
-
-/* ── COVER FLAG ────────────────────────────────────────
-   Slim horizontal band between the dark hero and the ticker
-   that holds the race-card preview data (decs, prize, market
-   favourite, Pin emblem) — moved out of the countdown column
-   so the hero reads as a magazine cover rather than a control
-   panel stacked 8 elements deep. */
-
-.hf-cover-flag {
+  border: 0;
+  border-radius: 99cqw;
   background: linear-gradient(
     180deg,
-    rgba(11, 14, 21, 0.96) 0%,
-    rgba(7, 9, 14, 0.99) 100%
+    #ffd858 0%,
+    #fecf4d 18%,
+    #f8c034 32%,
+    #eeae20 46%,
+    #de9b0c 60%,
+    #d38e03 74%,
+    #d38d01 86%,
+    #da9300 93%,
+    #f0b819 100%
   );
-  border-top: 1px solid rgba(212, 175, 55, 0.18);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
-  /* Sit between the hero section and the (fixed) ticker. */
-  position: relative;
-  z-index: 5;
-}
-.hf-cover-flag__inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  gap: 24px 36px;
-  padding: 18px var(--space-5);
+  box-shadow:
+    inset 0 0.270cqw 0.200cqw color-mix(in srgb, #fff 45%, transparent),
+    0 0.900cqw 2.800cqw -0.600cqw color-mix(in srgb, var(--hf-glow) 85%, transparent),
+    0 1.400cqw 3cqw color-mix(in srgb, #000 55%, transparent);
+  color: var(--c-midnight);
 }
 
-.hf-cover-flag__cell {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  min-width: 0;
-  color: rgba(255, 255, 255, 0.92);
-  text-decoration: none;
-  font-family: var(--font-body, "DM Sans", system-ui, sans-serif);
-}
-.hf-cover-flag__cell--link {
-  transition: opacity 0.18s ease;
-}
-.hf-cover-flag__cell--link:hover {
-  opacity: 0.85;
+.hf-ctas .hf-ctas__pick:hover,
+.hf-ctas .hf-ctas__pick:focus-visible {
+  background: linear-gradient(
+    180deg,
+    #ffd858 0%,
+    #fecf4d 18%,
+    #f8c034 32%,
+    #eeae20 46%,
+    #de9b0c 60%,
+    #d38e03 74%,
+    #d38d01 86%,
+    #da9300 93%,
+    #f0b819 100%
+  );
+  filter: brightness(1.070);
+  transform: none;
 }
 
-.hf-cover-flag__num {
-  font-family: var(--font-display, "Playfair Display", Georgia, serif);
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1.05;
-  color: var(--c-gold-lt);
-  letter-spacing: -0.01em;
+.hf-ctas__pick:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
 }
-.hf-cover-flag__lbl {
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+
+/* The light along the pill's foot. */
+.hf-ctas__pick::after {
+  content: "";
+  position: absolute;
+  right: 22%;
+  bottom: 0;
+  left: 22%;
+  height: 0.700cqw;
+  background: radial-gradient(
+    ellipse 50% 100% at 50% 100%,
+    #fff3c4 0%,
+    color-mix(in srgb, #ffd86a 70%, transparent) 40%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.hf-ctas__label {
+  font-size: 5.590cqw;
+  font-style: italic;
+  font-weight: 900;
+  line-height: 1;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+  transform: scaleX(0.969);
 }
 
-/* Market-favourite cell — horse + odds + trainer in a stack. */
-.hf-cover-flag__cell--fav {
-  min-width: 220px;
-}
-.hf-cover-flag__fav-horse {
-  font-family: var(--font-display, "Playfair Display", Georgia, serif);
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.15;
-  color: rgba(255, 255, 255, 0.95);
-}
-.hf-cover-flag__fav-link {
-  color: inherit;
-  text-decoration: none;
-}
-.hf-cover-flag__fav-link:hover {
-  color: var(--c-gold-lt);
-}
-.hf-cover-flag__fav-meta {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.55);
-}
-.hf-cover-flag__fav-meta strong {
-  color: var(--c-gold-lt);
-  font-weight: 700;
-  margin-right: 4px;
+.hf-ctas__arrow {
+  flex: 0 0 auto;
+  width: 5.340cqw;
+  height: 5.340cqw;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4.200;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.2s;
 }
 
-/* Pin emblem cell — right-most by default (pushed via margin-left auto). */
-.hf-cover-flag__cell--pin {
-  margin-left: auto;
+.hf-ctas__pick:hover .hf-ctas__arrow {
+  transform: translateX(0.900cqw);
+}
+
+/* ── FOUR WAYS IN ──────────────────────────────────────── */
+
+/* Rows on a phone, each with its chevron. */
+.hf-explore {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 1.500cqw;
+  margin: 3.640cqw 3.374cqw 4.200cqw 3.779cqw;
+}
+
+.hf-explore__link {
+  position: relative;
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 12px;
-  padding: 6px 14px 6px 10px;
-  background: rgba(212, 175, 55, 0.06);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  border-radius: 999px;
+  height: 13.090cqw;
+  padding: 0 2.900cqw 0 4.850cqw;
+  border: 1px solid color-mix(in srgb, #fff 34%, transparent);
+  border-radius: 1.900cqw;
+  background: #0c1214;
+  text-decoration: none;
+  color: #fff;
   transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease;
+    border-color 0.2s,
+    background 0.2s;
 }
-.hf-cover-flag__cell--pin:hover {
-  background: rgba(212, 175, 55, 0.14);
-  border-color: rgba(212, 175, 55, 0.6);
-  transform: translateY(-1px);
+
+.hf-explore__link:hover,
+.hf-explore__link:focus-visible {
+  border-color: var(--hf-line);
+  background: color-mix(in srgb, var(--hf-gold) 9%, #0c1214);
 }
-.hf-cover-flag__pin-icon {
-  display: inline-flex;
-  width: 22px;
-  height: 22px;
-  flex-shrink: 0;
+
+.hf-explore__link:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
-.hf-cover-flag__pin-icon svg {
-  width: 100%;
-  height: 100%;
+
+/* The first row takes the button's light along its top. */
+.hf-explore__link:first-child::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 16%;
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--hf-line) 50%, transparent);
+  box-shadow: 0 0 1.400cqw 0.100cqw color-mix(in srgb, var(--hf-glow) 70%, transparent);
+  pointer-events: none;
 }
-.hf-cover-flag__pin-body {
+
+/* A sign: one of the traced marks, in gold, centred in a box as wide as
+   the widest of them. */
+.hf-explore__ico {
+  flex: 0 0 auto;
+  width: 8.640cqw;
+  aspect-ratio: 129 / 124;
+  background: var(--hf-sign);
+  -webkit-mask: var(--hf-sign-mark) center / var(--hf-sign-w, 100%) auto no-repeat;
+  mask: var(--hf-sign-mark) center / var(--hf-sign-w, 100%) auto no-repeat;
+}
+
+.hf-explore__link--racing {
+  --hf-sign-mark: url("../img/icons/hero-calendar.svg");
+  --hf-sign-w: 86%;
+  --hf-name-x: 0.718;
+  --hf-note-x: 0.800;
+}
+
+.hf-explore__link--ai {
+  --hf-sign-mark: url("../img/icons/hero-brain.svg");
+  --hf-name-x: 0.759;
+  --hf-note-x: 0.833;
+}
+
+.hf-explore__link--cubs {
+  --hf-sign-mark: url("../img/icons/hero-trophy.svg");
+  --hf-name-x: 0.748;
+  --hf-note-x: 0.830;
+}
+
+.hf-explore__link--record {
+  --hf-sign-mark: url("../img/icons/hero-shield.svg");
+  --hf-sign-w: 90%;
+  --hf-name-x: 0.767;
+  --hf-note-x: 0.849;
+}
+
+.hf-explore__go {
+  flex: 0 0 auto;
+  width: 4.900cqw;
+  height: 4.900cqw;
+  fill: none;
+  stroke: var(--hf-gold);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hf-explore__text {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 1cqw;
   min-width: 0;
-}
-.hf-cover-flag__pin-title {
-  font-family: var(--font-display, "Playfair Display", Georgia, serif);
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.15;
-  color: rgba(255, 255, 255, 0.95);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 220px;
-}
-.hf-cover-flag__pin-arrow {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--c-gold-lt);
-  transition: transform 0.18s ease;
-}
-.hf-cover-flag__cell--pin:hover .hf-cover-flag__pin-arrow {
-  transform: translateX(2px);
+  margin-left: 6.200cqw;
 }
 
-@media (max-width: 768px) {
-  .hf-cover-flag__inner {
-    gap: 16px 22px;
-    padding: 14px var(--space-4);
+.hf-explore__name,
+.hf-explore__note {
+  width: max-content;
+  line-height: 1;
+  white-space: nowrap;
+  transform-origin: 0 50%;
+}
+
+.hf-explore__name {
+  font-size: 4.730cqw;
+  font-weight: 700;
+  transform: scaleX(var(--hf-name-x));
+}
+
+.hf-explore__note {
+  font-size: max(10px, 3.620cqw);
+  color: var(--hf-soft);
+  transform: scaleX(var(--hf-note-x));
+}
+
+/* ── THE BANNER — 1024px+ ──────────────────────────────── */
+
+@media (min-width: 1024px) {
+  /* The banner is drawn as wide as the window, unless that would put its
+     button under the first screen's foot: then it is drawn as wide as
+     keeps the button in (never under 960px; a window with room for the
+     whole banner past 1920px shows the whole of it). Drawn narrower than
+     the window it keeps the drawing's own layout, and the drawing's sky
+     carries on either side of it to the window's edges. */
+  .hero-fold {
+    --hf-soft: #d9dbdc;
+    --hf-fit-all: calc(var(--hf-room) * 1755 / 896);
+    --hf-fit-cta: calc(var(--hf-room) * 1755 / 703);
+    min-height: 0;
   }
-  .hf-cover-flag__num {
-    font-size: 18px;
+
+  .hero-fold__section {
+    background: linear-gradient(180deg, #020e14 0%, #0b0f11 50%, #000408 100%);
   }
-  .hf-cover-flag__cell--pin {
-    margin-left: 0;
-    width: 100%;
+
+  .hero-fold__layout {
+    width: clamp(
+      min(100%, 960px),
+      min(var(--hf-fit-cta), max(1920px, var(--hf-fit-all))),
+      100%
+    );
+    aspect-ratio: 1755 / 896;
   }
-  .hf-cover-flag__pin-title {
-    max-width: none;
-    white-space: normal;
+
+  /* The drawing's sky, carried on past its two sides: left of Mr Fox the
+     evening sky and the field under it, right of the racing the sky, the
+     stand's far wing, the crowd and the turf. Each runs 640 of the
+     drawing's pixels out (and 12 in, under the picture's edge, which is
+     the same pixels) and fades into the ground at its far end; the
+     section cuts whatever the window has no room for. One layer, under
+     both pictures. */
+  .hero-fold__bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -36.467cqw;
+    width: 172.934cqw;
+    aspect-ratio: 3035 / 896;
+    background:
+      url("../img/hero-sky-west.webp") left top / 21.483% 100% no-repeat,
+      url("../img/hero-sky-east.webp") right top / 21.483% 100% no-repeat;
+  }
+
+  /* The racing, where the drawing has it. */
+  .hero-fold__bg::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 71.909cqw;
+    width: 28.091cqw;
+    aspect-ratio: 493 / 896;
+    background: url("../img/hero-race-dusk.webp") center / 100% 100% no-repeat;
+  }
+
+  /* ── Stage: the evening sky, the gold frame and Mr Fox before it. ── */
+
+  .hf-stage::before {
+    top: 0;
+    left: 0;
+    width: 38.746cqw;
+    aspect-ratio: 680 / 896;
+    background-image: url("../img/hero-fox-banner.webp");
+  }
+
+  /* ── Pitch ── */
+
+  .hf-pitch {
+    align-items: center;
+    width: 45.870cqw;
+    margin-left: 33.470cqw;
+  }
+
+  /* The drawing does not stand its parts on one centre line: each is set
+     off from the pitch's centre by what the drawing shows (--hf-off). */
+  .hf-brand,
+  .hf-title__top,
+  .hf-title__big,
+  .hf-subtitle,
+  .hf-duel,
+  .hf-ctas {
+    position: relative;
+    left: var(--hf-off, 0);
+  }
+
+  .hf-brand {
+    --hf-off: -2.330cqw;
+    margin-top: 1.567cqw;
+  }
+
+  .hf-brand__crest {
+    left: 0.370cqw;
+    gap: 0.370cqw;
+  }
+
+  .hf-brand__crest::before,
+  .hf-brand__crest::after {
+    width: 8.260cqw;
+    height: max(1px, 0.085cqw);
+    margin-bottom: 0.370cqw;
+  }
+
+  .hf-brand__mark {
+    width: 4.758cqw;
+  }
+
+  .hf-brand__name {
+    margin-top: 0.290cqw;
+    padding: 0 6.040cqw;
+    font-size: 1.987cqw;
+    letter-spacing: 0.075em;
+    transform: scaleX(1.035);
+  }
+
+  .hf-brand__name::before,
+  .hf-brand__name::after {
+    top: calc(50% - 0.460cqw);
+    width: 4.730cqw;
+    height: max(2px, 0.230cqw);
+  }
+
+  .hf-brand__name::before {
+    left: 0.310cqw;
+  }
+
+  .hf-brand__name::after {
+    right: -0.085cqw;
+  }
+
+  .hf-brand::after {
+    width: 21.300cqw;
+    height: max(2px, 0.170cqw);
+    margin-top: 0.800cqw;
+    box-shadow: 0 0 0.600cqw 0.020cqw color-mix(in srgb, var(--hf-red) 60%, transparent);
+  }
+
+  /* The banner's headline: Playfair, upright, slanted, and narrowed to
+     the drawing's (its face is a narrower one). */
+  .hf-pitch .hf-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1.700cqw 0 0;
+    font-family: var(--font-display);
+    font-style: normal;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .hf-title__top,
+  .hf-title__big {
+    margin: 0;
+    transform-origin: 50% 50%;
+  }
+
+  @supports (-webkit-background-clip: text) or (background-clip: text) {
+    .hf-title__top,
+    .hf-title__big {
+      background: linear-gradient(180deg, #fff 58%, #e9e6e0 92%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hf-title__gold {
+      background: linear-gradient(180deg, #f8d56e 22%, #fbd570 40%, #f0c250 58%, #e7b74a 72%, #daa639 88%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+  }
+
+  .hf-title__top {
+    --hf-off: -1.620cqw;
+    font-size: 5.200cqw;
+    letter-spacing: 0.026em;
+    transform: skewX(-11deg);
+  }
+
+  .hf-title__big {
+    --hf-off: 0.060cqw;
+    margin-top: -0.900cqw;
+    font-size: 7.300cqw;
+    letter-spacing: -0.030em;
+    word-spacing: 0.060em;
+    transform: skewX(-11deg) scaleX(0.800);
+  }
+
+  /* Upright here (the line is slanted as a whole), so it needs none of
+     the phone's room for the lean. */
+  .hf-title__gold {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    font-size: 1em;
+  }
+
+  .hf-subtitle {
+    --hf-off: -0.650cqw;
+    margin: 0.756cqw 0 0;
+    font-size: 1.540cqw;
+    line-height: 1.3;
+    white-space: nowrap;
+    transform: scaleX(0.928);
+  }
+
+  .hf-subtitle span,
+  .hf-subtitle span + span {
+    display: inline;
+    transform: none;
+  }
+
+  .hf-duel {
+    --hf-off: 0.946cqw;
+    grid-template-columns: 19.088cqw 5.128cqw 20.684cqw;
+    margin: 2.033cqw 0 0;
+  }
+
+  .hf-duel__card {
+    height: 6.268cqw;
+  }
+
+  .hf-duel__card--fox {
+    --hf-ico-x: 2.877cqw;
+    --hf-ico-w: 3.960cqw;
+    --hf-id-x: 12.336cqw;
+    --hf-name-x: 0.669;
+    --hf-role-x: 0.906;
+    --hf-role-off: 0.142cqw;
+  }
+
+  .hf-duel__card--cubs {
+    --hf-ico-x: 2.051cqw;
+    --hf-ico-w: 4.587cqw;
+    --hf-id-x: 12.678cqw;
+    --hf-name-x: 0.681;
+    --hf-role-x: 0.750;
+    --hf-role-off: 0.641cqw;
+  }
+
+  .hf-duel__card::before {
+    border-width: max(1.5px, 0.142cqw);
+    border-radius: 1.030cqw;
+    box-shadow:
+      0 0 0.200cqw 0 color-mix(in srgb, var(--hf-gold) 85%, transparent),
+      0 0 0.950cqw 0.060cqw color-mix(in srgb, var(--hf-glow) 60%, transparent),
+      inset 0 0 0.200cqw 0 color-mix(in srgb, var(--hf-gold) 70%, transparent),
+      inset 0 0 0.900cqw -0.150cqw color-mix(in srgb, var(--hf-glow) 45%, transparent);
+  }
+
+  .hf-duel__card:hover::before,
+  .hf-duel__card:focus-visible::before {
+    box-shadow:
+      0 0 0.300cqw 0 color-mix(in srgb, var(--hf-gold) 95%, transparent),
+      0 0 1.500cqw 0.200cqw color-mix(in srgb, var(--hf-glow) 75%, transparent),
+      inset 0 0 0.250cqw 0 color-mix(in srgb, var(--hf-gold) 80%, transparent),
+      inset 0 0 1.200cqw -0.100cqw color-mix(in srgb, var(--hf-glow) 60%, transparent);
+  }
+
+  .hf-duel__id {
+    gap: 0.600cqw;
+  }
+
+  .hf-duel__name {
+    font-size: 2.579cqw;
+  }
+
+  .hf-duel__role {
+    font-size: 1.339cqw;
+  }
+
+  .hf-duel__vs {
+    left: -0.110cqw;
+    position: relative;
+    width: 3.818cqw;
+    height: 3.818cqw;
+    margin-top: 0;
+    border-width: max(2px, 0.200cqw);
+    box-shadow:
+      0 0 0.800cqw color-mix(in srgb, var(--hf-red) 70%, transparent),
+      inset 0 0 0.400cqw color-mix(in srgb, var(--hf-red) 45%, transparent);
+  }
+
+  .hf-duel__vs-text {
+    position: relative;
+    left: -0.120cqw;
+    font-size: 2.240cqw;
+    transform: scaleX(0.737);
+  }
+
+  .hf-ctas {
+    --hf-off: 0.490cqw;
+    margin-top: 2.108cqw;
+  }
+
+  .hf-ctas .hf-ctas__pick {
+    gap: 1.378cqw;
+    width: 31.510cqw;
+    height: 5.014cqw;
+    padding-left: 4.270cqw;
+    background: linear-gradient(
+      180deg,
+      #f6d46a 0%,
+      #fdd55c 7%,
+      #facc4e 22%,
+      #f6c038 36%,
+      #e8ac23 50%,
+      #d79814 64%,
+      #ca8a09 78%,
+      #c88809 86%,
+      #d2910a 94%,
+      #ca9b2f 100%
+    );
+    box-shadow:
+      inset 0 0.110cqw 0.080cqw color-mix(in srgb, #fff 45%, transparent),
+      0 0.400cqw 1.200cqw -0.250cqw color-mix(in srgb, var(--hf-glow) 85%, transparent),
+      0 0.600cqw 1.300cqw color-mix(in srgb, #000 55%, transparent);
+  }
+
+  .hf-ctas .hf-ctas__pick:hover,
+  .hf-ctas .hf-ctas__pick:focus-visible {
+    background: linear-gradient(
+      180deg,
+      #f6d46a 0%,
+      #fdd55c 7%,
+      #facc4e 22%,
+      #f6c038 36%,
+      #e8ac23 50%,
+      #d79814 64%,
+      #ca8a09 78%,
+      #c88809 86%,
+      #d2910a 94%,
+      #ca9b2f 100%
+    );
+  }
+
+  .hf-ctas__pick::after {
+    height: 0.300cqw;
+  }
+
+  .hf-ctas__label {
+    font-size: 2.339cqw;
+    transform: none;
+  }
+
+  .hf-ctas__arrow {
+    width: 2.190cqw;
+    height: 2.190cqw;
+  }
+
+  .hf-ctas__pick:hover .hf-ctas__arrow {
+    transform: translateX(0.400cqw);
+  }
+
+  /* ── Four ways in: one panel across the foot, hairlines between, each
+     column as wide as the drawing has it. ── */
+
+  .hf-explore {
+    grid-template-columns: 405.5fr 416.5fr 422.5fr 393.5fr;
+    gap: 0;
+    height: 6.268cqw;
+    margin: 3.419cqw 2.564cqw 0 4.103cqw;
+    border: max(1px, 0.100cqw) solid var(--hf-rule);
+    border-top-color: #edd781;
+    border-radius: 1.120cqw;
+    background: linear-gradient(180deg, #040708, #010609);
+  }
+
+  /* The light on the panel's top rule. */
+  .hf-explore::before {
+    content: "";
+    position: absolute;
+    top: -0.550cqw;
+    right: 1%;
+    left: 30%;
+    height: 1.100cqw;
+    background:
+      radial-gradient(ellipse 34% 50% at 42% 50%, color-mix(in srgb, #ffcf7a 55%, transparent), transparent),
+      radial-gradient(ellipse 9% 50% at 96% 50%, color-mix(in srgb, #ffcf7a 45%, transparent), transparent);
+    pointer-events: none;
+  }
+
+  .hf-explore__link {
+    height: auto;
+    padding: 0 0 0 var(--hf-pad);
+    border: 0;
+    border-radius: 0;
+    background: none;
+  }
+
+  .hf-explore__link:first-child {
+    border-radius: 1cqw 0 0 1cqw;
+  }
+
+  .hf-explore__link:last-child {
+    border-radius: 0 1cqw 1cqw 0;
+  }
+
+  .hf-explore__link:hover,
+  .hf-explore__link:focus-visible {
+    background: color-mix(in srgb, var(--hf-gold) 9%, transparent);
+  }
+
+  .hf-explore__link:first-child::after {
+    content: none;
+  }
+
+  .hf-explore__link + .hf-explore__link::before {
+    content: "";
+    position: absolute;
+    top: 16.500%;
+    bottom: 18%;
+    left: 0;
+    width: 1px;
+    background: #52565a;
+  }
+
+  .hf-explore__link--racing {
+    --hf-pad: 2.393cqw;
+    --hf-sign-w: 100%;
+    --hf-sign-box: 3.305cqw;
+    --hf-sign-ratio: 116 / 113;
+    --hf-gap: 1.937cqw;
+    --hf-name-x: 0.780;
+    --hf-note-x: 0.800;
+  }
+
+  .hf-explore__link--ai {
+    --hf-pad: 2.792cqw;
+    --hf-sign-box: 3.675cqw;
+    --hf-sign-ratio: 129 / 119;
+    --hf-gap: 1.766cqw;
+    --hf-name-x: 0.780;
+    --hf-note-x: 0.800;
+  }
+
+  .hf-explore__link--cubs {
+    --hf-pad: 2.650cqw;
+    --hf-sign-box: 3.447cqw;
+    --hf-sign-ratio: 121 / 114;
+    --hf-gap: 2.051cqw;
+    --hf-name-x: 0.780;
+    --hf-note-x: 0.800;
+  }
+
+  .hf-explore__link--record {
+    --hf-pad: 2.678cqw;
+    --hf-sign-w: 100%;
+    --hf-sign-box: 3.048cqw;
+    --hf-sign-ratio: 107 / 126;
+    --hf-gap: 2.108cqw;
+    --hf-name-x: 0.780;
+    --hf-note-x: 0.800;
+  }
+
+  .hf-explore__ico {
+    position: relative;
+    top: -0.230cqw;
+    width: var(--hf-sign-box);
+    aspect-ratio: var(--hf-sign-ratio);
+  }
+
+  .hf-explore__go {
+    display: none;
+  }
+
+  .hf-explore__text {
+    position: relative;
+    top: -0.100cqw;
+    gap: 0.480cqw;
+    margin-left: var(--hf-gap);
+  }
+
+  .hf-explore__name {
+    font-size: 1.655cqw;
+  }
+
+  .hf-explore__note {
+    font-size: 1.267cqw;
+  }
+}
+
+/* ── REDUCED MOTION ────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .hf-duel__card::before,
+  .hf-ctas__arrow,
+  .hf-explore__link {
+    transition: none;
   }
 }
 
@@ -1415,6 +1239,102 @@
 
 .page-landing {
   padding-bottom: calc(40px + env(safe-area-inset-bottom));
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   THE RACE HAS BEEN RUN (hero_fold.html: {% if hero.result %})
+
+   Not redesigned: the result's markup (partials/hero-resulted.html)
+   and its look are the template's own, as they were. Its column, its
+   title row and its one-line headline took their styles from rules it
+   shared with the old hero; those rules are below as they were, with
+   the same values, in the same order, kept to the result's column so
+   the hero above cannot pick them up. :where() adds no weight, so they
+   cascade exactly as they did.
+═══════════════════════════════════════════════════════════════ */
+
+.hero-fold__col--title:where(.hero-fold__col--resulted) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  /* Fills the room beside the countdown column. */
+  .hero-fold__col--title:where(.hero-fold__col--resulted) {
+    position: relative;
+    flex: 1 1 0%;
+    min-width: 0;
+    gap: var(--space-4);
+  }
+
+  /* Tighten the space above the headline. */
+  .hero-fold__col--title:where(.hero-fold__col--resulted) > .hf-title-row {
+    margin-top: -8px;
+  }
+}
+
+/* The headline, with the "Get latest news" pill to its right. */
+:where(.hero-fold__col--resulted) .hf-title-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+@media (max-width: 720px) {
+  :where(.hero-fold__col--resulted) .hf-title-row {
+    gap: 16px;
+  }
+}
+
+:where(.hero-fold__col--resulted) .hf-title {
+  line-height: 0.95;
+  margin: 0;
+}
+
+/* "Get latest news": a gold pill to the Fox's Wire, to the right of the
+   headline (it wraps under it on a narrow screen). */
+:where(.hero-fold__col--resulted) .hf-title-row .hf-news-pill {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+  padding: 11px 22px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #F0D57F 0%, var(--c-gold) 55%, #B8921D 100%);
+  box-shadow: inset 0 0 0 1px rgb(110 83 11 / 35%), 0 6px 18px -8px rgb(0 0 0 / 60%);
+  color: #1B1405;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+}
+:where(.hero-fold__col--resulted) .hf-title-row .hf-news-pill:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: inset 0 0 0 1px rgb(110 83 11 / 35%), 0 10px 22px -8px rgb(0 0 0 / 70%);
+}
+:where(.hero-fold__col--resulted) .hf-title-row .hf-news-pill:focus-visible {
+  outline: 2px solid #F0D57F;
+  outline-offset: 3px;
+}
+:where(.hero-fold__col--resulted) .hf-news-pill__arrow {
+  transition: transform 0.15s;
+}
+:where(.hero-fold__col--resulted) .hf-title-row .hf-news-pill:hover .hf-news-pill__arrow {
+  transform: translateX(3px);
+}
+@media (max-width: 720px) {
+  :where(.hero-fold__col--resulted) .hf-title-row .hf-news-pill {
+    margin-bottom: 0;
+    padding: 9px 18px;
+    font-size: 14px;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1721,7 +1641,7 @@
   background: rgba(212, 175, 55, 0.08);
 }
 .hf-result__verdict-item--link:focus-visible {
-  outline: 2px solid #d4af37;
+  outline: 2px solid var(--c-gold);
   outline-offset: 2px;
 }
 .hf-result__verdict-item--link:hover .hf-result__verdict-pick {
@@ -1730,7 +1650,7 @@
 }
 .hf-result__verdict-read {
   flex-shrink: 0;
-  color: #d4af37;
+  color: var(--c-gold);
   opacity: 0.85;
 }
 .hf-result__verdict-item--link:hover .hf-result__verdict-read { opacity: 1; }
@@ -1782,327 +1702,32 @@
   }
 }
 
-/* ═══════════════════════════════════════════════════════════════
-    HERO STAGE — countdown card + VS cards + meta
-═══════════════════════════════════════════════════════════════ */
+/* ── RACE REVEAL ───────────────────────────────────────── */
 
-.hf-countdown--stage {
-  padding: 0;
-  overflow: hidden;
-  width: 100%;
-  box-sizing: border-box;
-  align-self: stretch;
-  border-radius: 24px;
-  border-color: #d8b14a;
-  background-color: #060f15;
-  box-shadow:
-    0 0 0 1px rgba(216, 177, 74, 0.12),
-    0 22px 48px rgba(0, 0, 0, 0.4);
-  animation: none;
-}
-
-.hf-countdown--stage::before {
-  display: none;
-}
-
-/* Relative stage + absolute fox/panel (not position:fixed — that sticks to viewport) */
-.hf-countdown--stage .hf-countdown__stage {
-  position: relative;
-  isolation: isolate;
-  aspect-ratio: 3 / 4;
-  width: 100%;
-  min-height: 0;
-  overflow: hidden;
-  background-color: #071018;
-  background-image: url("../img/fox-card-bg.webp");
-  background-size: cover;
-  background-position: center 35%;
-}
-
-.hf-countdown--stage .hf-countdown__portrait {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  width: auto;
-  max-width: none;
-  margin: 0;
-  border-radius: 0;
-  overflow: hidden;
-  animation: none;
-}
-
-.hf-countdown--stage .hf-countdown__portrait img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  aspect-ratio: unset;
-  object-fit: cover;
-  object-position: center 8%;
-  transform: scale(1.12);
-  transform-origin: center 20%;
-  filter: none;
-}
-
-.hf-countdown--stage .hf-countdown__badge {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  z-index: 3;
+.hf-race-reveal__eyebrow {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  color: #e8c558;
+  align-items: center;
+  gap: 8px;
   font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.55);
-  line-height: 1.15;
-}
-.hf-countdown--stage .hf-countdown__badge-top {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-.hf-countdown--stage .hf-countdown__badge-name {
-  color: #e8c558;
-}
-.hf-countdown--stage .hf-countdown__badge-dot {
-  color: #e8c558;
-  font-size: 8px;
-  line-height: 1;
-}
-.hf-countdown--stage .hf-countdown__badge-rule {
-  display: block;
-  width: 42px;
-  height: 1px;
-  overflow: visible;
-}
-.hf-countdown--stage .hf-countdown__badge-role {
-  color: rgba(250, 247, 240, 0.92);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-}
-
-.hf-countdown--stage .hf-countdown__panel {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 16px 14px 14px;
-  border-radius: 11px 20px 24px 24px;
-  background: #060f15;
-  border: 1px solid #d8b14a;
-  border-bottom: 0;
-  backdrop-filter: none;
-}
-
-.hf-countdown--stage .hf-countdown__race-name,
-.hf-countdown--stage .hf-countdown__label,
-.hf-countdown--stage .hf-countdown__digits,
-.hf-countdown--stage .hf-countdown__sub {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.hf-countdown--stage .hf-countdown__race-name {
-  margin-bottom: 0;
-  font-size: 15px;
-  line-height: 1.25;
-}
-
-.hf-countdown--stage .hf-countdown__label {
-  margin-bottom: 0;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.hf-countdown--stage .hf-countdown__digits {
-  gap: 8px;
-  justify-content: center;
-  width: 100%;
-}
-
-.hf-countdown--stage .hf-cd-sep {
-  display: none;
-}
-
-.hf-countdown--stage .hf-cd-unit {
-  min-width: 54px;
-  flex: 1 1 0;
-  padding: 8px 6px 7px;
-  border: 1px solid rgba(212, 175, 55, 0.4);
-  background: rgba(0, 0, 0, 0.35);
-  border-radius: 8px;
-}
-
-.hf-countdown--stage .hf-cd-num {
-  font-size: 22px;
-  color: #e8c558;
-  background: none;
-  -webkit-background-clip: unset;
-  background-clip: unset;
-}
-
-.hf-countdown--stage .hf-cd-lbl {
-  margin-top: 4px;
-  font-size: 8px;
-  letter-spacing: 0.14em;
-  color: rgba(232, 197, 88, 0.7);
-}
-
-.hf-countdown--stage .hf-countdown__sub {
-  margin-top: 0;
-  color: rgba(255, 255, 255, 0.65);
-}
-
-.hf-countdown__news {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 0;
-  padding: 15px 20px !important;
-  border: 1px solid #d8b14a;
-  border-radius: 999px;
-  background: rgba(216, 177, 74, 0.14);
-  text-decoration: none;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 14px;
-  font-weight: 600;
-  transition:
-    border-color 0.15s,
-    background 0.15s;
-  width: 100%;
-  box-sizing: border-box;
-}
-.hf-countdown__news:hover {
-  border-color: rgba(216, 177, 74, 0.75);
-  background: rgba(216, 177, 74, 0.2);
-}
-.hf-countdown__news-flag {
-  color: #4ade80;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  width: 16px;
-  height: 16px;
-}
-.hf-countdown__news-flag img,
-.hf-countdown__news-flag svg {
-  display: block;
-  width: 16px;
-  height: 16px;
-}
-.hf-countdown__news-kicker {
-  color: #fff;
   font-weight: 700;
-  white-space: nowrap;
-  font-size: 14px;
-}
-.hf-countdown__news-sep {
-  display: none;
-}
-.hf-countdown__news-title {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: rgba(255, 255, 255, 0.5);
-  font-weight: 400;
-  margin-left: auto;
-  text-align: right;
-  max-width: 55%;
-}
-.hf-countdown__news-arrow {
-  color: var(--c-gold);
-  flex-shrink: 0;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-text-35);
+  margin-bottom: var(--space-3);
 }
 
-.hf-race-reveal__eyebrow--pill {
-  display: inline-flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  width: fit-content;
-  padding: 5px 12px 5px 10px;
-  border: 1px solid rgba(240, 206, 107, 0.55);
-  border-radius: 999px;
-  margin-bottom: 14px;
-  color: #f0ce6b;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  background: transparent;
-}
-/* bordered chip; no top rule */
-.hf-race-reveal__eyebrow-rule {
-  display: none;
-}
-.hf-race-reveal__eyebrow-row {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-/* 6×6 gold dot (not calendar) */
-.hf-race-reveal__eyebrow-ico {
-  display: block;
-  width: 6px;
-  height: 6px;
-  flex-shrink: 0;
-  border-radius: 50%;
-  background: #f0ce6b;
-  -webkit-mask: none;
-  mask: none;
-}
-.hf-race-reveal__star {
+.hf-race-reveal__dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: linear-gradient(90deg, #d8b14a, #f0ce6b);
+  background: var(--c-gold);
   flex-shrink: 0;
-  font-size: 0;
-  line-height: 0;
-  color: transparent;
+  animation: blink 1.4s ease-in-out infinite;
 }
 
-.hf-race-reveal__name {
-  text-transform: none;
-  font-weight: 700;
-}
+/* ── The race has been run · the one-line headline ─────── */
 
-.hf-meta-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-}
-.hf-meta-pill--flat {
-  background: rgba(212, 175, 55, 0.2);
-  color: #e8c558;
-  border: 1px solid rgba(212, 175, 55, 0.35);
-}
-
-.hf-meta-runners {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-.hf-meta-ico {
-  color: var(--c-gold);
-}
-
-.hf-title--oneline {
+:where(.hero-fold__col--resulted) .hf-title--oneline {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -2116,10 +1741,10 @@
   line-height: 1.08;
   white-space: nowrap;
 }
-.hf-title__lead {
+:where(.hero-fold__col--resulted) .hf-title__lead {
   display: inline;
 }
-.hf-title__fox {
+:where(.hero-fold__col--resulted) .hf-title__fox {
   position: relative;
   display: inline-block;
   color: transparent;
@@ -2132,593 +1757,552 @@
   padding-bottom: 0.12em;
   font-size: 1.48em;
 }
-.hf-title__fox-underline {
-  position: absolute;
-  left: -2%;
-  right: -2%;
-  bottom: -0.18em;
-  width: 104%;
-  height: auto;
-  max-height: 0.45em;
-  object-fit: fill;
-  pointer-events: none;
-  mix-blend-mode: screen;
-  user-select: none;
-}
-
-/* VS cards — two separate articles, not one shared frame */
-.picks-duel--split {
-  border: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  overflow: visible !important;
-  border-radius: 0 !important;
-  isolation: auto;
-}
-
-.picks-duel--split .picks-duel__inner {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
-  position: relative;
-  box-shadow: none !important;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-}
-
-.picks-duel--split .picks-duel__card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-height: 176px;
-  padding: 16px 16px 18px;
-  border-radius: 18px;
-  overflow: hidden;
-  isolation: isolate;
-  background-color: #0a0c12;
-  background-size: cover;
-  background-position: center;
-  box-shadow: none;
-  box-sizing: border-box;
-}
-
-.picks-duel--split .picks-duel__card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  background: rgba(0, 0, 0, 0.45);
-  pointer-events: none;
-}
-
-/* Hover tint layer — opacity animates cleanly */
-.picks-duel--split .picks-duel__card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.28s ease;
-}
-
-.picks-duel--split .picks-duel__card > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* Article-level border + radius (layout Frame 231)
-   BG on the article itself (not a child img) — bleed photo edge-to-edge */
-.picks-duel--split .picks-duel__card--fox {
-  border: 1px solid rgba(240, 206, 107, 0.33);
-  border-radius: 18px;
-  min-height: 224px;
-  background-color: #0a0c12;
-  background-image: url("../img/picks-fox-card-bg-bleed.webp");
-  background-repeat: no-repeat;
-  background-position: center 35%;
-  background-size: cover;
-}
-.picks-duel--split .picks-duel__card--fox::after {
-  background: linear-gradient(
-    135deg,
-    rgba(46, 230, 197, 0.42) 0%,
-    rgba(46, 230, 197, 0.16) 38%,
-    rgba(8, 20, 18, 0.28) 68%,
-    rgba(4, 10, 12, 0.45) 100%
-  );
-}
-.picks-duel--split .picks-duel__card--fox:hover::after,
-.picks-duel--split .picks-duel__card--fox:focus-within::after {
-  opacity: 1;
-}
-
-/* Article-level border + radius (layout Frame 187) */
-.picks-duel--split .picks-duel__card--cubs {
-  border: 1px solid rgba(216, 177, 74, 0.35);
-  border-radius: 20px;
-  min-height: 224px;
-  padding: 15px 23px 14px 28px;
-  background-color: #0a0c12;
-  background-image: url("../img/picks-cubs-card-bg-bleed.webp");
-  background-repeat: no-repeat;
-  background-position: right 40%;
-  background-size: cover;
-  box-shadow: -1px 0 6px rgba(224, 124, 75, 0.35);
-}
-.picks-duel--split .picks-duel__card--cubs::after {
-  background: linear-gradient(
-    135deg,
-    rgba(224, 90, 70, 0.44) 0%,
-    rgba(224, 124, 75, 0.18) 38%,
-    rgba(20, 8, 8, 0.28) 68%,
-    rgba(10, 4, 4, 0.45) 100%
-  );
-}
-.picks-duel--split .picks-duel__card--cubs:hover::after,
-.picks-duel--split .picks-duel__card--cubs:focus-within::after {
-  opacity: 1;
-}
-
-.picks-duel--split .picks-duel__card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.picks-duel--split .picks-duel__horse-name {
-  margin: 0;
-  font-family: var(--font-display, "Playfair Display", Georgia, serif);
-  font-size: clamp(22px, 2.4vw, 28px);
-  font-weight: 700;
-  color: #faf7f0;
-  line-height: 1.15;
-}
-
-.picks-duel--split .picks-duel__card-actions {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-items: flex-start;
-  gap: 10px;
-  margin-top: auto;
-}
-.picks-duel--split .picks-duel__card--cubs .picks-duel__card-actions {
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px;
-}
-
-/* Button radii — layout: pills for badges/CTAs; soft radius for odds / READ WHY */
-.picks-duel--split .picks-duel__odds {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 32px;
-  padding: 5px 11px;
-  border-radius: 11px;
-  background: rgba(12, 34, 25, 0.79);
-  border: 1px solid #6fbf8c;
-  color: #6fbf8c;
-  font-weight: 800;
-  font-size: 14px;
-}
-.picks-duel--split .picks-duel__view-fox {
-  color: #f0ce6b;
-  text-decoration: none;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-}
-.picks-duel--split .picks-duel__view-fox:hover {
-  color: #fff;
-  text-decoration: underline;
-}
-.picks-duel--split .picks-duel__why {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: 0;
-  min-height: 34px;
-  padding: 8px 14px;
-  border-radius: 15px;
-  border: 0.5px solid #8a763e;
-  color: #f0ce6b;
-  text-decoration: none;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  background: rgba(12, 34, 25, 0.79);
-}
-.picks-duel--split .picks-duel__why:hover {
-  background: rgba(74, 222, 128, 0.12);
-}
-.picks-duel--split .picks-duel__why-ico {
-  flex-shrink: 0;
-}
-.picks-duel--split .picks-duel__who {
-  color: #6fbf8c;
-  letter-spacing: 0.16em;
-}
-.picks-duel--split .picks-duel__who--cubs {
-  color: #e07c4b;
-}
-.picks-duel--split .picks-duel__dot--live {
-  width: 8px;
-  height: 8px;
-  background: #6fbf8c;
-}
-.picks-duel--split .picks-duel__dot--open {
-  width: 8px;
-  height: 8px;
-  background: #e07c4b;
-}
-.picks-duel--split .picks-duel__live-label {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 24px;
-  padding: 4px 14px;
-  border-radius: 999px;
-  background: rgba(12, 34, 25, 0.79);
-  border: 1px solid #6fbf8c;
-  color: #6fbf8c;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-}
-.picks-duel--split .picks-duel__live-label--cubs {
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(250, 247, 240, 0.22);
-  color: #e07c4b;
-}
-
-.picks-duel--split .picks-duel__chip--cubs {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 33px;
-  padding: 6px 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(242, 236, 223, 0.15);
-  color: rgba(242, 236, 223, 0.7);
-  background: transparent;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.picks-duel--split .picks-duel__sub--cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 33px;
-  padding: 6px 12px;
-  border-radius: 15px;
-  border: 1px solid rgba(250, 247, 240, 0.52);
-  background: rgba(63, 23, 14, 0.24);
-  color: rgba(242, 236, 223, 0.85);
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 13px;
-}
-.picks-duel--split .picks-duel__sub--cta:hover {
-  color: #fff;
-  border-color: rgba(250, 247, 240, 0.75);
-}
-
-.picks-duel--split .picks-duel__racecard {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 4px;
-  margin-left: 0;
-  min-height: 37px;
-  padding: 9px 16px;
-  border-radius: 15px;
-  border: 1px solid rgba(250, 247, 240, 0.52);
-  background: rgba(213, 63, 51, 0.12);
-  color: rgba(242, 236, 223, 0.85);
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  align-self: flex-start;
-}
-.picks-duel--split .picks-duel__racecard:hover {
-  background: rgba(213, 63, 51, 0.22);
-}
-
-.picks-duel--split .picks-duel__divider {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: auto;
-  padding: 0;
-  z-index: 3;
-  pointer-events: none;
-}
-
-.picks-duel--split .picks-duel__vs-badge {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #000;
-  border: 2px solid #d8b14a;
-  box-shadow: 0 0 24px rgba(216, 177, 74, 0.45);
-}
-
-.picks-duel--split .picks-duel__vs-text {
-  font-family: var(--font-display, "Playfair Display", Georgia, serif);
-  font-weight: 800;
-  font-style: italic;
-  color: #e8c558;
-  font-size: 16px;
-  letter-spacing: 0.04em;
-  text-shadow: 0 1px 13px #d8b14a;
-}
-
-.picks-duel--split .picks-duel__divider-line {
-  display: none;
-}
-
-.hf-ctas__tour-icon {
-  display: block;
-  flex-shrink: 0;
-}
-
-@media (min-width: 720px) {
-  /* layout: separate cards with ~20px gap; full border + radius on each article */
-  .picks-duel--split .picks-duel__inner {
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-  }
-
-  .picks-duel--split .picks-duel__card--fox {
-    border: 1px solid rgba(240, 206, 107, 0.33);
-    border-radius: 18px;
-  }
-  .picks-duel--split .picks-duel__card--cubs {
-    border: 1px solid rgba(216, 177, 74, 0.35);
-    border-radius: 20px;
-    padding-left: 28px;
-  }
-}
 
 @media (max-width: 719px) {
-  .hf-title--oneline {
+  :where(.hero-fold__col--resulted) .hf-title--oneline {
     white-space: normal;
     flex-direction: column;
     align-items: flex-start;
     gap: 0.06em;
   }
-  .hf-title__lead {
+  :where(.hero-fold__col--resulted) .hf-title__lead {
     display: block;
   }
-  .hf-title__fox {
+  :where(.hero-fold__col--resulted) .hf-title__fox {
     display: block;
     /* Slightly larger than desktop ratio so THE FOX leads the lockup */
     font-size: 1.72em;
   }
-  .picks-duel--split .picks-duel__divider {
-    position: relative;
-    left: auto;
-    top: auto;
-    transform: none;
-    justify-self: center;
-    margin: -4px 0;
-  }
-  .picks-duel--split .picks-duel__why {
-    margin-left: 0;
-  }
-  .picks-duel--split .picks-duel__card--fox {
-    border: 1px solid rgba(240, 206, 107, 0.33);
-    border-radius: 18px;
-  }
-  .picks-duel--split .picks-duel__card--cubs {
-    border: 1px solid rgba(216, 177, 74, 0.35);
-    border-radius: 20px;
-  }
 }
 
-/* ── Mobile layout stack (≤767): title first, fox/countdown after picks ── */
+/* Phones: the title first. */
 @media (max-width: 767px) {
-  .hero-fold__layout {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-    padding: var(--space-4) var(--page-gutter);
-  }
-
-  .hero-fold__col--title {
+  .hero-fold__col--title:where(.hero-fold__col--resulted) {
     order: 1;
     gap: 16px;
   }
 
   /* Race context lives in the today card on mobile */
-  .hero-fold__col--title .hf-race-reveal {
+  .hero-fold__col--title:where(.hero-fold__col--resulted) .hf-race-reveal {
     display: none !important;
   }
 
-  .hero-fold__col--title .hf-emblem-row__copy {
-    display: none;
-  }
-
-  .hero-fold__col--title .hf-emblem-row {
-    justify-content: flex-start;
-  }
-
-  /* With no Pick 6 the row has nothing to show on phones; drop it so it
-     doesn't leave an empty gap above the title. */
-  .hero-fold__col--title .hf-emblem-row--no-badge {
-    display: none;
-  }
-
-  .hero-fold__col--countdown {
-    order: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .hf-countdown--stage,
-  .hf-countdown--stage .hf-countdown__stage {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .hf-title--oneline {
+  :where(.hero-fold__col--resulted) .hf-title--oneline {
     font-size: clamp(28px, 8vw, 36px);
     line-height: 1.15;
   }
-
-  .hf-title__fox-underline {
-    max-width: 100%;
-  }
-
-  .picks-duel--split .picks-duel__vs-badge {
-    width: 48px;
-    height: 48px;
-    font-size: 14px;
-  }
-
-  .hf-countdown__news {
-    width: 100%;
-  }
 }
 
-/* ── Hero · which race is showing ─────────────────────────────────────
-   The live page could switch the hero between the big race and Bet of
-   the Day; the redesign showed one with no way to the other. Same
-   segmented-control language as the section tab strips. */
-.hf-switch {
+/* ═══════════════════════════════════════════════════════════════
+   NOT ON THIS PAGE
+
+   Rules for hero markup the sandbox's snapshot does not render: the
+   older news pill, the stat grid, the favourite card, the Pin emblem,
+   the cover flag, the demo link. They were here before the hero was
+   recomposed and are carried through untouched, since the template's
+   other branches cannot be seen from here.
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Latest-news pill ─────────────────────────────────────────
+   Classy gold-on-navy chip in the top-right of the hero. Solid
+   gold (not gradient — gradients flash on streaming render and
+   look less editorial); deep navy text; subtle dark-gold border
+   for definition against the dark hero background.
+
+   Hidden under 720px — mobile drawer already has a News tab.
+   Above 720px, sits in the negative-space corner where the X
+   was marked in the user's mockup. */
+.hf-latest-news-pill {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  z-index: 5;
   display: inline-flex;
-  align-self: flex-start;
-  padding: 3px;
-  margin-bottom: 12px;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px 7px 11px;
+  background: #e8c558;
+  border: 1px solid #8a6a14;
   border-radius: 999px;
-  border: 1px solid rgba(242, 236, 223, 0.16);
-  background: rgba(10, 12, 18, 0.55);
-}
-
-.hf-switch__opt {
-  padding: 7px 16px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(242, 236, 223, 0.6);
+  color: #0b2147;
   text-decoration: none;
-  transition: color 0.15s, background 0.15s;
-}
-
-.hf-switch__opt:hover,
-.hf-switch__opt:focus-visible {
-  color: var(--c-gold-lt);
-}
-
-.hf-switch__opt.is-active {
-  background: var(--c-gold);
-  color: var(--c-midnight);
-}
-
-/* ── Hero · race detail, The Pin and Pick 6 ───────────────────────────
-   Declarations, prize, favourite and each-way terms used to sit in a
-   band under the hero, along with the routes into The Pin and Pick 6.
-   Rebuilt as chips in the day hub's fact language so the hero keeps its
-   own weight: values first, labels beneath. */
-.hf-facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 12px 0 0;
-  padding: 0;
-  list-style: none;
-  width: 100%;
-}
-
-/* Compact enough that all six sit on one line beneath the CTAs: the
-   hero is sized to the viewport, so a second row is clipped. */
-.hf-facts__item {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  padding: 6px 10px;
-  border-radius: 9px;
-  border: 1px solid rgba(242, 236, 223, 0.1);
-  background: rgba(242, 236, 223, 0.04);
-}
-
-.hf-facts__num {
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1.2;
-}
-
-.hf-facts__lbl {
-  font-size: 9px;
-  font-weight: 700;
+  font-family: "DM Sans", "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 800;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.48);
+  line-height: 1;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 2px 8px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease;
+}
+.hf-latest-news-pill:hover,
+.hf-latest-news-pill:focus-visible {
+  transform: translateY(-1px);
+  background: #f2d76e;
+  color: #0b2147;
+  text-decoration: none;
+  outline: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+.hf-latest-news-pill__icon {
+  font-size: 13px;
+  line-height: 1;
+  filter: saturate(1.1);
+}
+.hf-latest-news-pill__text {
+  position: relative;
+  top: 0.5px;
+}
+@media (max-width: 720px) {
+  /* Mobile — tighter sizing + smaller offset so the pill sits
+     cleanly in the top-right corner without crowding the
+     stacked hero (Fox portrait / countdown / race title). */
+  .hf-latest-news-pill {
+    top: 12px;
+    right: 12px;
+    padding: 5px 11px 5px 9px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    gap: 5px;
+  }
+  .hf-latest-news-pill__icon {
+    font-size: 11px;
+  }
 }
 
-/* The two that go somewhere read as routes, not readouts. */
-.hf-facts__item--link,
-.hf-facts__item--pick6 {
-  border-color: rgba(212, 175, 55, 0.3);
-  background: rgba(212, 175, 55, 0.07);
+/* ── STAT GRID ─────────────────────────────────────────── */
+
+.hf-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
 
-.hf-facts__item--pick6 .hf-facts__num {
-  color: var(--c-gold-lt);
+.hf-stat-box {
+  background: var(--c-navy-raised);
+  border: 1px solid var(--c-border-md);
+  border-radius: var(--r-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s;
+}
+.hf-stat-box--link:hover {
+  border-color: rgba(212, 175, 55, 0.4);
 }
 
-.hf-facts__link {
+.hf-stat-num {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--c-text-100);
+  line-height: 1;
+}
+
+.hf-stat-lbl {
+  font-size: 10px;
+  color: var(--c-text-35);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+/* ── FAV CARD ──────────────────────────────────────────── */
+
+.hf-fav-card {
+  background: rgba(192, 57, 43, 0.08);
+  border: 1px solid rgba(192, 57, 43, 0.22);
+  border-radius: var(--r-md);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hf-fav-card__label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-red);
+  opacity: 0.8;
+}
+
+.hf-fav-card__horse {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--c-text-100);
+  margin-top: 4px;
+}
+
+.hf-fav-card__horse-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  transition: border-color 0.2s;
+}
+.hf-fav-card__horse-link:hover {
+  border-color: var(--c-text-55);
+}
+
+.hf-fav-card__odds {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--c-red);
+}
+
+.hf-fav-card__note {
+  font-size: 11px;
+  color: var(--c-text-35);
+}
+
+/* ── PIN EMBLEM ────────────────────────────────────────────
+   Gold-on-dark deep-link to the cinematic Pinsticker preview
+   for THIS hero's race. Self-hides via the {% if hero.featured_pin %}
+   gate in hero_fold.html so we never render an empty box. */
+.hf-pin-emblem {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 14px;
+  margin: 12px 0 0;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: var(--c-text-95, #f5f2e9);
+  background:
+    radial-gradient(
+      ellipse 80% 80% at 0% 50%,
+      rgba(212, 175, 55, 0.16) 0%,
+      transparent 65%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(212, 175, 55, 0.06) 0%,
+      rgba(26, 34, 51, 0.3) 100%
+    );
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  border-radius: var(--r-md, 10px);
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+  position: relative;
+  overflow: hidden;
+}
+.hf-pin-emblem:hover,
+.hf-pin-emblem:focus-visible {
+  transform: translateY(-1px);
+  border-color: var(--c-gold);
+  box-shadow: 0 10px 24px -12px rgba(212, 175, 55, 0.45);
+  outline: none;
+}
+.hf-pin-emblem__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 6px rgba(212, 175, 55, 0.3));
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hf-pin-emblem:hover .hf-pin-emblem__icon {
+  transform: rotate(-12deg) scale(1.08);
+}
+.hf-pin-emblem__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.hf-pin-emblem__body {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+.hf-pin-emblem__eyebrow {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-gold);
+}
+.hf-pin-emblem__title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--c-text-95, #f5f2e9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hf-pin-emblem__arrow {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--c-gold);
+  line-height: 1;
+  transition: transform 0.22s ease;
+}
+.hf-pin-emblem:hover .hf-pin-emblem__arrow {
+  transform: translateX(3px);
+}
+
+.hf-title__small {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 5vw, 42px);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--c-text-75);
+  letter-spacing: -0.01em;
+}
+
+.hf-title__main {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(48px, 11vw, 96px);
+  font-weight: 900;
+  color: var(--c-gold);
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+}
+
+/* ── DEMO LINK (tertiary CTA under the primary pair) ───────
+   Sits below .hf-ctas as a subtle but discoverable affordance —
+   gold-tinted text link with a play glyph and a sliding arrow.
+   Hover lifts the colour + nudges the arrow right. */
+.hf-demo-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  margin-top: 14px;
+  padding: 6px 12px 6px 10px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--c-gold);
+  background: rgba(212, 175, 55, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.22);
+  border-radius: 999px;
+  text-decoration: none;
+  transition:
+    background 0.16s,
+    border-color 0.16s,
+    color 0.16s;
+}
+.hf-demo-link:hover {
+  background: rgba(212, 175, 55, 0.14);
+  border-color: var(--c-gold);
+  color: var(--c-gold-lt);
+}
+.hf-demo-link:focus-visible {
+  outline: 2px solid var(--c-gold);
+  outline-offset: 3px;
+}
+.hf-demo-link__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--c-gold);
+  color: #14161f;
+  font-size: 9px;
+  line-height: 1;
+  padding-left: 2px; /* nudge the ▶ glyph to look optically centred */
+}
+.hf-demo-link__arrow {
+  font-size: 13px;
+  color: inherit;
+  transition: transform 0.18s;
+}
+.hf-demo-link:hover .hf-demo-link__arrow {
+  transform: translateX(3px);
+}
+
+/* Quieter ghost — used for "View Full Racecard" so the tour and
+   the racecard browse aren't competing for the same eye-weight. */
+.btn-ghost--quiet {
+  opacity: 0.78;
+}
+.btn-ghost--quiet:hover {
+  opacity: 1;
+}
+
+/* ── COVER FLAG ────────────────────────────────────────
+   Slim horizontal band between the dark hero and the ticker
+   that holds the race-card preview data (decs, prize, market
+   favourite, Pin emblem) — moved out of the countdown column
+   so the hero reads as a magazine cover rather than a control
+   panel stacked 8 elements deep. */
+
+.hf-cover-flag {
+  background: linear-gradient(
+    180deg,
+    rgba(11, 14, 21, 0.96) 0%,
+    rgba(7, 9, 14, 0.99) 100%
+  );
+  border-top: 1px solid rgba(212, 175, 55, 0.18);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+  /* Sit between the hero section and the (fixed) ticker. */
+  position: relative;
+  z-index: 5;
+}
+.hf-cover-flag__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 24px 36px;
+  padding: 18px var(--space-5);
+}
+
+.hf-cover-flag__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  font-family: var(--font-body, "DM Sans", system-ui, sans-serif);
+}
+.hf-cover-flag__cell--link {
+  transition: opacity 0.18s ease;
+}
+.hf-cover-flag__cell--link:hover {
+  opacity: 0.85;
+}
+
+.hf-cover-flag__num {
+  font-family: var(--font-display, "Playfair Display", Georgia, serif);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--c-gold-lt);
+  letter-spacing: -0.01em;
+}
+.hf-cover-flag__lbl {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Market-favourite cell — horse + odds + trainer in a stack. */
+.hf-cover-flag__cell--fav {
+  min-width: 220px;
+}
+.hf-cover-flag__fav-horse {
+  font-family: var(--font-display, "Playfair Display", Georgia, serif);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.95);
+}
+.hf-cover-flag__fav-link {
+  color: inherit;
   text-decoration: none;
 }
-
-.hf-facts__item--link:hover,
-.hf-facts__item--pick6:hover,
-.hf-facts__item--link:focus-within,
-.hf-facts__item--pick6:focus-within {
-  border-color: var(--c-gold);
-  background: rgba(212, 175, 55, 0.12);
+.hf-cover-flag__fav-link:hover {
+  color: var(--c-gold-lt);
+}
+.hf-cover-flag__fav-meta {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.55);
+}
+.hf-cover-flag__fav-meta strong {
+  color: var(--c-gold-lt);
+  font-weight: 700;
+  margin-right: 4px;
 }
 
-/* Below desktop the chips would wrap to three rows and push the hero well
-   past the fold, so they become one swipeable row instead. The row scrolls
-   inside itself; the page does not. */
-@media (max-width: 1024px) {
-  .hf-facts {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-bottom: 2px;
-    -webkit-overflow-scrolling: touch;
+/* Pin emblem cell — right-most by default (pushed via margin-left auto). */
+.hf-cover-flag__cell--pin {
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 14px 6px 10px;
+  background: rgba(212, 175, 55, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 999px;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+.hf-cover-flag__cell--pin:hover {
+  background: rgba(212, 175, 55, 0.14);
+  border-color: rgba(212, 175, 55, 0.6);
+  transform: translateY(-1px);
+}
+.hf-cover-flag__pin-icon {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+.hf-cover-flag__pin-icon svg {
+  width: 100%;
+  height: 100%;
+}
+.hf-cover-flag__pin-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+.hf-cover-flag__pin-title {
+  font-family: var(--font-display, "Playfair Display", Georgia, serif);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: rgba(255, 255, 255, 0.95);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+.hf-cover-flag__pin-arrow {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--c-gold-lt);
+  transition: transform 0.18s ease;
+}
+.hf-cover-flag__cell--pin:hover .hf-cover-flag__pin-arrow {
+  transform: translateX(2px);
+}
+
+@media (max-width: 768px) {
+  .hf-cover-flag__inner {
+    gap: 16px 22px;
+    padding: 14px var(--space-4);
   }
-  .hf-facts::-webkit-scrollbar {
-    display: none;
+  .hf-cover-flag__num {
+    font-size: 18px;
   }
-  .hf-facts__item {
-    flex: 0 0 auto;
+  .hf-cover-flag__cell--pin {
+    margin-left: 0;
+    width: 100%;
+  }
+  .hf-cover-flag__pin-title {
+    max-width: none;
+    white-space: normal;
   }
 }
