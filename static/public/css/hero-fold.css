@@ -590,62 +590,6 @@
   transform: translateX(0.900cqw);
 }
 
-/* ── GET LATEST NEWS ───────────────────────────────────── */
-
-/* Not in the drawings: a gold pill to the news front. On a phone it sits
-   under Pick your horse, centred; on the banner it is lifted to the
-   top right, over the racing's sky and level with the lockup, so the
-   drawing's own parts stay where the drawing has them. */
-.hf-news {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: fit-content;
-  margin: 18px auto 0;
-  padding: 10px 20px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #f0d57f 0%, var(--c-gold) 55%, #b8921d 100%);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, #6e530b 35%, transparent),
-    0 6px 18px -8px color-mix(in srgb, #000 60%, transparent);
-  color: var(--c-midnight);
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 20px;
-  letter-spacing: 0.01em;
-  text-decoration: none;
-  white-space: nowrap;
-  transition: transform 0.15s, filter 0.15s;
-}
-
-.hf-news:hover {
-  filter: brightness(1.060);
-  transform: translateY(-1px);
-}
-
-.hf-news:focus-visible {
-  outline: 2px solid #fff;
-  outline-offset: 3px;
-}
-
-.hf-news__arrow {
-  flex: 0 0 auto;
-  width: 16px;
-  height: 16px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 4.500;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform 0.15s;
-}
-
-.hf-news:hover .hf-news__arrow {
-  transform: translateX(3px);
-}
-
 /* ── FOUR WAYS IN ──────────────────────────────────────── */
 
 /* Rows on a phone, each with its chevron. */
@@ -706,6 +650,15 @@
   background: var(--hf-sign);
   -webkit-mask: var(--hf-sign-mark) center / var(--hf-sign-w, 100%) auto no-repeat;
   mask: var(--hf-sign-mark) center / var(--hf-sign-w, 100%) auto no-repeat;
+}
+
+/* The Wire is not in the drawings (added at the client's request): its
+   sign is drawn to the traced ones' weight, and it leads the list. */
+.hf-explore__link--news {
+  --hf-sign-mark: url("../img/icons/hero-news.svg");
+  --hf-sign-w: 92%;
+  --hf-name-x: 0.740;
+  --hf-note-x: 0.820;
 }
 
 .hf-explore__link--racing {
@@ -1131,30 +1084,14 @@
     transform: translateX(0.400cqw);
   }
 
-  /* ── Get latest news: top right, over the racing's sky, its right
-     edge on the four ways in's. It scales with the drawing, never under
-     14px type. ── */
-  .hf-news {
-    position: absolute;
-    top: 2.100cqw;
-    right: 2.564cqw;
-    gap: max(8px, 0.560cqw);
-    margin: 0;
-    padding: max(10px, 0.700cqw) max(20px, 1.400cqw);
-    font-size: max(14px, 0.980cqw);
-    line-height: 1.400;
-  }
-
-  .hf-news__arrow {
-    width: max(16px, 1.120cqw);
-    height: max(16px, 1.120cqw);
-  }
-
-  /* ── Four ways in: one panel across the foot, hairlines between, each
-     column as wide as the drawing has it. ── */
+  /* ── Five ways in: the drawing's panel across the foot, hairlines
+     between. The drawing has four columns; with the Wire added they are
+     five even ones, and each column's padding and gap are taken in by
+     the same measure (--hf-fit) so the words keep the drawing's size. ── */
 
   .hf-explore {
-    grid-template-columns: 405.5fr 416.5fr 422.5fr 393.5fr;
+    --hf-fit: 0.450;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 0;
     height: 6.268cqw;
     margin: 3.419cqw 2.564cqw 0 4.103cqw;
@@ -1180,7 +1117,7 @@
 
   .hf-explore__link {
     height: auto;
-    padding: 0 0 0 var(--hf-pad);
+    padding: 0 0 0 calc(var(--hf-pad) * var(--hf-fit));
     border: 0;
     border-radius: 0;
     background: none;
@@ -1211,6 +1148,16 @@
     left: 0;
     width: 1px;
     background: #52565a;
+  }
+
+  .hf-explore__link--news {
+    --hf-pad: 2.600cqw;
+    --hf-sign-w: 100%;
+    --hf-sign-box: 3.400cqw;
+    --hf-sign-ratio: 124 / 112;
+    --hf-gap: 1.900cqw;
+    --hf-name-x: 0.780;
+    --hf-note-x: 0.800;
   }
 
   .hf-explore__link--racing {
@@ -1266,7 +1213,7 @@
     position: relative;
     top: -0.100cqw;
     gap: 0.480cqw;
-    margin-left: var(--hf-gap);
+    margin-left: calc(var(--hf-gap) * var(--hf-fit));
   }
 
   .hf-explore__name {
@@ -1275,6 +1222,7 @@
 
   .hf-explore__note {
     font-size: 1.267cqw;
+    transform: scaleX(calc(var(--hf-note-x) * 0.940));
   }
 }
 
