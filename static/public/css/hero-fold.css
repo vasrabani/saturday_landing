@@ -30,10 +30,11 @@
  * used as masks (img/icons/hero-*.svg).
  *
  * Type. The banner's headline is Playfair Display, the site's display
- * face, upright and slanted here (its own italic has swash capitals). The
- * drawings' labels are a condensed sans; the site's sans, DM Sans, has no
- * condensed cut, so a label is set at the drawing's height and narrowed
- * to the drawing's width (--hf-x).
+ * face, upright and slanted here (its own italic has swash capitals),
+ * and the one line still narrowed to the drawing (scaleX). The drawings'
+ * narrow labels are Barlow Condensed (--hf-font-cond, self-hosted in
+ * saturday-fonts.css); the rest is DM Sans, each line sized to the
+ * drawing's width rather than squeezed to it.
  * ─────────────────────────────────────────────────────────
  */
 
