@@ -43,11 +43,11 @@
    "static/public/css/battle-section.css": 36,
    "static/public/css/day_hub.css": 5,
    "static/public/css/defer-bg.css": 1,
-   "static/public/css/hero-fold.css": 1,
+   "static/public/css/hero-result.css": 1,
    "static/public/css/how_it_works.css": 2,
-   "static/public/css/landing_den_section.css": 1,
    "static/public/css/landing-anim.css": 16,
    "static/public/css/landing.css": 4,
+   "static/public/css/landing_den_section.css": 1,
    "static/public/css/pick.css": 2
   },
   "token-colour-hardcoded": {
@@ -85,20 +85,20 @@
    "static/public/css/day_hub.css -> max-width:880px": 1,
    "static/public/css/day_hub.css -> max-width:900px": 1,
    "static/public/css/editorial-shelf.css -> max-width:700px": 1,
+   "static/public/css/hero-result.css -> max-width:640px": 1,
+   "static/public/css/hero-result.css -> max-width:719px": 1,
+   "static/public/css/hero-result.css -> max-width:720px": 2,
    "static/public/css/hero_tabs.css -> max-width:640px": 1,
-   "static/public/css/hero-fold.css -> max-width:640px": 1,
-   "static/public/css/hero-fold.css -> max-width:719px": 1,
-   "static/public/css/hero-fold.css -> max-width:720px": 3,
    "static/public/css/how_it_works.css -> max-width:560px": 1,
    "static/public/css/how_it_works.css -> max-width:700px": 1,
    "static/public/css/how_it_works.css -> max-width:900px": 2,
+   "static/public/css/landing-anim.css -> max-width:540px": 2,
+   "static/public/css/landing.css -> max-width:540px": 1,
    "static/public/css/landing_den_section.css -> max-width:1100px": 1,
    "static/public/css/landing_den_section.css -> max-width:480px": 1,
    "static/public/css/landing_den_section.css -> max-width:560px": 1,
    "static/public/css/landing_den_section.css -> max-width:900px": 3,
    "static/public/css/landing_den_section.css -> min-width:901px": 1,
-   "static/public/css/landing-anim.css -> max-width:540px": 2,
-   "static/public/css/landing.css -> max-width:540px": 1,
    "static/public/css/market_movers.css -> max-width:760px": 1,
    "static/public/css/money_moves.css -> max-width:480px": 1,
    "static/public/css/money_moves.css -> max-width:560px": 1,
@@ -114,7 +114,7 @@
    "static/public/experiences/pick-hero/css/pick-hero.css -> max-width:600px": 1
   },
   "font-not-loaded": {
-   "static/public/css/hero-fold.css -> Inter": 6
+   "static/public/css/hero-result.css -> Inter": 6
   }
  },
  "axe": {
