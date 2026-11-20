@@ -776,8 +776,8 @@
     width: 172.934cqw;
     aspect-ratio: 3035 / 896;
     background:
-      url("../img/hero-sky-west.webp") left top / 21.483% 100% no-repeat,
-      url("../img/hero-sky-east.webp") right top / 21.483% 100% no-repeat;
+      image-set(url("../img/hero-sky-west-1x.webp") 1x, url("../img/hero-sky-west.webp") 2x) left top / 21.483% 100% no-repeat,
+      image-set(url("../img/hero-sky-east-1x.webp") 1x, url("../img/hero-sky-east.webp") 2x) right top / 21.483% 100% no-repeat;
   }
 
   /* The racing, where the drawing has it. */
@@ -788,7 +788,7 @@
     left: 71.909cqw;
     width: 28.091cqw;
     aspect-ratio: 493 / 896;
-    background: url("../img/hero-race-dusk.webp") center / 100% 100% no-repeat;
+    background: image-set(url("../img/hero-race-dusk-1x.webp") 1x, url("../img/hero-race-dusk.webp") 2x) center / 100% 100% no-repeat;
   }
 
   /* ── Stage: the evening sky, the gold frame and Mr Fox before it. ── */
@@ -798,7 +798,7 @@
     left: 0;
     width: 38.746cqw;
     aspect-ratio: 680 / 896;
-    background-image: url("../img/hero-fox-banner.webp");
+    background-image: image-set(url("../img/hero-fox-banner-1x.webp") 1x, url("../img/hero-fox-banner.webp") 2x);
   }
 
   /* ── Pitch ── */
