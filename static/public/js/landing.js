@@ -72,6 +72,25 @@ document.addEventListener('DOMContentLoaded', () => {
         },
       });
     });
+
+    // The new hero's race line: the time to the off (days only while
+    // there are any), then "At the post" once the advertised off passes.
+    document.querySelectorAll('.hf-race[data-race-iso]').forEach((root) => {
+      window.SaturdayCountdown(root.dataset.raceIso, {
+        Days:  root.querySelector('.hf-cd-days'),
+        Hours: root.querySelector('.hf-cd-hours'),
+        Mins:  root.querySelector('.hf-cd-mins'),
+        Secs:  root.querySelector('.hf-cd-secs'),
+      }, {
+        prefersReducedMotion,
+        onTick({ d, diff }) {
+          if (d > 0) root.querySelector('.hf-cd-days').textContent = String(d);
+          root.classList.add('hf-race--ticking');
+          root.classList.toggle('hf-race--days', d > 0);
+          root.classList.toggle('hf-race--off', diff <= 0);
+        },
+      });
+    });
   }
 
   // ── Animate H2H bar on scroll ─────────────────────────────
