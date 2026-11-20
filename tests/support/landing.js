@@ -67,9 +67,10 @@ function injectDrawRunners(runnersJson) {
  * `offsite` for the tests that police them.
  *
  * Feature tests only need the scripts booted (DOMContentLoaded); visual
- * tests pass `waitUntil: 'load'` so every image has painted.
+ * tests pass `waitUntil: 'load'` so every image has painted. `hash` opens
+ * one of the hero's later states (hero-pick-made, hero-race-result).
  */
-export async function openLanding(page, { runners, clock = 'fixed', waitUntil = 'domcontentloaded' } = {}) {
+export async function openLanding(page, { runners, clock = 'fixed', waitUntil = 'domcontentloaded', hash = '' } = {}) {
   const { origin } = new URL(test.info().project.use.baseURL);
   const offsite = [];
   const problems = [];
@@ -87,7 +88,7 @@ export async function openLanding(page, { runners, clock = 'fixed', waitUntil = 
   if (clock === 'fixed') await page.clock.setFixedTime(SNAPSHOT_TIME);
   if (clock === 'controlled') await page.clock.install({ time: SNAPSHOT_TIME });
 
-  await page.goto('/', { waitUntil });
+  await page.goto(hash ? `/#${hash}` : '/', { waitUntil });
   return { offsite, problems };
 }
 

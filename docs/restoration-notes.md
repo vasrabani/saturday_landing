@@ -28,7 +28,6 @@ partial into the matching template branch.
 
 | Partial | Branch it serves |
 | --- | --- |
-| `hero-resulted.html` | `hero_fold.html`: `{% if hero.result %}` |
 | `ai-consensus-unanimous/single/split/empty.html` | `landing.html`: the five-way `ai_consensus.pattern` block |
 | `challenges-filled.html` | `challenges_section.html`: `{% if top_challengers %}` |
 | `market-empty.html` | `_money_moves.html`: `has_data` false — an alternative to hiding the section, which is what production does |

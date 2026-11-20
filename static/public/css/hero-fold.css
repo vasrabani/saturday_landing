@@ -274,7 +274,7 @@
 
 /* Beside Mr Fox on a phone, in the drawing's leaning sans, each line
    sized to the drawing's width. The pitch's own: the result state's
-   headline is an .hf-title too (see hero-result.css). */
+   headline is an .hf-title too (see hero-picked.css). */
 .hf-pitch .hf-title {
   margin: 5.440cqw 0 0 43.220cqw;
   font-family: var(--font-body);

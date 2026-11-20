@@ -183,6 +183,52 @@ test.describe('the hero, as drawn', () => {
 
 // This one was on the live page, dropped by the redesign, and rebuilt in
 // PR 9. Tested so it cannot go missing quietly a second time.
+// The hero once the member has picked, and once the race is run: in
+// index.html as templates, opened with #hero-pick-made / #hero-race-result.
+test.describe('the hero after the pick', () => {
+  test("sets your pick against the Fox's, locked, with the clock running", async ({ page }) => {
+    const { problems } = await openLanding(page, { hash: 'hero-pick-made' });
+    const hero = page.locator('#big-race-day');
+    await expect(hero).toHaveClass(/hero-fold__section--picked/);
+    await expect(hero.locator('.hf-explore')).toHaveCount(0);
+    await expect(hero.locator('h1')).toHaveText('Beat the Fox');
+    const cards = hero.locator('.hf-pick');
+    await expect(cards.nth(0)).toContainText('The Fox');
+    await expect(cards.nth(0)).toContainText('My selection');
+    await expect(cards.nth(0)).toContainText('Dark Cloud Rising');
+    await expect(cards.nth(1)).toContainText('You');
+    await expect(cards.nth(1)).toContainText('Your selection');
+    await expect(cards.nth(1)).toHaveAttribute('href', /my-picks\//);
+    await expect(hero.locator('.hf-locked')).toContainText('Selection Locked');
+    // 12:00 BST to the 15:45 off.
+    await expect(hero.locator('.hf-cd-hours')).toHaveText('03');
+    await expect(hero.locator('.hf-cd-mins')).toHaveText('45');
+    // Picks lock at the advertised off, so a change is open until then.
+    await expect(hero.locator('.hf-action--change')).toContainText('(until 15:45)');
+    await expect(hero.locator('.hf-board')).toHaveAttribute('href', /leaderboard\//);
+    expect(problems).toEqual([]);
+  });
+
+  test('marks each side right or wrong and keeps the winner behind a reveal', async ({ page }) => {
+    const { problems } = await openLanding(page, { hash: 'hero-race-result' });
+    const hero = page.locator('#big-race-day');
+    await expect(hero).toHaveClass(/hero-fold__section--resulted/);
+    await expect(hero.locator('h1')).toHaveText('The Fox called it');
+    await expect(hero.locator('.hf-pick--fox')).toHaveClass(/is-correct/);
+    await expect(hero.locator('.hf-pick--fox .hf-sr')).toHaveText('Right');
+    await expect(hero.locator('.hf-pick--cubs')).toHaveClass(/is-wrong/);
+    await expect(hero.locator('.hf-pick--cubs .hf-sr')).toHaveText('Wrong');
+    const reveal = hero.locator('.hf-winner__reveal');
+    await expect(reveal).toHaveAttribute('aria-pressed', 'false');
+    await expect(hero.locator('.hf-winner__payload')).toHaveCSS('opacity', '0');
+    await reveal.click();
+    await expect(reveal).toHaveAttribute('aria-pressed', 'true');
+    await expect(hero.locator('.hf-winner__horse')).toHaveText('Dark Cloud Rising');
+    await expect(hero.locator('.hf-board--record')).toHaveAttribute('href', /news\/honest-record\//);
+    expect(problems).toEqual([]);
+  });
+});
+
 test.describe('features the redesign had dropped', () => {
   test('the AI Lab shows what the simulation found', async ({ page }) => {
     await openLanding(page);
