@@ -289,6 +289,8 @@ test.describe('the hero after the pick', () => {
     await expect(hero.locator('.hf-pick__tick').first()).toBeVisible();
     await expect(hero.locator('.hf-winner__by')).toBeVisible();
     await expect(hero.locator('.hf-winner__horse')).toHaveText('Dark Cloud Rising');
+    // "View Full Result" opens the race's own result page, not its racecard.
+    await expect(hero.locator('.hf-action--card')).toHaveAttribute('href', 'results-race.html');
     // "Read why" on the Fox's card, clear of the card's mark.
     const why = hero.locator('.hf-why');
     await expect(why).toHaveAttribute('href', /races\/big-race\/featured-tip\//);
