@@ -104,12 +104,15 @@
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(var(--ftp-stat-count, 3), minmax(0, 1fr));
+  /* Each column as wide as its number, so "−£14.31" never wraps. */
+  grid-template-columns: repeat(var(--ftp-stat-count, 3), auto);
+  justify-content: start;
   margin: 4px 0 0;
   padding: 0;
   list-style: none;
 }
 .ftp__stat {
+  min-width: 64px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -125,6 +128,7 @@
   line-height: 1.1;
   color: #fff;
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 .ftp__stat-value--up { color: #8fd18a; }
 .ftp__stat-value--down { color: #f0a596; }
