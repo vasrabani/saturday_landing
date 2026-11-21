@@ -398,16 +398,22 @@ document.addEventListener('DOMContentLoaded', () => {
     var pill = root.querySelector('[data-spoiler][data-action="reveal-result"]');
     if (!pill) return;
 
-    var revealed = readRevealed();
-    if (revealed.has(String(pill.dataset.raceId))) {
-      pill.setAttribute('aria-pressed', 'true');
+    // The section carries the reveal too, so the headline and the
+    // cards' marks (hero-fox-picked.css) wait for it.
+    var section = root.closest('.hero-fold__section');
+    function show(on) {
+      pill.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (section) section.classList.toggle('is-revealed', on);
     }
+
+    var revealed = readRevealed();
+    if (revealed.has(String(pill.dataset.raceId))) show(true);
 
     pill.addEventListener('click', function (e) {
       e.preventDefault();
       var id = String(pill.dataset.raceId);
       var now = pill.getAttribute('aria-pressed') !== 'true';
-      pill.setAttribute('aria-pressed', now ? 'true' : 'false');
+      show(now);
       if (now) { revealed.add(id); } else { revealed.delete(id); }
       writeRevealed(revealed);
     });

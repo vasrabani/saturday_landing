@@ -213,16 +213,27 @@ test.describe('the hero after the pick', () => {
     const { problems } = await openLanding(page, { hash: 'hero-race-result' });
     const hero = page.locator('#big-race-day');
     await expect(hero).toHaveClass(/hero-fold__section--resulted/);
-    await expect(hero.locator('h1')).toHaveText('The Fox called it');
     await expect(hero.locator('.hf-pick--fox')).toHaveClass(/is-correct/);
     await expect(hero.locator('.hf-pick--fox .hf-sr')).toHaveText('Right');
     await expect(hero.locator('.hf-pick--cubs')).toHaveClass(/is-wrong/);
     await expect(hero.locator('.hf-pick--cubs .hf-sr')).toHaveText('Wrong');
+    // Until the reveal nothing gives the winner away: a neutral headline,
+    // no marks on the cards, no jockey and trainer.
+    await expect(hero.locator('.hf-title__veil')).toBeVisible();
+    await expect(hero.locator('.hf-title__veil')).toHaveText('The result is in');
+    await expect(hero.locator('.hf-title__told')).toBeHidden();
+    await expect(hero.locator('.hf-pick__tick').first()).toBeHidden();
+    await expect(hero.locator('.hf-winner__by')).toBeHidden();
     const reveal = hero.locator('.hf-winner__reveal');
     await expect(reveal).toHaveAttribute('aria-pressed', 'false');
     await expect(hero.locator('.hf-winner__payload')).toHaveCSS('opacity', '0');
     await reveal.click();
     await expect(reveal).toHaveAttribute('aria-pressed', 'true');
+    await expect(hero).toHaveClass(/is-revealed/);
+    await expect(hero.locator('.hf-title__told')).toHaveText('The Fox called it');
+    await expect(hero.locator('.hf-title__veil')).toBeHidden();
+    await expect(hero.locator('.hf-pick__tick').first()).toBeVisible();
+    await expect(hero.locator('.hf-winner__by')).toBeVisible();
     await expect(hero.locator('.hf-winner__horse')).toHaveText('Dark Cloud Rising');
     await expect(hero.locator('.hf-board--record')).toHaveAttribute('href', /news\/honest-record\//);
     expect(problems).toEqual([]);
