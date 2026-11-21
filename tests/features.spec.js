@@ -137,8 +137,8 @@ test.describe('the hero, as drawn', () => {
     await expect(cards.nth(0)).toHaveAttribute('href', /tipsters\/mr-fox\//);
     await expect(cards.nth(1)).toContainText('The Cubs');
     await expect(cards.nth(1)).toHaveAttribute('href', /\/cubs\//);
-    // The Cubs card shows the most-picked horse, not the visitor's.
-    await expect(cards.nth(1).locator('.hf-duel__role')).toHaveText('Most picked');
+    // Each card names its side's horse in place of a role line.
+    await expect(page.locator('#big-race-day .hf-duel__role')).toHaveCount(0);
   });
 
   test('"Read why" stands clear of the race line, even under a long race name', async ({ page }) => {
@@ -166,12 +166,36 @@ test.describe('the hero, as drawn', () => {
     await expect(race.locator('.hf-race__to-off')).toBeHidden();
   });
 
-  test("shows each side's pick under its card", async ({ page }) => {
+  test("shows each side's pick in its card, under its name", async ({ page }) => {
     await openLanding(page);
-    const picks = page.locator('#big-race-day .hf-duel__card .hf-duel__pick');
+    const picks = page.locator('#big-race-day .hf-duel__card .hf-duel__id .hf-duel__pick');
     await expect(picks).toHaveCount(2);
     await expect(picks.nth(0)).toHaveText('Dark Cloud Rising 7/2');
     await expect(picks.nth(1)).toHaveText('Voting open');
+  });
+
+  test('an 18-letter horse fits its card, clear of the icon and the Read why pill', async ({ page }) => {
+    await openLanding(page);
+    const hero = page.locator('#big-race-day');
+    await hero.locator('.hf-duel__card--fox .hf-duel__horse').evaluate((n) => { n.textContent = 'Galopin Des Champs'; });
+    await hero.locator('.hf-duel__card--fox .hf-duel__price').evaluate((n) => { n.textContent = '11/10'; });
+    const card = await hero.locator('.hf-duel__card--fox').boundingBox();
+    const ico = await hero.locator('.hf-duel__card--fox .hf-duel__ico').boundingBox();
+    const name = await hero.locator('.hf-duel__card--fox .hf-duel__name').boundingBox();
+    const pick = hero.locator('.hf-duel__card--fox .hf-duel__pick');
+    const box = await pick.boundingBox();
+    const pill = await hero.locator('.hf-why').boundingBox();
+    // The words themselves, not the line box, stay right of the icon.
+    const textLeft = await pick.evaluate((n) => Math.min(...[...n.querySelectorAll('span')]
+      .flatMap((sp) => [...sp.getClientRects()].map((r) => r.left))));
+    expect(textLeft).toBeGreaterThanOrEqual(ico.x + ico.width);
+    expect(box.x + box.width).toBeLessThanOrEqual(card.x + card.width);
+    expect(box.y + box.height).toBeLessThanOrEqual(card.y + card.height);
+    expect(name.y).toBeGreaterThanOrEqual(pill.y + pill.height);
+    // Nothing is cut: the whole name and price show, on at most two lines.
+    const lines = await pick.evaluate((n) => Math.round(n.getBoundingClientRect().height / parseFloat(getComputedStyle(n).lineHeight)));
+    expect(lines).toBeLessThanOrEqual(2);
+    await expect(pick).toHaveText('Galopin Des Champs 11/10');
   });
 
   test('has one button, into the featured race', async ({ page }) => {
