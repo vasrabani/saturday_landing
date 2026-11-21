@@ -200,6 +200,20 @@ test.describe('the hero after the pick', () => {
     await expect(cards.nth(1)).toContainText('Your selection');
     await expect(cards.nth(1)).toHaveAttribute('href', /my-picks\//);
     await expect(hero.locator('.hf-locked')).toContainText('Selection Locked');
+    // "Read why" sits on the Fox's card, and the VS stays between the cards.
+    const why = hero.locator('.hf-why');
+    await expect(why).toHaveAttribute('href', /races\/big-race\/featured-tip\//);
+    const fox = await cards.nth(0).boundingBox();
+    const you = await cards.nth(1).boundingBox();
+    const pill = await why.boundingBox();
+    const vs = await hero.locator('.hf-duel__vs').boundingBox();
+    expect(pill.x).toBeGreaterThan(fox.x);
+    expect(pill.x + pill.width).toBeLessThanOrEqual(fox.x + fox.width);
+    expect(pill.y).toBeLessThan(fox.y);
+    expect(pill.y + pill.height).toBeGreaterThan(fox.y);
+    const vsMid = vs.x + vs.width / 2;
+    expect(vsMid).toBeGreaterThan(fox.x + fox.width - vs.width);
+    expect(vsMid).toBeLessThan(you.x + vs.width);
     // 12:00 BST to the 15:45 off.
     await expect(hero.locator('.hf-cd-hours')).toHaveText('03');
     await expect(hero.locator('.hf-cd-mins')).toHaveText('45');
