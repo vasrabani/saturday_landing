@@ -45,7 +45,6 @@
   flex-direction: column;
   gap: 18px;
   min-height: 100%;
-  padding-bottom: 150px;   /* room for Mr Fox under the button */
 }
 
 .ftp__kicker {
@@ -162,15 +161,27 @@
 .ftp__cta:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 .ftp__cta-arrow { font-family: var(--font-body, system-ui, sans-serif); }
 
+/* Mr Fox. On desktop he looks over the board's top rail from behind
+   it (.ftp__fox--rail, inside the board); on tablets and phones he
+   stands beside the pitch instead. The same picture, so one download. */
 .ftp__fox {
   position: absolute;
-  left: -12px;
-  bottom: -56px;
-  width: 170px;
   height: auto;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
-          mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+}
+.ftp__fox--rail { display: none; }
+
+@media (min-width: 1024px) {
+  .ftp__inner { isolation: isolate; padding-top: 64px; }
+  .ftp__board { margin-top: 64px; }
+  .ftp__pitch .ftp__fox { display: none; }
+  .ftp__fox--rail {
+    display: block;
+    z-index: -1;            /* behind the turf, so the rail cuts him off */
+    top: -104px;
+    right: 48px;
+    width: 168px;
+  }
 }
 
 /* ── The board ─────────────────────────────────────────────── */
@@ -421,13 +432,13 @@
     padding-top: 40px;
     padding-bottom: 44px;
   }
-  .ftp__pitch { padding-bottom: 0; padding-right: 180px; }
+  .ftp__pitch { padding-right: 180px; }
   .ftp__fox {
-    left: auto;
     right: -24px;
     top: -12px;
-    bottom: auto;
     width: 200px;
+    -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+            mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
   }
   .ftp__cards { grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 16px; }
 }
