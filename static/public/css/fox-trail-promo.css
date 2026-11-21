@@ -1,0 +1,486 @@
+/* ═══════════════════════════════════════════════════════════════
+   The Fox Trail on the home page — between the editorial shelf and
+   Today's racing. The pitch on the left, a stretch of today's trail
+   on the right: two rows of six real trail cards around the next
+   race off, on a strip of turf. Phones swipe one row of cards.
+
+   The cards echo the trail page's (gold for a winner, silver and
+   bronze for the places, the horse's silks) without its stylesheet,
+   which is four thousand lines. The same file is used by the sandbox
+   and by Django, so it carries no image paths: the turf is drawn and
+   the drawn silk's shape is inline.
+═══════════════════════════════════════════════════════════════ */
+
+.ftp {
+  --ftp-gold: #e8c558;
+  --ftp-gold-deep: #c9a227;
+  --ftp-ink: #1d1a12;
+  --ftp-ink-60: #5a5446;
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+  background-color: #0b0e15;
+  background-image:
+    radial-gradient(ellipse 60% 70% at 85% 40%, rgba(64, 120, 52, 0.22), transparent 70%),
+    linear-gradient(180deg, #0b0e15 0%, #0a1210 100%);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+}
+
+.ftp__inner {
+  position: relative;
+  max-width: var(--max-w, 1280px);
+  margin: 0 auto;
+  padding: 48px var(--page-gutter, 24px) 56px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2.3fr);
+  gap: 36px;
+  align-items: center;
+}
+
+/* ── The pitch ─────────────────────────────────────────────── */
+.ftp__pitch {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 100%;
+  padding-bottom: 150px;   /* room for Mr Fox under the button */
+}
+
+.ftp__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ftp-gold-deep);
+}
+.ftp__kicker-rule {
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.85;
+}
+
+.ftp__title {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-family: var(--font-display, "Playfair Display", Georgia, serif);
+  font-size: clamp(32px, 3.4vw, 46px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.ftp__title-line { display: block; }
+.ftp__title-accent { color: var(--ftp-gold); }
+.ftp__title::after {
+  content: "";
+  display: block;
+  width: 64%;
+  height: 3px;
+  margin-top: 14px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--ftp-gold-deep), rgba(232, 197, 88, 0));
+}
+
+.ftp__sub {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  max-width: 30em;
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.ftp__stats {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--ftp-stat-count, 3), minmax(0, 1fr));
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ftp__stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 0 14px;
+  border-left: 1px solid rgba(232, 197, 88, 0.35);
+}
+.ftp__stat:first-child { padding-left: 0; border-left: 0; }
+.ftp__stat-value {
+  font-family: var(--font-display, "Playfair Display", Georgia, serif);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+.ftp__stat-value--up { color: #8fd18a; }
+.ftp__stat-value--down { color: #f0a596; }
+.ftp__stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.ftp__cta {
+  position: relative;
+  z-index: 1;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 6px;
+  padding: 14px 26px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f3d77a 0%, #d9b23f 100%);
+  box-shadow: 0 0 0 1px rgba(255, 233, 160, 0.5) inset, 0 10px 24px rgba(0, 0, 0, 0.35);
+  color: var(--ftp-ink);
+  font-family: var(--font-display, "Playfair Display", Georgia, serif);
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.ftp__cta:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(255, 233, 160, 0.7) inset, 0 14px 28px rgba(0, 0, 0, 0.4); }
+.ftp__cta:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.ftp__cta-arrow { font-family: var(--font-body, system-ui, sans-serif); }
+
+.ftp__fox {
+  position: absolute;
+  left: -12px;
+  bottom: -56px;
+  width: 170px;
+  height: auto;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 70%, transparent 100%);
+}
+
+/* ── The board ─────────────────────────────────────────────── */
+.ftp__board {
+  position: relative;
+  min-width: 0;
+  padding: 18px 18px 20px;
+  border-radius: 28px;
+  background-color: #2f6a2b;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.12), transparent 60%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.045) 0 70px, rgba(0, 0, 0, 0.04) 70px 140px),
+    linear-gradient(180deg, #3b7d33 0%, #2b5f27 100%);
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.9),
+    0 0 0 6px #2b5f27,
+    0 24px 48px rgba(0, 0, 0, 0.45);
+}
+/* The running rail, a dashed white line inside the edge. */
+.ftp__board::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 2px dashed rgba(255, 255, 255, 0.55);
+  border-radius: 22px;
+  pointer-events: none;
+}
+
+.ftp__board-head {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+}
+.ftp__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f3d77a 0%, #d9b23f 100%);
+  color: var(--ftp-ink);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.ftp__badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #b3261e;
+}
+.ftp[data-state="live"] .ftp__badge-dot { animation: ftp-pulse 1.6s ease-in-out infinite; }
+.ftp[data-state="morning"] .ftp__badge-dot,
+.ftp[data-state="done"] .ftp__badge-dot { background: var(--ftp-ink); }
+.ftp__progress {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(10, 30, 10, 0.55);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+@keyframes ftp-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+/* ── The cards ─────────────────────────────────────────────── */
+.ftp__cards {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* Desktop shows ten: two rows of five. The page sends twelve so a
+   tablet's three rows of four are full; the window keeps the next
+   race in the first ten. */
+@media (min-width: 1024px) {
+  .ftp-card:nth-child(n + 11) { display: none; }
+}
+.ftp__cards:focus-visible { outline: 3px solid #fff; outline-offset: 4px; border-radius: 12px; }
+
+.ftp-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  padding: 10px 10px 9px;
+  border-radius: 12px;
+  border: 2px solid #d9d5c9;
+  background: #fbfaf6;
+  color: var(--ftp-ink);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.22);
+}
+
+.ftp-card__head,
+.ftp-card__foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.ftp-card__foot { justify-content: space-between; margin-top: auto; }
+
+.ftp-card__no {
+  min-width: 22px;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: #e5e1d6;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.ftp-card__time {
+  font-size: 14px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.ftp-card__where {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.ftp-card__course {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ftp-ink-60);
+}
+.ftp-card__silk {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+.ftp-card__silk--drawn {
+  background: linear-gradient(90deg, var(--silk-2, #5a5446) 0 24%, var(--silk-1, #8a8473) 24% 76%, var(--silk-2, #5a5446) 76%);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8.2 3.5h2.4L12 5.6l1.4-2.1h2.4l5.6 2.7 1.2 6.4-4.2 1v7.9H5.6v-7.9l-4.2-1 1.2-6.4z'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M8.2 3.5h2.4L12 5.6l1.4-2.1h2.4l5.6 2.7 1.2 6.4-4.2 1v7.9H5.6v-7.9l-4.2-1 1.2-6.4z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.ftp-card__horse {
+  min-height: 2.4em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  min-width: 0;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  font-size: 13.5px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.ftp-card__price {
+  flex: none;
+  padding: 1px 7px;
+  border-radius: 5px;
+  background: rgba(29, 26, 18, 0.08);
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.ftp-card__price-sp { font-weight: 600; color: var(--ftp-ink-60); }
+.ftp-card__by {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--ftp-ink-60);
+}
+
+/* The result, top right: a rosette for a winner, a tag otherwise. */
+.ftp-card__result {
+  position: absolute;
+  top: -10px;
+  right: -8px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: #3d3a33;
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.ftp-card--won {
+  border-color: #d9b23f;
+  background: linear-gradient(180deg, #fff8e2 0%, #fbeec4 100%);
+}
+.ftp-card--won .ftp-card__no { background: #f0d27a; }
+.ftp-card--won .ftp-card__result {
+  top: -18px;
+  right: -10px;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff1b8 0%, #f0cf5e 45%, #c89a1c 100%);
+  box-shadow: 0 0 0 3px #fbe8a6, 0 0 0 4px #c89a1c, 0 4px 10px rgba(0, 0, 0, 0.35);
+  color: #4a3505;
+  font-size: 10px;
+}
+
+.ftp-card--placed-2 { border-color: #aeb6c2; background: linear-gradient(180deg, #f6f8fb 0%, #e6ebf1 100%); }
+.ftp-card--placed-2 .ftp-card__result { background: #5b6575; }
+.ftp-card--placed-3 { border-color: #c98f64; background: linear-gradient(180deg, #fcf1e8 0%, #f3dcc8 100%); }
+.ftp-card--placed-3 .ftp-card__result { background: #8a5530; }
+
+.ftp-card--pending { box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16); }
+.ftp-card--pending .ftp-card__no { background: #ece9e0; }
+
+.ftp-card--no_fancy .ftp-card__horse,
+.ftp-card--void .ftp-card__horse { font-weight: 600; color: var(--ftp-ink-60); }
+
+/* The next race off: a gold ring and a tag. */
+.ftp-card--now {
+  border-color: var(--ftp-gold);
+  box-shadow: 0 0 0 3px rgba(232, 197, 88, 0.55), 0 8px 18px rgba(0, 0, 0, 0.3);
+}
+.ftp-card--now .ftp-card__result { background: #b3261e; }
+
+/* ── Tablet: the pitch above the board, four abreast ──────────── */
+@media (max-width: 1023px) {
+  .ftp__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    padding-top: 40px;
+    padding-bottom: 44px;
+  }
+  .ftp__pitch { padding-bottom: 0; padding-right: 180px; }
+  .ftp__fox {
+    left: auto;
+    right: -24px;
+    top: -12px;
+    bottom: auto;
+    width: 200px;
+  }
+  .ftp__cards { grid-template-columns: repeat(4, minmax(0, 1fr)); row-gap: 16px; }
+}
+
+/* ── Phones: one row of cards to swipe ───────────────────────── */
+@media (max-width: 767px) {
+  .ftp__inner { padding-top: 32px; padding-bottom: 36px; gap: 24px; }
+  .ftp__pitch { gap: 14px; padding-right: 0; }
+  .ftp__title { font-size: clamp(30px, 9vw, 38px); max-width: 9.5em; }
+  .ftp__title::after { width: 52%; }
+  .ftp__sub { font-size: 14px; max-width: 22em; }
+  .ftp__fox { right: -36px; top: 8px; width: 150px; opacity: 0.9; }
+  .ftp__stat { padding: 0 10px; }
+  .ftp__stat-value { font-size: 24px; }
+  .ftp__cta { align-self: stretch; justify-content: center; font-size: 17px; }
+
+  .ftp__board { padding: 16px 0 18px; border-radius: 22px; }
+  .ftp__board::before { border-radius: 16px; }
+  .ftp__board-head { padding: 0 16px; }
+  .ftp__cards {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 18px 16px 10px;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 16px 0 64px;   /* the race before peeks in */
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .ftp__cards::-webkit-scrollbar { display: none; }
+  .ftp-card {
+    flex: 0 0 156px;
+    scroll-snap-align: start;
+  }
+  .ftp__swipe {
+    display: block;
+    margin: 6px 16px 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+  }
+}
+.ftp__swipe { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ftp__cta { transition: none; }
+  .ftp[data-state="live"] .ftp__badge-dot { animation: none; }
+}
+
+.ftp-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
