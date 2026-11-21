@@ -1154,7 +1154,7 @@
   .hf-duel {
     --hf-off: 0.946cqw;
     grid-template-columns: 19.088cqw 5.128cqw 20.684cqw;
-    margin: 0.800cqw 0 0;
+    margin: 1.500cqw 0 0; /* room for the Read why pill under the race line */
     padding-bottom: 1.750cqw;
   }
 
