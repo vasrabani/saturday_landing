@@ -74,6 +74,30 @@ test('no horse name is cut short', async ({ page }) => {
   expect(cut).toEqual([]);
 });
 
+test('no horse or course name is broken inside a word, or cut short', async ({ page }) => {
+  await openLanding(page, { waitUntil: 'load' });
+  const bad = await page.evaluate(() => {
+    const out = [];
+    document.querySelectorAll('#fox-trail .ftp-card__horse, #fox-trail .ftp-card__course').forEach((el) => {
+      if (!el.offsetParent) return;
+      if (el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1) out.push(`cut: ${el.textContent}`);
+      const text = el.firstChild;
+      if (!text || text.nodeType !== Node.TEXT_NODE) return;
+      const re = /\S+/g;
+      let m;
+      while ((m = re.exec(text.data))) {
+        const range = document.createRange();
+        range.setStart(text, m.index);
+        range.setEnd(text, m.index + m[0].length);
+        const lines = new Set([...range.getClientRects()].map((r) => Math.round(r.top)));
+        if (lines.size > 1) out.push(`split: ${m[0]}`);
+      }
+    });
+    return out;
+  });
+  expect(bad).toEqual([]);
+});
+
 test('the next race off is on screen without scrolling the page sideways', async ({ page }) => {
   await openLanding(page, { waitUntil: 'load' });
   await section(page).scrollIntoViewIfNeeded();

@@ -33,7 +33,7 @@
   padding: 48px var(--page-gutter, 24px) 56px;
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2.3fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2.45fr);
   gap: 36px;
   align-items: center;
 }
@@ -171,7 +171,7 @@
 }
 .ftp__fox--rail { display: none; }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .ftp__inner { isolation: isolate; padding-top: 64px; }
   .ftp__board { margin-top: 64px; }
   .ftp__pitch .ftp__fox { display: none; }
@@ -267,7 +267,7 @@
 /* Desktop shows ten: two rows of five. The page sends twelve so a
    tablet's three rows of four are full; the window keeps the next
    race in the first ten. */
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .ftp-card:nth-child(n + 11) { display: none; }
 }
 .ftp__cards:focus-visible { outline: 3px solid #fff; outline-offset: 4px; border-radius: 12px; }
@@ -278,7 +278,7 @@
   flex-direction: column;
   gap: 5px;
   min-width: 0;
-  padding: 10px 10px 9px;
+  padding: 10px 9px 9px;
   border-radius: 12px;
   border: 2px solid #d9d5c9;
   background: #fbfaf6;
@@ -313,24 +313,29 @@
 .ftp-card__where {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
 }
+/* A long course ("Wolverhampton (AW)") takes a second line rather
+   than losing its end. */
 .ftp-card__course {
   min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  line-height: 1.25;
+  letter-spacing: 0.015em;
+  overflow-wrap: break-word;   /* only for a word that can never fit */
   text-transform: uppercase;
   color: var(--ftp-ink-60);
 }
 .ftp-card__silk {
   flex: none;
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
 }
 .ftp-card__silk--drawn {
@@ -345,7 +350,7 @@
   -webkit-line-clamp: 2;
   min-width: 0;
   overflow: hidden;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;   /* between words; inside one only if it can never fit */
   font-size: 13.5px;
   font-weight: 800;
   line-height: 1.2;
@@ -424,8 +429,10 @@
 }
 .ftp-card--now .ftp-card__result { background: #b3261e; }
 
-/* ── Tablet: the pitch above the board, four abreast ──────────── */
-@media (max-width: 1023px) {
+/* ── Tablets and small laptops: the pitch above the board, four
+   abreast. Below 1280px five cards beside the pitch are too narrow
+   for a horse's name. ─────────────────────────────────────────── */
+@media (max-width: 1279px) {
   .ftp__inner {
     grid-template-columns: minmax(0, 1fr);
     gap: 28px;
