@@ -451,7 +451,7 @@
   grid-template-columns: 38.730cqw 12.550cqw 40.650cqw;
   align-items: center;
   margin: 17.278cqw 0 0 4.100cqw;
-  padding-bottom: 5.600cqw;
+  padding-bottom: 1.600cqw;
 }
 
 /* A card's ground leans the way the capitals do; what is on it stays
@@ -460,7 +460,9 @@
   position: relative;
   isolation: isolate;
   display: block;
-  height: 14.710cqw;
+  /* Tall enough for a horse name on two lines, so the name never rises
+     under the Read why pill. */
+  height: 18cqw;
   text-decoration: none;
   color: #fff;
 }
@@ -469,14 +471,14 @@
   --hf-ico-x: 5.900cqw;
   --hf-ico-w: 8.600cqw;
   --hf-id-x: 25.800cqw;
-  --hf-role-off: -0.200cqw;
+  --hf-pick-w: 21.500cqw;
 }
 
 .hf-duel__card--cubs {
   --hf-ico-x: 3.860cqw;
   --hf-ico-w: 9.720cqw;
   --hf-id-x: 26.200cqw;
-  --hf-role-off: 0.540cqw;
+  --hf-pick-w: 24cqw;
 }
 
 /* The ground: a lit gold rule round a dark panel that takes the rule's
@@ -536,7 +538,8 @@
    the drawing gives. */
 .hf-duel__id {
   position: absolute;
-  top: 50%;
+  /* A touch below centre, so the name clears the Read why pill. */
+  top: calc(50% + 0.800cqw);
   left: var(--hf-id-x);
   display: flex;
   flex-direction: column;
@@ -545,8 +548,7 @@
   transform: translate(-50%, -50%);
 }
 
-.hf-duel__name,
-.hf-duel__role {
+.hf-duel__name {
   width: max-content;
   line-height: 1;
   text-transform: uppercase;
@@ -560,14 +562,6 @@
   font-weight: 900;
 }
 
-.hf-duel__role {
-  position: relative;
-  left: var(--hf-role-off);
-  font-size: max(9px, 3.090cqw);
-  font-family: var(--hf-font-cond);
-  font-weight: 500;
-  color: var(--hf-soft);
-}
 
 /* Each piece of the duel keeps its own column, so the pill below can
    share the Fox card's cell without pushing the others along. */
@@ -660,26 +654,29 @@
 /* Each side's horse, under its card (inside the link, so it is read with
    it): the Fox's with its price, the Cubs' with their vote, or what is
    still to come. */
+/* The side's horse, in the card under its name, where the role was. A
+   long name (up to 18 letters) breaks onto a second line, never wider
+   than the space between the icon and the card's edge. */
 .hf-duel__pick {
-  position: absolute;
-  top: calc(100% + 1.800cqw);
-  left: 3%;
-  right: 3%;
+  display: -webkit-box;
+  width: var(--hf-pick-w);
   overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   font-family: var(--hf-font-cond);
-  font-size: 3.700cqw;
+  font-size: max(9px, 3.300cqw);
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.05;
   text-align: center;
-  text-overflow: ellipsis;
   text-transform: uppercase;
-  white-space: nowrap;
+  text-wrap: balance;
   color: var(--hf-gold);
 }
 
 .hf-duel__price {
   margin-left: 0.250em;
   font-weight: 500;
+  white-space: nowrap;
   color: #fff;
 }
 
@@ -1155,25 +1152,25 @@
     --hf-off: 0.946cqw;
     grid-template-columns: 19.088cqw 5.128cqw 20.684cqw;
     margin: 1.500cqw 0 0; /* room for the Read why pill under the race line */
-    padding-bottom: 1.750cqw;
+    padding-bottom: 0.600cqw;
   }
 
   .hf-duel__card {
-    height: 6.268cqw;
+    height: 7.500cqw;
   }
 
   .hf-duel__card--fox {
     --hf-ico-x: 2.877cqw;
     --hf-ico-w: 3.960cqw;
     --hf-id-x: 12.336cqw;
-    --hf-role-off: 0.142cqw;
+    --hf-pick-w: 11.400cqw;
   }
 
   .hf-duel__card--cubs {
     --hf-ico-x: 2.051cqw;
     --hf-ico-w: 4.587cqw;
     --hf-id-x: 12.678cqw;
-    --hf-role-off: 0.641cqw;
+    --hf-pick-w: 12.200cqw;
   }
 
   .hf-duel__card::before {
@@ -1196,6 +1193,7 @@
   }
 
   .hf-duel__id {
+    top: calc(50% + 0.450cqw);
     gap: 0.600cqw;
   }
 
@@ -1203,13 +1201,8 @@
     font-size: 2.500cqw;
   }
 
-  .hf-duel__role {
-    font-size: 1.339cqw;
-  }
-
   .hf-duel__pick {
-    top: calc(100% + 0.450cqw);
-    font-size: 1.300cqw;
+    font-size: 1.250cqw;
   }
 
   .hf-why {
