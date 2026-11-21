@@ -784,7 +784,7 @@
   margin: 0 0.300em;
 }
 
-.hf-tone-miss .hf-kicker {
+.hf-tone-miss.is-revealed .hf-kicker {
   color: #ff8f84;
 }
 
@@ -814,12 +814,12 @@
 }
 
 /* A card's mark: right, or wrong. */
-.hf-pick.is-wrong .hf-pick__tick {
+.is-revealed .hf-pick.is-wrong .hf-pick__tick {
   background: radial-gradient(circle at 50% 35%, #f2665c, #c8281f 70%);
   box-shadow: 0 0 1cqw color-mix(in srgb, var(--hf-red) 55%, transparent);
 }
 
-.hf-pick.is-wrong {
+.is-revealed .hf-pick.is-wrong {
   border-color: color-mix(in srgb, var(--hf-line) 55%, #5b5b5b);
   box-shadow:
     0 0 0.400cqw 0 color-mix(in srgb, var(--hf-gold) 45%, transparent),
@@ -1367,11 +1367,11 @@
     --hf-foot-pad: 0 1.400cqw 0 1.700cqw;
   }
 
-  .hf-pick.is-wrong .hf-pick__tick {
+  .is-revealed .hf-pick.is-wrong .hf-pick__tick {
     box-shadow: 0 0 0.400cqw color-mix(in srgb, var(--hf-red) 55%, transparent);
   }
 
-  .hf-pick.is-wrong {
+  .is-revealed .hf-pick.is-wrong {
     box-shadow:
       0 0 0.160cqw 0 color-mix(in srgb, var(--hf-gold) 45%, transparent),
       0 0 0.700cqw 0 color-mix(in srgb, var(--hf-glow) 28%, transparent);
@@ -1449,4 +1449,26 @@
   .hf-board--record .hf-board__text {
     margin-left: 2.050cqw;
   }
+}
+
+/* ── Result · nothing gives the winner away before the reveal ──
+   landing.js adds .is-revealed to the section when the winner is
+   revealed (or was, here or on the racecard); an abandoned race has no
+   reveal and is rendered with it. Until then the headline is neutral,
+   the cards carry no marks and the winner's jockey and trainer wait. */
+.hero-fold__section--resulted:not(.is-revealed) .hf-title__told,
+.hero-fold__section--resulted.is-revealed .hf-title__veil {
+  display: none;
+}
+
+.hero-fold__section--resulted:not(.is-revealed) .hf-pick__tick,
+.hero-fold__section--resulted:not(.is-revealed) .hf-winner__by {
+  visibility: hidden;
+}
+
+/* ── Phones · the pick-made and result states are shorter than the
+   first screen, so the hero ends with them instead of leaving an empty
+   band above the next section. ── */
+.hero-fold:has(.hero-fold__section--picked) {
+  min-height: 0;
 }
