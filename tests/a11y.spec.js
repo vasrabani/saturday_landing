@@ -7,6 +7,7 @@ import { openIndex } from './support/llama.js';
 import { openMeeting } from './support/meeting.js';
 import { ARTICLES, LETTERS, openNews } from './support/news.js';
 import { openRaces } from './support/races.js';
+import { openRaceResult } from './support/race-result.js';
 import { openTrail } from './support/trail.js';
 
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
@@ -37,6 +38,7 @@ const PAGES = [
   { file: 'races.html', open: (page) => openRaces(page) },
   { file: 'races-tomorrow.html', open: (page) => openRaces(page, { day: 'tomorrow' }) },
   { file: 'races-yesterday.html', open: (page) => openRaces(page, { day: 'yesterday' }) },
+  { file: 'results-race.html', open: (page) => openRaceResult(page, { waitUntil: 'load' }) },
   // The Fox's Wire: the front page, the article with the most parts
   // (tables, entries, side boxes) and a letter.
   { file: 'news/index.html', open: (page) => openNews(page) },

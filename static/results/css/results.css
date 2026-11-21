@@ -1,0 +1,437 @@
+/* RESULTS-1 · /results/ — Saturday Edition cream paper.
+ *
+ * Light, not dark. The site's chrome is navy and gold, but anything a
+ * reader SCANS switches to the cream treatment the racecard browser
+ * has always used — "easier to read at a glance", in its own words.
+ * A results table is the most scanned thing on the site, so the first
+ * version of this page being dark had it the wrong way round.
+ *
+ * Colours come from static/css/paper.css (the cream palette) and
+ * static/css/base.css (the brand gold, the space scale, the faces).
+ * The only literals are the two ink-on-gold values, marked where they
+ * are, because those must NOT follow a palette.
+ */
+
+.page-results { background: var(--c-paper); color: var(--c-ink); }
+
+.res-wrap { max-width: 1140px; margin: 0 auto; padding: 0 var(--space-4); }
+
+/* ── Masthead: the one dark band, tying the page to the chrome ── */
+.res-mast {
+  background: var(--c-navy);
+  border-bottom: 3px solid var(--c-gold);
+  padding: var(--space-5) 0;
+}
+.res-eyebrow {
+  margin: 0; font-size: 11px; font-weight: 700; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--c-gold);
+}
+.res-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(26px, 4.5vw, 40px); line-height: 1.08;
+  margin: var(--space-2) 0 var(--space-1);
+  color: var(--c-text-100); text-wrap: balance;
+}
+.res-lede { margin: 0; color: var(--c-text-55); font-size: 14px; }
+
+/* ── Meeting bar ───────────────────────────────────────────── */
+.res-bar {
+  position: sticky; top: 0; z-index: 30;
+  background: var(--c-card); border-bottom: 1px solid var(--c-rule);
+}
+.res-bar__inner {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--space-3); padding: var(--space-3) var(--space-4);
+}
+.res-dates { display: inline-flex; align-items: center; gap: var(--space-1); }
+.res-date {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 34px; height: 34px; padding: 0 var(--space-3);
+  border: 1px solid var(--c-rule-strong); border-radius: 8px;
+  background: var(--c-card); color: var(--c-ink);
+  font-size: 14px; font-weight: 600; text-decoration: none;
+}
+.res-date:hover { border-color: var(--c-gold-bright); background: var(--c-gold-wash); }
+.res-date--now { background: var(--c-card-warm); }
+.res-date--off { opacity: .3; }
+
+.res-meets { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.res-meet {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: 7px var(--space-3); border-radius: 999px;
+  border: 1px solid var(--c-rule-strong); background: var(--c-card);
+  color: var(--c-ink-70); font-size: 13.5px; font-weight: 600;
+  text-decoration: none;
+}
+.res-meet:hover { border-color: var(--c-gold-bright); color: var(--c-ink); }
+.res-meet.is-on {
+  background: var(--c-gold-bright); border-color: var(--c-gold-bright);
+  /* Ink on gold: a literal, because it must NOT follow the palette.
+     Legible on #D4AF37 whatever the surrounding theme does. */
+  color: #1a1405;
+}
+.res-meet__n {
+  font-size: 11px; font-weight: 700; color: var(--c-ink-40);
+  font-variant-numeric: tabular-nums;
+}
+.res-meet.is-on .res-meet__n { color: rgba(26, 20, 5, .65); }
+
+.res-showall {
+  margin-left: auto; cursor: pointer; border-radius: 8px;
+  border: 1px solid var(--c-rule-strong); background: var(--c-card);
+  color: var(--c-ink); padding: 8px 14px;
+  font-family: var(--font-body); font-size: 13.5px; font-weight: 700;
+}
+.res-showall:hover { border-color: var(--c-gold-bright); background: var(--c-gold-wash); }
+.res-showall[aria-pressed="true"] {
+  background: var(--c-gold-wash); border-color: var(--c-gold-bright);
+  color: var(--c-gold-ink);
+}
+
+/* ── The day strip ─────────────────────────────────────────── */
+.res-strip { background: var(--c-card-warm); border-bottom: 1px solid var(--c-rule); }
+.res-strip__inner {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--space-5); padding: var(--space-4);
+}
+.res-stat { display: flex; align-items: center; gap: var(--space-3); }
+.res-stat__ico {
+  width: 24px; height: 24px; flex: 0 0 auto;
+  color: var(--c-gold-ink); opacity: .85;
+}
+.res-stat__body { display: flex; flex-direction: column; }
+.res-stat__v {
+  font-family: var(--font-display); font-size: 20px; font-weight: 700;
+  line-height: 1.15; color: var(--c-ink); font-variant-numeric: tabular-nums;
+}
+.res-stat__k {
+  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--c-ink-40); font-weight: 700;
+}
+.res-strip__mark {
+  margin-left: auto; padding-left: var(--space-5);
+  border-left: 1px solid var(--c-rule-strong);
+  font-size: 10px; line-height: 1.6; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--c-ink-40); font-weight: 700;
+}
+.res-strip__mark b { display: block; color: var(--c-gold-ink); }
+@media (max-width: 960px) { .res-strip__mark { display: none; } }
+
+/* ── Races ─────────────────────────────────────────────────── */
+.res-main { padding: var(--space-5) var(--space-4) var(--space-7); }
+.res-races {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: var(--space-4);
+}
+.res-race {
+  background: var(--c-card); border: 1px solid var(--c-rule);
+  border-radius: 12px; overflow: hidden;
+  box-shadow: 0 1px 2px rgba(17, 21, 31, .04);
+}
+.res-race--void { opacity: .7; }
+
+.res-rhead {
+  display: grid; grid-template-columns: auto 1fr auto;
+  gap: var(--space-4); align-items: center;
+  padding: var(--space-4); border-bottom: 1px solid var(--c-rule);
+}
+@media (max-width: 760px) {
+  .res-rhead { grid-template-columns: auto 1fr; }
+  .res-rhead__act { grid-column: 1 / -1; justify-self: start; }
+}
+.res-rno { display: flex; align-items: center; gap: var(--space-3); }
+.res-rno__badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 999px; flex: 0 0 auto;
+  background: var(--c-gold-bright);
+  /* Ink on gold — a literal, same reason as the pill above. */
+  color: #1a1405;
+  font-family: var(--font-display); font-size: 15px; font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+.res-rno__t {
+  font-family: var(--font-display); font-size: 19px; font-weight: 700;
+  color: var(--c-ink); font-variant-numeric: tabular-nums;
+}
+.res-rtitle { min-width: 0; }
+.res-rtitle__nm {
+  display: block; font-weight: 700; font-size: 16px; color: var(--c-ink);
+}
+.res-rtitle__meta {
+  display: block; margin-top: 2px; font-size: 12.5px; color: var(--c-ink-40);
+}
+.res-rhead__act {
+  display: flex; align-items: center; gap: var(--space-2); justify-self: end;
+}
+.res-btn {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  border-radius: 8px; padding: 8px 13px; cursor: pointer;
+  border: 1px solid var(--c-rule-strong); background: var(--c-card);
+  color: var(--c-ink); text-decoration: none; white-space: nowrap;
+  font-family: var(--font-body); font-size: 13px; font-weight: 700;
+}
+.res-btn:hover { border-color: var(--c-gold-bright); background: var(--c-gold-wash); }
+.res-btn--gold {
+  background: var(--c-gold-bright); border-color: var(--c-gold-bright);
+  color: #1a1405;
+}
+.res-btn--gold:hover { background: var(--c-gold-lt); }
+
+.res-chip {
+  white-space: nowrap; border-radius: 999px; padding: 5px 10px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.res-chip--result {
+  color: var(--c-green); background: rgba(26, 125, 74, .10);
+  border: 1px solid rgba(26, 125, 74, .30);
+}
+.res-chip--await {
+  color: var(--c-ink-40); background: var(--c-card-warm);
+  border: 1px solid var(--c-rule-strong);
+}
+.res-chip--void {
+  color: var(--c-red); background: rgba(192, 57, 43, .08);
+  border: 1px solid rgba(192, 57, 43, .28);
+}
+
+/* ── Guard ─────────────────────────────────────────────────── */
+.res-guard {
+  display: flex; flex-wrap: wrap; align-items: center;
+  justify-content: space-between; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4); background: var(--c-card-warm);
+}
+.res-guard__say { margin: 0; font-size: 13.5px; color: var(--c-ink-70); }
+.res-guard__btn {
+  border: 1px solid var(--c-gold-bright); border-radius: 8px;
+  background: var(--c-card); color: var(--c-gold-ink); cursor: pointer;
+  padding: 8px 14px; font-family: var(--font-body);
+  font-size: 13.5px; font-weight: 700;
+}
+.res-guard__btn:hover { background: var(--c-gold-wash); }
+
+/* `hidden` is display:none from the UA sheet and ANY author display
+ * beats it. .res-guard sets display:flex, so hiding it in JS did
+ * nothing and the reveal left "Result hidden" sitting above the
+ * result. Attribute selectors rather than !important: already more
+ * specific than the class alone. */
+.res-guard[hidden], .res-body[hidden], .res-tbl tr[hidden] { display: none; }
+
+.res-body { padding: var(--space-4); }
+.res-body--flat { padding: var(--space-3) var(--space-4); }
+.res-empty { margin: 0; font-size: 13.5px; color: var(--c-ink-40); }
+
+/* ── The result: podium | table | take ─────────────────────── */
+/* TWO columns, not three. Saturday's take sits UNDER the Top 3 in
+ * the left rail rather than in a third column of its own, which gives
+ * the full-result table the width back -- it is the widest thing on
+ * the page and was being squeezed into the middle third while a
+ * two-row verdict panel held 280px of its own.
+ *
+ * The rail is sized to the podium, which needs three cards side by
+ * side; the table takes everything else. */
+.res-grid {
+  display: grid; gap: var(--space-4);
+  grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+  align-items: start;
+}
+.res-side {
+  display: flex; flex-direction: column; gap: var(--space-4);
+  min-width: 0;
+}
+/* minmax(0, 1fr), NOT 1fr. A bare 1fr refuses to shrink below its
+ * content's min-width, and .res-tbl carries min-width: 400px -- so on
+ * a 375px phone the column resolved to 400px, overflowed its card,
+ * and .res-race's `overflow: hidden` CLIPPED the table instead of
+ * letting .res-tblwrap scroll it. The page reported no sideways
+ * scroll and the table reported no scroll of its own, which is the
+ * signature of content quietly cut off rather than content that
+ * fits. Measured at 375px, not eyeballed. */
+@media (max-width: 1100px) {
+  .res-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+.res-podium__h, .res-tblhead, .res-take__h {
+  margin: 0 0 var(--space-3); font-family: var(--font-body);
+  font-size: 10.5px; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--c-ink-40);
+}
+.res-podium {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2); align-items: end;
+}
+/* Three podium cards in ~300px is about 95px each: enough for a
+ * price and a position, not for a horse name and two connections.
+ * Below that the podium stacks in finishing order, where first
+ * naturally comes first and the raised-centre treatment has no
+ * meaning anyway. */
+@media (max-width: 460px) {
+  .res-podium { grid-template-columns: minmax(0, 1fr); }
+  .res-pod--1 { order: 0; }
+  .res-pod--2 { order: 1; }
+  .res-pod--3 { order: 2; }
+}
+.res-pod {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: var(--space-3) var(--space-2); min-width: 0;
+  background: var(--c-card-warm); border: 1px solid var(--c-rule);
+  border-radius: 10px; text-align: center;
+}
+/* First is centre and raised, the way a podium reads. */
+.res-pod--1 {
+  order: 2; padding-top: var(--space-4); padding-bottom: var(--space-4);
+  background: var(--c-gold-wash); border-color: var(--c-gold-bright);
+}
+.res-pod--2 { order: 1; }
+.res-pod--3 { order: 3; }
+.res-pod__pos {
+  font-family: var(--font-display); font-size: 17px; font-weight: 800;
+  line-height: 1; color: var(--c-ink-40);
+}
+.res-pod--1 .res-pod__pos { font-size: 22px; color: var(--c-gold-ink); }
+.res-pod__horse {
+  font-weight: 700; font-size: 13px; color: var(--c-ink);
+  line-height: 1.25; overflow-wrap: anywhere;
+}
+.res-pod__sp {
+  font-weight: 800; font-size: 14px; color: var(--c-gold-ink);
+  font-variant-numeric: tabular-nums;
+}
+.res-pod__jt { font-size: 10.5px; color: var(--c-ink-40); line-height: 1.35; }
+.res-pod__mgn {
+  margin-top: 2px; font-size: 10px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--c-ink-40);
+}
+.res-pod--1 .res-pod__mgn { color: var(--c-gold-ink); }
+
+/* ── Full result table ─────────────────────────────────────── */
+.res-tblwrap { overflow-x: auto; }
+.res-tbl {
+  width: 100%; min-width: 400px; border-collapse: collapse;
+  font-size: 13px; color: var(--c-ink-70);
+}
+.res-tbl th {
+  text-align: left; padding: var(--space-2); white-space: nowrap;
+  border-bottom: 1px solid var(--c-rule-strong);
+  font-size: 10px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--c-ink-40);
+}
+.res-tbl td { padding: 8px var(--space-2); border-bottom: 1px solid var(--c-rule); }
+.res-tbl tbody tr:last-child td { border-bottom: 0; }
+.res-r { text-align: right; font-variant-numeric: tabular-nums; }
+th.res-r { text-align: right; }
+.res-pos { font-weight: 700; white-space: nowrap; color: var(--c-ink); }
+.res-pos--1 { color: var(--c-gold-ink); }
+.res-out td { color: var(--c-ink-40); }
+.res-dnf {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .06em; color: var(--c-red);
+}
+.res-horse { display: inline-flex; align-items: center; gap: var(--space-2); }
+.res-horse__nm { font-weight: 700; color: var(--c-ink); }
+.res-out .res-horse__nm { color: var(--c-ink-40); }
+.res-fav {
+  margin-left: 4px; padding: 0 3px; border-radius: 3px;
+  border: 1px solid var(--c-gold-ink); color: var(--c-gold-ink);
+  font-size: 9.5px; font-weight: 700; vertical-align: 1px;
+}
+.res-more {
+  display: flex; flex-wrap: wrap; gap: var(--space-3);
+  align-items: center; margin-top: var(--space-3);
+}
+.res-more__btn {
+  cursor: pointer; border-radius: 999px; padding: 7px 14px;
+  border: 1px dashed var(--c-rule-strong); background: var(--c-card-warm);
+  color: var(--c-ink-70); font-family: var(--font-body);
+  font-size: 12.5px; font-weight: 700;
+}
+.res-more__btn:hover { border-color: var(--c-gold-bright); color: var(--c-ink); }
+.res-more__all { font-size: 12.5px; font-weight: 700; color: var(--c-gold-ink); }
+
+/* Silks come from races/components/atoms/_silk.html: the API's hosted
+ * SVG where there is one, a stylised jersey patterned from the runner
+ * number otherwise. Sized here because that atom's own sizing lives in
+ * races/css/main.css, which this page does not load. Ratios match the
+ * atom's 28x32 viewBox so the jersey is not squashed. */
+.racecard__silk { flex: 0 0 auto; display: block; width: 18px; height: 21px; }
+.racecard__silk--sm { width: 18px; height: 21px; }
+.racecard__silk--md { width: 20px; height: 23px; }
+.racecard__silk--lg { width: 40px; height: 46px; }
+.racecard__silk--img { border-radius: 3px; background: var(--c-card); }
+
+/* ── Saturday's take ───────────────────────────────────────── */
+.res-take {
+  border-radius: 10px;
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  background: var(--c-card-warm); border: 1px solid var(--c-rule);
+}
+.res-vlist {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: var(--space-3);
+}
+.res-v {
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 2px var(--space-3); align-items: center;
+}
+.res-v__src {
+  grid-column: 1; font-size: 11px; font-weight: 700; letter-spacing: .06em;
+  color: var(--c-gold-ink); text-transform: uppercase;
+}
+.res-v__body { grid-column: 1; min-width: 0; }
+.res-v__horse { font-size: 13.5px; font-weight: 700; color: var(--c-ink); }
+.res-v__price {
+  margin-left: 5px; font-size: 12.5px; font-weight: 700;
+  color: var(--c-ink-70); font-variant-numeric: tabular-nums;
+}
+.res-badge {
+  grid-column: 2; grid-row: 1 / span 2; align-self: center;
+  white-space: nowrap; border-radius: 999px; padding: 4px 10px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.res-badge--won { background: var(--c-green); color: #ffffff; }
+.res-badge--placed { background: var(--c-gold-bright); color: #1a1405; }
+.res-badge--lost {
+  background: var(--c-card); color: var(--c-ink-40);
+  border: 1px solid var(--c-rule-strong);
+}
+.res-badge--pending {
+  background: transparent; color: var(--c-ink-40);
+  border: 1px dashed var(--c-rule-strong);
+}
+
+/* ── Remaining races, compact ──────────────────────────────── */
+.res-restwrap { overflow-x: auto; }
+.res-rest { width: 100%; min-width: 660px; border-collapse: collapse; font-size: 13px; }
+.res-rest th {
+  text-align: left; padding: var(--space-2) var(--space-3); white-space: nowrap;
+  border-bottom: 1px solid var(--c-rule-strong);
+  font-size: 10px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--c-ink-40);
+}
+.res-rest td {
+  padding: 10px var(--space-3); border-bottom: 1px solid var(--c-rule);
+  color: var(--c-ink-70);
+}
+.res-rest tbody tr:hover { background: var(--c-gold-wash); }
+.res-rest__n {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; border-radius: 999px;
+  background: var(--c-card-warm); border: 1px solid var(--c-rule-strong);
+  font-size: 11px; font-weight: 700; color: var(--c-ink-70);
+  font-variant-numeric: tabular-nums;
+}
+.res-rest__race { font-weight: 700; color: var(--c-ink); }
+.res-rest__winner { display: inline-flex; align-items: center; gap: var(--space-2); }
+.res-rest__link { color: var(--c-gold-ink); font-weight: 700; text-decoration: none; }
+.res-rest__link:hover { text-decoration: underline; }
+
+.res-none { padding: var(--space-7) 0; color: var(--c-ink-70); }
+.res-none a { color: var(--c-gold-ink); }
+
+/* ── Focus + motion ───────────────────────────────────────── */
+.res-date:focus-visible, .res-meet:focus-visible, .res-showall:focus-visible,
+.res-guard__btn:focus-visible, .res-btn:focus-visible,
+.res-more__btn:focus-visible, .res-rest__link:focus-visible {
+  outline: 2px solid var(--c-gold-ink); outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none; } }
