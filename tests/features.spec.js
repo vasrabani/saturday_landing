@@ -137,6 +137,8 @@ test.describe('the hero, as drawn', () => {
     await expect(cards.nth(0)).toHaveAttribute('href', /tipsters\/mr-fox\//);
     await expect(cards.nth(1)).toContainText('The Cubs');
     await expect(cards.nth(1)).toHaveAttribute('href', /\/cubs\//);
+    // The Cubs card shows the most-picked horse, not the visitor's.
+    await expect(cards.nth(1).locator('.hf-duel__role')).toHaveText('Most picked');
   });
 
   test('names the featured race and counts down to its off', async ({ page }) => {
@@ -231,6 +233,8 @@ test.describe('the hero after the pick', () => {
     await expect(hero.locator('.hf-pick--fox .hf-sr')).toHaveText('Right');
     await expect(hero.locator('.hf-pick--cubs')).toHaveClass(/is-wrong/);
     await expect(hero.locator('.hf-pick--cubs .hf-sr')).toHaveText('Wrong');
+    // The Cubs card shows the most-picked horse, not the visitor's.
+    await expect(hero.locator('.hf-pick--cubs .hf-pick__role')).toHaveText('Most picked');
     // Until the reveal nothing gives the winner away: a neutral headline,
     // no marks on the cards, no jockey and trainer.
     await expect(hero.locator('.hf-title__veil')).toBeVisible();
