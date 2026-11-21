@@ -323,6 +323,11 @@
 }
 
 /* Between the two cards, over the edge of each. */
+/* The "Read why" pill (hero-fold / hero-fox.css) shares the Fox card's
+   cell, as on the first state, so each card keeps its own. */
+.hf-picks .hf-pick--fox { grid-area: 1 / 1; }
+.hf-picks .hf-pick--you { grid-area: 1 / 2; }
+
 .hf-picks .hf-duel__vs {
   position: absolute;
   top: 9.290cqw;

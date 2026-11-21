@@ -571,9 +571,9 @@
 
 /* Each piece of the duel keeps its own column, so the pill below can
    share the Fox card's cell without pushing the others along. */
-.hf-duel__card--fox { grid-area: 1 / 1; }
-.hf-duel__vs { grid-area: 1 / 2; }
-.hf-duel__card--cubs { grid-area: 1 / 3; }
+.hf-duel > .hf-duel__card--fox { grid-area: 1 / 1; }
+.hf-duel > .hf-duel__vs { grid-area: 1 / 2; }
+.hf-duel > .hf-duel__card--cubs { grid-area: 1 / 3; }
 
 /* "Read why": the Fox's reasoning (the featured tip), a tab sitting on
    the top edge of the Fox's card towards its right. It shares the card's
