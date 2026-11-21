@@ -141,6 +141,18 @@ test.describe('the hero, as drawn', () => {
     await expect(cards.nth(1).locator('.hf-duel__role')).toHaveText('Most picked');
   });
 
+  test('"Read why" stands clear of the race line, even under a long race name', async ({ page }) => {
+    await openLanding(page);
+    const hero = page.locator('#big-race-day');
+    // The live Haydock name ran under the pill on desktop (November 2026).
+    await hero.locator('.hf-race__name').evaluate((n) => {
+      n.textContent = 'Betfair Steeple Chase (Grade 1) (Registered As The Lancashire Steeple Chase)';
+    });
+    const line = await hero.locator('.hf-race').boundingBox();
+    const pill = await hero.locator('.hf-why').boundingBox();
+    expect(pill.y).toBeGreaterThanOrEqual(line.y + line.height);
+  });
+
   test('names the featured race and counts down to its off', async ({ page }) => {
     await openLanding(page);
     const race = page.locator('#big-race-day .hf-race');
