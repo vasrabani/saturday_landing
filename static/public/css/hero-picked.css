@@ -326,7 +326,8 @@
 /* The "Read why" pill (hero-fold / hero-fox.css) shares the Fox card's
    cell, as on the first state, so each card keeps its own. */
 .hf-picks .hf-pick--fox { grid-area: 1 / 1; }
-.hf-picks .hf-pick--you { grid-area: 1 / 2; }
+.hf-picks .hf-pick--you,
+.hf-picks .hf-pick--cubs { grid-area: 1 / 2; }
 
 .hf-picks .hf-duel__vs {
   position: absolute;
@@ -1476,4 +1477,15 @@
    band above the next section. ── */
 .hero-fold:has(.hero-fold__section--picked) {
   min-height: 0;
+}
+
+/* ── Result · "Read why" stands clear of the Fox card's mark ── */
+.hero-fold__section--resulted .hf-why {
+  margin-right: 9.600cqw;
+}
+
+@media (min-width: 1024px) {
+  .hero-fold__section--resulted .hf-why {
+    margin-right: 3.700cqw;
+  }
 }

@@ -249,6 +249,15 @@ test.describe('the hero after the pick', () => {
     await expect(hero.locator('.hf-pick__tick').first()).toBeVisible();
     await expect(hero.locator('.hf-winner__by')).toBeVisible();
     await expect(hero.locator('.hf-winner__horse')).toHaveText('Dark Cloud Rising');
+    // "Read why" on the Fox's card, clear of the card's mark.
+    const why = hero.locator('.hf-why');
+    await expect(why).toHaveAttribute('href', /races\/big-race\/featured-tip\//);
+    const pill = await why.boundingBox();
+    const fox = await hero.locator('.hf-pick--fox').boundingBox();
+    const mark = await hero.locator('.hf-pick--fox .hf-pick__tick').boundingBox();
+    expect(pill.y).toBeLessThan(fox.y);
+    expect(pill.y + pill.height).toBeGreaterThan(fox.y);
+    expect(pill.x + pill.width).toBeLessThan(mark.x);
     await expect(hero.locator('.hf-board--record')).toHaveAttribute('href', /news\/honest-record\//);
     expect(problems).toEqual([]);
   });
