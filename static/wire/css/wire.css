@@ -161,8 +161,10 @@ html:has(> body.page-wire) {
    base.html's nav, unchanged, dressed as the Wire's bar: the
    Enclosure's glowing midnight, cream links, and the logo moved down
    into its own band. On narrow screens the links scroll sideways
-   instead of folding into the menu button, so the hamburger, the
-   race badge and the date (already in the masthead) stand down here.
+   instead of folding away, and the menu button stays beside them below
+   1280px, as on every page, so the drawer (account, Sign out, the big
+   race) is a tap away. The race badge and the date (already in the
+   masthead) stand down here.
    Menus open under their own item; wire_nav.js places them, because
    the scrolling row would clip them where chrome.css puts them. */
 
@@ -183,8 +185,7 @@ html:has(> body.page-wire) {
 }
 .page-wire .site-nav__brand,
 .page-wire .site-nav__date,
-.page-wire .site-nav__badge,
-.page-wire .site-nav__hamburger {
+.page-wire .site-nav__badge {
   display: none;
 }
 
