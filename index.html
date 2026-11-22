@@ -137,6 +137,7 @@
     <link rel="stylesheet" href="static/public/css/defer-bg.css" />
     <link rel="stylesheet" href="static/public/css/hero-fold.css" />
     <link rel="stylesheet" href="static/public/css/hero-picked.css" />
+    <link rel="stylesheet" href="static/public/css/fox-challenge.css" />
     <link rel="stylesheet" href="static/races/css/pick6_emblem.css" />
     <link rel="stylesheet" href="static/public/css/landing.css" />
     <link rel="stylesheet" href="static/public/css/battle-section.css" />
@@ -2954,6 +2955,8 @@
                 <a
                   href="https://www.saturday-racing.com/races/feature/"
                   class="btn btn-primary btn--lg hf-ctas__pick"
+                  data-fox-challenge
+                  data-fox-race="15:45 Musselburgh"
                 >
                   <span class="hf-ctas__label">Pick your horse</span>
                   <svg class="hf-ctas__arrow" viewBox="0 0 48 48" aria-hidden="true">
@@ -6581,7 +6584,7 @@
             <ul class="sf__nav-list">
               <li><a href="https://www.saturday-racing.com/">Home</a></li>
               <li><a href="https://www.saturday-racing.com/races/">Today’s card</a></li>
-              <li><a href="https://www.saturday-racing.com/pick/">Pick</a></li>
+              <li><a href="https://www.saturday-racing.com/pick/" data-fox-challenge>Pick</a></li>
               <li><a href="https://www.saturday-racing.com/races/tomorrow/">Tomorrow</a></li>
               <li><a href="https://www.saturday-racing.com/results/">Results</a></li>
               <li><a href="https://www.saturday-racing.com/#market-movers">Market movers</a></li>
@@ -6692,6 +6695,42 @@
       </div>
     </footer>
 
+    <!-- "Challenge me, Cubs": the step between "Pick your horse" and a
+         race. One dialog; any link marked data-fox-challenge opens it
+         (static/public/js/fox-challenge.js). Django: the partial
+         public/components/v2/_fox_challenge.html, included in base.html. -->
+    <dialog class="fox-challenge" id="foxChallenge" aria-labelledby="foxChallengeTitle" aria-describedby="foxChallengeBody">
+      <form method="dialog">
+        <button class="fox-challenge__close" aria-label="Close">✕</button>
+      </form>
+
+      <div class="fox-challenge__fox" aria-hidden="true"></div>
+      <p class="fox-challenge__eyebrow">The Fox says</p>
+      <h2 class="fox-challenge__title" id="foxChallengeTitle">“Challenge me, Cubs”</h2>
+      <p class="fox-challenge__body" id="foxChallengeBody">
+        Pick a horse from today’s racing or the featured race. Let’s see who wins.
+      </p>
+
+      <div class="fox-challenge__choices">
+        <a class="fox-challenge__choice" href="https://www.saturday-racing.com/races/">
+          <span class="fox-challenge__icon fox-challenge__icon--today" aria-hidden="true"></span>
+          <span>
+            <span class="fox-challenge__label">Today’s races</span>
+            <span class="fox-challenge__meta">Up to 6 picks today</span>
+          </span>
+          <span class="fox-challenge__arrow" aria-hidden="true">→</span>
+        </a>
+        <a class="fox-challenge__choice fox-challenge__choice--featured" href="https://www.saturday-racing.com/pick/" data-fox-challenge-featured>
+          <span class="fox-challenge__icon fox-challenge__icon--featured" aria-hidden="true"></span>
+          <span>
+            <span class="fox-challenge__label">Featured race</span>
+            <span class="fox-challenge__meta" data-fox-challenge-race>Beat the Fox</span>
+          </span>
+          <span class="fox-challenge__arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </dialog>
+
     <script src="static/js/site.js" defer></script>
 
     <script id="saturday-draw-runners" type="application/json">
@@ -6714,6 +6753,7 @@
     <script src="static/public/js/battle-fox-hero.js" defer></script>
     <script src="static/public/js/day_hub.js" defer></script>
     <script src="static/public/js/fox-trail-promo.js" defer></script>
+    <script src="static/public/js/fox-challenge.js" defer></script>
 
     <script src="static/public/js/tv_static.js" defer></script>
     <script src="static/public/js/defer-bg.js" defer></script>

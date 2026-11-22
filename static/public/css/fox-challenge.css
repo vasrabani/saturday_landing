@@ -1,0 +1,229 @@
+/* ──────────────────────────────────────────────────────────────
+   fox-challenge.css — "Challenge me, Cubs" onboarding step
+
+   Identical in saturday_landing (static/public/css/) and Django
+   (public/static/public/v2/css/): the icon paths are relative and the
+   two trees have the same img/icons/ beside css/.
+
+   One <dialog>, opened by any [data-fox-challenge] link. Desktop:
+   a centred card. Phone (< 640px): a bottom sheet, both choices
+   stacked within thumb reach. Same markup, same tokens - only the
+   container's shape changes.
+
+   Colours and type come from the drawn hero's tokens (hero-fox.css)
+   so the step reads as part of the hero, not a generic modal.
+   ────────────────────────────────────────────────────────────── */
+
+.fox-challenge {
+  /* The hero's own palette (hero-fold.css / hero-fox.css --hf-*),
+     restated here because the dialog sits in the top layer, outside
+     .hero-fold, and is on every page - not only the home page that
+     loads the hero's stylesheet. */
+  --fc-gold: #f2b833;
+  --fc-gold-lit: #fbd66c;
+  --fc-line: #ffe9a8;
+  --fc-glow: #f09a1c;
+  --fc-panel: #0a0a06;
+  --fc-soft: #e9ecee;
+  --fc-ink: #0b0b0f;
+  --fc-fill: linear-gradient(180deg, #ffd858 0%, #f8c034 32%, #de9b0c 60%, #d38d01 86%, #f0b819 100%);
+  --fc-cond: 'Barlow Condensed', 'DM Sans', system-ui, sans-serif;
+  --fc-body: 'DM Sans', system-ui, sans-serif;
+
+  box-sizing: border-box;
+  width: min(38rem, calc(100% - 2rem));
+  max-width: none;
+  max-height: calc(100dvh - 2rem);
+  margin: auto;
+  padding: 2.25rem 2rem 2rem;
+  overflow: auto;
+  border: 1px solid color-mix(in srgb, var(--fc-line) 55%, transparent);
+  border-radius: 1.25rem;
+  background:
+    radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, var(--fc-glow) 22%, transparent), transparent 60%),
+    var(--fc-panel);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, #000 60%, transparent),
+    0 0 2.5rem -0.5rem color-mix(in srgb, var(--fc-glow) 55%, transparent),
+    0 1.5rem 4rem color-mix(in srgb, #000 70%, transparent);
+  color: var(--fc-soft);
+  font-family: var(--fc-body);
+  text-align: center;
+}
+
+.fox-challenge *,
+.fox-challenge *::before,
+.fox-challenge *::after { box-sizing: border-box; }
+
+.fox-challenge::backdrop {
+  background: color-mix(in srgb, #04080b 72%, transparent);
+  backdrop-filter: blur(3px);
+}
+
+/* ── Close ───────────────────────────────────────────────────── */
+.fox-challenge__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, #fff 8%, transparent);
+  color: var(--fc-soft);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+.fox-challenge__close:hover { background: color-mix(in srgb, #fff 16%, transparent); }
+
+/* ── The Fox ─────────────────────────────────────────────────── */
+.fox-challenge__fox {
+  width: 4.75rem;
+  aspect-ratio: 139 / 145;
+  margin: 0 auto 0.75rem;
+  background: url("../img/icons/hero-fox.svg") center / contain no-repeat;
+  filter: drop-shadow(0 0 1.1rem color-mix(in srgb, var(--fc-glow) 60%, transparent));
+}
+
+.fox-challenge__eyebrow {
+  margin: 0;
+  color: var(--fc-gold);
+  font-family: var(--fc-cond);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.fox-challenge__title {
+  margin: 0.15rem 0 0.75rem;
+  background: linear-gradient(180deg, #fff3c4 0%, var(--fc-gold-lit) 45%, var(--fc-gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-family: var(--fc-cond);
+  font-size: clamp(2.4rem, 7vw, 3.1rem);
+  font-style: italic;
+  font-weight: 900;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.fox-challenge__body {
+  max-width: 26rem;
+  margin: 0 auto 1.75rem;
+  color: color-mix(in srgb, var(--fc-soft) 82%, transparent);
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+/* ── The two choices ─────────────────────────────────────────── */
+.fox-challenge__choices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.875rem;
+}
+
+.fox-challenge__choice {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 4.5rem;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid color-mix(in srgb, var(--fc-gold) 70%, transparent);
+  border-radius: 999px;
+  color: var(--fc-line);
+  text-align: left;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.fox-challenge__choice:hover { background: color-mix(in srgb, var(--fc-gold) 10%, transparent); }
+.fox-challenge__choice:focus-visible { outline: 3px solid var(--fc-line); outline-offset: 3px; }
+
+/* The featured race is the head-to-head with the Fox: it gets the
+   hero's gold, the same fill as "Pick your horse". */
+.fox-challenge__choice--featured {
+  border-color: transparent;
+  background: var(--fc-fill);
+  box-shadow:
+    inset 0 2px 1px color-mix(in srgb, #fff 45%, transparent),
+    0 0.5rem 1.5rem -0.4rem color-mix(in srgb, var(--fc-glow) 85%, transparent);
+  color: var(--fc-ink);
+}
+.fox-challenge__choice--featured:hover { background: var(--fc-fill); transform: translateY(-1px); }
+
+.fox-challenge__icon {
+  width: 1.6rem;
+  height: 1.6rem;
+  background: currentColor;
+  -webkit-mask: var(--fc-icon) center / contain no-repeat;
+  mask: var(--fc-icon) center / contain no-repeat;
+}
+.fox-challenge__icon--today { --fc-icon: url("../img/icons/hero-calendar.svg"); }
+.fox-challenge__icon--featured { --fc-icon: url("../img/icons/hero-fox.svg"); }
+
+.fox-challenge__label {
+  display: block;
+  font-family: var(--fc-cond);
+  font-size: 1.45rem;
+  font-style: italic;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.fox-challenge__meta {
+  display: block;
+  margin-top: 0.2rem;
+  overflow: hidden;
+  font-size: 0.8rem;
+  opacity: 0.8;
+  text-overflow: ellipsis;
+  white-space: nowrap;      /* a long course name ends in … , never a second line */
+}
+/* The words' column may shrink below its text, so the ellipsis can work. */
+.fox-challenge__choice > span:nth-child(2) { min-width: 0; }
+.fox-challenge__arrow { font-size: 1.3rem; }
+
+/* ── Phone: a bottom sheet ───────────────────────────────────── */
+@media (max-width: 639.98px) {
+  .fox-challenge {
+    width: 100%;
+    max-width: none;
+    margin: auto 0 0;
+    padding: 1.75rem 1rem calc(1.25rem + env(safe-area-inset-bottom));
+    border-width: 1px 0 0;
+    border-radius: 1.5rem 1.5rem 0 0;
+  }
+  /* A grab handle says "this is a sheet". */
+  .fox-challenge::before {
+    content: "";
+    position: absolute;
+    top: 0.5rem;
+    left: 50%;
+    width: 2.5rem;
+    height: 0.25rem;
+    border-radius: 99px;
+    background: color-mix(in srgb, #fff 25%, transparent);
+    transform: translateX(-50%);
+  }
+  .fox-challenge__fox { width: 3.75rem; }
+  .fox-challenge__body { margin-bottom: 1.25rem; font-size: 1rem; }
+  /* Stacked, Today's first, so the Fox's race sits nearest the thumb. */
+  .fox-challenge__choices { grid-template-columns: 1fr; gap: 0.625rem; }
+  .fox-challenge__choice { min-height: 4rem; }
+}
+
+/* ── Motion: fade + rise, sheet slides up. Off when asked. ───── */
+@media (prefers-reduced-motion: no-preference) {
+  .fox-challenge[open] { animation: fc-in 0.22s ease-out; }
+  .fox-challenge[open]::backdrop { animation: fc-fade 0.22s ease-out; }
+  @media (max-width: 639.98px) {
+    .fox-challenge[open] { animation: fc-sheet 0.28s cubic-bezier(.2,.8,.2,1); }
+  }
+}
+@keyframes fc-in    { from { opacity: 0; transform: translateY(12px) scale(.98); } }
+@keyframes fc-sheet { from { transform: translateY(100%); } }
+@keyframes fc-fade  { from { opacity: 0; } }
