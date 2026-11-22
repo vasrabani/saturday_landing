@@ -3397,273 +3397,105 @@
         </div>
       </div>
 
-      <section class="land-shelf" aria-label="Editorial shelf — start here">
+      <section class="land-shelf" aria-labelledby="land-shelf-title">
         <div class="container land-shelf__inner">
-          <div class="land-shelf__kicker">
-            <div class="land-shelf__kicker-title">
-              <span class="land-shelf__kicker-dot" aria-hidden="true"></span>
-              Not voting? Start here.
-            </div>
-            <span class="land-shelf__kicker-sub"
-              >Key stories. Smart angles. Nothing to vote on - just what
-              matters</span
-            >
-          </div>
+          <header class="land-shelf__head">
+            <div class="land-shelf__ornament" aria-hidden="true"><span></span><i></i><span></span></div>
+            <h2 class="land-shelf__title" id="land-shelf-title">Beyond the vote</h2>
+            <p class="land-shelf__sub"><span class="land-shelf__kicker-dot" aria-hidden="true"></span> Not voting? Start here. Racing stories, sharp selections and horses worth watching.</p>
+          </header>
           <div class="land-shelf__cards">
-            <a
-              href="https://www.saturday-racing.com/news/"
-              class="land-shelf-card land-shelf-card--fox"
-              data-card-id="today_news"
-              aria-label="Mr Fox · News &mdash; Today&#x27;s headlines"
-            >
-              <div class="land-shelf-card__main">
-                <img
-                  class="land-shelf-card__avatar"
-                  src="static/public/img/mr_fox_host-sm.webp"
-                  alt=""
-                  loading="lazy"
-                  width="44"
-                  height="44"
-                />
+            <a href="https://www.saturday-racing.com/news/"
+               class="land-shelf-card land-shelf-card--fox"
+               data-card-id="today_news"
+               aria-label="Mr Fox · News &mdash; Today&#x27;s headlines: 28 new this week">
+              <div class="land-shelf-card__top">
+                <img class="land-shelf-card__avatar" src="static/public/img/mr_fox_host-sm.webp" alt="" loading="lazy" width="68" height="68">
                 <div class="land-shelf-card__body">
                   <div class="land-shelf-card__eyebrow">Mr Fox · News</div>
-                  <div class="land-shelf-card__headline">
-                    Today&#x27;s headlines
-                  </div>
-                  <div class="land-shelf-card__meta">35 new this week</div>
+                  <h3 class="land-shelf-card__title">Today&#x27;s headlines</h3>
                 </div>
-                <div class="land-shelf-card__arrow" aria-hidden="true">
-                  &rarr;
-                </div>
+                <span class="land-shelf-card__arrow" aria-hidden="true">
+                  <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11M11 5.5 15.5 10 11 14.5"/></svg>
+                </span>
               </div>
+              <div class="land-shelf-card__line">28 new this week</div>
               <div class="land-shelf-card__foot">
-                <svg
-                  class="land-shelf-card__foot-icon"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M5.08154 6.65295H10.128V5.65295H5.08154V6.65295Z"
-                    fill="#D8B14A"
-                  />
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M5.08154 9.42908H7.62559V8.42908H5.08154V9.42908Z"
-                    fill="#D8B14A"
-                  />
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M1.91797 1.33337H14.0823V14.6667H1.91797V1.33337ZM2.91797 2.33337V13.6667H13.0823V2.33337H2.91797Z"
-                    fill="#D8B14A"
-                  />
-                </svg>
-                <span class="land-shelf-card__foot-text"
-                  >Top stories &amp; racing updates</span
-                >
+                <svg class="land-shelf-card__foot-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M4 5.5h13v13a1.5 1.5 0 0 0 1.5 1.5H5.5A1.5 1.5 0 0 1 4 18.5z"/><path d="M17 9h3v9.5a1.5 1.5 0 0 1-3 0"/><rect x="7" y="8.5" width="4" height="3.5"/><path d="M13 8.5h1.5M13 12h1.5M7 15h7.5"/></svg>
+                <span class="land-shelf-card__foot-text">Top stories &amp; racing updates</span>
               </div>
             </a>
-
-            <a
-              href="https://www.saturday-racing.com/bet-of-the-day/"
-              class="land-shelf-card land-shelf-card--sly"
-              data-card-id="bet_of_day"
-              aria-label="Sly Man · BoD &mdash; Today&#x27;s pick lands soon"
-            >
-              <div class="land-shelf-card__main">
-                <img
-                  class="land-shelf-card__avatar"
-                  src="static/news/img/slyman-sm.webp"
-                  alt=""
-                  loading="lazy"
-                  width="44"
-                  height="44"
-                />
+            <a href="https://www.saturday-racing.com/bet-of-the-day/"
+               class="land-shelf-card land-shelf-card--sly"
+               data-card-id="bet_of_day"
+               aria-label="Sly Man · Back &mdash; Bet of the Day: Ceasar&#x27;s Ball · 13/8, Punchestown 15:30, WON +1.63pt">
+              <div class="land-shelf-card__top">
+                <img class="land-shelf-card__avatar" src="static/news/img/slyman-sm.webp" alt="" loading="lazy" width="68" height="68">
                 <div class="land-shelf-card__body">
-                  <div class="land-shelf-card__eyebrow">Sly Man · BoD</div>
-                  <div class="land-shelf-card__headline">
-                    Today&#x27;s pick lands soon
-                  </div>
-                  <div class="land-shelf-card__meta">Browse the logbook</div>
+                  <div class="land-shelf-card__eyebrow">Sly Man · Back</div>
+                  <h3 class="land-shelf-card__title">Bet of the Day</h3>
                 </div>
-                <div class="land-shelf-card__arrow" aria-hidden="true">
-                  &rarr;
-                </div>
+                <span class="land-shelf-card__arrow" aria-hidden="true">
+                  <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11M11 5.5 15.5 10 11 14.5"/></svg>
+                </span>
+              </div>
+              <div class="land-shelf-card__line">Ceasar&#x27;s Ball · 13/8</div>
+              <div class="land-shelf-card__status">
+                <span>Punchestown 15:30</span>
+                <b class="land-shelf-card__result land-shelf-card__result--won">WON +1.63pt</b>
               </div>
               <div class="land-shelf-card__foot">
-                <svg
-                  class="land-shelf-card__foot-icon"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M5.08154 6.65295H10.128V5.65295H5.08154V6.65295Z"
-                    fill="#D8B14A"
-                  />
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M5.08154 9.42908H7.62559V8.42908H5.08154V9.42908Z"
-                    fill="#D8B14A"
-                  />
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M1.91797 1.33337H14.0823V14.6667H1.91797V1.33337ZM2.91797 2.33337V13.6667H13.0823V2.33337H2.91797Z"
-                    fill="#D8B14A"
-                  />
-                </svg>
-                <span class="land-shelf-card__foot-text"
-                  >Sly Man&rsquo;s single of the day</span
-                >
+                <svg class="land-shelf-card__foot-icon" width="20" height="20" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M7.2148 10.5771V11.7506C7.20925 12.2535 6.94247 12.7172 6.51061 12.9746C5.5965 13.6519 5.05528 14.7207 5.05029 15.8585" stroke="currentColor" stroke-width="1.443" stroke-linecap="round" stroke-linejoin="round"/> <path d="M10.1011 10.5771V11.7506C10.1066 12.2535 10.3734 12.7172 10.8053 12.9746C11.7194 13.6519 12.2606 14.7207 12.2656 15.8585" stroke="currentColor" stroke-width="1.443" stroke-linecap="round" stroke-linejoin="round"/> <path d="M12.9868 6.49349H14.0691C15.0653 6.49349 15.8728 5.68592 15.8728 4.68974C15.8728 3.69355 15.0653 2.88599 14.0691 2.88599H12.9868" stroke="currentColor" stroke-width="1.443" stroke-linecap="round" stroke-linejoin="round"/> <path d="M2.88574 15.873H14.4298" stroke="currentColor" stroke-width="1.443" stroke-linecap="round" stroke-linejoin="round"/> <path d="M4.3291 6.49362C4.3291 8.88446 6.26726 10.8226 8.65811 10.8226C11.049 10.8226 12.9871 8.88446 12.9871 6.49362V2.16462C12.9871 1.76614 12.6641 1.44312 12.2656 1.44312H5.0506C4.65213 1.44312 4.3291 1.76614 4.3291 2.16462V6.49362Z" stroke="currentColor" stroke-width="1.443" stroke-linecap="round" stroke-linejoin="round"/> <path d="M4.32936 6.49349H3.24711C2.25093 6.49349 1.44336 5.68592 1.44336 4.68974C1.44336 3.69355 2.25093 2.88599 3.24711 2.88599H4.32936" stroke="currentColor" stroke-width="1.443" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span class="land-shelf-card__foot-text">Sly Man&#x27;s standout selection</span>
               </div>
             </a>
-
-            <a
-              href="https://www.saturday-racing.com/lay-of-the-day/"
-              class="land-shelf-card land-shelf-card--sly"
-              data-card-id="lay_of_day"
-              aria-label="Sly Man · LoD &mdash; Today&#x27;s lay lands soon"
-            >
-              <div class="land-shelf-card__main">
-                <img
-                  class="land-shelf-card__avatar"
-                  src="static/news/img/slyman-sm.webp"
-                  alt=""
-                  loading="lazy"
-                  width="44"
-                  height="44"
-                />
+            <a href="https://www.saturday-racing.com/lay-of-the-day/"
+               class="land-shelf-card land-shelf-card--sly"
+               data-card-id="lay_of_day"
+               aria-label="Sly Man · Lay &mdash; Lay of the Day: Gaelic Warrior · 8/13, Punchestown 15:00, landed">
+              <div class="land-shelf-card__top">
+                <img class="land-shelf-card__avatar" src="static/news/img/slyman-sm.webp" alt="" loading="lazy" width="68" height="68">
                 <div class="land-shelf-card__body">
-                  <div class="land-shelf-card__eyebrow">Sly Man · LoD</div>
-                  <div class="land-shelf-card__headline">
-                    Today&#x27;s lay lands soon
-                  </div>
-                  <div class="land-shelf-card__meta">Browse the fade book</div>
+                  <div class="land-shelf-card__eyebrow">Sly Man · Lay</div>
+                  <h3 class="land-shelf-card__title">Lay of the Day</h3>
                 </div>
-                <div class="land-shelf-card__arrow" aria-hidden="true">
-                  &rarr;
-                </div>
+                <span class="land-shelf-card__arrow" aria-hidden="true">
+                  <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11M11 5.5 15.5 10 11 14.5"/></svg>
+                </span>
+              </div>
+              <div class="land-shelf-card__line">Gaelic Warrior · 8/13</div>
+              <div class="land-shelf-card__status">
+                <span>Punchestown 15:00</span>
+                <b class="land-shelf-card__result land-shelf-card__result--won">landed</b>
               </div>
               <div class="land-shelf-card__foot">
-                <svg
-                  class="land-shelf-card__foot-icon"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M5.08154 6.65295H10.128V5.65295H5.08154V6.65295Z"
-                    fill="#D8B14A"
-                  />
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M5.08154 9.42908H7.62559V8.42908H5.08154V9.42908Z"
-                    fill="#D8B14A"
-                  />
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M1.91797 1.33337H14.0823V14.6667H1.91797V1.33337ZM2.91797 2.33337V13.6667H13.0823V2.33337H2.91797Z"
-                    fill="#D8B14A"
-                  />
-                </svg>
-                <span class="land-shelf-card__foot-text"
-                  >Fade angles &amp; market notes</span
-                >
+                <svg class="land-shelf-card__foot-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M12 3.5v16.5M8 20h8M5 7h14"/><circle cx="12" cy="4.5" r="1"/><path d="M5 7l-3 6.5a3 3 0 0 0 6 0zM19 7l-3 6.5a3 3 0 0 0 6 0z"/></svg>
+                <span class="land-shelf-card__foot-text">Value to oppose</span>
               </div>
             </a>
-
-            <a
-              href="https://www.saturday-racing.com/news/horses-to-watch/latest/"
-              class="land-shelf-card land-shelf-card--sly"
-              data-card-id="horses_to_watch"
-              aria-label="Sly Man · Watch &mdash; Horses to Watch"
-            >
-              <div class="land-shelf-card__main">
-                <img
-                  class="land-shelf-card__avatar"
-                  src="static/news/img/slyman-sm.webp"
-                  alt=""
-                  loading="lazy"
-                  width="44"
-                  height="44"
-                />
+            <a href="https://www.saturday-racing.com/news/horses-to-watch/"
+               class="land-shelf-card land-shelf-card--sly"
+               data-card-id="horses_to_watch"
+               aria-label="Sly Man · Watch &mdash; Horses to Watch: 162 on the radar">
+              <div class="land-shelf-card__top">
+                <img class="land-shelf-card__avatar" src="static/news/img/slyman-sm.webp" alt="" loading="lazy" width="68" height="68">
                 <div class="land-shelf-card__body">
                   <div class="land-shelf-card__eyebrow">Sly Man · Watch</div>
-                  <div class="land-shelf-card__headline">Horses to Watch</div>
-                  <div class="land-shelf-card__meta">72 on the radar</div>
+                  <h3 class="land-shelf-card__title">Horses to Watch</h3>
                 </div>
-                <div class="land-shelf-card__arrow" aria-hidden="true">
-                  &rarr;
-                </div>
+                <span class="land-shelf-card__arrow" aria-hidden="true">
+                  <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h11M11 5.5 15.5 10 11 14.5"/></svg>
+                </span>
               </div>
+              <div class="land-shelf-card__line">162 on the radar</div>
               <div class="land-shelf-card__foot">
-                <svg
-                  class="land-shelf-card__foot-icon"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M5.08154 6.65295H10.128V5.65295H5.08154V6.65295Z"
-                    fill="#D8B14A"
-                  />
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M5.08154 9.42908H7.62559V8.42908H5.08154V9.42908Z"
-                    fill="#D8B14A"
-                  />
-                  <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M1.91797 1.33337H14.0823V14.6667H1.91797V1.33337ZM2.91797 2.33337V13.6667H13.0823V2.33337H2.91797Z"
-                    fill="#D8B14A"
-                  />
-                </svg>
-                <span class="land-shelf-card__foot-text"
-                  >Horses on the radar</span
-                >
+                <svg class="land-shelf-card__foot-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><circle cx="6.5" cy="16" r="3.5"/><circle cx="17.5" cy="16" r="3.5"/><path d="M10 16h4M3.2 14.6 5.5 6a1.5 1.5 0 0 1 2.9-.1L10 12.5M20.8 14.6 18.5 6a1.5 1.5 0 0 0-2.9-.1L14 12.5M10 12.5h4"/></svg>
+                <span class="land-shelf-card__foot-text">Horses with potential</span>
               </div>
             </a>
-
           </div>
-
           <div class="land-shelf__footer">
-            <span class="land-shelf__footer-rule" aria-hidden="true"></span>
-            <a
-              class="land-shelf-all"
-              href="https://www.saturday-racing.com/news/"
-            >
-              See all stories &amp; angles
-              <span aria-hidden="true">&rarr;</span>
-            </a>
-            <span class="land-shelf__footer-rule" aria-hidden="true"></span>
+            <a class="land-shelf-all" href="https://www.saturday-racing.com/news/">More from the Fox&rsquo;s Wire <span aria-hidden="true">&rarr;</span></a>
           </div>
         </div>
       </section>

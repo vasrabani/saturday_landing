@@ -1,70 +1,109 @@
 /* ═══════════════════════════════════════════════════════════════
-   EDITORIAL SHELF — landing page
+   BEYOND THE VOTE — the landing's editorial shelf
 
-   Three persona-coded cards sitting below the hero, offering
-   soft entry points for visitors not ready to vote. Dark-on-
-   dark variant of the wire-shelf-card pattern (which lives in
-   news.css for the Fox's Wire masthead).
+   The way in for visitors not ready to pick: Today's headlines,
+   Bet of the Day, Lay of the Day, Horses to Watch. Each card has a
+   fixed title, its line (the selection and price, or a count), where
+   and how it finished, and a footer saying what the card always is.
 
-   Persona accents driven by a single CSS custom property
-   (--shelf-accent) so adding a fourth persona is one new
-   .land-shelf-card--<name> rule + matching colour values.
-   No structural CSS changes needed.
-
-   Card data shape is fixed by news/services/editorial_shelf.py
-   — see the docstring there for the contract.
+   Four across from 1100px, two by two on tablets, a swipe row on
+   phones. Persona accents come from one custom property
+   (--shelf-accent), so a new persona is one .land-shelf-card--<name>
+   rule. Card data: news/services/editorial_shelf.py. Identical in the
+   saturday_landing sandbox and the site.
 ═══════════════════════════════════════════════════════════════ */
 
 .land-shelf {
-  background: linear-gradient(180deg, #14141a 0%, #0b0e15 100%);
-  padding: 40px 0 60px;
-  border-top: 1px solid rgba(212, 175, 55, 0.05);
-  border-bottom: 1px solid rgba(212, 175, 55, 0.05);
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(60% 55% at 50% 0%, rgba(212, 175, 55, 0.1), transparent 70%),
+    linear-gradient(180deg, #14141a 0%, #0b0e15 100%);
+  padding: 56px 0 64px;
+  border-top: 1px solid rgba(212, 175, 55, 0.08);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+}
+/* A gold sweep along the foot of the section. */
+.land-shelf::after {
+  content: "";
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: -120px;
+  height: 160px;
+  border-top: 1px solid rgba(216, 177, 74, 0.35);
+  border-radius: 50%;
+  box-shadow: 0 -8px 40px rgba(212, 175, 55, 0.08);
+  pointer-events: none;
 }
 
 .land-shelf__inner {
-  max-width: var(--max-w);
+  position: relative;
+  z-index: 1;
+  /* Wider than the page's 1280px rail: four cards need the room. */
+  max-width: 1480px;
   margin: 0 auto;
   padding: 0 var(--page-gutter);
   box-sizing: border-box;
 }
 
-/* ── Kicker — title on line 1, subtitle on line 2 ── */
-.land-shelf__kicker {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  font-size: 16px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  font-weight: 800;
-  color: var(--c-gold);
-  margin: 0 0 28px;
+/* ── Head ── */
+.land-shelf__head {
   text-align: center;
+  margin: 0 auto 36px;
+  max-width: 760px;
 }
-.land-shelf__kicker-title {
+.land-shelf__ornament {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 12px;
+  margin-bottom: 14px;
 }
-.land-shelf__kicker-sub {
-  display: block;
-  font-size: 12px;
-  font-weight: 400;
-  color: #f5ead5;
+.land-shelf__ornament span {
+  width: 72px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(216, 177, 74, 0.8));
+}
+.land-shelf__ornament span:last-child {
+  background: linear-gradient(to left, transparent, rgba(216, 177, 74, 0.8));
+}
+.land-shelf__ornament i {
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  background: var(--c-gold);
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
+}
+.land-shelf__title {
   margin: 0;
-  letter-spacing: 0.06em;
-  text-transform: none;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #f7dc8a 0%, #d4af37 55%, #a8801f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.land-shelf__sub {
+  margin: 12px 0 0;
+  font-family: "Playfair Display", Georgia, serif;
+  font-style: italic;
+  font-size: clamp(15px, 1.8vw, 20px);
+  line-height: 1.4;
+  color: #f5ead5;
 }
 .land-shelf__kicker-dot {
-  width: 10px;
-  height: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 8px;
+  height: 8px;
+  margin: -2px 4px 0 0;
   border-radius: 50%;
   background: var(--c-gold);
-  flex-shrink: 0;
   animation: land-shelf-blink 1.6s ease-in-out infinite;
 }
 @keyframes land-shelf-blink {
@@ -82,273 +121,322 @@
   }
 }
 
-/* ── Cards — horizontal scroll row ── */
+/* ── Cards ── */
 .land-shelf__cards {
-  display: flex;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  /* Room for hover translateY so top border is not clipped */
-  padding: 12px 0;
-  margin-top: -2px;
-  margin-bottom: 20px;
-  scrollbar-width: none; /* Firefox — hide scrollbar, keep scroll */
-  /* Left stays on content rail; right bleeds to viewport edge */
-  box-sizing: border-box;
-  width: calc(100% + (100vw - 100%) / 2);
-  max-width: none;
-}
-.land-shelf__cards::-webkit-scrollbar {
-  display: none; /* Chrome/Safari — hide scrollbar */
-  height: 0;
-  width: 0;
+  /* Room for the hover lift so the top border is not clipped */
+  padding: 6px 0;
+  margin-bottom: 28px;
 }
 
-/* ── Base card ─────────────────────────────────────────────────
-   Visual styling driven by --shelf-accent. Defaults to gold
-   (Mr Fox); persona modifiers below override per card. */
 .land-shelf-card {
-  --shelf-accent: #b8932f;
+  --shelf-accent: #d4af37;
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: 12px;
-  flex: 0 0 min(320px, 82vw);
-  max-width: 360px;
-  scroll-snap-align: start;
-  padding: 18px 16px 16px 14px;
-  background: rgba(212, 175, 55, 0.05);
-  border: 1px solid rgba(212, 175, 55, 0.18);
-  border-radius: 12px;
+  gap: 10px;
+  min-width: 0;
+  padding: 22px 20px 18px;
+  background: linear-gradient(180deg, rgba(212, 175, 55, 0.07) 0%, rgba(8, 10, 14, 0.6) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 226, 150, 0.12),
+    0 10px 30px rgba(0, 0, 0, 0.35);
   text-decoration: none;
   color: #f5ead5;
   font-family: "DM Sans", "Inter", sans-serif;
   transition:
     transform 180ms ease,
-    background 180ms ease,
-    border-color 180ms ease;
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+/* A glint along the top edge. */
+.land-shelf-card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 18%;
+  right: 18%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255, 226, 150, 0.9), transparent);
 }
 .land-shelf-card:hover,
 .land-shelf-card:focus-visible {
-  transform: translateY(-2px);
-  background: rgba(212, 175, 55, 0.1);
+  transform: translateY(-3px);
   border-color: var(--shelf-accent);
-  outline: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 226, 150, 0.18),
+    0 14px 36px rgba(0, 0, 0, 0.45),
+    0 0 24px rgba(212, 175, 55, 0.12);
   color: #f5ead5;
   text-decoration: none;
 }
+.land-shelf-card:focus-visible {
+  outline: 2px solid var(--shelf-accent);
+  outline-offset: 3px;
+}
 
-.land-shelf-card__main {
+.land-shelf-card__top {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   min-width: 0;
 }
-
 .land-shelf-card__avatar {
-  width: 44px;
-  height: 44px;
+  width: 68px;
+  height: 68px;
+  flex: 0 0 auto;
+  display: block;
   border-radius: 50%;
   border: 2px solid var(--shelf-accent);
+  box-shadow: 0 0 16px rgba(212, 175, 55, 0.25);
   background: #1f1d18;
-  flex: 0 0 auto;
   object-fit: cover;
-  display: block;
+  object-position: 50% 22%;
 }
-
 .land-shelf-card__body {
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 .land-shelf-card__eyebrow {
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  font-size: 11px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   font-weight: 700;
   color: var(--shelf-accent);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.land-shelf-card__headline {
+.land-shelf-card__title {
+  margin: 0;
   font-family: "Playfair Display", Georgia, serif;
-  font-size: 15px;
+  font-size: 24px;
   font-weight: 700;
-  line-height: 1.2;
-  color: #f5ead5;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.1;
+  color: #fff6e2;
+  text-wrap: balance;
 }
-.land-shelf-card__meta {
-  font-size: 11px;
-  font-weight: 600;
-  color: rgba(245, 234, 213, 0.55);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .land-shelf-card__arrow {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 1px solid var(--shelf-accent);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--shelf-accent);
+  align-self: center;
+  width: 36px;
+  height: 36px;
   flex: 0 0 auto;
-  transition: transform 180ms ease;
+  border-radius: 50%;
+  border: 1.5px solid var(--shelf-accent);
+  color: var(--shelf-accent);
+  transition:
+    transform 180ms ease,
+    background 180ms ease;
 }
 .land-shelf-card:hover .land-shelf-card__arrow,
 .land-shelf-card:focus-visible .land-shelf-card__arrow {
   transform: translateX(3px);
+  background: rgba(212, 175, 55, 0.12);
 }
 
-/* Card bottom row — icon + caption (layout) */
+/* The selection and price, or a count: the card's live line. */
+.land-shelf-card__line {
+  margin-top: 6px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+  color: #f5ead5;
+  overflow-wrap: anywhere;
+}
+/* Where it ran and how it finished. */
+.land-shelf-card__status {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(245, 234, 213, 0.6);
+  text-align: center;
+}
+.land-shelf-card__result {
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: rgba(245, 234, 213, 0.75);
+}
+.land-shelf-card__result--won {
+  color: #7fd093;
+}
+.land-shelf-card__result--lost {
+  color: #e48b7b;
+}
+.land-shelf-card__result--live {
+  color: var(--c-gold);
+}
+
 .land-shelf-card__foot {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   min-width: 0;
-  padding-top: 2px;
+  margin-top: auto;
+  padding-top: 14px;
+}
+.land-shelf-card__foot::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(216, 177, 74, 0.45), transparent);
 }
 .land-shelf-card__foot-icon {
   flex: 0 0 auto;
   display: block;
+  color: var(--shelf-accent);
 }
 .land-shelf-card__foot-text {
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 500;
-  color: rgba(245, 234, 213, 0.55);
+  color: rgba(245, 234, 213, 0.82);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* ── Footer CTA — "See all stories & angles" ── */
+/* ── Footer button ── */
 .land-shelf__footer {
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 16px;
-  margin-top: 4px;
-  width: 100%;
 }
-.land-shelf__footer-rule {
-  flex: 1 1 0;
-  min-width: 48px;
-  max-width: none;
-  height: 1px;
-  position: relative;
-  border: 0;
-}
-/* Left rule: fade in from left → solid near the button/dot */
-.land-shelf__footer-rule:first-child {
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(216, 177, 74, 0.15) 35%,
-    rgba(216, 177, 74, 0.75) 100%
-  );
-}
-/* Right rule: solid near button → fade out to right */
-.land-shelf__footer-rule:last-child {
-  background: linear-gradient(
-    to left,
-    transparent 0%,
-    rgba(216, 177, 74, 0.15) 35%,
-    rgba(216, 177, 74, 0.75) 100%
-  );
-}
-.land-shelf__footer-rule::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(216, 177, 74, 0.9);
-  transform: translateY(-50%);
-}
-.land-shelf__footer-rule:first-child::after {
-  right: 0;
-}
-.land-shelf__footer-rule:last-child::after {
-  left: 0;
-}
-
 .land-shelf-all {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  flex: 0 0 auto;
-  padding: 10px 22px;
+  gap: 10px;
+  padding: 14px 32px;
   border-radius: 999px;
-  border: 1px solid rgba(212, 175, 55, 0.45);
-  background: rgba(8, 10, 14, 0.55);
-  color: var(--c-gold);
+  border: 1.5px solid rgba(212, 175, 55, 0.7);
+  background: rgba(8, 10, 14, 0.6);
+  box-shadow: 0 0 24px rgba(212, 175, 55, 0.1);
+  color: #f5ead5;
   text-decoration: none;
   font-family: "DM Sans", "Inter", sans-serif;
-  font-size: 13px;
+  font-size: 17px;
   font-weight: 700;
-  letter-spacing: 0.02em;
   white-space: nowrap;
   transition:
     background 160ms ease,
     border-color 160ms ease,
     color 160ms ease;
 }
+.land-shelf-all span {
+  color: var(--c-gold);
+}
 .land-shelf-all:hover,
 .land-shelf-all:focus-visible {
-  background: rgba(212, 175, 55, 0.1);
+  background: rgba(212, 175, 55, 0.12);
   border-color: var(--c-gold);
-  color: var(--c-gold-lt);
-  outline: none;
+  color: #fff6e2;
   text-decoration: none;
 }
+.land-shelf-all:focus-visible {
+  outline: 2px solid var(--c-gold);
+  outline-offset: 3px;
+}
 
-/* ── Persona accents ──────────────────────────────────────────
-   Override --shelf-accent + card background/border. Adding a
-   fourth persona is one block here — no markup changes. */
+/* ── Persona accents ── */
 .land-shelf-card--fox {
   --shelf-accent: #d4af37;
-  background: rgba(212, 175, 55, 0.05);
-  border-color: rgba(212, 175, 55, 0.18);
 }
 .land-shelf-card--sly {
-  --shelf-accent: #c9892f;
-  background: rgba(139, 94, 26, 0.08);
-  border-color: rgba(139, 94, 26, 0.28);
+  --shelf-accent: #d29a3e;
 }
 .land-shelf-card--llama {
   --shelf-accent: #87a07f;
-  background: rgba(90, 120, 96, 0.08);
-  border-color: rgba(90, 120, 96, 0.28);
 }
 
-/* ── Mobile: layout vertical stack ───────────────────────────── */
-@media (max-width: 700px) {
+/* ── Narrower desktops: smaller type so four still fit ── */
+@media (max-width: 1279px) {
+  .land-shelf-card {
+    padding: 20px 16px 16px;
+  }
+  .land-shelf-card__avatar {
+    width: 56px;
+    height: 56px;
+  }
+  .land-shelf-card__title {
+    font-size: 21px;
+  }
+  .land-shelf-card__line {
+    font-size: 17px;
+  }
+  .land-shelf-card__arrow {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ── Tablets: two by two ── */
+@media (max-width: 1099px) {
   .land-shelf__cards {
-    flex-direction: column;
-    flex-wrap: nowrap;
-    overflow-x: visible;
-    overflow-y: visible;
-    scroll-snap-type: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .land-shelf-card__avatar {
+    width: 64px;
+    height: 64px;
+  }
+  .land-shelf-card__title {
+    font-size: 23px;
+  }
+}
+
+/* ── Phones: a swipe row, the next card peeking in ── */
+@media (max-width: 700px) {
+  .land-shelf {
+    padding: 40px 0 48px;
+  }
+  .land-shelf__head {
+    margin-bottom: 24px;
+  }
+  .land-shelf__ornament span {
+    width: 48px;
+  }
+  .land-shelf__cards {
+    display: flex;
     gap: 12px;
+    margin: 0 calc(var(--page-gutter) * -1) 22px;
+    padding: 6px var(--page-gutter);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--page-gutter);
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .land-shelf__cards::-webkit-scrollbar {
+    display: none;
   }
   .land-shelf-card {
-    flex: 0 0 auto;
-    max-width: none;
-    width: 100%;
+    flex: 0 0 min(300px, 80vw);
+    scroll-snap-align: start;
   }
-  .land-shelf-card__headline {
-    white-space: normal;
+  .land-shelf-card__avatar {
+    width: 56px;
+    height: 56px;
+  }
+  .land-shelf-card__title {
+    font-size: 21px;
+  }
+  .land-shelf-all {
+    padding: 12px 24px;
+    font-size: 15px;
   }
 }
