@@ -238,6 +238,7 @@
   background: #b3261e;
 }
 .ftp[data-state="live"] .ftp__badge-dot { animation: ftp-pulse 1.6s ease-in-out infinite; }
+.ftp[data-state="early"] .ftp__badge-dot,
 .ftp[data-state="morning"] .ftp__badge-dot,
 .ftp[data-state="done"] .ftp__badge-dot { background: var(--ftp-ink); }
 .ftp__progress {
@@ -422,12 +423,24 @@
 .ftp-card--no_fancy .ftp-card__horse,
 .ftp-card--void .ftp-card__horse { font-weight: 600; color: var(--ftp-ink-60); }
 
+/* Before the board: each race waiting for its pick. */
+.ftp-card--early {
+  border-style: dashed;
+  border-color: #cdc6b3;
+  background: #f5f3ec;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.14);
+}
+.ftp-card--early .ftp-card__no { background: #e9e5da; }
+.ftp-card--early .ftp-card__horse { font-weight: 600; color: var(--ftp-ink-60); }
+
 /* The next race off: a gold ring and a tag. */
 .ftp-card--now {
   border-color: var(--ftp-gold);
   box-shadow: 0 0 0 3px rgba(232, 197, 88, 0.55), 0 8px 18px rgba(0, 0, 0, 0.3);
 }
 .ftp-card--now .ftp-card__result { background: #b3261e; }
+.ftp-card--early.ftp-card--now { border-style: solid; }
+.ftp-card--early.ftp-card--now .ftp-card__result { background: var(--ftp-ink); }
 
 /* ── Tablets and small laptops: the pitch above the board, four
    abreast. Below 1280px five cards beside the pitch are too narrow
