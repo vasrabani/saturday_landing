@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sandown 14:25 · The Tipping Ring · The Paddock · Saturday Racing</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="static/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="static/fonts/saturday-fonts.css">
+<link rel="stylesheet" href="static/paddock/css/paddock.css">
+</head>
+<!--
+  THE PADDOCK — chat channel mockup (sandbox only, 2026-11-22).
+  One Tipping Ring race channel, with the Commons and Form Room in the rail.
+  State hooks: body[data-auth="in|out"], body[data-race="open|off"],
+  .pd-shell[data-view="chat|runners"], body.is-rail-open.
+  Everything that moves is faked in static/paddock/js/paddock.js; the
+  word list there stands in for the server-side check.
+-->
+<body class="pd" data-auth="in" data-race="open">
+
+<svg class="pd-sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-hash" viewBox="0 0 24 24"><path d="M9 3 7 21M17 3l-2 18M4 8.5h17M3 15.5h17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-shoe" viewBox="0 0 24 24"><path d="M6 20V11a6 6 0 0 1 12 0v9M6 20H3.5M18 20h2.5M8.5 14h.01M15.5 14h.01M9 9.5h.01M15 9.5h.01M12 6.5h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4m0 0h11l-2 4 2 4H5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-rosette" viewBox="0 0 24 24"><circle cx="12" cy="9" r="5.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="9" r="2" fill="currentColor"/><path d="m8.5 13.4-2 7.1 3-1.4 1.6 2.4 1-6.6M15.5 13.4l2 7.1-3-1.4-1.6 2.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-reply" viewBox="0 0 24 24"><path d="M10 6 4 12l6 6M4 12h10a6 6 0 0 1 6 6v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-report" viewBox="0 0 24 24"><path d="M12 3 2.5 20h19L12 3Zm0 6.5v4.5m0 3h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M4 12 20 4l-5 16-3-6.5L4 12Zm8 1.5L20 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15L6 16Zm4 4.5a2.2 2.2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="m14.5 3.5 6 6-3 1-3.5 3.5.5 4-1.5 1.5-4-4L5 19.5M9 9l3.5-3.5 2-2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8.5" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 5.2a3.5 3.5 0 0 1 0 6.6M18.5 14.5a6.5 6.5 0 0 1 3 5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14m0 0-5.5-5.5M12 19l5.5-5.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.2 7.5 9.5 4.4-1.3 7.5-4.9 7.5-9.5V6L12 3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-verified" viewBox="0 0 24 24"><path d="m12 2 2.4 1.8 3-.2.9 2.9 2.5 1.7-1 2.8 1 2.8-2.5 1.7-.9 2.9-3-.2L12 22l-2.4-1.8-3 .2-.9-2.9-2.5-1.7 1-2.8-1-2.8 2.5-1.7.9-2.9 3 .2L12 2Z" fill="currentColor"/><path d="m8.5 12.2 2.3 2.3 4.7-4.8" fill="none" stroke="#11151F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<a class="pd-skip" href="#pd-composer">Skip to the message box</a>
+
+<!-- ─── Top bar ─────────────────────────────────────────── -->
+<header class="pd-top">
+  <button class="pd-top__menu" type="button" data-act="rail" aria-label="Open channels" aria-expanded="false" aria-controls="pd-rail">
+    <svg><use href="#i-menu"/></svg>
+  </button>
+  <a class="pd-brand" href="#">
+    <img src="static/img/nav/mr_fox_host-72.webp" alt="" width="36" height="36">
+    <span class="pd-brand__text">
+      <span class="pd-brand__name">The Paddock</span>
+      <span class="pd-brand__sub">Saturday Racing</span>
+    </span>
+  </a>
+  <nav class="pd-areas" aria-label="Paddock areas">
+    <a href="#" class="pd-area">The Commons</a>
+    <a href="#" class="pd-area">The Form Room</a>
+    <a href="#" class="pd-area is-current" aria-current="page">The Tipping Ring</a>
+  </nav>
+  <div class="pd-top__right">
+    <span class="pd-online"><i class="pd-live"></i><b>1,284</b> in the Paddock</span>
+    <button class="pd-iconbtn pd-only-in" type="button" aria-label="Notifications, 3 unread">
+      <svg><use href="#i-bell"/></svg><span class="pd-dotcount">3</span>
+    </button>
+    <span class="pd-me pd-only-in" title="Signed in as Sam R"><span class="pd-av pd-av--sm" style="--av:#2D5BBF">SR</span></span>
+    <a class="pd-btn pd-btn--gold pd-btn--sm pd-only-out" href="#">Sign in</a>
+  </div>
+</header>
+
+<div class="pd-shell" data-view="chat">
+
+  <!-- ─── Channel rail ──────────────────────────────────── -->
+  <nav class="pd-rail" id="pd-rail" aria-label="Channels">
+    <div class="pd-rail__head">
+      <label class="pd-search">
+        <svg><use href="#i-search"/></svg>
+        <input type="search" placeholder="Search horses, races, topics" aria-label="Search the Paddock">
+      </label>
+      <button class="pd-iconbtn pd-rail__close" type="button" data-act="rail" aria-label="Close channels"><svg><use href="#i-x"/></svg></button>
+    </div>
+
+    <div class="pd-rail__scroll">
+      <section class="pd-group">
+        <h2 class="pd-group__title"><svg><use href="#i-flag"/></svg>The Tipping Ring <span>Today</span></h2>
+        <ul class="pd-chans">
+          <li><a class="pd-chan-link is-done" href="#"><span class="pd-chan-link__time">13:50</span>Sandown<span class="pd-chan-link__tag pd-chan-link__tag--done"><svg><use href="#i-check"/></svg>Result</span></a></li>
+          <li><a class="pd-chan-link is-current" href="#" aria-current="page"><span class="pd-chan-link__time">14:25</span>Sandown<span class="pd-chan-link__tag pd-chan-link__tag--live"><i class="pd-live"></i>412</span></a></li>
+          <li><a class="pd-chan-link" href="#"><span class="pd-chan-link__time">14:40</span>Doncaster<span class="pd-badge">8</span></a></li>
+          <li><a class="pd-chan-link" href="#"><span class="pd-chan-link__time">15:00</span>Sandown<span class="pd-badge pd-badge--quiet">2</span></a></li>
+          <li><a class="pd-chan-link" href="#"><span class="pd-chan-link__time">15:15</span>Doncaster</a></li>
+          <li><a class="pd-chan-link" href="#"><span class="pd-chan-link__time">15:35</span>Sandown</a></li>
+        </ul>
+      </section>
+
+      <section class="pd-group">
+        <h2 class="pd-group__title"><svg><use href="#i-hash"/></svg>The Commons</h2>
+        <ul class="pd-chans">
+          <li><a class="pd-chan-link is-unread" href="#"><span class="pd-chan-link__hash">#</span>saturday-chat<span class="pd-badge">12</span></a></li>
+          <li><a class="pd-chan-link" href="#"><span class="pd-chan-link__hash">#</span>big-race-weekend</a></li>
+          <li><a class="pd-chan-link is-unread" href="#"><span class="pd-chan-link__hash">#</span>festival-countdown<span class="pd-badge pd-badge--quiet">4</span></a></li>
+          <li><a class="pd-chan-link" href="#"><span class="pd-chan-link__hash">#</span>newcomers</a></li>
+        </ul>
+      </section>
+
+      <section class="pd-group">
+        <h2 class="pd-group__title"><svg><use href="#i-shoe"/></svg>The Form Room <span>Following</span></h2>
+        <ul class="pd-chans">
+          <li><a class="pd-chan-link" href="#"><img class="pd-chan-link__silk" src="static/meeting/img/silks/171561af107ab17b.svg" alt="">Copper Lantern<span class="pd-chan-link__kind">Horse</span></a></li>
+          <li><a class="pd-chan-link is-unread" href="#"><img class="pd-chan-link__silk" src="static/meeting/img/silks/57b3dbef731ed01a.svg" alt="">Kalaroo Bay<span class="pd-badge pd-badge--quiet">5</span></a></li>
+          <li><a class="pd-chan-link" href="#"><span class="pd-chan-link__mono">PH</span>Paul Holloway<span class="pd-chan-link__kind">Trainer</span></a></li>
+          <li><a class="pd-chan-link" href="#"><span class="pd-chan-link__mono">SP</span>Sandown Park<span class="pd-chan-link__kind">Course</span></a></li>
+        </ul>
+      </section>
+    </div>
+
+    <a class="pd-rail__rules" href="#"><svg><use href="#i-shield"/></svg><span><b>House rules</b>Every message is checked before it goes up.</span></a>
+  </nav>
+  <div class="pd-scrim" data-act="rail" aria-hidden="true"></div>
+
+  <!-- ─── Chat ─────────────────────────────────────────── -->
+  <main class="pd-chat" aria-labelledby="pd-chan-title">
+    <header class="pd-chanhead">
+      <div class="pd-chanhead__art" aria-hidden="true"></div>
+      <div class="pd-chanhead__body">
+        <p class="pd-kicker"><span class="pd-kicker__ring">The Tipping Ring</span>Saturday 22 November</p>
+        <h1 class="pd-chanhead__title" id="pd-chan-title">Sandown <span>14:25</span></h1>
+        <p class="pd-chanhead__race">The Esher Novices' Chase <span aria-hidden="true">·</span> Grade 2 <span aria-hidden="true">·</span> 2m4f 10y <span aria-hidden="true">·</span> Good to Soft <span aria-hidden="true">·</span> 7 runners</p>
+      </div>
+      <div class="pd-chanhead__side">
+        <div class="pd-off" role="timer" aria-live="off">
+          <span class="pd-off__label pd-when-open">Off in</span>
+          <span class="pd-off__label pd-when-off">Tips locked</span>
+          <span class="pd-off__clock" data-countdown>32:18</span>
+        </div>
+        <div class="pd-chanhead__acts">
+          <span class="pd-here"><svg><use href="#i-users"/></svg>412 here</span>
+          <button class="pd-btn pd-btn--ghost pd-btn--sm pd-only-in" type="button" data-act="follow" aria-pressed="true"><svg><use href="#i-bell"/></svg><span>Following</span></button>
+        </div>
+      </div>
+    </header>
+
+    <div class="pd-tabs" role="tablist" aria-label="Race channel">
+      <button class="pd-tab" type="button" role="tab" aria-selected="true" data-view="chat">Chat</button>
+      <button class="pd-tab" type="button" role="tab" aria-selected="false" data-view="runners">Runners &amp; tips <span class="pd-tab__n">7</span></button>
+    </div>
+
+    <div class="pd-offbar pd-when-off" role="status">
+      <svg><use href="#i-lock"/></svg>
+      <span><b>They're off.</b> Tips locked at 14:25:03. The chat stays open, and tips settle on the official result.</span>
+    </div>
+
+    <section class="pd-stream" id="pd-stream" aria-label="Messages" tabindex="-1">
+      <ol class="pd-msgs" id="pd-msgs" aria-live="polite" aria-relevant="additions">
+
+        <li class="pd-pinned">
+          <svg class="pd-pinned__pin"><use href="#i-pin"/></svg>
+          <img class="pd-pinned__fox" src="static/img/nav/mr_fox_host-72.webp" alt="" width="40" height="40">
+          <div>
+            <p class="pd-pinned__who">Mr Fox <svg class="pd-verified"><use href="#i-verified"/></svg><span>Pinned</span></p>
+            <p class="pd-pinned__text">Welcome to the 14:25. Post your tip from <b>Runners &amp; tips</b> before the off. Each tip is timestamped and settled on the official result. Keep it about the racing, and keep it friendly.</p>
+          </div>
+        </li>
+
+        <li class="pd-day" role="separator"><span>Today</span></li>
+
+        <li class="pd-msg" data-id="m1" data-author="nell">
+          <span class="pd-av" style="--av:#1B7A73" aria-hidden="true">NG</span>
+          <div class="pd-msg__main">
+            <p class="pd-msg__meta"><b class="pd-msg__name">Nell Gwyn</b><span class="pd-rank" title="Verified tipping record: 31% strike rate from 212 settled tips">Top 20 · 31% of 212</span><time datetime="2026-11-22T13:31">13:31</time></p>
+            <p class="pd-msg__text">Walked the course this morning. Inside rail down the back straight is chewed up, so they'll want to come wide.</p>
+            <p class="pd-msg__text">Ground's on the soft side of good, whatever the going stick says.</p>
+            <div class="pd-msg__foot">
+              <button class="pd-like" type="button" aria-pressed="false" data-likes="14"><svg><use href="#i-rosette"/></svg><span class="pd-like__n">14</span></button>
+            </div>
+          </div>
+          <div class="pd-msg__tools"><button type="button" data-act="reply" aria-label="Reply to Nell Gwyn"><svg><use href="#i-reply"/></svg></button><button type="button" data-act="report" aria-label="Report this message"><svg><use href="#i-report"/></svg></button></div>
+        </li>
+
+        <li class="pd-msg" data-id="m2" data-author="dev">
+          <span class="pd-av" style="--av:#8A3FB0" aria-hidden="true">DK</span>
+          <div class="pd-msg__main">
+            <p class="pd-msg__meta"><b class="pd-msg__name">Dev Kapoor</b><time datetime="2026-11-22T13:36">13:36</time></p>
+            <p class="pd-msg__text">That helps <a class="pd-entity" href="#"><img src="static/meeting/img/silks/57b3dbef731ed01a.svg" alt="">Kalaroo Bay</a>. Won on soft at Chepstow in November and jumps out to his right, so wide suits.</p>
+            <div class="pd-msg__foot">
+              <button class="pd-like" type="button" aria-pressed="false" data-likes="6"><svg><use href="#i-rosette"/></svg><span class="pd-like__n">6</span></button>
+              <a class="pd-thread" href="#"><span class="pd-thread__avs"><span class="pd-av pd-av--xs" style="--av:#C2552B">MO</span><span class="pd-av pd-av--xs" style="--av:#1B7A73">NG</span></span>3 replies <span class="pd-thread__last">Last reply 13:49</span></a>
+            </div>
+          </div>
+          <div class="pd-msg__tools"><button type="button" data-act="reply" aria-label="Reply to Dev Kapoor"><svg><use href="#i-reply"/></svg></button><button type="button" data-act="report" aria-label="Report this message"><svg><use href="#i-report"/></svg></button></div>
+        </li>
+
+        <li class="pd-msg pd-msg--tip" data-id="m3" data-author="nell">
+          <span class="pd-av" style="--av:#1B7A73" aria-hidden="true">NG</span>
+          <div class="pd-msg__main">
+            <p class="pd-msg__meta"><b class="pd-msg__name">Nell Gwyn</b><span class="pd-msg__did">posted a tip</span><time datetime="2026-11-22T13:41">13:41</time></p>
+            <article class="pd-tipcard">
+              <img class="pd-tipcard__silk" src="static/meeting/img/silks/57b3dbef731ed01a.svg" alt="">
+              <div class="pd-tipcard__body">
+                <p class="pd-tipcard__horse">Kalaroo Bay</p>
+                <p class="pd-tipcard__sub">No. 3 · S. Mercer · P. Holloway</p>
+              </div>
+              <div class="pd-tipcard__bet">
+                <span class="pd-tipcard__type">Each-way</span>
+                <span class="pd-tipcard__price">9/2</span>
+                <span class="pd-tipcard__at">Price at 13:41</span>
+              </div>
+              <p class="pd-tipcard__why">“Wide draw is a plus on this ground and he's the only one in the field who has won on soft over fences.”</p>
+            </article>
+            <div class="pd-msg__foot">
+              <button class="pd-like" type="button" aria-pressed="true" data-likes="21"><svg><use href="#i-rosette"/></svg><span class="pd-like__n">21</span></button>
+            </div>
+          </div>
+          <div class="pd-msg__tools"><button type="button" data-act="reply" aria-label="Reply to Nell Gwyn"><svg><use href="#i-reply"/></svg></button><button type="button" data-act="report" aria-label="Report this message"><svg><use href="#i-report"/></svg></button></div>
+        </li>
+
+        <li class="pd-msg pd-msg--removed" data-id="m4">
+          <span class="pd-av pd-av--ghost" aria-hidden="true"><svg><use href="#i-shield"/></svg></span>
+          <div class="pd-msg__main">
+            <p class="pd-msg__text">A moderator removed this message for breaking the house rules.</p>
+          </div>
+        </li>
+
+        <li class="pd-msg" data-id="m5" data-author="marcus">
+          <span class="pd-av" style="--av:#C2552B" aria-hidden="true">MO</span>
+          <div class="pd-msg__main">
+            <p class="pd-msg__meta"><b class="pd-msg__name">Marcus Ola</b><time datetime="2026-11-22T13:47">13:47</time></p>
+            <a class="pd-quote" href="#"><b>Dev Kapoor</b> That helps Kalaroo Bay. Won on soft at Chepstow in November…</a>
+            <p class="pd-msg__text">Fair, but <a class="pd-entity" href="#"><img src="static/meeting/img/silks/171561af107ab17b.svg" alt="">Copper Lantern</a> beat him four lengths last time on worse ground. Not reading anything into the drift.</p>
+            <div class="pd-msg__foot">
+              <button class="pd-like" type="button" aria-pressed="false" data-likes="3"><svg><use href="#i-rosette"/></svg><span class="pd-like__n">3</span></button>
+            </div>
+          </div>
+          <div class="pd-msg__tools"><button type="button" data-act="reply" aria-label="Reply to Marcus Ola"><svg><use href="#i-reply"/></svg></button><button type="button" data-act="report" aria-label="Report this message"><svg><use href="#i-report"/></svg></button></div>
+        </li>
+
+        <li class="pd-notice">
+          <span class="pd-notice__tag">Race update</span>
+          <p><b>Non-runner: Wendover Lad</b> (vet's certificate). Any tips on him are void.</p>
+          <time datetime="2026-11-22T13:50">13:50</time>
+        </li>
+
+        <li class="pd-msg pd-msg--mine" data-id="m6" data-author="me">
+          <span class="pd-av" style="--av:#2D5BBF" aria-hidden="true">SR</span>
+          <div class="pd-msg__main">
+            <p class="pd-msg__meta"><b class="pd-msg__name">Sam R</b><span class="pd-you">You</span><time datetime="2026-11-22T13:52">13:52</time></p>
+            <p class="pd-msg__text"><span class="pd-mention">@Nell Gwyn</span> how wide is wide? Thinking about Copper Lantern, he usually races handy.</p>
+            <div class="pd-msg__foot">
+              <button class="pd-like" type="button" aria-pressed="false" data-likes="2" disabled title="You can't like your own message"><svg><use href="#i-rosette"/></svg><span class="pd-like__n">2</span></button>
+            </div>
+          </div>
+          <div class="pd-msg__tools"><button type="button" data-act="reply" aria-label="Reply to your message"><svg><use href="#i-reply"/></svg></button></div>
+        </li>
+
+        <li class="pd-msg pd-msg--mentions-me" data-id="m7" data-author="nell">
+          <span class="pd-av" style="--av:#1B7A73" aria-hidden="true">NG</span>
+          <div class="pd-msg__main">
+            <p class="pd-msg__meta"><b class="pd-msg__name">Nell Gwyn</b><span class="pd-rank" title="Verified tipping record: 31% strike rate from 212 settled tips">Top 20 · 31% of 212</span><time datetime="2026-11-22T13:53">13:53</time></p>
+            <p class="pd-msg__text"><span class="pd-mention pd-mention--me">@Sam R</span> three or four off the rail. If he's ridden handy he gets the good ground anyway, so I wouldn't knock him.</p>
+            <div class="pd-msg__foot">
+              <button class="pd-like" type="button" aria-pressed="false" data-likes="4"><svg><use href="#i-rosette"/></svg><span class="pd-like__n">4</span></button>
+            </div>
+          </div>
+          <div class="pd-msg__tools"><button type="button" data-act="reply" aria-label="Reply to Nell Gwyn"><svg><use href="#i-reply"/></svg></button><button type="button" data-act="report" aria-label="Report this message"><svg><use href="#i-report"/></svg></button></div>
+        </li>
+      </ol>
+    </section>
+
+    <button class="pd-newpill" type="button" hidden data-act="jump"><svg><use href="#i-down"/></svg><span>1 new message</span></button>
+
+    <footer class="pd-compose" id="pd-composer">
+      <p class="pd-typing" aria-live="off"><span class="pd-typing__dots"><i></i><i></i><i></i></span><span data-typing>Dev Kapoor is typing</span></p>
+
+      <!-- signed in -->
+      <form class="pd-compose__box pd-only-in" data-form="compose" novalidate>
+        <div class="pd-replying" hidden>
+          <svg><use href="#i-reply"/></svg><span>Replying to <b data-reply-name>Nell</b></span>
+          <button type="button" data-act="unreply" aria-label="Cancel reply"><svg><use href="#i-x"/></svg></button>
+        </div>
+        <div class="pd-compose__row">
+          <button class="pd-compose__tip" type="button" data-act="tip"><svg><use href="#i-flag"/></svg><span>Tip</span></button>
+          <label class="pd-sr" for="pd-input">Message Sandown 14:25</label>
+          <textarea id="pd-input" rows="1" maxlength="1000" placeholder="Message Sandown 14:25"></textarea>
+          <button class="pd-compose__send" type="submit" aria-label="Send" disabled><svg><use href="#i-send"/></svg></button>
+        </div>
+        <p class="pd-compose__hint"><span>Enter to send · Shift + Enter for a new line</span><span class="pd-compose__count" data-count></span></p>
+      </form>
+
+      <!-- signed out -->
+      <div class="pd-gate pd-only-out">
+        <img src="static/img/nav/mr_fox_host-72.webp" alt="" width="44" height="44">
+        <div class="pd-gate__copy">
+          <p class="pd-gate__title">Pull up a chair</p>
+          <p>Anyone can read the Paddock. Sign in to post, give Likes and tip this race.</p>
+        </div>
+        <div class="pd-gate__acts">
+          <a class="pd-btn pd-btn--gold" href="#">Sign in</a>
+          <a class="pd-btn pd-btn--ghost" href="#">Join free</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- ─── Race panel ───────────────────────────────────── -->
+  <aside class="pd-race" aria-label="Runners and tips">
+    <div class="pd-race__scroll">
+
+      <section class="pd-mytip">
+        <div class="pd-mytip__none pd-only-in" data-mytip="none">
+          <p class="pd-mytip__title">Your tip</p>
+          <p class="pd-mytip__text pd-when-open">You haven't tipped this race. Tips lock at the off and can't be changed once posted.</p>
+          <p class="pd-mytip__text pd-when-off">You didn't tip this race.</p>
+          <button class="pd-btn pd-btn--gold pd-btn--block pd-when-open" type="button" data-act="tip"><svg><use href="#i-flag"/></svg>Post a tip</button>
+        </div>
+        <div class="pd-mytip__done" data-mytip="done" hidden>
+          <p class="pd-mytip__title">Your tip <span class="pd-mytip__stamp"><svg><use href="#i-lock"/></svg><span data-mytip-at>13:58:12</span></span></p>
+          <div class="pd-mytip__horse"><img data-mytip-silk src="" alt=""><span><b data-mytip-horse></b><small data-mytip-bet></small></span></div>
+        </div>
+        <div class="pd-only-out">
+          <p class="pd-mytip__title pd-when-open">Think you know?</p>
+          <p class="pd-mytip__text pd-when-open">Sign in to tip this race. Every tip is timestamped and settled on the official result.</p>
+          <a class="pd-btn pd-btn--gold pd-btn--block pd-when-open" href="#">Sign in to tip</a>
+          <p class="pd-mytip__title pd-when-off">Tips locked</p>
+          <p class="pd-mytip__text pd-when-off">Tips for this race closed at the off. The 14:40 at Doncaster is open now.</p>
+          <a class="pd-btn pd-btn--ghost pd-btn--block pd-when-off" href="#">Go to Doncaster 14:40</a>
+        </div>
+      </section>
+
+      <section class="pd-field">
+        <header class="pd-field__head">
+          <h2>The field</h2>
+          <p>Paddock tips <b data-tipcount>186</b></p>
+        </header>
+        <ol class="pd-runners" data-runners></ol>
+        <p class="pd-field__note">Prices are the best available at the time shown and are for reference only. Saturday Racing doesn't take bets.</p>
+      </section>
+
+      <section class="pd-who">
+        <h2>Sharpest in this channel</h2>
+        <p class="pd-who__sub">Verified, settled Paddock tips. Last 90 days, min. 50 tips.</p>
+        <ol class="pd-board">
+          <li><span class="pd-board__pos">1</span><span class="pd-av pd-av--sm" style="--av:#B8860B">JT</span><span class="pd-board__name">Jo Tring<small>94 tips</small></span><span class="pd-board__sr">34%</span></li>
+          <li><span class="pd-board__pos">2</span><span class="pd-av pd-av--sm" style="--av:#1B7A73">NG</span><span class="pd-board__name">Nell Gwyn<small>212 tips</small></span><span class="pd-board__sr">31%</span></li>
+          <li><span class="pd-board__pos">3</span><span class="pd-av pd-av--sm" style="--av:#5B6B2E">AB</span><span class="pd-board__name">Alfie B<small>67 tips</small></span><span class="pd-board__sr">28%</span></li>
+        </ol>
+        <a class="pd-link" href="#">How we work out strike rates</a>
+      </section>
+    </div>
+  </aside>
+</div>
+
+<!-- ─── Tip sheet ─────────────────────────────────────── -->
+<dialog class="pd-sheet" id="pd-tipsheet" aria-labelledby="pd-tipsheet-title">
+  <form method="dialog" class="pd-sheet__form" data-form="tip">
+    <header class="pd-sheet__head">
+      <div>
+        <p class="pd-kicker">Sandown 14:25 · Tips lock at the off</p>
+        <h2 id="pd-tipsheet-title">Post your tip</h2>
+      </div>
+      <button class="pd-iconbtn" type="submit" value="cancel" formnovalidate aria-label="Close"><svg><use href="#i-x"/></svg></button>
+    </header>
+    <fieldset class="pd-pick">
+      <legend class="pd-sr">Runner</legend>
+      <div class="pd-pick__list" data-pick-list></div>
+    </fieldset>
+    <fieldset class="pd-seg">
+      <legend>Bet type</legend>
+      <label><input type="radio" name="bet" value="Win" checked><span>Win</span></label>
+      <label><input type="radio" name="bet" value="Each-way"><span>Each-way</span></label>
+    </fieldset>
+    <label class="pd-why">
+      <span>Why? <small>Optional, shown with your tip</small></span>
+      <textarea name="why" rows="2" maxlength="280" placeholder="What makes this one the pick?"></textarea>
+    </label>
+    <footer class="pd-sheet__foot">
+      <p><svg><use href="#i-lock"/></svg>Once posted, a tip is timestamped and can't be changed.</p>
+      <button class="pd-btn pd-btn--gold" type="submit" value="post" data-tip-submit disabled>Choose a runner</button>
+    </footer>
+  </form>
+</dialog>
+
+<!-- ─── Report dialog ─────────────────────────────────── -->
+<dialog class="pd-sheet pd-sheet--sm" id="pd-report" aria-labelledby="pd-report-title">
+  <form method="dialog" class="pd-sheet__form">
+    <header class="pd-sheet__head">
+      <div><p class="pd-kicker">Report a message</p><h2 id="pd-report-title">What's wrong with it?</h2></div>
+      <button class="pd-iconbtn" type="submit" value="cancel" aria-label="Close"><svg><use href="#i-x"/></svg></button>
+    </header>
+    <div class="pd-reasons">
+      <label><input type="radio" name="reason" value="abuse" checked><span>Abuse, hate or racism</span></label>
+      <label><input type="radio" name="reason" value="harass"><span>Harassing someone</span></label>
+      <label><input type="radio" name="reason" value="spam"><span>Spam or touting</span></label>
+      <label><input type="radio" name="reason" value="other"><span>Something else</span></label>
+    </div>
+    <footer class="pd-sheet__foot">
+      <p>A moderator will look at it. The author won't see who reported it.</p>
+      <button class="pd-btn pd-btn--gold" type="submit" value="send">Send report</button>
+    </footer>
+  </form>
+</dialog>
+
+<div class="pd-toast" role="status" aria-live="polite" hidden></div>
+
+<!-- ─── Mockup controls (not part of the design) ──────── -->
+<aside class="pd-mock" aria-label="Mockup controls">
+  <button class="pd-mock__fold" type="button" data-act="mockfold" aria-expanded="true">Mockup</button>
+  <div class="pd-mock__body">
+    <div class="pd-mock__row"><span>Visitor</span>
+      <button type="button" data-mock="auth" data-val="in" aria-pressed="true">Signed in</button>
+      <button type="button" data-mock="auth" data-val="out" aria-pressed="false">Signed out</button>
+    </div>
+    <div class="pd-mock__row"><span>Race</span>
+      <button type="button" data-mock="race" data-val="open" aria-pressed="true">Before off</button>
+      <button type="button" data-mock="race" data-val="off" aria-pressed="false">Off</button>
+    </div>
+    <p class="pd-mock__hint">Try: send a message, like, reply, report, post a tip. Type “idiot” to see a held message.</p>
+  </div>
+</aside>
+
+<script src="static/paddock/js/paddock.js" defer></script>
+</body>
+</html>
