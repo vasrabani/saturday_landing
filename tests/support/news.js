@@ -24,7 +24,13 @@ export const LETTERS = ['1250', '1325', '1400', '1433', '1510', '1543'].map((tim
 // page, which is the 31 October morning).
 export const WATCHLIST = '/news/article/2026/sly-mans-horses-to-watch-friday-20-november-2026/';
 
-export const NEWS_PAGES = [FRONT_PAGE, ...ARTICLES, WATCHLIST, ...LETTERS];
+// Sly Man's Top Rated for Friday 20 November 2026 in its new dress: the
+// contents line, the Top Signal, Sly's column, the Signal Board with Pick,
+// and the ratings, the consensus and the money as tiles (captured from the
+// approved preview; not linked from the front page).
+export const SIGNAL_BOARD = '/news/article/2026/sly-mans-top-rated-friday-20-november-2026/';
+
+export const NEWS_PAGES = [FRONT_PAGE, ...ARTICLES, WATCHLIST, SIGNAL_BOARD, ...LETTERS];
 
 // The front page's sections, in page order: the masthead, the top
 // stories, then §1 to §7 and the 10:00 Card. Feature tests assert the

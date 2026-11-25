@@ -15,7 +15,7 @@
  * displayed, where it is, whether it can be pressed, and what it says.
  */
 import { test, expect } from '@playwright/test';
-import { ARTICLES, FRONT_PAGE, LETTERS, NEWS_PAGES, NEWS_SECTIONS, WATCHLIST, box, openNews } from './support/news.js';
+import { ARTICLES, FRONT_PAGE, LETTERS, NEWS_PAGES, NEWS_SECTIONS, SIGNAL_BOARD, WATCHLIST, box, openNews } from './support/news.js';
 
 const WHITE = 'rgb(255, 255, 255)';
 const MIDNIGHT = 'rgb(11, 11, 15)';
@@ -47,7 +47,7 @@ test.describe('page health', () => {
   });
 
   test('every picture loads', async ({ page }) => {
-    for (const path of [FRONT_PAGE, ARTICLES[0], WATCHLIST, LETTERS[0]]) {
+    for (const path of [FRONT_PAGE, ARTICLES[0], WATCHLIST, SIGNAL_BOARD, LETTERS[0]]) {
       await openNews(page, { path });
       // Lazy pictures load as they come near the screen: bring each one there.
       const broken = await page.evaluate(async () => {
@@ -63,9 +63,9 @@ test.describe('page health', () => {
   });
 
   test('every link to another news page here finds it', async ({ page, request }) => {
-    for (const path of [FRONT_PAGE, ARTICLES[3], WATCHLIST, LETTERS[2]]) {
+    for (const path of [FRONT_PAGE, ARTICLES[3], WATCHLIST, SIGNAL_BOARD, LETTERS[2]]) {
       await openNews(page, { path });
-      const local = await page.locator('main a[href], .wire-drawer a[href]').evaluateAll((links) =>
+      const local =await page.locator('main a[href], .wire-drawer a[href]').evaluateAll((links) =>
         [...new Set(links.map((a) => a.href).filter((href) => href.startsWith(window.location.origin)))]);
       for (const href of local) expect((await request.get(href)).status(), `${path} -> ${href}`).toBe(200);
     }
@@ -73,11 +73,15 @@ test.describe('page health', () => {
 
   test('nothing is set in italic', async ({ page }) => {
     // Horses to Watch sets Sly's own words, his take and his verdict, in
-    // italic as quotes; nothing else on any page is.
-    const quotes = { [WATCHLIST]: '.wire-pick__lead, .wire-verdict > p:not([class])' };
-    for (const path of [FRONT_PAGE, ARTICLES[3], WATCHLIST, LETTERS[0]]) {
+    // italic as quotes, and Top Rated his line on the Top Signal
+    // (wire_article.css); nothing else on any page is.
+    const quotes = {
+      [WATCHLIST]: '.wire-pick__lead, .wire-verdict > p:not([class])',
+      [SIGNAL_BOARD]: '.wire-tr-hero__quote',
+    };
+    for (const path of [FRONT_PAGE, ARTICLES[3], WATCHLIST, SIGNAL_BOARD, LETTERS[0]]) {
       await openNews(page, { path });
-      const italic = await page.evaluate((allowed) =>
+      const italic =await page.evaluate((allowed) =>
         Array.from(document.querySelectorAll('body, body *'))
           .filter((el) => getComputedStyle(el).fontStyle !== 'normal')
           .filter((el) => !(allowed && el.closest(allowed)))
@@ -304,7 +308,7 @@ test.describe('front page: what it says', () => {
   test('on a touch screen every link and button takes a press 44px across', async ({ page }) => {
     test.skip(!test.info().project.use.hasTouch, 'a touch screen only');
     test.setTimeout(120_000);
-    for (const path of [FRONT_PAGE, ARTICLES[2], WATCHLIST, LETTERS[0]]) {
+    for (const path of [FRONT_PAGE, ARTICLES[2], WATCHLIST, SIGNAL_BOARD, LETTERS[0]]) {
       await openNews(page, { path, tour: false });
       // A press 21px from a control's centre, in each direction, lands on
       // the control (its area may be larger than it is drawn) or on
@@ -666,5 +670,148 @@ test.describe('Horses to Watch', () => {
       expect(stamp.top).toBeGreaterThanOrEqual(price.bottom - 1);
       expect(Math.abs(stamp.right - price.right)).toBeLessThan(4);
     }
+  });
+});
+
+/*
+ * Sly Man's Top Rated in its new dress (Friday 20 November): a contents
+ * line to each part; the Top Signal as a photographed card, its six
+ * signals behind a pill; Sly's column; the Signal Board, every horse a
+ * photographed card in its kind's colour, with Pick, a slot each under the
+ * scoreboard, Sly's Fold in one press and the board read strongest first
+ * or by race time; picks kept in this browser for the page.
+ */
+test.describe('Top Rated', () => {
+  const NONE_PICKED = 'Make your picks: press Pick on any horse below';
+  const rows = (page) => page.locator('.wire-tr-board > .wire-tr-row:not(.wire-tr-row--head)');
+  const names = (page) => rows(page).evaluateAll((all) =>
+    all.map((row) => row.querySelector('.wire-tr-row__name a').textContent.trim()));
+
+  test('a contents line leads to each part of the page', async ({ page }) => {
+    await openNews(page, { path: SIGNAL_BOARD, tour: false });
+    const links = page.locator('.wire-tr-jump a');
+    await expect(links).toHaveText(['Top Signal', 'Sly’s take', 'Signal Board', 'Ratings', 'Consensus', 'The Money']);
+    for (const href of await links.evaluateAll((all) => all.map((a) => a.getAttribute('href')))) {
+      await expect(page.locator(href), href).toHaveCount(1);
+    }
+    // In-page, so site.js glides there itself: the board comes up under the bar.
+    await links.nth(2).click();
+    await expect.poll(() => page.locator('#tr-signal-board').evaluate((el) => {
+      const top = el.getBoundingClientRect().top;
+      const bar = document.querySelector('#siteNav').getBoundingClientRect().bottom;
+      return top >= bar - 30 && top < bar + 60;
+    })).toBe(true);
+  });
+
+  test('the Top Signal: a photographed card with its count, and its six signals behind a pill', async ({ page }) => {
+    await openNews(page, { path: SIGNAL_BOARD, tour: false });
+    const card = page.locator('.wire-tr-hero__card');
+    expect(await card.evaluate((el) => getComputedStyle(el, '::before').backgroundImage)).toContain('tr/hero.webp');
+    await expect(page.locator('.wire-tr-hero__count')).toHaveText('2 of 6 signals agree');
+    const more = page.locator('.wire-tr-hero__more');
+    await expect(more.locator('summary')).toHaveText('The six signals');
+    await expect(more.locator('.wire-tr-lights')).toBeHidden();
+    await more.locator('summary').click();
+    await expect(more.locator('.wire-tr-lights')).toBeVisible();
+    await expect(more.locator('.wire-tr-light')).toHaveCount(6);
+    await expect(more.locator('a.wire-tr-go')).toHaveText(/View the racecard/);
+  });
+
+  test('the Signal Board: every horse a photographed card of its own, bordered in its kind’s colour', async ({ page }) => {
+    await openNews(page, { path: SIGNAL_BOARD, tour: false });
+    expect(await page.locator('.wire-tr-panel').evaluate((el) => getComputedStyle(el, '::before').backgroundImage)).toContain('tr/board.webp');
+    await expect(rows(page)).toHaveCount(8);
+    const seen = await rows(page).evaluateAll((all) => all.map((row) => ({
+      photo: getComputedStyle(row).getPropertyValue('--tr-photo').trim(),
+      kind: row.querySelector('.wire-tr-badge').className,
+      border: getComputedStyle(row).borderTopColor,
+    })));
+    expect(new Set(seen.map((row) => row.photo)).size).toBe(8);
+    // One colour per kind, and no two kinds share one.
+    const colourOf = {};
+    for (const { kind, border } of seen) {
+      colourOf[kind] ??= border;
+      expect(border, kind).toBe(colourOf[kind]);
+    }
+    expect(new Set(Object.values(colourOf)).size).toBe(Object.keys(colourOf).length);
+  });
+
+  test('Pick: a pick shows on its card, its slot and the tally, and is still there when the page is opened again', async ({ page }) => {
+    await openNews(page, { path: SIGNAL_BOARD, tour: false });
+    const tally = page.locator('.wire-tr-panel__tally');
+    await expect(tally).toHaveText(NONE_PICKED);
+    // The Top Signal and the eight on the board.
+    await expect(page.locator('.wire-tr-pick')).toHaveCount(9);
+
+    const row = rows(page).nth(2);
+    const pick = row.locator('.wire-tr-pick');
+    await expect(pick).toHaveAttribute('aria-pressed', 'false');
+    await pick.click();
+    await expect(pick).toHaveAttribute('aria-pressed', 'true');
+    await expect(pick).toHaveText('Picked');
+    await expect(row).toHaveClass(/is-picked/);
+    await expect(page.locator('.wire-tr-slots a').nth(2)).toHaveClass(/is-picked/);
+    await expect(tally).toHaveText('Your picks: 1 of 8');
+
+    // Kept in this browser for this page.
+    await page.reload();
+    await expect(rows(page).nth(2).locator('.wire-tr-pick')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.wire-tr-panel__tally')).toHaveText('Your picks: 1 of 8');
+
+    // And taken back.
+    await rows(page).nth(2).locator('.wire-tr-pick').click();
+    await expect(page.locator('.wire-tr-panel__tally')).toHaveText(NONE_PICKED);
+  });
+
+  test('a horse picked on the Top Signal is picked on the board as well', async ({ page }) => {
+    await openNews(page, { path: SIGNAL_BOARD, tour: false });
+    const name = (await page.locator('.wire-tr-hero__name a').textContent()).trim();
+    await page.locator('.wire-tr-hero .wire-tr-pick').click();
+    const row = rows(page).filter({ has: page.locator('.wire-tr-row__name a', { hasText: name }) });
+    await expect(row).toHaveCount(1);
+    await expect(row).toHaveClass(/is-picked/);
+    await expect(row.locator('.wire-tr-pick')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.wire-tr-panel__tally')).toHaveText('Your picks: 1 of 8');
+  });
+
+  test('Sly’s Fold in one press: every horse two signals or more agree on', async ({ page }) => {
+    await openNews(page, { path: SIGNAL_BOARD, tour: false });
+    const fold = await rows(page).evaluateAll((all) =>
+      all.filter((row) => row.querySelectorAll('.wire-tr-pips .is-on').length >= 2).map((row) => row.id));
+    expect(fold.length).toBeGreaterThan(0);
+    const button = page.locator('.wire-tr-fold');
+    await expect(button).toHaveText(`Pick Sly’s Fold (${fold.length})`);
+    await button.click();
+    for (const id of fold) await expect(page.locator(`#${id}`)).toHaveClass(/is-picked/);
+    await expect(button).toBeDisabled();
+    await expect(button).toHaveText('Sly’s Fold is in your picks');
+    await expect(page.locator('.wire-tr-panel__tally')).toHaveText(`Your picks: ${fold.length} of 8`);
+  });
+
+  test('the board reads strongest first or by race time', async ({ page }) => {
+    await openNews(page, { path: SIGNAL_BOARD, tour: false });
+    const strongest = await names(page);
+    const byTime = page.locator('.wire-tr-sort button[data-sort="time"]');
+    await expect(page.locator('.wire-tr-sort button[data-sort="rank"]')).toHaveAttribute('aria-pressed', 'true');
+    await byTime.click();
+    await expect(byTime).toHaveAttribute('aria-pressed', 'true');
+    const times = await rows(page).evaluateAll((all) => all.map((row) =>
+      row.querySelector('.wire-tr-row__sub').textContent.match(/\d{1,2}:\d{2}/)[0].padStart(5, '0')));
+    expect(times).toEqual([...times].sort());
+    await page.locator('.wire-tr-sort button[data-sort="rank"]').click();
+    expect(await names(page)).toEqual(strongest);
+  });
+
+  test('with a horse picked, a floating tally leads back to the board while the board is out of sight', async ({ page }) => {
+    await openNews(page, { path: SIGNAL_BOARD, tour: false });
+    const dock = page.locator('.wire-tr-dock');
+    await expect(dock).not.toHaveClass(/is-on/);
+    await rows(page).first().locator('.wire-tr-pick').click();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await expect(dock).toHaveClass(/is-on/);
+    await expect(dock).toContainText('Your picks');
+    await expect(dock).toHaveAttribute('href', '#tr-signal-board');
+    await page.locator('.wire-tr-panel__picks').scrollIntoViewIfNeeded();
+    await expect(dock).not.toHaveClass(/is-on/);
   });
 });
