@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { openLanding } from './support/landing.js';
 import { openIndex } from './support/llama.js';
 import { openMeeting } from './support/meeting.js';
-import { ARTICLES, LETTERS, WATCHLIST, openNews } from './support/news.js';
+import { ARTICLES, LETTERS, SIGNAL_BOARD, WATCHLIST, openNews } from './support/news.js';
 import { openRaces } from './support/races.js';
 import { openRaceResult } from './support/race-result.js';
 import { openTrail } from './support/trail.js';
@@ -23,13 +23,14 @@ async function openWholeTrail(page) {
   return openTrail(page, { live: false });
 }
 
-// Horses to Watch fades its stops and cards in as it opens, and axe reads
-// colours as they are drawn at that moment, so a scan straight after load
-// can catch a stop half faded in. It is scanned at rest: a frame for the
-// cards in view to light, then the end of every animation that ends
-// (looping ones run forever; scroll-driven ones follow the scroll).
-async function openWatchlistAtRest(page) {
-  const opened = await openNews(page, { path: WATCHLIST });
+// Horses to Watch and the Signal Board fade their parts in as they open,
+// and axe reads colours as they are drawn at that moment, so a scan
+// straight after load can catch one half faded in. They are scanned at
+// rest: a frame for what is in view to light, then the end of every
+// animation that ends (looping ones run forever; scroll-driven ones
+// follow the scroll).
+async function openNewsAtRest(page, path) {
+  const opened = await openNews(page, { path });
   await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
   await page.waitForFunction(() => document.getAnimations().every((animation) =>
     animation.timeline !== document.timeline
@@ -60,7 +61,10 @@ const PAGES = [
   { file: `${ARTICLES[3].slice(1)}index.html`, open: (page) => openNews(page, { path: ARTICLES[3] }) },
   { file: `${LETTERS[2].slice(1)}index.html`, open: (page) => openNews(page, { path: LETTERS[2] }) },
   // Horses to Watch: Your afternoon and the five cards, at rest.
-  { file: `${WATCHLIST.slice(1)}index.html`, open: openWatchlistAtRest },
+  { file: `${WATCHLIST.slice(1)}index.html`, open: (page) => openNewsAtRest(page, WATCHLIST) },
+  // Top Rated in its new dress: the Top Signal, the Signal Board and the
+  // tiles, at rest.
+  { file: `${SIGNAL_BOARD.slice(1)}index.html`, open: (page) => openNewsAtRest(page, SIGNAL_BOARD) },
 ];
 
 // Ratchet: a rule not on the known list fails the run, and a known rule
