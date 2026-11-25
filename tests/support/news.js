@@ -18,7 +18,13 @@ export const ARTICLES = [
 
 export const LETTERS = ['1250', '1325', '1400', '1433', '1510', '1543'].map((time) => `/letters/ascot-2026-10-31/${time}/`);
 
-export const NEWS_PAGES = [FRONT_PAGE, ...ARTICLES, ...LETTERS];
+// Sly Man's Horses to Watch as the live template renders it now, after
+// racing on Friday 20 November 2026: "Your afternoon", the five cards and
+// the verdict (captured from the live page; not linked from the front
+// page, which is the 31 October morning).
+export const WATCHLIST = '/news/article/2026/sly-mans-horses-to-watch-friday-20-november-2026/';
+
+export const NEWS_PAGES = [FRONT_PAGE, ...ARTICLES, WATCHLIST, ...LETTERS];
 
 // The front page's sections, in page order: the masthead, the top
 // stories, then §1 to §7 and the 10:00 Card. Feature tests assert the
