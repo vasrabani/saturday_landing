@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { openLanding } from './support/landing.js';
 import { openIndex } from './support/llama.js';
 import { openMeeting } from './support/meeting.js';
-import { ARTICLES, LETTERS, openNews } from './support/news.js';
+import { ARTICLES, LETTERS, WATCHLIST, openNews } from './support/news.js';
 import { openRaces } from './support/races.js';
 import { openRaceResult } from './support/race-result.js';
 import { openTrail } from './support/trail.js';
@@ -44,6 +44,9 @@ const PAGES = [
   { file: 'news/index.html', open: (page) => openNews(page) },
   { file: `${ARTICLES[3].slice(1)}index.html`, open: (page) => openNews(page, { path: ARTICLES[3] }) },
   { file: `${LETTERS[2].slice(1)}index.html`, open: (page) => openNews(page, { path: LETTERS[2] }) },
+  // Horses to Watch as the live template renders it: the running order
+  // on midnight and the five cards.
+  { file: `${WATCHLIST.slice(1)}index.html`, open: (page) => openNews(page, { path: WATCHLIST }) },
 ];
 
 // Ratchet: a rule not on the known list fails the run, and a known rule

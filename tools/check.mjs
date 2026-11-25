@@ -45,6 +45,8 @@ const ENTRY_PAGES = [
     'market-steamers-saturday-31-october-2026',
     'sly-mans-top-rated-saturday-31-october-2026',
     'sly-mans-jockeys-taking-aim-saturday-31-october-2026',
+    // Horses to Watch as the live template renders it (20 November).
+    'sly-mans-horses-to-watch-friday-20-november-2026',
   ].map((slug) => `news/article/2026/${slug}/index.html`),
   ...readdirSync(join(ROOT, 'letters'), { recursive: true })
     .map((path) => join('letters', path).split(sep).join('/'))

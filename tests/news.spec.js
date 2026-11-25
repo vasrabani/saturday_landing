@@ -15,7 +15,7 @@
  * displayed, where it is, whether it can be pressed, and what it says.
  */
 import { test, expect } from '@playwright/test';
-import { ARTICLES, FRONT_PAGE, LETTERS, NEWS_PAGES, NEWS_SECTIONS, box, openNews } from './support/news.js';
+import { ARTICLES, FRONT_PAGE, LETTERS, NEWS_PAGES, NEWS_SECTIONS, WATCHLIST, box, openNews } from './support/news.js';
 
 const WHITE = 'rgb(255, 255, 255)';
 const MIDNIGHT = 'rgb(11, 11, 15)';
@@ -47,7 +47,7 @@ test.describe('page health', () => {
   });
 
   test('every picture loads', async ({ page }) => {
-    for (const path of [FRONT_PAGE, ARTICLES[0], LETTERS[0]]) {
+    for (const path of [FRONT_PAGE, ARTICLES[0], WATCHLIST, LETTERS[0]]) {
       await openNews(page, { path });
       // Lazy pictures load as they come near the screen: bring each one there.
       const broken = await page.evaluate(async () => {
@@ -63,7 +63,7 @@ test.describe('page health', () => {
   });
 
   test('every link to another news page here finds it', async ({ page, request }) => {
-    for (const path of [FRONT_PAGE, ARTICLES[3], LETTERS[2]]) {
+    for (const path of [FRONT_PAGE, ARTICLES[3], WATCHLIST, LETTERS[2]]) {
       await openNews(page, { path });
       const local = await page.locator('main a[href], .wire-drawer a[href]').evaluateAll((links) =>
         [...new Set(links.map((a) => a.href).filter((href) => href.startsWith(window.location.origin)))]);
@@ -72,12 +72,16 @@ test.describe('page health', () => {
   });
 
   test('nothing is set in italic', async ({ page }) => {
-    for (const path of [FRONT_PAGE, ARTICLES[3], LETTERS[0]]) {
+    // Horses to Watch sets Sly's own words, his take and his verdict, in
+    // italic as quotes; nothing else on any page is.
+    const quotes = { [WATCHLIST]: '.wire-pick__lead, .wire-verdict > p:not([class])' };
+    for (const path of [FRONT_PAGE, ARTICLES[3], WATCHLIST, LETTERS[0]]) {
       await openNews(page, { path });
-      const italic = await page.evaluate(() =>
+      const italic = await page.evaluate((allowed) =>
         Array.from(document.querySelectorAll('body, body *'))
           .filter((el) => getComputedStyle(el).fontStyle !== 'normal')
-          .map((el) => el.tagName.toLowerCase() + (el.className && typeof el.className === 'string' ? `.${el.className.split(' ')[0]}` : '')));
+          .filter((el) => !(allowed && el.closest(allowed)))
+          .map((el) => el.tagName.toLowerCase() + (el.className && typeof el.className === 'string' ? `.${el.className.split(' ')[0]}` : '')), quotes[path] ?? '');
       expect(italic, path).toEqual([]);
     }
   });
@@ -300,7 +304,7 @@ test.describe('front page: what it says', () => {
   test('on a touch screen every link and button takes a press 44px across', async ({ page }) => {
     test.skip(!test.info().project.use.hasTouch, 'a touch screen only');
     test.setTimeout(120_000);
-    for (const path of [FRONT_PAGE, ARTICLES[2], LETTERS[0]]) {
+    for (const path of [FRONT_PAGE, ARTICLES[2], WATCHLIST, LETTERS[0]]) {
       await openNews(page, { path, tour: false });
       // A press 21px from a control's centre, in each direction, lands on
       // the control (its area may be larger than it is drawn) or on
@@ -509,5 +513,158 @@ test.describe('article pages', () => {
     const more = page.locator('#more-title');
     await expect(more).toHaveText('More from The Fox’s Wire');
     await expect(page.locator('.wire-grid--4 .wire-card')).toHaveCount(4);
+  });
+});
+
+/*
+ * Sly Man's Horses to Watch, light: "Your afternoon" under the Wire's
+ * floodlit photograph, the five as white stops barred in their signal's
+ * colour, each going to its card and opening its full case; each card a
+ * photographed head (silks, name, price, the signal's chip, connections,
+ * result) bordered in the signal's colour, then Sly's take, his full case
+ * behind "Sly's full case", and Pick, kept in this browser for the page.
+ */
+test.describe('Horses to Watch', () => {
+  const nameOf = (text) => text.replace(/^\s*\d+\s*/, '').trim();
+  const NONE_PICKED = 'Make your picks: press Pick on any horse below';
+
+  test('Your afternoon: the five in order of the off, each in its signal’s colour, each going to its card', async ({ page }) => {
+    await openNews(page, { path: WATCHLIST, tour: false });
+    const order = page.locator('.wire-htw-order');
+    // The Wire's floodlit photograph heads it.
+    expect(await order.evaluate((el) => getComputedStyle(el, '::before').backgroundImage)).toContain('lead.webp');
+    const stops = order.locator('.wire-htw-stop');
+    await expect(stops).toHaveCount(5);
+
+    const seen = await stops.evaluateAll((items) => items.map((li) => ({
+      time: li.querySelector('.wire-htw-stop__when b').textContent.trim(),
+      name: li.querySelector('.wire-htw-stop__name').textContent.trim(),
+      price: li.querySelector('.wire-htw-stop__price').textContent.trim(),
+      result: li.querySelector('.wire-tr-result')?.textContent.trim() ?? '',
+      bar: getComputedStyle(li.querySelector('a'), '::before').backgroundColor,
+      target: li.querySelector('a').getAttribute('href'),
+    })));
+    const times = seen.map((stop) => stop.time);
+    expect(times).toEqual([...times].sort());
+
+    // Each stop agrees with the card it goes to: name, price, result, and
+    // the signal's colour (the stop's bar, the card's border).
+    for (const stop of seen) {
+      const card = page.locator(`.wire-pick${stop.target}`);
+      await expect(card, stop.target).toHaveCount(1);
+      expect(nameOf(await card.locator('.wire-pick__name').textContent())).toBe(stop.name);
+      await expect(card.locator('.wire-tr-price b')).toHaveText(stop.price);
+      await expect(card.locator('.wire-pick__stamp')).toHaveText(stop.result);
+      await expect(card.locator('.wire-pick__silk img')).toHaveAttribute('alt', `${stop.name} silks`);
+      await expect(card).toHaveCSS('border-top-color', stop.bar);
+    }
+  });
+
+  test('on a phone the five read as a timetable, a row each; wider, they share one row', async ({ page }) => {
+    await openNews(page, { path: WATCHLIST, tour: false });
+    // Laid-out positions (offsetTop): the stops slide in one after another,
+    // which moves where they are drawn, not where they sit.
+    const { rows, overflow } = await page.locator('.wire-htw-order__list').evaluate((ol) => ({
+      rows: new Set([...ol.children].map((li) => li.offsetTop)).size,
+      overflow: ol.scrollWidth - ol.clientWidth,
+    }));
+    expect(overflow).toBeLessThanOrEqual(0);
+    expect(rows).toBe(isPhone(page) ? 5 : 1);
+  });
+
+  // A stop's link is in-page: site.js glides there itself and leaves the
+  // address alone; the page's script opens the card's full case. site.js
+  // measures the card while its rise into view still holds it 28px low, so
+  // the card can come to rest up to that much higher than site.js meant.
+  test('a stop glides to its horse’s card and opens Sly’s full case', async ({ page }) => {
+    await openNews(page, { path: WATCHLIST, tour: false });
+    const stop = page.locator('.wire-htw-stop a').first();
+    const card = page.locator(await stop.getAttribute('href'));
+    const more = card.locator('.wire-pick__more');
+    expect(await more.evaluate((details) => details.open)).toBe(false);
+    await stop.click();
+    await expect.poll(() => more.evaluate((details) => details.open)).toBe(true);
+    await expect.poll(() => card.evaluate((el) => {
+      const top = el.getBoundingClientRect().top;
+      const bar = document.querySelector('#siteNav').getBoundingClientRect().bottom;
+      return top >= bar - 30 && top < bar + 60;
+    })).toBe(true);
+  });
+
+  test('a card opened by its own address opens its full case, the others stay closed', async ({ page }) => {
+    await openNews(page, { path: `${WATCHLIST}#pick-3`, tour: false });
+    const open = await page.locator('.wire-pick__more').evaluateAll((all) =>
+      all.filter((details) => details.open).map((details) => details.closest('.wire-pick').id));
+    expect(open).toEqual(['pick-3']);
+  });
+
+  test('a card: a photographed head, Sly’s take, and his full case behind its pill', async ({ page }) => {
+    await openNews(page, { path: WATCHLIST, tour: false });
+    const photos = new Set();
+    for (const card of await page.locator('.wire-pick').all()) {
+      photos.add(await card.evaluate((el) => getComputedStyle(el).getPropertyValue('--wire-htw-photo').trim()));
+      const silks = await box(card.locator('.wire-pick__silk img'));
+      const name = await box(card.locator('.wire-pick__name'));
+      const price = await box(card.locator('.wire-tr-price b'));
+      const lead = await box(card.locator('.wire-pick__lead'));
+      expect(silks.right).toBeLessThan(name.left);
+      expect(price.left).toBeGreaterThan(name.left);
+      expect(lead.top).toBeGreaterThan(Math.max(silks.bottom, name.bottom));
+      expect(await card.locator('.wire-pick__lead').evaluate((el) => getComputedStyle(el, '::after').content)).toBe(`"Sly's take"`);
+
+      // The full case waits behind its pill; the racecard is inside it.
+      const more = card.locator('.wire-pick__more');
+      await expect(more.locator('summary')).toHaveText("Sly's full case");
+      await expect(card.locator('.wire-pick__case')).toBeHidden();
+      await more.locator('summary > span').click();
+      await expect(card.locator('.wire-pick__case')).toBeVisible();
+      const racecard = card.locator('.wire-pick__links a').first();
+      await expect(racecard).toHaveText(/View the racecard/);
+      expect((await box(racecard)).height).toBeGreaterThanOrEqual(44);
+    }
+    // Each card its own photograph.
+    expect(photos.size).toBe(5);
+  });
+
+  test('Pick: a pick shows on its card, its stop and the tally, and is still there when the page is opened again', async ({ page }) => {
+    await openNews(page, { path: WATCHLIST, tour: false });
+    const tally = page.locator('.wire-htw-order__picks');
+    await expect(tally).toHaveText(NONE_PICKED);
+    await expect(page.locator('.wire-pick__pick')).toHaveCount(5);
+
+    const card = page.locator('.wire-pick').nth(1);
+    const id = await card.getAttribute('id');
+    const pick = card.locator('.wire-pick__pick');
+    await expect(pick).toHaveAttribute('aria-pressed', 'false');
+    await pick.click();
+    await expect(pick).toHaveAttribute('aria-pressed', 'true');
+    await expect(pick).toHaveText('Picked');
+    await expect(card).toHaveClass(/is-picked/);
+    await expect(page.locator('.wire-htw-stop').filter({ has: page.locator(`a[href="#${id}"]`) })).toHaveClass(/is-picked/);
+    await expect(tally).toHaveText('Your picks: 1 of 5');
+    // A pick does not open the card.
+    expect(await card.locator('.wire-pick__more').evaluate((details) => details.open)).toBe(false);
+
+    // Kept in this browser for this page.
+    await page.reload();
+    await expect(page.locator(`#${id} .wire-pick__pick`)).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('.wire-htw-order__picks')).toHaveText('Your picks: 1 of 5');
+
+    // And taken back.
+    await page.locator(`#${id} .wire-pick__pick`).click();
+    await expect(page.locator(`#${id} .wire-pick__pick`)).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.locator('.wire-htw-order__picks')).toHaveText(NONE_PICKED);
+  });
+
+  test('the result shows once, under the price', async ({ page }) => {
+    await openNews(page, { path: WATCHLIST, tour: false });
+    for (const card of await page.locator('.wire-pick').all()) {
+      await expect(card.locator('.wire-pick__stamp')).toBeVisible();
+      await expect(card.locator('.wire-pick__links > .wire-tr-result')).toBeHidden();
+      const stamp = await box(card.locator('.wire-pick__stamp'));
+      const price = await box(card.locator('.wire-tr-price'));
+      expect(stamp.top).toBeGreaterThanOrEqual(price.bottom - 1);
+      expect(Math.abs(stamp.right - price.right)).toBeLessThan(4);
+    }
   });
 });
