@@ -23,6 +23,21 @@ async function openWholeTrail(page) {
   return openTrail(page, { live: false });
 }
 
+// Horses to Watch fades its stops and cards in as it opens, and axe reads
+// colours as they are drawn at that moment, so a scan straight after load
+// can catch a stop half faded in. It is scanned at rest: a frame for the
+// cards in view to light, then the end of every animation that ends
+// (looping ones run forever; scroll-driven ones follow the scroll).
+async function openWatchlistAtRest(page) {
+  const opened = await openNews(page, { path: WATCHLIST });
+  await page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done))));
+  await page.waitForFunction(() => document.getAnimations().every((animation) =>
+    animation.timeline !== document.timeline
+    || animation.playState !== 'running'
+    || animation.effect.getComputedTiming().iterations === Infinity));
+  return opened;
+}
+
 // Every page the contractor works on, each with its own known list: a
 // violation introduced on one must not be excused by another's.
 const PAGES = [
@@ -44,9 +59,8 @@ const PAGES = [
   { file: 'news/index.html', open: (page) => openNews(page) },
   { file: `${ARTICLES[3].slice(1)}index.html`, open: (page) => openNews(page, { path: ARTICLES[3] }) },
   { file: `${LETTERS[2].slice(1)}index.html`, open: (page) => openNews(page, { path: LETTERS[2] }) },
-  // Horses to Watch as the live template renders it: the running order
-  // on midnight and the five cards.
-  { file: `${WATCHLIST.slice(1)}index.html`, open: (page) => openNews(page, { path: WATCHLIST }) },
+  // Horses to Watch: Your afternoon and the five cards, at rest.
+  { file: `${WATCHLIST.slice(1)}index.html`, open: openWatchlistAtRest },
 ];
 
 // Ratchet: a rule not on the known list fails the run, and a known rule
